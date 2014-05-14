@@ -31,13 +31,9 @@
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabEndpoints = new System.Windows.Forms.TabPage();
+            this.dataGridEndPoints = new System.Windows.Forms.DataGridView();
             this.tabDesign = new System.Windows.Forms.TabPage();
             this.tabInteractions = new System.Windows.Forms.TabPage();
-            this.dataGridEndPoints = new System.Windows.Forms.DataGridView();
-            this.colName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colType = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.colPrimary = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.colMeasurement = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.menuStrip1.SuspendLayout();
             this.tabControl.SuspendLayout();
             this.tabEndpoints.SuspendLayout();
@@ -80,7 +76,7 @@
             // toolstripAbout
             // 
             this.toolstripAbout.Name = "toolstripAbout";
-            this.toolstripAbout.Size = new System.Drawing.Size(152, 22);
+            this.toolstripAbout.Size = new System.Drawing.Size(107, 22);
             this.toolstripAbout.Text = "About";
             // 
             // toolStrip1
@@ -114,6 +110,17 @@
             this.tabEndpoints.Text = "Endpoints";
             this.tabEndpoints.UseVisualStyleBackColor = true;
             // 
+            // dataGridEndPoints
+            // 
+            this.dataGridEndPoints.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dataGridEndPoints.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridEndPoints.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridEndPoints.Location = new System.Drawing.Point(6, 6);
+            this.dataGridEndPoints.Name = "dataGridEndPoints";
+            this.dataGridEndPoints.Size = new System.Drawing.Size(738, 174);
+            this.dataGridEndPoints.TabIndex = 1;
+            // 
             // tabDesign
             // 
             this.tabDesign.Location = new System.Drawing.Point(4, 22);
@@ -134,40 +141,7 @@
             this.tabInteractions.Text = "interactions";
             this.tabInteractions.UseVisualStyleBackColor = true;
             // 
-            // dataGridEndPoints
-            // 
-            this.dataGridEndPoints.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridEndPoints.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.colName,
-            this.colType,
-            this.colPrimary,
-            this.colMeasurement});
-            this.dataGridEndPoints.Location = new System.Drawing.Point(92, 46);
-            this.dataGridEndPoints.Name = "dataGridEndPoints";
-            this.dataGridEndPoints.Size = new System.Drawing.Size(539, 150);
-            this.dataGridEndPoints.TabIndex = 0;
-            // 
-            // colName
-            // 
-            this.colName.HeaderText = "Name";
-            this.colName.Name = "colName";
-            // 
-            // colType
-            // 
-            this.colType.HeaderText = "Type";
-            this.colType.Name = "colType";
-            // 
-            // colPrimary
-            // 
-            this.colPrimary.HeaderText = "Primary";
-            this.colPrimary.Name = "colPrimary";
-            // 
-            // colMeasurement
-            // 
-            this.colMeasurement.HeaderText = "Measurement";
-            this.colMeasurement.Name = "colMeasurement";
-            // 
-            // Form1
+            // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -176,7 +150,7 @@
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
-            this.Name = "Form1";
+            this.Name = "MainWindow";
             this.Text = "Amiga Power Analysis";
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
@@ -201,10 +175,6 @@
         private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolstripEndpointTypes;
         private System.Windows.Forms.DataGridView dataGridEndPoints;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colName;
-        private System.Windows.Forms.DataGridViewComboBoxColumn colType;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn colPrimary;
-        private System.Windows.Forms.DataGridViewComboBoxColumn colMeasurement;
     }
 }
 

@@ -12,37 +12,71 @@ namespace Amiga_Power_Analysis {
 
         private Project _project;
 
+        private EndpointTypeProvider _endpointTypeProvider;
+
         public MainWindow() {
             InitializeComponent();
-            Initialize();
+            initialize();
         }
 
-        void Initialize() {
+        private void initialize() {
             _project = new Project();
-            var endpointFactory = new EndpointFactory();
-            var endpoints = new List<Endpoint>();
-            endpoints.Add(new Endpoint() {
+            _endpointTypeProvider = new EndpointTypeProvider();
+            _project.Endpoints.Add(new Endpoint() {
                 Name = "Beatle",
-                EndpointType = endpointFactory.CreateEndpointType("Predator")
+                EndpointType = _endpointTypeProvider.GetEndpointType("Predator")
             });
-            endpoints.Add(new Endpoint() {
+            _project.Endpoints.Add(new Endpoint() {
                 Name = "Giraffe",
-                EndpointType = endpointFactory.CreateEndpointType("Herbivore")
+                EndpointType = _endpointTypeProvider.GetEndpointType("Herbivore")
             });
-            _project.Endpoints = endpoints;
-            BindingSource bs = new BindingSource();
-            bs.DataSource = typeof(Endpoint);
-            bs.Add(new Endpoint() {
-                Name = "Giraffe",
-                EndpointType = endpointFactory.CreateEndpointType("Herbivore")
-            });
-            dataGridEndPoints.DataSource = bs;
+            createEndpointTypesDataGrid();
         }
 
-        void addEndpointEvent() {
+        private void createEndpointTypesDataGrid() {
+            var endpointsBindingList = new BindingList<Endpoint>(_project.Endpoints);
+            var endpointsBindingSouce = new BindingSource(_project.Endpoints, null);
+            dataGridEndPoints.AutoGenerateColumns = false;
+            dataGridEndPoints.DataSource = endpointsBindingSouce;
 
+            var column = new DataGridViewTextBoxColumn();
+            column.DataPropertyName = "Name";
+            column.Name = "Name";
+            dataGridEndPoints.Columns.Add(column);
+
+            var _availableEndpointTypes = _endpointTypeProvider.GetAvailableEndpointTypes().Select(h => new { Name = h.Name, EndpointType = h }).ToList();
+            var combo = new DataGridViewComboBoxColumn();
+            combo.DataSource = _availableEndpointTypes;
+            combo.DisplayMember = "Name";
+            combo.ValueMember = "EndpointType";
+            combo.DataPropertyName = "EndpointType";
+            dataGridEndPoints.Columns.Add(combo);
+
+            var checkbox = new DataGridViewCheckBoxColumn();
+            checkbox.DataPropertyName = "VarietyInteractions";
+            checkbox.Name = "VarietyInteractions";
+            dataGridEndPoints.Columns.Add(checkbox);
+
+            checkbox = new DataGridViewCheckBoxColumn();
+            checkbox.DataPropertyName = "RepeatedMeasures";
+            checkbox.Name = "RepeatedMeasures";
+            dataGridEndPoints.Columns.Add(checkbox);
+
+            checkbox = new DataGridViewCheckBoxColumn();
+            checkbox.DataPropertyName = "ExcessZeroes";
+            checkbox.Name = "ExcessZeroes";
+            dataGridEndPoints.Columns.Add(checkbox);
         }
 
+        private void endpointsBindingList_AddingNew(object sender, AddingNewEventArgs e) {
+            var endpointFactory = new EndpointTypeProvider();
+            e.NewObject = new Endpoint() {
+                EndpointType = endpointFactory.GetEndpointType("Herbivore")
+            };
+        }
 
+        private void addEndpointEvent() {
+
+        }
     }
 }

@@ -28,32 +28,33 @@ namespace Amiga_Power_Analysis {
         /// <summary>
         /// Name of endpoint; e.g. Predator, Detrivore
         /// </summary>
-        public string Name;
+        public string Name { get; set; }
 
         /// <summary>
         /// Whether the endpoint is primary (true) or secondary (false)
         /// </summary>
-        public bool Primary;
+        public bool Primary { get; set; }
 
         /// <summary>
         /// Binomial total for fractions
         /// </summary>
-        public int BinomialTotal;
+        public int BinomialTotal { get; set; }
 
         /// <summary>
         /// Type of measurement (count, fraction, nonnegative)
         /// </summary>
-        public MeasurementType Measurement;
+        public MeasurementType Measurement { get; set; }
 
         /// <summary>
         /// Lower Limit of Concern
         /// </summary>
-        public double LocLower;
+        public double LocLower { get; set; }
 
         /// <summary>
         /// Upper Limit of Concern
         /// </summary>
-        public double LocUpper;
+        public double LocUpper { get; set; }
+
     }
 
 }

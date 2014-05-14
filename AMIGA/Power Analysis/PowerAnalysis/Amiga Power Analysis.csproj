@@ -48,7 +48,7 @@
   <ItemGroup>
     <Compile Include="Core\Design.cs" />
     <Compile Include="Core\Endpoint.cs" />
-    <Compile Include="Core\EndpointFactory.cs" />
+    <Compile Include="Core\EndpointTypeProvider.cs" />
     <Compile Include="Core\EndpointType.cs" />
     <Compile Include="Core\Factor.cs" />
     <Compile Include="GUI\MainWindow.cs">
