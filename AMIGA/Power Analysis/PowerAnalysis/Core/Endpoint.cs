@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Amiga_Power_Analysis {
+namespace AmigaPowerAnalysis.Core {
 
-    public class Endpoint {
+    public sealed class Endpoint {
 
-        private string _name;
         private EndpointType _endpointType;
 
         public Endpoint() {
@@ -15,19 +14,12 @@ namespace Amiga_Power_Analysis {
         }
 
         /// <summary>
-        /// Name of the endpoint, e.g. Aphids, Predator
+        /// Name of the endpoint, e.g. Aphids, Predator.
         /// </summary>
-        public string Name {
-            get {
-                return _name;
-            }
-            set {
-                _name = value;
-            }
-        }
+        public string Name { get; set; }
 
         /// <summary>
-        /// Type of measurement
+        /// Type of measurement.
         /// </summary>
         public EndpointType EndpointType {
             get {
@@ -45,8 +37,14 @@ namespace Amiga_Power_Analysis {
 
         //public List<Comparison> ListComparisons = new List<Comparison>();
 
+        /// <summary>
+        /// 
+        /// </summary>
         public bool RepeatedMeasures { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public bool ExcessZeroes { get; set; }
     }
 }

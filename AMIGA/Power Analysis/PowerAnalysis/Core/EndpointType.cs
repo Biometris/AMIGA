@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Amiga_Power_Analysis {
+namespace AmigaPowerAnalysis.Core {
 
-    public class EndpointType {
+    public sealed class EndpointType {
 
         public enum MeasurementType {
             Count,
@@ -26,35 +26,34 @@ namespace Amiga_Power_Analysis {
         }
 
         /// <summary>
-        /// Name of endpoint; e.g. Predator, Detrivore
+        /// Name of endpoint; e.g. Predator, Detrivore.
         /// </summary>
         public string Name { get; set; }
 
         /// <summary>
-        /// Whether the endpoint is primary (true) or secondary (false)
+        /// Whether the endpoint is primary (true) or secondary (false).
         /// </summary>
         public bool Primary { get; set; }
 
         /// <summary>
-        /// Binomial total for fractions
+        /// Binomial total for fractions.
         /// </summary>
         public int BinomialTotal { get; set; }
 
         /// <summary>
-        /// Type of measurement (count, fraction, nonnegative)
+        /// Type of measurement (count, fraction, nonnegative).
         /// </summary>
         public MeasurementType Measurement { get; set; }
 
         /// <summary>
-        /// Lower Limit of Concern
+        /// Lower Limit of Concern.
         /// </summary>
         public double LocLower { get; set; }
 
         /// <summary>
-        /// Upper Limit of Concern
+        /// Upper Limit of Concern.
         /// </summary>
         public double LocUpper { get; set; }
 
     }
-
 }

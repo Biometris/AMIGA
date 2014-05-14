@@ -3,18 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Amiga_Power_Analysis {
-    public sealed class Project {
+namespace AmigaPowerAnalysis.Core {
 
-        public List<Endpoint> Endpoints { get; set; }
+    /// <summary>
+    /// Holds the data for an amiga power analysis project.
+    /// </summary>
+    public sealed class Project {
 
         public Project() {
             Endpoints = new List<Endpoint>();
         }
 
-        public void AddEndpoint(Endpoint endpoint) {
-            Endpoints.Add(endpoint);
-        }
+        /// <summary>
+        /// The endpoints of interest in this project.
+        /// </summary>
+        public List<Endpoint> Endpoints { get; set; }
 
     }
 }

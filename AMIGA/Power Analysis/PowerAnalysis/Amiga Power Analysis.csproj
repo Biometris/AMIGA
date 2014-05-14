@@ -8,7 +8,7 @@
     <ProjectGuid>{358CB528-DDA2-4C8B-83A8-66FE10D97FA0}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Amiga_Power_Analysis</RootNamespace>
+    <RootNamespace>AmigaPowerAnalysis</RootNamespace>
     <AssemblyName>Amiga Power Analysis</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
@@ -71,6 +71,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

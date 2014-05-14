@@ -6,8 +6,9 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using AmigaPowerAnalysis.Core;
 
-namespace Amiga_Power_Analysis {
+namespace AmigaPowerAnalysis.Gui {
     public partial class MainWindow : Form {
 
         private Project _project;

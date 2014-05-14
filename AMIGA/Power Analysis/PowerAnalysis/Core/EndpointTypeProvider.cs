@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Amiga_Power_Analysis {
+namespace AmigaPowerAnalysis.Core {
     public sealed class EndpointTypeProvider {
 
-        private List<EndpointType> _endpointTypes { get; set; }
+        private List<EndpointType> _endpointTypes;
 
         public EndpointTypeProvider() {
             // ToDo: save and retrieve in Registry
@@ -19,10 +19,19 @@ namespace Amiga_Power_Analysis {
             _endpointTypes.Add(new EndpointType("Yield", true, EndpointType.MeasurementType.Nonnegative, int.MinValue, 0.8, 1.2));
         }
 
+        /// <summary>
+        /// Returns a list of available endpoint types.
+        /// </summary>
+        /// <returns></returns>
         public List<EndpointType> GetAvailableEndpointTypes() {
             return _endpointTypes;
         }
 
+        /// <summary>
+        /// Returns the endpoint type with the given name, or null if there is no such endpoint type.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public EndpointType GetEndpointType(string name) {
             return _endpointTypes.FirstOrDefault(ept => ept.Name == name);
         }

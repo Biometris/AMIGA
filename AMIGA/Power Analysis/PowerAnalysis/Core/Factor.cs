@@ -3,43 +3,47 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Amiga_Power_Analysis {
-    public class Factor {
+namespace AmigaPowerAnalysis.Core {
+    public sealed class Factor {
 
         /// <summary>
         /// Set up a simple factor with levels 1...nlevels and no labels
         /// </summary>
         /// <param name="name">Name of factor</param>
-        /// <param name="nlevels">Number of levels of Factor</param>
-        public Factor(string name, int nlevels) {
+        /// <param name="numberOfLevels">Number of levels of Factor</param>
+        public Factor(string name, int numberOfLevels) {
+            IncludeInAssessment = false;
             Name = name;
-            Nlevels = nlevels;
+            NumberOfLevels = numberOfLevels;
             Levels = new List<double>();
-            for (int i = 0; i < nlevels; i++) {
+            for (int i = 0; i < numberOfLevels; i++) {
                 Levels.Add(Convert.ToDouble(i));
             }
         }
-        
+
         /// <summary>
         /// Factor name, e.q. variety or agricultural treatment
         /// </summary>
-        public string Name;
-        
+        public string Name { get; set; }
+
         /// <summary>
         /// Number of levels of factor
         /// </summary>
-        public int Nlevels;
+        public int NumberOfLevels { get; set; }
 
         /// <summary>
         /// Factor labels
         /// </summary>
-        public List<String> Labels;
+        public List<String> Labels { get; set; }
 
         /// <summary>
         /// Factor levels
         /// </summary>
-        public List<double> Levels;
+        public List<double> Levels { get; set; }
 
-        public bool IncludeInAssessment = false;
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool IncludeInAssessment { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace Amiga_Power_Analysis {
+﻿namespace AmigaPowerAnalysis.Gui {
     partial class MainWindow {
         /// <summary>
         /// Required designer variable.
