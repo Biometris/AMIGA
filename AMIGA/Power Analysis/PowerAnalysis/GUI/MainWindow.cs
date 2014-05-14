@@ -68,15 +68,7 @@ namespace Amiga_Power_Analysis {
             dataGridEndPoints.Columns.Add(checkbox);
         }
 
-        private void endpointsBindingList_AddingNew(object sender, AddingNewEventArgs e) {
-            var endpointFactory = new EndpointTypeProvider();
-            e.NewObject = new Endpoint() {
-                EndpointType = endpointFactory.GetEndpointType("Herbivore")
-            };
-        }
-
-        private void addEndpointEvent() {
-
+        private void toolstripAbout_Click(object sender, EventArgs e) {
         }
     }
 }

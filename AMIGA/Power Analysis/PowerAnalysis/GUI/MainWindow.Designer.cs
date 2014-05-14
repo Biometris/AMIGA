@@ -76,8 +76,9 @@
             // toolstripAbout
             // 
             this.toolstripAbout.Name = "toolstripAbout";
-            this.toolstripAbout.Size = new System.Drawing.Size(107, 22);
+            this.toolstripAbout.Size = new System.Drawing.Size(152, 22);
             this.toolstripAbout.Text = "About";
+            this.toolstripAbout.Click += new System.EventHandler(this.toolstripAbout_Click);
             // 
             // toolStrip1
             // 
