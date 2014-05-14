@@ -34,7 +34,6 @@ namespace Amiga_Power_Analysis {
         }
 
         private void createEndpointTypesDataGrid() {
-            var endpointsBindingList = new BindingList<Endpoint>(_project.Endpoints);
             var endpointsBindingSouce = new BindingSource(_project.Endpoints, null);
             dataGridEndPoints.AutoGenerateColumns = false;
             dataGridEndPoints.DataSource = endpointsBindingSouce;
