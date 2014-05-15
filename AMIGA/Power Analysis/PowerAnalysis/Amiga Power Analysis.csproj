@@ -57,11 +57,44 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\Comparison.cs" />
     <Compile Include="Core\Design.cs" />
     <Compile Include="Core\Endpoint.cs" />
     <Compile Include="Core\EndpointTypeProvider.cs" />
     <Compile Include="Core\EndpointType.cs" />
     <Compile Include="Core\Factor.cs" />
+    <Compile Include="Core\FactorLevel.cs" />
+    <Compile Include="GUI\ComparisonSettingsForm.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\ComparisonSettingsForm.Designer.cs">
+      <DependentUpon>ComparisonSettingsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\ComparisonsForm.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\ComparisonsForm.Designer.cs">
+      <DependentUpon>ComparisonsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\DesignForm.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\DesignForm.Designer.cs">
+      <DependentUpon>DesignForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\EndpointsForm.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\EndpointsForm.Designer.cs">
+      <DependentUpon>EndpointsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\InteractionsForm.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\InteractionsForm.Designer.cs">
+      <DependentUpon>InteractionsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\ISelectionForm.cs" />
     <Compile Include="GUI\MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -71,6 +104,21 @@
     <Compile Include="Program.cs" />
     <Compile Include="Core\Project.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="GUI\ComparisonSettingsForm.resx">
+      <DependentUpon>ComparisonSettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\ComparisonsForm.resx">
+      <DependentUpon>ComparisonsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\DesignForm.resx">
+      <DependentUpon>DesignForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\EndpointsForm.resx">
+      <DependentUpon>EndpointsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\InteractionsForm.resx">
+      <DependentUpon>InteractionsForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GUI\MainWindow.resx">
       <DependentUpon>MainWindow.cs</DependentUpon>
     </EmbeddedResource>

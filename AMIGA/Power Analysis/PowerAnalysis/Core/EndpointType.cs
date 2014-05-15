@@ -1,12 +1,12 @@
 ﻿namespace AmigaPowerAnalysis.Core {
 
-    public sealed class EndpointType {
+    public enum MeasurementType {
+        Count,
+        Fraction,
+        Nonnegative,
+    };
 
-        public enum MeasurementType {
-            Count,
-            Fraction,
-            Nonnegative,
-        };
+    public sealed class EndpointType {
 
         public EndpointType() {
         }

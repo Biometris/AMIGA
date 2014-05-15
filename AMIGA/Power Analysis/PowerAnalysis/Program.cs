@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using AmigaPowerAnalysis.Gui;
+using AmigaPowerAnalysis.GUI;
 
 namespace AmigaPowerAnalysis {
     static class Program {

@@ -1,22 +1,27 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
+using System.Collections.Generic;
 
 namespace AmigaPowerAnalysis.Core {
+
+    public enum ExperimentalDesignType {
+        CompletelyRandomized,
+        RandomizedCompleteBlocks,
+        SplitPlots,
+    };
+
     public sealed class Design {
 
-        public enum DesignType {
-            CompletelyRandomized,
-            RandomizedCompleteBlocks,
-            RandomizedIncompleteBlocks,
-        };
-
         public Design() {
-            Treatments = new List<Factor>();
+            VarietyFactor = Factor.CreateVarietyFactor();
+            Factors = new List<Factor>();
+            Factors.Add(VarietyFactor);
+            ExperimentalDesignType = ExperimentalDesignType.CompletelyRandomized;
         }
 
         /// <summary>
         /// Type of design 
         /// </summary>
-        public DesignType Type { get; set; }
+        public ExperimentalDesignType Type { get; set; }
 
         /// <summary>
         /// Number of plots in each block
@@ -26,11 +31,22 @@ namespace AmigaPowerAnalysis.Core {
         /// <summary>
         /// Variety factor which includes GMO and Comparator
         /// </summary>
-        public Factor Variety { get; set; }
+        public Factor VarietyFactor { get; set; }
 
         /// <summary>
-        /// List of additional treatments
+        /// The list of factors used in the experiment of this project.
         /// </summary>
-        public List<Factor> Treatments { get; set; }
+        public List<Factor> Factors { get; set; }
+
+        /// <summary>
+        /// The experimental design type used in this project.
+        /// </summary>
+        public ExperimentalDesignType ExperimentalDesignType { get; set; }
+
+        /// <summary>
+        /// Specifies whether or not to use the same interactions for all endpoints.
+        /// </summary>
+        public bool UseDefaultInteractions { get; set; }
+
     }
 }
