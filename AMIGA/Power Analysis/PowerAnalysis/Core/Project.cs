@@ -37,19 +37,5 @@ namespace AmigaPowerAnalysis.Core {
             };
             Comparisons.Add(comparison);
         }
-
-        public void UpdateInteractions() {
-            foreach (var endpoint in Endpoints) {
-                foreach (var factor in Design.Factors) {
-                    endpoint.SetDefaultInteraction(factor);
-                }
-            }
-        }
-
-        public void UpdateInteractionsOfFactor(Factor factor) {
-            foreach (var endpoint in Endpoints) {
-                endpoint.SetDefaultInteraction(factor);
-            }
-        }
     }
 }

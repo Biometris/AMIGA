@@ -33,9 +33,9 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridInteractions.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridInteractions.Location = new System.Drawing.Point(4, 4);
+            this.dataGridInteractions.Location = new System.Drawing.Point(10, 10);
             this.dataGridInteractions.Name = "dataGridInteractions";
-            this.dataGridInteractions.Size = new System.Drawing.Size(648, 491);
+            this.dataGridInteractions.Size = new System.Drawing.Size(635, 478);
             this.dataGridInteractions.TabIndex = 0;
             // 
             // InteractionsForm
@@ -44,6 +44,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.dataGridInteractions);
             this.Name = "InteractionsForm";
+            this.Padding = new System.Windows.Forms.Padding(10);
             this.Size = new System.Drawing.Size(655, 498);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridInteractions)).EndInit();
             this.ResumeLayout(false);

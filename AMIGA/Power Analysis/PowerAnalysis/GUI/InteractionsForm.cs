@@ -14,6 +14,8 @@ namespace AmigaPowerAnalysis.GUI {
 
         private Project _project;
 
+        private DataTable _interactionsDataTable = new DataTable(); 
+
         public InteractionsForm(Project project) {
             InitializeComponent();
             _project = project;
@@ -26,28 +28,26 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void createDataGridInteractions() {
-            var endpointsBindingSouce = new BindingSource(_project.Endpoints, null);
-            dataGridInteractions.AutoGenerateColumns = false;
-            dataGridInteractions.DataSource = endpointsBindingSouce;
-            dataGridInteractions.AllowUserToAddRows = false;
+            dataGridInteractions.DataSource = _interactionsDataTable;
+            updateDataGridInteractions();
         }
 
         private void updateDataGridInteractions() {
-            dataGridInteractions.Columns.Clear();
-
-            var column = new DataGridViewTextBoxColumn();
-            column.DataPropertyName = "Name";
-            column.Name = "Name";
-            dataGridInteractions.Columns.Add(column);
-
+            _interactionsDataTable.Clear();
+            _interactionsDataTable.Columns.Clear();
+            _interactionsDataTable.Columns.Add("Endpoint");
             for (int i = 1; i < _project.Design.Factors.Count; ++i) {
+                _interactionsDataTable.Columns.Add(_project.Design.Factors.ElementAt(i).Name, typeof(bool));
+            }
 
-                var checkbox = new DataGridViewCheckBoxColumn();
-                //checkbox.DataPropertyName = "IsInteractionWithGMO";
-                checkbox.Name = "Factor";
-                checkbox.HeaderText = _project.Design.Factors.ElementAt(i).Name;
-                dataGridInteractions.Columns.Add(checkbox);
-
+            for (int i = 0; i < _project.Endpoints.Count; ++i) {
+                DataRow row = _interactionsDataTable.NewRow();
+                row["Endpoint"] = _project.Endpoints.ElementAt(i).Name;
+                var endpointInteractions = _project.Endpoints.ElementAt(i).InteractionFactors;
+                for (int j = 0; j < endpointInteractions.Count; ++j) {
+                    row[endpointInteractions.ElementAt(j).Name] = true;
+                }
+                _interactionsDataTable.Rows.Add(row);
             }
         }
     }

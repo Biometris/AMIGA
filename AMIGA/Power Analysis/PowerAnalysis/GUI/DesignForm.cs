@@ -142,7 +142,6 @@ namespace AmigaPowerAnalysis.GUI {
             var editedCell = this.dataGridFactors.Rows[e.RowIndex].Cells[e.ColumnIndex];
             var newValue = editedCell.Value;
             if (e.ColumnIndex == dataGridFactors.Columns["IsInteractionWithVariety"].Index) {
-                _project.UpdateInteractionsOfFactor(_project.Design.Factors.ElementAt(e.RowIndex));
                 dataGridFactorLevels.Columns["IsInteractionLevelGMO"].Visible = _currentFactor.IsInteractionWithVariety;
                 dataGridFactorLevels.Columns["IsInteractionLevelComparator"].Visible = _currentFactor.IsInteractionWithVariety;
             }

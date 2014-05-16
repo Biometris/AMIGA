@@ -42,9 +42,9 @@
             this.groupBoxTypeOfDesign.Controls.Add(this.radioButtonSplitPlot);
             this.groupBoxTypeOfDesign.Controls.Add(this.radioButtonRandomizedCompleteBlocks);
             this.groupBoxTypeOfDesign.Controls.Add(this.radioButtonCompletelyRandomized);
-            this.groupBoxTypeOfDesign.Location = new System.Drawing.Point(2, 0);
+            this.groupBoxTypeOfDesign.Location = new System.Drawing.Point(12, 10);
             this.groupBoxTypeOfDesign.Name = "groupBoxTypeOfDesign";
-            this.groupBoxTypeOfDesign.Size = new System.Drawing.Size(661, 99);
+            this.groupBoxTypeOfDesign.Size = new System.Drawing.Size(641, 99);
             this.groupBoxTypeOfDesign.TabIndex = 5;
             this.groupBoxTypeOfDesign.TabStop = false;
             this.groupBoxTypeOfDesign.Text = "Type of design";
@@ -92,9 +92,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridFactorLevels.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridFactorLevels.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridFactorLevels.Location = new System.Drawing.Point(319, 129);
+            this.dataGridFactorLevels.Location = new System.Drawing.Point(329, 139);
             this.dataGridFactorLevels.Name = "dataGridFactorLevels";
-            this.dataGridFactorLevels.Size = new System.Drawing.Size(344, 298);
+            this.dataGridFactorLevels.Size = new System.Drawing.Size(324, 278);
             this.dataGridFactorLevels.TabIndex = 4;
             // 
             // dataGridFactors
@@ -103,9 +103,9 @@
             | System.Windows.Forms.AnchorStyles.Left)));
             this.dataGridFactors.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridFactors.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridFactors.Location = new System.Drawing.Point(0, 129);
+            this.dataGridFactors.Location = new System.Drawing.Point(10, 139);
             this.dataGridFactors.Name = "dataGridFactors";
-            this.dataGridFactors.Size = new System.Drawing.Size(313, 298);
+            this.dataGridFactors.Size = new System.Drawing.Size(313, 278);
             this.dataGridFactors.TabIndex = 3;
             this.dataGridFactors.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridFactors_CellValueChanged);
             this.dataGridFactors.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.dataGridFactors_RowsAdded);
@@ -115,7 +115,7 @@
             // checkBoxUseDefaultInteractions
             // 
             this.checkBoxUseDefaultInteractions.AutoSize = true;
-            this.checkBoxUseDefaultInteractions.Location = new System.Drawing.Point(8, 106);
+            this.checkBoxUseDefaultInteractions.Location = new System.Drawing.Point(18, 116);
             this.checkBoxUseDefaultInteractions.Name = "checkBoxUseDefaultInteractions";
             this.checkBoxUseDefaultInteractions.Size = new System.Drawing.Size(276, 17);
             this.checkBoxUseDefaultInteractions.TabIndex = 6;
@@ -127,11 +127,13 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.Window;
             this.Controls.Add(this.checkBoxUseDefaultInteractions);
             this.Controls.Add(this.groupBoxTypeOfDesign);
             this.Controls.Add(this.dataGridFactorLevels);
             this.Controls.Add(this.dataGridFactors);
             this.Name = "DesignForm";
+            this.Padding = new System.Windows.Forms.Padding(10);
             this.Size = new System.Drawing.Size(663, 427);
             this.groupBoxTypeOfDesign.ResumeLayout(false);
             this.groupBoxTypeOfDesign.PerformLayout();

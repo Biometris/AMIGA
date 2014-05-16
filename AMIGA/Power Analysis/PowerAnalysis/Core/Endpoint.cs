@@ -5,13 +5,8 @@ namespace AmigaPowerAnalysis.Core {
 
         private EndpointType _endpointType;
 
-        /// <summary>
-        /// A dictionary.
-        /// </summary>
-        private Dictionary<string, bool> _interactionFactors;
-
         public Endpoint() {
-            _interactionFactors = new Dictionary<string, bool>();
+            InteractionFactors = new List<Factor>();
         }
 
         /// <summary>
@@ -71,27 +66,9 @@ namespace AmigaPowerAnalysis.Core {
         /// </summary>
         public double LocUpper { get; set; }
 
-        public bool IsInteraction(Factor factor) {
-            if (!_interactionFactors.ContainsKey(factor.Name)) {
-                _interactionFactors.Add(factor.Name, factor.IsInteractionWithVariety);
-            }
-            return _interactionFactors[factor.Name];
-        }
-
-        public void SetInteraction(Factor factor, bool value) {
-            if (!_interactionFactors.ContainsKey(factor.Name)) {
-                _interactionFactors.Add(factor.Name, factor.IsInteractionWithVariety);
-            } else {
-                _interactionFactors[factor.Name] = value;
-            }
-        }
-
-        public void SetDefaultInteraction(Factor factor) {
-            if (!_interactionFactors.ContainsKey(factor.Name)) {
-                _interactionFactors.Add(factor.Name, factor.IsInteractionWithVariety);
-            } else {
-                _interactionFactors[factor.Name] = factor.IsInteractionWithVariety;
-            }
-        }
+        /// <summary>
+        /// Contains the interaction factors for this endpoint.
+        /// </summary>
+        public List<Factor> InteractionFactors { get; set; }
     }
 }

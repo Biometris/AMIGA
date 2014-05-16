@@ -32,9 +32,9 @@
             this.dataGridComparisons.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.dataGridComparisons.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridComparisons.Location = new System.Drawing.Point(3, 3);
+            this.dataGridComparisons.Location = new System.Drawing.Point(10, 10);
             this.dataGridComparisons.Name = "dataGridComparisons";
-            this.dataGridComparisons.Size = new System.Drawing.Size(266, 446);
+            this.dataGridComparisons.Size = new System.Drawing.Size(269, 432);
             this.dataGridComparisons.TabIndex = 0;
             this.dataGridComparisons.SelectionChanged += new System.EventHandler(this.dataGridComparisons_SelectionChanged);
             // 
@@ -42,8 +42,10 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.Window;
             this.Controls.Add(this.dataGridComparisons);
             this.Name = "ComparisonsForm";
+            this.Padding = new System.Windows.Forms.Padding(10);
             this.Size = new System.Drawing.Size(575, 452);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridComparisons)).EndInit();
             this.ResumeLayout(false);

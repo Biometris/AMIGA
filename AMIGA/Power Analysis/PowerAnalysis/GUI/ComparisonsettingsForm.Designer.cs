@@ -29,8 +29,9 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.Window;
             this.Name = "ComparisonSettingsControl";
-            this.Size = new System.Drawing.Size(636, 133);
+            this.Size = new System.Drawing.Size(662, 459);
             this.ResumeLayout(false);
 
         }

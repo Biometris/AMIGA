@@ -33,9 +33,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridEndpoints.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridEndpoints.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridEndpoints.Location = new System.Drawing.Point(3, 3);
+            this.dataGridEndpoints.Location = new System.Drawing.Point(10, 10);
             this.dataGridEndpoints.Name = "dataGridEndpoints";
-            this.dataGridEndpoints.Size = new System.Drawing.Size(871, 179);
+            this.dataGridEndpoints.Size = new System.Drawing.Size(854, 182);
             this.dataGridEndpoints.TabIndex = 2;
             this.dataGridEndpoints.UserAddedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.dataGridEndpoints_UserAddedRow);
             this.dataGridEndpoints.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.dataGridEndpoints_UserDeletingRow);
@@ -46,6 +46,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.dataGridEndpoints);
             this.Name = "EndpointsForm";
+            this.Padding = new System.Windows.Forms.Padding(10);
             this.Size = new System.Drawing.Size(874, 503);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridEndpoints)).EndInit();
             this.ResumeLayout(false);

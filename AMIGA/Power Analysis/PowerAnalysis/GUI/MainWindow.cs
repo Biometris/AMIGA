@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
@@ -9,11 +10,6 @@ namespace AmigaPowerAnalysis.GUI {
 
         private Project _project;
         private EndpointTypeProvider _endpointTypeProvider;
-
-        private TabPage _endpointsTab;
-        private TabPage _designTab;
-        private TabPage _interactionsTab;
-        private TabPage _comparisonsTab;
 
         private EndpointsForm _endpointsForm;
         private DesignForm _designForm;
@@ -42,28 +38,28 @@ namespace AmigaPowerAnalysis.GUI {
             _project.UpdateComparisons(_project.Endpoints.Last());
 
             _endpointsForm = new EndpointsForm(_project, _endpointTypeProvider);
-            _endpointsTab = new TabPage(_endpointsForm.Name);
-            this.tabControl.TabPages.Add(_endpointsTab);
+            var tab = new TabPage(_endpointsForm.Name);
+            this.tabControl.TabPages.Add(tab);
             _endpointsForm.Dock = System.Windows.Forms.DockStyle.Fill;
-            _endpointsTab.Controls.Add(_endpointsForm);
+            tab.Controls.Add(_endpointsForm);
 
             _designForm = new DesignForm(_project);
-            _designTab = new TabPage(_designForm.Name);
-            this.tabControl.TabPages.Add(_designTab);
+            tab = new TabPage(_designForm.Name);
+            this.tabControl.TabPages.Add(tab);
             _designForm.Dock = System.Windows.Forms.DockStyle.Fill;
-            _designTab.Controls.Add(_designForm);
+            tab.Controls.Add(_designForm);
 
             _interactionsForm = new InteractionsForm(_project);
-            _interactionsTab = new TabPage(_interactionsForm.Name);
-            this.tabControl.TabPages.Add(_interactionsTab);
+            tab = new TabPage(_interactionsForm.Name);
+            this.tabControl.TabPages.Add(tab);
             _interactionsForm.Dock = System.Windows.Forms.DockStyle.Fill;
-            _interactionsTab.Controls.Add(_interactionsForm);
+            tab.Controls.Add(_interactionsForm);
 
             _comparisonsForm = new ComparisonsForm(_project);
-            _comparisonsTab = new TabPage(_comparisonsForm.Name);
-            this.tabControl.TabPages.Add(_comparisonsTab);
+            tab = new TabPage(_comparisonsForm.Name);
+            this.tabControl.TabPages.Add(tab);
             _comparisonsForm.Dock = System.Windows.Forms.DockStyle.Fill;
-            _comparisonsTab.Controls.Add(_comparisonsForm);
+            tab.Controls.Add(_comparisonsForm);
         }
 
         #endregion
