@@ -9,6 +9,16 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using AmigaPowerAnalysis.Core;
 
+// TODO Factor name must be entered before Interaction can be checked (otherwise fault)
+// TODO Factor names must be unique
+// TODO Factor labels must be unique
+// TODO Factor labels are compulsitory
+// TODO A factor should have at least two labels; remove factors with 0/1 labels (present user with a message)
+// TODO Not allowed to remove (and rename?) the Variety factor 
+// TODO The Variety factor should not have an Interaction checkbox
+// TODO The First level of the variety factor is considered to be the GMO; second the comparator. renaming of these levels is not allowed???
+// TODO Frequency off factor levels must be postitive
+
 namespace AmigaPowerAnalysis.GUI {
     public partial class DesignForm : UserControl, ISelectionForm {
 

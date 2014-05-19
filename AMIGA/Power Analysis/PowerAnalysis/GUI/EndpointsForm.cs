@@ -9,6 +9,12 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using AmigaPowerAnalysis.Core;
 
+// TODO Obligatory to first enter a name for a new endpoint
+// TODO Binomial totals greyed out for non fractions
+// TODO Binomial totals must be positive
+// TODO LOC=NaN should be displayed as empty textbox; also empty textbox store as to NaN. Possibly better to use null
+// TODO LOC must be positive
+
 namespace AmigaPowerAnalysis.GUI {
     public partial class EndpointsForm : UserControl, ISelectionForm {
 
@@ -51,31 +57,21 @@ namespace AmigaPowerAnalysis.GUI {
             dataGridEndpoints.Columns.Add(combo);
 
             var checkbox = new DataGridViewCheckBoxColumn();
-            checkbox.DataPropertyName = "RepeatedMeasures";
-            checkbox.Name = "RepeatedMeasures";
-            dataGridEndpoints.Columns.Add(checkbox);
-
-            checkbox = new DataGridViewCheckBoxColumn();
-            checkbox.DataPropertyName = "ExcessZeroes";
-            checkbox.Name = "ExcessZeroes";
-            dataGridEndpoints.Columns.Add(checkbox);
-
-            checkbox = new DataGridViewCheckBoxColumn();
             checkbox.DataPropertyName = "Primary";
             checkbox.Name = "Primary";
             dataGridEndpoints.Columns.Add(checkbox);
-
-            column = new DataGridViewTextBoxColumn();
-            column.DataPropertyName = "BinomialTotal";
-            column.Name = "BinomialTotal";
-            column.ValueType = typeof(int);
-            dataGridEndpoints.Columns.Add(column);
 
             combo = new DataGridViewComboBoxColumn();
             combo.DataSource = Enum.GetValues(typeof(MeasurementType));
             combo.DataPropertyName = "Measurement";
             combo.ValueType = typeof(MeasurementType);
             dataGridEndpoints.Columns.Add(combo);
+
+            column = new DataGridViewTextBoxColumn();
+            column.DataPropertyName = "BinomialTotal";
+            column.Name = "BinomialTotal";
+            column.ValueType = typeof(int);
+            dataGridEndpoints.Columns.Add(column);
 
             column = new DataGridViewTextBoxColumn();
             column.DataPropertyName = "LocLower";
@@ -89,6 +85,16 @@ namespace AmigaPowerAnalysis.GUI {
             column.ValueType = typeof(double);
             dataGridEndpoints.Columns.Add(column);
 
+            checkbox = new DataGridViewCheckBoxColumn();
+            checkbox.DataPropertyName = "ExcessZeroes";
+            checkbox.Name = "ExcessZeroes";
+            dataGridEndpoints.Columns.Add(checkbox);
+
+
+            checkbox = new DataGridViewCheckBoxColumn();
+            checkbox.DataPropertyName = "RepeatedMeasures";
+            checkbox.Name = "RepeatedMeasures";
+            dataGridEndpoints.Columns.Add(checkbox);
         }
 
         private void dataGridEndpoints_UserAddedRow(object sender, DataGridViewRowEventArgs e) {
