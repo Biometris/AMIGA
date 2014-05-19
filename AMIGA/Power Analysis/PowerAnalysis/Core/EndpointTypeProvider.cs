@@ -7,7 +7,7 @@ namespace AmigaPowerAnalysis.Core {
         private List<EndpointType> _endpointTypes;
 
         public EndpointTypeProvider() {
-            // ToDo: save and retrieve in Registry
+            // TODO WinForm to define default endpoint type and to save these in an XML file (or Registry) for retrieval
             _endpointTypes = new List<EndpointType>();
             _endpointTypes.Add(new EndpointType("Predator", true, MeasurementType.Count, 0, 0.5, 2));
             _endpointTypes.Add(new EndpointType("Detrivore", true, MeasurementType.Count, 0, double.NaN, 3));
