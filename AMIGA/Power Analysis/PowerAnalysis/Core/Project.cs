@@ -12,7 +12,6 @@ namespace AmigaPowerAnalysis.Core {
 
         public Project() {
             Endpoints = new List<Endpoint>();
-            Comparisons = new List<Comparison>();
             Design = new Design();
             UseDefaultInteractions = true;
         }
@@ -40,7 +39,7 @@ namespace AmigaPowerAnalysis.Core {
                         for (int i = 1; i < Design.Factors.Count; ++i) {
                             var factor = Design.Factors.ElementAt(i);
                             if (factor.IsInteractionWithVariety) {
-                                endpoint.InteractionFactors.Add(factor);
+                                endpoint.AddInteractionFactor(factor);
                             }
                         }
                     }
@@ -51,15 +50,10 @@ namespace AmigaPowerAnalysis.Core {
         /// <summary>
         /// The comparisons of this project.
         /// </summary>
-        public List<Comparison> Comparisons { get; set; }
-
-        public void UpdateComparisons(Endpoint endpoint) {
-            var comparison = new Comparison() {
-                Name = string.Format("Default"),
-                Endpoint = endpoint,
-                IsDefault = true,
-            };
-            Comparisons.Add(comparison);
+        public IEnumerable<Comparison> Comparisons {
+            get {
+                return Endpoints.SelectMany(ep => ep.Comparisons).ToList();
+            }
         }
     }
 }

@@ -69,10 +69,10 @@ namespace AmigaPowerAnalysis.GUI {
                 var endpoint = _project.Endpoints.ElementAt(e.RowIndex);
                 var factor = _project.Design.Factors.ElementAt(e.ColumnIndex);
                 var isChecked = (bool)_interactionsDataTable.Rows[e.RowIndex][e.ColumnIndex];
-                if (isChecked && !endpoint.InteractionFactors.Contains(factor)) {
-                    endpoint.InteractionFactors.Add(factor);
-                } else if (!isChecked && endpoint.InteractionFactors.Contains(factor)) {
-                    endpoint.InteractionFactors.Remove(factor);
+                if (isChecked) {
+                    endpoint.AddInteractionFactor(factor);
+                } else {
+                    endpoint.RemoveInteractionFactor(factor);
                 }
             }
         }

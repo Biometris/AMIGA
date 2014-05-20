@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
+using System.Collections.Generic;
+
 namespace AmigaPowerAnalysis.Core {
 
     public sealed class Endpoint {
@@ -7,6 +9,12 @@ namespace AmigaPowerAnalysis.Core {
 
         public Endpoint() {
             InteractionFactors = new List<Factor>();
+            Comparisons = new List<Comparison>();
+            Comparisons.Add(new Comparison() {
+                Name = string.Format("Default"),
+                Endpoint = this,
+                IsDefault = true,
+            });
         }
 
         /// <summary>
@@ -70,5 +78,22 @@ namespace AmigaPowerAnalysis.Core {
         /// Contains the interaction factors for this endpoint.
         /// </summary>
         public List<Factor> InteractionFactors { get; set; }
+
+        /// <summary>
+        /// The comparisons of this endpoint.
+        /// </summary>
+        public List<Comparison> Comparisons { get; set; }
+
+        public void AddInteractionFactor(Factor factor) {
+            if (!InteractionFactors.Any(f => f == factor)) {
+                InteractionFactors.Add(factor);
+                Comparisons.ForEach(c => c.InteractionFactors.Add(new ComparisonInteractionFactor(factor)));
+            }
+        }
+
+        public void RemoveInteractionFactor(Factor factor) {
+            InteractionFactors.RemoveAll(f => f == factor);
+            Comparisons.ForEach(c => c.InteractionFactors.RemoveAll(ifc => ifc.Factor == factor));
+        }
     }
 }

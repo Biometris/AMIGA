@@ -60,6 +60,7 @@
     <Compile Include="Core\Comparison.cs" />
     <Compile Include="Core\Design.cs" />
     <Compile Include="Core\Endpoint.cs" />
+    <Compile Include="Core\ComparisonInteractionFactor.cs" />
     <Compile Include="Core\EndpointTypeProvider.cs" />
     <Compile Include="Core\EndpointType.cs" />
     <Compile Include="Core\Factor.cs" />

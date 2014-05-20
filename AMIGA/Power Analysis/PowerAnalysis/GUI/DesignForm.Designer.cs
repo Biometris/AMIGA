@@ -27,11 +27,11 @@
             this.radioButtonSplitPlot = new System.Windows.Forms.RadioButton();
             this.radioButtonRandomizedCompleteBlocks = new System.Windows.Forms.RadioButton();
             this.radioButtonCompletelyRandomized = new System.Windows.Forms.RadioButton();
-            this.dataGridFactorLevels = new System.Windows.Forms.DataGridView();
+            this.dataGridViewFactorLevels = new System.Windows.Forms.DataGridView();
             this.dataGridFactors = new System.Windows.Forms.DataGridView();
             this.checkBoxUseDefaultInteractions = new System.Windows.Forms.CheckBox();
             this.groupBoxTypeOfDesign.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridFactorLevels)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFactorLevels)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridFactors)).BeginInit();
             this.SuspendLayout();
             // 
@@ -87,18 +87,19 @@
             // 
             // dataGridFactorLevels
             // 
-            this.dataGridFactorLevels.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.dataGridViewFactorLevels.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.dataGridFactorLevels.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dataGridFactorLevels.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridFactorLevels.Location = new System.Drawing.Point(329, 139);
-            this.dataGridFactorLevels.Name = "dataGridFactorLevels";
-            this.dataGridFactorLevels.RowHeadersWidth = 24;
-            this.dataGridFactorLevels.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            this.dataGridFactorLevels.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridFactorLevels.Size = new System.Drawing.Size(324, 278);
-            this.dataGridFactorLevels.TabIndex = 4;
+            this.dataGridViewFactorLevels.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewFactorLevels.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewFactorLevels.Location = new System.Drawing.Point(329, 139);
+            this.dataGridViewFactorLevels.MultiSelect = false;
+            this.dataGridViewFactorLevels.Name = "dataGridFactorLevels";
+            this.dataGridViewFactorLevels.RowHeadersWidth = 24;
+            this.dataGridViewFactorLevels.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            this.dataGridViewFactorLevels.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dataGridViewFactorLevels.Size = new System.Drawing.Size(324, 278);
+            this.dataGridViewFactorLevels.TabIndex = 4;
             // 
             // dataGridFactors
             // 
@@ -107,6 +108,7 @@
             this.dataGridFactors.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridFactors.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridFactors.Location = new System.Drawing.Point(10, 139);
+            this.dataGridFactors.MultiSelect = false;
             this.dataGridFactors.Name = "dataGridFactors";
             this.dataGridFactors.RowHeadersWidth = 24;
             this.dataGridFactors.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
@@ -137,14 +139,14 @@
             this.BackColor = System.Drawing.SystemColors.Window;
             this.Controls.Add(this.checkBoxUseDefaultInteractions);
             this.Controls.Add(this.groupBoxTypeOfDesign);
-            this.Controls.Add(this.dataGridFactorLevels);
+            this.Controls.Add(this.dataGridViewFactorLevels);
             this.Controls.Add(this.dataGridFactors);
             this.Name = "DesignForm";
             this.Padding = new System.Windows.Forms.Padding(10);
             this.Size = new System.Drawing.Size(663, 427);
             this.groupBoxTypeOfDesign.ResumeLayout(false);
             this.groupBoxTypeOfDesign.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridFactorLevels)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFactorLevels)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridFactors)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -157,7 +159,7 @@
         private System.Windows.Forms.RadioButton radioButtonSplitPlot;
         private System.Windows.Forms.RadioButton radioButtonRandomizedCompleteBlocks;
         private System.Windows.Forms.RadioButton radioButtonCompletelyRandomized;
-        private System.Windows.Forms.DataGridView dataGridFactorLevels;
+        private System.Windows.Forms.DataGridView dataGridViewFactorLevels;
         private System.Windows.Forms.DataGridView dataGridFactors;
         private System.Windows.Forms.CheckBox checkBoxUseDefaultInteractions;
     }

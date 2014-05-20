@@ -105,7 +105,6 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void dataGridEndpoints_UserAddedRow(object sender, DataGridViewRowEventArgs e) {
-            _project.UpdateComparisons(_project.Endpoints.Last());
         }
 
         private void dataGridEndpoints_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e) {

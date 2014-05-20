@@ -30,12 +30,10 @@ namespace AmigaPowerAnalysis.GUI {
                 Name = "Beatle",
                 EndpointType = _endpointTypeProvider.GetEndpointType("Predator")
             });
-            _project.UpdateComparisons(_project.Endpoints.Last());
             _project.Endpoints.Add(new Endpoint() {
                 Name = "Giraffe",
                 EndpointType = _endpointTypeProvider.GetEndpointType("Herbivore")
             });
-            _project.UpdateComparisons(_project.Endpoints.Last());
             _project.Design.Factors.Add(new Factor("Spraying", 3));
 
             _endpointsForm = new EndpointsForm(_project, _endpointTypeProvider);

@@ -74,31 +74,31 @@ namespace AmigaPowerAnalysis.GUI {
             column.DataPropertyName = "Label";
             column.Name = "Label";
             column.HeaderText = "Label";
-            dataGridFactorLevels.Columns.Add(column);
+            dataGridViewFactorLevels.Columns.Add(column);
 
             column = new DataGridViewTextBoxColumn();
             column.DataPropertyName = "Level";
             column.Name = "Level";
             column.HeaderText = "Level";
             column.ValueType = typeof(double);
-            dataGridFactorLevels.Columns.Add(column);
+            dataGridViewFactorLevels.Columns.Add(column);
 
             column = new DataGridViewTextBoxColumn();
             column.DataPropertyName = "Frequency";
             column.Name = "Frequency";
             column.HeaderText = "Frequency";
             column.ValueType = typeof(int);
-            dataGridFactorLevels.Columns.Add(column);
+            dataGridViewFactorLevels.Columns.Add(column);
 
             var checkbox = new DataGridViewCheckBoxColumn();
             checkbox.DataPropertyName = "IsInteractionLevelGMO";
             checkbox.Name = "IsInteractionLevelGMO";
-            dataGridFactorLevels.Columns.Add(checkbox);
+            dataGridViewFactorLevels.Columns.Add(checkbox);
 
             checkbox = new DataGridViewCheckBoxColumn();
             checkbox.DataPropertyName = "IsInteractionLevelComparator";
             checkbox.Name = "IsInteractionLevelComparator";
-            dataGridFactorLevels.Columns.Add(checkbox);
+            dataGridViewFactorLevels.Columns.Add(checkbox);
 
             updateDataGridFactorLevels();
         }
@@ -107,13 +107,13 @@ namespace AmigaPowerAnalysis.GUI {
             if (_currentFactor != null) {
                 var factorLevels = _currentFactor.FactorLevels;
                 var factorLevelsBindingSouce = new BindingSource(factorLevels, null);
-                dataGridFactorLevels.AutoGenerateColumns = false;
-                dataGridFactorLevels.DataSource = factorLevelsBindingSouce;
+                dataGridViewFactorLevels.AutoGenerateColumns = false;
+                dataGridViewFactorLevels.DataSource = factorLevelsBindingSouce;
                 // TODO: check for leaks
                 factorLevelsBindingSouce.AddingNew += new AddingNewEventHandler(bindingSource_AddingNew);
-                if (dataGridFactorLevels.Columns.Count > 0) {
-                    dataGridFactorLevels.Columns["IsInteractionLevelGMO"].Visible = _currentFactor.IsInteractionWithVariety;
-                    dataGridFactorLevels.Columns["IsInteractionLevelComparator"].Visible = _currentFactor.IsInteractionWithVariety; 
+                if (dataGridViewFactorLevels.Columns.Count > 0) {
+                    dataGridViewFactorLevels.Columns["IsInteractionLevelGMO"].Visible = _currentFactor.IsInteractionWithVariety;
+                    dataGridViewFactorLevels.Columns["IsInteractionLevelComparator"].Visible = _currentFactor.IsInteractionWithVariety; 
                 }
             }
         }
@@ -137,7 +137,7 @@ namespace AmigaPowerAnalysis.GUI {
             } else if (this.radioButtonSplitPlot.Checked) {
                 _project.Design.ExperimentalDesignType = ExperimentalDesignType.SplitPlots;
             }
-            if (dataGridFactorLevels.ColumnCount > 0) {
+            if (dataGridViewFactorLevels.ColumnCount > 0) {
                 dataGridFactors.Columns["ExperimentUnitType"].Visible = _project.Design.ExperimentalDesignType == ExperimentalDesignType.SplitPlots;
             }
         }
@@ -158,9 +158,9 @@ namespace AmigaPowerAnalysis.GUI {
             var editedCell = this.dataGridFactors.Rows[e.RowIndex].Cells[e.ColumnIndex];
             var newValue = editedCell.Value;
             if (e.ColumnIndex == dataGridFactors.Columns["IsInteractionWithVariety"].Index) {
-                if (dataGridFactorLevels.Columns.Count > 0) {
-                    dataGridFactorLevels.Columns["IsInteractionLevelGMO"].Visible = _currentFactor.IsInteractionWithVariety;
-                    dataGridFactorLevels.Columns["IsInteractionLevelComparator"].Visible = _currentFactor.IsInteractionWithVariety;
+                if (dataGridViewFactorLevels.Columns.Count > 0) {
+                    dataGridViewFactorLevels.Columns["IsInteractionLevelGMO"].Visible = _currentFactor.IsInteractionWithVariety;
+                    dataGridViewFactorLevels.Columns["IsInteractionLevelComparator"].Visible = _currentFactor.IsInteractionWithVariety;
                 }
             }
         }
@@ -174,13 +174,11 @@ namespace AmigaPowerAnalysis.GUI {
                     var factor = _project.Design.Factors.ElementAt(cell.RowIndex);
                     if (factor.IsInteractionWithVariety) {
                         foreach (var endpoint in _project.Endpoints) {
-                            if (!endpoint.InteractionFactors.Contains(factor)) {
-                                endpoint.InteractionFactors.Add(factor);
-                            }
+                            endpoint.AddInteractionFactor(factor);
                         }
                     } else {
                         foreach (var endpoint in _project.Endpoints) {
-                            endpoint.InteractionFactors.RemoveAll(f => f == factor);
+                            endpoint.RemoveInteractionFactor(factor);
                         }
                     }
                 }
