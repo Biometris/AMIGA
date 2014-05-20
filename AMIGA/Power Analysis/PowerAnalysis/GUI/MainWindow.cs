@@ -12,9 +12,12 @@ namespace AmigaPowerAnalysis.GUI {
         private EndpointTypeProvider _endpointTypeProvider;
 
         private EndpointsForm _endpointsForm;
+        private EndpointsDataForm _endpointsDataForm;
+        private FactorsForm _factorsForm;
         private DesignForm _designForm;
         private InteractionsForm _interactionsForm;
         private ComparisonsForm _comparisonsForm;
+        private ModifiersForm _modifiersForm;
 
         public MainWindow() {
             InitializeComponent();
@@ -42,6 +45,18 @@ namespace AmigaPowerAnalysis.GUI {
             _endpointsForm.Dock = System.Windows.Forms.DockStyle.Fill;
             tab.Controls.Add(_endpointsForm);
 
+            _endpointsDataForm = new EndpointsDataForm(_project, _endpointTypeProvider);
+            tab = new TabPage(_endpointsDataForm.Name);
+            this.tabControl.TabPages.Add(tab);
+            _endpointsDataForm.Dock = System.Windows.Forms.DockStyle.Fill;
+            tab.Controls.Add(_endpointsDataForm);
+
+            _factorsForm = new FactorsForm(_project);
+            tab = new TabPage(_factorsForm.Name);
+            this.tabControl.TabPages.Add(tab);
+            _factorsForm.Dock = System.Windows.Forms.DockStyle.Fill;
+            tab.Controls.Add(_factorsForm);
+
             _designForm = new DesignForm(_project);
             tab = new TabPage(_designForm.Name);
             this.tabControl.TabPages.Add(tab);
@@ -59,6 +74,12 @@ namespace AmigaPowerAnalysis.GUI {
             this.tabControl.TabPages.Add(tab);
             _comparisonsForm.Dock = System.Windows.Forms.DockStyle.Fill;
             tab.Controls.Add(_comparisonsForm);
+
+            _modifiersForm = new ModifiersForm(_project);
+            tab = new TabPage(_modifiersForm.Name);
+            this.tabControl.TabPages.Add(tab);
+            _modifiersForm.Dock = System.Windows.Forms.DockStyle.Fill;
+            tab.Controls.Add(_modifiersForm);
         }
 
         #endregion

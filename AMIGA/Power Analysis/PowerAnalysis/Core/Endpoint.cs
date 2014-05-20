@@ -36,6 +36,9 @@ namespace AmigaPowerAnalysis.Core {
                 Measurement = _endpointType.Measurement;
                 LocLower = _endpointType.LocLower;
                 LocUpper = _endpointType.LocUpper;
+                MuComparator = _endpointType.MuComparator;
+                CvComparator = _endpointType.CvComparator;
+                DistributionType = _endpointType.DistributionType;
             }
         }
 
@@ -53,6 +56,21 @@ namespace AmigaPowerAnalysis.Core {
         /// Whether the endpoint is primary (true) or secondary (false).
         /// </summary>
         public bool Primary { get; set; }
+
+        /// <summary>
+        /// The Mu of the comparator.
+        /// </summary>
+        public double MuComparator { get; set; }
+
+        /// <summary>
+        /// The CV of the comparator.
+        /// </summary>
+        public double CvComparator { get; set; }
+
+        /// <summary>
+        /// The distribution type of this endpoint.
+        /// </summary>
+        public DistributionType DistributionType { get; set; }
 
         /// <summary>
         /// Binomial total for fractions.
@@ -83,6 +101,11 @@ namespace AmigaPowerAnalysis.Core {
         /// The comparisons of this endpoint.
         /// </summary>
         public List<Comparison> Comparisons { get; set; }
+
+        /// <summary>
+        /// Specifies whether to use a modifier for this endpoint or not.
+        /// </summary>
+        public bool UseModifier { get; set; }
 
         public void AddInteractionFactor(Factor factor) {
             if (!InteractionFactors.Any(f => f == factor)) {

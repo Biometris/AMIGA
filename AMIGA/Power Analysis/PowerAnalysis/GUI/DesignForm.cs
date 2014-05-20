@@ -32,25 +32,42 @@ namespace AmigaPowerAnalysis.GUI {
             Name = "Design";
             createDataGridFactors();
             createDataGridFactorLevels();
+            checkBoxUseInteractions.Checked = _project.UseInteractions;
             checkBoxUseDefaultInteractions.Checked = _project.UseDefaultInteractions;
         }
 
         public void Activate() {
-            dataGridFactors.Rows[0].ReadOnly = true;
-            dataGridFactors.Rows[0].DefaultCellStyle.BackColor = Color.LightGray;
-            dataGridFactors.Rows[0].Cells["ExperimentUnitType"].ReadOnly = false;
+            var factorsBindingSouce = new BindingSource(_project.Design.Factors, null);
+            dataGridViewFactors.AutoGenerateColumns = false;
+            dataGridViewFactors.DataSource = factorsBindingSouce;
+
+            dataGridViewFactors.Rows[0].ReadOnly = true;
+            dataGridViewFactors.Rows[0].DefaultCellStyle.BackColor = Color.LightGray;
+            dataGridViewFactors.Rows[0].Cells["ExperimentUnitType"].ReadOnly = false;
+            updateVisibilities();
+        }
+
+        private void updateVisibilities() {
+            if (_project.Design.Factors.Count <= 1) {
+                groupBoxInteractions.Visible = false;
+                dataGridViewFactors.Visible = false;
+                dataGridViewFactorLevels.Visible = false;
+                radioButtonSplitPlot.Visible = false;
+            } else {
+                groupBoxInteractions.Visible = true;
+                checkBoxUseDefaultInteractions.Visible = _project.UseInteractions;
+                dataGridViewFactors.Visible = _project.UseInteractions;
+                dataGridViewFactorLevels.Visible = _project.UseInteractions;
+            }
         }
 
         private void createDataGridFactors() {
-            var factorsBindingSouce = new BindingSource(_project.Design.Factors, null);
-            dataGridFactors.AutoGenerateColumns = false;
-            dataGridFactors.DataSource = factorsBindingSouce;
-
             var column = new DataGridViewTextBoxColumn();
             column.DataPropertyName = "Name";
             column.Name = "Name";
             column.HeaderText = "Factor name";
-            dataGridFactors.Columns.Add(column);
+            column.ReadOnly = true;
+            dataGridViewFactors.Columns.Add(column);
 
             var combo = new DataGridViewComboBoxColumn();
             combo.DataSource = Enum.GetValues(typeof(ExperimentUnitType));
@@ -60,13 +77,13 @@ namespace AmigaPowerAnalysis.GUI {
             combo.HeaderText = "Plot level";
             combo.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
             combo.Visible = _project.Design.ExperimentalDesignType == ExperimentalDesignType.SplitPlots;
-            dataGridFactors.Columns.Add(combo);
+            dataGridViewFactors.Columns.Add(combo);
 
             var checkbox = new DataGridViewCheckBoxColumn();
             checkbox.DataPropertyName = "IsInteractionWithVariety";
             checkbox.Name = "IsInteractionWithVariety";
             checkbox.HeaderText = "Interaction";
-            dataGridFactors.Columns.Add(checkbox);
+            dataGridViewFactors.Columns.Add(checkbox);
         }
 
         private void createDataGridFactorLevels() {
@@ -74,6 +91,7 @@ namespace AmigaPowerAnalysis.GUI {
             column.DataPropertyName = "Label";
             column.Name = "Label";
             column.HeaderText = "Label";
+            column.ReadOnly = true;
             dataGridViewFactorLevels.Columns.Add(column);
 
             column = new DataGridViewTextBoxColumn();
@@ -81,6 +99,7 @@ namespace AmigaPowerAnalysis.GUI {
             column.Name = "Level";
             column.HeaderText = "Level";
             column.ValueType = typeof(double);
+            column.ReadOnly = true;
             dataGridViewFactorLevels.Columns.Add(column);
 
             column = new DataGridViewTextBoxColumn();
@@ -88,6 +107,7 @@ namespace AmigaPowerAnalysis.GUI {
             column.Name = "Frequency";
             column.HeaderText = "Frequency";
             column.ValueType = typeof(int);
+            column.ReadOnly = true;
             dataGridViewFactorLevels.Columns.Add(column);
 
             var checkbox = new DataGridViewCheckBoxColumn();
@@ -109,8 +129,6 @@ namespace AmigaPowerAnalysis.GUI {
                 var factorLevelsBindingSouce = new BindingSource(factorLevels, null);
                 dataGridViewFactorLevels.AutoGenerateColumns = false;
                 dataGridViewFactorLevels.DataSource = factorLevelsBindingSouce;
-                // TODO: check for leaks
-                factorLevelsBindingSouce.AddingNew += new AddingNewEventHandler(bindingSource_AddingNew);
                 if (dataGridViewFactorLevels.Columns.Count > 0) {
                     dataGridViewFactorLevels.Columns["IsInteractionLevelGMO"].Visible = _currentFactor.IsInteractionWithVariety;
                     dataGridViewFactorLevels.Columns["IsInteractionLevelComparator"].Visible = _currentFactor.IsInteractionWithVariety; 
@@ -118,14 +136,8 @@ namespace AmigaPowerAnalysis.GUI {
             }
         }
 
-        private void bindingSource_AddingNew(object sender, AddingNewEventArgs e) {
-            e.NewObject = new FactorLevel() {
-                Level = _currentFactor.GetUniqueFactorLevel(),
-            };
-        }
-
         private void dataGridFactors_SelectionChanged(object sender, EventArgs e) {
-            _currentFactor = _project.Design.Factors.ElementAt(dataGridFactors.CurrentRow.Index);
+            _currentFactor = _project.Design.Factors.ElementAt(dataGridViewFactors.CurrentRow.Index);
             updateDataGridFactorLevels();
         }
 
@@ -138,26 +150,23 @@ namespace AmigaPowerAnalysis.GUI {
                 _project.Design.ExperimentalDesignType = ExperimentalDesignType.SplitPlots;
             }
             if (dataGridViewFactorLevels.ColumnCount > 0) {
-                dataGridFactors.Columns["ExperimentUnitType"].Visible = _project.Design.ExperimentalDesignType == ExperimentalDesignType.SplitPlots;
+                dataGridViewFactors.Columns["ExperimentUnitType"].Visible = _project.Design.ExperimentalDesignType == ExperimentalDesignType.SplitPlots;
             }
+        }
+
+        private void checkBoxUseInteractions_CheckedChanged(object sender, EventArgs e) {
+            _project.UseInteractions = checkBoxUseInteractions.Checked;
+            updateVisibilities();
         }
 
         private void checkBoxUseDefaultInteractions_CheckedChanged(object sender, EventArgs e) {
             _project.UseDefaultInteractions = checkBoxUseDefaultInteractions.Checked;
         }
 
-        private void dataGridFactors_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e) {
-            checkBoxUseDefaultInteractions.Visible = _project.Design.Factors.Count > 1;
-        }
-
-        private void dataGridFactors_RowsRemoved(object sender, DataGridViewRowsRemovedEventArgs e) {
-            checkBoxUseDefaultInteractions.Visible = _project.Design.Factors.Count > 1;
-        }
-
         private void dataGridFactors_CellValueChanged(object sender, DataGridViewCellEventArgs e) {
-            var editedCell = this.dataGridFactors.Rows[e.RowIndex].Cells[e.ColumnIndex];
+            var editedCell = this.dataGridViewFactors.Rows[e.RowIndex].Cells[e.ColumnIndex];
             var newValue = editedCell.Value;
-            if (e.ColumnIndex == dataGridFactors.Columns["IsInteractionWithVariety"].Index) {
+            if (e.ColumnIndex == dataGridViewFactors.Columns["IsInteractionWithVariety"].Index) {
                 if (dataGridViewFactorLevels.Columns.Count > 0) {
                     dataGridViewFactorLevels.Columns["IsInteractionLevelGMO"].Visible = _currentFactor.IsInteractionWithVariety;
                     dataGridViewFactorLevels.Columns["IsInteractionLevelComparator"].Visible = _currentFactor.IsInteractionWithVariety;
@@ -166,11 +175,11 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void dataGridFactors_CurrentCellDirtyStateChanged(object sender, EventArgs e) {
-            var cell = this.dataGridFactors.CurrentCell;
-            if (cell.ColumnIndex == dataGridFactors.Columns["IsInteractionWithVariety"].Index) {
+            var cell = this.dataGridViewFactors.CurrentCell;
+            if (cell.ColumnIndex == dataGridViewFactors.Columns["IsInteractionWithVariety"].Index) {
                 // TODO: update interaction factors for the factor levels
-                if (dataGridFactors.IsCurrentCellDirty) {
-                    dataGridFactors.CommitEdit(DataGridViewDataErrorContexts.Commit);
+                if (dataGridViewFactors.IsCurrentCellDirty) {
+                    dataGridViewFactors.CommitEdit(DataGridViewDataErrorContexts.Commit);
                     var factor = _project.Design.Factors.ElementAt(cell.RowIndex);
                     if (factor.IsInteractionWithVariety) {
                         foreach (var endpoint in _project.Endpoints) {

@@ -71,6 +71,24 @@
     <Compile Include="GUI\ComparisonsForm.Designer.cs">
       <DependentUpon>ComparisonsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\ModifiersForm.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\ModifiersForm.Designer.cs">
+      <DependentUpon>ModifiersForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\FactorsForm.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\FactorsForm.Designer.cs">
+      <DependentUpon>FactorsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\EndpointsDataForm.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\EndpointsDataForm.Designer.cs">
+      <DependentUpon>EndpointsDataForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\DesignForm.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -101,6 +119,15 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="GUI\ComparisonsForm.resx">
       <DependentUpon>ComparisonsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\ModifiersForm.resx">
+      <DependentUpon>ModifiersForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\FactorsForm.resx">
+      <DependentUpon>FactorsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\EndpointsDataForm.resx">
+      <DependentUpon>EndpointsDataForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\DesignForm.resx">
       <DependentUpon>DesignForm.cs</DependentUpon>

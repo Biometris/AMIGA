@@ -28,11 +28,16 @@
             this.radioButtonRandomizedCompleteBlocks = new System.Windows.Forms.RadioButton();
             this.radioButtonCompletelyRandomized = new System.Windows.Forms.RadioButton();
             this.dataGridViewFactorLevels = new System.Windows.Forms.DataGridView();
-            this.dataGridFactors = new System.Windows.Forms.DataGridView();
+            this.dataGridViewFactors = new System.Windows.Forms.DataGridView();
             this.checkBoxUseDefaultInteractions = new System.Windows.Forms.CheckBox();
+            this.groupBoxInteractions = new System.Windows.Forms.GroupBox();
+            this.checkBoxUseInteractions = new System.Windows.Forms.CheckBox();
+            this.fileSystemWatcher1 = new System.IO.FileSystemWatcher();
             this.groupBoxTypeOfDesign.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFactorLevels)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridFactors)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFactors)).BeginInit();
+            this.groupBoxInteractions.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher1)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBoxTypeOfDesign
@@ -87,46 +92,48 @@
             // 
             // dataGridViewFactorLevels
             // 
+            this.dataGridViewFactorLevels.AllowUserToAddRows = false;
+            this.dataGridViewFactorLevels.AllowUserToDeleteRows = false;
             this.dataGridViewFactorLevels.AllowUserToResizeRows = false;
             this.dataGridViewFactorLevels.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridViewFactorLevels.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewFactorLevels.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewFactorLevels.Location = new System.Drawing.Point(329, 139);
+            this.dataGridViewFactorLevels.Location = new System.Drawing.Point(329, 193);
             this.dataGridViewFactorLevels.MultiSelect = false;
             this.dataGridViewFactorLevels.Name = "dataGridViewFactorLevels";
             this.dataGridViewFactorLevels.RowHeadersWidth = 24;
             this.dataGridViewFactorLevels.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dataGridViewFactorLevels.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewFactorLevels.Size = new System.Drawing.Size(324, 278);
+            this.dataGridViewFactorLevels.Size = new System.Drawing.Size(324, 224);
             this.dataGridViewFactorLevels.TabIndex = 4;
             // 
-            // dataGridFactors
+            // dataGridViewFactors
             // 
-            this.dataGridFactors.AllowUserToResizeRows = false;
-            this.dataGridFactors.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.dataGridViewFactors.AllowUserToAddRows = false;
+            this.dataGridViewFactors.AllowUserToDeleteRows = false;
+            this.dataGridViewFactors.AllowUserToResizeRows = false;
+            this.dataGridViewFactors.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.dataGridFactors.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dataGridFactors.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridFactors.Location = new System.Drawing.Point(10, 139);
-            this.dataGridFactors.MultiSelect = false;
-            this.dataGridFactors.Name = "dataGridFactors";
-            this.dataGridFactors.RowHeadersWidth = 24;
-            this.dataGridFactors.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            this.dataGridFactors.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridFactors.Size = new System.Drawing.Size(313, 278);
-            this.dataGridFactors.TabIndex = 3;
-            this.dataGridFactors.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridFactors_CellValueChanged);
-            this.dataGridFactors.CurrentCellDirtyStateChanged += new System.EventHandler(this.dataGridFactors_CurrentCellDirtyStateChanged);
-            this.dataGridFactors.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.dataGridFactors_RowsAdded);
-            this.dataGridFactors.RowsRemoved += new System.Windows.Forms.DataGridViewRowsRemovedEventHandler(this.dataGridFactors_RowsRemoved);
-            this.dataGridFactors.SelectionChanged += new System.EventHandler(this.dataGridFactors_SelectionChanged);
+            this.dataGridViewFactors.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewFactors.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewFactors.Location = new System.Drawing.Point(10, 193);
+            this.dataGridViewFactors.MultiSelect = false;
+            this.dataGridViewFactors.Name = "dataGridViewFactors";
+            this.dataGridViewFactors.RowHeadersWidth = 24;
+            this.dataGridViewFactors.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            this.dataGridViewFactors.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dataGridViewFactors.Size = new System.Drawing.Size(313, 224);
+            this.dataGridViewFactors.TabIndex = 3;
+            this.dataGridViewFactors.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridFactors_CellValueChanged);
+            this.dataGridViewFactors.CurrentCellDirtyStateChanged += new System.EventHandler(this.dataGridFactors_CurrentCellDirtyStateChanged);
+            this.dataGridViewFactors.SelectionChanged += new System.EventHandler(this.dataGridFactors_SelectionChanged);
             // 
             // checkBoxUseDefaultInteractions
             // 
             this.checkBoxUseDefaultInteractions.AutoSize = true;
-            this.checkBoxUseDefaultInteractions.Location = new System.Drawing.Point(18, 116);
+            this.checkBoxUseDefaultInteractions.Location = new System.Drawing.Point(6, 42);
             this.checkBoxUseDefaultInteractions.Name = "checkBoxUseDefaultInteractions";
             this.checkBoxUseDefaultInteractions.Size = new System.Drawing.Size(276, 17);
             this.checkBoxUseDefaultInteractions.TabIndex = 6;
@@ -134,24 +141,55 @@
             this.checkBoxUseDefaultInteractions.UseVisualStyleBackColor = true;
             this.checkBoxUseDefaultInteractions.CheckedChanged += new System.EventHandler(this.checkBoxUseDefaultInteractions_CheckedChanged);
             // 
+            // groupBoxInteractions
+            // 
+            this.groupBoxInteractions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBoxInteractions.Controls.Add(this.checkBoxUseInteractions);
+            this.groupBoxInteractions.Controls.Add(this.checkBoxUseDefaultInteractions);
+            this.groupBoxInteractions.Location = new System.Drawing.Point(12, 115);
+            this.groupBoxInteractions.Name = "groupBoxInteractions";
+            this.groupBoxInteractions.Size = new System.Drawing.Size(638, 72);
+            this.groupBoxInteractions.TabIndex = 7;
+            this.groupBoxInteractions.TabStop = false;
+            this.groupBoxInteractions.Text = "Interactions";
+            // 
+            // checkBoxUseInteractions
+            // 
+            this.checkBoxUseInteractions.AutoSize = true;
+            this.checkBoxUseInteractions.Location = new System.Drawing.Point(6, 19);
+            this.checkBoxUseInteractions.Name = "checkBoxUseInteractions";
+            this.checkBoxUseInteractions.Size = new System.Drawing.Size(214, 17);
+            this.checkBoxUseInteractions.TabIndex = 7;
+            this.checkBoxUseInteractions.Text = "Do you expect interactions with variety?";
+            this.checkBoxUseInteractions.UseVisualStyleBackColor = true;
+            this.checkBoxUseInteractions.CheckedChanged += new System.EventHandler(this.checkBoxUseInteractions_CheckedChanged);
+            // 
+            // fileSystemWatcher1
+            // 
+            this.fileSystemWatcher1.EnableRaisingEvents = true;
+            this.fileSystemWatcher1.SynchronizingObject = this;
+            // 
             // DesignForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.Controls.Add(this.checkBoxUseDefaultInteractions);
+            this.Controls.Add(this.groupBoxInteractions);
             this.Controls.Add(this.groupBoxTypeOfDesign);
             this.Controls.Add(this.dataGridViewFactorLevels);
-            this.Controls.Add(this.dataGridFactors);
+            this.Controls.Add(this.dataGridViewFactors);
             this.Name = "DesignForm";
             this.Padding = new System.Windows.Forms.Padding(10);
             this.Size = new System.Drawing.Size(663, 427);
             this.groupBoxTypeOfDesign.ResumeLayout(false);
             this.groupBoxTypeOfDesign.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFactorLevels)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridFactors)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFactors)).EndInit();
+            this.groupBoxInteractions.ResumeLayout(false);
+            this.groupBoxInteractions.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher1)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -162,7 +200,10 @@
         private System.Windows.Forms.RadioButton radioButtonRandomizedCompleteBlocks;
         private System.Windows.Forms.RadioButton radioButtonCompletelyRandomized;
         private System.Windows.Forms.DataGridView dataGridViewFactorLevels;
-        private System.Windows.Forms.DataGridView dataGridFactors;
+        private System.Windows.Forms.DataGridView dataGridViewFactors;
         private System.Windows.Forms.CheckBox checkBoxUseDefaultInteractions;
+        private System.Windows.Forms.GroupBox groupBoxInteractions;
+        private System.Windows.Forms.CheckBox checkBoxUseInteractions;
+        private System.IO.FileSystemWatcher fileSystemWatcher1;
     }
 }

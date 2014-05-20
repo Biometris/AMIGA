@@ -45,7 +45,7 @@ namespace AmigaPowerAnalysis.Core {
             for (int i = 0; i < numberOfLevels; i++) {
                 FactorLevels.Add(new FactorLevel() {
                     Level = Convert.ToDouble(i+1),
-                    Label = string.Empty,
+                    Label = string.Format("Level {0}", i+1),
                     Frequency = 1,
                 });
             }

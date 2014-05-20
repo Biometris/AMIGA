@@ -8,12 +8,16 @@ namespace AmigaPowerAnalysis.Core {
     /// </summary>
     public sealed class Project {
 
+        private bool _useInteractions;
         private bool _useDefaultInteractions;
+        private bool _useInteractionModifier;
 
         public Project() {
             Endpoints = new List<Endpoint>();
             Design = new Design();
-            UseDefaultInteractions = true;
+            _useInteractions = false;
+            _useDefaultInteractions = true;
+            _useInteractionModifier = false;
         }
 
         /// <summary>
@@ -31,7 +35,7 @@ namespace AmigaPowerAnalysis.Core {
         /// </summary>
         public bool UseDefaultInteractions {
             get { return _useDefaultInteractions; }
-            set { 
+            set {
                 _useDefaultInteractions = value;
                 if (_useDefaultInteractions) {
                     foreach (var endpoint in Endpoints) {
@@ -45,6 +49,22 @@ namespace AmigaPowerAnalysis.Core {
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Specifies whether or not to use interactions.
+        /// </summary>
+        public bool UseInteractions {
+            get { return _useInteractions; }
+            set { _useInteractions = value; }
+        }
+
+        /// <summary>
+        /// Specifies whether design factors can be modifiers.
+        /// </summary>
+        public bool UseModifier {
+            get { return _useInteractionModifier; }
+            set { _useInteractionModifier = value; }
         }
 
         /// <summary>

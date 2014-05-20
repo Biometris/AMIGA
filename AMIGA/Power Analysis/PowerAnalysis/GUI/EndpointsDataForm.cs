@@ -16,21 +16,24 @@ using AmigaPowerAnalysis.Core;
 // TODO LOC must be positive
 
 namespace AmigaPowerAnalysis.GUI {
-    public partial class EndpointsForm : UserControl, ISelectionForm {
+    public partial class EndpointsDataForm : UserControl, ISelectionForm {
 
         private Project _project;
 
         private EndpointTypeProvider _endpointTypeProvider;
 
-        public EndpointsForm(Project project, EndpointTypeProvider endpoointTypeProvider) {
+        public EndpointsDataForm(Project project, EndpointTypeProvider endpoointTypeProvider) {
             InitializeComponent();
-            Name = "Endpoints";
+            Name = "Endpoints data";
             _project = project;
             _endpointTypeProvider = endpoointTypeProvider;
             createDataGridEndpoints();
         }
 
         public void Activate() {
+            var endpointsBindingSouce = new BindingSource(_project.Endpoints, null);
+            dataGridEndpoints.AutoGenerateColumns = false;
+            dataGridEndpoints.DataSource = endpointsBindingSouce;
         }
 
         public EndpointTypeProvider EndpointTypeProvider {
@@ -39,31 +42,12 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void createDataGridEndpoints() {
-            var endpointsBindingSouce = new BindingSource(_project.Endpoints, null);
-            dataGridEndpoints.AutoGenerateColumns = false;
-            dataGridEndpoints.DataSource = endpointsBindingSouce;
-
             var column = new DataGridViewTextBoxColumn();
             column.DataPropertyName = "Name";
             column.Name = "Name";
             dataGridEndpoints.Columns.Add(column);
 
-            var _availableEndpointTypes = _endpointTypeProvider.GetAvailableEndpointTypes().Select(h => new { Name = h.Name, EndpointType = h }).ToList();
             var combo = new DataGridViewComboBoxColumn();
-            combo.DataSource = _availableEndpointTypes;
-            combo.DataPropertyName = "EndpointType";
-            combo.DisplayMember = "Name";
-            combo.ValueMember = "EndpointType";
-            combo.HeaderText = "Endpoint type";
-            combo.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
-            dataGridEndpoints.Columns.Add(combo);
-
-            var checkbox = new DataGridViewCheckBoxColumn();
-            checkbox.DataPropertyName = "Primary";
-            checkbox.Name = "Primary";
-            dataGridEndpoints.Columns.Add(checkbox);
-
-            combo = new DataGridViewComboBoxColumn();
             combo.DataSource = Enum.GetValues(typeof(MeasurementType));
             combo.DataPropertyName = "Measurement";
             combo.ValueType = typeof(MeasurementType);
@@ -71,17 +55,46 @@ namespace AmigaPowerAnalysis.GUI {
             combo.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
             dataGridEndpoints.Columns.Add(combo);
 
+            combo = new DataGridViewComboBoxColumn();
+            combo.DataSource = Enum.GetValues(typeof(DistributionType));
+            combo.DataPropertyName = "DistributionType";
+            combo.ValueType = typeof(DistributionType);
+            combo.HeaderText = "DistributionType";
+            combo.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
+            dataGridEndpoints.Columns.Add(combo);
+
             column = new DataGridViewTextBoxColumn();
-            column.DataPropertyName = "LocLower";
-            column.Name = "LocLower";
+            column.DataPropertyName = "BinomialTotal";
+            column.Name = "BinomialTotal";
+            column.HeaderText = "Binomial total";
+            column.ValueType = typeof(int);
+            dataGridEndpoints.Columns.Add(column);
+
+            column = new DataGridViewTextBoxColumn();
+            column.DataPropertyName = "MuComparator";
+            column.Name = "MuComparator";
+            column.HeaderText = "Mean";
             column.ValueType = typeof(double);
             dataGridEndpoints.Columns.Add(column);
 
             column = new DataGridViewTextBoxColumn();
-            column.DataPropertyName = "LocUpper";
-            column.Name = "LocUpper";
+            column.DataPropertyName = "CvComparator";
+            column.Name = "CvComparator";
+            column.HeaderText = "CV";
             column.ValueType = typeof(double);
             dataGridEndpoints.Columns.Add(column);
+
+            var checkbox = new DataGridViewCheckBoxColumn();
+            checkbox.DataPropertyName = "RepeatedMeasures";
+            checkbox.Name = "RepeatedMeasures";
+            checkbox.HeaderText = "Repeated measures";
+            dataGridEndpoints.Columns.Add(checkbox);
+
+            checkbox = new DataGridViewCheckBoxColumn();
+            checkbox.DataPropertyName = "ExcessZeroes";
+            checkbox.Name = "ExcessZeroes";
+            checkbox.HeaderText = "Excess zeroes";
+            dataGridEndpoints.Columns.Add(checkbox);
         }
 
         private void dataGridEndpoints_UserAddedRow(object sender, DataGridViewRowEventArgs e) {
