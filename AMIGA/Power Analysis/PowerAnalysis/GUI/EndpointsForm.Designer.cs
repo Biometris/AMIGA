@@ -29,6 +29,7 @@
             // 
             // dataGridEndpoints
             // 
+            this.dataGridEndpoints.AllowUserToResizeRows = false;
             this.dataGridEndpoints.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridEndpoints.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;

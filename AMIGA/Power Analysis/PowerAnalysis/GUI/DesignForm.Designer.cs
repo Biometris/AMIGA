@@ -85,8 +85,9 @@
             this.radioButtonCompletelyRandomized.UseVisualStyleBackColor = true;
             this.radioButtonCompletelyRandomized.CheckedChanged += new System.EventHandler(this.radioButtonTypeOfDesign_CheckedChanged);
             // 
-            // dataGridFactorLevels
+            // dataGridViewFactorLevels
             // 
+            this.dataGridViewFactorLevels.AllowUserToResizeRows = false;
             this.dataGridViewFactorLevels.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -94,7 +95,7 @@
             this.dataGridViewFactorLevels.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewFactorLevels.Location = new System.Drawing.Point(329, 139);
             this.dataGridViewFactorLevels.MultiSelect = false;
-            this.dataGridViewFactorLevels.Name = "dataGridFactorLevels";
+            this.dataGridViewFactorLevels.Name = "dataGridViewFactorLevels";
             this.dataGridViewFactorLevels.RowHeadersWidth = 24;
             this.dataGridViewFactorLevels.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dataGridViewFactorLevels.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
@@ -103,6 +104,7 @@
             // 
             // dataGridFactors
             // 
+            this.dataGridFactors.AllowUserToResizeRows = false;
             this.dataGridFactors.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.dataGridFactors.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;

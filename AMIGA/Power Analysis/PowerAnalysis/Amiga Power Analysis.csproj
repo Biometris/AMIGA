@@ -65,12 +65,6 @@
     <Compile Include="Core\EndpointType.cs" />
     <Compile Include="Core\Factor.cs" />
     <Compile Include="Core\FactorLevel.cs" />
-    <Compile Include="GUI\ComparisonSettingsForm.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="GUI\ComparisonSettingsForm.Designer.cs">
-      <DependentUpon>ComparisonSettingsForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="GUI\ComparisonsForm.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -105,9 +99,6 @@
     <Compile Include="Program.cs" />
     <Compile Include="Core\Project.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="GUI\ComparisonSettingsForm.resx">
-      <DependentUpon>ComparisonSettingsForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="GUI\ComparisonsForm.resx">
       <DependentUpon>ComparisonsForm.cs</DependentUpon>
     </EmbeddedResource>

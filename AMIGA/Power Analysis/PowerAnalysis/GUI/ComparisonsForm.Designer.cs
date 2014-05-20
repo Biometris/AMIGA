@@ -35,8 +35,10 @@
             // 
             this.dataGridComparisons.AllowUserToAddRows = false;
             this.dataGridComparisons.AllowUserToDeleteRows = false;
+            this.dataGridComparisons.AllowUserToResizeRows = false;
             this.dataGridComparisons.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
+            this.dataGridComparisons.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridComparisons.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridComparisons.Location = new System.Drawing.Point(10, 10);
             this.dataGridComparisons.MultiSelect = false;
@@ -53,13 +55,17 @@
             // 
             this.dataGridViewFactors.AllowUserToAddRows = false;
             this.dataGridViewFactors.AllowUserToDeleteRows = false;
+            this.dataGridViewFactors.AllowUserToResizeColumns = false;
+            this.dataGridViewFactors.AllowUserToResizeRows = false;
             this.dataGridViewFactors.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
+            this.dataGridViewFactors.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewFactors.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewFactors.Location = new System.Drawing.Point(271, 10);
             this.dataGridViewFactors.MultiSelect = false;
             this.dataGridViewFactors.Name = "dataGridViewFactors";
             this.dataGridViewFactors.ReadOnly = true;
+            this.dataGridViewFactors.RowHeadersVisible = false;
             this.dataGridViewFactors.RowHeadersWidth = 24;
             this.dataGridViewFactors.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dataGridViewFactors.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
@@ -71,9 +77,11 @@
             // 
             this.dataGridViewFactorLevels.AllowUserToAddRows = false;
             this.dataGridViewFactorLevels.AllowUserToDeleteRows = false;
+            this.dataGridViewFactorLevels.AllowUserToResizeRows = false;
             this.dataGridViewFactorLevels.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.dataGridViewFactorLevels.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewFactorLevels.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewFactorLevels.Location = new System.Drawing.Point(471, 10);
             this.dataGridViewFactorLevels.MultiSelect = false;
