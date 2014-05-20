@@ -54,9 +54,23 @@ namespace AmigaPowerAnalysis.GUI {
             combo.DataPropertyName = "EndpointType";
             combo.DisplayMember = "Name";
             combo.ValueMember = "EndpointType";
+            combo.HeaderText = "Endpoint type";
+            combo.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
             dataGridEndpoints.Columns.Add(combo);
 
             var checkbox = new DataGridViewCheckBoxColumn();
+            checkbox.DataPropertyName = "RepeatedMeasures";
+            checkbox.Name = "RepeatedMeasures";
+            checkbox.HeaderText = "Repeated measures";
+            dataGridEndpoints.Columns.Add(checkbox);
+
+            checkbox = new DataGridViewCheckBoxColumn();
+            checkbox.DataPropertyName = "ExcessZeroes";
+            checkbox.Name = "ExcessZeroes";
+            checkbox.HeaderText = "Excess zeroes";
+            dataGridEndpoints.Columns.Add(checkbox);
+
+            checkbox = new DataGridViewCheckBoxColumn();
             checkbox.DataPropertyName = "Primary";
             checkbox.Name = "Primary";
             dataGridEndpoints.Columns.Add(checkbox);
@@ -65,11 +79,14 @@ namespace AmigaPowerAnalysis.GUI {
             combo.DataSource = Enum.GetValues(typeof(MeasurementType));
             combo.DataPropertyName = "Measurement";
             combo.ValueType = typeof(MeasurementType);
+            combo.HeaderText = "Measurement";
+            combo.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
             dataGridEndpoints.Columns.Add(combo);
 
             column = new DataGridViewTextBoxColumn();
             column.DataPropertyName = "BinomialTotal";
             column.Name = "BinomialTotal";
+            column.HeaderText = "Binomial total";
             column.ValueType = typeof(int);
             dataGridEndpoints.Columns.Add(column);
 
@@ -85,16 +102,6 @@ namespace AmigaPowerAnalysis.GUI {
             column.ValueType = typeof(double);
             dataGridEndpoints.Columns.Add(column);
 
-            checkbox = new DataGridViewCheckBoxColumn();
-            checkbox.DataPropertyName = "ExcessZeroes";
-            checkbox.Name = "ExcessZeroes";
-            dataGridEndpoints.Columns.Add(checkbox);
-
-
-            checkbox = new DataGridViewCheckBoxColumn();
-            checkbox.DataPropertyName = "RepeatedMeasures";
-            checkbox.Name = "RepeatedMeasures";
-            dataGridEndpoints.Columns.Add(checkbox);
         }
 
         private void dataGridEndpoints_UserAddedRow(object sender, DataGridViewRowEventArgs e) {

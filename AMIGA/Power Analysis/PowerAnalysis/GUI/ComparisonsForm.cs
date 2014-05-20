@@ -43,6 +43,7 @@ namespace AmigaPowerAnalysis.GUI {
             combo.DisplayMember = "Name";
             combo.ValueMember = "Endpoint";
             combo.HeaderText = "Endpoint";
+            combo.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
             dataGridComparisons.Columns.Add(combo);
         }
 

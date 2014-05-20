@@ -32,10 +32,13 @@ namespace AmigaPowerAnalysis.GUI {
             Name = "Design";
             createDataGridFactors();
             createDataGridFactorLevels();
-            checkBoxUseDefaultInteractions.Checked = _project.Design.UseDefaultInteractions;
+            checkBoxUseDefaultInteractions.Checked = _project.UseDefaultInteractions;
         }
 
         public void Activate() {
+            dataGridFactors.Rows[0].ReadOnly = true;
+            dataGridFactors.Rows[0].DefaultCellStyle.BackColor = Color.LightGray;
+            dataGridFactors.Rows[0].Cells["ExperimentUnitType"].ReadOnly = false;
         }
 
         private void createDataGridFactors() {
@@ -55,6 +58,7 @@ namespace AmigaPowerAnalysis.GUI {
             combo.DataPropertyName = "ExperimentUnitType";
             combo.ValueType = typeof(ExperimentUnitType);
             combo.HeaderText = "Plot level";
+            combo.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
             combo.Visible = _project.Design.ExperimentalDesignType == ExperimentalDesignType.SplitPlots;
             dataGridFactors.Columns.Add(combo);
 
@@ -107,8 +111,10 @@ namespace AmigaPowerAnalysis.GUI {
                 dataGridFactorLevels.DataSource = factorLevelsBindingSouce;
                 // TODO: check for leaks
                 factorLevelsBindingSouce.AddingNew += new AddingNewEventHandler(bindingSource_AddingNew);
-                dataGridFactorLevels.Columns["IsInteractionLevelGMO"].Visible = _currentFactor.IsInteractionWithVariety;
-                dataGridFactorLevels.Columns["IsInteractionLevelComparator"].Visible = _currentFactor.IsInteractionWithVariety; 
+                if (dataGridFactorLevels.Columns.Count > 0) {
+                    dataGridFactorLevels.Columns["IsInteractionLevelGMO"].Visible = _currentFactor.IsInteractionWithVariety;
+                    dataGridFactorLevels.Columns["IsInteractionLevelComparator"].Visible = _currentFactor.IsInteractionWithVariety; 
+                }
             }
         }
 
@@ -137,7 +143,7 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void checkBoxUseDefaultInteractions_CheckedChanged(object sender, EventArgs e) {
-            _project.Design.UseDefaultInteractions = checkBoxUseDefaultInteractions.Checked;
+            _project.UseDefaultInteractions = checkBoxUseDefaultInteractions.Checked;
         }
 
         private void dataGridFactors_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e) {
@@ -152,8 +158,32 @@ namespace AmigaPowerAnalysis.GUI {
             var editedCell = this.dataGridFactors.Rows[e.RowIndex].Cells[e.ColumnIndex];
             var newValue = editedCell.Value;
             if (e.ColumnIndex == dataGridFactors.Columns["IsInteractionWithVariety"].Index) {
-                dataGridFactorLevels.Columns["IsInteractionLevelGMO"].Visible = _currentFactor.IsInteractionWithVariety;
-                dataGridFactorLevels.Columns["IsInteractionLevelComparator"].Visible = _currentFactor.IsInteractionWithVariety;
+                if (dataGridFactorLevels.Columns.Count > 0) {
+                    dataGridFactorLevels.Columns["IsInteractionLevelGMO"].Visible = _currentFactor.IsInteractionWithVariety;
+                    dataGridFactorLevels.Columns["IsInteractionLevelComparator"].Visible = _currentFactor.IsInteractionWithVariety;
+                }
+            }
+        }
+
+        private void dataGridFactors_CurrentCellDirtyStateChanged(object sender, EventArgs e) {
+            var cell = this.dataGridFactors.CurrentCell;
+            if (cell.ColumnIndex == dataGridFactors.Columns["IsInteractionWithVariety"].Index) {
+                // TODO: update interaction factors for the factor levels
+                if (dataGridFactors.IsCurrentCellDirty) {
+                    dataGridFactors.CommitEdit(DataGridViewDataErrorContexts.Commit);
+                    var factor = _project.Design.Factors.ElementAt(cell.RowIndex);
+                    if (factor.IsInteractionWithVariety) {
+                        foreach (var endpoint in _project.Endpoints) {
+                            if (!endpoint.InteractionFactors.Contains(factor)) {
+                                endpoint.InteractionFactors.Add(factor);
+                            }
+                        }
+                    } else {
+                        foreach (var endpoint in _project.Endpoints) {
+                            endpoint.InteractionFactors.RemoveAll(f => f == factor);
+                        }
+                    }
+                }
             }
         }
     }

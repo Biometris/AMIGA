@@ -43,10 +43,6 @@ namespace AmigaPowerAnalysis.Core {
         /// </summary>
         public ExperimentalDesignType ExperimentalDesignType { get; set; }
 
-        /// <summary>
-        /// Specifies whether or not to use the same interactions for all endpoints.
-        /// </summary>
-        public bool UseDefaultInteractions { get; set; }
 
     }
 }

@@ -29,14 +29,19 @@
             // 
             // dataGridInteractions
             // 
+            this.dataGridInteractions.AllowUserToAddRows = false;
+            this.dataGridInteractions.AllowUserToDeleteRows = false;
             this.dataGridInteractions.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridInteractions.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridInteractions.Location = new System.Drawing.Point(10, 10);
             this.dataGridInteractions.Name = "dataGridInteractions";
+            this.dataGridInteractions.RowHeadersWidth = 24;
+            this.dataGridInteractions.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dataGridInteractions.Size = new System.Drawing.Size(635, 478);
             this.dataGridInteractions.TabIndex = 0;
+            this.dataGridInteractions.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridInteractions_CellValueChanged);
             // 
             // InteractionsForm
             // 

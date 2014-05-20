@@ -36,6 +36,7 @@ namespace AmigaPowerAnalysis.GUI {
                 EndpointType = _endpointTypeProvider.GetEndpointType("Herbivore")
             });
             _project.UpdateComparisons(_project.Endpoints.Last());
+            _project.Design.Factors.Add(new Factor("Spraying", 3));
 
             _endpointsForm = new EndpointsForm(_project, _endpointTypeProvider);
             var tab = new TabPage(_endpointsForm.Name);

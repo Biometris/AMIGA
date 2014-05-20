@@ -25,6 +25,13 @@ namespace AmigaPowerAnalysis.GUI {
 
         public void Activate() {
             updateDataGridInteractions();
+            if (_project.UseDefaultInteractions) {
+                dataGridInteractions.ReadOnly = true;
+                dataGridInteractions.DefaultCellStyle.BackColor = Color.LightGray;
+            } else {
+                dataGridInteractions.ReadOnly = false;
+                dataGridInteractions.DefaultCellStyle.BackColor = Color.White;
+            }
         }
 
         private void createDataGridInteractions() {
@@ -38,6 +45,10 @@ namespace AmigaPowerAnalysis.GUI {
             _interactionsDataTable.Columns.Add("Endpoint");
             for (int i = 1; i < _project.Design.Factors.Count; ++i) {
                 _interactionsDataTable.Columns.Add(_project.Design.Factors.ElementAt(i).Name, typeof(bool));
+                if (!_project.Design.Factors.ElementAt(i).IsInteractionWithVariety) {
+                    dataGridInteractions.Columns[i].ReadOnly = true;
+                    dataGridInteractions.Columns[i].DefaultCellStyle.BackColor = Color.LightGray;
+                }
             }
 
             for (int i = 0; i < _project.Endpoints.Count; ++i) {
@@ -45,9 +56,24 @@ namespace AmigaPowerAnalysis.GUI {
                 row["Endpoint"] = _project.Endpoints.ElementAt(i).Name;
                 var endpointInteractions = _project.Endpoints.ElementAt(i).InteractionFactors;
                 for (int j = 0; j < endpointInteractions.Count; ++j) {
-                    row[endpointInteractions.ElementAt(j).Name] = true;
+                    if (_interactionsDataTable.Columns.Contains(endpointInteractions.ElementAt(j).Name)) {
+                        row[endpointInteractions.ElementAt(j).Name] = true;
+                    }
                 }
                 _interactionsDataTable.Rows.Add(row);
+            }
+        }
+
+        private void dataGridInteractions_CellValueChanged(object sender, DataGridViewCellEventArgs e) {
+            if (e.ColumnIndex > 0 && e.ColumnIndex - 1 < _project.Design.Factors.Count) {
+                var endpoint = _project.Endpoints.ElementAt(e.RowIndex);
+                var factor = _project.Design.Factors.ElementAt(e.ColumnIndex);
+                var isChecked = (bool)_interactionsDataTable.Rows[e.RowIndex][e.ColumnIndex];
+                if (isChecked && !endpoint.InteractionFactors.Contains(factor)) {
+                    endpoint.InteractionFactors.Add(factor);
+                } else if (!isChecked && endpoint.InteractionFactors.Contains(factor)) {
+                    endpoint.InteractionFactors.Remove(factor);
+                }
             }
         }
     }

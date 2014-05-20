@@ -34,6 +34,8 @@
             this.dataGridComparisons.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridComparisons.Location = new System.Drawing.Point(10, 10);
             this.dataGridComparisons.Name = "dataGridComparisons";
+            this.dataGridComparisons.RowHeadersWidth = 24;
+            this.dataGridComparisons.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dataGridComparisons.Size = new System.Drawing.Size(269, 432);
             this.dataGridComparisons.TabIndex = 0;
             this.dataGridComparisons.SelectionChanged += new System.EventHandler(this.dataGridComparisons_SelectionChanged);

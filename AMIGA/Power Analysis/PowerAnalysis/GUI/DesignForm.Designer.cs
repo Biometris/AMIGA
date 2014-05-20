@@ -94,6 +94,9 @@
             this.dataGridFactorLevels.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridFactorLevels.Location = new System.Drawing.Point(329, 139);
             this.dataGridFactorLevels.Name = "dataGridFactorLevels";
+            this.dataGridFactorLevels.RowHeadersWidth = 24;
+            this.dataGridFactorLevels.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            this.dataGridFactorLevels.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridFactorLevels.Size = new System.Drawing.Size(324, 278);
             this.dataGridFactorLevels.TabIndex = 4;
             // 
@@ -105,9 +108,13 @@
             this.dataGridFactors.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridFactors.Location = new System.Drawing.Point(10, 139);
             this.dataGridFactors.Name = "dataGridFactors";
+            this.dataGridFactors.RowHeadersWidth = 24;
+            this.dataGridFactors.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            this.dataGridFactors.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridFactors.Size = new System.Drawing.Size(313, 278);
             this.dataGridFactors.TabIndex = 3;
             this.dataGridFactors.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridFactors_CellValueChanged);
+            this.dataGridFactors.CurrentCellDirtyStateChanged += new System.EventHandler(this.dataGridFactors_CurrentCellDirtyStateChanged);
             this.dataGridFactors.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.dataGridFactors_RowsAdded);
             this.dataGridFactors.RowsRemoved += new System.Windows.Forms.DataGridViewRowsRemovedEventHandler(this.dataGridFactors_RowsRemoved);
             this.dataGridFactors.SelectionChanged += new System.EventHandler(this.dataGridFactors_SelectionChanged);
