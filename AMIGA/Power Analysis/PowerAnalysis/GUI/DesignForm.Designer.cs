@@ -42,14 +42,16 @@
             // 
             // groupBoxTypeOfDesign
             // 
-            this.groupBoxTypeOfDesign.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBoxTypeOfDesign.AutoSize = true;
+            this.groupBoxTypeOfDesign.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.groupBoxTypeOfDesign.Controls.Add(this.radioButtonSplitPlot);
             this.groupBoxTypeOfDesign.Controls.Add(this.radioButtonRandomizedCompleteBlocks);
             this.groupBoxTypeOfDesign.Controls.Add(this.radioButtonCompletelyRandomized);
-            this.groupBoxTypeOfDesign.Location = new System.Drawing.Point(12, 10);
+            this.groupBoxTypeOfDesign.Dock = System.Windows.Forms.DockStyle.Top;
+            this.groupBoxTypeOfDesign.Location = new System.Drawing.Point(10, 10);
             this.groupBoxTypeOfDesign.Name = "groupBoxTypeOfDesign";
-            this.groupBoxTypeOfDesign.Size = new System.Drawing.Size(641, 99);
+            this.groupBoxTypeOfDesign.Padding = new System.Windows.Forms.Padding(3, 3, 3, 0);
+            this.groupBoxTypeOfDesign.Size = new System.Drawing.Size(643, 100);
             this.groupBoxTypeOfDesign.TabIndex = 5;
             this.groupBoxTypeOfDesign.TabStop = false;
             this.groupBoxTypeOfDesign.Text = "Type of design";
@@ -57,7 +59,7 @@
             // radioButtonSplitPlot
             // 
             this.radioButtonSplitPlot.AutoSize = true;
-            this.radioButtonSplitPlot.Location = new System.Drawing.Point(6, 65);
+            this.radioButtonSplitPlot.Location = new System.Drawing.Point(11, 67);
             this.radioButtonSplitPlot.Name = "radioButtonSplitPlot";
             this.radioButtonSplitPlot.Size = new System.Drawing.Size(65, 17);
             this.radioButtonSplitPlot.TabIndex = 2;
@@ -69,7 +71,7 @@
             // radioButtonRandomizedCompleteBlocks
             // 
             this.radioButtonRandomizedCompleteBlocks.AutoSize = true;
-            this.radioButtonRandomizedCompleteBlocks.Location = new System.Drawing.Point(6, 42);
+            this.radioButtonRandomizedCompleteBlocks.Location = new System.Drawing.Point(11, 44);
             this.radioButtonRandomizedCompleteBlocks.Name = "radioButtonRandomizedCompleteBlocks";
             this.radioButtonRandomizedCompleteBlocks.Size = new System.Drawing.Size(164, 17);
             this.radioButtonRandomizedCompleteBlocks.TabIndex = 1;
@@ -81,7 +83,7 @@
             // radioButtonCompletelyRandomized
             // 
             this.radioButtonCompletelyRandomized.AutoSize = true;
-            this.radioButtonCompletelyRandomized.Location = new System.Drawing.Point(6, 19);
+            this.radioButtonCompletelyRandomized.Location = new System.Drawing.Point(11, 21);
             this.radioButtonCompletelyRandomized.Name = "radioButtonCompletelyRandomized";
             this.radioButtonCompletelyRandomized.Size = new System.Drawing.Size(133, 17);
             this.radioButtonCompletelyRandomized.TabIndex = 0;
@@ -103,6 +105,7 @@
             this.dataGridViewFactorLevels.Location = new System.Drawing.Point(329, 193);
             this.dataGridViewFactorLevels.MultiSelect = false;
             this.dataGridViewFactorLevels.Name = "dataGridViewFactorLevels";
+            this.dataGridViewFactorLevels.RowHeadersVisible = false;
             this.dataGridViewFactorLevels.RowHeadersWidth = 24;
             this.dataGridViewFactorLevels.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dataGridViewFactorLevels.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
@@ -121,6 +124,7 @@
             this.dataGridViewFactors.Location = new System.Drawing.Point(10, 193);
             this.dataGridViewFactors.MultiSelect = false;
             this.dataGridViewFactors.Name = "dataGridViewFactors";
+            this.dataGridViewFactors.RowHeadersVisible = false;
             this.dataGridViewFactors.RowHeadersWidth = 24;
             this.dataGridViewFactors.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dataGridViewFactors.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
@@ -133,7 +137,7 @@
             // checkBoxUseDefaultInteractions
             // 
             this.checkBoxUseDefaultInteractions.AutoSize = true;
-            this.checkBoxUseDefaultInteractions.Location = new System.Drawing.Point(6, 42);
+            this.checkBoxUseDefaultInteractions.Location = new System.Drawing.Point(11, 43);
             this.checkBoxUseDefaultInteractions.Name = "checkBoxUseDefaultInteractions";
             this.checkBoxUseDefaultInteractions.Size = new System.Drawing.Size(276, 17);
             this.checkBoxUseDefaultInteractions.TabIndex = 6;
@@ -143,13 +147,15 @@
             // 
             // groupBoxInteractions
             // 
-            this.groupBoxInteractions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBoxInteractions.AutoSize = true;
+            this.groupBoxInteractions.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.groupBoxInteractions.Controls.Add(this.checkBoxUseInteractions);
             this.groupBoxInteractions.Controls.Add(this.checkBoxUseDefaultInteractions);
-            this.groupBoxInteractions.Location = new System.Drawing.Point(12, 115);
+            this.groupBoxInteractions.Dock = System.Windows.Forms.DockStyle.Top;
+            this.groupBoxInteractions.Location = new System.Drawing.Point(10, 110);
             this.groupBoxInteractions.Name = "groupBoxInteractions";
-            this.groupBoxInteractions.Size = new System.Drawing.Size(638, 72);
+            this.groupBoxInteractions.Padding = new System.Windows.Forms.Padding(3, 3, 3, 0);
+            this.groupBoxInteractions.Size = new System.Drawing.Size(643, 76);
             this.groupBoxInteractions.TabIndex = 7;
             this.groupBoxInteractions.TabStop = false;
             this.groupBoxInteractions.Text = "Interactions";
@@ -157,7 +163,7 @@
             // checkBoxUseInteractions
             // 
             this.checkBoxUseInteractions.AutoSize = true;
-            this.checkBoxUseInteractions.Location = new System.Drawing.Point(6, 19);
+            this.checkBoxUseInteractions.Location = new System.Drawing.Point(11, 20);
             this.checkBoxUseInteractions.Name = "checkBoxUseInteractions";
             this.checkBoxUseInteractions.Size = new System.Drawing.Size(214, 17);
             this.checkBoxUseInteractions.TabIndex = 7;
@@ -190,6 +196,7 @@
             this.groupBoxInteractions.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher1)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 

@@ -72,7 +72,7 @@ namespace AmigaPowerAnalysis.Core {
         /// </summary>
         public IEnumerable<Comparison> Comparisons {
             get {
-                return Endpoints.SelectMany(ep => ep.Comparisons).ToList();
+                return Endpoints.SelectMany(ep => ep.Comparisons);
             }
         }
     }

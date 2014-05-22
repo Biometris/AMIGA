@@ -23,98 +23,95 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            this.dataGridComparisons = new System.Windows.Forms.DataGridView();
-            this.dataGridViewFactors = new System.Windows.Forms.DataGridView();
             this.dataGridViewFactorLevels = new System.Windows.Forms.DataGridView();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridComparisons)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFactors)).BeginInit();
+            this.dataGridComparisons = new System.Windows.Forms.DataGridView();
+            this.splitContainerComparisons = new System.Windows.Forms.SplitContainer();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFactorLevels)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridComparisons)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerComparisons)).BeginInit();
+            this.splitContainerComparisons.Panel1.SuspendLayout();
+            this.splitContainerComparisons.Panel2.SuspendLayout();
+            this.splitContainerComparisons.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // dataGridComparisons
-            // 
-            this.dataGridComparisons.AllowUserToAddRows = false;
-            this.dataGridComparisons.AllowUserToDeleteRows = false;
-            this.dataGridComparisons.AllowUserToResizeRows = false;
-            this.dataGridComparisons.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.dataGridComparisons.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dataGridComparisons.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridComparisons.Location = new System.Drawing.Point(10, 10);
-            this.dataGridComparisons.MultiSelect = false;
-            this.dataGridComparisons.Name = "dataGridComparisons";
-            this.dataGridComparisons.ReadOnly = true;
-            this.dataGridComparisons.RowHeadersWidth = 24;
-            this.dataGridComparisons.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            this.dataGridComparisons.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridComparisons.Size = new System.Drawing.Size(255, 432);
-            this.dataGridComparisons.TabIndex = 0;
-            this.dataGridComparisons.SelectionChanged += new System.EventHandler(this.dataGridComparisons_SelectionChanged);
-            // 
-            // dataGridViewFactors
-            // 
-            this.dataGridViewFactors.AllowUserToAddRows = false;
-            this.dataGridViewFactors.AllowUserToDeleteRows = false;
-            this.dataGridViewFactors.AllowUserToResizeColumns = false;
-            this.dataGridViewFactors.AllowUserToResizeRows = false;
-            this.dataGridViewFactors.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.dataGridViewFactors.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dataGridViewFactors.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewFactors.Location = new System.Drawing.Point(271, 10);
-            this.dataGridViewFactors.MultiSelect = false;
-            this.dataGridViewFactors.Name = "dataGridViewFactors";
-            this.dataGridViewFactors.ReadOnly = true;
-            this.dataGridViewFactors.RowHeadersVisible = false;
-            this.dataGridViewFactors.RowHeadersWidth = 24;
-            this.dataGridViewFactors.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            this.dataGridViewFactors.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewFactors.Size = new System.Drawing.Size(194, 432);
-            this.dataGridViewFactors.TabIndex = 1;
-            this.dataGridViewFactors.SelectionChanged += new System.EventHandler(this.dataGridViewFactors_SelectionChanged);
             // 
             // dataGridViewFactorLevels
             // 
             this.dataGridViewFactorLevels.AllowUserToAddRows = false;
             this.dataGridViewFactorLevels.AllowUserToDeleteRows = false;
             this.dataGridViewFactorLevels.AllowUserToResizeRows = false;
-            this.dataGridViewFactorLevels.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridViewFactorLevels.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewFactorLevels.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewFactorLevels.Location = new System.Drawing.Point(471, 10);
+            this.dataGridViewFactorLevels.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridViewFactorLevels.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewFactorLevels.MultiSelect = false;
             this.dataGridViewFactorLevels.Name = "dataGridViewFactorLevels";
-            this.dataGridViewFactorLevels.ReadOnly = true;
+            this.dataGridViewFactorLevels.RowHeadersVisible = false;
             this.dataGridViewFactorLevels.RowHeadersWidth = 24;
             this.dataGridViewFactorLevels.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dataGridViewFactorLevels.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewFactorLevels.Size = new System.Drawing.Size(318, 432);
+            this.dataGridViewFactorLevels.Size = new System.Drawing.Size(518, 432);
             this.dataGridViewFactorLevels.TabIndex = 2;
+            // 
+            // dataGridComparisons
+            // 
+            this.dataGridComparisons.AllowUserToAddRows = false;
+            this.dataGridComparisons.AllowUserToDeleteRows = false;
+            this.dataGridComparisons.AllowUserToResizeRows = false;
+            this.dataGridComparisons.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridComparisons.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridComparisons.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridComparisons.Location = new System.Drawing.Point(0, 0);
+            this.dataGridComparisons.MultiSelect = false;
+            this.dataGridComparisons.Name = "dataGridComparisons";
+            this.dataGridComparisons.ReadOnly = true;
+            this.dataGridComparisons.RowHeadersVisible = false;
+            this.dataGridComparisons.RowHeadersWidth = 24;
+            this.dataGridComparisons.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            this.dataGridComparisons.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dataGridComparisons.Size = new System.Drawing.Size(260, 432);
+            this.dataGridComparisons.TabIndex = 3;
+            this.dataGridComparisons.SelectionChanged += new System.EventHandler(this.dataGridComparisons_SelectionChanged);
+            // 
+            // splitContainerComparisons
+            // 
+            this.splitContainerComparisons.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainerComparisons.Location = new System.Drawing.Point(10, 10);
+            this.splitContainerComparisons.Name = "splitContainerComparisons";
+            // 
+            // splitContainerComparisons.Panel1
+            // 
+            this.splitContainerComparisons.Panel1.Controls.Add(this.dataGridComparisons);
+            // 
+            // splitContainerComparisons.Panel2
+            // 
+            this.splitContainerComparisons.Panel2.Controls.Add(this.dataGridViewFactorLevels);
+            this.splitContainerComparisons.Size = new System.Drawing.Size(782, 432);
+            this.splitContainerComparisons.SplitterDistance = 260;
+            this.splitContainerComparisons.TabIndex = 4;
             // 
             // ComparisonsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.Controls.Add(this.dataGridViewFactorLevels);
-            this.Controls.Add(this.dataGridViewFactors);
-            this.Controls.Add(this.dataGridComparisons);
+            this.Controls.Add(this.splitContainerComparisons);
             this.Name = "ComparisonsForm";
             this.Padding = new System.Windows.Forms.Padding(10);
             this.Size = new System.Drawing.Size(802, 452);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridComparisons)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFactors)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFactorLevels)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridComparisons)).EndInit();
+            this.splitContainerComparisons.Panel1.ResumeLayout(false);
+            this.splitContainerComparisons.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerComparisons)).EndInit();
+            this.splitContainerComparisons.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.DataGridView dataGridComparisons;
-        private System.Windows.Forms.DataGridView dataGridViewFactors;
         private System.Windows.Forms.DataGridView dataGridViewFactorLevels;
+        private System.Windows.Forms.DataGridView dataGridComparisons;
+        private System.Windows.Forms.SplitContainer splitContainerComparisons;
     }
 }

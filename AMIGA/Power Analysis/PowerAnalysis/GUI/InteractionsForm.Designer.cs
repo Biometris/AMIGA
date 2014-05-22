@@ -38,6 +38,7 @@
             this.dataGridInteractions.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridInteractions.Location = new System.Drawing.Point(10, 10);
             this.dataGridInteractions.Name = "dataGridInteractions";
+            this.dataGridInteractions.RowHeadersVisible = false;
             this.dataGridInteractions.RowHeadersWidth = 24;
             this.dataGridInteractions.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dataGridInteractions.Size = new System.Drawing.Size(635, 478);

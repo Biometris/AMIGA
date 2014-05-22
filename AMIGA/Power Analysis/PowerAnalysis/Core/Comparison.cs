@@ -15,8 +15,14 @@ namespace AmigaPowerAnalysis.Core {
             InteractionFactors = new List<ComparisonInteractionFactor>();
         }
 
+        /// <summary>
+        /// Specifies whether this is the default comparison.
+        /// </summary>
         public bool IsDefault { get; set; }
 
+        /// <summary>
+        /// The comparison name.
+        /// </summary>
         public string Name { get; set; }
 
         /// <summary>
