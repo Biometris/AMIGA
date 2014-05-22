@@ -37,7 +37,7 @@ namespace AmigaPowerAnalysis.GUI {
                 Name = "Giraffe",
                 EndpointType = _endpointTypeProvider.GetEndpointType("Herbivore")
             });
-            _project.Design.Factors.Add(new Factor("Spraying", 3));
+            _project.Factors.Add(new Factor("Spraying", 3));
 
             _endpointsForm = new EndpointsForm(_project, _endpointTypeProvider);
             var tab = new TabPage(_endpointsForm.Name);

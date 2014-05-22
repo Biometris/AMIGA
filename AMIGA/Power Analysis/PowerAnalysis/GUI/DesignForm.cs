@@ -37,7 +37,7 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         public void Activate() {
-            var factorsBindingSouce = new BindingSource(_project.Design.Factors, null);
+            var factorsBindingSouce = new BindingSource(_project.Factors, null);
             dataGridViewFactors.AutoGenerateColumns = false;
             dataGridViewFactors.DataSource = factorsBindingSouce;
 
@@ -48,7 +48,7 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void updateVisibilities() {
-            if (_project.Design.Factors.Count <= 1) {
+            if (_project.Factors.Count <= 1) {
                 groupBoxInteractions.Visible = false;
                 dataGridViewFactors.Visible = false;
                 dataGridViewFactorLevels.Visible = false;
@@ -137,7 +137,7 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void dataGridFactors_SelectionChanged(object sender, EventArgs e) {
-            _currentFactor = _project.Design.Factors.ElementAt(dataGridViewFactors.CurrentRow.Index);
+            _currentFactor = _project.Factors.ElementAt(dataGridViewFactors.CurrentRow.Index);
             updateDataGridFactorLevels();
         }
 
@@ -180,7 +180,7 @@ namespace AmigaPowerAnalysis.GUI {
                 // TODO: update interaction factors for the factor levels
                 if (dataGridViewFactors.IsCurrentCellDirty) {
                     dataGridViewFactors.CommitEdit(DataGridViewDataErrorContexts.Commit);
-                    var factor = _project.Design.Factors.ElementAt(cell.RowIndex);
+                    var factor = _project.Factors.ElementAt(cell.RowIndex);
                     if (factor.IsInteractionWithVariety) {
                         foreach (var endpoint in _project.Endpoints) {
                             endpoint.AddInteractionFactor(factor);

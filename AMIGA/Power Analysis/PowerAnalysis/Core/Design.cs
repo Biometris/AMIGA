@@ -12,9 +12,6 @@ namespace AmigaPowerAnalysis.Core {
     public sealed class Design {
 
         public Design() {
-            VarietyFactor = Factor.CreateVarietyFactor();
-            Factors = new List<Factor>();
-            Factors.Add(VarietyFactor);
             ExperimentalDesignType = ExperimentalDesignType.CompletelyRandomized;
         }
 
@@ -27,16 +24,6 @@ namespace AmigaPowerAnalysis.Core {
         /// Number of plots in each block
         /// </summary>
         public int NumberOfPlotsPerBlock { get; set; }
-
-        /// <summary>
-        /// Variety factor which includes GMO and Comparator
-        /// </summary>
-        public Factor VarietyFactor { get; set; }
-
-        /// <summary>
-        /// The list of factors used in the experiment of this project.
-        /// </summary>
-        public List<Factor> Factors { get; set; }
 
         /// <summary>
         /// The experimental design type used in this project.

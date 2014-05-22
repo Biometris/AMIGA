@@ -41,7 +41,7 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void createDataGridFactors() {
-            var factorsBindingSouce = new BindingSource(_project.Design.Factors, null);
+            var factorsBindingSouce = new BindingSource(_project.Factors, null);
             dataGridFactors.AutoGenerateColumns = false;
             dataGridFactors.DataSource = factorsBindingSouce;
 
@@ -110,7 +110,7 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void dataGridFactors_SelectionChanged(object sender, EventArgs e) {
-            _currentFactor = _project.Design.Factors.ElementAt(dataGridFactors.CurrentRow.Index);
+            _currentFactor = _project.Factors.ElementAt(dataGridFactors.CurrentRow.Index);
             updateDataGridFactorLevels();
         }
     }

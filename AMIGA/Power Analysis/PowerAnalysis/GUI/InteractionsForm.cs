@@ -43,9 +43,9 @@ namespace AmigaPowerAnalysis.GUI {
             _interactionsDataTable.Clear();
             _interactionsDataTable.Columns.Clear();
             _interactionsDataTable.Columns.Add("Endpoint");
-            for (int i = 1; i < _project.Design.Factors.Count; ++i) {
-                _interactionsDataTable.Columns.Add(_project.Design.Factors.ElementAt(i).Name, typeof(bool));
-                if (!_project.Design.Factors.ElementAt(i).IsInteractionWithVariety) {
+            for (int i = 1; i < _project.Factors.Count; ++i) {
+                _interactionsDataTable.Columns.Add(_project.Factors.ElementAt(i).Name, typeof(bool));
+                if (!_project.Factors.ElementAt(i).IsInteractionWithVariety) {
                     dataGridInteractions.Columns[i].ReadOnly = true;
                     dataGridInteractions.Columns[i].DefaultCellStyle.BackColor = Color.LightGray;
                 }
@@ -65,9 +65,9 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void dataGridInteractions_CellValueChanged(object sender, DataGridViewCellEventArgs e) {
-            if (e.ColumnIndex > 0 && e.ColumnIndex - 1 < _project.Design.Factors.Count) {
+            if (e.ColumnIndex > 0 && e.ColumnIndex - 1 < _project.Factors.Count) {
                 var endpoint = _project.Endpoints.ElementAt(e.RowIndex);
-                var factor = _project.Design.Factors.ElementAt(e.ColumnIndex);
+                var factor = _project.Factors.ElementAt(e.ColumnIndex);
                 var isChecked = (bool)_interactionsDataTable.Rows[e.RowIndex][e.ColumnIndex];
                 if (isChecked) {
                     endpoint.AddInteractionFactor(factor);

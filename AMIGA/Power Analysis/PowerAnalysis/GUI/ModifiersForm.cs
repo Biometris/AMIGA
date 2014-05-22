@@ -22,7 +22,9 @@ namespace AmigaPowerAnalysis.GUI {
             Name = "Modifiers";
             createDataGridEndpoints();
             createDataGridModifiers();
-            checkBoxUseModifier.Checked = _project.UseModifier;
+            checkBoxUseBlockModifier .Checked = _project.UseBlockModifier;
+            checkBoxUseMainPlotModifier.Checked = _project.UseMainPlotModifier;
+            checkBoxUseFactorModifiers.Checked = _project.UseFactorModifiers;
         }
 
         public void Activate() {
@@ -31,8 +33,9 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void updateVisibilities() {
-            dataGridViewEndpoints.Visible = _project.UseModifier;
-            dataGridViewModifiers.Visible = _project.UseModifier;
+            dataGridViewEndpoints.Visible = _project.UseFactorModifiers;
+            dataGridViewModifiers.Visible = _project.UseFactorModifiers;
+            checkBoxUseMainPlotModifier.Visible = _project.Design.ExperimentalDesignType == ExperimentalDesignType.SplitPlots;
         }
 
         private void createDataGridEndpoints() {
@@ -75,8 +78,18 @@ namespace AmigaPowerAnalysis.GUI {
             }
         }
 
-        private void checkBoxUseModifier_CheckedChanged(object sender, EventArgs e) {
-            _project.UseModifier = checkBoxUseModifier.Checked;
+        private void checkBoxUseBlockModifier_CheckedChanged(object sender, EventArgs e) {
+            _project.UseBlockModifier = checkBoxUseBlockModifier.Checked;
+            updateVisibilities();
+        }
+
+        private void checkBoxUseMainPlotModifier_CheckedChanged(object sender, EventArgs e) {
+            _project.UseMainPlotModifier = checkBoxUseMainPlotModifier.Checked;
+            updateVisibilities();
+        }
+
+        private void checkBoxUseFactorModifiers_CheckedChanged(object sender, EventArgs e) {
+            _project.UseFactorModifiers = checkBoxUseFactorModifiers.Checked;
             updateVisibilities();
         }
 

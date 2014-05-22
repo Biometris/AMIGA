@@ -12,40 +12,14 @@ namespace AmigaPowerAnalysis.Core {
             InteractionFactorLevels =  factor.FactorLevels.Select(fl => new ComparisonInteractionFactorLevel(fl)).ToList();
         }
 
+        /// <summary>
+        /// The factor on which this comparison interaction factor is based.
+        /// </summary>
         public Factor Factor { get; set; }
+
+        /// <summary>
+        /// The comparison interaction factor levels of this comparison interaction factor.
+        /// </summary>
         public List<ComparisonInteractionFactorLevel> InteractionFactorLevels { get; set; }
-    }
-
-    public sealed class ComparisonInteractionFactorLevel {
-
-        public ComparisonInteractionFactorLevel(FactorLevel factorLevel) {
-            FactorLevel = factorLevel;
-            IsInteractionLevelGMO = factorLevel.IsInteractionLevelGMO;
-            IsInteractionLevelComparator = factorLevel.IsInteractionLevelComparator;
-        }
-
-        public FactorLevel FactorLevel { get; set; }
-
-        public bool IsInteractionLevelGMO { get; set; }
-
-        public bool IsInteractionLevelComparator { get; set; }
-
-        public double Level {
-            get {
-                return FactorLevel.Level;
-            }
-        }
-
-        public string Label {
-            get {
-                return FactorLevel.Label;
-            }
-        }
-
-        public int Frequency {
-            get {
-                return FactorLevel.Frequency;
-            }
-        }
     }
 }
