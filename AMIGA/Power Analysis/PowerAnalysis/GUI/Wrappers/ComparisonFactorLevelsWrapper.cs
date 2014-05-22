@@ -20,9 +20,6 @@ namespace AmigaPowerAnalysis.GUI.Wrappers {
             get {
                 return Factor.Factor.Name;
             }
-            set {
-
-            }
         }
 
         public string Label {

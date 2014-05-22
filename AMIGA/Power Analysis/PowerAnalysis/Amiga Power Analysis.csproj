@@ -115,7 +115,8 @@
     <Compile Include="GUI\MainWindow.Designer.cs">
       <DependentUpon>MainWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\Wrappers\ComparisonWrapper.cs" />
+    <Compile Include="GUI\Wrappers\ComparisonFactorLevelsWrapper.cs" />
+    <Compile Include="GUI\Wrappers\FactorModifierWrapper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Core\Project.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
