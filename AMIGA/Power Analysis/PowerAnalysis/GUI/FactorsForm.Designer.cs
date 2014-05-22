@@ -25,56 +25,78 @@
         private void InitializeComponent() {
             this.dataGridViewFactorLevels = new System.Windows.Forms.DataGridView();
             this.dataGridFactors = new System.Windows.Forms.DataGridView();
+            this.splitContainerFactors = new System.Windows.Forms.SplitContainer();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFactorLevels)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridFactors)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerFactors)).BeginInit();
+            this.splitContainerFactors.Panel1.SuspendLayout();
+            this.splitContainerFactors.Panel2.SuspendLayout();
+            this.splitContainerFactors.SuspendLayout();
             this.SuspendLayout();
             // 
             // dataGridViewFactorLevels
             // 
             this.dataGridViewFactorLevels.AllowUserToResizeRows = false;
-            this.dataGridViewFactorLevels.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridViewFactorLevels.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewFactorLevels.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewFactorLevels.Location = new System.Drawing.Point(329, 13);
+            this.dataGridViewFactorLevels.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridViewFactorLevels.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewFactorLevels.MultiSelect = false;
             this.dataGridViewFactorLevels.Name = "dataGridViewFactorLevels";
             this.dataGridViewFactorLevels.RowHeadersWidth = 24;
             this.dataGridViewFactorLevels.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dataGridViewFactorLevels.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewFactorLevels.Size = new System.Drawing.Size(324, 404);
+            this.dataGridViewFactorLevels.Size = new System.Drawing.Size(380, 407);
             this.dataGridViewFactorLevels.TabIndex = 4;
             // 
             // dataGridFactors
             // 
             this.dataGridFactors.AllowUserToResizeRows = false;
-            this.dataGridFactors.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
             this.dataGridFactors.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridFactors.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridFactors.Location = new System.Drawing.Point(10, 13);
+            this.dataGridFactors.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridFactors.Location = new System.Drawing.Point(0, 0);
             this.dataGridFactors.MultiSelect = false;
             this.dataGridFactors.Name = "dataGridFactors";
             this.dataGridFactors.RowHeadersWidth = 24;
             this.dataGridFactors.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dataGridFactors.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridFactors.Size = new System.Drawing.Size(313, 404);
+            this.dataGridFactors.Size = new System.Drawing.Size(259, 407);
             this.dataGridFactors.TabIndex = 3;
             this.dataGridFactors.SelectionChanged += new System.EventHandler(this.dataGridFactors_SelectionChanged);
+            // 
+            // splitContainerFactors
+            // 
+            this.splitContainerFactors.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainerFactors.Location = new System.Drawing.Point(10, 10);
+            this.splitContainerFactors.Name = "splitContainerFactors";
+            // 
+            // splitContainerFactors.Panel1
+            // 
+            this.splitContainerFactors.Panel1.Controls.Add(this.dataGridFactors);
+            // 
+            // splitContainerFactors.Panel2
+            // 
+            this.splitContainerFactors.Panel2.Controls.Add(this.dataGridViewFactorLevels);
+            this.splitContainerFactors.Size = new System.Drawing.Size(643, 407);
+            this.splitContainerFactors.SplitterDistance = 259;
+            this.splitContainerFactors.TabIndex = 5;
             // 
             // FactorsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.Controls.Add(this.dataGridViewFactorLevels);
-            this.Controls.Add(this.dataGridFactors);
+            this.Controls.Add(this.splitContainerFactors);
             this.Name = "FactorsForm";
             this.Padding = new System.Windows.Forms.Padding(10);
             this.Size = new System.Drawing.Size(663, 427);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFactorLevels)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridFactors)).EndInit();
+            this.splitContainerFactors.Panel1.ResumeLayout(false);
+            this.splitContainerFactors.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerFactors)).EndInit();
+            this.splitContainerFactors.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -83,5 +105,6 @@
 
         private System.Windows.Forms.DataGridView dataGridViewFactorLevels;
         private System.Windows.Forms.DataGridView dataGridFactors;
+        private System.Windows.Forms.SplitContainer splitContainerFactors;
     }
 }

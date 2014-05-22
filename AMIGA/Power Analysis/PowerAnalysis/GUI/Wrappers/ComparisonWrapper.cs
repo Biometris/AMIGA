@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 using AmigaPowerAnalysis.Core;
 
 namespace AmigaPowerAnalysis.GUI.Wrappers {
-    public sealed class ComparisonWrapper {
+    public sealed class ComparisonFactorLevelsWrapper {
 
         public ComparisonInteractionFactor Factor { get; set; }
         public ComparisonInteractionFactorLevel ComparisonInteractionFactorLevel { get; set; }
 
-        public ComparisonWrapper(ComparisonInteractionFactor factor, ComparisonInteractionFactorLevel comparisonInteractionFactorLevel) {
+        public ComparisonFactorLevelsWrapper(ComparisonInteractionFactor factor, ComparisonInteractionFactorLevel comparisonInteractionFactorLevel) {
             Factor = factor;
             ComparisonInteractionFactorLevel = comparisonInteractionFactorLevel;
         }

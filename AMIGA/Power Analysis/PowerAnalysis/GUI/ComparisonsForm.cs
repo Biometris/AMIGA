@@ -17,7 +17,7 @@ namespace AmigaPowerAnalysis.GUI {
 
         private Comparison _currentComparison;
         private List<Comparison> _comparisons;
-        private List<ComparisonWrapper> _currentEndpointComparisons;
+        private List<ComparisonFactorLevelsWrapper> _currentComparisonFactorLevels;
 
         public ComparisonsForm(Project project) {
             InitializeComponent();
@@ -35,7 +35,7 @@ namespace AmigaPowerAnalysis.GUI {
             var column = new DataGridViewTextBoxColumn();
             column.DataPropertyName = "Name";
             column.Name = "Name";
-            dataGridComparisons.Columns.Add(column);
+            dataGridViewComparisons.Columns.Add(column);
 
             var _availableEndpoints = _project.Endpoints.Select(h => new { Name = h.Name, Endpoint = h }).ToList();
             var combo = new DataGridViewComboBoxColumn();
@@ -45,7 +45,7 @@ namespace AmigaPowerAnalysis.GUI {
             combo.ValueMember = "Endpoint";
             combo.HeaderText = "Endpoint";
             combo.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
-            dataGridComparisons.Columns.Add(combo);
+            dataGridViewComparisons.Columns.Add(combo);
         }
 
         private void createDataGridFactorLevels() {
@@ -93,22 +93,22 @@ namespace AmigaPowerAnalysis.GUI {
         private void updateDataGridComparisons() {
             _comparisons = _project.Comparisons.ToList();
             var comparisonsBindingSouce = new BindingSource(_comparisons, null);
-            dataGridComparisons.AutoGenerateColumns = false;
-            dataGridComparisons.DataSource = comparisonsBindingSouce;
+            dataGridViewComparisons.AutoGenerateColumns = false;
+            dataGridViewComparisons.DataSource = comparisonsBindingSouce;
             updateDataGridFactorLevels();
         }
 
         private void updateDataGridFactorLevels() {
-            if (_currentEndpointComparisons != null) {
-                var factorLevelsBindingSouce = new BindingSource(_currentEndpointComparisons, null);
+            if (_currentComparisonFactorLevels != null) {
+                var factorLevelsBindingSouce = new BindingSource(_currentComparisonFactorLevels, null);
                 dataGridViewFactorLevels.AutoGenerateColumns = false;
                 dataGridViewFactorLevels.DataSource = factorLevelsBindingSouce;
             }
         }
 
         private void dataGridComparisons_SelectionChanged(object sender, EventArgs e) {
-            _currentComparison = _project.Comparisons.ElementAt(dataGridComparisons.CurrentRow.Index);
-            _currentEndpointComparisons = _currentComparison.InteractionFactors.SelectMany(ifc => ifc.InteractionFactorLevels, (f, l) => new ComparisonWrapper(f, l)).ToList();
+            _currentComparison = _project.Comparisons.ElementAt(dataGridViewComparisons.CurrentRow.Index);
+            _currentComparisonFactorLevels = _currentComparison.InteractionFactors.SelectMany(ifc => ifc.InteractionFactorLevels, (f, l) => new ComparisonFactorLevelsWrapper(f, l)).ToList();
             updateDataGridFactorLevels();
         }
     }

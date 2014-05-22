@@ -40,13 +40,13 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void createDataGridEndpoints() {
             var endpointsBindingSouce = new BindingSource(_project.Endpoints, null);
-            dataGridEndpoints.AutoGenerateColumns = false;
-            dataGridEndpoints.DataSource = endpointsBindingSouce;
+            dataGridViewEndpoints.AutoGenerateColumns = false;
+            dataGridViewEndpoints.DataSource = endpointsBindingSouce;
 
             var column = new DataGridViewTextBoxColumn();
             column.DataPropertyName = "Name";
             column.Name = "Name";
-            dataGridEndpoints.Columns.Add(column);
+            dataGridViewEndpoints.Columns.Add(column);
 
             var _availableEndpointTypes = _endpointTypeProvider.GetAvailableEndpointTypes().Select(h => new { Name = h.Name, EndpointType = h }).ToList();
             var combo = new DataGridViewComboBoxColumn();
@@ -56,12 +56,12 @@ namespace AmigaPowerAnalysis.GUI {
             combo.ValueMember = "EndpointType";
             combo.HeaderText = "Endpoint type";
             combo.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
-            dataGridEndpoints.Columns.Add(combo);
+            dataGridViewEndpoints.Columns.Add(combo);
 
             var checkbox = new DataGridViewCheckBoxColumn();
             checkbox.DataPropertyName = "Primary";
             checkbox.Name = "Primary";
-            dataGridEndpoints.Columns.Add(checkbox);
+            dataGridViewEndpoints.Columns.Add(checkbox);
 
             combo = new DataGridViewComboBoxColumn();
             combo.DataSource = Enum.GetValues(typeof(MeasurementType));
@@ -69,19 +69,19 @@ namespace AmigaPowerAnalysis.GUI {
             combo.ValueType = typeof(MeasurementType);
             combo.HeaderText = "Measurement";
             combo.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
-            dataGridEndpoints.Columns.Add(combo);
+            dataGridViewEndpoints.Columns.Add(combo);
 
             column = new DataGridViewTextBoxColumn();
             column.DataPropertyName = "LocLower";
             column.Name = "LocLower";
             column.ValueType = typeof(double);
-            dataGridEndpoints.Columns.Add(column);
+            dataGridViewEndpoints.Columns.Add(column);
 
             column = new DataGridViewTextBoxColumn();
             column.DataPropertyName = "LocUpper";
             column.Name = "LocUpper";
             column.ValueType = typeof(double);
-            dataGridEndpoints.Columns.Add(column);
+            dataGridViewEndpoints.Columns.Add(column);
         }
 
         private void dataGridEndpoints_UserAddedRow(object sender, DataGridViewRowEventArgs e) {

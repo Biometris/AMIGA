@@ -32,8 +32,8 @@ namespace AmigaPowerAnalysis.GUI {
 
         public void Activate() {
             var endpointsBindingSouce = new BindingSource(_project.Endpoints, null);
-            dataGridEndpoints.AutoGenerateColumns = false;
-            dataGridEndpoints.DataSource = endpointsBindingSouce;
+            dataGridViewEndpoints.AutoGenerateColumns = false;
+            dataGridViewEndpoints.DataSource = endpointsBindingSouce;
         }
 
         public EndpointTypeProvider EndpointTypeProvider {
@@ -45,7 +45,7 @@ namespace AmigaPowerAnalysis.GUI {
             var column = new DataGridViewTextBoxColumn();
             column.DataPropertyName = "Name";
             column.Name = "Name";
-            dataGridEndpoints.Columns.Add(column);
+            dataGridViewEndpoints.Columns.Add(column);
 
             var combo = new DataGridViewComboBoxColumn();
             combo.DataSource = Enum.GetValues(typeof(MeasurementType));
@@ -53,7 +53,7 @@ namespace AmigaPowerAnalysis.GUI {
             combo.ValueType = typeof(MeasurementType);
             combo.HeaderText = "Measurement";
             combo.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
-            dataGridEndpoints.Columns.Add(combo);
+            dataGridViewEndpoints.Columns.Add(combo);
 
             combo = new DataGridViewComboBoxColumn();
             combo.DataSource = Enum.GetValues(typeof(DistributionType));
@@ -61,40 +61,40 @@ namespace AmigaPowerAnalysis.GUI {
             combo.ValueType = typeof(DistributionType);
             combo.HeaderText = "DistributionType";
             combo.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
-            dataGridEndpoints.Columns.Add(combo);
+            dataGridViewEndpoints.Columns.Add(combo);
 
             column = new DataGridViewTextBoxColumn();
             column.DataPropertyName = "BinomialTotal";
             column.Name = "BinomialTotal";
             column.HeaderText = "Binomial total";
             column.ValueType = typeof(int);
-            dataGridEndpoints.Columns.Add(column);
+            dataGridViewEndpoints.Columns.Add(column);
 
             column = new DataGridViewTextBoxColumn();
             column.DataPropertyName = "MuComparator";
             column.Name = "MuComparator";
             column.HeaderText = "Mean";
             column.ValueType = typeof(double);
-            dataGridEndpoints.Columns.Add(column);
+            dataGridViewEndpoints.Columns.Add(column);
 
             column = new DataGridViewTextBoxColumn();
             column.DataPropertyName = "CvComparator";
             column.Name = "CvComparator";
             column.HeaderText = "CV";
             column.ValueType = typeof(double);
-            dataGridEndpoints.Columns.Add(column);
+            dataGridViewEndpoints.Columns.Add(column);
 
             var checkbox = new DataGridViewCheckBoxColumn();
             checkbox.DataPropertyName = "RepeatedMeasures";
             checkbox.Name = "RepeatedMeasures";
             checkbox.HeaderText = "Repeated measures";
-            dataGridEndpoints.Columns.Add(checkbox);
+            dataGridViewEndpoints.Columns.Add(checkbox);
 
             checkbox = new DataGridViewCheckBoxColumn();
             checkbox.DataPropertyName = "ExcessZeroes";
             checkbox.Name = "ExcessZeroes";
             checkbox.HeaderText = "Excess zeroes";
-            dataGridEndpoints.Columns.Add(checkbox);
+            dataGridViewEndpoints.Columns.Add(checkbox);
         }
 
         private void dataGridEndpoints_UserAddedRow(object sender, DataGridViewRowEventArgs e) {

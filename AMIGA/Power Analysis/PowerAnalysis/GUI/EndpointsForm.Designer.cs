@@ -23,42 +23,42 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            this.dataGridEndpoints = new System.Windows.Forms.DataGridView();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridEndpoints)).BeginInit();
+            this.dataGridViewEndpoints = new System.Windows.Forms.DataGridView();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewEndpoints)).BeginInit();
             this.SuspendLayout();
             // 
             // dataGridEndpoints
             // 
-            this.dataGridEndpoints.AllowUserToResizeRows = false;
-            this.dataGridEndpoints.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.dataGridViewEndpoints.AllowUserToResizeRows = false;
+            this.dataGridViewEndpoints.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.dataGridEndpoints.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dataGridEndpoints.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridEndpoints.Location = new System.Drawing.Point(10, 10);
-            this.dataGridEndpoints.Name = "dataGridEndpoints";
-            this.dataGridEndpoints.RowHeadersWidth = 24;
-            this.dataGridEndpoints.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            this.dataGridEndpoints.Size = new System.Drawing.Size(854, 182);
-            this.dataGridEndpoints.TabIndex = 2;
-            this.dataGridEndpoints.UserAddedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.dataGridEndpoints_UserAddedRow);
-            this.dataGridEndpoints.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.dataGridEndpoints_UserDeletingRow);
+            this.dataGridViewEndpoints.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewEndpoints.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewEndpoints.Location = new System.Drawing.Point(10, 10);
+            this.dataGridViewEndpoints.Name = "dataGridEndpoints";
+            this.dataGridViewEndpoints.RowHeadersWidth = 24;
+            this.dataGridViewEndpoints.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            this.dataGridViewEndpoints.Size = new System.Drawing.Size(854, 182);
+            this.dataGridViewEndpoints.TabIndex = 2;
+            this.dataGridViewEndpoints.UserAddedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.dataGridEndpoints_UserAddedRow);
+            this.dataGridViewEndpoints.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.dataGridEndpoints_UserDeletingRow);
             // 
             // EndpointsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.Controls.Add(this.dataGridEndpoints);
+            this.Controls.Add(this.dataGridViewEndpoints);
             this.Name = "EndpointsForm";
             this.Padding = new System.Windows.Forms.Padding(10);
             this.Size = new System.Drawing.Size(874, 503);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridEndpoints)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewEndpoints)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.DataGridView dataGridEndpoints;
+        private System.Windows.Forms.DataGridView dataGridViewEndpoints;
     }
 }
