@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using AmigaPowerAnalysis.Core;
+using System.Text.RegularExpressions;
 
 namespace AmigaPowerAnalysis.GUI {
     public partial class ModifiersForm : UserControl, ISelectionForm {
@@ -30,12 +31,18 @@ namespace AmigaPowerAnalysis.GUI {
         public void Activate() {
             updateDataGridModifiers();
             updateVisibilities();
+            textBoxCVForBlocks.Text = _project.CVForBlocks.ToString();
+            textBoxCVForMainPlots.Text = _project.CVForMainPlots.ToString();
         }
 
         private void updateVisibilities() {
             dataGridViewEndpoints.Visible = _project.UseFactorModifiers;
-            dataGridViewModifiers.Visible = _project.UseFactorModifiers;
+            labelCVForBlocks.Visible = _project.UseBlockModifier;
+            textBoxCVForBlocks.Visible = _project.UseBlockModifier;
             checkBoxUseMainPlotModifier.Visible = _project.Design.ExperimentalDesignType == ExperimentalDesignType.SplitPlots;
+            labelCVForMainPlots.Visible = (_project.Design.ExperimentalDesignType == ExperimentalDesignType.SplitPlots) && _project.UseMainPlotModifier;
+            textBoxCVForMainPlots.Visible = (_project.Design.ExperimentalDesignType == ExperimentalDesignType.SplitPlots) && _project.UseMainPlotModifier;
+            dataGridViewFactorModifiers.Visible = _project.UseFactorModifiers;
         }
 
         private void createDataGridEndpoints() {
@@ -51,18 +58,18 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void createDataGridModifiers() {
             var comparisonsBindingSouce = new BindingSource(_project.Comparisons, null);
-            dataGridViewModifiers.AutoGenerateColumns = false;
-            dataGridViewModifiers.DataSource = comparisonsBindingSouce;
+            dataGridViewFactorModifiers.AutoGenerateColumns = false;
+            dataGridViewFactorModifiers.DataSource = comparisonsBindingSouce;
         }
 
         private void updateDataGridModifiers() {
             if (_currentEndpoint != null) {
-                dataGridViewModifiers.Columns.Clear();
+                dataGridViewFactorModifiers.Columns.Clear();
 
                 var column = new DataGridViewTextBoxColumn();
                 column.DataPropertyName = "Name";
                 column.Name = "Name";
-                dataGridViewModifiers.Columns.Add(column);
+                dataGridViewFactorModifiers.Columns.Add(column);
 
                 var _availableEndpoints = _project.Endpoints.Select(h => new { Name = h.Name, Endpoint = h }).ToList();
                 var combo = new DataGridViewComboBoxColumn();
@@ -72,9 +79,9 @@ namespace AmigaPowerAnalysis.GUI {
                 combo.ValueMember = "Endpoint";
                 combo.HeaderText = "Endpoint";
                 combo.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
-                dataGridViewModifiers.Columns.Add(combo);
+                dataGridViewFactorModifiers.Columns.Add(combo);
             } else {
-                dataGridViewModifiers.DataSource = null;
+                dataGridViewFactorModifiers.DataSource = null;
             }
         }
 
@@ -96,6 +103,28 @@ namespace AmigaPowerAnalysis.GUI {
         private void dataGridViewEndpoints_SelectionChanged(object sender, EventArgs e) {
             _currentEndpoint = _project.Endpoints.ElementAt(dataGridViewEndpoints.CurrentRow.Index);
             updateDataGridModifiers();
+        }
+
+        private void textBoxCVForBlocks_Validating(object sender, CancelEventArgs e) {
+            var textBox = sender as TextBox;
+            double value;
+            if (!Double.TryParse(textBox.Text, out value)) {
+                textBox.Text = Regex.Replace(textBox.Text, "[^0-9.]", "");
+                Double.TryParse(textBox.Text, out value);
+            }
+            _project.CVForBlocks = value;
+            textBox.Text = value.ToString();
+        }
+
+        private void textBoxCVForMainPlots_Validating(object sender, CancelEventArgs e) {
+            var textBox = sender as TextBox;
+            double value;
+            if (!Double.TryParse(textBox.Text, out value)) {
+                textBox.Text = Regex.Replace(textBox.Text, "[^0-9.]", "");
+                Double.TryParse(textBox.Text, out value);
+            }
+            _project.CVForMainPlots = value;
+            textBox.Text = value.ToString();
         }
     }
 }

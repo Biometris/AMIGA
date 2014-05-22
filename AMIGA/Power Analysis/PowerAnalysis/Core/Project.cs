@@ -91,12 +91,22 @@ namespace AmigaPowerAnalysis.Core {
         }
 
         /// <summary>
+        /// Gets and sets the CV for the blocks.
+        /// </summary>
+        public double CVForBlocks { get; set; }
+
+        /// <summary>
         /// Specifies whether to use a modifier for the main plots.
         /// </summary>
         public bool UseMainPlotModifier {
             get { return _useMainPlotModifier; }
             set { _useMainPlotModifier = value; }
         }
+
+        /// <summary>
+        /// Gets and sets the CV for the main plots.
+        /// </summary>
+        public double CVForMainPlots { get; set; }
 
         /// <summary>
         /// The comparisons of this project.
