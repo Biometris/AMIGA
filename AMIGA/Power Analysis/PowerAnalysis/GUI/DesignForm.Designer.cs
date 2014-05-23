@@ -34,8 +34,10 @@
             this.groupBoxInteractions = new System.Windows.Forms.GroupBox();
             this.checkBoxUseInteractions = new System.Windows.Forms.CheckBox();
             this.fileSystemWatcher1 = new System.IO.FileSystemWatcher();
-            this.textBoxTabDescription = new System.Windows.Forms.TextBox();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
+            this.panelTabDescription = new System.Windows.Forms.Panel();
+            this.textBoxTabDescription = new System.Windows.Forms.TextBox();
+            this.textBoxTabTitle = new System.Windows.Forms.TextBox();
             this.groupBoxTypeOfDesign.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFactorLevels)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFactors)).BeginInit();
@@ -45,6 +47,7 @@
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
             this.splitContainer.SuspendLayout();
+            this.panelTabDescription.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBoxTypeOfDesign
@@ -55,7 +58,7 @@
             this.groupBoxTypeOfDesign.Controls.Add(this.radioButtonRandomizedCompleteBlocks);
             this.groupBoxTypeOfDesign.Controls.Add(this.radioButtonCompletelyRandomized);
             this.groupBoxTypeOfDesign.Dock = System.Windows.Forms.DockStyle.Top;
-            this.groupBoxTypeOfDesign.Location = new System.Drawing.Point(10, 104);
+            this.groupBoxTypeOfDesign.Location = new System.Drawing.Point(10, 107);
             this.groupBoxTypeOfDesign.Name = "groupBoxTypeOfDesign";
             this.groupBoxTypeOfDesign.Padding = new System.Windows.Forms.Padding(3, 3, 3, 0);
             this.groupBoxTypeOfDesign.Size = new System.Drawing.Size(643, 100);
@@ -105,6 +108,7 @@
             this.dataGridViewFactorLevels.AllowUserToDeleteRows = false;
             this.dataGridViewFactorLevels.AllowUserToResizeRows = false;
             this.dataGridViewFactorLevels.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewFactorLevels.BackgroundColor = System.Drawing.Color.White;
             this.dataGridViewFactorLevels.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewFactorLevels.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewFactorLevels.Location = new System.Drawing.Point(0, 0);
@@ -114,7 +118,7 @@
             this.dataGridViewFactorLevels.RowHeadersWidth = 24;
             this.dataGridViewFactorLevels.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dataGridViewFactorLevels.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewFactorLevels.Size = new System.Drawing.Size(425, 137);
+            this.dataGridViewFactorLevels.Size = new System.Drawing.Size(425, 134);
             this.dataGridViewFactorLevels.TabIndex = 4;
             // 
             // dataGridViewFactors
@@ -123,6 +127,7 @@
             this.dataGridViewFactors.AllowUserToDeleteRows = false;
             this.dataGridViewFactors.AllowUserToResizeRows = false;
             this.dataGridViewFactors.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewFactors.BackgroundColor = System.Drawing.Color.White;
             this.dataGridViewFactors.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewFactors.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewFactors.Location = new System.Drawing.Point(0, 0);
@@ -132,7 +137,7 @@
             this.dataGridViewFactors.RowHeadersWidth = 24;
             this.dataGridViewFactors.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dataGridViewFactors.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewFactors.Size = new System.Drawing.Size(214, 137);
+            this.dataGridViewFactors.Size = new System.Drawing.Size(214, 134);
             this.dataGridViewFactors.TabIndex = 3;
             this.dataGridViewFactors.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridFactors_CellValueChanged);
             this.dataGridViewFactors.CurrentCellDirtyStateChanged += new System.EventHandler(this.dataGridFactors_CurrentCellDirtyStateChanged);
@@ -156,7 +161,7 @@
             this.groupBoxInteractions.Controls.Add(this.checkBoxUseInteractions);
             this.groupBoxInteractions.Controls.Add(this.checkBoxUseDefaultInteractions);
             this.groupBoxInteractions.Dock = System.Windows.Forms.DockStyle.Top;
-            this.groupBoxInteractions.Location = new System.Drawing.Point(10, 204);
+            this.groupBoxInteractions.Location = new System.Drawing.Point(10, 207);
             this.groupBoxInteractions.Name = "groupBoxInteractions";
             this.groupBoxInteractions.Padding = new System.Windows.Forms.Padding(3, 3, 3, 0);
             this.groupBoxInteractions.Size = new System.Drawing.Size(643, 76);
@@ -180,24 +185,10 @@
             this.fileSystemWatcher1.EnableRaisingEvents = true;
             this.fileSystemWatcher1.SynchronizingObject = this;
             // 
-            // textBoxTabDescription
-            // 
-            this.textBoxTabDescription.BackColor = System.Drawing.SystemColors.Window;
-            this.textBoxTabDescription.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBoxTabDescription.Dock = System.Windows.Forms.DockStyle.Top;
-            this.textBoxTabDescription.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxTabDescription.Location = new System.Drawing.Point(10, 10);
-            this.textBoxTabDescription.Multiline = true;
-            this.textBoxTabDescription.Name = "textBoxTabDescription";
-            this.textBoxTabDescription.ReadOnly = true;
-            this.textBoxTabDescription.Size = new System.Drawing.Size(643, 94);
-            this.textBoxTabDescription.TabIndex = 8;
-            this.textBoxTabDescription.Text = resources.GetString("textBoxTabDescription.Text");
-            // 
             // splitContainer
             // 
             this.splitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer.Location = new System.Drawing.Point(10, 280);
+            this.splitContainer.Location = new System.Drawing.Point(10, 283);
             this.splitContainer.Name = "splitContainer";
             // 
             // splitContainer.Panel1
@@ -207,9 +198,47 @@
             // splitContainer.Panel2
             // 
             this.splitContainer.Panel2.Controls.Add(this.dataGridViewFactorLevels);
-            this.splitContainer.Size = new System.Drawing.Size(643, 137);
+            this.splitContainer.Size = new System.Drawing.Size(643, 134);
             this.splitContainer.SplitterDistance = 214;
             this.splitContainer.TabIndex = 9;
+            // 
+            // panelTabDescription
+            // 
+            this.panelTabDescription.AutoSize = true;
+            this.panelTabDescription.Controls.Add(this.textBoxTabDescription);
+            this.panelTabDescription.Controls.Add(this.textBoxTabTitle);
+            this.panelTabDescription.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelTabDescription.Location = new System.Drawing.Point(10, 10);
+            this.panelTabDescription.Name = "panelTabDescription";
+            this.panelTabDescription.Size = new System.Drawing.Size(643, 97);
+            this.panelTabDescription.TabIndex = 10;
+            // 
+            // textBoxTabDescription
+            // 
+            this.textBoxTabDescription.BackColor = System.Drawing.SystemColors.Window;
+            this.textBoxTabDescription.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBoxTabDescription.Dock = System.Windows.Forms.DockStyle.Top;
+            this.textBoxTabDescription.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxTabDescription.Location = new System.Drawing.Point(0, 22);
+            this.textBoxTabDescription.Multiline = true;
+            this.textBoxTabDescription.Name = "textBoxTabDescription";
+            this.textBoxTabDescription.ReadOnly = true;
+            this.textBoxTabDescription.Size = new System.Drawing.Size(643, 75);
+            this.textBoxTabDescription.TabIndex = 6;
+            this.textBoxTabDescription.Text = resources.GetString("textBoxTabDescription.Text");
+            // 
+            // textBoxTabTitle
+            // 
+            this.textBoxTabTitle.BackColor = System.Drawing.Color.White;
+            this.textBoxTabTitle.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBoxTabTitle.Dock = System.Windows.Forms.DockStyle.Top;
+            this.textBoxTabTitle.Font = new System.Drawing.Font("Arial", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxTabTitle.Location = new System.Drawing.Point(0, 0);
+            this.textBoxTabTitle.Name = "textBoxTabTitle";
+            this.textBoxTabTitle.ReadOnly = true;
+            this.textBoxTabTitle.Size = new System.Drawing.Size(643, 22);
+            this.textBoxTabTitle.TabIndex = 7;
+            this.textBoxTabTitle.Text = "Tab title";
             // 
             // DesignForm
             // 
@@ -219,7 +248,7 @@
             this.Controls.Add(this.splitContainer);
             this.Controls.Add(this.groupBoxInteractions);
             this.Controls.Add(this.groupBoxTypeOfDesign);
-            this.Controls.Add(this.textBoxTabDescription);
+            this.Controls.Add(this.panelTabDescription);
             this.Name = "DesignForm";
             this.Padding = new System.Windows.Forms.Padding(10);
             this.Size = new System.Drawing.Size(663, 427);
@@ -234,6 +263,8 @@
             this.splitContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
             this.splitContainer.ResumeLayout(false);
+            this.panelTabDescription.ResumeLayout(false);
+            this.panelTabDescription.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -251,7 +282,9 @@
         private System.Windows.Forms.GroupBox groupBoxInteractions;
         private System.Windows.Forms.CheckBox checkBoxUseInteractions;
         private System.IO.FileSystemWatcher fileSystemWatcher1;
-        private System.Windows.Forms.TextBox textBoxTabDescription;
         private System.Windows.Forms.SplitContainer splitContainer;
+        private System.Windows.Forms.Panel panelTabDescription;
+        private System.Windows.Forms.TextBox textBoxTabDescription;
+        private System.Windows.Forms.TextBox textBoxTabTitle;
     }
 }
