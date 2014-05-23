@@ -1,0 +1,189 @@
+scalar    nLevelsVariety ; 3
+variate   [values=2,3] nLevelsAdditionalTreats
+variate   [values=0,1] Interaction
+variate   [values=0,0] Modifier
+
+scalar    meanComparator ; 10
+scalar    cvComparator ; 50
+scalar    sdInteraction  ; 4
+scalar    power ; 1.5
+text      distribution ; 'negative'
+text      distribution ; 'opoisson'
+text      distribution ; 'power'
+
+scalar    Loc ; 0.5
+scalar    LocNsteps ; 6
+variate   nBlocks ; !(4,6,8,10)
+scalar    ndatasets ; 10
+
+scalar    seed ; 342894
+" Faults "
+fault     [diag=fault ; expla=!t('Interaction must have values 0 or 1')] \
+          sum(Interaction.ni.!(0,1))
+fault     [diag=fault ; expla=!t('Modifier must have values 0 or 1')] \
+          sum(Modifier.ni.!(0,1))
+fault     [diag=fault ; expla=!t('Interaction and Modifier both equal to 1')] \
+          sum((Interaction+Modifier).gt.1)
+
+" Generate design "
+text      labelsVariety ; !t(GMO, Comparator, V3, V4, V5, V6, V7, V8, V9, V10)
+text      labVariety ; labelsVariety$[!(1...nLevelsVariety)]
+factor    [levels=nLevelsVariety ; labels=labVariety] Variety
+
+if nmv(nLevelsAdditionalTreats)
+    pointer   [values=Variety] factors
+    calculate nplots = nLevelsVariety 
+  else
+    calculate nplots = nLevelsVariety * round(exp(sum(log(nLevelsAdditionalTreats))))
+    for [index=ii] nl=#nLevelsAdditionalTreats
+      factor    [levels=nl] Treat[ii]
+    endfor
+    pointer   [values=Variety, Treat[]] factors
+endif
+factor    [nvalues=nplots ; levels=1 ; values=#nplots(1)] block
+factor    [nvalues=nplots ; levels=nplots ; values=1...nplots] plot
+factor    [modify=yes ; nvalues=nplots] factors[]
+generate  factors[]
+print     factors[]
+
+" Interactions with Variety "
+calculate init = urand(seed ; 1)
+variate   [nvalues=nplots ; values=#nplots(#meanComparator)] mean
+variate   comparison ; (Variety.in.1) - (Variety.in.2) ; deci=0
+if sum(Interaction)
+    restrict  nLevelsAdditionalTreats ; Interaction ; saveset=save
+    calculate nrandom = nLevelsVariety * round(exp(sum(log(nLevelsAdditionalTreats))))
+    variate   random ; grnormal(nrandom ; meanComparator ; sdInteraction**2)
+    calculate random = round(10*random)/10
+    facproduc !p(Variety, Treat[#save]) ; combined
+    calculate mean = newlevels(combined ; random)
+    facproduc !p(Treat[#save]) ; interactionTreat
+    calculate nInteract = nlevels(interactionTreat)
+    calculate z1 = (Variety.in.1).and.(interactionTreat.EQ.1) 
+    calculate z2 = (Variety.in.2).and.(interactionTreat.in.!(2,nInteract))
+    calculate comparison = z1 - z2
+    calculate dummy[1] = z1
+    calculate dummy[2] = z1+z2
+    subset    [dummy[2].eq.0 ; setlevels=yes] combined ; subcombined
+    getattrib [attribute=levels,labels] subcombined ; save=levels
+    scalar    idum ; 2
+    for ll=#levels['levels']
+      calculate idum=idum+1
+      calculate dummy[idum] = combined.in.ll
+    endfor
+    if 0
+      print     Variety, interactionTreat, combined, z1, z2, dummy[] ; deci=0
+    endif
+    formula   VarietyModel ; !f(interactionTreat*Variety)
+  else
+    formula   VarietyModel ; !f(Variety)
+    pointer   [nvalues=nLevelsVariety] dummy
+    calculate dummy[] = Variety.in.1...nLevelsVariety
+    calculate dummy[2] = Variety.in.!(1,2)
+endif
+calculate ndummy, ndummy1 = nvalues(dummy) - (0,1)
+
+" Set comparison to default values "
+restrict  mean ; comparison.ne.0
+calculate mean = meanComparator
+restrict  mean 
+print     factors[], mean
+
+" Modifiers "
+if sum(Modifier)
+    restrict  nLevelsAdditionalTreats ; Modifier ; saveset=save
+    calculate nrandom = round(exp(sum(log(nLevelsAdditionalTreats))))
+    variate   random ; urand(0 ; nrandom)
+    calculate random = round(10*random)/10
+    calculate random = random + (1 - mean(random))
+    facproduc !p(Treat[#save]) ; modifierTreat
+    calculate factor = newlevels(modifierTreat ; random)
+    calculate mean = factor * mean
+    formula   ModifierModel ; !f(modifierTreat)
+  else
+    formula   ModifierModel ; !f(Variety - Variety)
+endif
+tabulate  [class=Variety, Treat[1] ; print=mean] mean
+print     block, plot, factors[], mean, comparison
+
+" Check "
+variate   check ; mean
+model     [dist=poisson] check
+fit       [print=*] #VarietyModel + #ModifierModel
+rkeep     lin=lp1
+
+model     [dist=poisson] check
+fit       [print=*] dummy[2...#ndummy1] + #ModifierModel
+rkeep     lin=lp2
+fit       [print=*] dummy[1...#ndummy1] + #ModifierModel
+rkeep     lin=lp3
+calculate chk[1,2] = sum(abs(lp1 - lp2,lp3))
+print     chk[1,2]
+
+" Check with effect for GMO "
+restrict  check ; comparison.eq.1
+calculate check = Loc*check
+restrict  check 
+model     [dist=poisson] check
+fit       [print=*] dummy[1...#ndummy1] + #ModifierModel
+rkeep     lin=lp4
+calculate ratio = exp(lp4-lp1)
+restrict  factors[] ; lp1.ne.lp4
+print     factors[], lp1, lp4, ratio
+restrict  factors[]
+
+" Calculate overdispersion factor "
+calculate sig2NB = (cvComparator/100)**2 - 1/meanComparator
+calculate cvNB = 100*sqrt(mean + sig2NB*mean*mean)/mean
+calculate sig2OP = (cvComparator/100)**2 * meanComparator
+calculate cvOP = 100*sqrt(sig2OP*mean)/mean
+calculate sig2PW = (cvComparator/100)**2 * meanComparator**(2-power)
+calculate cvPW = 100*sqrt(sig2PW*mean**power)/mean
+print     mean, cvNB, cvOP, cvPW
+text      dist ; distribution
+if distribution.eqs.'negative'
+    calculate sig2, cvmean = sig2NB, cvNB
+  elsif distribution.eqs.'opoisson'
+    calculate sig2, cvmean = sig2OP, cvOP
+  elsif distribution.eqs.'power'
+    calculate cvmean = cvPW
+    calculate sig2 = sig2PW*mean**(power-2) - 1/mean
+    text      dist ; 'negative'
+  else
+    fault     [diag=fault ; expl=!t('Wrong setting of distribution')]
+endif
+
+" Loop over Loc/nBlocks values "
+fgrid     [minimum=Loc ; maximum=1 ; ngrid=LocNsteps] gridLOC
+fgrid     [values=gridLOC[], nBlocks] grid
+variate   LOC, nReps ; grid[]
+print     LOC, nReps 
+calculate nloop = nvalues(LOC)
+calculate nfactors = nvalues(factors)
+pointer   [nvalues=nfactors] qfactors
+duplicate factors[] ; qfactors[]
+for [ntimes=nloop ; index=ii]
+  " Create Design "
+  scalar    iiLOC, iiReps ; (LOC, nReps)$[ii]
+  calculate iiplots = iiReps*nplots
+  factor    [nvalues=iiplots ; levels=iiReps] qBlock
+  factor    [nvalues=iiplots ; levels=nplots] qPlot
+  generate  qBlock, qPlot
+  factor    [nvalues=iiplots ; modify=yes] qfactors[] 
+  variate   [nvalues=iiplots] qmean, qcomparison, qsig2, yy
+  equate    factors[],mean,comparison,sig2 ; qfactors[],qmean,qcomparison,qsig2
+  restrict  qmean ; qcomparison.eq.1
+  calculate qmean = iiLOC*qmean
+  restrict  qmean
+  if 1
+    print     qBlock, qPlot, qfactors[], qmean, qcomparison
+  endif
+
+  " Simulate in a loop "
+  for [ntimes=ndatasets ; index=kk]
+    cntgrando [dist=#dist] qmean ; dispersion=qsig2 ; numbers=yy
+  endfor
+
+  exit [co=for] (ii.eq.3)
+endfor
+
