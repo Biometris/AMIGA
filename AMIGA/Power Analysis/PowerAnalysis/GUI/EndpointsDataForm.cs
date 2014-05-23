@@ -25,6 +25,7 @@ namespace AmigaPowerAnalysis.GUI {
         public EndpointsDataForm(Project project, EndpointTypeProvider endpoointTypeProvider) {
             InitializeComponent();
             Name = "Endpoints data";
+            this.textBoxTabTitle.Text = Name;
             _project = project;
             _endpointTypeProvider = endpoointTypeProvider;
             createDataGridEndpoints();

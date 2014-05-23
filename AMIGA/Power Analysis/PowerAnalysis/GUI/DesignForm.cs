@@ -30,6 +30,7 @@ namespace AmigaPowerAnalysis.GUI {
             InitializeComponent();
             _project = project;
             Name = "Design";
+            this.textBoxTabTitle.Text = Name;
             createDataGridFactors();
             createDataGridFactorLevels();
             checkBoxUseInteractions.Checked = _project.UseInteractions;

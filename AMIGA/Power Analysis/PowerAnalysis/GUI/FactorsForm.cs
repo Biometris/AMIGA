@@ -30,6 +30,7 @@ namespace AmigaPowerAnalysis.GUI {
             InitializeComponent();
             _project = project;
             Name = "Factors";
+            this.textBoxTabTitle.Text = Name;
             createDataGridFactors();
             createDataGridFactorLevels();
         }

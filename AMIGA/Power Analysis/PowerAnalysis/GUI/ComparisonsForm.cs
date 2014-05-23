@@ -23,6 +23,7 @@ namespace AmigaPowerAnalysis.GUI {
             InitializeComponent();
             _project = project;
             Name = "Comparisons";
+            this.textBoxTabTitle.Text = Name;
             createDataGridComparisons();
             createDataGridFactorLevels();
         }
