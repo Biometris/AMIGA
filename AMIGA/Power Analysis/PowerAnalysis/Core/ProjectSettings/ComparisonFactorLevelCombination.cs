@@ -16,6 +16,11 @@ namespace AmigaPowerAnalysis.Core {
         private double _meanGMO;
         private double _meanComparator;
 
+        public ComparisonFactorLevelCombination() {
+            _meanGMO = double.NaN;
+            _meanComparator = double.NaN;
+        }
+
         /// <summary>
         /// The comparison for which this factor level combination settings apply.
         /// </summary>
@@ -51,7 +56,7 @@ namespace AmigaPowerAnalysis.Core {
         /// <summary>
         /// 
         /// </summary>
-        [DataMember(Order = 1)]
+        [DataMember(Order = 2)]
         public double MeanGMO {
             get {
                 if (!double.IsNaN(_meanGMO)) {
@@ -60,7 +65,7 @@ namespace AmigaPowerAnalysis.Core {
                 return Comparison.Endpoint.MuComparator;
             }
             set {
-                if (value == Comparison.Endpoint.MuComparator) {
+                if (IsComparisonLevelGMO || value == Comparison.Endpoint.MuComparator) {
                     _meanGMO = double.NaN;
                 } else {
                     _meanGMO = value;
@@ -91,7 +96,7 @@ namespace AmigaPowerAnalysis.Core {
         /// <summary>
         /// 
         /// </summary>
-        [DataMember(Order = 1)]
+        [DataMember(Order = 2)]
         public double MeanComparator {
             get {
                 if (!double.IsNaN(_meanComparator)) {
@@ -100,7 +105,7 @@ namespace AmigaPowerAnalysis.Core {
                 return Comparison.Endpoint.MuComparator;
             }
             set {
-                if (value == Comparison.Endpoint.MuComparator) {
+                if (IsComparisonLevelComparator || value == Comparison.Endpoint.MuComparator) {
                     _meanComparator = double.NaN;
                 } else {
                     _meanComparator = value;

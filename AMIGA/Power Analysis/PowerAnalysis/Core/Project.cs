@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
+using System.Text;
 
 namespace AmigaPowerAnalysis.Core {
 
@@ -145,6 +146,60 @@ namespace AmigaPowerAnalysis.Core {
         /// </summary>
         public IEnumerable<Comparison> GetComparisons() {
             return Endpoints.SelectMany(ep => ep.Comparisons);
+        }
+
+        public List<InputPowerAnalysis> GetPowerAnalysisInput() {
+            var records = new List<InputPowerAnalysis>();
+            var comparisons = GetComparisons();
+            for (int i = 0; i < comparisons.Count(); ++i) {
+                var comparisonRecords = comparisons.ElementAt(i).GetInputPowerAnalysis();
+                comparisonRecords.ForEach(r => r.ComparisonId = i);
+                records.AddRange(comparisonRecords);
+            }
+            return records;
+        }
+
+        public void ExportPowerAnalysisInputToCsv(string filename) {
+            var records = GetPowerAnalysisInput();
+            var separator = ",";
+
+            var headers = new List<string>();
+            headers.Add("Endpoint");
+            headers.Add("ComparisonId");
+            headers.Add("NumberOfInteractions");
+            headers.Add("Block");
+            headers.Add("MainPlot");
+            headers.Add("SubPlot");
+            foreach (var factor in Factors) {
+                headers.Add(factor.Name);
+            }
+            headers.Add("SubPlot");
+            headers.Add("Comparison");
+
+            var stringBuilder = new StringBuilder();
+            stringBuilder.AppendLine(string.Join(separator, headers));
+
+            foreach (var record in records) {
+                var line = new List<string>();
+                line.Add(record.Endpoint.ToString());
+                line.Add(record.ComparisonId.ToString());
+                line.Add(record.NumberOfInteractions.ToString());
+                line.Add(record.Block.ToString());
+                line.Add(record.MainPlot.ToString());
+                line.Add(record.SubPlot.ToString());
+                foreach (var factor in record.Factors) {
+                    line.Add(factor.ToString());
+                }
+                line.Add(record.SubPlot.ToString());
+                line.Add(record.Comparison.ToString());
+                stringBuilder.AppendLine(string.Join(separator, line));
+            }
+
+            var csvString = stringBuilder.ToString();
+            using (var file = new System.IO.StreamWriter(filename)) {
+                file.WriteLine(csvString);
+                file.Close();
+            }
         }
     }
 }

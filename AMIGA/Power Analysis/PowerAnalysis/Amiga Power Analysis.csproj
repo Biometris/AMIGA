@@ -60,6 +60,7 @@
   <ItemGroup>
     <Compile Include="Core\ProjectManager.cs" />
     <Compile Include="Core\ProjectSettings\Comparison.cs" />
+    <Compile Include="Core\ProjectSettings\ModifierFactorLevelCombination.cs" />
     <Compile Include="Core\ProjectSettings\Design.cs" />
     <Compile Include="Core\Distributions\PoissonLogNormalDistribution.cs" />
     <Compile Include="Core\Distributions\PowerLawDistribution.cs" />
@@ -129,7 +130,7 @@
     <Compile Include="GUI\MainWindow.Designer.cs">
       <DependentUpon>MainWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\Wrappers\FactorModifierWrapper.cs" />
+    <Compile Include="Helpers\CsvWriter.cs" />
     <Compile Include="Helpers\ListExtensionMethods.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Core\Project.cs" />

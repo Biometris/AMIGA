@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Windows.Forms;
 using AmigaPowerAnalysis.Core;
+using AmigaPowerAnalysis.Helpers;
 
 namespace AmigaPowerAnalysis.GUI {
     public partial class MainWindow : Form {
@@ -163,6 +164,12 @@ namespace AmigaPowerAnalysis.GUI {
 
         #endregion
 
-
+        private void goToolStripMenuItem_Click(object sender, EventArgs e) {
+            if (string.IsNullOrEmpty(_currentProjectFilename)) {
+                saveAsDialog();
+            }
+            var csvFilename = Path.Combine(Path.GetDirectoryName(_currentProjectFilename), Path.GetFileNameWithoutExtension(_currentProjectFilename) + ".csv");
+            _project.ExportPowerAnalysisInputToCsv(csvFilename);
+        }
     }
 }

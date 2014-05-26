@@ -8,7 +8,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using AmigaPowerAnalysis.Core;
-using AmigaPowerAnalysis.GUI.Wrappers;
 
 namespace AmigaPowerAnalysis.GUI {
     public partial class ComparisonsForm : UserControl, ISelectionForm {

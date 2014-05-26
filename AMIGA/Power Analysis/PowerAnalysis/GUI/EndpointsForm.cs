@@ -8,7 +8,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using AmigaPowerAnalysis.Core;
-using AmigaPowerAnalysis.GUI.Wrappers;
 
 // TODO Obligatory to first enter a name for a new endpoint
 // TODO Binomial totals greyed out for non fractions

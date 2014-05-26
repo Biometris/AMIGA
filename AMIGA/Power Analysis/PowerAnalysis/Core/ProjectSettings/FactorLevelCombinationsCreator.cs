@@ -14,7 +14,7 @@ namespace AmigaPowerAnalysis.Core {
         /// <param name="factors"></param>
         /// <returns></returns>
         public static List<FactorLevelCombination> GenerateInteractionCombinations(List<Factor> factors) {
-            if (factors.Count >= 2) {
+            if (factors.Count >= 1) {
                 return generateAllCombinations(factors);
             }
             return new List<FactorLevelCombination>();

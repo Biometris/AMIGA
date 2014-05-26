@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using AmigaPowerAnalysis.Core;
 using System.Text.RegularExpressions;
-using AmigaPowerAnalysis.GUI.Wrappers;
 using AmigaPowerAnalysis.Helpers;
 
 namespace AmigaPowerAnalysis.GUI {
@@ -18,7 +17,7 @@ namespace AmigaPowerAnalysis.GUI {
         private Project _project;
 
         private Endpoint _currentEndpoint;
-        private List<FactorModifierWrapper> _currentFactorModifiers;
+        private List<ModifierFactorLevelCombination> _currentFactorModifiers;
 
         public ModifiersForm(Project project) {
             InitializeComponent();
@@ -59,18 +58,17 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void createDataGridFactorModifiers() {
             var column = new DataGridViewTextBoxColumn();
-            column.DataPropertyName = "FactorIds";
-            column.Name = "FactorIds";
-            column.HeaderText = "Factors";
+            column.DataPropertyName = "FactorLevelCombinationName";
+            column.Name = "FactorLevelCombinationName";
+            column.HeaderText = "FactorLevelCombinationName";
             column.ReadOnly = true;
             dataGridViewFactorModifiers.Columns.Add(column);
 
             column = new DataGridViewTextBoxColumn();
-            column.DataPropertyName = "MuComparator";
-            column.Name = "MuComparator";
-            column.HeaderText = "Mu comparator";
+            column.DataPropertyName = "Modifier";
+            column.Name = "Modifier";
+            column.HeaderText = "Modifier";
             column.ValueType = typeof(double);
-            column.ReadOnly = true;
             dataGridViewFactorModifiers.Columns.Add(column);
         }
 
@@ -92,7 +90,7 @@ namespace AmigaPowerAnalysis.GUI {
             _currentEndpoint = _project.Endpoints.ElementAt(dataGridViewEndpoints.CurrentRow.Index);
             var factorFactorLevelTuples = _currentEndpoint.InteractionFactors.SelectMany(f => f.FactorLevels, (ifc, fl) => new Tuple<Factor, FactorLevel>(ifc, fl)).ToList();
             var combinations = factorFactorLevelTuples.Combinations(2).ToList();
-            _currentFactorModifiers = combinations.Select(c => new FactorModifierWrapper(_currentEndpoint, c.ToList())).ToList();
+            _currentFactorModifiers = _currentEndpoint.ModifierFactorLevelCombinations;
             updateDataGridFactorModifiers();
         }
 
