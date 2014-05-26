@@ -10,31 +10,26 @@ namespace AmigaPowerAnalysis.Core {
     [DataContract]
     public sealed class FactorLevelCombination {
 
-        private List<FactorLevel> _items;
-
         public FactorLevelCombination() {
-            _items = new List<FactorLevel>();
+            Items = new List<FactorLevel>();
         }
 
         [DataMember]
-        public List<FactorLevel> Items {
-            get { return _items; }
-            set { _items = value; }
-        }
+        public List<FactorLevel> Items { get; set; }
 
         public string Label {
             get {
-                return string.Join(" - ", _items.Select(fl => string.Format("{0} ({1})", fl.Parent.Name, fl.Label)));
+                return string.Join(" - ", Items.Select(fl => string.Format("{0} ({1})", fl.Parent.Name, fl.Label)));
             }
         }
 
         public void Add(FactorLevel factorLevel) {
-            _items.Add(factorLevel);
+            Items.Add(factorLevel);
         }
 
         public FactorLevelCombination GetCopy() {
             var newFactorLevelCombination = new FactorLevelCombination();
-            _items.ForEach(i => newFactorLevelCombination.Add(i));
+            Items.ForEach(i => newFactorLevelCombination.Add(i));
             return newFactorLevelCombination;
         }
     }

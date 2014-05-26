@@ -28,19 +28,19 @@ namespace AmigaPowerAnalysis.Core {
         /// <summary>
         /// The comparison name.
         /// </summary>
-        [DataMember]
+        [DataMember(Order=0)]
         public string Name { get; set; }
 
         /// <summary>
         /// The endpoint in this comparison.
         /// </summary>
-        [DataMember]
+        [DataMember(Order = 0)]
         public Endpoint Endpoint { get; set; }
 
         /// <summary>
         /// The mu of the comparator.
         /// </summary>
-        [DataMember]
+        [DataMember(Order = 1)]
         public double MuComparator {
             get {
                 if (double.IsNaN(_muComparator)) {
@@ -54,7 +54,7 @@ namespace AmigaPowerAnalysis.Core {
         /// <summary>
         /// The CV of the comparator.
         /// </summary>
-        [DataMember]
+        [DataMember(Order = 1)]
         public double CvComparator {
             get {
                 if (double.IsNaN(_cvComparator)) {
@@ -68,13 +68,13 @@ namespace AmigaPowerAnalysis.Core {
         /// <summary>
         /// Contains the interaction factors for this comparison.
         /// </summary>
-        [DataMember]
+        [DataMember(Order = 1)]
         public List<Factor> InteractionFactors { get; set; }
 
         /// <summary>
         /// Contains a list of factor level 
         /// </summary>
-        [DataMember]
+        [DataMember(Order = 1)]
         public List<ComparisonFactorLevelCombination> ComparisonFactorLevelCombinations { get; set; }
 
         /// <summary>

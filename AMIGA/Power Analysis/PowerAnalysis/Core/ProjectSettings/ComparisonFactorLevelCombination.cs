@@ -16,23 +16,22 @@ namespace AmigaPowerAnalysis.Core {
         private double _meanGMO;
         private double _meanComparator;
 
+        /// <summary>
+        /// The comparison for which this factor level combination settings apply.
+        /// </summary>
+        [DataMember(Order = 0)]
         public Comparison Comparison { get; set; }
-        public FactorLevelCombination FactorLevelCombination { get; set; }
 
         /// <summary>
-        /// The label of this factor level combination.
+        /// The factor level combination of interest.
         /// </summary>
-        [DataMember]
-        public string FactorLevelCombinationName {
-            get {
-                return FactorLevelCombination.Label;
-            }
-        }
+        [DataMember(Order = 0)]
+        public FactorLevelCombination FactorLevelCombination { get; set; }
 
         /// <summary>
         /// Specifies whether this comparison interaction level is a GMO interaction level.
         /// </summary>
-        [DataMember]
+        [DataMember(Order = 1)]
         public bool IsComparisonLevelGMO {
             get {
                 if (_isComparisonLevelGMO != null) {
@@ -43,6 +42,8 @@ namespace AmigaPowerAnalysis.Core {
             set {
                 if (value != FactorLevelCombination.Items.All(flc => flc.IsComparisonLevelGMO)) {
                     _isComparisonLevelGMO = value;
+                } else {
+                    _isComparisonLevelGMO = null;
                 }
             }
         }
@@ -50,7 +51,7 @@ namespace AmigaPowerAnalysis.Core {
         /// <summary>
         /// 
         /// </summary>
-        [DataMember]
+        [DataMember(Order = 1)]
         public double MeanGMO {
             get {
                 if (!double.IsNaN(_meanGMO)) {
@@ -70,7 +71,7 @@ namespace AmigaPowerAnalysis.Core {
         /// <summary>
         /// Specifies whether this comparison interaction level is a comparator interaction level.
         /// </summary>
-        [DataMember]
+        [DataMember(Order=1)]
         public bool IsComparisonLevelComparator {
             get {
                 if (_isComparisonLevelComparator != null) {
@@ -81,6 +82,8 @@ namespace AmigaPowerAnalysis.Core {
             set {
                 if (value != FactorLevelCombination.Items.All(flc => flc.IsComparisonLevelComparator)) {
                     _isComparisonLevelComparator = value;
+                } else {
+                    _isComparisonLevelComparator = null;
                 }
             }
         }
@@ -88,7 +91,7 @@ namespace AmigaPowerAnalysis.Core {
         /// <summary>
         /// 
         /// </summary>
-        [DataMember]
+        [DataMember(Order = 1)]
         public double MeanComparator {
             get {
                 if (!double.IsNaN(_meanComparator)) {
@@ -102,6 +105,15 @@ namespace AmigaPowerAnalysis.Core {
                 } else {
                     _meanComparator = value;
                 }
+            }
+        }
+
+        /// <summary>
+        /// The label of this factor level combination.
+        /// </summary>
+        public string FactorLevelCombinationName {
+            get {
+                return FactorLevelCombination.Label;
             }
         }
     }
