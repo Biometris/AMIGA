@@ -13,6 +13,7 @@ namespace AmigaPowerAnalysis.Core {
 
         public Design() {
             ExperimentalDesignType = ExperimentalDesignType.CompletelyRandomized;
+            UseInteractions = false;
         }
 
         /// <summary>
@@ -30,6 +31,9 @@ namespace AmigaPowerAnalysis.Core {
         /// </summary>
         public ExperimentalDesignType ExperimentalDesignType { get; set; }
 
-
+        /// <summary>
+        /// Specifies whether or not to use interactions.
+        /// </summary>
+        public bool UseInteractions { get; set; }
     }
 }

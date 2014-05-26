@@ -17,7 +17,7 @@ namespace AmigaPowerAnalysis.GUI {
 
         private Comparison _currentComparison;
         private List<Comparison> _comparisons;
-        private List<ComparisonFactorLevelsWrapper> _currentComparisonFactorLevels;
+        private List<ComparisonFactorLevelCombination> _currentComparisonFactorLevels;
 
         public ComparisonsForm(Project project) {
             InitializeComponent();
@@ -33,6 +33,42 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void createDataGridComparisons() {
+        }
+
+        private void createDataGridFactorLevels() {
+            var column = new DataGridViewTextBoxColumn();
+            column.DataPropertyName = "FactorLevelCombinationName";
+            column.Name = "FactorLevelCombinationName";
+            column.HeaderText = "FactorLevelCombinationName";
+            column.ReadOnly = true;
+            dataGridViewFactorLevels.Columns.Add(column);
+
+            var checkbox = new DataGridViewCheckBoxColumn();
+            checkbox.DataPropertyName = "IsComparisonLevelGMO";
+            checkbox.Name = "IsComparisonLevelGMO";
+            dataGridViewFactorLevels.Columns.Add(checkbox);
+
+            column = new DataGridViewTextBoxColumn();
+            column.DataPropertyName = "MeanGMO";
+            column.Name = "MeanGMO";
+            column.HeaderText = "MeanGMO";
+            dataGridViewFactorLevels.Columns.Add(column);
+
+            checkbox = new DataGridViewCheckBoxColumn();
+            checkbox.DataPropertyName = "IsComparisonLevelComparator";
+            checkbox.Name = "IsComparisonLevelComparator";
+            dataGridViewFactorLevels.Columns.Add(checkbox);
+
+            column = new DataGridViewTextBoxColumn();
+            column.DataPropertyName = "MeanComparator";
+            column.Name = "MeanComparator";
+            column.HeaderText = "MeanComparator";
+            dataGridViewFactorLevels.Columns.Add(column);
+        }
+
+        private void updateDataGridComparisons() {
+            dataGridViewComparisons.Columns.Clear();
+
             var column = new DataGridViewTextBoxColumn();
             column.DataPropertyName = "Name";
             column.Name = "Name";
@@ -47,52 +83,8 @@ namespace AmigaPowerAnalysis.GUI {
             combo.HeaderText = "Endpoint";
             combo.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
             dataGridViewComparisons.Columns.Add(combo);
-        }
 
-        private void createDataGridFactorLevels() {
-            var column = new DataGridViewTextBoxColumn();
-            column.DataPropertyName = "FactorName";
-            column.Name = "FactorName";
-            column.HeaderText = "Factor name";
-            column.ReadOnly = true;
-            dataGridViewFactorLevels.Columns.Add(column);
-
-            column = new DataGridViewTextBoxColumn();
-            column.DataPropertyName = "Label";
-            column.Name = "Label";
-            column.HeaderText = "Label";
-            column.ReadOnly = true;
-            dataGridViewFactorLevels.Columns.Add(column);
-
-            column = new DataGridViewTextBoxColumn();
-            column.DataPropertyName = "Level";
-            column.Name = "Level";
-            column.HeaderText = "Level";
-            column.ValueType = typeof(double);
-            column.ReadOnly = true;
-            dataGridViewFactorLevels.Columns.Add(column);
-
-            column = new DataGridViewTextBoxColumn();
-            column.DataPropertyName = "Frequency";
-            column.Name = "Frequency";
-            column.HeaderText = "Frequency";
-            column.ValueType = typeof(int);
-            column.ReadOnly = true;
-            dataGridViewFactorLevels.Columns.Add(column);
-
-            var checkbox = new DataGridViewCheckBoxColumn();
-            checkbox.DataPropertyName = "IsInteractionLevelGMO";
-            checkbox.Name = "IsInteractionLevelGMO";
-            dataGridViewFactorLevels.Columns.Add(checkbox);
-
-            checkbox = new DataGridViewCheckBoxColumn();
-            checkbox.DataPropertyName = "IsInteractionLevelComparator";
-            checkbox.Name = "IsInteractionLevelComparator";
-            dataGridViewFactorLevels.Columns.Add(checkbox);
-        }
-
-        private void updateDataGridComparisons() {
-            _comparisons = _project.Comparisons.ToList();
+            _comparisons = _project.GetComparisons().ToList();
             var comparisonsBindingSouce = new BindingSource(_comparisons, null);
             dataGridViewComparisons.AutoGenerateColumns = false;
             dataGridViewComparisons.DataSource = comparisonsBindingSouce;
@@ -108,8 +100,8 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void dataGridComparisons_SelectionChanged(object sender, EventArgs e) {
-            _currentComparison = _project.Comparisons.ElementAt(dataGridViewComparisons.CurrentRow.Index);
-            _currentComparisonFactorLevels = _currentComparison.InteractionFactors.SelectMany(ifc => ifc.InteractionFactorLevels, (f, l) => new ComparisonFactorLevelsWrapper(f, l)).ToList();
+            _currentComparison = _project.GetComparisons().ElementAt(dataGridViewComparisons.CurrentRow.Index);
+            _currentComparisonFactorLevels = _currentComparison.ComparisonFactorLevelCombinations;
             updateDataGridFactorLevels();
         }
     }

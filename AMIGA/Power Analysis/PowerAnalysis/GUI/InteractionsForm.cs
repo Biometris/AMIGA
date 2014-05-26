@@ -14,7 +14,7 @@ namespace AmigaPowerAnalysis.GUI {
 
         private Project _project;
 
-        private DataTable _interactionsDataTable = new DataTable(); 
+        private DataTable _interactionsDataTable = new DataTable();
 
         public InteractionsForm(Project project) {
             InitializeComponent();
@@ -56,7 +56,7 @@ namespace AmigaPowerAnalysis.GUI {
                 DataRow row = _interactionsDataTable.NewRow();
                 row["Endpoint"] = _project.Endpoints.ElementAt(i).Name;
                 var endpointInteractions = _project.Endpoints.ElementAt(i).InteractionFactors;
-                for (int j = 0; j < endpointInteractions.Count; ++j) {
+                for (int j = 0; j < endpointInteractions.Count(); ++j) {
                     if (_interactionsDataTable.Columns.Contains(endpointInteractions.ElementAt(j).Name)) {
                         row[endpointInteractions.ElementAt(j).Name] = true;
                     }

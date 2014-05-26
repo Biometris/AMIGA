@@ -160,10 +160,9 @@
             this.checkBoxUseMainPlotModifier.AutoSize = true;
             this.checkBoxUseMainPlotModifier.Location = new System.Drawing.Point(6, 68);
             this.checkBoxUseMainPlotModifier.Name = "checkBoxUseMainPlotModifier";
-            this.checkBoxUseMainPlotModifier.Size = new System.Drawing.Size(453, 17);
+            this.checkBoxUseMainPlotModifier.Size = new System.Drawing.Size(395, 17);
             this.checkBoxUseMainPlotModifier.TabIndex = 8;
-            this.checkBoxUseMainPlotModifier.Text = "I there an expectation that other experimental factors will lower the mean compar" +
-    "ator level?";
+            this.checkBoxUseMainPlotModifier.Text = "Is there an expectation that there will be large differences between main plots?";
             this.checkBoxUseMainPlotModifier.UseVisualStyleBackColor = true;
             this.checkBoxUseMainPlotModifier.CheckedChanged += new System.EventHandler(this.checkBoxUseMainPlotModifier_CheckedChanged);
             // 

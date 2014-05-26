@@ -1,4 +1,6 @@
-﻿namespace AmigaPowerAnalysis.Core {
+﻿using System.Runtime.Serialization;
+using AmigaPowerAnalysis.Core.Distributions;
+namespace AmigaPowerAnalysis.Core {
 
     public enum MeasurementType {
         Count,
@@ -6,21 +8,7 @@
         Nonnegative,
     };
 
-    public enum DistributionType {
-        // Counts
-        Poisson,
-        OverdispersedPoisson,
-        NegativeBinomial,
-        PoissonLogNormal,
-        // Fractions
-        Binomial,
-        BetaBinomial,
-        BinomialLogitNormal,
-        // Non-negative
-        Normal,
-        LogNormal,
-    };
-
+    [DataContract]
     public sealed class EndpointType {
 
         public EndpointType() {
@@ -41,46 +29,61 @@
         /// <summary>
         /// Name of endpoint; e.g. Predator, Detrivore.
         /// </summary>
+        [DataMember]
         public string Name { get; set; }
 
         /// <summary>
         /// Whether the endpoint is primary (true) or secondary (false).
         /// </summary>
+        [DataMember]
         public bool Primary { get; set; }
 
         /// <summary>
         /// The Mu of the comparator.
         /// </summary>
+        [DataMember]
         public double MuComparator { get; set; }
 
         /// <summary>
         /// The CV of the comparator.
         /// </summary>
+        [DataMember]
         public double CvComparator { get; set; }
 
         /// <summary>
         /// The distribution type of this endpoint.
         /// </summary>
+        [DataMember]
         public DistributionType DistributionType { get; set; }
 
         /// <summary>
-        /// Binomial total for fractions.
+        /// Binomial total for fraction distributions.
         /// </summary>
+        [DataMember]
         public int BinomialTotal { get; set; }
+
+        /// <summary>
+        /// The power parameter for the power law distribution.
+        /// </summary>
+        [DataMember]
+        public double PowerLawPower { get; set; }
 
         /// <summary>
         /// Type of measurement (count, fraction, nonnegative).
         /// </summary>
+        [DataMember]
         public MeasurementType Measurement { get; set; }
 
         /// <summary>
         /// Lower Limit of Concern.
         /// </summary>
+        [DataMember]
         public double LocLower { get; set; }
 
         /// <summary>
         /// Upper Limit of Concern.
         /// </summary>
+        [DataMember]
         public double LocUpper { get; set; }
 
     }

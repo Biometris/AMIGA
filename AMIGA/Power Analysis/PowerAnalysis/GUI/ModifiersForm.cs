@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using AmigaPowerAnalysis.Core;
 using System.Text.RegularExpressions;
 using AmigaPowerAnalysis.GUI.Wrappers;
+using AmigaPowerAnalysis.Helpers;
 
 namespace AmigaPowerAnalysis.GUI {
     public partial class ModifiersForm : UserControl, ISelectionForm {
@@ -58,32 +59,9 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void createDataGridFactorModifiers() {
             var column = new DataGridViewTextBoxColumn();
-            column.DataPropertyName = "FactorName";
-            column.Name = "FactorName";
-            column.HeaderText = "Factor name";
-            column.ReadOnly = true;
-            dataGridViewFactorModifiers.Columns.Add(column);
-
-            column = new DataGridViewTextBoxColumn();
-            column.DataPropertyName = "Label";
-            column.Name = "Label";
-            column.HeaderText = "Label";
-            column.ReadOnly = true;
-            dataGridViewFactorModifiers.Columns.Add(column);
-
-            column = new DataGridViewTextBoxColumn();
-            column.DataPropertyName = "Level";
-            column.Name = "Level";
-            column.HeaderText = "Level";
-            column.ValueType = typeof(double);
-            column.ReadOnly = true;
-            dataGridViewFactorModifiers.Columns.Add(column);
-
-            column = new DataGridViewTextBoxColumn();
-            column.DataPropertyName = "Frequency";
-            column.Name = "Frequency";
-            column.HeaderText = "Frequency";
-            column.ValueType = typeof(int);
+            column.DataPropertyName = "FactorIds";
+            column.Name = "FactorIds";
+            column.HeaderText = "Factors";
             column.ReadOnly = true;
             dataGridViewFactorModifiers.Columns.Add(column);
 
@@ -112,8 +90,9 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void dataGridViewEndpoints_SelectionChanged(object sender, EventArgs e) {
             _currentEndpoint = _project.Endpoints.ElementAt(dataGridViewEndpoints.CurrentRow.Index);
-            _currentFactorModifiers = _currentEndpoint.InteractionFactors
-                .SelectMany(f => f.FactorLevels, (ifc, fl) => new FactorModifierWrapper(_currentEndpoint, ifc, fl)).ToList();
+            var factorFactorLevelTuples = _currentEndpoint.InteractionFactors.SelectMany(f => f.FactorLevels, (ifc, fl) => new Tuple<Factor, FactorLevel>(ifc, fl)).ToList();
+            var combinations = factorFactorLevelTuples.Combinations(2).ToList();
+            _currentFactorModifiers = combinations.Select(c => new FactorModifierWrapper(_currentEndpoint, c.ToList())).ToList();
             updateDataGridFactorModifiers();
         }
 

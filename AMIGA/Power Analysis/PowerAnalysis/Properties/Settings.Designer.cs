@@ -22,5 +22,17 @@ namespace AmigaPowerAnalysis.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LastOpenedDirectory {
+            get {
+                return ((string)(this["LastOpenedDirectory"]));
+            }
+            set {
+                this["LastOpenedDirectory"] = value;
+            }
+        }
     }
 }

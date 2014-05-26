@@ -70,6 +70,8 @@
             this.dataGridFactors.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridFactors.Size = new System.Drawing.Size(259, 310);
             this.dataGridFactors.TabIndex = 3;
+            this.dataGridFactors.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.dataGridFactors_RowsAdded);
+            this.dataGridFactors.RowsRemoved += new System.Windows.Forms.DataGridViewRowsRemovedEventHandler(this.dataGridFactors_RowsRemoved);
             this.dataGridFactors.SelectionChanged += new System.EventHandler(this.dataGridFactors_SelectionChanged);
             // 
             // splitContainerFactors

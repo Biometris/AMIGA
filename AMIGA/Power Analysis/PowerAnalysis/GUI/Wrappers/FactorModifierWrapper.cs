@@ -9,36 +9,26 @@ namespace AmigaPowerAnalysis.GUI.Wrappers {
     public sealed class FactorModifierWrapper {
 
         public Endpoint Endpoint { get; set; }
-        public Factor Factor { get; set; }
-        public FactorLevel FactorLevel { get; set; }
+        public List<Tuple<Factor, FactorLevel>> FactorLevelCombinations { get; set; }
 
         public FactorModifierWrapper(Endpoint endpoint, Factor factor, FactorLevel factorLevel) {
             Endpoint = endpoint;
-            Factor = factor;
-            FactorLevel = factorLevel;
+            FactorLevelCombinations = new List<Tuple<Factor, FactorLevel>>();
+            FactorLevelCombinations.Add(new Tuple<Factor, FactorLevel>(factor, factorLevel));
         }
 
-        public string FactorName {
-            get {
-                return Factor.Name;
-            }
+        public FactorModifierWrapper(Endpoint endpoint, List<Tuple<Factor, FactorLevel>> factorLevelCombinations) {
+            Endpoint = endpoint;
+            FactorLevelCombinations = factorLevelCombinations;
         }
 
-        public string Label {
+        public string FactorIds {
             get {
-                return FactorLevel.Label;
-            }
-        }
-
-        public double Level {
-            get {
-                return FactorLevel.Level;
-            }
-        }
-
-        public double Frequency {
-            get {
-                return FactorLevel.Frequency;
+                var labels = new List<string>();
+                foreach (var combination in FactorLevelCombinations) {
+                    labels.Add(string.Format("{0} ({1})", combination.Item1.Name, combination.Item2.Label));
+                }
+                return string.Join(" - ", labels);
             }
         }
 
@@ -47,7 +37,9 @@ namespace AmigaPowerAnalysis.GUI.Wrappers {
             get {
                 return Endpoint.MuComparator;
             }
+            set {
+                var x = value;
+            }
         }
-
     }
 }

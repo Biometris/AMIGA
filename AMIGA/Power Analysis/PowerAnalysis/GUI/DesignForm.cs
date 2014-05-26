@@ -33,7 +33,7 @@ namespace AmigaPowerAnalysis.GUI {
             this.textBoxTabTitle.Text = Name;
             createDataGridFactors();
             createDataGridFactorLevels();
-            checkBoxUseInteractions.Checked = _project.UseInteractions;
+            checkBoxUseInteractions.Checked = _project.Design.UseInteractions;
             checkBoxUseDefaultInteractions.Checked = _project.UseDefaultInteractions;
         }
 
@@ -56,9 +56,9 @@ namespace AmigaPowerAnalysis.GUI {
                 radioButtonSplitPlot.Visible = false;
             } else {
                 groupBoxInteractions.Visible = true;
-                checkBoxUseDefaultInteractions.Visible = _project.UseInteractions;
-                dataGridViewFactors.Visible = _project.UseInteractions;
-                dataGridViewFactorLevels.Visible = _project.UseInteractions;
+                checkBoxUseDefaultInteractions.Visible = _project.Design.UseInteractions;
+                dataGridViewFactors.Visible = _project.Design.UseInteractions;
+                dataGridViewFactorLevels.Visible = _project.Design.UseInteractions;
             }
         }
 
@@ -112,13 +112,13 @@ namespace AmigaPowerAnalysis.GUI {
             dataGridViewFactorLevels.Columns.Add(column);
 
             var checkbox = new DataGridViewCheckBoxColumn();
-            checkbox.DataPropertyName = "IsInteractionLevelGMO";
-            checkbox.Name = "IsInteractionLevelGMO";
+            checkbox.DataPropertyName = "IsComparisonLevelGMO";
+            checkbox.Name = "IsComparisonLevelGMO";
             dataGridViewFactorLevels.Columns.Add(checkbox);
 
             checkbox = new DataGridViewCheckBoxColumn();
-            checkbox.DataPropertyName = "IsInteractionLevelComparator";
-            checkbox.Name = "IsInteractionLevelComparator";
+            checkbox.DataPropertyName = "IsComparisonLevelComparator";
+            checkbox.Name = "IsComparisonLevelComparator";
             dataGridViewFactorLevels.Columns.Add(checkbox);
 
             updateDataGridFactorLevels();
@@ -131,14 +131,16 @@ namespace AmigaPowerAnalysis.GUI {
                 dataGridViewFactorLevels.AutoGenerateColumns = false;
                 dataGridViewFactorLevels.DataSource = factorLevelsBindingSouce;
                 if (dataGridViewFactorLevels.Columns.Count > 0) {
-                    dataGridViewFactorLevels.Columns["IsInteractionLevelGMO"].Visible = _currentFactor.IsInteractionWithVariety;
-                    dataGridViewFactorLevels.Columns["IsInteractionLevelComparator"].Visible = _currentFactor.IsInteractionWithVariety; 
+                    dataGridViewFactorLevels.Columns["IsComparisonLevelGMO"].Visible = _currentFactor.IsInteractionWithVariety;
+                    dataGridViewFactorLevels.Columns["IsComparisonLevelComparator"].Visible = _currentFactor.IsInteractionWithVariety; 
                 }
             }
         }
 
         private void dataGridFactors_SelectionChanged(object sender, EventArgs e) {
-            _currentFactor = _project.Factors.ElementAt(dataGridViewFactors.CurrentRow.Index);
+            if (dataGridViewFactors.CurrentRow.Index < _project.Factors.Count) {
+                _currentFactor = _project.Factors.ElementAt(dataGridViewFactors.CurrentRow.Index);
+            }
             updateDataGridFactorLevels();
         }
 
@@ -156,12 +158,12 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void checkBoxUseInteractions_CheckedChanged(object sender, EventArgs e) {
-            _project.UseInteractions = checkBoxUseInteractions.Checked;
+            _project.Design.UseInteractions = checkBoxUseInteractions.Checked;
             updateVisibilities();
         }
 
         private void checkBoxUseDefaultInteractions_CheckedChanged(object sender, EventArgs e) {
-            _project.UseDefaultInteractions = checkBoxUseDefaultInteractions.Checked;
+            _project.SetDefaultInteractions(checkBoxUseDefaultInteractions.Checked);
         }
 
         private void dataGridFactors_CellValueChanged(object sender, DataGridViewCellEventArgs e) {
@@ -169,8 +171,8 @@ namespace AmigaPowerAnalysis.GUI {
             var newValue = editedCell.Value;
             if (e.ColumnIndex == dataGridViewFactors.Columns["IsInteractionWithVariety"].Index) {
                 if (dataGridViewFactorLevels.Columns.Count > 0) {
-                    dataGridViewFactorLevels.Columns["IsInteractionLevelGMO"].Visible = _currentFactor.IsInteractionWithVariety;
-                    dataGridViewFactorLevels.Columns["IsInteractionLevelComparator"].Visible = _currentFactor.IsInteractionWithVariety;
+                    dataGridViewFactorLevels.Columns["IsComparisonLevelGMO"].Visible = _currentFactor.IsInteractionWithVariety;
+                    dataGridViewFactorLevels.Columns["IsComparisonLevelComparator"].Visible = _currentFactor.IsInteractionWithVariety;
                 }
             }
         }

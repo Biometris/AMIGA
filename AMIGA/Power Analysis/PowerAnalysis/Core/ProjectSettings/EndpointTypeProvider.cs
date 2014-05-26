@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using AmigaPowerAnalysis.Core.Distributions;
 
 namespace AmigaPowerAnalysis.Core {
     public sealed class EndpointTypeProvider {
@@ -23,15 +24,6 @@ namespace AmigaPowerAnalysis.Core {
         /// <returns></returns>
         public List<EndpointType> GetAvailableEndpointTypes() {
             return _endpointTypes;
-        }
-
-        /// <summary>
-        /// Returns the endpoint type with the given name, or null if there is no such endpoint type.
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public EndpointType GetEndpointType(string name) {
-            return _endpointTypes.FirstOrDefault(ept => ept.Name == name);
         }
     }
 }

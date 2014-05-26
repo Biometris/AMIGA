@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using AmigaPowerAnalysis.Core;
+using AmigaPowerAnalysis.GUI.Wrappers;
 
 // TODO Obligatory to first enter a name for a new endpoint
 // TODO Binomial totals greyed out for non fractions
@@ -20,27 +21,20 @@ namespace AmigaPowerAnalysis.GUI {
 
         private Project _project;
 
-        private EndpointTypeProvider _endpointTypeProvider;
-
-        public EndpointsForm(Project project, EndpointTypeProvider endpoointTypeProvider) {
+        public EndpointsForm(Project project) {
             InitializeComponent();
             Name = "Endpoints";
             this.textBoxTabTitle.Text = Name;
             _project = project;
-            _endpointTypeProvider = endpoointTypeProvider;
             createDataGridEndpoints();
         }
 
         public void Activate() {
         }
 
-        public EndpointTypeProvider EndpointTypeProvider {
-            get { return _endpointTypeProvider; }
-            set { _endpointTypeProvider = value; }
-        }
-
         private void createDataGridEndpoints() {
             var endpointsBindingSouce = new BindingSource(_project.Endpoints, null);
+            endpointsBindingSouce.AddingNew += new AddingNewEventHandler(endpointsBindingSouce_AddingNew);
             dataGridViewEndpoints.AutoGenerateColumns = false;
             dataGridViewEndpoints.DataSource = endpointsBindingSouce;
 
@@ -49,7 +43,7 @@ namespace AmigaPowerAnalysis.GUI {
             column.Name = "Name";
             dataGridViewEndpoints.Columns.Add(column);
 
-            var _availableEndpointTypes = _endpointTypeProvider.GetAvailableEndpointTypes().Select(h => new { Name = h.Name, EndpointType = h }).ToList();
+            var _availableEndpointTypes = _project.EndpointTypes.Select(h => new { Name = h.Name, EndpointType = h }).ToList();
             var combo = new DataGridViewComboBoxColumn();
             combo.DataSource = _availableEndpointTypes;
             combo.DataPropertyName = "EndpointType";
@@ -85,10 +79,16 @@ namespace AmigaPowerAnalysis.GUI {
             dataGridViewEndpoints.Columns.Add(column);
         }
 
-        private void dataGridEndpoints_UserAddedRow(object sender, DataGridViewRowEventArgs e) {
+        private void endpointsBindingSouce_AddingNew(object sender, AddingNewEventArgs e) {
+            e.NewObject = new Endpoint("New endpoint", _project.EndpointTypes.First());
         }
 
-        private void dataGridEndpoints_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e) {
+        private void dataGridViewEndpoints_UserAddedRow(object sender, DataGridViewRowEventArgs e) {
+            _project.UpdateEndpointFactors();
+        }
+
+        private void dataGridViewEndpoints_UserDeletedRow(object sender, DataGridViewRowEventArgs e) {
+            _project.UpdateEndpointFactors();
         }
     }
 }

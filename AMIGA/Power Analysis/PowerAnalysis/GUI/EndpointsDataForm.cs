@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using AmigaPowerAnalysis.Core;
+using AmigaPowerAnalysis.Core.Distributions;
 
 // TODO Obligatory to first enter a name for a new endpoint
 // TODO Binomial totals greyed out for non fractions
@@ -20,14 +21,11 @@ namespace AmigaPowerAnalysis.GUI {
 
         private Project _project;
 
-        private EndpointTypeProvider _endpointTypeProvider;
-
-        public EndpointsDataForm(Project project, EndpointTypeProvider endpoointTypeProvider) {
+        public EndpointsDataForm(Project project) {
             InitializeComponent();
             Name = "Endpoints data";
             this.textBoxTabTitle.Text = Name;
             _project = project;
-            _endpointTypeProvider = endpoointTypeProvider;
             createDataGridEndpoints();
         }
 
@@ -35,11 +33,6 @@ namespace AmigaPowerAnalysis.GUI {
             var endpointsBindingSouce = new BindingSource(_project.Endpoints, null);
             dataGridViewEndpoints.AutoGenerateColumns = false;
             dataGridViewEndpoints.DataSource = endpointsBindingSouce;
-        }
-
-        public EndpointTypeProvider EndpointTypeProvider {
-            get { return _endpointTypeProvider; }
-            set { _endpointTypeProvider = value; }
         }
 
         private void createDataGridEndpoints() {
@@ -72,6 +65,13 @@ namespace AmigaPowerAnalysis.GUI {
             dataGridViewEndpoints.Columns.Add(column);
 
             column = new DataGridViewTextBoxColumn();
+            column.DataPropertyName = "PowerLawPower";
+            column.Name = "PowerLawPower";
+            column.HeaderText = "p (power law)";
+            column.ValueType = typeof(double);
+            dataGridViewEndpoints.Columns.Add(column);
+
+            column = new DataGridViewTextBoxColumn();
             column.DataPropertyName = "MuComparator";
             column.Name = "MuComparator";
             column.HeaderText = "Mean";
@@ -96,12 +96,6 @@ namespace AmigaPowerAnalysis.GUI {
             checkbox.Name = "ExcessZeroes";
             checkbox.HeaderText = "Excess zeroes";
             dataGridViewEndpoints.Columns.Add(checkbox);
-        }
-
-        private void dataGridEndpoints_UserAddedRow(object sender, DataGridViewRowEventArgs e) {
-        }
-
-        private void dataGridEndpoints_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e) {
         }
     }
 }

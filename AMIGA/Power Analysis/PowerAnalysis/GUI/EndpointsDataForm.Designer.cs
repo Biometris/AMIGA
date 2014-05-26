@@ -49,8 +49,6 @@
             this.dataGridViewEndpoints.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dataGridViewEndpoints.Size = new System.Drawing.Size(854, 386);
             this.dataGridViewEndpoints.TabIndex = 2;
-            this.dataGridViewEndpoints.UserAddedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.dataGridEndpoints_UserAddedRow);
-            this.dataGridViewEndpoints.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.dataGridEndpoints_UserDeletingRow);
             // 
             // panelTabDescription
             // 

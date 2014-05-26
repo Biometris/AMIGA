@@ -47,6 +47,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -57,15 +58,28 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Core\Comparison.cs" />
-    <Compile Include="Core\ComparisonInteractionFactorLevel.cs" />
-    <Compile Include="Core\Design.cs" />
-    <Compile Include="Core\Endpoint.cs" />
-    <Compile Include="Core\ComparisonInteractionFactor.cs" />
-    <Compile Include="Core\EndpointTypeProvider.cs" />
-    <Compile Include="Core\EndpointType.cs" />
-    <Compile Include="Core\Factor.cs" />
-    <Compile Include="Core\FactorLevel.cs" />
+    <Compile Include="Core\ProjectManager.cs" />
+    <Compile Include="Core\ProjectSettings\Comparison.cs" />
+    <Compile Include="Core\ProjectSettings\Design.cs" />
+    <Compile Include="Core\Distributions\PoissonLogNormalDistribution.cs" />
+    <Compile Include="Core\Distributions\PowerLawDistribution.cs" />
+    <Compile Include="Core\Distributions\BetaBinomialDistribution.cs" />
+    <Compile Include="Core\Distributions\BinomialDistribution.cs" />
+    <Compile Include="Core\Distributions\NegativeBinomialDistribution.cs" />
+    <Compile Include="Core\Distributions\OverdispersedPoissonDistribution.cs" />
+    <Compile Include="Core\Distributions\DistributionFactory.cs" />
+    <Compile Include="Core\Distributions\IDistribution.cs" />
+    <Compile Include="Core\Distributions\PoissonDistribution.cs" />
+    <Compile Include="Core\ProjectSettings\Endpoint.cs" />
+    <Compile Include="Core\ProjectSettings\ComparisonFactorLevelCombination.cs" />
+    <Compile Include="Core\ProjectSettings\EndpointFactor.cs" />
+    <Compile Include="Core\ProjectSettings\EndpointTypeProvider.cs" />
+    <Compile Include="Core\ProjectSettings\EndpointType.cs" />
+    <Compile Include="Core\ProjectSettings\Factor.cs" />
+    <Compile Include="Core\ProjectSettings\FactorLevel.cs" />
+    <Compile Include="Core\ProjectSettings\FactorLevelCombination.cs" />
+    <Compile Include="Core\ProjectSettings\FactorLevelCombinationsCreator.cs" />
+    <Compile Include="Core\PowerAnalysis\InputPowerAnalysis.cs" />
     <Compile Include="GUI\ComparisonsForm.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -115,8 +129,8 @@
     <Compile Include="GUI\MainWindow.Designer.cs">
       <DependentUpon>MainWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\Wrappers\ComparisonFactorLevelsWrapper.cs" />
     <Compile Include="GUI\Wrappers\FactorModifierWrapper.cs" />
+    <Compile Include="Helpers\ListExtensionMethods.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Core\Project.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

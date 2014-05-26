@@ -95,24 +95,32 @@ namespace AmigaPowerAnalysis.GUI {
                 var factorLevelsBindingSouce = new BindingSource(factorLevels, null);
                 dataGridViewFactorLevels.AutoGenerateColumns = false;
                 dataGridViewFactorLevels.DataSource = factorLevelsBindingSouce;
-                // TODO: check for leaks
                 factorLevelsBindingSouce.AddingNew += new AddingNewEventHandler(factorLevelsBindingSouce_AddingNew);
             }
         }
 
         private void factorLevelsBindingSouce_AddingNew(object sender, AddingNewEventArgs e) {
             e.NewObject = new FactorLevel() {
+                Parent = _currentFactor,
                 Level = _currentFactor.GetUniqueFactorLevel(),
             };
         }
 
         private void factorsBindingSouceSource_AddingNew(object sender, AddingNewEventArgs e) {
-            e.NewObject = new Factor("NewFactor", 2);
+            e.NewObject = new Factor("New factor", 2);
         }
 
         private void dataGridFactors_SelectionChanged(object sender, EventArgs e) {
             _currentFactor = _project.Factors.ElementAt(dataGridFactors.CurrentRow.Index);
             updateDataGridFactorLevels();
+        }
+
+        private void dataGridFactors_RowsRemoved(object sender, DataGridViewRowsRemovedEventArgs e) {
+            _project.UpdateEndpointFactors();
+        }
+
+        private void dataGridFactors_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e) {
+            _project.UpdateEndpointFactors();
         }
     }
 }
