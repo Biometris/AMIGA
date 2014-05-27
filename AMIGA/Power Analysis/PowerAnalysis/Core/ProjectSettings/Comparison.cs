@@ -118,44 +118,5 @@ namespace AmigaPowerAnalysis.Core {
                 }).ToList();
             }
         }
-
-        public List<InputPowerAnalysis> GetInputPowerAnalysis() {
-            var records = new List<InputPowerAnalysis>();
-            var counter = 1;
-            foreach (var varietyLevel in Endpoint.VarietyFactor.FactorLevels) {
-                var isGMO = varietyLevel.Label == "GMO";
-                var isComparator = varietyLevel.Label == "Comparator";
-                foreach (var interactionLevels in ComparisonFactorLevelCombinations) {
-                    double mean;
-                    int comparison;
-                    if (isGMO) {
-                        mean = interactionLevels.MeanGMO;
-                        comparison = interactionLevels.IsComparisonLevelGMO ? 1 : 0;
-                    } else if (isComparator) {
-                        mean = interactionLevels.MeanComparator;
-                        comparison = interactionLevels.IsComparisonLevelComparator ? -1 : 0;
-                    } else {
-                        mean = Endpoint.MuComparator;
-                        comparison = 0;
-                    }
-                    foreach (var modifierLevel in Endpoint.ModifierFactorLevelCombinations) {
-                        var factors = interactionLevels.FactorLevelCombination.Items.Select(il => il.Level).ToList();
-                        factors.AddRange(modifierLevel.FactorLevelCombination.Items.Select(il => il.Level).ToList());
-                        records.Add(new InputPowerAnalysis() {
-                            Endpoint = Endpoint.Name,
-                            NumberOfInteractions = Endpoint.InteractionFactors.Count(),
-                            Block = 1,
-                            MainPlot = counter,
-                            SubPlot = 1,
-                            Factors = factors,
-                            Mean = modifierLevel.Modifier * mean,
-                            Comparison = (ComparisonType)comparison,
-                        });
-                        counter++;
-                    }
-                }
-            }
-            return records;
-        }
     }
 }

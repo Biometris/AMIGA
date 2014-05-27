@@ -58,6 +58,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\PowerAnalysis\PowerAnalysisInputGenerator.cs" />
     <Compile Include="Core\ProjectManager.cs" />
     <Compile Include="Core\ProjectSettings\Comparison.cs" />
     <Compile Include="Core\ProjectSettings\ModifierFactorLevelCombination.cs" />
