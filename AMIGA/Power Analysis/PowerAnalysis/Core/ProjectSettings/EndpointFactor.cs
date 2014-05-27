@@ -7,19 +7,25 @@ using System.Threading.Tasks;
 
 namespace AmigaPowerAnalysis.Core {
 
+    public enum FactorType {
+        ExcludedFactor,
+        InteractionFactor,
+        ModifierFactor,
+    }
+
     [DataContract]
     public sealed class EndpointFactorSettings {
-
-        private bool? _isInteractionFactor;
-        private bool _isModifierFactor;
 
         public EndpointFactorSettings() {
         }
 
         public EndpointFactorSettings(Factor factor) {
             Factor = factor;
-            _isModifierFactor = false;
-            _isInteractionFactor = Factor.IsInteractionWithVariety;
+            if (Factor.IsInteractionWithVariety) {
+                FactorType = FactorType.InteractionFactor;
+            } else {
+                FactorType = FactorType.ModifierFactor;
+            }
         }
 
         /// <summary>
@@ -32,37 +38,7 @@ namespace AmigaPowerAnalysis.Core {
         /// States whether the factor is an interaction factor.
         /// </summary>
         [DataMember(Order = 1)]
-        public bool IsInteractionFactor {
-            get {
-                if (_isInteractionFactor == null) {
-                    return Factor.IsInteractionWithVariety;
-                }
-                return (bool)_isInteractionFactor;
-            }
-            set {
-                if (value == Factor.IsInteractionWithVariety) {
-                    _isInteractionFactor = null;
-                } else {
-                    _isInteractionFactor = value;
-                }
-                if (value) {
-                    _isModifierFactor = false;
-                }
-            }
-        }
+        public FactorType FactorType { get; set; }
 
-        /// <summary>
-        /// Sates whether the factor is a modifier factor.
-        /// </summary>
-        [DataMember(Order = 1)]
-        public bool IsModifierFactor {
-            get { return _isModifierFactor; }
-            set {
-                _isModifierFactor = value;
-                if (_isModifierFactor) {
-                    _isModifierFactor = false;
-                }
-            }
-        }
     }
 }

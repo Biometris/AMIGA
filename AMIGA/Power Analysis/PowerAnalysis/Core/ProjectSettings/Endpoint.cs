@@ -86,6 +86,12 @@ namespace AmigaPowerAnalysis.Core {
         public double CvComparator { get; set; }
 
         /// <summary>
+        /// Gets and sets the CV for the blocks for this endpoint.
+        /// </summary>
+        [DataMember(Order = 2)]
+        public double CVForBlocks { get; set; }
+
+        /// <summary>
         /// The distribution type of this endpoint.
         /// </summary>
         [DataMember(Order = 2)]
@@ -159,7 +165,7 @@ namespace AmigaPowerAnalysis.Core {
         /// </summary>
         public IEnumerable<Factor> InteractionFactors {
             get {
-                return this.Factors.Where(f => f.IsInteractionFactor).Select(f => f.Factor).ToList();
+                return this.Factors.Where(f => f.FactorType == FactorType.InteractionFactor).Select(f => f.Factor).ToList();
             }
         }
 
@@ -168,7 +174,7 @@ namespace AmigaPowerAnalysis.Core {
         /// </summary>
         public IEnumerable<Factor> ModifierFactors {
             get {
-                return this.Factors.Where(f => !f.IsInteractionFactor && f.Factor != VarietyFactor).Select(f => f.Factor).ToList();
+                return this.Factors.Where(f => f.FactorType != FactorType.InteractionFactor && f.Factor != VarietyFactor).Select(f => f.Factor).ToList();
                 //return this.Factors.Where(f => f.IsModifierFactor).Select(f => f.Factor).ToList();
             }
         }
@@ -179,8 +185,8 @@ namespace AmigaPowerAnalysis.Core {
         /// </summary>
         /// <param name="factor"></param>
         public void AddInteractionFactor(Factor factor) {
-            if (Factors.First(f => f.Factor == factor).IsInteractionFactor != true) {
-                Factors.First(f => f.Factor == factor).IsInteractionFactor = true;
+            if (Factors.First(f => f.Factor == factor).FactorType != FactorType.InteractionFactor) {
+                Factors.First(f => f.Factor == factor).FactorType = FactorType.InteractionFactor;
                 Comparisons.ForEach(c => c.AddInteractionFactor(factor));
                 var combinations = FactorLevelCombinationsCreator.GenerateInteractionCombinations(ModifierFactors.ToList());
                 ModifierFactorLevelCombinations = combinations.Select(flc => new ModifierFactorLevelCombination() {
@@ -195,8 +201,8 @@ namespace AmigaPowerAnalysis.Core {
         /// </summary>
         /// <param name="factor"></param>
         public void RemoveInteractionFactor(Factor factor) {
-            if (Factors.First(f => f.Factor == factor).IsInteractionFactor != false) {
-                Factors.First(f => f.Factor == factor).IsInteractionFactor = false;
+            if (Factors.First(f => f.Factor == factor).FactorType == FactorType.InteractionFactor) {
+                Factors.First(f => f.Factor == factor).FactorType = FactorType.ModifierFactor; 
                 Comparisons.ForEach(c => c.RemoveInteractionFactor(factor));
                 var combinations = FactorLevelCombinationsCreator.GenerateInteractionCombinations(ModifierFactors.ToList());
                 ModifierFactorLevelCombinations = combinations.Select(flc => new ModifierFactorLevelCombination() {

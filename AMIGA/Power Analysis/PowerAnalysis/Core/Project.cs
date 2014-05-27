@@ -175,6 +175,7 @@ namespace AmigaPowerAnalysis.Core {
             }
             headers.Add("SubPlot");
             headers.Add("Comparison");
+            headers.Add("Mean");
 
             var stringBuilder = new StringBuilder();
             stringBuilder.AppendLine(string.Join(separator, headers));
@@ -192,6 +193,7 @@ namespace AmigaPowerAnalysis.Core {
                 }
                 line.Add(record.SubPlot.ToString());
                 line.Add(record.Comparison.ToString());
+                line.Add(record.Mean.ToString());
                 stringBuilder.AppendLine(string.Join(separator, line));
             }
 
