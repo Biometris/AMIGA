@@ -102,11 +102,30 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                     mean = comparison.Endpoint.MuComparator;
                     comparisonType = 0;
                 }
-                foreach (var modifierLevel in comparison.Endpoint.ModifierFactorLevelCombinations) {
+                if (comparison.Endpoint.ModifierFactorLevelCombinations.Count > 1) {
+                    foreach (var modifierLevel in comparison.Endpoint.ModifierFactorLevelCombinations) {
+                        var factorLevels = interactionLevels.FactorLevelCombination.Items.Select(il => il.Level).ToList();
+                        factorLevels.AddRange(modifierLevel.FactorLevelCombination.Items.Select(il => il.Level).ToList());
+                        var factors = interactionLevels.FactorLevelCombination.Items.Select(il => il.Parent.Name).ToList();
+                        factors.AddRange(modifierLevel.FactorLevelCombination.Items.Select(il => il.Parent.Name).ToList());
+                        records.Add(new InputPowerAnalysis() {
+                            Endpoint = comparison.Endpoint.Name,
+                            NumberOfInteractions = comparison.Endpoint.InteractionFactors.Count(),
+                            NumberOfModifiers = comparison.Endpoint.ModifierFactors.Count(),
+                            Block = 1,
+                            MainPlot = counter,
+                            SubPlot = 1,
+                            Variety = varietyLevel.Label,
+                            FactorLevels = factorLevels,
+                            Factors = factors,
+                            Mean = modifierLevel.Modifier * mean,
+                            Comparison = (ComparisonType)comparisonType,
+                        });
+                        counter++;
+                    }
+                } else {
                     var factorLevels = interactionLevels.FactorLevelCombination.Items.Select(il => il.Level).ToList();
-                    factorLevels.AddRange(modifierLevel.FactorLevelCombination.Items.Select(il => il.Level).ToList());
                     var factors = interactionLevels.FactorLevelCombination.Items.Select(il => il.Parent.Name).ToList();
-                    factors.AddRange(modifierLevel.FactorLevelCombination.Items.Select(il => il.Parent.Name).ToList());
                     records.Add(new InputPowerAnalysis() {
                         Endpoint = comparison.Endpoint.Name,
                         NumberOfInteractions = comparison.Endpoint.InteractionFactors.Count(),
@@ -117,7 +136,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                         Variety = varietyLevel.Label,
                         FactorLevels = factorLevels,
                         Factors = factors,
-                        Mean = modifierLevel.Modifier * mean,
+                        Mean = mean,
                         Comparison = (ComparisonType)comparisonType,
                     });
                     counter++;
