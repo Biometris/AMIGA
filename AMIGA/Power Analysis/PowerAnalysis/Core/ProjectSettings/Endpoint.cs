@@ -179,12 +179,14 @@ namespace AmigaPowerAnalysis.Core {
         /// </summary>
         /// <param name="factor"></param>
         public void AddInteractionFactor(Factor factor) {
-            Factors.First(f => f.Factor == factor).IsInteractionFactor = true;
-            Comparisons.ForEach(c => c.AddInteractionFactor(factor));
-            var combinations = FactorLevelCombinationsCreator.GenerateInteractionCombinations(ModifierFactors.ToList());
-            ModifierFactorLevelCombinations = combinations.Select(flc => new ModifierFactorLevelCombination() {
-                FactorLevelCombination = flc,
-            }).ToList();
+            if (Factors.First(f => f.Factor == factor).IsInteractionFactor != true) {
+                Factors.First(f => f.Factor == factor).IsInteractionFactor = true;
+                Comparisons.ForEach(c => c.AddInteractionFactor(factor));
+                var combinations = FactorLevelCombinationsCreator.GenerateInteractionCombinations(ModifierFactors.ToList());
+                ModifierFactorLevelCombinations = combinations.Select(flc => new ModifierFactorLevelCombination() {
+                    FactorLevelCombination = flc,
+                }).ToList();
+            }
         }
 
         /// <summary>
@@ -193,12 +195,14 @@ namespace AmigaPowerAnalysis.Core {
         /// </summary>
         /// <param name="factor"></param>
         public void RemoveInteractionFactor(Factor factor) {
-            Factors.First(f => f.Factor == factor).IsInteractionFactor = false;
-            Comparisons.ForEach(c => c.RemoveInteractionFactor(factor));
-            var combinations = FactorLevelCombinationsCreator.GenerateInteractionCombinations(ModifierFactors.ToList());
-            ModifierFactorLevelCombinations = combinations.Select(flc => new ModifierFactorLevelCombination() {
-                FactorLevelCombination = flc,
-            }).ToList();
+            if (Factors.First(f => f.Factor == factor).IsInteractionFactor != false) {
+                Factors.First(f => f.Factor == factor).IsInteractionFactor = false;
+                Comparisons.ForEach(c => c.RemoveInteractionFactor(factor));
+                var combinations = FactorLevelCombinationsCreator.GenerateInteractionCombinations(ModifierFactors.ToList());
+                ModifierFactorLevelCombinations = combinations.Select(flc => new ModifierFactorLevelCombination() {
+                    FactorLevelCombination = flc,
+                }).ToList();
+            }
         }
     }
 }
