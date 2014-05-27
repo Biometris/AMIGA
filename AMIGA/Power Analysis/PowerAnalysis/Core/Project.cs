@@ -114,10 +114,34 @@ namespace AmigaPowerAnalysis.Core {
         public void UpdateEndpointFactors() {
             foreach (var factor in Factors) {
                 foreach (var endpoint in Endpoints) {
+                    bool changed = false;
                     if (!endpoint.Factors.Any(ef => ef.Factor == factor)) {
                         endpoint.Factors.Add(new EndpointFactorSettings(factor));
+                        changed = true;
                     }
-                    endpoint.Factors.RemoveAll(ef => !Factors.Contains(ef.Factor));
+                    if (endpoint.Factors.Any(ef => !Factors.Contains(ef.Factor))) {
+                        endpoint.Factors.RemoveAll(ef => !Factors.Contains(ef.Factor));
+                        changed = true;
+                    }
+                    if (changed) {
+                        endpoint.UpdateNonInteractionFactorLevelCombinations();
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sets whether interactions should be used for any of the endpoints.
+        /// </summary>
+        /// <param name="useInteractions"></param>
+        public void SetUseInteractions(bool useInteractions) {
+            Design.UseInteractions = useInteractions;
+            if (!useInteractions) {
+                foreach (var endpoint in Endpoints) {
+                    for (int i = 1; i < Factors.Count; ++i) {
+                        var factor = Factors.ElementAt(i);
+                        endpoint.RemoveInteractionFactor(factor);
+                    }
                 }
             }
         }
@@ -141,12 +165,14 @@ namespace AmigaPowerAnalysis.Core {
             }
         }
 
+        /// <summary>
+        /// Sets whether to use the non-interaction factors as modifiers.
+        /// </summary>
+        /// <param name="useFactorModifiers"></param>
         public void SetUseFactorModifiers(bool useFactorModifiers) {
             UseFactorModifiers = useFactorModifiers;
-            if (!UseFactorModifiers) {
-                //foreach (var endpoint in Endpoints) {
-                //    endpoint.
-                //}
+            foreach (var endpoint in Endpoints) {
+                endpoint.UseModifier = UseFactorModifiers;
             }
         }
 
@@ -156,7 +182,5 @@ namespace AmigaPowerAnalysis.Core {
         public IEnumerable<Comparison> GetComparisons() {
             return Endpoints.SelectMany(ep => ep.Comparisons);
         }
-
-        
     }
 }

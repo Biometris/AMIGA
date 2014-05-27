@@ -102,8 +102,8 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                     mean = comparison.Endpoint.MuComparator;
                     comparisonType = 0;
                 }
-                if (comparison.Endpoint.ModifierFactorLevelCombinations.Count > 1) {
-                    foreach (var modifierLevel in comparison.Endpoint.ModifierFactorLevelCombinations) {
+                if (comparison.Endpoint.NonInteractionFactorLevelCombinations.Count > 1) {
+                    foreach (var modifierLevel in comparison.Endpoint.NonInteractionFactorLevelCombinations) {
                         var factorLevels = interactionLevels.FactorLevelCombination.Items.Select(il => il.Level).ToList();
                         factorLevels.AddRange(modifierLevel.FactorLevelCombination.Items.Select(il => il.Level).ToList());
                         var factors = interactionLevels.FactorLevelCombination.Items.Select(il => il.Parent.Name).ToList();
@@ -111,14 +111,14 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                         records.Add(new InputPowerAnalysis() {
                             Endpoint = comparison.Endpoint.Name,
                             NumberOfInteractions = comparison.Endpoint.InteractionFactors.Count(),
-                            NumberOfModifiers = comparison.Endpoint.ModifierFactors.Count(),
+                            NumberOfModifiers = comparison.Endpoint.UseModifier ? comparison.Endpoint.NonInteractionFactors.Count() : 0,
                             Block = 1,
                             MainPlot = counter,
                             SubPlot = 1,
                             Variety = varietyLevel.Label,
                             FactorLevels = factorLevels,
                             Factors = factors,
-                            Mean = modifierLevel.Modifier * mean,
+                            Mean = comparison.Endpoint.UseModifier ? modifierLevel.Modifier * mean : mean,
                             Comparison = (ComparisonType)comparisonType,
                         });
                         counter++;
@@ -129,7 +129,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                     records.Add(new InputPowerAnalysis() {
                         Endpoint = comparison.Endpoint.Name,
                         NumberOfInteractions = comparison.Endpoint.InteractionFactors.Count(),
-                        NumberOfModifiers = comparison.Endpoint.ModifierFactors.Count(),
+                        NumberOfModifiers = comparison.Endpoint.UseModifier ? comparison.Endpoint.NonInteractionFactors.Count() : 0,
                         Block = 1,
                         MainPlot = counter,
                         SubPlot = 1,
@@ -159,20 +159,20 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                 mean = comparison.Endpoint.MuComparator;
                 comparisonType = 0;
             }
-            foreach (var modifierLevel in comparison.Endpoint.ModifierFactorLevelCombinations) {
+            foreach (var modifierLevel in comparison.Endpoint.NonInteractionFactorLevelCombinations) {
                 var factorLevels = modifierLevel.FactorLevelCombination.Items.Select(il => il.Level).ToList();
                 var factors = modifierLevel.FactorLevelCombination.Items.Select(il => il.Parent.Name).ToList();
                 records.Add(new InputPowerAnalysis() {
                     Endpoint = comparison.Endpoint.Name,
                     NumberOfInteractions = comparison.Endpoint.InteractionFactors.Count(),
-                    NumberOfModifiers = comparison.Endpoint.ModifierFactors.Count(),
+                    NumberOfModifiers = comparison.Endpoint.UseModifier ? comparison.Endpoint.NonInteractionFactors.Count() : 0,
                     Block = 1,
                     MainPlot = counter,
                     SubPlot = 1,
                     Variety = varietyLevel.Label,
                     FactorLevels = factorLevels,
                     Factors = factors,
-                    Mean = modifierLevel.Modifier * mean,
+                    Mean = comparison.Endpoint.UseModifier ? modifierLevel.Modifier * mean : mean,
                     Comparison = (ComparisonType)comparisonType,
                 });
                 counter++;

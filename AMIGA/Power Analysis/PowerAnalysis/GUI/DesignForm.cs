@@ -158,7 +158,7 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void checkBoxUseInteractions_CheckedChanged(object sender, EventArgs e) {
-            _project.Design.UseInteractions = checkBoxUseInteractions.Checked;
+            _project.SetUseInteractions(checkBoxUseInteractions.Checked);
             updateVisibilities();
         }
 

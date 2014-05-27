@@ -91,7 +91,7 @@ namespace AmigaPowerAnalysis.GUI {
             _currentEndpoint = _project.Endpoints.ElementAt(dataGridViewEndpoints.CurrentRow.Index);
             var factorFactorLevelTuples = _currentEndpoint.InteractionFactors.SelectMany(f => f.FactorLevels, (ifc, fl) => new Tuple<Factor, FactorLevel>(ifc, fl)).ToList();
             var combinations = factorFactorLevelTuples.Combinations(2).ToList();
-            _currentFactorModifiers = _currentEndpoint.ModifierFactorLevelCombinations;
+            _currentFactorModifiers = _currentEndpoint.NonInteractionFactorLevelCombinations;
             updateDataGridFactorModifiers();
         }
 
@@ -106,7 +106,7 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void checkBoxUseFactorModifiers_CheckedChanged(object sender, EventArgs e) {
-            _project.UseFactorModifiers = checkBoxUseFactorModifiers.Checked;
+            _project.SetUseFactorModifiers(checkBoxUseFactorModifiers.Checked);
             updateVisibilities();
         }
 
