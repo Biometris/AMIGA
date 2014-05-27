@@ -62,7 +62,6 @@
             this.dataGridViewFactorModifiers.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewFactorModifiers.MultiSelect = false;
             this.dataGridViewFactorModifiers.Name = "dataGridViewFactorModifiers";
-            this.dataGridViewFactorModifiers.ReadOnly = true;
             this.dataGridViewFactorModifiers.RowHeadersWidth = 24;
             this.dataGridViewFactorModifiers.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dataGridViewFactorModifiers.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;

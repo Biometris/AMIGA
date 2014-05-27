@@ -53,6 +53,7 @@ namespace AmigaPowerAnalysis.GUI {
             var column = new DataGridViewTextBoxColumn();
             column.DataPropertyName = "Name";
             column.Name = "Name";
+            column.HeaderText = "Endpoint";
             dataGridViewEndpoints.Columns.Add(column);
         }
 
@@ -60,7 +61,7 @@ namespace AmigaPowerAnalysis.GUI {
             var column = new DataGridViewTextBoxColumn();
             column.DataPropertyName = "FactorLevelCombinationName";
             column.Name = "FactorLevelCombinationName";
-            column.HeaderText = "FactorLevelCombinationName";
+            column.HeaderText = "Factor level combination";
             column.ReadOnly = true;
             dataGridViewFactorModifiers.Columns.Add(column);
 
