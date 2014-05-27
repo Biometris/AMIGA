@@ -80,7 +80,6 @@
             this.dataGridViewEndpoints.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewEndpoints.MultiSelect = false;
             this.dataGridViewEndpoints.Name = "dataGridViewEndpoints";
-            this.dataGridViewEndpoints.ReadOnly = true;
             this.dataGridViewEndpoints.RowHeadersVisible = false;
             this.dataGridViewEndpoints.RowHeadersWidth = 24;
             this.dataGridViewEndpoints.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;

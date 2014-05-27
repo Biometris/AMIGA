@@ -43,6 +43,9 @@ namespace AmigaPowerAnalysis.GUI {
             dataGridViewEndpoints.Visible = _project.UseFactorModifiers;
             labelCVForBlocks.Visible = _project.UseBlockModifier;
             textBoxCVForBlocks.Visible = _project.UseBlockModifier;
+            if (dataGridViewEndpoints.Columns.Contains("CVForBlocks")) {
+                dataGridViewEndpoints.Columns["CVForBlocks"].Visible = _project.UseBlockModifier;
+            }
             checkBoxUseMainPlotModifier.Visible = _project.Design.ExperimentalDesignType == ExperimentalDesignType.SplitPlots;
             labelCVForMainPlots.Visible = (_project.Design.ExperimentalDesignType == ExperimentalDesignType.SplitPlots) && _project.UseMainPlotModifier;
             textBoxCVForMainPlots.Visible = (_project.Design.ExperimentalDesignType == ExperimentalDesignType.SplitPlots) && _project.UseMainPlotModifier;
@@ -54,6 +57,14 @@ namespace AmigaPowerAnalysis.GUI {
             column.DataPropertyName = "Name";
             column.Name = "Name";
             column.HeaderText = "Endpoint";
+            column.ReadOnly = true;
+            dataGridViewEndpoints.Columns.Add(column);
+
+            column = new DataGridViewTextBoxColumn();
+            column.DataPropertyName = "CVForBlocks";
+            column.Name = "CVForBlocks";
+            column.HeaderText = "CV";
+            column.ValueType = typeof(double);
             dataGridViewEndpoints.Columns.Add(column);
         }
 
