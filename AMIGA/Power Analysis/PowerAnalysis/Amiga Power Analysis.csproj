@@ -88,6 +88,12 @@
     <Compile Include="GUI\ComparisonsForm.Designer.cs">
       <DependentUpon>ComparisonsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\SimulationSettingsForm.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\SimulationSettingsForm.Designer.cs">
+      <DependentUpon>SimulationSettingsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\ModifiersForm.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -138,6 +144,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="GUI\ComparisonsForm.resx">
       <DependentUpon>ComparisonsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\SimulationSettingsForm.resx">
+      <DependentUpon>SimulationSettingsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\ModifiersForm.resx">
       <DependentUpon>ModifiersForm.cs</DependentUpon>

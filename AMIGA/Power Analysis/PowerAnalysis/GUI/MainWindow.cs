@@ -151,6 +151,12 @@ namespace AmigaPowerAnalysis.GUI {
             modifiersForm.Dock = System.Windows.Forms.DockStyle.Fill;
             tab.Controls.Add(modifiersForm);
 
+            var simulationSettingsForm = new SimulationSettingsForm(_project);
+            tab = new TabPage(simulationSettingsForm.Name);
+            this.tabControl.TabPages.Add(tab);
+            simulationSettingsForm.Dock = System.Windows.Forms.DockStyle.Fill;
+            tab.Controls.Add(simulationSettingsForm);
+
             this.saveAsToolStripMenuItem.Enabled = true;
             this.saveToolStripMenuItem.Enabled = true;
             this.closeToolStripMenuItem.Enabled = true;
