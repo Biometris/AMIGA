@@ -23,6 +23,7 @@ namespace AmigaPowerAnalysis.Core {
         /// <summary>
         /// The modifier for this factor level combination.
         /// </summary>
+        [DataMember(Order = 0)]
         public double Modifier { get; set; }
 
         /// <summary>

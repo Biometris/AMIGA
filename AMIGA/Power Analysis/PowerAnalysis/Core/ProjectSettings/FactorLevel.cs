@@ -42,13 +42,13 @@ namespace AmigaPowerAnalysis.Core {
         public int Frequency { get; set; }
 
         /// <summary>
-        /// TODO
+        /// Specifies whether this level is a comparison level for the GMO.
         /// </summary>
         [DataMember]
         public bool IsComparisonLevelGMO { get; set; }
 
         /// <summary>
-        /// TODO
+        /// Specifies whether this level is a comparison level for the comparator.
         /// </summary>
         [DataMember]
         public bool IsComparisonLevelComparator { get; set; }

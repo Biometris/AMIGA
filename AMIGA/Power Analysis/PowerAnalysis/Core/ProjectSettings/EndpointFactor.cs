@@ -25,13 +25,13 @@ namespace AmigaPowerAnalysis.Core {
         /// <summary>
         /// The factor for which the settings hold.
         /// </summary>
-        [DataMember]
+        [DataMember(Order=0)]
         public Factor Factor { get; set; }
 
         /// <summary>
         /// States whether the factor is an interaction factor.
         /// </summary>
-        [DataMember]
+        [DataMember(Order = 1)]
         public bool IsInteractionFactor {
             get {
                 if (_isInteractionFactor == null) {
@@ -40,7 +40,11 @@ namespace AmigaPowerAnalysis.Core {
                 return (bool)_isInteractionFactor;
             }
             set {
-                _isInteractionFactor = value;
+                if (value == Factor.IsInteractionWithVariety) {
+                    _isInteractionFactor = null;
+                } else {
+                    _isInteractionFactor = value;
+                }
                 if (value) {
                     _isModifierFactor = false;
                 }
@@ -50,7 +54,7 @@ namespace AmigaPowerAnalysis.Core {
         /// <summary>
         /// Sates whether the factor is a modifier factor.
         /// </summary>
-        [DataMember]
+        [DataMember(Order = 1)]
         public bool IsModifierFactor {
             get { return _isModifierFactor; }
             set {

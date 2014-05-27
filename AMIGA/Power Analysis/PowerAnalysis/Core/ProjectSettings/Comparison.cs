@@ -48,7 +48,13 @@ namespace AmigaPowerAnalysis.Core {
                 }
                 return _muComparator;
             }
-            set { _muComparator = value; }
+            set {
+                if (value == Endpoint.MuComparator) {
+                    _muComparator = double.NaN;
+                } else {
+                    _muComparator = value;
+                }
+            }
         }
 
         /// <summary>
@@ -62,7 +68,13 @@ namespace AmigaPowerAnalysis.Core {
                 }
                 return _cvComparator;
             }
-            set { _cvComparator = value; }
+            set {
+                if (value == Endpoint.CvComparator) {
+                    _cvComparator = double.NaN;
+                } else {
+                    _cvComparator = value;
+                }
+            }
         }
 
         /// <summary>

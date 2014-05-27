@@ -87,15 +87,6 @@ namespace AmigaPowerAnalysis.Core {
         public ExperimentUnitType ExperimentUnitType { get; set; }
 
         /// <summary>
-        /// Number of levels of factor.
-        /// </summary>
-        public int NumberOfLevels {
-            get {
-                return FactorLevels.Count;
-            }
-        }
-
-        /// <summary>
         /// Create a new unique level for generating a new factor level.
         /// </summary>
         /// <returns></returns>

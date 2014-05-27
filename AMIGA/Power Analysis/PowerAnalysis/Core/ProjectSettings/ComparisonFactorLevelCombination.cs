@@ -54,7 +54,7 @@ namespace AmigaPowerAnalysis.Core {
         }
 
         /// <summary>
-        /// 
+        /// The mean of the GMO for this level.
         /// </summary>
         [DataMember(Order = 2)]
         public double MeanGMO {
@@ -94,7 +94,7 @@ namespace AmigaPowerAnalysis.Core {
         }
 
         /// <summary>
-        /// 
+        /// The mean of the comparator for this level.
         /// </summary>
         [DataMember(Order = 2)]
         public double MeanComparator {
