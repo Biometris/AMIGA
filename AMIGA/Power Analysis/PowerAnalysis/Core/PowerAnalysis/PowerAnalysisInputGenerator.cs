@@ -16,7 +16,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             var baseFileName = Path.GetFileNameWithoutExtension(filename);
             for (int i = 0; i < comparisons.Count(); ++i) {
                 var comparisonRecords = getComparisonInputPowerAnalysisRecords(comparisons.ElementAt(i));
-                var comparisonFilename = Path.Combine(filePath, string.Format("{0}_{1}.csv", baseFileName, i));
+                var comparisonFilename = Path.Combine(filePath, string.Format("{0}-{1}.csv", baseFileName, i));
                 PowerAnalysisInputToCsv(comparisonRecords, comparisonFilename);
             }
         }
