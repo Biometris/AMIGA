@@ -73,40 +73,90 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             foreach (var varietyLevel in comparison.Endpoint.VarietyFactor.FactorLevels) {
                 var isGMO = varietyLevel.Label == "GMO";
                 var isComparator = varietyLevel.Label == "Comparator";
-                foreach (var interactionLevels in comparison.ComparisonFactorLevelCombinations) {
-                    double mean;
-                    int comparisonType;
-                    if (isGMO) {
-                        mean = interactionLevels.MeanGMO;
-                        comparisonType = interactionLevels.IsComparisonLevelGMO ? 1 : 0;
-                    } else if (isComparator) {
-                        mean = interactionLevels.MeanComparator;
-                        comparisonType = interactionLevels.IsComparisonLevelComparator ? -1 : 0;
-                    } else {
-                        mean = comparison.Endpoint.MuComparator;
-                        comparisonType = 0;
-                    }
-                    foreach (var modifierLevel in comparison.Endpoint.ModifierFactorLevelCombinations) {
-                        var factorLevels = interactionLevels.FactorLevelCombination.Items.Select(il => il.Level).ToList();
-                        factorLevels.AddRange(modifierLevel.FactorLevelCombination.Items.Select(il => il.Level).ToList());
-                        var factors = interactionLevels.FactorLevelCombination.Items.Select(il => il.Parent.Name).ToList();
-                        factors.AddRange(modifierLevel.FactorLevelCombination.Items.Select(il => il.Parent.Name).ToList());
-                        records.Add(new InputPowerAnalysis() {
-                            Endpoint = comparison.Endpoint.Name,
-                            NumberOfInteractions = comparison.Endpoint.InteractionFactors.Count(),
-                            NumberOfModifiers = comparison.Endpoint.ModifierFactors.Count(),
-                            Block = 1,
-                            MainPlot = counter,
-                            SubPlot = 1,
-                            Variety = varietyLevel.Label,
-                            FactorLevels = factorLevels,
-                            Factors = factors,
-                            Mean = modifierLevel.Modifier * mean,
-                            Comparison = (ComparisonType)comparisonType,
-                        });
-                        counter++;
-                    }
+                if (comparison.ComparisonFactorLevelCombinations.Count > 0) {
+                    var recordsVarietyLevel = createInputPowerAnalysisRecordsPerInteraction(comparison, counter, varietyLevel, isGMO, isComparator);
+                    records.AddRange(recordsVarietyLevel);
+                    counter = records.Count + 1;
+                } else {
+                    var recordsVarietyLevel = createInputPowerAnalysisRecordsForNoInteraction(comparison, counter, varietyLevel, isGMO, isComparator);
+                    records.AddRange(recordsVarietyLevel);
+                    counter = records.Count + 1;
                 }
+
+            }
+            return records;
+        }
+
+        private static List<InputPowerAnalysis> createInputPowerAnalysisRecordsPerInteraction(Comparison comparison, int counter, FactorLevel varietyLevel, bool isGMO, bool isComparator) {
+            var records = new List<InputPowerAnalysis>();
+            foreach (var interactionLevels in comparison.ComparisonFactorLevelCombinations) {
+                double mean;
+                int comparisonType;
+                if (isGMO) {
+                    mean = interactionLevels.MeanGMO;
+                    comparisonType = interactionLevels.IsComparisonLevelGMO ? 1 : 0;
+                } else if (isComparator) {
+                    mean = interactionLevels.MeanComparator;
+                    comparisonType = interactionLevels.IsComparisonLevelComparator ? -1 : 0;
+                } else {
+                    mean = comparison.Endpoint.MuComparator;
+                    comparisonType = 0;
+                }
+                foreach (var modifierLevel in comparison.Endpoint.ModifierFactorLevelCombinations) {
+                    var factorLevels = interactionLevels.FactorLevelCombination.Items.Select(il => il.Level).ToList();
+                    factorLevels.AddRange(modifierLevel.FactorLevelCombination.Items.Select(il => il.Level).ToList());
+                    var factors = interactionLevels.FactorLevelCombination.Items.Select(il => il.Parent.Name).ToList();
+                    factors.AddRange(modifierLevel.FactorLevelCombination.Items.Select(il => il.Parent.Name).ToList());
+                    records.Add(new InputPowerAnalysis() {
+                        Endpoint = comparison.Endpoint.Name,
+                        NumberOfInteractions = comparison.Endpoint.InteractionFactors.Count(),
+                        NumberOfModifiers = comparison.Endpoint.ModifierFactors.Count(),
+                        Block = 1,
+                        MainPlot = counter,
+                        SubPlot = 1,
+                        Variety = varietyLevel.Label,
+                        FactorLevels = factorLevels,
+                        Factors = factors,
+                        Mean = modifierLevel.Modifier * mean,
+                        Comparison = (ComparisonType)comparisonType,
+                    });
+                    counter++;
+                }
+            }
+            return records;
+        }
+
+        private static List<InputPowerAnalysis> createInputPowerAnalysisRecordsForNoInteraction(Comparison comparison, int counter, FactorLevel varietyLevel, bool isGMO, bool isComparator) {
+            var records = new List<InputPowerAnalysis>();
+            double mean;
+            int comparisonType;
+            if (isGMO) {
+                mean = comparison.Endpoint.MuComparator;
+                comparisonType = 1;
+            } else if (isComparator) {
+                mean = comparison.Endpoint.MuComparator;
+                comparisonType = -1;
+            } else {
+                mean = comparison.Endpoint.MuComparator;
+                comparisonType = 0;
+            }
+            foreach (var modifierLevel in comparison.Endpoint.ModifierFactorLevelCombinations) {
+                var factorLevels = modifierLevel.FactorLevelCombination.Items.Select(il => il.Level).ToList();
+                var factors = modifierLevel.FactorLevelCombination.Items.Select(il => il.Parent.Name).ToList();
+                records.Add(new InputPowerAnalysis() {
+                    Endpoint = comparison.Endpoint.Name,
+                    NumberOfInteractions = comparison.Endpoint.InteractionFactors.Count(),
+                    NumberOfModifiers = comparison.Endpoint.ModifierFactors.Count(),
+                    Block = 1,
+                    MainPlot = counter,
+                    SubPlot = 1,
+                    Variety = varietyLevel.Label,
+                    FactorLevels = factorLevels,
+                    Factors = factors,
+                    Mean = modifierLevel.Modifier * mean,
+                    Comparison = (ComparisonType)comparisonType,
+                });
+                counter++;
             }
             return records;
         }

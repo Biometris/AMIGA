@@ -141,6 +141,15 @@ namespace AmigaPowerAnalysis.Core {
             }
         }
 
+        public void SetUseFactorModifiers(bool useFactorModifiers) {
+            UseFactorModifiers = useFactorModifiers;
+            if (!UseFactorModifiers) {
+                //foreach (var endpoint in Endpoints) {
+                //    endpoint.
+                //}
+            }
+        }
+
         /// <summary>
         /// The comparisons of this project.
         /// </summary>
