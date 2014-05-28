@@ -1,24 +1,3 @@
-"
-  dum[1] : difference between GMO and Comparator
-  dum[2] : common GMO and Comparator parameter
-              dum1  dum2  dum3  dum4
-  GMO            1     1     0     0
-  Comparator     0     1     0     0
-  V3             0     0     1     0
-  V4             0     0     0     1
-
-  Better parameterization allowing factors to be fitted.
-  All estimates are then contrasts with comparator
-          constant  dum1  dum2  dum3
-  GMO            1     1     0     0
-  Comparator     1     0     0     0
-  V3             1     0     1     0
-  V4             1     0     0     1
-
-  This assumes that the order of the factor labels is as above!
-
-"
-
 " Simulation settings "
 scalar    cvBlock ; 10
 scalar    cvComparator ; 110
@@ -27,17 +6,17 @@ scalar    lowerLOC ; 0.5
 scalar    upperLOC ; 2.0
 scalar    ngridLOC ; 5
 variate   nBlocks ; !(2,3,4)
-scalar    ndatasets ; 2
-scalar    ndatasets ; 200
+scalar    ndatasets ; 1
 scalar    nGCI ; 10000            " Number of draws for Gen. Conf. Interval "
 scalar    alfa ; 0.05
 scalar    limPowerDiff ; 2
-scalar    seed ; 34289
+scalar    minimumSum ; 0.999      " Minimum sum for probs for each mean "
+scalar    seed ; 342894
 
 scalar    power ; 1.5
-text      distribution ; 'opoisson'
 text      distribution ; 'power'
 text      distribution ; 'poisson'
+text      distribution ; 'opoisson'
 text      distribution ; 'negative'
 
 text      design ; 'randomized'
@@ -45,8 +24,11 @@ text      design ; 'splitplot'
 text      design ; 'block'
 
 text      models ; !t(LN,NB)
-text      models ; !t(LN,SQ,OP,NB)
 text      models ; !t(LN,SQ,OP)
+text      models ; !t(LN,SQ,OP,NB)
+text      models ; !t(LN,SQ)
+text      models ; !t(LN,SQ,OP)
+text      models ; !t(LN,SQ,OP,NB)
 
 " Some extra options "
 scalar    mis
@@ -56,12 +38,10 @@ setoption [add] nomessage ; !t(res,lev,disp)
 setoption [r2negbinomial] nomessage ; !t(warnings)
 variate   perc ; 100 * (!(0,1) + !(1,-1)*alfa/2)
 
-
 " Import Data from Simulation tool "
-text      file ; 'M:/My Documents/TechDoc-0.csv'
 text      file ; 'M:/My Documents/SmallMeans-0.csv'
 import    file ; isave=isave
-print     Comparison,Mean
+print     Variety, Ranking, Spraying, Comparison, Mean ; deci=4(0),2
 
 " Define treatments as factors "
 txconstru [tsave] isave
@@ -93,6 +73,7 @@ variate   comparison ; (Comparison.in.'IncludeGMO') - \
 restrict  Mean ; abs(comparison)
 calculate meanComparator = mean(Mean)
 restrict  Mean
+print meanComparator
 
 " Determine interaction factors and create dummies for Interaction*Variety "
 calculate nInteractions = mean(NumberOfInteractions)
@@ -145,15 +126,19 @@ print     Mean, cvPO, cvOP, cvNB, cvPW
 text      dist ; distribution
 if distribution.eqs.'negative'
     calculate sig2, cvmean = sig2NB, cvNB
+    expressio evar ; !e(kvar = kmean + ksig2*kmean*kmean)
   elsif distribution.eqs.'opoisson'
     calculate sig2, cvmean = sig2OP, cvOP
+    expressio evar ; !e(kvar = ksig2*kmean)
   elsif distribution.eqs.'power'
     calculate cvmean = cvPW
     calculate sig2 = sig2PW*Mean**(power-2) - 1/Mean
     text      dist ; 'negative'
+    expressio evar ; !e(kvar = kmean + ksig2*kmean*kmean)
   elsif distribution.eqs.'poisson'
     calculate sig2,cvmean = mis,cvPO
     text      dist ; 'poisson'
+    expressio evar ; !e(kvar = kmean)
   else
     fault     [diag=fault ; expl=!t('Wrong setting of distribution')]
 endif
@@ -168,6 +153,7 @@ if design.eqs.'randomized'
   else
     fault   [expl=!t('Misspecification of design')]
 endif
+calculate sigBlock = sqrt(sig2Block)
 print     dist, sig2, sig2Block
 
 " Print effective replication "
@@ -183,13 +169,15 @@ fgrid     [values=gridLOC[], nBlocks] grid
 variate   LOC, nReps ; grid[] ; deci=*,0
 decimals  LOC
 
+calculate critvalChi = edchi(1-alfa ; 1)
+
+
 " Structures to store results "
 calculate doLN, doSQ, doOP, doNB = 'LN', 'SQ', 'OP', 'NB' .in. models
 calculate nloop = nvalues(LOC)
-variate   [nvalues=nloop ; values=#nloop(*)] powLN, powSQ, powOP, powNB, \
+variate   [nvalues=nloop ; values=#nloop(*)] powPO, powLN, powSQ, powOP, powNB, \
           powOPe, powLNe, powSQe, powNBe ; deci=3
-variate   [nvalues=nloop] meanLNms, meanSQms, medLNms, medSQms, \
-          meanOPms, medOPms ; deci=3
+variate   [nvalues=nloop ; values=#nloop(*)] meanVarLN, meanVarSQ, meanVarOP
 
 " Structures to obtain prediction for GCI "
 if (ndum1)
@@ -209,10 +197,168 @@ for [ntimes=nloop ; index=ii]
   factor    [nvalues=iiplots ; levels=nplots] qPlot
   generate  qBlock, qPlot
   variate   [nvalues=iiReps] ranBlock
-  pointer   [nvalues=ndum] qdum
-  variate   [nvalues=iiplots] qdum[], qmean, qcomparison, qsig2, \
-            yy, logyy, sqrtyy, qmeanBlock, lowOffset, uppOffset
+  pointer   [nvalues=ndum] qdum, zdum
+  variate   [nvalues=iiplots] qdum[], qmean, qcomparison, qsig2
   equate    Mean, comparison, sig2, dum[] ; qmean, qcomparison, qsig2, qdum[]
+  \print     qdum[] ; deci=0
+
+  " Apply LOC effect"
+  calculate qmean = ((1-qdum[1]) + qdum[1]*iiLOC) * qmean
+
+  " Apply Blocking effect by means of Blom scores "
+  if design.eqs.'block'
+    variate   [values=1...#iiReps] blockeff
+    calculate blockeff = exp(sigBlock*ned((blockeff-0.375)/(iiReps+0.25)))
+    calculate qmean = qmean * newlevels(qBlock ; blockeff)
+  endif
+
+  " Loop over individual means to generate Lyles synthetic dataset "
+  calculate nmean = nvalues(qmean)
+  pointer   [nvalues=nmean] yy, ww
+  variate   [nvalues=nmean] nobs, sumww, factor, qvar, eeLN, vvLN, eeSQ, vvSQ ; \
+            decimals=0,4,0,5(*)
+  for [ntimes=nmean ; index=kk]
+    scalar    kmean, ksig2 ; (qmean,qsig2)$[kk]
+    calculate #evar
+    calculate qvar$[kk] = kvar
+    calculate ksd = sqrt(kvar)
+    for ff=5,6,7,8,9,10
+      calculate factor$[kk] = ff
+      calculate lowcount = bound(floor(kmean - ff*ksd) ; 0 ; mis)
+      calculate uppcount = ceiling(kmean + ff*ksd)
+      calculate nobs$[kk] = uppcount - lowcount + 1
+      variate   [values=#lowcount...#uppcount] yy[kk], ww[kk]
+      cntprobab [dist=#dist] yy[kk] ; mean=kmean ; disp=ksig2 ; prob=ww[kk]
+      calculate ksumww = sum(ww[kk])
+      exit      [control=for] (ksumww.gt.minimumSum)
+    endfor
+    calculate sumww$[kk] = ksumww
+    " For LN "
+    calculate ee1 = sum(ww[kk] * log(yy[kk]+1))
+    calculate vv1 = sum(ww[kk] * (log(yy[kk]+1)-ee1)**2)
+    calculate (eeLN,vvLN)$[kk] = ee1, vv1
+    calculate ee1 = sum(ww[kk] * sqrt(yy[kk]))
+    calculate vv1 = sum(ww[kk] * (sqrt(yy[kk])-ee1)**2)
+    calculate (eeSQ,vvSQ)$[kk] = ee1, vv1
+  endfor
+  calculate (meanVarLN, meanVarSQ)$[ii] = mean(vvLN, vvSQ)
+  calculate meanVarOP$[ii] = mean(qvar/qmean)
+  \print     qmean, factor, nobs, sumww, vvLN
+  variate   response, weight ; !(#yy), !(#ww)
+
+  " Expand design and define model "
+  fexpand   !(1...#nmean) ; nobs=nobs ; factor=id
+  factor    [modify=yes] id ; decimals=0
+  fexpand   qdum[] ; nobs=nobs ; variate=zdum[]
+  variate   [modify=yes] zdum[] ; decimals=0
+  fclassifi [out=modelH1] zdum[]
+
+  if nModifiers
+    duplicate Modifiers ; qModifiers ; values=!((#Modifiers)#iiReps)
+    fexpand   !(#qModifiers) ; nobs=nobs ; factor=zModifiers
+    factor    [modify=yes] zModifiers ; decimals=0
+    fclassifi [out=modelH1] #modelH1 + zModifiers
+  endif
+
+  if design.eqs.'block'
+    fexpand   !(#qBlock) ; nobs=nobs ; factor=zBlock
+    factor    [modify=yes] zBlock ; decimals=0
+    fclassifi [out=modelH1] #modelH1 + zBlock
+  endif
+  fclassifi [out=modelH0] #modelH1 - zdum[1]
+
+  " Ready to fit the models "
+  " LN: logarithmic transformation "
+  variate   tresponse ; log(response+1)
+  calculate meanVariance = mean(vvLN)
+  model     [dist=normal ; dispersion=meanVariance ; weight=weight] tresponse
+  terms     #modelH1
+  fit       [print=* ; nomes=lev,res,disp] #modelH1
+  rkeep     dev=dev1 ; df=df1
+  drop      [print=* ; nomes=lev,res,disp] zdum[1]
+  rkeep     dev=dev0 ; df=df0
+  calculate noncentral = bound((dev0-dev1)/meanVariance ; 0 ; mis)
+  calculate powLN$[ii] = (power = cuchi(critvalChi ; 1 ; noncentral))
+
+  " SQ: squared root transformation "
+  variate   tresponse ; sqrt(response)
+  calculate meanVariance = mean(vvSQ)
+  model     [dist=normal ; dispersion=meanVariance ; weight=weight] tresponse
+  terms     #modelH1
+  fit       [print=* ; nomes=lev,res,disp] #modelH1
+  rkeep     dev=dev1 ; df=df1
+  drop      [print=* ; nomes=lev,res,disp] zdum[1]
+  rkeep     dev=dev0 ; df=df0
+  calculate noncentral = bound((dev0-dev1)/meanVariance ; 0 ; mis)
+  calculate powSQ$[ii] = (power = cuchi(critvalChi ; 1 ; noncentral))
+
+  " PO: Poisson "
+  model     [dist=poisson ; link=log ; weight=weight] response
+  terms     #modelH1
+  fit       [print=* ; nomes=lev,res,disp] #modelH1
+  rkeep     dev=dev1 ; df=df1
+  drop      [print=* ; nomes=lev,res,disp] zdum[1]
+  rkeep     dev=dev0 ; df=df0
+  calculate noncentral = bound(dev0 - dev1 ; 0 ; mis)
+  calculate powPO$[ii] = (power = cuchi(critvalChi ; 1 ; noncentral))
+  print     noncentral, power
+
+  " OP: overdipsersed Poisson "
+  " Note that OP needs not to be fitted because deviances are identical to PO "
+  calculate meanVariance = mean(qvar/qmean)
+  model     [dist=poisson ; dispersion=meanVariance ; weight=weight] response
+  terms     #modelH1
+  fit       [print=* ; nomes=lev,res,disp] #modelH1
+  rkeep     dev=dev1 ; df=df1
+  drop      [print=* ; nomes=lev,res,disp] zdum[1]
+  rkeep     dev=dev0 ; df=df0
+  calculate noncentral = bound((dev0-dev1)/meanVariance ; 0 ; mis)
+  calculate powOP$[ii] = (power = cuchi(critvalChi ; 1 ; noncentral))
+  print     noncentral, power
+
+  " NB: negative binomial "
+  calculate dev0,dev1 = mis
+  model     [dist=negative ; link=log ; weight=weight] response
+  r2negbin  [print=* ; _2log=dev1] #modelH1
+  rkeep     exit=exit ; esti=esti
+  calculate effGMO = esti$[1]
+  r2negbin  [print=* ; _2log=dev0] #modelH0
+  calculate noncentral = bound(dev0 - dev1 ; 0 ; mis)
+  calculate powNB$[ii] = (power = cuchi(critvalChi ; 1 ; noncentral))
+  print     noncentral, power
+endfor
+print   LOC, nReps, meanVarLN, meanVarSQ, meanVarOP
+
+groups  LOC ; fLOC ; levels=levLOC
+for [index=ii] ll=#levLOC
+  restrict  nReps ; fLOC.eq.ll
+  if (ii.eq.1)
+      text      iprint ; 'id'
+      skip      [filetype=output] 1
+    else
+      text      iprint ; ''
+  endif
+  print     [squash=yes ; iprint=#iprint] LOC, nReps, \
+            powLN,powSQ,powPO,powOP,powNB ; fi=2(7),(10,8,8,8,8)1
+  skip      [filetype=output] 1
+endfor
+stop
+print   LOC, nReps, powLN, powSQ, powPO, powOP, powNB
+
+stop
+  if 1 " Checking "
+    pointer   [nvalues=ndum] dummean, vdummean, chk
+    tabulate  [class=id] zdum[] ; mean=dummean[]
+    variate   vdummean[] ; dummean[] ; decimals=0
+    calculate chk[] = sum(abs(qdum[] - vdummean[]))
+    print     chk[]
+  endif
+  exit
+endfor
+stop
+
+
+
   fclassifi [out=modelH1] qdum[]
 
   " Include Modifiers/Blocks in model "
@@ -254,7 +400,7 @@ for [ntimes=nloop ; index=ii]
 
   " Structure to store results "
   variate   [nvalues=ndatasets ; values=#ndatasets(*)] efGMO, \
-            fLN,fSQ,fOP,fNB, LNe,SQe,fOPe,fNBe, LNms, SQms, OPms ; deci=2
+            fLN,fSQ,fOP,fNB, LNe,SQe,fOPe,fNBe ; deci=2
   variate   [nvalues=ndatasets ; values=#ndatasets(*)] exOP,exNB ; deci=0
 
   for [ntimes=ndatasets ; index=kk]
@@ -278,7 +424,6 @@ for [ntimes=nloop ; index=ii]
       rkeep     dev=qdev1[2] ; esti=qesti[2] ; se=qse[2]
       predict   [print=* ; pred=qpred[2]] qdum[] ; predval[]
       calculate (fLN, fSQ)$[kk] = (qesti[]$[2]/qse[]$[2])**2
-      calculate (LNms,SQms)$[kk] = qdev1[]/df1
       " Equivalence testing by means of GCI "
       calculate effRep = (qdev1[1]/df1)/(se[1]*se[1])
       equate    !p(qpred[1,2],effRep) ; !p(logGMO,logCMP,sqrGMO,sqrCMP,nGMO,nCMP)
@@ -295,7 +440,7 @@ for [ntimes=nloop ; index=ii]
     endif
     if doOP     " OP difference testing "
       calculate dev0,dev1 = mis
-      model     [distribution=poisson ; dispersion=*] yy
+      model     [dist=poisson ; dispersion=*] yy
       terms     #modelH1
       fit       [print=*] #modelH1
       rkeep     dev=dev1 ; exit=exit ; esti=esti ; pear=pear1
@@ -303,7 +448,7 @@ for [ntimes=nloop ; index=ii]
       calculate disp = pear1/df1
       drop      [print=*] qdum[1]
       rkeep     dev=dev0
-      calculate (OPms,exOP)$[kk] = disp, exit
+      calculate exOP$[kk] = exit
       calculate fOP$[kk] = (dev0-dev1) / disp
 
       " OP equivalence Test "
@@ -326,7 +471,7 @@ for [ntimes=nloop ; index=ii]
     endif
     if doNB     " NB difference testing "
       calculate dev0,dev1 = mis
-      model     [distribution=negative ; link=log] yy
+      model     [dist=negative ; link=log] yy
       r2negbin  [print=* ; _2log=dev1] #modelH1
       rkeep     exit=exit ; esti=esti
       calculate effGMO = esti$[1]
@@ -340,11 +485,11 @@ for [ntimes=nloop ; index=ii]
           calculate fNBe$[kk] = 0
         elsif (effGMO.le.0)
           model     [dist=negative ; link=log ; offset=lowOffset] yy
-          r2negbin  [print=* ; _2log=dev0] #modelH0
+          r2negbin  [print=* ; _2log=dev0 ; constant=omit] #modelH0
           calculate fNBe$[kk] = (dev0-dev1)
         elsif (effGMO.ge.0)
           model     [dist=negative ; link=log ; offset=uppOffset] yy
-          r2negbin  [print=* ; _2log=dev0] #modelH0
+          r2negbin  [print=* ; _2log=dev0 ; constant=omit] #modelH0
           calculate fNBe$[kk] = (dev0-dev1)
         else
           FAULT   [diag=fault ; expl=!t('Not possible')]
@@ -357,12 +502,7 @@ for [ntimes=nloop ; index=ii]
   calculate (powLN,powSQ,powOP,powOPe,powNB,powNBe)$[ii] = \
             curLN,curSQ,curOP,curOPe,curNB,curNBe
   calculate (powLNe,powSQe)$[ii] = mean(LNe, SQe)
-
-  calculate (meanLNms, meanSQms, meanOPms)$[ii] = mean(LNms, SQms, OPms)
-  calculate (medLNms, medSQms, medOPms)$[ii] = median(LNms, SQms, OPms)
 endfor
-print     LOC, nReps, meanLNms,meanSQms,meanOPms, medLNms, medSQms,medOPms ; \
-          field=10
 
 groups  LOC ; fLOC ; levels=levLOC
 for [index=ii] ll=#levLOC
