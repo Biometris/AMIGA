@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace AmigaPowerAnalysis.Core.PowerAnalysis {
@@ -16,7 +17,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             var baseFileName = Path.GetFileNameWithoutExtension(filename);
             for (int i = 0; i < comparisons.Count(); ++i) {
                 var comparison = comparisons.ElementAt(i);
-                var comparisonRecords = getComparisonInputPowerAnalysisRecords(comparison);
+                var comparisonRecords = GetComparisonInputPowerAnalysisRecords(comparison);
                 comparisonRecords.ForEach(r => r.ComparisonId = i);
                 var comparisonFilename = Path.Combine(filePath, string.Format("{0}-{1}.csv", baseFileName, i));
                 PowerAnalysisInputToCsv(comparison.Endpoint, comparisonRecords, comparisonFilename);
@@ -75,7 +76,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             }
         }
 
-        public List<InputPowerAnalysis> getComparisonInputPowerAnalysisRecords(Comparison comparison) {
+        public List<InputPowerAnalysis> GetComparisonInputPowerAnalysisRecords(Comparison comparison) {
             var records = new List<InputPowerAnalysis>();
             var counter = 1;
             foreach (var varietyLevel in comparison.Endpoint.VarietyFactor.FactorLevels) {
@@ -90,7 +91,6 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                     records.AddRange(recordsVarietyLevel);
                     counter = records.Count + 1;
                 }
-
             }
             return records;
         }

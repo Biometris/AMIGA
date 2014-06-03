@@ -5,6 +5,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using AmigaPowerAnalysis.Core.Distributions;
+using AmigaPowerAnalysis.Core.PowerAnalysis;
 
 namespace AmigaPowerAnalysis.Core {
 
@@ -88,6 +89,12 @@ namespace AmigaPowerAnalysis.Core {
         /// </summary>
         [DataMember(Order = 1)]
         public List<ComparisonFactorLevelCombination> ComparisonFactorLevelCombinations { get; set; }
+
+        /// <summary>
+        /// Contains the output of a power analysis.
+        /// </summary>
+        [DataMember(Order = 1)]
+        public OutputPowerAnalysis OutputPowerAnalysis { get; set; }
 
         /// <summary>
         /// Adds a factor as interaction factor for all the comparisons of this endpoint.

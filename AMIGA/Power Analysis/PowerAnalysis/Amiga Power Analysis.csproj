@@ -58,6 +58,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\PowerAnalysis\OutputPowerAnalysisRecord.cs" />
+    <Compile Include="Core\PowerAnalysis\PowerAnalysisOutputReader.cs" />
     <Compile Include="Core\PowerAnalysis\OutputPowerAnalysis.cs" />
     <Compile Include="Core\PowerAnalysis\PowerAnalysisInputGenerator.cs" />
     <Compile Include="Core\ProjectManager.cs" />
@@ -88,6 +90,18 @@
     </Compile>
     <Compile Include="GUI\ComparisonsForm.Designer.cs">
       <DependentUpon>ComparisonsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\AnalysisResultsForm.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\AnalysisResultsForm.Designer.cs">
+      <DependentUpon>AnalysisResultsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\RunSimulationDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\RunSimulationDialog.Designer.cs">
+      <DependentUpon>RunSimulationDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\SimulationSettingsForm.cs">
       <SubType>UserControl</SubType>
@@ -145,6 +159,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="GUI\ComparisonsForm.resx">
       <DependentUpon>ComparisonsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\AnalysisResultsForm.resx">
+      <DependentUpon>AnalysisResultsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\RunSimulationDialog.resx">
+      <DependentUpon>RunSimulationDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\SimulationSettingsForm.resx">
       <DependentUpon>SimulationSettingsForm.cs</DependentUpon>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -157,6 +158,12 @@ namespace AmigaPowerAnalysis.GUI {
             simulationSettingsForm.Dock = System.Windows.Forms.DockStyle.Fill;
             tab.Controls.Add(simulationSettingsForm);
 
+            var analysisResultsForm = new AnalysisResultsForm(_project);
+            tab = new TabPage(analysisResultsForm.Name);
+            this.tabControl.TabPages.Add(tab);
+            analysisResultsForm.Dock = System.Windows.Forms.DockStyle.Fill;
+            tab.Controls.Add(analysisResultsForm);
+
             this.saveAsToolStripMenuItem.Enabled = true;
             this.saveToolStripMenuItem.Enabled = true;
             this.closeToolStripMenuItem.Enabled = true;
@@ -173,11 +180,15 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void goToolStripMenuItem_Click(object sender, EventArgs e) {
             if (string.IsNullOrEmpty(_currentProjectFilename)) {
-                saveAsDialog();
+                MessageBox.Show("Please save the project first.",
+                   "Save project first",
+                   MessageBoxButtons.OK,
+                   MessageBoxIcon.Exclamation,
+                   MessageBoxDefaultButton.Button1);
+                return;
             }
-            var csvFilename = Path.Combine(Path.GetDirectoryName(_currentProjectFilename), Path.GetFileNameWithoutExtension(_currentProjectFilename) + ".csv");
-            var powerAnalysisInputGenerator = new PowerAnalysisInputGenerator();
-            powerAnalysisInputGenerator.CreatePowerAnalysisInputCsv(_project, csvFilename);
+            var runSimulationDialog = new RunSimulationDialog(_project, _currentProjectFilename);
+            runSimulationDialog.ShowDialog();
         }
     }
 }
