@@ -15,15 +15,23 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             var filePath = Path.GetDirectoryName(filename);
             var baseFileName = Path.GetFileNameWithoutExtension(filename);
             for (int i = 0; i < comparisons.Count(); ++i) {
-                var comparisonRecords = getComparisonInputPowerAnalysisRecords(comparisons.ElementAt(i));
+                var comparison = comparisons.ElementAt(i);
+                var comparisonRecords = getComparisonInputPowerAnalysisRecords(comparison);
                 comparisonRecords.ForEach(r => r.ComparisonId = i);
                 var comparisonFilename = Path.Combine(filePath, string.Format("{0}-{1}.csv", baseFileName, i));
-                PowerAnalysisInputToCsv(comparisonRecords, comparisonFilename);
+                PowerAnalysisInputToCsv(comparison.Endpoint, comparisonRecords, comparisonFilename);
             }
         }
 
-        public void PowerAnalysisInputToCsv(List<InputPowerAnalysis> records, string filename) {
+        public void PowerAnalysisInputToCsv(Endpoint endpoint, List<InputPowerAnalysis> records, string filename) {
             var separator = ",";
+            var stringBuilder = new StringBuilder();
+
+            stringBuilder.AppendLine(string.Format("LocLower {0}", endpoint.LocLower));
+            stringBuilder.AppendLine(string.Format("LocUpper {0}", endpoint.LocUpper));
+            stringBuilder.AppendLine(string.Format("CVComparator {0}", endpoint.CvComparator));
+            stringBuilder.AppendLine(string.Format("CVBlocks {0}", endpoint.CVForBlocks));
+            stringBuilder.AppendLine(string.Format("Distribution {0}", endpoint.DistributionType.ToString()));
 
             var headers = new List<string>();
             headers.Add("Endpoint");
@@ -40,7 +48,6 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             headers.Add("Mean");
             headers.Add("Comparison");
 
-            var stringBuilder = new StringBuilder();
             stringBuilder.AppendLine(string.Join(separator, headers));
 
             foreach (var record in records) {
