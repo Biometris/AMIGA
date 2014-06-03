@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
+using AmigaPowerAnalysis.Core.ProjectSettings;
 
 namespace AmigaPowerAnalysis.Core {
 
@@ -43,16 +44,21 @@ namespace AmigaPowerAnalysis.Core {
         public List<Factor> Factors { get; set; }
 
         /// <summary>
-        /// Variety factor which includes GMO and Comparator
-        /// </summary>
-        [DataMember]
-        public Factor VarietyFactor { get; set; }
-
-        /// <summary>
         /// The experimental design of the project.
         /// </summary>
         [DataMember]
         public Design Design { get; set; }
+
+        /// <summary>
+        /// The settings for the power analysis.
+        /// </summary>
+        public PowerCalculationSettings PowerCalculationSettings { get; set; }
+
+        /// <summary>
+        /// Variety factor which includes GMO and Comparator.
+        /// </summary>
+        [DataMember]
+        public Factor VarietyFactor { get; set; }
 
         /// <summary>
         /// Specifies whether or not to use the same interactions for all endpoints.

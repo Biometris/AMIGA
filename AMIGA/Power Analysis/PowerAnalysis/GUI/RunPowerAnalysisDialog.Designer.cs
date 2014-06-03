@@ -1,5 +1,5 @@
 ﻿namespace AmigaPowerAnalysis.GUI {
-    partial class RunSimulationDialog {
+    partial class RunPowerAnalysisDialog {
         /// <summary>
         /// Required designer variable.
         /// </summary>

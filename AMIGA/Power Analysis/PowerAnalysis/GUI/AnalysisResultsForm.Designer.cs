@@ -23,11 +23,17 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SimulationSettingsForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AnalysisResultsForm));
             this.panelTabDescription = new System.Windows.Forms.Panel();
             this.textBoxTabDescription = new System.Windows.Forms.TextBox();
             this.textBoxTabTitle = new System.Windows.Forms.TextBox();
+            this.splitContainerComparisons = new System.Windows.Forms.SplitContainer();
+            this.dataGridViewComparisons = new System.Windows.Forms.DataGridView();
             this.panelTabDescription.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerComparisons)).BeginInit();
+            this.splitContainerComparisons.Panel1.SuspendLayout();
+            this.splitContainerComparisons.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewComparisons)).BeginInit();
             this.SuspendLayout();
             // 
             // panelTabDescription
@@ -68,17 +74,56 @@
             this.textBoxTabTitle.TabIndex = 7;
             this.textBoxTabTitle.Text = "Tab title";
             // 
-            // SimulationSettingsForm
+            // splitContainerComparisons
+            // 
+            this.splitContainerComparisons.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainerComparisons.Location = new System.Drawing.Point(10, 107);
+            this.splitContainerComparisons.Name = "splitContainerComparisons";
+            // 
+            // splitContainerComparisons.Panel1
+            // 
+            this.splitContainerComparisons.Panel1.Controls.Add(this.dataGridViewComparisons);
+            this.splitContainerComparisons.Size = new System.Drawing.Size(854, 386);
+            this.splitContainerComparisons.SplitterDistance = 283;
+            this.splitContainerComparisons.TabIndex = 9;
+            // 
+            // dataGridViewComparisons
+            // 
+            this.dataGridViewComparisons.AllowUserToAddRows = false;
+            this.dataGridViewComparisons.AllowUserToDeleteRows = false;
+            this.dataGridViewComparisons.AllowUserToResizeRows = false;
+            this.dataGridViewComparisons.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewComparisons.BackgroundColor = System.Drawing.Color.White;
+            this.dataGridViewComparisons.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewComparisons.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridViewComparisons.Location = new System.Drawing.Point(0, 0);
+            this.dataGridViewComparisons.MultiSelect = false;
+            this.dataGridViewComparisons.Name = "dataGridViewComparisons";
+            this.dataGridViewComparisons.ReadOnly = true;
+            this.dataGridViewComparisons.RowHeadersVisible = false;
+            this.dataGridViewComparisons.RowHeadersWidth = 24;
+            this.dataGridViewComparisons.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            this.dataGridViewComparisons.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dataGridViewComparisons.Size = new System.Drawing.Size(283, 386);
+            this.dataGridViewComparisons.TabIndex = 3;
+            this.dataGridViewComparisons.SelectionChanged += new System.EventHandler(this.dataGridViewComparisons_SelectionChanged);
+            // 
+            // AnalysisResultsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
+            this.Controls.Add(this.splitContainerComparisons);
             this.Controls.Add(this.panelTabDescription);
-            this.Name = "SimulationSettingsForm";
+            this.Name = "AnalysisResultsForm";
             this.Padding = new System.Windows.Forms.Padding(10);
             this.Size = new System.Drawing.Size(874, 503);
             this.panelTabDescription.ResumeLayout(false);
             this.panelTabDescription.PerformLayout();
+            this.splitContainerComparisons.Panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerComparisons)).EndInit();
+            this.splitContainerComparisons.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewComparisons)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -89,5 +134,7 @@
         private System.Windows.Forms.Panel panelTabDescription;
         private System.Windows.Forms.TextBox textBoxTabDescription;
         private System.Windows.Forms.TextBox textBoxTabTitle;
+        private System.Windows.Forms.SplitContainer splitContainerComparisons;
+        private System.Windows.Forms.DataGridView dataGridViewComparisons;
     }
 }

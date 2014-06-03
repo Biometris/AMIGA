@@ -152,7 +152,7 @@ namespace AmigaPowerAnalysis.GUI {
             modifiersForm.Dock = System.Windows.Forms.DockStyle.Fill;
             tab.Controls.Add(modifiersForm);
 
-            var simulationSettingsForm = new SimulationSettingsForm(_project);
+            var simulationSettingsForm = new PowerAnalysisSettingsForm(_project);
             tab = new TabPage(simulationSettingsForm.Name);
             this.tabControl.TabPages.Add(tab);
             simulationSettingsForm.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -187,7 +187,7 @@ namespace AmigaPowerAnalysis.GUI {
                    MessageBoxDefaultButton.Button1);
                 return;
             }
-            var runSimulationDialog = new RunSimulationDialog(_project, _currentProjectFilename);
+            var runSimulationDialog = new RunPowerAnalysisDialog(_project, _currentProjectFilename);
             runSimulationDialog.ShowDialog();
         }
     }

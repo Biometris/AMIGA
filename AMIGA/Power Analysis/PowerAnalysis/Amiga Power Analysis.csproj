@@ -85,6 +85,7 @@
     <Compile Include="Core\ProjectSettings\FactorLevelCombination.cs" />
     <Compile Include="Core\ProjectSettings\FactorLevelCombinationsCreator.cs" />
     <Compile Include="Core\PowerAnalysis\InputPowerAnalysis.cs" />
+    <Compile Include="Core\ProjectSettings\PowerCalculationSettings.cs" />
     <Compile Include="GUI\ComparisonsForm.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -97,17 +98,17 @@
     <Compile Include="GUI\AnalysisResultsForm.Designer.cs">
       <DependentUpon>AnalysisResultsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\RunSimulationDialog.cs">
+    <Compile Include="GUI\RunPowerAnalysisDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GUI\RunSimulationDialog.Designer.cs">
-      <DependentUpon>RunSimulationDialog.cs</DependentUpon>
+    <Compile Include="GUI\RunPowerAnalysisDialog.Designer.cs">
+      <DependentUpon>RunPowerAnalysisDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\SimulationSettingsForm.cs">
+    <Compile Include="GUI\PowerAnalysisSettingsForm.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="GUI\SimulationSettingsForm.Designer.cs">
-      <DependentUpon>SimulationSettingsForm.cs</DependentUpon>
+    <Compile Include="GUI\PowerAnalysisSettingsForm.Designer.cs">
+      <DependentUpon>PowerAnalysisSettingsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\ModifiersForm.cs">
       <SubType>UserControl</SubType>
@@ -163,11 +164,11 @@
     <EmbeddedResource Include="GUI\AnalysisResultsForm.resx">
       <DependentUpon>AnalysisResultsForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GUI\RunSimulationDialog.resx">
-      <DependentUpon>RunSimulationDialog.cs</DependentUpon>
+    <EmbeddedResource Include="GUI\RunPowerAnalysisDialog.resx">
+      <DependentUpon>RunPowerAnalysisDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GUI\SimulationSettingsForm.resx">
-      <DependentUpon>SimulationSettingsForm.cs</DependentUpon>
+    <EmbeddedResource Include="GUI\PowerAnalysisSettingsForm.resx">
+      <DependentUpon>PowerAnalysisSettingsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\ModifiersForm.resx">
       <DependentUpon>ModifiersForm.cs</DependentUpon>

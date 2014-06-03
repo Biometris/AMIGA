@@ -1,5 +1,5 @@
 ﻿namespace AmigaPowerAnalysis.GUI {
-    partial class SimulationSettingsForm {
+    partial class PowerAnalysisSettingsForm {
         /// <summary> 
         /// Required designer variable.
         /// </summary>
@@ -23,11 +23,13 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SimulationSettingsForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PowerAnalysisSettingsForm));
             this.panelTabDescription = new System.Windows.Forms.Panel();
             this.textBoxTabDescription = new System.Windows.Forms.TextBox();
             this.textBoxTabTitle = new System.Windows.Forms.TextBox();
             this.groupBoxOptions = new System.Windows.Forms.GroupBox();
+            this.textBoxSeedForRandomNumbers = new System.Windows.Forms.TextBox();
+            this.labelSeedForRandomNumbers = new System.Windows.Forms.Label();
             this.textBoxNumberSimulatedDatasets = new System.Windows.Forms.TextBox();
             this.labelNumberSimulatedDatasets = new System.Windows.Forms.Label();
             this.comboBoxMethodForPowerCalculation = new System.Windows.Forms.ComboBox();
@@ -43,8 +45,6 @@
             this.checkBoxMethodForAnalysesOP = new System.Windows.Forms.CheckBox();
             this.checkBoxMethodForAnalysesNB = new System.Windows.Forms.CheckBox();
             this.groupBoxMethodsForAnalysis = new System.Windows.Forms.GroupBox();
-            this.labelSeedForRandomNumbers = new System.Windows.Forms.Label();
-            this.textBoxSeedForRandomNumbers = new System.Windows.Forms.TextBox();
             this.panelTabDescription.SuspendLayout();
             this.groupBoxOptions.SuspendLayout();
             this.groupBoxMethodsForAnalysis.SuspendLayout();
@@ -102,12 +102,31 @@
             this.groupBoxOptions.Controls.Add(this.labelNumberOfRatios);
             this.groupBoxOptions.Controls.Add(this.textBoxSignificanceLevel);
             this.groupBoxOptions.Controls.Add(this.labelSignificanceLevel);
-            this.groupBoxOptions.Location = new System.Drawing.Point(20, 124);
+            this.groupBoxOptions.Dock = System.Windows.Forms.DockStyle.Top;
+            this.groupBoxOptions.Location = new System.Drawing.Point(10, 107);
             this.groupBoxOptions.Name = "groupBoxOptions";
-            this.groupBoxOptions.Size = new System.Drawing.Size(796, 196);
+            this.groupBoxOptions.Size = new System.Drawing.Size(854, 196);
             this.groupBoxOptions.TabIndex = 9;
             this.groupBoxOptions.TabStop = false;
             this.groupBoxOptions.Text = "Options";
+            // 
+            // textBoxSeedForRandomNumbers
+            // 
+            this.textBoxSeedForRandomNumbers.Location = new System.Drawing.Point(447, 161);
+            this.textBoxSeedForRandomNumbers.Name = "textBoxSeedForRandomNumbers";
+            this.textBoxSeedForRandomNumbers.Size = new System.Drawing.Size(100, 20);
+            this.textBoxSeedForRandomNumbers.TabIndex = 11;
+            this.textBoxSeedForRandomNumbers.Text = "123456";
+            this.textBoxSeedForRandomNumbers.Validating += new System.ComponentModel.CancelEventHandler(this.textBoxSeedForRandomNumbers_Validating);
+            // 
+            // labelSeedForRandomNumbers
+            // 
+            this.labelSeedForRandomNumbers.AutoSize = true;
+            this.labelSeedForRandomNumbers.Location = new System.Drawing.Point(20, 164);
+            this.labelSeedForRandomNumbers.Name = "labelSeedForRandomNumbers";
+            this.labelSeedForRandomNumbers.Size = new System.Drawing.Size(365, 13);
+            this.labelSeedForRandomNumbers.TabIndex = 10;
+            this.labelSeedForRandomNumbers.Text = "Seed for random number generator (non-negative value uses computer time)";
             // 
             // textBoxNumberSimulatedDatasets
             // 
@@ -116,6 +135,7 @@
             this.textBoxNumberSimulatedDatasets.Size = new System.Drawing.Size(100, 20);
             this.textBoxNumberSimulatedDatasets.TabIndex = 9;
             this.textBoxNumberSimulatedDatasets.Text = "100";
+            this.textBoxNumberSimulatedDatasets.Validating += new System.ComponentModel.CancelEventHandler(this.textBoxNumberSimulatedDatasets_Validating);
             // 
             // labelNumberSimulatedDatasets
             // 
@@ -137,6 +157,7 @@
             this.comboBoxMethodForPowerCalculation.Size = new System.Drawing.Size(100, 21);
             this.comboBoxMethodForPowerCalculation.TabIndex = 7;
             this.comboBoxMethodForPowerCalculation.Text = "Approximate";
+            this.comboBoxMethodForPowerCalculation.Validating += new System.ComponentModel.CancelEventHandler(this.comboBoxMethodForPowerCalculation_Validating);
             // 
             // labelMethodForPowerCalculation
             // 
@@ -154,6 +175,7 @@
             this.textBoxNumberOfReplications.Size = new System.Drawing.Size(100, 20);
             this.textBoxNumberOfReplications.TabIndex = 5;
             this.textBoxNumberOfReplications.Text = "2,4,8,16,32";
+            this.textBoxNumberOfReplications.Validating += new System.ComponentModel.CancelEventHandler(this.textBoxNumberOfReplications_Validating);
             // 
             // labelNumberOfReplications
             // 
@@ -171,6 +193,7 @@
             this.textBoxNumberOfRatios.Size = new System.Drawing.Size(100, 20);
             this.textBoxNumberOfRatios.TabIndex = 3;
             this.textBoxNumberOfRatios.Text = "5";
+            this.textBoxNumberOfRatios.Validating += new System.ComponentModel.CancelEventHandler(this.textBoxNumberOfRatios_Validating);
             // 
             // labelNumberOfRatios
             // 
@@ -189,6 +212,7 @@
             this.textBoxSignificanceLevel.Size = new System.Drawing.Size(100, 20);
             this.textBoxSignificanceLevel.TabIndex = 1;
             this.textBoxSignificanceLevel.Text = "0.05";
+            this.textBoxSignificanceLevel.Validating += new System.ComponentModel.CancelEventHandler(this.textBoxSignificanceLevel_Validating);
             // 
             // labelSignificanceLevel
             // 
@@ -210,6 +234,7 @@
             this.checkBoxMethodForAnalysesLN.TabIndex = 11;
             this.checkBoxMethodForAnalysesLN.Text = "Log(y + 1) transformation";
             this.checkBoxMethodForAnalysesLN.UseVisualStyleBackColor = true;
+            this.checkBoxMethodForAnalysesLN.CheckedChanged += new System.EventHandler(this.checkBoxMethodForAnalysesLN_CheckedChanged);
             // 
             // checkBoxMethodForAnalysesSQ
             // 
@@ -220,6 +245,7 @@
             this.checkBoxMethodForAnalysesSQ.TabIndex = 12;
             this.checkBoxMethodForAnalysesSQ.Text = "Squared root transformation";
             this.checkBoxMethodForAnalysesSQ.UseVisualStyleBackColor = true;
+            this.checkBoxMethodForAnalysesSQ.CheckedChanged += new System.EventHandler(this.checkBoxMethodForAnalysesSQ_CheckedChanged);
             // 
             // checkBoxMethodForAnalysesOP
             // 
@@ -232,6 +258,7 @@
             this.checkBoxMethodForAnalysesOP.TabIndex = 13;
             this.checkBoxMethodForAnalysesOP.Text = "Log linear model with overdispersion";
             this.checkBoxMethodForAnalysesOP.UseVisualStyleBackColor = true;
+            this.checkBoxMethodForAnalysesOP.CheckedChanged += new System.EventHandler(this.checkBoxMethodForAnalysesOP_CheckedChanged);
             // 
             // checkBoxMethodForAnalysesNB
             // 
@@ -242,6 +269,7 @@
             this.checkBoxMethodForAnalysesNB.TabIndex = 14;
             this.checkBoxMethodForAnalysesNB.Text = "Negative binomial model with log link";
             this.checkBoxMethodForAnalysesNB.UseVisualStyleBackColor = true;
+            this.checkBoxMethodForAnalysesNB.CheckedChanged += new System.EventHandler(this.checkBoxMethodForAnalysesNB_CheckedChanged);
             // 
             // groupBoxMethodsForAnalysis
             // 
@@ -249,31 +277,15 @@
             this.groupBoxMethodsForAnalysis.Controls.Add(this.checkBoxMethodForAnalysesLN);
             this.groupBoxMethodsForAnalysis.Controls.Add(this.checkBoxMethodForAnalysesOP);
             this.groupBoxMethodsForAnalysis.Controls.Add(this.checkBoxMethodForAnalysesSQ);
-            this.groupBoxMethodsForAnalysis.Location = new System.Drawing.Point(20, 340);
+            this.groupBoxMethodsForAnalysis.Dock = System.Windows.Forms.DockStyle.Top;
+            this.groupBoxMethodsForAnalysis.Location = new System.Drawing.Point(10, 303);
             this.groupBoxMethodsForAnalysis.Name = "groupBoxMethodsForAnalysis";
-            this.groupBoxMethodsForAnalysis.Size = new System.Drawing.Size(796, 138);
+            this.groupBoxMethodsForAnalysis.Size = new System.Drawing.Size(854, 138);
             this.groupBoxMethodsForAnalysis.TabIndex = 10;
             this.groupBoxMethodsForAnalysis.TabStop = false;
             this.groupBoxMethodsForAnalysis.Text = "Methods for Analysis";
             // 
-            // labelSeedForRandomNumbers
-            // 
-            this.labelSeedForRandomNumbers.AutoSize = true;
-            this.labelSeedForRandomNumbers.Location = new System.Drawing.Point(20, 164);
-            this.labelSeedForRandomNumbers.Name = "labelSeedForRandomNumbers";
-            this.labelSeedForRandomNumbers.Size = new System.Drawing.Size(365, 13);
-            this.labelSeedForRandomNumbers.TabIndex = 10;
-            this.labelSeedForRandomNumbers.Text = "Seed for random number generator (non-negative value uses computer time)";
-            // 
-            // textBoxSeedForRandomNumbers
-            // 
-            this.textBoxSeedForRandomNumbers.Location = new System.Drawing.Point(447, 161);
-            this.textBoxSeedForRandomNumbers.Name = "textBoxSeedForRandomNumbers";
-            this.textBoxSeedForRandomNumbers.Size = new System.Drawing.Size(100, 20);
-            this.textBoxSeedForRandomNumbers.TabIndex = 11;
-            this.textBoxSeedForRandomNumbers.Text = "123456";
-            // 
-            // SimulationSettingsForm
+            // PowerAnalysisSettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -281,7 +293,7 @@
             this.Controls.Add(this.groupBoxMethodsForAnalysis);
             this.Controls.Add(this.groupBoxOptions);
             this.Controls.Add(this.panelTabDescription);
-            this.Name = "SimulationSettingsForm";
+            this.Name = "PowerAnalysisSettingsForm";
             this.Padding = new System.Windows.Forms.Padding(10);
             this.Size = new System.Drawing.Size(874, 503);
             this.panelTabDescription.ResumeLayout(false);

@@ -13,14 +13,14 @@ using AmigaPowerAnalysis.Core;
 using AmigaPowerAnalysis.Core.PowerAnalysis;
 
 namespace AmigaPowerAnalysis.GUI {
-    public partial class RunSimulationDialog : Form {
+    public partial class RunPowerAnalysisDialog : Form {
 
         private BackgroundWorker _powerAnalysisBackgroundWorker;
 
         private Project _project;
         private string _projectFilename;
 
-        public RunSimulationDialog(Project project, string projectFilename) {
+        public RunPowerAnalysisDialog(Project project, string projectFilename) {
             _project = project;
             _projectFilename = projectFilename;
             InitializeComponent();
