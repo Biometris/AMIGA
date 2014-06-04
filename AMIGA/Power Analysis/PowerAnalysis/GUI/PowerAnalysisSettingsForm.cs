@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using AmigaPowerAnalysis.Core;
 using System.Text.RegularExpressions;
+using AmigaPowerAnalysis.Core.ProjectSettings;
 
 // TODO Obligatory to first enter a name for a new endpoint
 // TODO Binomial totals greyed out for non fractions
@@ -29,20 +30,34 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         public void Activate() {
-            textBoxSignificanceLevel.Text = "";
-            textBoxNumberOfRatios.Text = "";
-            textBoxNumberOfReplications.Text = "";
-//            comboBoxMethodForPowerCalculation;
-            textBoxNumberSimulatedDatasets.Text = "";
-            textBoxSeedForRandomNumbers.Text = "";
+            checkBoxMethodForAnalysesLN.Checked = _project.PowerCalculationSettings.SelectedAnalysisMethodTypes.Contains(AnalysisMethodType.LogNormal);
+            checkBoxMethodForAnalysesSQ.Checked = _project.PowerCalculationSettings.SelectedAnalysisMethodTypes.Contains(AnalysisMethodType.SquareRoot);
+            checkBoxMethodForAnalysesOP.Checked = _project.PowerCalculationSettings.SelectedAnalysisMethodTypes.Contains(AnalysisMethodType.OverdispersedPoisson);
+            checkBoxMethodForAnalysesNB.Checked = _project.PowerCalculationSettings.SelectedAnalysisMethodTypes.Contains(AnalysisMethodType.NegativeBinomial);
+            textBoxSignificanceLevel.Text = _project.PowerCalculationSettings.SignificanceLevel.ToString();
+            textBoxNumberOfRatios.Text = _project.PowerCalculationSettings.NumberOfRatios.ToString();
+            textBoxNumberOfReplications.Text = string.Join(", ", _project.PowerCalculationSettings.NumberOfReplications.Select(r => r.ToString().ToList()));
+//            comboBoxMethodForPowerCalculation
+            textBoxNumberSimulatedDatasets.Text = _project.PowerCalculationSettings.NumberOfSimulatedDataSets.ToString();
+            textBoxSeedForRandomNumbers.Text = _project.PowerCalculationSettings.Seed.ToString();
         }
 
         private void textBoxSignificanceLevel_Validating(object sender, CancelEventArgs e) {
-            _project.PowerCalculationSettings.SignificanceLevel = ValidateDouble(sender as TextBox);
+            var textBox = sender as TextBox;
+            double value;
+            if (Double.TryParse(textBox.Text, out value)) {
+                _project.PowerCalculationSettings.SignificanceLevel = value;
+            }
+            textBox.Text = _project.PowerCalculationSettings.SignificanceLevel.ToString();
         }
 
         private void textBoxNumberOfRatios_Validating(object sender, CancelEventArgs e) {
-
+            var textBox = sender as TextBox;
+            int value;
+            if (Int32.TryParse(textBox.Text, out value)) {
+                _project.PowerCalculationSettings.NumberOfRatios = value;
+            }
+            textBox.Text = _project.PowerCalculationSettings.NumberOfRatios.ToString();
         }
 
         private void textBoxNumberOfReplications_Validating(object sender, CancelEventArgs e) {
@@ -54,37 +69,53 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void textBoxNumberSimulatedDatasets_Validating(object sender, CancelEventArgs e) {
-
+            var textBox = sender as TextBox;
+            int value;
+            if (Int32.TryParse(textBox.Text, out value)) {
+                _project.PowerCalculationSettings.NumberOfSimulatedDataSets = value;
+            }
+            textBox.Text = _project.PowerCalculationSettings.NumberOfSimulatedDataSets.ToString();
         }
 
         private void textBoxSeedForRandomNumbers_Validating(object sender, CancelEventArgs e) {
-
-        }
-
-        private static double ValidateDouble(TextBox textBox) {
-            double value;
-            if (!Double.TryParse(textBox.Text, out value)) {
-                textBox.Text = Regex.Replace(textBox.Text, "[^0-9.]", "");
-                Double.TryParse(textBox.Text, out value);
+            var textBox = sender as TextBox;
+            int value;
+            if (Int32.TryParse(textBox.Text, out value)) {
+                _project.PowerCalculationSettings.Seed = value;
             }
-            textBox.Text = value.ToString();
-            return value;
+            textBox.Text = _project.PowerCalculationSettings.Seed.ToString();
         }
 
         private void checkBoxMethodForAnalysesLN_CheckedChanged(object sender, EventArgs e) {
-
+            if (checkBoxMethodForAnalysesLN.Checked) {
+                _project.PowerCalculationSettings.AddAnalysisMethodType(AnalysisMethodType.LogNormal);
+            } else {
+                _project.PowerCalculationSettings.RemoveAnalysisMethodType(AnalysisMethodType.LogNormal);
+            }
         }
 
         private void checkBoxMethodForAnalysesSQ_CheckedChanged(object sender, EventArgs e) {
-
+            if (checkBoxMethodForAnalysesSQ.Checked) {
+                _project.PowerCalculationSettings.AddAnalysisMethodType(AnalysisMethodType.SquareRoot);
+            } else {
+                _project.PowerCalculationSettings.RemoveAnalysisMethodType(AnalysisMethodType.SquareRoot);
+            }
         }
 
         private void checkBoxMethodForAnalysesOP_CheckedChanged(object sender, EventArgs e) {
-
+            if (checkBoxMethodForAnalysesOP.Checked) {
+                _project.PowerCalculationSettings.AddAnalysisMethodType(AnalysisMethodType.OverdispersedPoisson);
+            } else {
+                _project.PowerCalculationSettings.RemoveAnalysisMethodType(AnalysisMethodType.OverdispersedPoisson);
+            }
         }
 
         private void checkBoxMethodForAnalysesNB_CheckedChanged(object sender, EventArgs e) {
-
+            if (checkBoxMethodForAnalysesNB.Checked) {
+                _project.PowerCalculationSettings.AddAnalysisMethodType(AnalysisMethodType.NegativeBinomial);
+            } else {
+                _project.PowerCalculationSettings.RemoveAnalysisMethodType(AnalysisMethodType.NegativeBinomial);
+            }
         }
     }
 }

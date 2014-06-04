@@ -19,6 +19,7 @@ namespace AmigaPowerAnalysis.Core {
             Factors = new List<Factor>();
             Factors.Add(VarietyFactor);
             Design = new Design();
+            PowerCalculationSettings = new PowerCalculationSettings();
             UseDefaultInteractions = true;
             UseFactorModifiers = false;
             UseBlockModifier = false;
@@ -52,6 +53,7 @@ namespace AmigaPowerAnalysis.Core {
         /// <summary>
         /// The settings for the power analysis.
         /// </summary>
+        [DataMember]
         public PowerCalculationSettings PowerCalculationSettings { get; set; }
 
         /// <summary>

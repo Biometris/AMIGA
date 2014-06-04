@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AmigaPowerAnalysis.Core.PowerAnalysis;
+using AmigaPowerAnalysis.Core.ProjectSettings;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
@@ -16,7 +17,7 @@ namespace AmigaPowerAnalysis.Core.Charting {
             Ratio,
         }
 
-        private static PlotModel CreatePlotModel(TestType testType, AnalysisType analysisType, PlotType plotType) {
+        private static PlotModel CreatePlotModel(TestType testType, AnalysisMethodType analysisMethodType, PlotType plotType) {
             var plotModel = new PlotModel() {
                 LegendPlacement = LegendPlacement.Outside,
                 LegendPosition = LegendPosition.RightTop,
@@ -26,7 +27,7 @@ namespace AmigaPowerAnalysis.Core.Charting {
             var verticalAxis = new LinearAxis();
             verticalAxis.MajorGridlineStyle = LineStyle.Solid;
             verticalAxis.MinorGridlineStyle = LineStyle.Dot;
-            verticalAxis.Title = testType.ToString() + " " + analysisType.ToString();
+            verticalAxis.Title = testType.ToString() + " " + analysisMethodType.ToString();
             plotModel.Axes.Add(verticalAxis);
 
             var horizontalAxis = new LinearAxis();
@@ -39,8 +40,8 @@ namespace AmigaPowerAnalysis.Core.Charting {
             return plotModel;
         }
 
-        public static PlotModel CreatePlotViewReplicates(OutputPowerAnalysis outputPowerAnalysis, TestType testType, AnalysisType analysisType) {
-            var model = CreatePlotModel(testType, analysisType, PlotType.Replicates);
+        public static PlotModel CreatePlotViewReplicates(OutputPowerAnalysis outputPowerAnalysis, TestType testType, AnalysisMethodType analysisMethodType) {
+            var model = CreatePlotModel(testType, analysisMethodType, PlotType.Replicates);
             if (outputPowerAnalysis != null) {
                 var ratioGroups = outputPowerAnalysis.OutputRecords.GroupBy(r => r.Ratio);
                 for (int i = 0; i < ratioGroups.Count(); ++i) {
@@ -49,42 +50,42 @@ namespace AmigaPowerAnalysis.Core.Charting {
                         MarkerType = (MarkerType)(i % 7 + 1),
                     };
                     series.Title = string.Format("Ratio = {0:0.##}", ratioGroup.Key);
-                    if (testType == TestType.Difference && analysisType == AnalysisType.LogNormal) {
+                    if (testType == TestType.Difference && analysisMethodType == AnalysisMethodType.LogNormal) {
                         series.Points.AddRange(ratioGroup.Select(g => new DataPoint() {
                             X = g.NumberOfReplicates,
                             Y = g.PowerDifferenceLogNormal,
                         }));
-                    } else if (testType == TestType.Difference && analysisType == AnalysisType.NegativeBinomial) {
+                    } else if (testType == TestType.Difference && analysisMethodType == AnalysisMethodType.NegativeBinomial) {
                         series.Points.AddRange(ratioGroup.Select(g => new DataPoint() {
                             X = g.NumberOfReplicates,
                             Y = g.PowerDifferenceNegativeBinomial,
                         }));
-                    } else if (testType == TestType.Difference && analysisType == AnalysisType.OverdispersedPoisson) {
+                    } else if (testType == TestType.Difference && analysisMethodType == AnalysisMethodType.OverdispersedPoisson) {
                         series.Points.AddRange(ratioGroup.Select(g => new DataPoint() {
                             X = g.NumberOfReplicates,
                             Y = g.PowerDifferenceOverdispersedPoisson,
                         }));
-                    } else if (testType == TestType.Difference && analysisType == AnalysisType.SquareRoot) {
+                    } else if (testType == TestType.Difference && analysisMethodType == AnalysisMethodType.SquareRoot) {
                         series.Points.AddRange(ratioGroup.Select(g => new DataPoint() {
                             X = g.NumberOfReplicates,
                             Y = g.PowerDifferenceSquareRoot,
                         }));
-                    } else if (testType == TestType.Equivalence && analysisType == AnalysisType.LogNormal) {
+                    } else if (testType == TestType.Equivalence && analysisMethodType == AnalysisMethodType.LogNormal) {
                         series.Points.AddRange(ratioGroup.Select(g => new DataPoint() {
                             X = g.NumberOfReplicates,
                             Y = g.PowerEquivalenceLogNormal,
                         }));
-                    } else if (testType == TestType.Equivalence && analysisType == AnalysisType.NegativeBinomial) {
+                    } else if (testType == TestType.Equivalence && analysisMethodType == AnalysisMethodType.NegativeBinomial) {
                         series.Points.AddRange(ratioGroup.Select(g => new DataPoint() {
                             X = g.NumberOfReplicates,
                             Y = g.PowerEquivalenceNegativeBinomial,
                         }));
-                    } else if (testType == TestType.Equivalence && analysisType == AnalysisType.OverdispersedPoisson) {
+                    } else if (testType == TestType.Equivalence && analysisMethodType == AnalysisMethodType.OverdispersedPoisson) {
                         series.Points.AddRange(ratioGroup.Select(g => new DataPoint() {
                             X = g.NumberOfReplicates,
                             Y = g.PowerEquivalenceOverdispersedPoisson,
                         }));
-                    } else if (testType == TestType.Equivalence && analysisType == AnalysisType.SquareRoot) {
+                    } else if (testType == TestType.Equivalence && analysisMethodType == AnalysisMethodType.SquareRoot) {
                         series.Points.AddRange(ratioGroup.Select(g => new DataPoint() {
                             X = g.NumberOfReplicates,
                             Y = g.PowerEquivalenceSquareRoot,
@@ -96,8 +97,8 @@ namespace AmigaPowerAnalysis.Core.Charting {
             return model;
         }
 
-        public static PlotModel CreatePlotViewLog(OutputPowerAnalysis outputPowerAnalysis, TestType testType, AnalysisType analysisType) {
-            var model = CreatePlotModel(testType, analysisType, PlotType.Ratio);
+        public static PlotModel CreatePlotViewLog(OutputPowerAnalysis outputPowerAnalysis, TestType testType, AnalysisMethodType analysisMethodType) {
+            var model = CreatePlotModel(testType, analysisMethodType, PlotType.Ratio);
             if (outputPowerAnalysis != null) {
                 var replicateGroups = outputPowerAnalysis.OutputRecords.GroupBy(r => r.NumberOfReplicates);
                 for (int i = 0; i < replicateGroups.Count(); ++i) {
@@ -106,42 +107,42 @@ namespace AmigaPowerAnalysis.Core.Charting {
                         MarkerType = (MarkerType)(i % 7 + 1),
                     };
                     series.Title = string.Format("Ratio = {0:0.##}", replicateGroup.Key);
-                    if (testType == TestType.Difference && analysisType == AnalysisType.LogNormal) {
+                    if (testType == TestType.Difference && analysisMethodType == AnalysisMethodType.LogNormal) {
                         series.Points.AddRange(replicateGroup.Select(g => new DataPoint() {
                             X = g.LogRatio,
                             Y = g.PowerDifferenceLogNormal,
                         }));
-                    } else if (testType == TestType.Difference && analysisType == AnalysisType.NegativeBinomial) {
+                    } else if (testType == TestType.Difference && analysisMethodType == AnalysisMethodType.NegativeBinomial) {
                         series.Points.AddRange(replicateGroup.Select(g => new DataPoint() {
                             X = g.LogRatio,
                             Y = g.PowerDifferenceNegativeBinomial,
                         }));
-                    } else if (testType == TestType.Difference && analysisType == AnalysisType.OverdispersedPoisson) {
+                    } else if (testType == TestType.Difference && analysisMethodType == AnalysisMethodType.OverdispersedPoisson) {
                         series.Points.AddRange(replicateGroup.Select(g => new DataPoint() {
                             X = g.LogRatio,
                             Y = g.PowerDifferenceOverdispersedPoisson,
                         }));
-                    } else if (testType == TestType.Difference && analysisType == AnalysisType.SquareRoot) {
+                    } else if (testType == TestType.Difference && analysisMethodType == AnalysisMethodType.SquareRoot) {
                         series.Points.AddRange(replicateGroup.Select(g => new DataPoint() {
                             X = g.LogRatio,
                             Y = g.PowerDifferenceSquareRoot,
                         }));
-                    } else if (testType == TestType.Equivalence && analysisType == AnalysisType.LogNormal) {
+                    } else if (testType == TestType.Equivalence && analysisMethodType == AnalysisMethodType.LogNormal) {
                         series.Points.AddRange(replicateGroup.Select(g => new DataPoint() {
                             X = g.LogRatio,
                             Y = g.PowerEquivalenceLogNormal,
                         }));
-                    } else if (testType == TestType.Equivalence && analysisType == AnalysisType.NegativeBinomial) {
+                    } else if (testType == TestType.Equivalence && analysisMethodType == AnalysisMethodType.NegativeBinomial) {
                         series.Points.AddRange(replicateGroup.Select(g => new DataPoint() {
                             X = g.LogRatio,
                             Y = g.PowerEquivalenceNegativeBinomial,
                         }));
-                    } else if (testType == TestType.Equivalence && analysisType == AnalysisType.OverdispersedPoisson) {
+                    } else if (testType == TestType.Equivalence && analysisMethodType == AnalysisMethodType.OverdispersedPoisson) {
                         series.Points.AddRange(replicateGroup.Select(g => new DataPoint() {
                             X = g.LogRatio,
                             Y = g.PowerEquivalenceOverdispersedPoisson,
                         }));
-                    } else if (testType == TestType.Equivalence && analysisType == AnalysisType.SquareRoot) {
+                    } else if (testType == TestType.Equivalence && analysisMethodType == AnalysisMethodType.SquareRoot) {
                         series.Points.AddRange(replicateGroup.Select(g => new DataPoint() {
                             X = g.LogRatio,
                             Y = g.PowerEquivalenceSquareRoot,
