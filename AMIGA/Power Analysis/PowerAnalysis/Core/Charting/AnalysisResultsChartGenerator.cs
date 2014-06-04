@@ -106,7 +106,7 @@ namespace AmigaPowerAnalysis.Core.Charting {
                     var series = new LineSeries() {
                         MarkerType = (MarkerType)(i % 7 + 1),
                     };
-                    series.Title = string.Format("Ratio = {0:0.##}", replicateGroup.Key);
+                    series.Title = string.Format("Replicates = {0:0.##}", replicateGroup.Key);
                     if (testType == TestType.Difference && analysisMethodType == AnalysisMethodType.LogNormal) {
                         series.Points.AddRange(replicateGroup.Select(g => new DataPoint() {
                             X = g.LogRatio,

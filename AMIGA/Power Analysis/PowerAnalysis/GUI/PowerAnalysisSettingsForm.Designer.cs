@@ -148,16 +148,13 @@
             // 
             // comboBoxMethodForPowerCalculation
             // 
+            this.comboBoxMethodForPowerCalculation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxMethodForPowerCalculation.FormattingEnabled = true;
-            this.comboBoxMethodForPowerCalculation.Items.AddRange(new object[] {
-            "Approximate",
-            "Simulation"});
             this.comboBoxMethodForPowerCalculation.Location = new System.Drawing.Point(447, 105);
             this.comboBoxMethodForPowerCalculation.Name = "comboBoxMethodForPowerCalculation";
             this.comboBoxMethodForPowerCalculation.Size = new System.Drawing.Size(100, 21);
             this.comboBoxMethodForPowerCalculation.TabIndex = 7;
-            this.comboBoxMethodForPowerCalculation.Text = "Approximate";
-            this.comboBoxMethodForPowerCalculation.Validating += new System.ComponentModel.CancelEventHandler(this.comboBoxMethodForPowerCalculation_Validating);
+            this.comboBoxMethodForPowerCalculation.SelectedIndexChanged += new System.EventHandler(this.comboBoxMethodForPowerCalculation_SelectedIndexChanged);
             // 
             // labelMethodForPowerCalculation
             // 

@@ -37,7 +37,8 @@ namespace AmigaPowerAnalysis.GUI {
             textBoxSignificanceLevel.Text = _project.PowerCalculationSettings.SignificanceLevel.ToString();
             textBoxNumberOfRatios.Text = _project.PowerCalculationSettings.NumberOfRatios.ToString();
             textBoxNumberOfReplications.Text = string.Join(", ", _project.PowerCalculationSettings.NumberOfReplications.Select(r => r.ToString().ToList()));
-//            comboBoxMethodForPowerCalculation
+            comboBoxMethodForPowerCalculation.DataSource = Enum.GetValues(typeof(PowerCalculationMethod));
+            comboBoxMethodForPowerCalculation.SelectedIndex = (int)_project.PowerCalculationSettings.PowerCalculationMethod;
             textBoxNumberSimulatedDatasets.Text = _project.PowerCalculationSettings.NumberOfSimulatedDataSets.ToString();
             textBoxSeedForRandomNumbers.Text = _project.PowerCalculationSettings.Seed.ToString();
         }
@@ -61,10 +62,6 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void textBoxNumberOfReplications_Validating(object sender, CancelEventArgs e) {
-
-        }
-
-        private void comboBoxMethodForPowerCalculation_Validating(object sender, CancelEventArgs e) {
 
         }
 
@@ -116,6 +113,12 @@ namespace AmigaPowerAnalysis.GUI {
             } else {
                 _project.PowerCalculationSettings.RemoveAnalysisMethodType(AnalysisMethodType.NegativeBinomial);
             }
+        }
+
+        private void comboBoxMethodForPowerCalculation_SelectedIndexChanged(object sender, EventArgs e) {
+            PowerCalculationMethod powerCalculationMethod;
+            Enum.TryParse<PowerCalculationMethod>(comboBoxMethodForPowerCalculation.SelectedValue.ToString(), out powerCalculationMethod);
+            _project.PowerCalculationSettings.PowerCalculationMethod = powerCalculationMethod;
         }
     }
 }
