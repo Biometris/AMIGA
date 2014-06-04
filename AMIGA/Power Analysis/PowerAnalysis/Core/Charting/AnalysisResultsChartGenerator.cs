@@ -25,27 +25,29 @@ namespace AmigaPowerAnalysis.Core.Charting {
             };
 
             var verticalAxis = new LinearAxis() {
+                Title = testType.ToString() + " " + analysisMethodType.ToString(),
                 MajorGridlineStyle = LineStyle.Solid,
                 MinorGridlineStyle = LineStyle.Dot,
                 Minimum = 0,
                 Maximum = 1,
             };
-
-            verticalAxis.Title = testType.ToString() + " " + analysisMethodType.ToString();
             plotModel.Axes.Add(verticalAxis);
-
-            var horizontalAxis = new LinearAxis();
-            horizontalAxis.MajorGridlineStyle = LineStyle.Solid;
-            horizontalAxis.MinorGridlineStyle = LineStyle.Dot;
-            horizontalAxis.Position = AxisPosition.Bottom;
-            horizontalAxis.Title = plotType.ToString();
-            plotModel.Axes.Add(horizontalAxis);
 
             return plotModel;
         }
 
         public static PlotModel CreatePlotViewReplicates(OutputPowerAnalysis outputPowerAnalysis, TestType testType, AnalysisMethodType analysisMethodType) {
             var model = CreatePlotModel(testType, analysisMethodType, PlotType.Replicates);
+
+            var horizontalAxis = new LogarithmicAxis() {
+                Title = "Replicates",
+                Base = 2,
+                MajorGridlineStyle = LineStyle.Solid,
+                MinorGridlineStyle = LineStyle.Dot,
+                Position = AxisPosition.Bottom,
+            };
+            model.Axes.Add(horizontalAxis);
+
             if (outputPowerAnalysis != null) {
                 var ratioGroups = outputPowerAnalysis.OutputRecords.GroupBy(r => r.Ratio);
                 for (int i = 0; i < ratioGroups.Count(); ++i) {
@@ -103,6 +105,15 @@ namespace AmigaPowerAnalysis.Core.Charting {
 
         public static PlotModel CreatePlotViewLog(OutputPowerAnalysis outputPowerAnalysis, TestType testType, AnalysisMethodType analysisMethodType) {
             var model = CreatePlotModel(testType, analysisMethodType, PlotType.Ratio);
+
+            var horizontalAxis = new LinearAxis() {
+                Title = "(Log)Ratio",
+                MajorGridlineStyle = LineStyle.Solid,
+                MinorGridlineStyle = LineStyle.Dot,
+                Position = AxisPosition.Bottom,
+            };
+            model.Axes.Add(horizontalAxis);
+
             if (outputPowerAnalysis != null) {
                 var replicateGroups = outputPowerAnalysis.OutputRecords.GroupBy(r => r.NumberOfReplicates);
                 for (int i = 0; i < replicateGroups.Count(); ++i) {
