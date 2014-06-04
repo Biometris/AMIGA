@@ -24,9 +24,13 @@ namespace AmigaPowerAnalysis.Core.Charting {
                 LegendBorder = OxyColors.Black,
             };
 
-            var verticalAxis = new LinearAxis();
-            verticalAxis.MajorGridlineStyle = LineStyle.Solid;
-            verticalAxis.MinorGridlineStyle = LineStyle.Dot;
+            var verticalAxis = new LinearAxis() {
+                MajorGridlineStyle = LineStyle.Solid,
+                MinorGridlineStyle = LineStyle.Dot,
+                Minimum = 0,
+                Maximum = 1,
+            };
+
             verticalAxis.Title = testType.ToString() + " " + analysisMethodType.ToString();
             plotModel.Axes.Add(verticalAxis);
 
