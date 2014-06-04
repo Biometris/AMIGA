@@ -1,0 +1,108 @@
+open      'Lyles.pro' ; channel=2 ; filetype=input
+input     [print=*] 2
+close     channel=2 ; filetype=input
+
+" Completely randomized than one loop is sufficient "
+
+" Simulation settings "
+text      file ; 'M:/My Documents/Default-0.csv'
+text      file ; 'M:/My Documents/SmallMeans-0.csv'
+text      file ; 'M:/My Documents/TechDoc-0.csv'
+
+scalar    ngridLOC ; 3
+variate   nBlocks ; !(2,4,6,8,10,12,14,16)
+variate   nBlocks ; !(2,4,8,16,32,64)  " For fitting "
+scalar    alfa ; 0.05
+scalar    seed ; 342894
+
+scalar    powerdist ; 1.5
+text      design ; 'splitplot'
+text      design ; 'randomized'
+text      design ; 'block'
+
+text      models ; !t(LN,NB)
+text      models ; !t(LN,SQ,OP)
+text      models ; !t(LN,SQ,OP,NB)
+text      models ; !t(LN,SQ,OP)
+text      models ; !t(LN,SQ,OP)
+text      models ; !t(LN,SQ,OP,NB)
+
+" Some extra options "
+calculate init = urand(seed ; 1)
+
+" Import Data from Simulation tool "
+text      [nvalues=1] dummy, distribution
+scalar    lowerLOC, upperLOC, cvComparator, cvBlock
+open      file ; channel=2 ; filetype=input
+for read=lowerLOC, upperLOC, cvComparator, cvBlock, distribution
+  read    [print=* ; channel=2 ; end=*] dummy, read
+endfor
+print     lowerLOC, upperLOC, cvComparator, cvBlock, distribution
+close     channel=2 ; filetype=input
+fileread  [print=* ; name=file ; skip=5 ; imethod=read ; separator=',' ; \
+          maxcat=0 ; isave=isave]
+sreplace  ['OverdispersedPoisson' ; 'opoisson'] distribution
+sreplace  ['PowerLaw' ; 'power'] distribution
+
+
+" Create design matrix from input file "
+L1CREATE  [isave] MUCOMPARATOR=meanComparator ; MEAN=zz ; COMPARISON=comparison ; \
+          DUMMY=dum ; MODIFIERS=Modifiers
+
+" create grid for looping loop over loc/nblocks values "
+" for a randomized design the non-centrality parameter is proportional "
+calculate loglowerloc, logupperloc = log(lowerLOC, upperLOC)
+fgrid     [min=loglowerloc ; max=logupperloc ; ngrid=ngridLOC] gridratio
+calculate gridratio[] = exp(gridratio[])
+if flagRan = (design.eqs.'randomized') .or. (cvBlock.eq.0)
+    variate   ratio ; gridratio[]
+    variate   nreps ; 2 + 0*ratio
+  else
+    fgrid     [values=gridratio[], nBlocks] grid
+    variate   ratio, nreps ; grid[] ; deci=*,0
+endif
+
+calculate nloop = nvalues(ratio)
+decimals  ratio
+
+" main looping "
+for [ntimes=nloop ; index=ii]
+  scalar    iiratio, iireps ; (ratio, nreps)$[ii]
+  l2lyles   [dist=#distribution ; power=powerdist ; design=#design ; sign=alfa ; \
+            mucomp=meanComparator ; cvcomp=cvComparator ; cvblock=cvBlock ; \
+            mean=Mean ; comparison=comparison ; dummy=dum ; \
+            modifiers=Modifiers ; loclower=lowerLOC ; locupper=upperLOC ; \
+            analysis=#models] iiratio ; iireps ; qnc[ii] ; qpow[ii] ; qdf[ii]
+endfor
+variate   df ; !(#qdf) ; deci=0
+vequate   qnc,qpow ; nc,pow
+
+" Expand for randomized "
+print flagRan
+if flagRan 
+  scalar    nplots ; nvalues(Mean)
+  calculate npars = 2*nplots - mean(df)
+  fgrid     [values=ratio, nBlocks] grid
+  groups    grid[] ; fRatio, fReps
+  tabulate  [class=fRatio, fReps] nplots*fReps - npars ; mean=tdf
+  variate   df ; tdf ; decimals=0
+
+  pointer   [nvalues=nvalues(nc)] tnc, ttnc, pow
+  table     [class=fRatio] tnc[] ; nc[]
+  table     [class=fRatio, fReps] tNreps, ttnc[]
+  tabulate  1*fReps ; mean=tNreps
+  calculate ttnc[] = tnc[] * tNreps/2
+  variate   nc[] ; ttnc[]
+  calculate critvalChi = edchi(1-alfa + 0*df ; 1)
+  calculate critvalF = edf(1-alfa + 0*df ; 1 ; df)
+  for [index=ii] qq=nc[] ; pp=pow[] ; type=2,2,1,2,1
+    if (type.eq.1)
+        variate   pp ; CUCHI(critvalChi ; 1 ; qq)
+      else
+        variate   pp ; CUF(critvalF ; 1 ; df ; qq)
+    endif
+  endfor    
+endif
+print   nc[1...5,8,9,10] ; fi=10 ; de=3
+print   pow[1...5,8,9,10] ; fi=10 ; de=3
+stop

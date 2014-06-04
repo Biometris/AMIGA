@@ -4,22 +4,23 @@
   Shows that the test can be performed by means of the F test
   The estimate for xx is (mu2/mu1)
 
-  Note when H0 : mu2/mu1 outside interval [LOCleft, INF] then 
+  Note when H0 : mu2/mu1 outside interval [LOCleft, INF] then
   do not divide Pvalue by two, or use as critical value edchi(1-2*alfa ; 1)
 "
-scalar    LOC ; 3
-scalar    mu1 ; 1
-scalar    mu2 ; 2
-scalar    nrep ; 100
+scalar    mu1 ; 5
+scalar    mu2 ; 10
+scalar    nrep ; 5
 scalar    seed ; 328312
-scalar    nloop ; 1000
 scalar    alfa ; 0.05
+
+scalar    setdevice ; 0
 
 " Simulate data "
 calculate init = urand(seed ; 1)
 variate   yy, mu ; !(#nrep(#mu1, #mu2))
 calculate yy = grpoisson(2*nrep ; mu)
 variate   xx ; !(#nrep(0,1))
+print     xx,yy ; deci=0
 print     log(mu2/mu1)
 
 " Fit model and Wald interval "
@@ -33,7 +34,7 @@ print     logratio, ratio, leftWL,rightWL
 
 " LR interval "
 scalar    ngrid ; 1000
-calculate min,max = logratio + (-1,1)*ednormal(1-alfa/5)*selogratio
+calculate min,max = logratio + (-1,1)*ednormal(1-alfa/10)*selogratio
 fgrid     [min=min ; max=max ; ngrid=ngrid] grid
 variate   [nvalues=ngrid] savedev
 for [ntimes=ngrid ; index=ii]
@@ -79,16 +80,17 @@ pen       1,2 ; method=line ; symbols=0 ; colour='black', 'red' ; thick=1.5
 calculate line = edchi + 0*grid[]
 variate   verty, leftx, rightx ; !(-100,#edchi), !(2(#leftLR)), !(2(#rightLR))
 calculate leftx, rightx = log(leftx, rightx)
+setdevice [create=setdevice ; res=2000]
 dgraph    [win=1 ; key=0 ; title='Profile likelihood Poisson'] \
           savedev,line,2(verty) ; 2(grid[]),leftx,rightx ; pen=1,1,2,2
 
 " Set LOC to left and test "
 " Note: never reject when estimate is outside LOC interval "
-scalar    LOC ; leftLogLR
+scalar    LOC ; leftLogLR-0.01
 calculate offset = (xx.eq.1)*LOC
 model     [dist=poisson; offset=offset] yy
 terms     xx
-fit       [print=* ; nomes=lev,res,disp]
+fit       [print=# ; nomes=lev,res,disp]
 rkeep     dev=dev0 ; df=df0
 add       [print=* ; nomes=lev,res,disp] xx   " This is the full model "
 rkeep     dev=dev1 ; df=df1 ; esti=esti2
@@ -116,5 +118,6 @@ endif
 calculate pChi = cuchi(ChiTest ; 1)/2
 calculate critValChi = edchi(1-alfa ; 1)
 print     pChi, ChiTest, critValChi
+dcrop     [sec=1 ; nomes=warning]
 stop
 
