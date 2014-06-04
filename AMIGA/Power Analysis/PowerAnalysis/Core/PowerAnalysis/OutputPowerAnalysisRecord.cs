@@ -5,6 +5,18 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace AmigaPowerAnalysis.Core.PowerAnalysis {
+    public enum TestType {
+        Difference,
+        Equivalence,
+    }
+
+    public enum AnalysisType {
+        LogNormal,
+        SquareRoot,
+        OverdispersedPoisson,
+        NegativeBinomial,
+    }
+
     public sealed class OutputPowerAnalysisRecord {
 
         public double Ratio { get; set; }

@@ -32,6 +32,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                     PowerEquivalenceOverdispersedPoisson = values[9],
                     PowerEquivalenceNegativeBinomial = values[10],
                 };
+                outputRecords.Add(record);
             }
 
             return new OutputPowerAnalysis() {

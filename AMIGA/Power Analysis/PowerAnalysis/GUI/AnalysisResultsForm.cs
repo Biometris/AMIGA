@@ -8,6 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using AmigaPowerAnalysis.Core;
+using OxyPlot;
+using OxyPlot.Series;
+using OxyPlot.Axes;
+using AmigaPowerAnalysis.Core.Charting;
+using AmigaPowerAnalysis.Core.PowerAnalysis;
 
 // TODO Obligatory to first enter a name for a new endpoint
 // TODO Binomial totals greyed out for non fractions
@@ -20,11 +25,15 @@ namespace AmigaPowerAnalysis.GUI {
 
         private Project _project;
         private List<Comparison> _comparisons;
+        private Comparison _currentComparison;
+        private AnalysisType _currentAnalysisType = AnalysisType.OverdispersedPoisson;
 
         public AnalysisResultsForm(Project project) {
             InitializeComponent();
             Name = "Results";
             this.textBoxTabTitle.Text = Name;
+            this.comboBoxAnalysisType.DataSource = Enum.GetValues(typeof(AnalysisType));
+            this.comboBoxAnalysisType.SelectedIndex = 1;
             _project = project;
         }
 
@@ -56,8 +65,25 @@ namespace AmigaPowerAnalysis.GUI {
             dataGridViewComparisons.DataSource = comparisonsBindingSouce;
         }
 
-        private void dataGridViewComparisons_SelectionChanged(object sender, EventArgs e) {
+        private void updateAnalysisOutputPanel() {
+            if (_currentComparison != null) {
+                plotViewDifferenceRepetitions.Model = AnalysisResultsChartGenerator.CreatePlotViewReplicates(_currentComparison.OutputPowerAnalysis, TestType.Difference, _currentAnalysisType);
+                plotViewEquivalenceRepetitions.Model = AnalysisResultsChartGenerator.CreatePlotViewReplicates(_currentComparison.OutputPowerAnalysis, TestType.Equivalence, _currentAnalysisType);
+                plotViewDifferenceLog.Model = AnalysisResultsChartGenerator.CreatePlotViewLog(_currentComparison.OutputPowerAnalysis, TestType.Difference, _currentAnalysisType);
+                plotViewEquivalenceLog.Model = AnalysisResultsChartGenerator.CreatePlotViewLog(_currentComparison.OutputPowerAnalysis, TestType.Equivalence, _currentAnalysisType);
+            }
+        }
 
+        private void dataGridViewComparisons_SelectionChanged(object sender, EventArgs e) {
+            _currentComparison = _project.GetComparisons().ElementAt(dataGridViewComparisons.CurrentRow.Index);
+            updateAnalysisOutputPanel();
+        }
+
+        private void comboBoxAnalysisType_SelectedIndexChanged(object sender, EventArgs e) {
+            AnalysisType analysisType;
+            Enum.TryParse<AnalysisType>(comboBoxAnalysisType.SelectedValue.ToString(), out analysisType);
+            _currentAnalysisType = analysisType;
+            updateAnalysisOutputPanel();
         }
     }
 }

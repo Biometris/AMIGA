@@ -78,7 +78,7 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void runWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
             this.Close();
-            MessageBox.Show("Done");
+            //MessageBox.Show("Done");
         }
     }
 }

@@ -29,11 +29,21 @@
             this.textBoxTabTitle = new System.Windows.Forms.TextBox();
             this.splitContainerComparisons = new System.Windows.Forms.SplitContainer();
             this.dataGridViewComparisons = new System.Windows.Forms.DataGridView();
+            this.panelResultPlots = new System.Windows.Forms.Panel();
+            this.tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.plotViewEquivalenceLog = new OxyPlot.WindowsForms.PlotView();
+            this.plotViewDifferenceLog = new OxyPlot.WindowsForms.PlotView();
+            this.plotViewEquivalenceRepetitions = new OxyPlot.WindowsForms.PlotView();
+            this.plotViewDifferenceRepetitions = new OxyPlot.WindowsForms.PlotView();
+            this.comboBoxAnalysisType = new System.Windows.Forms.ComboBox();
             this.panelTabDescription.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerComparisons)).BeginInit();
             this.splitContainerComparisons.Panel1.SuspendLayout();
+            this.splitContainerComparisons.Panel2.SuspendLayout();
             this.splitContainerComparisons.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewComparisons)).BeginInit();
+            this.panelResultPlots.SuspendLayout();
+            this.tableLayoutPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelTabDescription
@@ -77,12 +87,17 @@
             // splitContainerComparisons
             // 
             this.splitContainerComparisons.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainerComparisons.IsSplitterFixed = true;
             this.splitContainerComparisons.Location = new System.Drawing.Point(10, 107);
             this.splitContainerComparisons.Name = "splitContainerComparisons";
             // 
             // splitContainerComparisons.Panel1
             // 
             this.splitContainerComparisons.Panel1.Controls.Add(this.dataGridViewComparisons);
+            // 
+            // splitContainerComparisons.Panel2
+            // 
+            this.splitContainerComparisons.Panel2.Controls.Add(this.panelResultPlots);
             this.splitContainerComparisons.Size = new System.Drawing.Size(854, 386);
             this.splitContainerComparisons.SplitterDistance = 283;
             this.splitContainerComparisons.TabIndex = 9;
@@ -108,6 +123,99 @@
             this.dataGridViewComparisons.TabIndex = 3;
             this.dataGridViewComparisons.SelectionChanged += new System.EventHandler(this.dataGridViewComparisons_SelectionChanged);
             // 
+            // panelResultPlots
+            // 
+            this.panelResultPlots.Controls.Add(this.comboBoxAnalysisType);
+            this.panelResultPlots.Controls.Add(this.tableLayoutPanel);
+            this.panelResultPlots.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelResultPlots.Location = new System.Drawing.Point(0, 0);
+            this.panelResultPlots.Name = "panelResultPlots";
+            this.panelResultPlots.Size = new System.Drawing.Size(567, 386);
+            this.panelResultPlots.TabIndex = 0;
+            // 
+            // tableLayoutPanel
+            // 
+            this.tableLayoutPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tableLayoutPanel.ColumnCount = 2;
+            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel.Controls.Add(this.plotViewEquivalenceLog, 1, 1);
+            this.tableLayoutPanel.Controls.Add(this.plotViewDifferenceLog, 1, 0);
+            this.tableLayoutPanel.Controls.Add(this.plotViewEquivalenceRepetitions, 0, 1);
+            this.tableLayoutPanel.Controls.Add(this.plotViewDifferenceRepetitions, 0, 0);
+            this.tableLayoutPanel.Location = new System.Drawing.Point(0, 21);
+            this.tableLayoutPanel.Name = "tableLayoutPanel";
+            this.tableLayoutPanel.RowCount = 2;
+            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel.Size = new System.Drawing.Size(567, 365);
+            this.tableLayoutPanel.TabIndex = 5;
+            // 
+            // plotViewEquivalenceLog
+            // 
+            this.plotViewEquivalenceLog.BackColor = System.Drawing.SystemColors.Window;
+            this.plotViewEquivalenceLog.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.plotViewEquivalenceLog.Location = new System.Drawing.Point(286, 185);
+            this.plotViewEquivalenceLog.Name = "plotViewEquivalenceLog";
+            this.plotViewEquivalenceLog.PanCursor = System.Windows.Forms.Cursors.Hand;
+            this.plotViewEquivalenceLog.Size = new System.Drawing.Size(278, 177);
+            this.plotViewEquivalenceLog.TabIndex = 4;
+            this.plotViewEquivalenceLog.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
+            this.plotViewEquivalenceLog.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
+            this.plotViewEquivalenceLog.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
+            // 
+            // plotViewDifferenceLog
+            // 
+            this.plotViewDifferenceLog.BackColor = System.Drawing.SystemColors.Window;
+            this.plotViewDifferenceLog.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.plotViewDifferenceLog.Location = new System.Drawing.Point(286, 3);
+            this.plotViewDifferenceLog.Name = "plotViewDifferenceLog";
+            this.plotViewDifferenceLog.PanCursor = System.Windows.Forms.Cursors.Hand;
+            this.plotViewDifferenceLog.Size = new System.Drawing.Size(278, 176);
+            this.plotViewDifferenceLog.TabIndex = 2;
+            this.plotViewDifferenceLog.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
+            this.plotViewDifferenceLog.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
+            this.plotViewDifferenceLog.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
+            // 
+            // plotViewEquivalenceRepetitions
+            // 
+            this.plotViewEquivalenceRepetitions.BackColor = System.Drawing.SystemColors.Window;
+            this.plotViewEquivalenceRepetitions.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.plotViewEquivalenceRepetitions.Location = new System.Drawing.Point(3, 185);
+            this.plotViewEquivalenceRepetitions.Name = "plotViewEquivalenceRepetitions";
+            this.plotViewEquivalenceRepetitions.PanCursor = System.Windows.Forms.Cursors.Hand;
+            this.plotViewEquivalenceRepetitions.Size = new System.Drawing.Size(277, 177);
+            this.plotViewEquivalenceRepetitions.TabIndex = 3;
+            this.plotViewEquivalenceRepetitions.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
+            this.plotViewEquivalenceRepetitions.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
+            this.plotViewEquivalenceRepetitions.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
+            // 
+            // plotViewDifferenceRepetitions
+            // 
+            this.plotViewDifferenceRepetitions.BackColor = System.Drawing.SystemColors.Window;
+            this.plotViewDifferenceRepetitions.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.plotViewDifferenceRepetitions.Location = new System.Drawing.Point(3, 3);
+            this.plotViewDifferenceRepetitions.Name = "plotViewDifferenceRepetitions";
+            this.plotViewDifferenceRepetitions.PanCursor = System.Windows.Forms.Cursors.Hand;
+            this.plotViewDifferenceRepetitions.Size = new System.Drawing.Size(277, 176);
+            this.plotViewDifferenceRepetitions.TabIndex = 0;
+            this.plotViewDifferenceRepetitions.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
+            this.plotViewDifferenceRepetitions.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
+            this.plotViewDifferenceRepetitions.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
+            // 
+            // comboBoxAnalysisType
+            // 
+            this.comboBoxAnalysisType.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboBoxAnalysisType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxAnalysisType.FormattingEnabled = true;
+            this.comboBoxAnalysisType.Location = new System.Drawing.Point(385, 0);
+            this.comboBoxAnalysisType.Name = "comboBoxAnalysisType";
+            this.comboBoxAnalysisType.Size = new System.Drawing.Size(182, 21);
+            this.comboBoxAnalysisType.TabIndex = 6;
+            this.comboBoxAnalysisType.SelectedIndexChanged += new System.EventHandler(this.comboBoxAnalysisType_SelectedIndexChanged);
+            // 
             // AnalysisResultsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -121,9 +229,12 @@
             this.panelTabDescription.ResumeLayout(false);
             this.panelTabDescription.PerformLayout();
             this.splitContainerComparisons.Panel1.ResumeLayout(false);
+            this.splitContainerComparisons.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerComparisons)).EndInit();
             this.splitContainerComparisons.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewComparisons)).EndInit();
+            this.panelResultPlots.ResumeLayout(false);
+            this.tableLayoutPanel.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -136,5 +247,12 @@
         private System.Windows.Forms.TextBox textBoxTabTitle;
         private System.Windows.Forms.SplitContainer splitContainerComparisons;
         private System.Windows.Forms.DataGridView dataGridViewComparisons;
+        private System.Windows.Forms.Panel panelResultPlots;
+        private OxyPlot.WindowsForms.PlotView plotViewDifferenceRepetitions;
+        private OxyPlot.WindowsForms.PlotView plotViewEquivalenceRepetitions;
+        private OxyPlot.WindowsForms.PlotView plotViewDifferenceLog;
+        private OxyPlot.WindowsForms.PlotView plotViewEquivalenceLog;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel;
+        private System.Windows.Forms.ComboBox comboBoxAnalysisType;
     }
 }
