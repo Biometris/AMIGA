@@ -11,9 +11,16 @@ using AmigaPowerAnalysis.Core.ProjectSettings;
 namespace AmigaPowerAnalysis.Core.PowerAnalysis {
     public sealed class PowerAnalysisInputGenerator {
 
-        public void PowerCalculationSettingsToCsv(PowerCalculationSettings powerCalculationSettings, string filename) {
+        public void PowerAnalysisInputToCsv(Endpoint endpoint, PowerCalculationSettings powerCalculationSettings, List<InputPowerAnalysis> records, string filename) {
             var separator = ",";
             var stringBuilder = new StringBuilder();
+
+            stringBuilder.AppendLine(string.Format("LocLower {0}", endpoint.LocLower));
+            stringBuilder.AppendLine(string.Format("LocUpper {0}", endpoint.LocUpper));
+            stringBuilder.AppendLine(string.Format("CVComparator {0}", endpoint.CvComparator));
+            stringBuilder.AppendLine(string.Format("CVBlocks {0}", endpoint.CVForBlocks));
+            stringBuilder.AppendLine(string.Format("Distribution {0}", endpoint.DistributionType.ToString()));
+            stringBuilder.AppendLine(string.Format("PowerLawPower {0}", endpoint.PowerLawPower.ToString()));
 
             stringBuilder.AppendLine("SignificanceLevel" + separator + powerCalculationSettings.SignificanceLevel.ToString());
             stringBuilder.AppendLine("NumberOfRatios" + separator + powerCalculationSettings.NumberOfRatios.ToString());
@@ -24,24 +31,6 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             stringBuilder.AppendLine("IsSquareRoot" + separator + powerCalculationSettings.IsSquareRoot.ToString());
             stringBuilder.AppendLine("IsOverdispersedPoisson" + separator + powerCalculationSettings.IsOverdispersedPoisson.ToString());
             stringBuilder.AppendLine("IsNegativeBinomial" + separator + powerCalculationSettings.IsNegativeBinomial.ToString());
-
-            var csvString = stringBuilder.ToString();
-            using (var file = new System.IO.StreamWriter(filename)) {
-                file.WriteLine(csvString);
-                file.Close();
-            }
-        }
-
-        public void PowerAnalysisInputToCsv(Endpoint endpoint, List<InputPowerAnalysis> records, string filename) {
-            var separator = ",";
-            var stringBuilder = new StringBuilder();
-
-            stringBuilder.AppendLine(string.Format("LocLower {0}", endpoint.LocLower));
-            stringBuilder.AppendLine(string.Format("LocUpper {0}", endpoint.LocUpper));
-            stringBuilder.AppendLine(string.Format("CVComparator {0}", endpoint.CvComparator));
-            stringBuilder.AppendLine(string.Format("CVBlocks {0}", endpoint.CVForBlocks));
-            stringBuilder.AppendLine(string.Format("Distribution {0}", endpoint.DistributionType.ToString()));
-            stringBuilder.AppendLine(string.Format("PowerLawPower {0}", endpoint.PowerLawPower.ToString()));
 
             var headers = new List<string>();
             headers.Add("Endpoint");

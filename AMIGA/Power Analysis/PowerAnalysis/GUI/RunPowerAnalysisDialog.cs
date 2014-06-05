@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -38,14 +39,14 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void doWork(object sender, DoWorkEventArgs e) {
             var comparisons = _project.GetComparisons();
-            var filePath = Path.GetDirectoryName(_projectFilename);
+            var projectPath = Path.GetDirectoryName(_projectFilename);
             var projectName = Path.GetFileNameWithoutExtension(_projectFilename);
+            var filesPath = Path.Combine(projectPath, projectName);
+            if (!Directory.Exists(filesPath)) {
+                Directory.CreateDirectory(filesPath);
+            }
 
             var inputGenerator = new PowerAnalysisInputGenerator();
-
-            // Create power analysis settings file
-            var settingsFilename = Path.Combine(filePath, "PowerAnalysisSettings.csv");
-            inputGenerator.PowerCalculationSettingsToCsv(_project.PowerCalculationSettings, settingsFilename);
 
             // Create input files for power analysis
             for (int i = 0; i < comparisons.Count(); ++i) {
@@ -53,21 +54,23 @@ namespace AmigaPowerAnalysis.GUI {
                 var comparison = comparisons.ElementAt(i);
                 var comparisonRecords = inputGenerator.GetComparisonInputPowerAnalysisRecords(comparison);
                 comparisonRecords.ForEach(r => r.ComparisonId = i);
-                var comparisonFilename = Path.Combine(filePath, string.Format("{0}-{1}.csv", projectName, i));
-                inputGenerator.PowerAnalysisInputToCsv(comparison.Endpoint, comparisonRecords, comparisonFilename);
+                var comparisonFilename = Path.Combine(filesPath, string.Format("{0}-{1}.csv", projectName, i));
+                inputGenerator.PowerAnalysisInputToCsv(comparison.Endpoint, _project.PowerCalculationSettings, comparisonRecords, comparisonFilename);
             }
+
+            var applicationDirectory = Assembly.GetExecutingAssembly().Location;
 
             for (int i = 0; i < comparisons.Count(); ++i) {
                 _powerAnalysisBackgroundWorker.ReportProgress((int)(33 + 33 * i / 3D), string.Format("running analysis for comparison {0} of {1}...", i + 1, comparisons.Count()));
-
-                var comparisonInputFilename = Path.Combine(filePath, string.Format("{0}-{1}.csv", projectName, i));
-                var comparisonOutputFilename = Path.Combine(filePath, string.Format("{0}-{1}-Output.csv", projectName, i));
+                var comparisonInputFilename = Path.Combine(filesPath, string.Format("{0}-{1}.csv", projectName, i));
+                var comparisonOutputFilename = Path.Combine(filesPath, string.Format("{0}-{1}-Output.csv", projectName, i));
+                var logFilename = Path.Combine(filesPath, string.Format("{0}-{1}.log", projectName, i));
                 var startInfo = new ProcessStartInfo();
                 startInfo.CreateNoWindow = false;
                 startInfo.UseShellExecute = false;
                 startInfo.FileName = @"C:\Program Files\Gen16ed\Bin\GenBatch.exe";
                 startInfo.WindowStyle = ProcessWindowStyle.Normal;
-                startInfo.Arguments = string.Format("in=\"..\\AmigaPowerAnalysis.gen\" in2=\"{0}\" out=\"{1}\" out2=\"{2}\" /D=\"{3}\"", comparisonInputFilename, settingsFilename, comparisonOutputFilename, filePath);
+                startInfo.Arguments = string.Format("in=\"{0}\\AmigaPowerAnalysis.gen\" in2=\"{1}\" out=\"{2}\" out2=\"{3}\"", applicationDirectory, comparisonInputFilename, logFilename, comparisonOutputFilename);
                 try {
                     using (Process exeProcess = Process.Start(startInfo)) {
                         exeProcess.WaitForExit();
@@ -82,7 +85,7 @@ namespace AmigaPowerAnalysis.GUI {
             for (int i = 0; i < comparisons.Count(); ++i) {
                 _powerAnalysisBackgroundWorker.ReportProgress((int)(66 + 34 * i / 3D), string.Format("reading analysis output for comparison {0} of {1}...", i + 1, comparisons.Count()));
                 var comparison = comparisons.ElementAt(i);
-                var comparisonFilename = Path.Combine(filePath, string.Format("{0}-{1}-Output.csv", projectName, i));
+                var comparisonFilename = Path.Combine(filesPath, string.Format("{0}-{1}-Output.csv", projectName, i));
                 comparison.OutputPowerAnalysis = outputReader.ReadOutputPowerAnalysis(comparisonFilename);
             }
         }
