@@ -15,22 +15,22 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             var separator = ",";
             var stringBuilder = new StringBuilder();
 
-            stringBuilder.AppendLine(string.Format("LocLower {0}", endpoint.LocLower));
-            stringBuilder.AppendLine(string.Format("LocUpper {0}", endpoint.LocUpper));
-            stringBuilder.AppendLine(string.Format("CVComparator {0}", endpoint.CvComparator));
-            stringBuilder.AppendLine(string.Format("CVBlocks {0}", endpoint.CVForBlocks));
-            stringBuilder.AppendLine(string.Format("Distribution {0}", endpoint.DistributionType.ToString()));
-            stringBuilder.AppendLine(string.Format("PowerLawPower {0}", endpoint.PowerLawPower.ToString()));
+            stringBuilder.AppendLine(string.Format("LocLower {0} :", endpoint.LocLower));
+            stringBuilder.AppendLine(string.Format("LocUpper {0} :", endpoint.LocUpper));
+            stringBuilder.AppendLine(string.Format("CVComparator {0} :", endpoint.CvComparator));
+            stringBuilder.AppendLine(string.Format("CVBlocks {0} :", endpoint.CVForBlocks));
+            stringBuilder.AppendLine(string.Format("Distribution {0} :", endpoint.DistributionType.ToString()));
+            stringBuilder.AppendLine(string.Format("PowerLawPower {0} :", endpoint.PowerLawPower.ToString()));
 
-            stringBuilder.AppendLine("SignificanceLevel" + separator + powerCalculationSettings.SignificanceLevel.ToString());
-            stringBuilder.AppendLine("NumberOfRatios" + separator + powerCalculationSettings.NumberOfRatios.ToString());
-            stringBuilder.AppendLine("NumberOfReplications" + separator + string.Join(", ", powerCalculationSettings.NumberOfReplications.Select(r => r.ToString()).ToList()));
-            stringBuilder.AppendLine("PowerCalculationMethod" + separator + powerCalculationSettings.PowerCalculationMethod.ToString());
-            stringBuilder.AppendLine("NumberOfSimulatedDataSets" + separator + powerCalculationSettings.NumberOfSimulatedDataSets.ToString());
-            stringBuilder.AppendLine("IsLogNormal" + separator + powerCalculationSettings.IsLogNormal.ToString());
-            stringBuilder.AppendLine("IsSquareRoot" + separator + powerCalculationSettings.IsSquareRoot.ToString());
-            stringBuilder.AppendLine("IsOverdispersedPoisson" + separator + powerCalculationSettings.IsOverdispersedPoisson.ToString());
-            stringBuilder.AppendLine("IsNegativeBinomial" + separator + powerCalculationSettings.IsNegativeBinomial.ToString());
+            stringBuilder.AppendLine(string.Format("SignificanceLevel {0} :", powerCalculationSettings.SignificanceLevel.ToString()));
+            stringBuilder.AppendLine(string.Format("NumberOfRatios {0} :", powerCalculationSettings.NumberOfRatios.ToString()));
+            stringBuilder.AppendLine(string.Format("NumberOfReplications {0} :", string.Join(" ", powerCalculationSettings.NumberOfReplications.Select(r => r.ToString()).ToList())));
+            stringBuilder.AppendLine(string.Format("PowerCalculationMethod {0} :", powerCalculationSettings.PowerCalculationMethod.ToString()));
+            stringBuilder.AppendLine(string.Format("NumberOfSimulatedDataSets {0} :", powerCalculationSettings.NumberOfSimulatedDataSets.ToString()));
+            stringBuilder.AppendLine(string.Format("IsLogNormal {0} :", powerCalculationSettings.IsLogNormal.ToString()));
+            stringBuilder.AppendLine(string.Format("IsSquareRoot {0} :", powerCalculationSettings.IsSquareRoot.ToString()));
+            stringBuilder.AppendLine(string.Format("IsOverdispersedPoisson {0} :", powerCalculationSettings.IsOverdispersedPoisson.ToString()));
+            stringBuilder.AppendLine(string.Format("IsNegativeBinomial {0} :", powerCalculationSettings.IsNegativeBinomial.ToString()));
 
             var headers = new List<string>();
             headers.Add("Endpoint");
