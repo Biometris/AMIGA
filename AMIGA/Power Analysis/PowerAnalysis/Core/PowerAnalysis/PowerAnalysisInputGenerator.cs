@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using AmigaPowerAnalysis.Core.ProjectSettings;
 
 namespace AmigaPowerAnalysis.Core.PowerAnalysis {
     public sealed class PowerAnalysisInputGenerator {
@@ -21,6 +22,27 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                 comparisonRecords.ForEach(r => r.ComparisonId = i);
                 var comparisonFilename = Path.Combine(filePath, string.Format("{0}-{1}.csv", baseFileName, i));
                 PowerAnalysisInputToCsv(comparison.Endpoint, comparisonRecords, comparisonFilename);
+            }
+        }
+
+        public void PowerCalculationSettingsToCsv(PowerCalculationSettings powerAnalysisSettings, string filename) {
+            var separator = ",";
+            var stringBuilder = new StringBuilder();
+
+            stringBuilder.AppendLine("SignificanceLevel" + separator + powerAnalysisSettings.SignificanceLevel.ToString());
+            stringBuilder.AppendLine("NumberOfRatios" + separator + powerAnalysisSettings.NumberOfRatios.ToString());
+            stringBuilder.AppendLine("NumberOfReplications" + separator + powerAnalysisSettings.NumberOfReplications.ToString());
+            stringBuilder.AppendLine("PowerCalculationMethod" + separator + powerAnalysisSettings.PowerCalculationMethod.ToString());
+            stringBuilder.AppendLine("NumberOfSimulatedDataSets" + separator + powerAnalysisSettings.NumberOfSimulatedDataSets.ToString());
+            stringBuilder.AppendLine("IsLogNormal" + separator + powerAnalysisSettings.IsLogNormal.ToString());
+            stringBuilder.AppendLine("IsSquareRoot" + separator + powerAnalysisSettings.IsSquareRoot.ToString());
+            stringBuilder.AppendLine("IsOverdispersedPoisson" + separator + powerAnalysisSettings.IsOverdispersedPoisson.ToString());
+            stringBuilder.AppendLine("IsNegativeBinomial" + separator + powerAnalysisSettings.IsNegativeBinomial.ToString());
+
+            var csvString = stringBuilder.ToString();
+            using (var file = new System.IO.StreamWriter(filename)) {
+                file.WriteLine(csvString);
+                file.Close();
             }
         }
 

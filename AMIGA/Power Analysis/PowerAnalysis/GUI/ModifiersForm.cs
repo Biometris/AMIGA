@@ -101,7 +101,6 @@ namespace AmigaPowerAnalysis.GUI {
         private void dataGridViewEndpoints_SelectionChanged(object sender, EventArgs e) {
             _currentEndpoint = _project.Endpoints.ElementAt(dataGridViewEndpoints.CurrentRow.Index);
             var factorFactorLevelTuples = _currentEndpoint.InteractionFactors.SelectMany(f => f.FactorLevels, (ifc, fl) => new Tuple<Factor, FactorLevel>(ifc, fl)).ToList();
-            var combinations = factorFactorLevelTuples.Combinations(2).ToList();
             _currentFactorModifiers = _currentEndpoint.NonInteractionFactorLevelCombinations;
             updateDataGridFactorModifiers();
         }

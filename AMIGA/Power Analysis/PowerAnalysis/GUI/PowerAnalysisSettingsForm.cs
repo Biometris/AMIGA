@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using AmigaPowerAnalysis.Core;
 using System.Text.RegularExpressions;
 using AmigaPowerAnalysis.Core.ProjectSettings;
+using AmigaPowerAnalysis.Helpers;
 
 // TODO Obligatory to first enter a name for a new endpoint
 // TODO Binomial totals greyed out for non fractions
@@ -36,7 +37,7 @@ namespace AmigaPowerAnalysis.GUI {
             checkBoxMethodForAnalysesNB.Checked = _project.PowerCalculationSettings.SelectedAnalysisMethodTypes.Contains(AnalysisMethodType.NegativeBinomial);
             textBoxSignificanceLevel.Text = _project.PowerCalculationSettings.SignificanceLevel.ToString();
             textBoxNumberOfRatios.Text = _project.PowerCalculationSettings.NumberOfRatios.ToString();
-            textBoxNumberOfReplications.Text = string.Join(", ", _project.PowerCalculationSettings.NumberOfReplications.Select(r => r.ToString().ToList()));
+            textBoxNumberOfReplications.Text = string.Join(", ", _project.PowerCalculationSettings.NumberOfReplications.Select(r => r.ToString()).ToList());
             comboBoxMethodForPowerCalculation.DataSource = Enum.GetValues(typeof(PowerCalculationMethod));
             comboBoxMethodForPowerCalculation.SelectedIndex = (int)_project.PowerCalculationSettings.PowerCalculationMethod;
             textBoxNumberSimulatedDatasets.Text = _project.PowerCalculationSettings.NumberOfSimulatedDataSets.ToString();
@@ -62,7 +63,12 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void textBoxNumberOfReplications_Validating(object sender, CancelEventArgs e) {
-
+            var textBox = sender as TextBox;
+            var numberOfReplications = textBox.Text.ParseRange(1, 64);
+            if (numberOfReplications.Count() > 0) {
+                _project.PowerCalculationSettings.NumberOfReplications = numberOfReplications.ToList();
+            }
+            textBox.Text = string.Join(", ", _project.PowerCalculationSettings.NumberOfReplications.Select(r => r.ToString()).ToList());
         }
 
         private void textBoxNumberSimulatedDatasets_Validating(object sender, CancelEventArgs e) {

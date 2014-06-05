@@ -162,6 +162,7 @@
     </Compile>
     <Compile Include="Helpers\CsvWriter.cs" />
     <Compile Include="Helpers\ListExtensionMethods.cs" />
+    <Compile Include="Helpers\StringToIntegerRangeExtension.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Core\Project.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -79,6 +79,70 @@ namespace AmigaPowerAnalysis.Core.ProjectSettings {
         public List<AnalysisMethodType> SelectedAnalysisMethodTypes { get; set; }
 
         /// <summary>
+        /// Use log normal analysis method.
+        /// </summary>
+        public bool IsLogNormal {
+            set{
+                if (value) {
+                    this.AddAnalysisMethodType(AnalysisMethodType.LogNormal);
+                } else {
+                    this.RemoveAnalysisMethodType(AnalysisMethodType.LogNormal);
+                }
+            }
+            get {
+                return SelectedAnalysisMethodTypes.Contains(AnalysisMethodType.LogNormal);
+            }
+        }
+
+        /// <summary>
+        /// Use square root analysis method.
+        /// </summary>
+        public bool IsSquareRoot {
+            set{
+                if (value) {
+                    this.AddAnalysisMethodType(AnalysisMethodType.SquareRoot);
+                } else {
+                    this.RemoveAnalysisMethodType(AnalysisMethodType.SquareRoot);
+                }
+            }
+            get {
+                return SelectedAnalysisMethodTypes.Contains(AnalysisMethodType.SquareRoot);
+            }
+        }
+
+        /// <summary>
+        /// Use overdisperser Poisson analysis method.
+        /// </summary>
+        public bool IsOverdispersedPoisson {
+            set{
+                if (value) {
+                    this.AddAnalysisMethodType(AnalysisMethodType.OverdispersedPoisson);
+                } else {
+                    this.RemoveAnalysisMethodType(AnalysisMethodType.OverdispersedPoisson);
+                }
+            }
+            get {
+                return SelectedAnalysisMethodTypes.Contains(AnalysisMethodType.OverdispersedPoisson);
+            }
+        }
+
+        /// <summary>
+        /// Use negative binomial analysis method.
+        /// </summary>
+        public bool IsNegativeBinomial {
+            set{
+                if (value) {
+                    this.AddAnalysisMethodType(AnalysisMethodType.NegativeBinomial);
+                } else {
+                    this.RemoveAnalysisMethodType(AnalysisMethodType.NegativeBinomial);
+                }
+            }
+            get {
+                return SelectedAnalysisMethodTypes.Contains(AnalysisMethodType.NegativeBinomial);
+            }
+        }
+
+        /// <summary>
         /// Adds an analysis method to the list of selected analysis method types.
         /// </summary>
         /// <param name="analysisMethodType"></param>
