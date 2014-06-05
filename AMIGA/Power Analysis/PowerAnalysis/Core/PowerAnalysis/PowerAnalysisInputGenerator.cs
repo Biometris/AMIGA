@@ -15,22 +15,24 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             var separator = ",";
             var stringBuilder = new StringBuilder();
 
-            stringBuilder.AppendLine(string.Format("LocLower {0} :", endpoint.LocLower));
-            stringBuilder.AppendLine(string.Format("LocUpper {0} :", endpoint.LocUpper));
-            stringBuilder.AppendLine(string.Format("CVComparator {0} :", endpoint.CvComparator));
-            stringBuilder.AppendLine(string.Format("CVBlocks {0} :", endpoint.CVForBlocks));
-            stringBuilder.AppendLine(string.Format("Distribution {0} :", endpoint.DistributionType.ToString()));
-            stringBuilder.AppendLine(string.Format("PowerLawPower {0} :", endpoint.PowerLawPower.ToString()));
+            stringBuilder.AppendLine(string.Format("LocLower\r\n {0} :", endpoint.LocLower));
+            stringBuilder.AppendLine(string.Format("LocUpper\r\n {0} :", endpoint.LocUpper));
+            stringBuilder.AppendLine(string.Format("CVComparator\r\n {0} :", endpoint.CvComparator));
+            stringBuilder.AppendLine(string.Format("CVBlocks\r\n {0} :", endpoint.CVForBlocks));
+            stringBuilder.AppendLine(string.Format("Distribution\r\n {0} :", endpoint.DistributionType.ToString()));
+            stringBuilder.AppendLine(string.Format("PowerLawPower\r\n {0} :", endpoint.PowerLawPower.ToString()));
 
-            stringBuilder.AppendLine(string.Format("SignificanceLevel {0} :", powerCalculationSettings.SignificanceLevel.ToString()));
-            stringBuilder.AppendLine(string.Format("NumberOfRatios {0} :", powerCalculationSettings.NumberOfRatios.ToString()));
-            stringBuilder.AppendLine(string.Format("NumberOfReplications {0} :", string.Join(" ", powerCalculationSettings.NumberOfReplications.Select(r => r.ToString()).ToList())));
-            stringBuilder.AppendLine(string.Format("PowerCalculationMethod {0} :", powerCalculationSettings.PowerCalculationMethod.ToString()));
-            stringBuilder.AppendLine(string.Format("NumberOfSimulatedDataSets {0} :", powerCalculationSettings.NumberOfSimulatedDataSets.ToString()));
-            stringBuilder.AppendLine(string.Format("IsLogNormal {0} :", powerCalculationSettings.IsLogNormal.ToString()));
-            stringBuilder.AppendLine(string.Format("IsSquareRoot {0} :", powerCalculationSettings.IsSquareRoot.ToString()));
-            stringBuilder.AppendLine(string.Format("IsOverdispersedPoisson {0} :", powerCalculationSettings.IsOverdispersedPoisson.ToString()));
-            stringBuilder.AppendLine(string.Format("IsNegativeBinomial {0} :", powerCalculationSettings.IsNegativeBinomial.ToString()));
+            stringBuilder.AppendLine(string.Format("SignificanceLevel\r\n {0} :", powerCalculationSettings.SignificanceLevel.ToString()));
+            stringBuilder.AppendLine(string.Format("NumberOfRatios\r\n {0} :", powerCalculationSettings.NumberOfRatios.ToString()));
+            stringBuilder.AppendLine(string.Format("NumberOfReplications\r\n {0} :", string.Join(" ", powerCalculationSettings.NumberOfReplications.Select(r => r.ToString()).ToList())));
+            stringBuilder.AppendLine(string.Format("PowerCalculationMethod\r\n {0} :", powerCalculationSettings.PowerCalculationMethod.ToString()));
+            stringBuilder.AppendLine(string.Format("RandomNumberSeed\r\n {0} :", powerCalculationSettings.Seed.ToString()));
+
+            stringBuilder.AppendLine(string.Format("NumberOfSimulatedDataSets\r\n {0} :", powerCalculationSettings.NumberOfSimulatedDataSets.ToString()));
+            stringBuilder.AppendLine(string.Format("IsLogNormal\r\n {0} :", powerCalculationSettings.IsLogNormal.ToString()));
+            stringBuilder.AppendLine(string.Format("IsSquareRoot\r\n {0} :", powerCalculationSettings.IsSquareRoot.ToString()));
+            stringBuilder.AppendLine(string.Format("IsOverdispersedPoisson\r\n {0} :", powerCalculationSettings.IsOverdispersedPoisson.ToString()));
+            stringBuilder.AppendLine(string.Format("IsNegativeBinomial\r\n {0} :", powerCalculationSettings.IsNegativeBinomial.ToString()));
 
             var headers = new List<string>();
             headers.Add("Endpoint");
