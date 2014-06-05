@@ -77,6 +77,7 @@
             // splitContainerFactors
             // 
             this.splitContainerFactors.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainerFactors.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
             this.splitContainerFactors.Location = new System.Drawing.Point(10, 107);
             this.splitContainerFactors.Name = "splitContainerFactors";
             // 
