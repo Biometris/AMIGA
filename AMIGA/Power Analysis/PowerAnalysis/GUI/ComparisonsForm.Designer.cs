@@ -82,6 +82,7 @@
             // splitContainerComparisons
             // 
             this.splitContainerComparisons.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainerComparisons.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
             this.splitContainerComparisons.Location = new System.Drawing.Point(10, 107);
             this.splitContainerComparisons.Name = "splitContainerComparisons";
             // 
