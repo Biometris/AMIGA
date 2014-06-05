@@ -1,7 +1,7 @@
 enquire   ch=2 ; filetype=input  ; open=inopen  ; name=infile
 enquire   ch=2 ; filetype=output ; open=outopen ; name=outfile
 if inopen.eq.0
-    text      project ; 'MyFirstProject-0'
+    text      project ; 'New2-0'
 
     text      dir ; 'D:/Diverse Opdrachten/AMIGA/Power Analysis/Projects/'
     calculate pos = getposition(project ; '-')
@@ -102,6 +102,7 @@ decimals  ratio
 " main looping "
 for [ntimes=nloop ; index=ii]
   scalar    iiratio, iireps ; (ratio, nreps)$[ii]
+  PRINT     [IPRINT=* ; SQUASH=yes] iiratio, iireps ; FIELD=10 ; DECI=3,0
   l2lyles   [dist=#distribution ; power=powerdist ; design=#design ; sign=alfa ; \
             mucomp=meanComparator ; cvcomp=cvComparator ; cvblock=cvBlock ; \
             mean=Mean ; comparison=comparison ; dummy=dum ; \

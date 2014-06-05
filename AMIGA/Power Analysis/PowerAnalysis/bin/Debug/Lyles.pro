@@ -228,8 +228,16 @@ ENDIF
 
 " Define models; ensure that zdum[1] is last parameter "
 FCLASSIFI [OUT=modelH0] #modelH1 - zdum[1]
-FCLASSIFI [OUT=modelH1] #modelH0 + zdum[1]
-
+GETATTRIB [ATTRIBUTE=stype] modelH0 ; SAVE=amodel
+IF amodel[].eqs.'*'
+    VARIATE   dummy ; 0*zdum[1]
+    FORMULA   modelH0 ; !f(dummy-dummy)
+    FCLASSIFI [OUT=modelH1] zdum[1]
+    FORMULA   terms ; !f(dummy+zdum[1])
+  ELSE
+    FCLASSIFI [OUT=modelH1] #modelH0 + zdum[1]
+    FORMULA   terms ; modelH1
+ENDIF
 " Calculate offsets for equivalence testing "
 CALCULATE loglowerLOC,logupperLOC = LOG(LOCLOWER, LOCUPPER)
 VARIATE   lowOffset,uppOffset ; (loglowerLOC,logupperLOC) * (zdum[1].eq.1)
@@ -240,10 +248,11 @@ CALCULATE critvalChi = EDCHI(1-SIGNIFICANCELEVEL ; 1)
 
 " Ready to fit the models "
 IF 'LN'.IN.ANALYSIS  " LN: logarithmic transformation "
+  PRINT     [IPRINT=* ; SQUASH=yes] 'LN'
   VARIATE   tresponse ; LOG(response+1)
   CALCULATE meanVariance = MEAN(vvLN)
   MODEL     [DIST=normal ; WEIGHT=weight] tresponse
-  TERMS     #modelH1
+  TERMS     #terms
   FIT       [PRINT=* ; NOMES=lev,res,disp] #modelH0
   RKEEP     DEV=Ddev0 ; DF=df0 ; TDF=tdf0
   ADD       [PRINT=* ; NOMES=lev,res,disp] zdum[1]
@@ -257,10 +266,11 @@ IF 'LN'.IN.ANALYSIS  " LN: logarithmic transformation "
 ENDIF
 
 IF 'SQ'.IN.ANALYSIS  " SQ: squared root transformation "
+  PRINT     [IPRINT=* ; SQUASH=yes] 'SQ'
   VARIATE   tresponse ; SQRT(response)
   CALCULATE meanVariance = MEAN(vvSQ)
   MODEL     [DIST=normal ; WEIGHT=weight] tresponse
-  TERMS     #modelH1
+  TERMS     #terms
   FIT       [PRINT=* ; NOMES=lev,res,disp] #modelH0
   RKEEP     DEV=Ddev0 ; DF=df0 ; TDF=tdf0
   ADD       [PRINT=* ; NOMES=lev,res,disp] zdum[1]
@@ -274,8 +284,9 @@ IF 'SQ'.IN.ANALYSIS  " SQ: squared root transformation "
 ENDIF
 
 IF SUM(!t('PO','OP').IN.ANALYSIS)  " PO: Poisson "
+  PRINT     [IPRINT=* ; SQUASH=yes] 'OP'
   MODEL     [DIST=poisson ; WEIGHT=weight] response
-  TERMS     #modelH1
+  TERMS     #terms
   FIT       [PRINT=* ; NOMES=lev,res,disp] #modelH0
   RKEEP     DEV=Ddev0 ; DF=df0 ; TDF=tdf0
   ADD       [PRINT=* ; NOMES=lev,res,disp] zdum[1]
@@ -306,6 +317,7 @@ IF SUM(!t('PO','OP').IN.ANALYSIS)  " PO: Poisson "
 ENDIF
 
 IF 'NB'.IN.ANALYSIS  " NB: negative binomial "
+  PRINT     [IPRINT=* ; SQUASH=yes] 'NB'
   CALCULATE Ddev0,Edev0,dev1 = mis
   MODEL     [DIST=negative ; LINK=log ; WEIGHT=weight] response
   R2NEGBIN  [PRINT=* ; _2LOG=Ddev0 ; NOMES=lev,res,disp,warn] #modelH0
