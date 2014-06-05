@@ -24,9 +24,9 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
 
             stringBuilder.AppendLine("SignificanceLevel" + separator + powerCalculationSettings.SignificanceLevel.ToString());
             stringBuilder.AppendLine("NumberOfRatios" + separator + powerCalculationSettings.NumberOfRatios.ToString());
-            stringBuilder.AppendLine("NumberOfReplications" + separator + powerCalculationSettings.NumberOfReplications.ToString());
+            stringBuilder.AppendLine("NumberOfReplications" + separator + string.Join(", ", powerCalculationSettings.NumberOfReplications.Select(r => r.ToString()).ToList()));
             stringBuilder.AppendLine("PowerCalculationMethod" + separator + powerCalculationSettings.PowerCalculationMethod.ToString());
-            stringBuilder.AppendLine("NumberOfSimulatedDataSets" + separator + string.Join(", ", powerCalculationSettings.NumberOfReplications.Select(r => r.ToString()).ToList()));
+            stringBuilder.AppendLine("NumberOfSimulatedDataSets" + separator + powerCalculationSettings.NumberOfSimulatedDataSets.ToString());
             stringBuilder.AppendLine("IsLogNormal" + separator + powerCalculationSettings.IsLogNormal.ToString());
             stringBuilder.AppendLine("IsSquareRoot" + separator + powerCalculationSettings.IsSquareRoot.ToString());
             stringBuilder.AppendLine("IsOverdispersedPoisson" + separator + powerCalculationSettings.IsOverdispersedPoisson.ToString());
