@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -48,7 +49,7 @@ namespace AmigaPowerAnalysis.GUI {
 
             // Create input files for power analysis
             for (int i = 0; i < comparisons.Count(); ++i) {
-                _powerAnalysisBackgroundWorker.ReportProgress(i, string.Format("compiling analysis input for comparison {0} of {1}...", i+1, comparisons.Count()));
+                _powerAnalysisBackgroundWorker.ReportProgress((int)(33 * i), string.Format("compiling analysis input for comparison {0} of {1}...", i + 1, comparisons.Count()));
                 var comparison = comparisons.ElementAt(i);
                 var comparisonRecords = inputGenerator.GetComparisonInputPowerAnalysisRecords(comparison);
                 comparisonRecords.ForEach(r => r.ComparisonId = i);
@@ -56,16 +57,30 @@ namespace AmigaPowerAnalysis.GUI {
                 inputGenerator.PowerAnalysisInputToCsv(comparison.Endpoint, comparisonRecords, comparisonFilename);
             }
 
-            // TODO: power analysis (preferably per comparison)
-            for (int i = 1; i <= 100; i++) {
-                Thread.Sleep(10);
-                _powerAnalysisBackgroundWorker.ReportProgress(i);
+            for (int i = 0; i < comparisons.Count(); ++i) {
+                _powerAnalysisBackgroundWorker.ReportProgress((int)(33 + 33 * i / 3D), string.Format("running analysis for comparison {0} of {1}...", i + 1, comparisons.Count()));
+
+                var comparisonInputFilename = Path.Combine(filePath, string.Format("{0}-{1}.csv", projectName, i));
+                var comparisonOutputFilename = Path.Combine(filePath, string.Format("{0}-{1}-Output.csv", projectName, i));
+                var startInfo = new ProcessStartInfo();
+                startInfo.CreateNoWindow = false;
+                startInfo.UseShellExecute = false;
+                startInfo.FileName = @"C:\Program Files\Gen16ed\Bin\GenBatch.exe";
+                startInfo.WindowStyle = ProcessWindowStyle.Normal;
+                startInfo.Arguments = string.Format("in=\"..\\AmigaPowerAnalysis.gen\" in2=\"{0}\" out=\"{1}\" out2=\"{2}\" /D=\"{3}\"", comparisonInputFilename, settingsFilename, comparisonOutputFilename, filePath);
+                try {
+                    using (Process exeProcess = Process.Start(startInfo)) {
+                        exeProcess.WaitForExit();
+                    }
+                } catch {
+                    // TODO: Log error.
+                }
             }
 
             // Create output files for power analysis
             var outputReader = new PowerAnalysisOutputReader();
             for (int i = 0; i < comparisons.Count(); ++i) {
-                _powerAnalysisBackgroundWorker.ReportProgress(i, string.Format("reading analysis output for comparison {0} of {1}...", i + 1, comparisons.Count()));
+                _powerAnalysisBackgroundWorker.ReportProgress((int)(66 + 34 * i / 3D), string.Format("reading analysis output for comparison {0} of {1}...", i + 1, comparisons.Count()));
                 var comparison = comparisons.ElementAt(i);
                 var comparisonFilename = Path.Combine(filePath, string.Format("{0}-{1}-Output.csv", projectName, i));
                 comparison.OutputPowerAnalysis = outputReader.ReadOutputPowerAnalysis(comparisonFilename);
