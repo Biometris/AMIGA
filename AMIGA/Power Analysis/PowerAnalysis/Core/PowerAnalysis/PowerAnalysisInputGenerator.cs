@@ -41,6 +41,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             stringBuilder.AppendLine(string.Format("CVComparator {0}", endpoint.CvComparator));
             stringBuilder.AppendLine(string.Format("CVBlocks {0}", endpoint.CVForBlocks));
             stringBuilder.AppendLine(string.Format("Distribution {0}", endpoint.DistributionType.ToString()));
+            stringBuilder.AppendLine(string.Format("PowerLawPower {0}", endpoint.PowerLawPower.ToString()));
 
             var headers = new List<string>();
             headers.Add("Endpoint");
