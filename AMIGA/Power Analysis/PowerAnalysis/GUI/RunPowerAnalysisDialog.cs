@@ -40,8 +40,13 @@ namespace AmigaPowerAnalysis.GUI {
             var filePath = Path.GetDirectoryName(_projectFilename);
             var projectName = Path.GetFileNameWithoutExtension(_projectFilename);
 
-            // Create input files for power analysis
             var inputGenerator = new PowerAnalysisInputGenerator();
+
+            // Create power analysis settings file
+            var settingsFilename = Path.Combine(filePath, "PowerAnalysisSettings.csv");
+            inputGenerator.PowerCalculationSettingsToCsv(_project.PowerCalculationSettings, settingsFilename);
+
+            // Create input files for power analysis
             for (int i = 0; i < comparisons.Count(); ++i) {
                 _powerAnalysisBackgroundWorker.ReportProgress(i, string.Format("compiling analysis input for comparison {0} of {1}...", i+1, comparisons.Count()));
                 var comparison = comparisons.ElementAt(i);

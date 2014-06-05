@@ -11,33 +11,19 @@ using AmigaPowerAnalysis.Core.ProjectSettings;
 namespace AmigaPowerAnalysis.Core.PowerAnalysis {
     public sealed class PowerAnalysisInputGenerator {
 
-        public void CreatePowerAnalysisInputCsv(Project project, string filename) {
-            var records = new List<InputPowerAnalysis>();
-            var comparisons = project.GetComparisons();
-            var filePath = Path.GetDirectoryName(filename);
-            var baseFileName = Path.GetFileNameWithoutExtension(filename);
-            for (int i = 0; i < comparisons.Count(); ++i) {
-                var comparison = comparisons.ElementAt(i);
-                var comparisonRecords = GetComparisonInputPowerAnalysisRecords(comparison);
-                comparisonRecords.ForEach(r => r.ComparisonId = i);
-                var comparisonFilename = Path.Combine(filePath, string.Format("{0}-{1}.csv", baseFileName, i));
-                PowerAnalysisInputToCsv(comparison.Endpoint, comparisonRecords, comparisonFilename);
-            }
-        }
-
-        public void PowerCalculationSettingsToCsv(PowerCalculationSettings powerAnalysisSettings, string filename) {
+        public void PowerCalculationSettingsToCsv(PowerCalculationSettings powerCalculationSettings, string filename) {
             var separator = ",";
             var stringBuilder = new StringBuilder();
 
-            stringBuilder.AppendLine("SignificanceLevel" + separator + powerAnalysisSettings.SignificanceLevel.ToString());
-            stringBuilder.AppendLine("NumberOfRatios" + separator + powerAnalysisSettings.NumberOfRatios.ToString());
-            stringBuilder.AppendLine("NumberOfReplications" + separator + powerAnalysisSettings.NumberOfReplications.ToString());
-            stringBuilder.AppendLine("PowerCalculationMethod" + separator + powerAnalysisSettings.PowerCalculationMethod.ToString());
-            stringBuilder.AppendLine("NumberOfSimulatedDataSets" + separator + powerAnalysisSettings.NumberOfSimulatedDataSets.ToString());
-            stringBuilder.AppendLine("IsLogNormal" + separator + powerAnalysisSettings.IsLogNormal.ToString());
-            stringBuilder.AppendLine("IsSquareRoot" + separator + powerAnalysisSettings.IsSquareRoot.ToString());
-            stringBuilder.AppendLine("IsOverdispersedPoisson" + separator + powerAnalysisSettings.IsOverdispersedPoisson.ToString());
-            stringBuilder.AppendLine("IsNegativeBinomial" + separator + powerAnalysisSettings.IsNegativeBinomial.ToString());
+            stringBuilder.AppendLine("SignificanceLevel" + separator + powerCalculationSettings.SignificanceLevel.ToString());
+            stringBuilder.AppendLine("NumberOfRatios" + separator + powerCalculationSettings.NumberOfRatios.ToString());
+            stringBuilder.AppendLine("NumberOfReplications" + separator + powerCalculationSettings.NumberOfReplications.ToString());
+            stringBuilder.AppendLine("PowerCalculationMethod" + separator + powerCalculationSettings.PowerCalculationMethod.ToString());
+            stringBuilder.AppendLine("NumberOfSimulatedDataSets" + separator + string.Join(", ", powerCalculationSettings.NumberOfReplications.Select(r => r.ToString()).ToList()));
+            stringBuilder.AppendLine("IsLogNormal" + separator + powerCalculationSettings.IsLogNormal.ToString());
+            stringBuilder.AppendLine("IsSquareRoot" + separator + powerCalculationSettings.IsSquareRoot.ToString());
+            stringBuilder.AppendLine("IsOverdispersedPoisson" + separator + powerCalculationSettings.IsOverdispersedPoisson.ToString());
+            stringBuilder.AppendLine("IsNegativeBinomial" + separator + powerCalculationSettings.IsNegativeBinomial.ToString());
 
             var csvString = stringBuilder.ToString();
             using (var file = new System.IO.StreamWriter(filename)) {
