@@ -1,24 +1,42 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Amiga Power Analysis", "PowerAnalysis\Amiga Power Analysis.csproj", "{358CB528-DDA2-4C8B-83A8-66FE10D97FA0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AmigaPowerAnalysis", "PowerAnalysis\AmigaPowerAnalysis.csproj", "{358CB528-DDA2-4C8B-83A8-66FE10D97FA0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AmigaPowerAnalysis.Tests", "AmigaPowerAnalysis.Tests\AmigaPowerAnalysis.Tests.csproj", "{BC8C357B-7776-4B78-B133-20CE23EF9D5E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Debug|Mixed Platforms = Debug|Mixed Platforms
 		Debug|x86 = Debug|x86
 		Release|Any CPU = Release|Any CPU
+		Release|Mixed Platforms = Release|Mixed Platforms
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{358CB528-DDA2-4C8B-83A8-66FE10D97FA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{358CB528-DDA2-4C8B-83A8-66FE10D97FA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{358CB528-DDA2-4C8B-83A8-66FE10D97FA0}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{358CB528-DDA2-4C8B-83A8-66FE10D97FA0}.Debug|Mixed Platforms.Build.0 = Debug|x86
 		{358CB528-DDA2-4C8B-83A8-66FE10D97FA0}.Debug|x86.ActiveCfg = Debug|x86
 		{358CB528-DDA2-4C8B-83A8-66FE10D97FA0}.Debug|x86.Build.0 = Debug|x86
 		{358CB528-DDA2-4C8B-83A8-66FE10D97FA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{358CB528-DDA2-4C8B-83A8-66FE10D97FA0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{358CB528-DDA2-4C8B-83A8-66FE10D97FA0}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{358CB528-DDA2-4C8B-83A8-66FE10D97FA0}.Release|Mixed Platforms.Build.0 = Release|x86
 		{358CB528-DDA2-4C8B-83A8-66FE10D97FA0}.Release|x86.ActiveCfg = Release|x86
 		{358CB528-DDA2-4C8B-83A8-66FE10D97FA0}.Release|x86.Build.0 = Release|x86
+		{BC8C357B-7776-4B78-B133-20CE23EF9D5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC8C357B-7776-4B78-B133-20CE23EF9D5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC8C357B-7776-4B78-B133-20CE23EF9D5E}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{BC8C357B-7776-4B78-B133-20CE23EF9D5E}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{BC8C357B-7776-4B78-B133-20CE23EF9D5E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BC8C357B-7776-4B78-B133-20CE23EF9D5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC8C357B-7776-4B78-B133-20CE23EF9D5E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC8C357B-7776-4B78-B133-20CE23EF9D5E}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{BC8C357B-7776-4B78-B133-20CE23EF9D5E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{BC8C357B-7776-4B78-B133-20CE23EF9D5E}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

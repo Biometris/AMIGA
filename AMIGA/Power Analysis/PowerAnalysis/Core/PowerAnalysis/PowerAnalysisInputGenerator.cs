@@ -111,7 +111,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                     mean = comparison.Endpoint.MuComparator;
                     comparisonType = 0;
                 }
-                if (comparison.Endpoint.NonInteractionFactorLevelCombinations.Count > 1) {
+                if (comparison.Endpoint.NonInteractionFactorLevelCombinations.Count > 0) {
                     foreach (var modifierLevel in comparison.Endpoint.NonInteractionFactorLevelCombinations) {
                         var factorLevels = interactionLevels.FactorLevelCombination.Items.Select(il => il.Level).ToList();
                         factorLevels.AddRange(modifierLevel.FactorLevelCombination.Items.Select(il => il.Level).ToList());
@@ -168,20 +168,38 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                 mean = comparison.Endpoint.MuComparator;
                 comparisonType = 0;
             }
-            foreach (var modifierLevel in comparison.Endpoint.NonInteractionFactorLevelCombinations) {
-                var factorLevels = modifierLevel.FactorLevelCombination.Items.Select(il => il.Level).ToList();
-                var factors = modifierLevel.FactorLevelCombination.Items.Select(il => il.Parent.Name).ToList();
+
+            if (comparison.Endpoint.NonInteractionFactorLevelCombinations.Count > 0) {
+                foreach (var modifierLevel in comparison.Endpoint.NonInteractionFactorLevelCombinations) {
+                    var factorLevels = modifierLevel.FactorLevelCombination.Items.Select(il => il.Level).ToList();
+                    var factors = modifierLevel.FactorLevelCombination.Items.Select(il => il.Parent.Name).ToList();
+                    records.Add(new InputPowerAnalysis() {
+                        Endpoint = comparison.Endpoint.Name,
+                        NumberOfInteractions = comparison.Endpoint.InteractionFactors.Count(),
+                        NumberOfModifiers = comparison.Endpoint.UseModifier ? comparison.Endpoint.NonInteractionFactors.Count() : 0,
+                        Block = 1,
+                        MainPlot = counter,
+                        SubPlot = 1,
+                        Variety = varietyLevel.Label,
+                        FactorLevels = factorLevels,
+                        Factors = factors,
+                        Mean = comparison.Endpoint.UseModifier ? modifierLevel.Modifier * mean : mean,
+                        Comparison = (ComparisonType)comparisonType,
+                    });
+                    counter++;
+                }
+            } else {
                 records.Add(new InputPowerAnalysis() {
                     Endpoint = comparison.Endpoint.Name,
                     NumberOfInteractions = comparison.Endpoint.InteractionFactors.Count(),
-                    NumberOfModifiers = comparison.Endpoint.UseModifier ? comparison.Endpoint.NonInteractionFactors.Count() : 0,
+                    NumberOfModifiers = 0,
                     Block = 1,
                     MainPlot = counter,
                     SubPlot = 1,
                     Variety = varietyLevel.Label,
-                    FactorLevels = factorLevels,
-                    Factors = factors,
-                    Mean = comparison.Endpoint.UseModifier ? modifierLevel.Modifier * mean : mean,
+                    FactorLevels = new List<double>(),
+                    Factors = new List<string>(),
+                    Mean = mean,
                     Comparison = (ComparisonType)comparisonType,
                 });
                 counter++;
