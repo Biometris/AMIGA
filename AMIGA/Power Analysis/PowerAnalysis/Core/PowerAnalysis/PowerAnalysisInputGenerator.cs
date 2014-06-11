@@ -54,16 +54,16 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
 
             foreach (var record in records) {
                 var line = new List<string>();
-                line.Add(record.Endpoint.ToString());
+                line.Add("'" + record.Endpoint.ToString() + "'");
                 line.Add(record.ComparisonId.ToString());
                 line.Add(record.NumberOfInteractions.ToString());
                 line.Add(record.NumberOfModifiers.ToString());
                 line.Add(record.Block.ToString());
                 line.Add(record.MainPlot.ToString());
                 line.Add(record.SubPlot.ToString());
-                line.Add(record.Variety.ToString());
+                line.Add("'" + record.Variety.ToString() + "'");
                 foreach (var factor in record.FactorLevels) {
-                    line.Add(factor.ToString());
+                    line.Add("'" + factor.ToString() + "'");
                 }
                 line.Add(record.Mean.ToString());
                 line.Add(record.Comparison.ToString());

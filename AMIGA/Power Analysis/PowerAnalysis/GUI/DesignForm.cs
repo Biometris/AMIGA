@@ -44,7 +44,6 @@ namespace AmigaPowerAnalysis.GUI {
             var factorsBindingSouce = new BindingSource(_project.Factors, null);
             dataGridViewFactors.AutoGenerateColumns = false;
             dataGridViewFactors.DataSource = factorsBindingSouce;
-
             dataGridViewFactors.Rows[0].ReadOnly = true;
             dataGridViewFactors.Rows[0].DefaultCellStyle.BackColor = Color.LightGray;
             dataGridViewFactors.Rows[0].Cells["ExperimentUnitType"].ReadOnly = false;
