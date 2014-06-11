@@ -48,9 +48,12 @@ namespace AmigaPowerAnalysis.GUI {
 
             var inputGenerator = new PowerAnalysisInputGenerator();
 
+            var numberOfComparisons = comparisons.Count();
+            var progressStep = 10D / numberOfComparisons;
+
             // Create input files for power analysis
             for (int i = 0; i < comparisons.Count(); ++i) {
-                _powerAnalysisBackgroundWorker.ReportProgress((int)(33 * i), string.Format("compiling analysis input for comparison {0} of {1}...", i + 1, comparisons.Count()));
+                _powerAnalysisBackgroundWorker.ReportProgress((int)(i * progressStep), string.Format("compiling analysis input for comparison {0} of {1}...", i + 1, comparisons.Count()));
                 var comparison = comparisons.ElementAt(i);
                 var comparisonRecords = inputGenerator.GetComparisonInputPowerAnalysisRecords(comparison);
                 comparisonRecords.ForEach(r => r.ComparisonId = i);
@@ -60,8 +63,9 @@ namespace AmigaPowerAnalysis.GUI {
 
             var applicationDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
+            progressStep = 80D / numberOfComparisons;
             for (int i = 0; i < comparisons.Count(); ++i) {
-                _powerAnalysisBackgroundWorker.ReportProgress((int)(33 + 33 * i / 3D), string.Format("running analysis for comparison {0} of {1}...", i + 1, comparisons.Count()));
+                _powerAnalysisBackgroundWorker.ReportProgress((int)(10 + i * progressStep), string.Format("running analysis for comparison {0} of {1}...", i + 1, comparisons.Count()));
                 var comparisonInputFilename = Path.Combine(filesPath, string.Format("{0}-{1}.csv", projectName, i));
                 var comparisonOutputFilename = Path.Combine(filesPath, string.Format("{0}-{1}-Output.csv", projectName, i));
                 var logFilename = Path.Combine(filesPath, string.Format("{0}-{1}.log", projectName, i));
@@ -82,8 +86,9 @@ namespace AmigaPowerAnalysis.GUI {
 
             // Create output files for power analysis
             var outputReader = new PowerAnalysisOutputReader();
+            progressStep = 10D / numberOfComparisons; 
             for (int i = 0; i < comparisons.Count(); ++i) {
-                _powerAnalysisBackgroundWorker.ReportProgress((int)(66 + 34 * i / 3D), string.Format("reading analysis output for comparison {0} of {1}...", i + 1, comparisons.Count()));
+                _powerAnalysisBackgroundWorker.ReportProgress((int)(90 + i * progressStep), string.Format("reading analysis output for comparison {0} of {1}...", i + 1, comparisons.Count()));
                 var comparison = comparisons.ElementAt(i);
                 var comparisonFilename = Path.Combine(filesPath, string.Format("{0}-{1}-Output.csv", projectName, i));
                 comparison.OutputPowerAnalysis = outputReader.ReadOutputPowerAnalysis(comparisonFilename);
@@ -91,7 +96,11 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void progressChanged(object sender, ProgressChangedEventArgs e) {
-            progressBarCurrentProgress.Value = e.ProgressPercentage;
+            if (e.ProgressPercentage <= 100) {
+                progressBarCurrentProgress.Value = e.ProgressPercentage;
+            } else {
+                progressBarCurrentProgress.Value = 100;
+            }
             if (e.UserState != null) {
                 labelCurrentActivity.Text = "Current activity: " + e.UserState.ToString();
             } else {
