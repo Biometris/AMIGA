@@ -46,9 +46,9 @@ namespace AmigaPowerAnalysis.GUI {
             if (dataGridViewEndpoints.Columns.Contains("CVForBlocks")) {
                 dataGridViewEndpoints.Columns["CVForBlocks"].Visible = _project.UseBlockModifier;
             }
-            checkBoxUseMainPlotModifier.Visible = _project.Design.ExperimentalDesignType == ExperimentalDesignType.SplitPlots;
-            labelCVForMainPlots.Visible = (_project.Design.ExperimentalDesignType == ExperimentalDesignType.SplitPlots) && _project.UseMainPlotModifier;
-            textBoxCVForMainPlots.Visible = (_project.Design.ExperimentalDesignType == ExperimentalDesignType.SplitPlots) && _project.UseMainPlotModifier;
+            checkBoxUseMainPlotModifier.Visible = _project.DesignSettings.ExperimentalDesignType == ExperimentalDesignType.SplitPlots;
+            labelCVForMainPlots.Visible = (_project.DesignSettings.ExperimentalDesignType == ExperimentalDesignType.SplitPlots) && _project.UseMainPlotModifier;
+            textBoxCVForMainPlots.Visible = (_project.DesignSettings.ExperimentalDesignType == ExperimentalDesignType.SplitPlots) && _project.UseMainPlotModifier;
             dataGridViewFactorModifiers.Visible = _project.UseFactorModifiers;
         }
 

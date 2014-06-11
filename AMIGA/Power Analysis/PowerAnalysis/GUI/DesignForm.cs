@@ -33,8 +33,11 @@ namespace AmigaPowerAnalysis.GUI {
             this.textBoxTabTitle.Text = Name;
             createDataGridFactors();
             createDataGridFactorLevels();
-            checkBoxUseInteractions.Checked = _project.Design.UseInteractions;
-            checkBoxUseDefaultInteractions.Checked = _project.UseDefaultInteractions;
+            checkBoxUseInteractions.Checked = _project.DesignSettings.UseInteractions;
+            checkBoxUseDefaultInteractions.Checked = _project.DesignSettings.UseDefaultInteractions;
+            this.radioButtonCompletelyRandomized.Checked = _project.DesignSettings.ExperimentalDesignType == ExperimentalDesignType.CompletelyRandomized;
+            this.radioButtonRandomizedCompleteBlocks.Checked = _project.DesignSettings.ExperimentalDesignType == ExperimentalDesignType.RandomizedCompleteBlocks;
+            this.radioButtonSplitPlot.Checked = _project.DesignSettings.ExperimentalDesignType == ExperimentalDesignType.SplitPlots;
         }
 
         public void Activate() {
@@ -56,9 +59,9 @@ namespace AmigaPowerAnalysis.GUI {
                 radioButtonSplitPlot.Visible = false;
             } else {
                 groupBoxInteractions.Visible = true;
-                checkBoxUseDefaultInteractions.Visible = _project.Design.UseInteractions;
-                dataGridViewFactors.Visible = _project.Design.UseInteractions;
-                dataGridViewFactorLevels.Visible = _project.Design.UseInteractions;
+                checkBoxUseDefaultInteractions.Visible = _project.DesignSettings.UseInteractions;
+                dataGridViewFactors.Visible = _project.DesignSettings.UseInteractions;
+                dataGridViewFactorLevels.Visible = _project.DesignSettings.UseInteractions;
             }
         }
 
@@ -77,7 +80,7 @@ namespace AmigaPowerAnalysis.GUI {
             combo.ValueType = typeof(ExperimentUnitType);
             combo.HeaderText = "Plot level";
             combo.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
-            combo.Visible = _project.Design.ExperimentalDesignType == ExperimentalDesignType.SplitPlots;
+            combo.Visible = _project.DesignSettings.ExperimentalDesignType == ExperimentalDesignType.SplitPlots;
             dataGridViewFactors.Columns.Add(combo);
 
             var checkbox = new DataGridViewCheckBoxColumn();
@@ -146,14 +149,14 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void radioButtonTypeOfDesign_CheckedChanged(object sender, EventArgs e) {
             if (this.radioButtonCompletelyRandomized.Checked) {
-                _project.Design.ExperimentalDesignType = ExperimentalDesignType.CompletelyRandomized;
+                _project.DesignSettings.ExperimentalDesignType = ExperimentalDesignType.CompletelyRandomized;
             } else if (this.radioButtonRandomizedCompleteBlocks.Checked) {
-                _project.Design.ExperimentalDesignType = ExperimentalDesignType.RandomizedCompleteBlocks;
+                _project.DesignSettings.ExperimentalDesignType = ExperimentalDesignType.RandomizedCompleteBlocks;
             } else if (this.radioButtonSplitPlot.Checked) {
-                _project.Design.ExperimentalDesignType = ExperimentalDesignType.SplitPlots;
+                _project.DesignSettings.ExperimentalDesignType = ExperimentalDesignType.SplitPlots;
             }
             if (dataGridViewFactorLevels.ColumnCount > 0) {
-                dataGridViewFactors.Columns["ExperimentUnitType"].Visible = _project.Design.ExperimentalDesignType == ExperimentalDesignType.SplitPlots;
+                dataGridViewFactors.Columns["ExperimentUnitType"].Visible = _project.DesignSettings.ExperimentalDesignType == ExperimentalDesignType.SplitPlots;
             }
         }
 

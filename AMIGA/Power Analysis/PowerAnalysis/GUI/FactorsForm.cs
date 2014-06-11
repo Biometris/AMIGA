@@ -59,7 +59,7 @@ namespace AmigaPowerAnalysis.GUI {
             combo.ValueType = typeof(ExperimentUnitType);
             combo.HeaderText = "Plot level";
             combo.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
-            combo.Visible = _project.Design.ExperimentalDesignType == ExperimentalDesignType.SplitPlots;
+            combo.Visible = _project.DesignSettings.ExperimentalDesignType == ExperimentalDesignType.SplitPlots;
             dataGridFactors.Columns.Add(combo);
 
             factorsBindingSouce.AddingNew += new AddingNewEventHandler(factorsBindingSouceSource_AddingNew);

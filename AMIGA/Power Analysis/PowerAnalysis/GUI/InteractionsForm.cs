@@ -26,7 +26,7 @@ namespace AmigaPowerAnalysis.GUI {
 
         public void Activate() {
             updateDataGridInteractions();
-            if (_project.UseDefaultInteractions) {
+            if (_project.DesignSettings.UseDefaultInteractions) {
                 dataGridInteractions.ReadOnly = true;
                 dataGridInteractions.DefaultCellStyle.BackColor = Color.LightGray;
             } else {

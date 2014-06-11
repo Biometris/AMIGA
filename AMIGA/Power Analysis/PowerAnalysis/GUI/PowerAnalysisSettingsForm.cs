@@ -1,15 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using AmigaPowerAnalysis.Core;
-using System.Text.RegularExpressions;
-using AmigaPowerAnalysis.Core.ProjectSettings;
 using AmigaPowerAnalysis.Helpers;
 
 // TODO Obligatory to first enter a name for a new endpoint

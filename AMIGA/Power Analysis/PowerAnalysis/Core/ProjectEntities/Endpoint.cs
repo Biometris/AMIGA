@@ -1,7 +1,7 @@
-﻿using System.Linq;
-using System.Collections.Generic;
-using AmigaPowerAnalysis.Core.Distributions;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
+using AmigaPowerAnalysis.Core.Distributions;
 
 namespace AmigaPowerAnalysis.Core {
 

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AmigaPowerAnalysis.Core.PowerAnalysis;
-using AmigaPowerAnalysis.Core.ProjectSettings;
+﻿using System.Linq;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;

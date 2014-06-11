@@ -1,16 +1,17 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using AmigaPowerAnalysis.Core.ProjectSettings;
 
 namespace AmigaPowerAnalysis.Core.PowerAnalysis {
     public sealed class PowerAnalysisInputGenerator {
 
+        /// <summary>
+        /// Writes the power analysis settings for an endpoint to a csv file.
+        /// </summary>
+        /// <param name="endpoint">The endpoint of interest.</param>
+        /// <param name="powerCalculationSettings">The general power analysis settings.</param>
+        /// <param name="records">The power analysis input records of the comparison of interest.</param>
+        /// <param name="filename">The name of the file to which the settings are written.</param>
         public void PowerAnalysisInputToCsv(Endpoint endpoint, PowerCalculationSettings powerCalculationSettings, List<InputPowerAnalysis> records, string filename) {
             var separator = ",";
             var stringBuilder = new StringBuilder();

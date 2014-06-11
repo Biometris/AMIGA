@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
-using AmigaPowerAnalysis.Core.ProjectSettings;
 
 namespace AmigaPowerAnalysis.Core {
 
@@ -18,9 +16,8 @@ namespace AmigaPowerAnalysis.Core {
             VarietyFactor = Factor.CreateVarietyFactor();
             Factors = new List<Factor>();
             Factors.Add(VarietyFactor);
-            Design = new Design();
+            DesignSettings = new DesignSettings();
             PowerCalculationSettings = new PowerCalculationSettings();
-            UseDefaultInteractions = true;
             UseFactorModifiers = false;
             UseBlockModifier = false;
             UseMainPlotModifier = false;
@@ -48,7 +45,7 @@ namespace AmigaPowerAnalysis.Core {
         /// The experimental design of the project.
         /// </summary>
         [DataMember]
-        public Design Design { get; set; }
+        public DesignSettings DesignSettings { get; set; }
 
         /// <summary>
         /// The settings for the power analysis.
@@ -61,12 +58,6 @@ namespace AmigaPowerAnalysis.Core {
         /// </summary>
         [DataMember]
         public Factor VarietyFactor { get; set; }
-
-        /// <summary>
-        /// Specifies whether or not to use the same interactions for all endpoints.
-        /// </summary>
-        [DataMember]
-        public bool UseDefaultInteractions { get; set; }
 
         /// <summary>
         /// Specifies whether design factors can be modifiers.
@@ -143,7 +134,7 @@ namespace AmigaPowerAnalysis.Core {
         /// </summary>
         /// <param name="useInteractions"></param>
         public void SetUseInteractions(bool useInteractions) {
-            Design.UseInteractions = useInteractions;
+            DesignSettings.UseInteractions = useInteractions;
             if (!useInteractions) {
                 foreach (var endpoint in Endpoints) {
                     for (int i = 1; i < Factors.Count; ++i) {
@@ -158,8 +149,8 @@ namespace AmigaPowerAnalysis.Core {
         /// Resets the default interaction factors for all endpoints.
         /// </summary>
         public void SetDefaultInteractions(bool useDefaultInteractions) {
-            UseDefaultInteractions = useDefaultInteractions;
-            if (UseDefaultInteractions) {
+            DesignSettings.UseDefaultInteractions = useDefaultInteractions;
+            if (DesignSettings.UseDefaultInteractions) {
                 foreach (var endpoint in Endpoints) {
                     for (int i = 1; i < Factors.Count; ++i) {
                         var factor = Factors.ElementAt(i);

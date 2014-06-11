@@ -65,14 +65,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Charting\AnalysisResultsChartGenerator.cs" />
-    <Compile Include="Core\PowerAnalysis\OutputPowerAnalysisRecord.cs" />
+    <Compile Include="Core\ProjectEntities\OutputPowerAnalysisRecord.cs" />
     <Compile Include="Core\PowerAnalysis\PowerAnalysisOutputReader.cs" />
-    <Compile Include="Core\PowerAnalysis\OutputPowerAnalysis.cs" />
+    <Compile Include="Core\ProjectEntities\OutputPowerAnalysis.cs" />
     <Compile Include="Core\PowerAnalysis\PowerAnalysisInputGenerator.cs" />
     <Compile Include="Core\ProjectManager.cs" />
-    <Compile Include="Core\ProjectSettings\Comparison.cs" />
-    <Compile Include="Core\ProjectSettings\ModifierFactorLevelCombination.cs" />
-    <Compile Include="Core\ProjectSettings\Design.cs" />
+    <Compile Include="Core\ProjectEntities\Comparison.cs" />
+    <Compile Include="Core\ProjectEntities\ModifierFactorLevelCombination.cs" />
+    <Compile Include="Core\ProjectEntities\DesignSettings.cs" />
     <Compile Include="Core\Distributions\PoissonLogNormalDistribution.cs" />
     <Compile Include="Core\Distributions\PowerLawDistribution.cs" />
     <Compile Include="Core\Distributions\BetaBinomialDistribution.cs" />
@@ -82,17 +82,17 @@
     <Compile Include="Core\Distributions\DistributionFactory.cs" />
     <Compile Include="Core\Distributions\IDistribution.cs" />
     <Compile Include="Core\Distributions\PoissonDistribution.cs" />
-    <Compile Include="Core\ProjectSettings\Endpoint.cs" />
-    <Compile Include="Core\ProjectSettings\ComparisonFactorLevelCombination.cs" />
-    <Compile Include="Core\ProjectSettings\EndpointFactor.cs" />
-    <Compile Include="Core\ProjectSettings\EndpointTypeProvider.cs" />
-    <Compile Include="Core\ProjectSettings\EndpointType.cs" />
-    <Compile Include="Core\ProjectSettings\Factor.cs" />
-    <Compile Include="Core\ProjectSettings\FactorLevel.cs" />
-    <Compile Include="Core\ProjectSettings\FactorLevelCombination.cs" />
-    <Compile Include="Core\ProjectSettings\FactorLevelCombinationsCreator.cs" />
-    <Compile Include="Core\PowerAnalysis\InputPowerAnalysis.cs" />
-    <Compile Include="Core\ProjectSettings\PowerCalculationSettings.cs" />
+    <Compile Include="Core\ProjectEntities\Endpoint.cs" />
+    <Compile Include="Core\ProjectEntities\ComparisonFactorLevelCombination.cs" />
+    <Compile Include="Core\ProjectEntities\EndpointFactor.cs" />
+    <Compile Include="Core\ProjectEntities\EndpointTypeProvider.cs" />
+    <Compile Include="Core\ProjectEntities\EndpointType.cs" />
+    <Compile Include="Core\ProjectEntities\Factor.cs" />
+    <Compile Include="Core\ProjectEntities\FactorLevel.cs" />
+    <Compile Include="Core\ProjectEntities\FactorLevelCombination.cs" />
+    <Compile Include="Core\ProjectEntities\FactorLevelCombinationsCreator.cs" />
+    <Compile Include="Core\ProjectEntities\InputPowerAnalysis.cs" />
+    <Compile Include="Core\ProjectEntities\PowerCalculationSettings.cs" />
     <Compile Include="GUI\ComparisonsForm.cs">
       <SubType>UserControl</SubType>
     </Compile>

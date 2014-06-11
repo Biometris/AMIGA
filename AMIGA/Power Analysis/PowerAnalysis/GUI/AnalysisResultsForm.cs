@@ -4,7 +4,6 @@ using System.Linq;
 using System.Windows.Forms;
 using AmigaPowerAnalysis.Core;
 using AmigaPowerAnalysis.Core.Charting;
-using AmigaPowerAnalysis.Core.ProjectSettings;
 
 // TODO Obligatory to first enter a name for a new endpoint
 // TODO Binomial totals greyed out for non fractions

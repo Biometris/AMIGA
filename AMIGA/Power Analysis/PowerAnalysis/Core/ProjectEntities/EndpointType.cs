@@ -1,5 +1,6 @@
 ﻿using System.Runtime.Serialization;
 using AmigaPowerAnalysis.Core.Distributions;
+
 namespace AmigaPowerAnalysis.Core {
 
     public enum MeasurementType {
