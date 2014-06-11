@@ -30,6 +30,11 @@ namespace AmigaPowerAnalysis.GUI {
 
         public void Activate() {
             updateDataGridComparisons();
+            if (_project.GetComparisons().Any(c => c.OutputPowerAnalysis != null)) {
+                splitContainerComparisons.Visible = true;
+            } else {
+                splitContainerComparisons.Visible = false;
+            }
         }
 
         private void updateDataGridComparisons() {

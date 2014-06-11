@@ -154,7 +154,7 @@
             this.comboBoxMethodForPowerCalculation.Name = "comboBoxMethodForPowerCalculation";
             this.comboBoxMethodForPowerCalculation.Size = new System.Drawing.Size(100, 21);
             this.comboBoxMethodForPowerCalculation.TabIndex = 7;
-            this.comboBoxMethodForPowerCalculation.SelectedIndexChanged += new System.EventHandler(this.comboBoxMethodForPowerCalculation_SelectedIndexChanged);
+            this.comboBoxMethodForPowerCalculation.SelectionChangeCommitted += new System.EventHandler(this.comboBoxMethodForPowerCalculation_SelectionChangeCommitted);
             // 
             // labelMethodForPowerCalculation
             // 

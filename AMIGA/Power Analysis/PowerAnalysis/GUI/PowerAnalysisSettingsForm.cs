@@ -114,7 +114,7 @@ namespace AmigaPowerAnalysis.GUI {
             }
         }
 
-        private void comboBoxMethodForPowerCalculation_SelectedIndexChanged(object sender, EventArgs e) {
+        private void comboBoxMethodForPowerCalculation_SelectionChangeCommitted(object sender, EventArgs e) {
             PowerCalculationMethod powerCalculationMethod;
             Enum.TryParse<PowerCalculationMethod>(comboBoxMethodForPowerCalculation.SelectedValue.ToString(), out powerCalculationMethod);
             _project.PowerCalculationSettings.PowerCalculationMethod = powerCalculationMethod;
