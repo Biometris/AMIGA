@@ -9,6 +9,8 @@ namespace AmigaPowerAnalysis.GUI {
 
         string Name { get; set; }
 
+        string Description { get; }
+
         void Activate();
     }
 }

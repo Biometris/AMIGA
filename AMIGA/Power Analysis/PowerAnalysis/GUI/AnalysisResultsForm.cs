@@ -22,11 +22,15 @@ namespace AmigaPowerAnalysis.GUI {
         public AnalysisResultsForm(Project project) {
             InitializeComponent();
             Name = "Results";
+            Description = "Description here";
             this.textBoxTabTitle.Text = Name;
+            this.textBoxTabDescription.Text = Description;
             this.comboBoxAnalysisType.DataSource = Enum.GetValues(typeof(AnalysisMethodType));
             this.comboBoxAnalysisType.SelectedIndex = 1;
             _project = project;
         }
+
+        public string Description { get; private set; }
 
         public void Activate() {
             updateDataGridComparisons();

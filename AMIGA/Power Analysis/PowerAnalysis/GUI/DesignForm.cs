@@ -30,7 +30,9 @@ namespace AmigaPowerAnalysis.GUI {
             InitializeComponent();
             _project = project;
             Name = "Design";
+            Description = "Description here";
             this.textBoxTabTitle.Text = Name;
+            this.textBoxTabDescription.Text = Description;
             createDataGridFactors();
             createDataGridFactorLevels();
             checkBoxUseInteractions.Checked = _project.DesignSettings.UseInteractions;
@@ -39,6 +41,8 @@ namespace AmigaPowerAnalysis.GUI {
             this.radioButtonRandomizedCompleteBlocks.Checked = _project.DesignSettings.ExperimentalDesignType == ExperimentalDesignType.RandomizedCompleteBlocks;
             this.radioButtonSplitPlot.Checked = _project.DesignSettings.ExperimentalDesignType == ExperimentalDesignType.SplitPlots;
         }
+
+        public string Description { get; private set; }
 
         public void Activate() {
             var factorsBindingSouce = new BindingSource(_project.Factors, null);

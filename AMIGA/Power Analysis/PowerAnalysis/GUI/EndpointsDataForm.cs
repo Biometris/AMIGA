@@ -24,10 +24,14 @@ namespace AmigaPowerAnalysis.GUI {
         public EndpointsDataForm(Project project) {
             InitializeComponent();
             Name = "Endpoints data";
+            Description = "Description here";
             this.textBoxTabTitle.Text = Name;
+            this.textBoxTabDescription.Text = Description;
             _project = project;
             createDataGridEndpoints();
         }
+
+        public string Description { get; private set; }
 
         public void Activate() {
             var endpointsBindingSouce = new BindingSource(_project.Endpoints, null);

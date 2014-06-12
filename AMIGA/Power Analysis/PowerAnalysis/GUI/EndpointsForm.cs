@@ -20,10 +20,14 @@ namespace AmigaPowerAnalysis.GUI {
 
         private Project _project;
 
+        public string Description { get; private set; }
+
         public EndpointsForm(Project project) {
             InitializeComponent();
             Name = "Endpoints";
+            Description = "Enter a list of endpoints.\r\nThe power analysis will be based on all primary endpoints. Results for other endpoints will be shown for information only. For each endpoint provide the measurement type and limits of concern (LoC).  Provide a lower LoC, an upper LoC, or both.";
             this.textBoxTabTitle.Text = Name;
+            this.textBoxTabDescription.Text = Description;
             _project = project;
             createDataGridEndpoints();
         }
@@ -48,7 +52,7 @@ namespace AmigaPowerAnalysis.GUI {
             combo.DataPropertyName = "EndpointType";
             combo.DisplayMember = "Name";
             combo.ValueMember = "EndpointType";
-            combo.HeaderText = "Endpoint type";
+            combo.HeaderText = "Endpoint group";
             combo.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
             dataGridViewEndpoints.Columns.Add(combo);
 
@@ -61,7 +65,7 @@ namespace AmigaPowerAnalysis.GUI {
             combo.DataSource = Enum.GetValues(typeof(MeasurementType));
             combo.DataPropertyName = "Measurement";
             combo.ValueType = typeof(MeasurementType);
-            combo.HeaderText = "Measurement";
+            combo.HeaderText = "Measurement type";
             combo.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
             dataGridViewEndpoints.Columns.Add(combo);
 

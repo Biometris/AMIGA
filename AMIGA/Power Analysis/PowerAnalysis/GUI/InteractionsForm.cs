@@ -20,9 +20,13 @@ namespace AmigaPowerAnalysis.GUI {
             InitializeComponent();
             _project = project;
             Name = "Interactions";
+            Description = "Description here";
             this.textBoxTabTitle.Text = Name;
+            this.textBoxTabDescription.Text = Description;
             createDataGridInteractions();
         }
+
+        public string Description { get; private set; }
 
         public void Activate() {
             updateDataGridInteractions();

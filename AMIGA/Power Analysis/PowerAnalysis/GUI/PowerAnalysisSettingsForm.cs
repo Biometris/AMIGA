@@ -19,9 +19,13 @@ namespace AmigaPowerAnalysis.GUI {
         public PowerAnalysisSettingsForm(Project project) {
             InitializeComponent();
             Name = "Simulation settings";
+            Description = "Description here";
             this.textBoxTabTitle.Text = Name;
+            this.textBoxTabDescription.Text = Description;
             _project = project;
         }
+
+        public string Description { get; private set; }
 
         public void Activate() {
             checkBoxMethodForAnalysesLN.Checked = _project.PowerCalculationSettings.SelectedAnalysisMethodTypes.Contains(AnalysisMethodType.LogNormal);

@@ -22,10 +22,14 @@ namespace AmigaPowerAnalysis.GUI {
             InitializeComponent();
             _project = project;
             Name = "Comparisons";
+            Description = "Description here";
             this.textBoxTabTitle.Text = Name;
+            this.textBoxTabDescription.Text = Description;
             createDataGridComparisons();
             createDataGridFactorLevels();
         }
+
+        public string Description { get; private set; }
 
         public void Activate() {
             updateDataGridComparisons();

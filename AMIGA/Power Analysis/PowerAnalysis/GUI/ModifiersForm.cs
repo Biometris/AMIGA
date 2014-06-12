@@ -23,13 +23,17 @@ namespace AmigaPowerAnalysis.GUI {
             InitializeComponent();
             _project = project;
             Name = "Modifiers";
+            Description = "Description here";
             this.textBoxTabTitle.Text = Name;
+            this.textBoxTabDescription.Text = Description;
             checkBoxUseBlockModifier.Checked = _project.UseBlockModifier;
             checkBoxUseMainPlotModifier.Checked = _project.UseMainPlotModifier;
             checkBoxUseFactorModifiers.Checked = _project.UseFactorModifiers;
             createDataGridEndpoints();
             createDataGridFactorModifiers();
         }
+
+        public string Description { get; private set; }
 
         public void Activate() {
             updateDataGridEndpoints();
