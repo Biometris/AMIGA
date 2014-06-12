@@ -89,5 +89,9 @@ namespace AmigaPowerAnalysis.GUI {
         private void dataGridViewEndpoints_UserDeletedRow(object sender, DataGridViewRowEventArgs e) {
             _project.UpdateEndpointFactors();
         }
+
+        private void textBoxTabDescription_TextChanged(object sender, EventArgs e) {
+
+        }
     }
 }

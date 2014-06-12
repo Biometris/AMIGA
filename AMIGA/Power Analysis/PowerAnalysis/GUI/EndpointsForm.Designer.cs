@@ -72,6 +72,7 @@
             this.textBoxTabDescription.Size = new System.Drawing.Size(854, 75);
             this.textBoxTabDescription.TabIndex = 6;
             this.textBoxTabDescription.Text = resources.GetString("textBoxTabDescription.Text");
+            this.textBoxTabDescription.TextChanged += new System.EventHandler(this.textBoxTabDescription_TextChanged);
             // 
             // textBoxTabTitle
             // 
