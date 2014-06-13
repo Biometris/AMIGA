@@ -30,7 +30,7 @@ namespace AmigaPowerAnalysis.GUI {
             InitializeComponent();
             _project = project;
             Name = "Design";
-            Description = "Description here";
+            Description = "Specify the type of experimental design.\r\nWhen other factors have been specified, the GMO-CMP Variety comparisons can be expected to be the same for all levels of such a factor (no interaction) or different (interaction). Indicate if such interactions are expected for one or more endpoints. Uncheck the box 'Use interactions for all endpoints' will allow you to specify specific endpoints in the next screen.\r\nNote: Interactions with Variety will lower the effective replication, because comparisons are now needed at the separate levels of the other factor.\r\n\r\nFor specified interactions in a split-plot design, indicate the level where the factor is randomised.\r\n,For specified interactions, indicate both for the GMO and the CMP the levels of the additional factor that have to be compared.";
             this.textBoxTabTitle.Text = Name;
             this.textBoxTabDescription.Text = Description;
             createDataGridFactors();

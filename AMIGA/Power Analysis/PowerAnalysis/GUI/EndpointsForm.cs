@@ -25,7 +25,7 @@ namespace AmigaPowerAnalysis.GUI {
         public EndpointsForm(Project project) {
             InitializeComponent();
             Name = "Endpoints";
-            Description = "Enter a list of endpoints.\r\nThe power analysis will be based on all primary endpoints. Results for other endpoints will be shown for information only. For each endpoint provide the measurement type and limits of concern (LoC).  Provide a lower LoC, an upper LoC, or both.";
+            Description = "Enter a list of endpoints. For each endpoint indicate its group.\r\nThe power analysis will be based on all primary endpoints. Results for other endpoints will be shown for information only.\r\n For each endpoint provide the measurement type and limits of concern (LoC).  Provide a lower LoC, an upper LoC, or both.";
             this.textBoxTabTitle.Text = Name;
             this.textBoxTabDescription.Text = Description;
             _project = project;

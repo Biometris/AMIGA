@@ -19,7 +19,7 @@ namespace AmigaPowerAnalysis.GUI {
         public PowerAnalysisSettingsForm(Project project) {
             InitializeComponent();
             Name = "Simulation settings";
-            Description = "Description here";
+            Description = "Specify how to perform the power analysis and which methods of analysis are to be compared\r\nIt is advised first to use the Approximate method (Lyles) because it is much faster.";
             this.textBoxTabTitle.Text = Name;
             this.textBoxTabDescription.Text = Description;
             _project = project;

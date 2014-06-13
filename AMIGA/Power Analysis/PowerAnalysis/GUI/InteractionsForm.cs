@@ -20,7 +20,7 @@ namespace AmigaPowerAnalysis.GUI {
             InitializeComponent();
             _project = project;
             Name = "Interactions";
-            Description = "Description here";
+            Description = "In the previous screen it was indicated that interactions are not expected for all endpoints.\r\nIndicate per endpoint which factors are expected to have an interaction with the GMO-CMP Variety comparison.";
             this.textBoxTabTitle.Text = Name;
             this.textBoxTabDescription.Text = Description;
             createDataGridInteractions();
