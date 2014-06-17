@@ -45,6 +45,10 @@ namespace AmigaPowerAnalysis.GUI {
             dataGridFactors.Rows[0].Cells["ExperimentUnitType"].ReadOnly = false;
         }
 
+        public bool IsVisible() {
+            return true;
+        }
+
         private void createDataGridFactors() {
             var factorsBindingSouce = new BindingSource(_project.Factors, null);
             dataGridFactors.AutoGenerateColumns = false;

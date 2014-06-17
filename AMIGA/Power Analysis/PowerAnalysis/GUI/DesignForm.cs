@@ -54,6 +54,10 @@ namespace AmigaPowerAnalysis.GUI {
             updateVisibilities();
         }
 
+        public bool IsVisible() {
+            return true;
+        }
+
         private void updateVisibilities() {
             if (_project.Factors.Count <= 1) {
                 groupBoxInteractions.Visible = false;

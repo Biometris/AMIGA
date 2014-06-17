@@ -39,6 +39,10 @@ namespace AmigaPowerAnalysis.GUI {
             dataGridViewEndpoints.DataSource = endpointsBindingSouce;
         }
 
+        public bool IsVisible() {
+            return true;
+        }
+
         private void createDataGridEndpoints() {
             var column = new DataGridViewTextBoxColumn();
             column.DataPropertyName = "Name";

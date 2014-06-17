@@ -12,5 +12,7 @@ namespace AmigaPowerAnalysis.GUI {
         string Description { get; }
 
         void Activate();
+
+        bool IsVisible();
     }
 }

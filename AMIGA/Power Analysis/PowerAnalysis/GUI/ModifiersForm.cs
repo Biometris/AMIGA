@@ -43,6 +43,10 @@ namespace AmigaPowerAnalysis.GUI {
             textBoxCVForMainPlots.Text = _project.CVForMainPlots.ToString();
         }
 
+        public bool IsVisible() {
+            return true;
+        }
+
         private void updateVisibilities() {
             dataGridViewEndpoints.Visible = _project.UseFactorModifiers;
             labelCVForBlocks.Visible = _project.UseBlockModifier;

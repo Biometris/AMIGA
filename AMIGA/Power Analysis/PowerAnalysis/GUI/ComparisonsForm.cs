@@ -35,6 +35,10 @@ namespace AmigaPowerAnalysis.GUI {
             updateDataGridComparisons();
         }
 
+        public bool IsVisible() {
+            return true;
+        }
+
         private void createDataGridComparisons() {
         }
 

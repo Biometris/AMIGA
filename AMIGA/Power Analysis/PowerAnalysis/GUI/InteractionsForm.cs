@@ -39,6 +39,10 @@ namespace AmigaPowerAnalysis.GUI {
             }
         }
 
+        public bool IsVisible() {
+            return true;
+        }
+
         private void createDataGridInteractions() {
             dataGridInteractions.DataSource = _interactionsDataTable;
             updateDataGridInteractions();

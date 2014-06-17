@@ -35,6 +35,10 @@ namespace AmigaPowerAnalysis.GUI {
         public void Activate() {
         }
 
+        public bool IsVisible() {
+            return true;
+        }
+
         private void createDataGridEndpoints() {
             var endpointsBindingSouce = new BindingSource(_project.Endpoints, null);
             endpointsBindingSouce.AddingNew += new AddingNewEventHandler(endpointsBindingSouce_AddingNew);
@@ -92,10 +96,6 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void dataGridViewEndpoints_UserDeletedRow(object sender, DataGridViewRowEventArgs e) {
             _project.UpdateEndpointFactors();
-        }
-
-        private void textBoxTabDescription_TextChanged(object sender, EventArgs e) {
-
         }
     }
 }

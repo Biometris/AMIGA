@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -7,12 +8,17 @@ using System.Windows.Forms;
 using AmigaPowerAnalysis.Core;
 using AmigaPowerAnalysis.Core.PowerAnalysis;
 using AmigaPowerAnalysis.Helpers;
+using AmigaPowerAnalysis.Helpers.Log;
 
 namespace AmigaPowerAnalysis.GUI {
     public partial class MainWindow : Form {
 
         private Project _project;
         private string _currentProjectFilename;
+
+        private List<ISelectionForm> _selectionForms;
+
+        private ILogger _logger;
 
         public MainWindow() {
             InitializeComponent();
@@ -22,6 +28,8 @@ namespace AmigaPowerAnalysis.GUI {
         #region Initialization
 
         private void initialize() {
+            _selectionForms = new List<ISelectionForm>();
+            _logger = new SimpleLogger();
             this.closeProject();
         }
 
@@ -58,6 +66,19 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void toolstripAbout_Click(object sender, EventArgs e) {
+        }
+
+        private void goToolStripMenuItem_Click(object sender, EventArgs e) {
+            if (string.IsNullOrEmpty(_currentProjectFilename)) {
+                MessageBox.Show("Please save the project first.",
+                   "Save project first",
+                   MessageBoxButtons.OK,
+                   MessageBoxIcon.Exclamation,
+                   MessageBoxDefaultButton.Button1);
+                return;
+            }
+            var runSimulationDialog = new RunPowerAnalysisDialog(_project, _currentProjectFilename);
+            runSimulationDialog.ShowDialog();
         }
 
         private void tabControl_SelectedIndexChanged(object sender, EventArgs e) {
@@ -107,88 +128,54 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void loadProject(Project project) {
-            closeProject();
-            _project = project;
+            try {
+                closeProject();
+                _project = project;
 
-            var endpointsForm = new EndpointsForm(_project);
-            var tab = new TabPage(endpointsForm.Name);
-            this.tabControl.TabPages.Add(tab);
-            endpointsForm.Dock = System.Windows.Forms.DockStyle.Fill;
-            tab.Controls.Add(endpointsForm);
+                _selectionForms.Add(new EndpointsForm(_project));
+                _selectionForms.Add(new EndpointsDataForm(_project));
+                _selectionForms.Add(new FactorsForm(_project));
+                _selectionForms.Add(new DesignForm(_project));
+                _selectionForms.Add(new InteractionsForm(_project));
+                _selectionForms.Add(new ComparisonsForm(_project));
+                _selectionForms.Add(new ModifiersForm(_project));
+                _selectionForms.Add(new PowerAnalysisSettingsForm(_project));
+                _selectionForms.Add(new AnalysisResultsForm(_project));
 
-            var endpointsDataForm = new EndpointsDataForm(_project);
-            tab = new TabPage(endpointsDataForm.Name);
-            this.tabControl.TabPages.Add(tab);
-            endpointsDataForm.Dock = System.Windows.Forms.DockStyle.Fill;
-            tab.Controls.Add(endpointsDataForm);
-
-            var factorsForm = new FactorsForm(_project);
-            tab = new TabPage(factorsForm.Name);
-            this.tabControl.TabPages.Add(tab);
-            factorsForm.Dock = System.Windows.Forms.DockStyle.Fill;
-            tab.Controls.Add(factorsForm);
-
-            var designForm = new DesignForm(_project);
-            tab = new TabPage(designForm.Name);
-            this.tabControl.TabPages.Add(tab);
-            designForm.Dock = System.Windows.Forms.DockStyle.Fill;
-            tab.Controls.Add(designForm);
-
-            var interactionsForm = new InteractionsForm(_project);
-            tab = new TabPage(interactionsForm.Name);
-            this.tabControl.TabPages.Add(tab);
-            interactionsForm.Dock = System.Windows.Forms.DockStyle.Fill;
-            tab.Controls.Add(interactionsForm);
-
-            var comparisonsForm = new ComparisonsForm(_project);
-            tab = new TabPage(comparisonsForm.Name);
-            this.tabControl.TabPages.Add(tab);
-            comparisonsForm.Dock = System.Windows.Forms.DockStyle.Fill;
-            tab.Controls.Add(comparisonsForm);
-
-            var modifiersForm = new ModifiersForm(_project);
-            tab = new TabPage(modifiersForm.Name);
-            this.tabControl.TabPages.Add(tab);
-            modifiersForm.Dock = System.Windows.Forms.DockStyle.Fill;
-            tab.Controls.Add(modifiersForm);
-
-            var simulationSettingsForm = new PowerAnalysisSettingsForm(_project);
-            tab = new TabPage(simulationSettingsForm.Name);
-            this.tabControl.TabPages.Add(tab);
-            simulationSettingsForm.Dock = System.Windows.Forms.DockStyle.Fill;
-            tab.Controls.Add(simulationSettingsForm);
-
-            var analysisResultsForm = new AnalysisResultsForm(_project);
-            tab = new TabPage(analysisResultsForm.Name);
-            this.tabControl.TabPages.Add(tab);
-            analysisResultsForm.Dock = System.Windows.Forms.DockStyle.Fill;
-            tab.Controls.Add(analysisResultsForm);
-
-            this.saveAsToolStripMenuItem.Enabled = true;
-            this.saveToolStripMenuItem.Enabled = true;
-            this.closeToolStripMenuItem.Enabled = true;
+                updateTabs();
+            } catch (Exception ex) {
+                MessageBox.Show(
+                    "An error occurred while opening the project. An invalid project file may have been provided or the project file may be corrupted.",
+                    "Error opening project.", 
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error,
+                    MessageBoxDefaultButton.Button1);
+                _logger.Log(ex.Message);
+                closeProject();
+                return;
+            }
         }
 
         private void closeProject() {
+            _selectionForms.Clear();
             this.tabControl.TabPages.Clear();
             this.saveAsToolStripMenuItem.Enabled = false;
             this.saveToolStripMenuItem.Enabled = false;
             this.closeToolStripMenuItem.Enabled = false;
         }
 
+        private void updateTabs() {
+            var visibleForms = _selectionForms.Where(f => f.IsVisible()).ToList();
+            foreach (var selectionForm in visibleForms) {
+                var form = (UserControl)selectionForm;
+                form.Dock = System.Windows.Forms.DockStyle.Fill;
+                var tab = new TabPage(selectionForm.Name);
+                tab.Controls.Add(form);
+                this.tabControl.TabPages.Add(tab);
+            }
+        }
+
         #endregion
 
-        private void goToolStripMenuItem_Click(object sender, EventArgs e) {
-            if (string.IsNullOrEmpty(_currentProjectFilename)) {
-                MessageBox.Show("Please save the project first.",
-                   "Save project first",
-                   MessageBoxButtons.OK,
-                   MessageBoxIcon.Exclamation,
-                   MessageBoxDefaultButton.Button1);
-                return;
-            }
-            var runSimulationDialog = new RunPowerAnalysisDialog(_project, _currentProjectFilename);
-            runSimulationDialog.ShowDialog();
-        }
     }
 }

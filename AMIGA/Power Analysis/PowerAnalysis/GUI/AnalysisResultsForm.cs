@@ -41,6 +41,13 @@ namespace AmigaPowerAnalysis.GUI {
             }
         }
 
+        public bool IsVisible() {
+            if (_project.GetComparisons().Any(c => c.OutputPowerAnalysis != null)) {
+                return true;
+            }
+            return false;
+        }
+
         private void updateDataGridComparisons() {
             dataGridViewComparisons.Columns.Clear();
 

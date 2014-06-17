@@ -41,6 +41,10 @@ namespace AmigaPowerAnalysis.GUI {
             textBoxSeedForRandomNumbers.Text = _project.PowerCalculationSettings.Seed.ToString();
         }
 
+        public bool IsVisible() {
+            return true;
+        }
+
         private void textBoxSignificanceLevel_Validating(object sender, CancelEventArgs e) {
             var textBox = sender as TextBox;
             double value;
