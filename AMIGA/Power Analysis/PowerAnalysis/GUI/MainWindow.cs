@@ -148,6 +148,10 @@ namespace AmigaPowerAnalysis.GUI {
 
                 _selectionForms.ForEach(s => s.TabVisibilitiesChanged += onVisibilitySettingsChanged);
 
+                this.closeToolStripMenuItem.Enabled = true;
+                this.saveAsToolStripMenuItem.Enabled = true;
+                this.saveToolStripMenuItem.Enabled = true;
+
                 updateTabs();
             } catch (Exception ex) {
                 MessageBox.Show(
