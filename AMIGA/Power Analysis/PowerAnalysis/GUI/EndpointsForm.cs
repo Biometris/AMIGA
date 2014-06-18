@@ -99,5 +99,37 @@ namespace AmigaPowerAnalysis.GUI {
         private void dataGridViewEndpoints_UserDeletedRow(object sender, DataGridViewRowEventArgs e) {
             _project.UpdateEndpointFactors();
         }
+
+        private void dataGridViewEndpoints_CellValidating(object sender, DataGridViewCellValidatingEventArgs e) {
+            if (dataGridViewEndpoints.Columns[e.ColumnIndex].Name == "Name") {
+                var newValue = e.FormattedValue.ToString();
+                if (string.IsNullOrEmpty(newValue)) {
+                    dataGridViewEndpoints.Rows[e.RowIndex].ErrorText = "Endpoint name cannot not be empty.";
+                    showError("Invalid data", dataGridViewEndpoints.Rows[e.RowIndex].ErrorText);
+                    e.Cancel = true;
+                } else {
+                    var newEndpointNames = _project.Endpoints.Select(ep => ep.Name).ToList();
+                    newEndpointNames[e.RowIndex] = newValue;
+                    if (newEndpointNames.Distinct().Count() < newEndpointNames.Count) {
+                        dataGridViewEndpoints.Rows[e.RowIndex].ErrorText = "Duplicate endpoint names are not allowed.";
+                        showError("Invalid data", dataGridViewEndpoints.Rows[e.RowIndex].ErrorText);
+                        e.Cancel = true;
+                    }
+                }
+            }
+        }
+
+        private void dataGridViewEndpoints_DataError(object sender, DataGridViewDataErrorEventArgs e) {
+            showError("Invalid data", e.Exception.Message);
+        }
+
+        private void showError(string title, string message) {
+            MessageBox.Show(
+                    message,
+                    title,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error,
+                    MessageBoxDefaultButton.Button1);
+        }
     }
 }

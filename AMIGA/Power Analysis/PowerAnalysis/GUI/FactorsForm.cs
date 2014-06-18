@@ -132,5 +132,41 @@ namespace AmigaPowerAnalysis.GUI {
         private void dataGridFactors_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e) {
             _project.UpdateEndpointFactors();
         }
+
+        private void dataGridFactors_CellValidating(object sender, DataGridViewCellValidatingEventArgs e) {
+            if (dataGridFactors.Columns[e.ColumnIndex].Name == "Name") {
+                var newValue = e.FormattedValue.ToString();
+                if (string.IsNullOrEmpty(newValue)) {
+                    dataGridFactors.Rows[e.RowIndex].ErrorText = "Factor name cannot not be empty.";
+                    showError("Invalid data", dataGridFactors.Rows[e.RowIndex].ErrorText);
+                    e.Cancel = true;
+                } else {
+                    var newFactorNames = _project.Factors.Select(f => f.Name).ToList();
+                    newFactorNames[e.RowIndex] = newValue;
+                    if (newFactorNames.Distinct().Count() < newFactorNames.Count) {
+                        dataGridFactors.Rows[e.RowIndex].ErrorText = "Duplicate factor names are not allowed.";
+                        showError("Invalid data", dataGridFactors.Rows[e.RowIndex].ErrorText);
+                        e.Cancel = true;
+                    }
+                }
+            }
+        }
+
+        private void dataGridFactors_DataError(object sender, DataGridViewDataErrorEventArgs e) {
+            showError("Invalid data", e.Exception.Message);
+        }
+
+        private void dataGridViewFactorLevels_DataError(object sender, DataGridViewDataErrorEventArgs e) {
+            showError("Invalid data", e.Exception.Message);
+        }
+
+        private void showError(string title, string message) {
+            MessageBox.Show(
+                    message,
+                    title,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error,
+                    MessageBoxDefaultButton.Button1);
+        }
     }
 }
