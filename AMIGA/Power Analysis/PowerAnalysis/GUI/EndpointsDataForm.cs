@@ -107,5 +107,18 @@ namespace AmigaPowerAnalysis.GUI {
             checkbox.HeaderText = "Excess zeroes";
             dataGridViewEndpoints.Columns.Add(checkbox);
         }
+
+        private void dataGridViewEndpoints_DataError(object sender, DataGridViewDataErrorEventArgs e) {
+            showError("Invalid data", e.Exception.Message);
+        }
+
+        private void showError(string title, string message) {
+            MessageBox.Show(
+                    message,
+                    title,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error,
+                    MessageBoxDefaultButton.Button1);
+        }
     }
 }

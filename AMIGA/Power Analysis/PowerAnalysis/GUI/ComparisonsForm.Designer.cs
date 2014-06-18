@@ -56,6 +56,7 @@
             this.dataGridViewFactorLevels.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridViewFactorLevels.Size = new System.Drawing.Size(518, 335);
             this.dataGridViewFactorLevels.TabIndex = 2;
+            this.dataGridViewFactorLevels.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dataGridViewFactorLevels_DataError);
             // 
             // dataGridViewComparisons
             // 

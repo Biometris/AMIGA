@@ -113,5 +113,18 @@ namespace AmigaPowerAnalysis.GUI {
             _currentComparisonFactorLevels = _currentComparison.ComparisonFactorLevelCombinations;
             updateDataGridFactorLevels();
         }
+
+        private void dataGridViewFactorLevels_DataError(object sender, DataGridViewDataErrorEventArgs e) {
+            showError("Invalid data", e.Exception.Message);
+        }
+
+        private void showError(string title, string message) {
+            MessageBox.Show(
+                    message,
+                    title,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error,
+                    MessageBoxDefaultButton.Button1);
+        }
     }
 }

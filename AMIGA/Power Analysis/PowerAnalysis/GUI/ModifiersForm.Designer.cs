@@ -66,6 +66,7 @@
             this.dataGridViewFactorModifiers.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridViewFactorModifiers.Size = new System.Drawing.Size(518, 161);
             this.dataGridViewFactorModifiers.TabIndex = 0;
+            this.dataGridViewFactorModifiers.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dataGridViewFactorModifiers_DataError);
             // 
             // dataGridViewEndpoints
             // 

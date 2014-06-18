@@ -48,6 +48,7 @@
             this.dataGridViewEndpoints.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dataGridViewEndpoints.Size = new System.Drawing.Size(854, 386);
             this.dataGridViewEndpoints.TabIndex = 2;
+            this.dataGridViewEndpoints.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dataGridViewEndpoints_DataError);
             // 
             // panelTabDescription
             // 

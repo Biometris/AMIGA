@@ -138,15 +138,15 @@ namespace AmigaPowerAnalysis.GUI {
                 var newValue = e.FormattedValue.ToString();
                 if (string.IsNullOrEmpty(newValue)) {
                     dataGridFactors.Rows[e.RowIndex].ErrorText = "Factor name cannot not be empty.";
-                    showError("Invalid data", dataGridFactors.Rows[e.RowIndex].ErrorText);
                     e.Cancel = true;
+                    showError("Invalid data", dataGridFactors.Rows[e.RowIndex].ErrorText);
                 } else {
                     var newFactorNames = _project.Factors.Select(f => f.Name).ToList();
                     newFactorNames[e.RowIndex] = newValue;
                     if (newFactorNames.Distinct().Count() < newFactorNames.Count) {
                         dataGridFactors.Rows[e.RowIndex].ErrorText = "Duplicate factor names are not allowed.";
-                        showError("Invalid data", dataGridFactors.Rows[e.RowIndex].ErrorText);
                         e.Cancel = true;
+                        showError("Invalid data", dataGridFactors.Rows[e.RowIndex].ErrorText);
                     }
                 }
             }
@@ -160,12 +160,12 @@ namespace AmigaPowerAnalysis.GUI {
                     showError("Invalid data", dataGridViewFactorLevels.Rows[e.RowIndex].ErrorText);
                     e.Cancel = true;
                 } else {
-                    var newFactorLabelNames = _project.Factors.SelectMany(f => f.FactorLevels).Select(fl => fl.Label).ToList();
+                    var newFactorLabelNames =  _currentFactor.FactorLevels.Select(fl => fl.Label).ToList();
                     newFactorLabelNames[e.RowIndex] = newValue;
                     if (newFactorLabelNames.Distinct().Count() < newFactorLabelNames.Count) {
                         dataGridViewFactorLevels.Rows[e.RowIndex].ErrorText = "Duplicate factor label names are not allowed.";
-                        showError("Invalid data", dataGridViewFactorLevels.Rows[e.RowIndex].ErrorText);
                         e.Cancel = true;
+                        showError("Invalid data", dataGridViewFactorLevels.Rows[e.RowIndex].ErrorText);
                     }
                 }
             }
@@ -175,8 +175,8 @@ namespace AmigaPowerAnalysis.GUI {
                 newFactorLevels[e.RowIndex] = newValue;
                 if (newFactorLevels.Distinct().Count() < newFactorLevels.Count) {
                     dataGridViewFactorLevels.Rows[e.RowIndex].ErrorText = "Duplicate factor levels are not allowed.";
-                    showError("Invalid data", dataGridViewFactorLevels.Rows[e.RowIndex].ErrorText);
                     e.Cancel = true;
+                    showError("Invalid data", dataGridViewFactorLevels.Rows[e.RowIndex].ErrorText);
                 }
             }
         }
