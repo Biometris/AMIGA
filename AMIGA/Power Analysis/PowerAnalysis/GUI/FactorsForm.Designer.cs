@@ -24,13 +24,13 @@
         /// </summary>
         private void InitializeComponent() {
             this.dataGridViewFactorLevels = new System.Windows.Forms.DataGridView();
-            this.dataGridFactors = new System.Windows.Forms.DataGridView();
+            this.dataGridViewFactors = new System.Windows.Forms.DataGridView();
             this.splitContainerFactors = new System.Windows.Forms.SplitContainer();
             this.panelTabDescription = new System.Windows.Forms.Panel();
-            this.textBoxTabTitle = new System.Windows.Forms.TextBox();
             this.textBoxTabDescription = new System.Windows.Forms.TextBox();
+            this.textBoxTabTitle = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFactorLevels)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridFactors)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFactors)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerFactors)).BeginInit();
             this.splitContainerFactors.Panel1.SuspendLayout();
             this.splitContainerFactors.Panel2.SuspendLayout();
@@ -55,27 +55,28 @@
             this.dataGridViewFactorLevels.TabIndex = 4;
             this.dataGridViewFactorLevels.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.dataGridViewFactorLevels_CellValidating);
             this.dataGridViewFactorLevels.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dataGridViewFactorLevels_DataError);
+            this.dataGridViewFactorLevels.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.dataGridViewFactorLevels_UserDeletingRow);
             // 
-            // dataGridFactors
+            // dataGridViewFactors
             // 
-            this.dataGridFactors.AllowUserToResizeRows = false;
-            this.dataGridFactors.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dataGridFactors.BackgroundColor = System.Drawing.Color.White;
-            this.dataGridFactors.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridFactors.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridFactors.Location = new System.Drawing.Point(0, 0);
-            this.dataGridFactors.MultiSelect = false;
-            this.dataGridFactors.Name = "dataGridFactors";
-            this.dataGridFactors.RowHeadersWidth = 24;
-            this.dataGridFactors.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            this.dataGridFactors.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridFactors.Size = new System.Drawing.Size(259, 310);
-            this.dataGridFactors.TabIndex = 3;
-            this.dataGridFactors.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.dataGridFactors_CellValidating);
-            this.dataGridFactors.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dataGridFactors_DataError);
-            this.dataGridFactors.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.dataGridFactors_RowsAdded);
-            this.dataGridFactors.RowsRemoved += new System.Windows.Forms.DataGridViewRowsRemovedEventHandler(this.dataGridFactors_RowsRemoved);
-            this.dataGridFactors.SelectionChanged += new System.EventHandler(this.dataGridFactors_SelectionChanged);
+            this.dataGridViewFactors.AllowUserToResizeRows = false;
+            this.dataGridViewFactors.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewFactors.BackgroundColor = System.Drawing.Color.White;
+            this.dataGridViewFactors.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewFactors.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridViewFactors.Location = new System.Drawing.Point(0, 0);
+            this.dataGridViewFactors.MultiSelect = false;
+            this.dataGridViewFactors.Name = "dataGridViewFactors";
+            this.dataGridViewFactors.RowHeadersWidth = 24;
+            this.dataGridViewFactors.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            this.dataGridViewFactors.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dataGridViewFactors.Size = new System.Drawing.Size(259, 310);
+            this.dataGridViewFactors.TabIndex = 3;
+            this.dataGridViewFactors.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.dataGridFactors_CellValidating);
+            this.dataGridViewFactors.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dataGridFactors_DataError);
+            this.dataGridViewFactors.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.dataGridFactors_RowsAdded);
+            this.dataGridViewFactors.RowsRemoved += new System.Windows.Forms.DataGridViewRowsRemovedEventHandler(this.dataGridFactors_RowsRemoved);
+            this.dataGridViewFactors.SelectionChanged += new System.EventHandler(this.dataGridFactors_SelectionChanged);
             // 
             // splitContainerFactors
             // 
@@ -86,7 +87,7 @@
             // 
             // splitContainerFactors.Panel1
             // 
-            this.splitContainerFactors.Panel1.Controls.Add(this.dataGridFactors);
+            this.splitContainerFactors.Panel1.Controls.Add(this.dataGridViewFactors);
             // 
             // splitContainerFactors.Panel2
             // 
@@ -106,19 +107,6 @@
             this.panelTabDescription.Size = new System.Drawing.Size(643, 97);
             this.panelTabDescription.TabIndex = 8;
             // 
-            // textBoxTabTitle
-            // 
-            this.textBoxTabTitle.BackColor = System.Drawing.Color.White;
-            this.textBoxTabTitle.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBoxTabTitle.Dock = System.Windows.Forms.DockStyle.Top;
-            this.textBoxTabTitle.Font = new System.Drawing.Font("Arial", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxTabTitle.Location = new System.Drawing.Point(0, 0);
-            this.textBoxTabTitle.Name = "textBoxTabTitle";
-            this.textBoxTabTitle.ReadOnly = true;
-            this.textBoxTabTitle.Size = new System.Drawing.Size(643, 22);
-            this.textBoxTabTitle.TabIndex = 7;
-            this.textBoxTabTitle.Text = "Tab title";
-            // 
             // textBoxTabDescription
             // 
             this.textBoxTabDescription.BackColor = System.Drawing.SystemColors.Window;
@@ -133,6 +121,19 @@
             this.textBoxTabDescription.TabIndex = 6;
             this.textBoxTabDescription.Text = "Description";
             // 
+            // textBoxTabTitle
+            // 
+            this.textBoxTabTitle.BackColor = System.Drawing.Color.White;
+            this.textBoxTabTitle.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBoxTabTitle.Dock = System.Windows.Forms.DockStyle.Top;
+            this.textBoxTabTitle.Font = new System.Drawing.Font("Arial", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxTabTitle.Location = new System.Drawing.Point(0, 0);
+            this.textBoxTabTitle.Name = "textBoxTabTitle";
+            this.textBoxTabTitle.ReadOnly = true;
+            this.textBoxTabTitle.Size = new System.Drawing.Size(643, 22);
+            this.textBoxTabTitle.TabIndex = 7;
+            this.textBoxTabTitle.Text = "Tab title";
+            // 
             // FactorsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -144,7 +145,7 @@
             this.Padding = new System.Windows.Forms.Padding(10);
             this.Size = new System.Drawing.Size(663, 427);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFactorLevels)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridFactors)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFactors)).EndInit();
             this.splitContainerFactors.Panel1.ResumeLayout(false);
             this.splitContainerFactors.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerFactors)).EndInit();
@@ -159,7 +160,7 @@
         #endregion
 
         private System.Windows.Forms.DataGridView dataGridViewFactorLevels;
-        private System.Windows.Forms.DataGridView dataGridFactors;
+        private System.Windows.Forms.DataGridView dataGridViewFactors;
         private System.Windows.Forms.SplitContainer splitContainerFactors;
         private System.Windows.Forms.Panel panelTabDescription;
         private System.Windows.Forms.TextBox textBoxTabDescription;
