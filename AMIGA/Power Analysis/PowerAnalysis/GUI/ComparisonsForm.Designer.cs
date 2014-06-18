@@ -23,13 +23,12 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ComparisonsForm));
             this.dataGridViewFactorLevels = new System.Windows.Forms.DataGridView();
             this.dataGridViewComparisons = new System.Windows.Forms.DataGridView();
             this.splitContainerComparisons = new System.Windows.Forms.SplitContainer();
-            this.textBoxTabDescription = new System.Windows.Forms.TextBox();
             this.panelTabDescription = new System.Windows.Forms.Panel();
             this.textBoxTabTitle = new System.Windows.Forms.TextBox();
+            this.textBoxTabDescription = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFactorLevels)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewComparisons)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerComparisons)).BeginInit();
@@ -97,20 +96,6 @@
             this.splitContainerComparisons.SplitterDistance = 260;
             this.splitContainerComparisons.TabIndex = 4;
             // 
-            // textBoxTabDescription
-            // 
-            this.textBoxTabDescription.BackColor = System.Drawing.SystemColors.Window;
-            this.textBoxTabDescription.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBoxTabDescription.Dock = System.Windows.Forms.DockStyle.Top;
-            this.textBoxTabDescription.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxTabDescription.Location = new System.Drawing.Point(0, 22);
-            this.textBoxTabDescription.Multiline = true;
-            this.textBoxTabDescription.Name = "textBoxTabDescription";
-            this.textBoxTabDescription.ReadOnly = true;
-            this.textBoxTabDescription.Size = new System.Drawing.Size(782, 75);
-            this.textBoxTabDescription.TabIndex = 6;
-            this.textBoxTabDescription.Text = resources.GetString("textBoxTabDescription.Text");
-            // 
             // panelTabDescription
             // 
             this.panelTabDescription.AutoSize = true;
@@ -134,6 +119,20 @@
             this.textBoxTabTitle.Size = new System.Drawing.Size(782, 22);
             this.textBoxTabTitle.TabIndex = 7;
             this.textBoxTabTitle.Text = "Tab title";
+            // 
+            // textBoxTabDescription
+            // 
+            this.textBoxTabDescription.BackColor = System.Drawing.SystemColors.Window;
+            this.textBoxTabDescription.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBoxTabDescription.Dock = System.Windows.Forms.DockStyle.Top;
+            this.textBoxTabDescription.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxTabDescription.Location = new System.Drawing.Point(0, 22);
+            this.textBoxTabDescription.Multiline = true;
+            this.textBoxTabDescription.Name = "textBoxTabDescription";
+            this.textBoxTabDescription.ReadOnly = true;
+            this.textBoxTabDescription.Size = new System.Drawing.Size(782, 75);
+            this.textBoxTabDescription.TabIndex = 6;
+            this.textBoxTabDescription.Text = "Description";
             // 
             // ComparisonsForm
             // 
@@ -163,8 +162,8 @@
         private System.Windows.Forms.DataGridView dataGridViewFactorLevels;
         private System.Windows.Forms.DataGridView dataGridViewComparisons;
         private System.Windows.Forms.SplitContainer splitContainerComparisons;
-        private System.Windows.Forms.TextBox textBoxTabDescription;
         private System.Windows.Forms.Panel panelTabDescription;
+        private System.Windows.Forms.TextBox textBoxTabDescription;
         private System.Windows.Forms.TextBox textBoxTabTitle;
     }
 }

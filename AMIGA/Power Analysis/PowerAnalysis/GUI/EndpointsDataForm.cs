@@ -24,7 +24,7 @@ namespace AmigaPowerAnalysis.GUI {
         public EndpointsDataForm(Project project) {
             InitializeComponent();
             Name = "Endpoints data";
-            Description = "For each endpoint, indicate the distribution type.\r\nFor binomial data specify the binomial total. For Taylor's law enter the power.\r\nSpecify expected values of mean and coefficient of variation (CV) for the comparator variety.\r\nIndicate if more there are observations in time series per plot (repeated measures).\r\nIndicate if more zeroes are expected than corresponds to the chosen distribution (Excess zeroes).";
+            Description = "For each endpoint, indicate the distribution type. For binomial data specify the binomial total. For Taylor's law enter the power. Specify expected values of mean and coefficient of variation (CV) for the comparator variety. Indicate if more there are observations in time series per plot (repeated measures). Indicate if more zeroes are expected than corresponds to the chosen distribution (Excess zeroes).";
             this.textBoxTabTitle.Text = Name;
             this.textBoxTabDescription.Text = Description;
             _project = project;
@@ -42,6 +42,8 @@ namespace AmigaPowerAnalysis.GUI {
         public bool IsVisible() {
             return true;
         }
+
+        public event EventHandler TabVisibilitiesChanged;
 
         private void createDataGridEndpoints() {
             var column = new DataGridViewTextBoxColumn();

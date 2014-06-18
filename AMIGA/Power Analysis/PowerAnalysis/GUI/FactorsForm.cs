@@ -30,7 +30,7 @@ namespace AmigaPowerAnalysis.GUI {
             InitializeComponent();
             _project = project;
             Name = "Factors";
-            Description = "The main factor in the experiment is variety, with levels 1 (labelled GMO) and 2 (labelled Comparator). If the design contains more varieies enter additional rows.\r\nIf numbers of plots per variety are not equal, change the (relative) frequencies.\r\nIf the design contains more factors (e.g. spraying treatments), add additional rows in the factor table, and specify the levels in the Levels table.";
+            Description = "The main factor in the experiment is variety, with levels 1 (labelled GMO) and 2 (labelled Comparator). If the design contains more varieies enter additional rows. If numbers of plots per variety are not equal, change the (relative) frequencies. If the design contains more factors (e.g. spraying treatments), add additional rows in the factor table, and specify the levels in the Levels table.";
             this.textBoxTabTitle.Text = Name;
             this.textBoxTabDescription.Text = Description;
             createDataGridFactors();
@@ -48,6 +48,8 @@ namespace AmigaPowerAnalysis.GUI {
         public bool IsVisible() {
             return true;
         }
+
+        public event EventHandler TabVisibilitiesChanged;
 
         private void createDataGridFactors() {
             var factorsBindingSouce = new BindingSource(_project.Factors, null);

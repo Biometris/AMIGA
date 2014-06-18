@@ -20,7 +20,7 @@ namespace AmigaPowerAnalysis.GUI {
             InitializeComponent();
             _project = project;
             Name = "Interactions";
-            Description = "In the previous screen it was indicated that interactions are not expected for all endpoints.\r\nIndicate per endpoint which factors are expected to have an interaction with the GMO-CMP Variety comparison.";
+            Description = "In the previous screen it was indicated that interactions are not expected for all endpoints. Indicate per endpoint which factors are expected to have an interaction with the GMO-CMP Variety comparison.";
             this.textBoxTabTitle.Text = Name;
             this.textBoxTabDescription.Text = Description;
             createDataGridInteractions();
@@ -40,8 +40,14 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         public bool IsVisible() {
-            return true;
+            if (_project.DesignSettings.UseInteractions && !_project.DesignSettings.UseDefaultInteractions) {
+                return true;
+            } else {
+                return false;
+            }
         }
+
+        public event EventHandler TabVisibilitiesChanged;
 
         private void createDataGridInteractions() {
             dataGridInteractions.DataSource = _interactionsDataTable;

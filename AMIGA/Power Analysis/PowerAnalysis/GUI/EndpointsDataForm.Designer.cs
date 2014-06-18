@@ -23,11 +23,10 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EndpointsDataForm));
             this.dataGridViewEndpoints = new System.Windows.Forms.DataGridView();
             this.panelTabDescription = new System.Windows.Forms.Panel();
-            this.textBoxTabDescription = new System.Windows.Forms.TextBox();
             this.textBoxTabTitle = new System.Windows.Forms.TextBox();
+            this.textBoxTabDescription = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewEndpoints)).BeginInit();
             this.panelTabDescription.SuspendLayout();
             this.SuspendLayout();
@@ -61,20 +60,6 @@
             this.panelTabDescription.Size = new System.Drawing.Size(854, 97);
             this.panelTabDescription.TabIndex = 8;
             // 
-            // textBoxTabDescription
-            // 
-            this.textBoxTabDescription.BackColor = System.Drawing.SystemColors.Window;
-            this.textBoxTabDescription.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBoxTabDescription.Dock = System.Windows.Forms.DockStyle.Top;
-            this.textBoxTabDescription.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxTabDescription.Location = new System.Drawing.Point(0, 22);
-            this.textBoxTabDescription.Multiline = true;
-            this.textBoxTabDescription.Name = "textBoxTabDescription";
-            this.textBoxTabDescription.ReadOnly = true;
-            this.textBoxTabDescription.Size = new System.Drawing.Size(854, 75);
-            this.textBoxTabDescription.TabIndex = 6;
-            this.textBoxTabDescription.Text = resources.GetString("textBoxTabDescription.Text");
-            // 
             // textBoxTabTitle
             // 
             this.textBoxTabTitle.BackColor = System.Drawing.Color.White;
@@ -87,6 +72,20 @@
             this.textBoxTabTitle.Size = new System.Drawing.Size(854, 22);
             this.textBoxTabTitle.TabIndex = 7;
             this.textBoxTabTitle.Text = "Tab title";
+            // 
+            // textBoxTabDescription
+            // 
+            this.textBoxTabDescription.BackColor = System.Drawing.SystemColors.Window;
+            this.textBoxTabDescription.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBoxTabDescription.Dock = System.Windows.Forms.DockStyle.Top;
+            this.textBoxTabDescription.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxTabDescription.Location = new System.Drawing.Point(0, 22);
+            this.textBoxTabDescription.Multiline = true;
+            this.textBoxTabDescription.Name = "textBoxTabDescription";
+            this.textBoxTabDescription.ReadOnly = true;
+            this.textBoxTabDescription.Size = new System.Drawing.Size(854, 75);
+            this.textBoxTabDescription.TabIndex = 6;
+            this.textBoxTabDescription.Text = "Description";
             // 
             // EndpointsDataForm
             // 

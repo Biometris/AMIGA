@@ -19,7 +19,7 @@ namespace AmigaPowerAnalysis.GUI {
         public PowerAnalysisSettingsForm(Project project) {
             InitializeComponent();
             Name = "Simulation settings";
-            Description = "Specify how to perform the power analysis and which methods of analysis are to be compared\r\nIt is advised first to use the Approximate method (Lyles) because it is much faster.";
+            Description = "Specify how to perform the power analysis and which methods of analysis are to be compared. It is advised first to use the Approximate method (Lyles) because it is much faster.";
             this.textBoxTabTitle.Text = Name;
             this.textBoxTabDescription.Text = Description;
             _project = project;
@@ -44,6 +44,8 @@ namespace AmigaPowerAnalysis.GUI {
         public bool IsVisible() {
             return true;
         }
+
+        public event EventHandler TabVisibilitiesChanged;
 
         private void textBoxSignificanceLevel_Validating(object sender, CancelEventArgs e) {
             var textBox = sender as TextBox;

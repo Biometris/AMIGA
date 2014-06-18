@@ -117,7 +117,4 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="textBoxTabDescription.Text" xml:space="preserve">
-    <value>For each endpoint select the distribution assumed to generate the data. For binomial data specify the binomial total. For Taylor's power law model specify the power. Specify the comparator mean and coefficient of variation (CV) (expected value) for each endpoint. Indicate if the data will be sampled at repeated samplings in the same plots (repeated measures). Indicate if  you expect more zeroes than  would follow from the assumed distribution (excess zeroes).</value>
-  </data>
 </root>

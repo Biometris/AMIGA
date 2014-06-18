@@ -14,5 +14,7 @@ namespace AmigaPowerAnalysis.GUI {
         void Activate();
 
         bool IsVisible();
+
+        event EventHandler TabVisibilitiesChanged;
     }
 }

@@ -88,6 +88,10 @@ namespace AmigaPowerAnalysis.GUI {
             }
         }
 
+        private void onVisibilitySettingsChanged(object sender, EventArgs e) {
+            updateTabs();
+        }
+
         #endregion
 
         #region Actions
@@ -142,6 +146,8 @@ namespace AmigaPowerAnalysis.GUI {
                 _selectionForms.Add(new PowerAnalysisSettingsForm(_project));
                 _selectionForms.Add(new AnalysisResultsForm(_project));
 
+                _selectionForms.ForEach(s => s.TabVisibilitiesChanged += onVisibilitySettingsChanged);
+
                 updateTabs();
             } catch (Exception ex) {
                 MessageBox.Show(
@@ -165,13 +171,29 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void updateTabs() {
+            var currentTabName = this.tabControl.SelectedTab != null ? this.tabControl.SelectedTab.Name : null;
+            //this.tabControl.TabPages.Clear();
             var visibleForms = _selectionForms.Where(f => f.IsVisible()).ToList();
-            foreach (var selectionForm in visibleForms) {
-                var form = (UserControl)selectionForm;
-                form.Dock = System.Windows.Forms.DockStyle.Fill;
-                var tab = new TabPage(selectionForm.Name);
-                tab.Controls.Add(form);
-                this.tabControl.TabPages.Add(tab);
+            var visibleTabCount = 0;
+            foreach (var selectionForm in _selectionForms) {
+                var currentTab = this.tabControl.TabPages.Cast<TabPage>().FirstOrDefault(tp => tp.Name == selectionForm.Name);
+                if (currentTab == null && selectionForm.IsVisible()) {
+                    var form = (UserControl)selectionForm;
+                    form.Dock = System.Windows.Forms.DockStyle.Fill;
+                    var tab = new TabPage(selectionForm.Name);
+                    tab.Name = selectionForm.Name;
+                    tab.Controls.Add(form);
+                    this.tabControl.TabPages.Insert(visibleTabCount, tab);
+                } else if (currentTab != null && !selectionForm.IsVisible()) {
+                    this.tabControl.TabPages.Remove(currentTab);
+                }
+                if (selectionForm.IsVisible()) {
+                    ++visibleTabCount;
+                }
+            }
+            var selectedTab = this.tabControl.TabPages.Cast<TabPage>().FirstOrDefault(tp => tp.Name == currentTabName);
+            if (selectedTab != null) {
+                this.tabControl.SelectTab(selectedTab);
             }
         }
 
