@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?define ProductVersion = "0.0.1"?>
+<?define ProductUpgradeCode = "{DE4FBCF5-135D-4A27-9D4B-8246CEDF13D2}"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Product Id="*" Name="AmigaPowerAnalysis" Manufacturer="Wageningen UR" Language="1033"
+           Version="$(var.ProductVersion)" UpgradeCode="$(var.ProductUpgradeCode)">
+    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+    <MediaTemplate EmbedCab="yes" />
+
+    <Icon Id="ProductIcon" SourceFile="Resources\Logo.ico" />
+    <Property Id="ARPPRODUCTICON" Value="ProductIcon"/>
+    <Property Id="ARPNOREPAIR" Value="1"/>
+    <Property Id="MSIFASTINSTALL" Value="1"/>
+
+    <Upgrade Id="$(var.ProductUpgradeCode)">
+      <UpgradeVersion Minimum="$(var.ProductVersion)" OnlyDetect="yes" Property="NEWERVERSIONDETECTED"/>
+      <UpgradeVersion Minimum="0.0.0" Maximum="$(var.ProductVersion)" IncludeMinimum="yes" IncludeMaximum="no" Property="OLDERVERSIONBEINGUPGRADED"/>
+    </Upgrade>
+    <Condition Message="A newer version of this software is already installed.">NOT NEWERVERSIONDETECTED</Condition>
+
+    <Feature Id="ProductFeature" Title="AmigaPowerAnalysis" Level="1" Display="expand" ConfigurableDirectory='INSTALLFOLDER'>
+      <ComponentGroupRef Id="ApplicationComponentGroup" />
+      <ComponentRef Id="ProgramMenuSubFolderComponent"/>
+      <ComponentRef Id="DesktopShortcutComponent"/>
+    </Feature>
+
+    <WixVariable Id="WixUIBannerBmp" Value="Resources\Banner.bmp" />
+    <WixVariable Id="WixUIDialogBmp" Value="Resources\Dialog.bmp" />
+    <UI>
+      <UIRef Id="WixUI_Custom" />
+      <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
+    </UI>
+  </Product>
+
+  <Fragment>
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <!-- Root of the application folder -->
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="INSTALLFOLDER" Name="AmigaPowerAnalysis"/>
+      </Directory>
+      <!-- Root of the programs menu folder -->
+      <Directory Id="ProgramMenuFolder">
+        <Directory Id="ProgramMenuSubFolder" Name="AmigaPowerAnalysis"/>
+      </Directory>
+      <!-- Desktop folder -->
+      <Directory Id="DesktopFolder" />
+    </Directory>
+  </Fragment>
+
+  <Fragment>
+    <DirectoryRef Id="DesktopFolder">
+      <Component Id="DesktopShortcutComponent" Guid="{562559F9-87C1-4618-9204-1F39583EE947}">
+        <Shortcut Id="DesktopShortcut" Name="AmigaPowerAnalysis" Description="AmigaPowerAnalysis" Target="[INSTALLFOLDER]AmigaPowerAnalysis.exe" WorkingDirectory="INSTALLFOLDER">
+          <Icon Id="DesktopIcon" SourceFile="Resources\Logo.ico" />
+        </Shortcut>
+        <RegistryValue Root="HKCU" Key="Software\Wageningen UR\AmigaPowerAnalysis" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
+        <RemoveFolder Id="DesktopFolder" On="uninstall"/>
+      </Component>
+    </DirectoryRef>
+  </Fragment>
+
+  <Fragment>
+    <DirectoryRef Id="ProgramMenuSubFolder">
+      <Component Id="ProgramMenuSubFolderComponent" Guid="{FF325E2E-9503-4C2C-9BE0-AD6A13A6DCD6}">
+        <Shortcut Id="ProgramMenuShortcut" Name="AmigaPowerAnalysis" Description="AmigaPowerAnalysis" Target="[INSTALLFOLDER]AmigaPowerAnalysis.exe" WorkingDirectory="INSTALLFOLDER" />
+        <RegistryValue Root="HKCU" Key="Software\Wageningen UR\AmigaPowerAnalysis" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
+        <RemoveFolder Id="ApplicationProgramsFolder" On="uninstall"/>
+      </Component>
+    </DirectoryRef>
+  </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="ApplicationComponentGroup" Directory="INSTALLFOLDER">
+      <Component Guid="{B7149209-2DD9-421D-998F-531412A53B6C}">
+        <File Source="..\PowerAnalysis\bin\Release\AmigaPowerAnalysis.exe" KeyPath="yes" />
+      </Component>
+      <Component Guid="{5E1C1A2C-F3F5-4D69-B14F-F0C5F93E8683}">
+        <File Source="..\PowerAnalysis\bin\Release\OxyPlot.dll" KeyPath="yes" />
+      </Component>
+      <Component Guid="{83ECBA92-89F6-4054-9F00-9948D9FF2303}">
+        <File Source="..\PowerAnalysis\bin\Release\OxyPlot.WindowsForms.dll" KeyPath="yes" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+</Wix>

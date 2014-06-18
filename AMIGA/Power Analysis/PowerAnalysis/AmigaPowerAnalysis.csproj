@@ -44,6 +44,9 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <OutputPath>bin\Release\</OutputPath>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Resources\amiga_icon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="OxyPlot">
       <HintPath>..\packages\OxyPlot.WindowsForms.2014.1.312.1\lib\NET45\OxyPlot.dll</HintPath>
