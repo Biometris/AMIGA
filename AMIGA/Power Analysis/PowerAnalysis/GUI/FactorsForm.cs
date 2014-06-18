@@ -152,6 +152,35 @@ namespace AmigaPowerAnalysis.GUI {
             }
         }
 
+        private void dataGridViewFactorLevels_CellValidating(object sender, DataGridViewCellValidatingEventArgs e) {
+            if (dataGridViewFactorLevels.Columns[e.ColumnIndex].Name == "Label") {
+                var newValue = e.FormattedValue.ToString();
+                if (string.IsNullOrEmpty(newValue)) {
+                    dataGridViewFactorLevels.Rows[e.RowIndex].ErrorText = "Factor label cannot not be empty.";
+                    showError("Invalid data", dataGridViewFactorLevels.Rows[e.RowIndex].ErrorText);
+                    e.Cancel = true;
+                } else {
+                    var newFactorLabelNames = _project.Factors.SelectMany(f => f.FactorLevels).Select(fl => fl.Label).ToList();
+                    newFactorLabelNames[e.RowIndex] = newValue;
+                    if (newFactorLabelNames.Distinct().Count() < newFactorLabelNames.Count) {
+                        dataGridViewFactorLevels.Rows[e.RowIndex].ErrorText = "Duplicate factor label names are not allowed.";
+                        showError("Invalid data", dataGridViewFactorLevels.Rows[e.RowIndex].ErrorText);
+                        e.Cancel = true;
+                    }
+                }
+            }
+            if (dataGridViewFactorLevels.Columns[e.ColumnIndex].Name == "Level") {
+                var newValue = Convert.ToDouble(e.FormattedValue);
+                var newFactorLevels = _project.Factors.SelectMany(f => f.FactorLevels).Select(fl => fl.Level).ToList();
+                newFactorLevels[e.RowIndex] = newValue;
+                if (newFactorLevels.Distinct().Count() < newFactorLevels.Count) {
+                    dataGridViewFactorLevels.Rows[e.RowIndex].ErrorText = "Duplicate factor levels are not allowed.";
+                    showError("Invalid data", dataGridViewFactorLevels.Rows[e.RowIndex].ErrorText);
+                    e.Cancel = true;
+                }
+            }
+        }
+
         private void dataGridFactors_DataError(object sender, DataGridViewDataErrorEventArgs e) {
             showError("Invalid data", e.Exception.Message);
         }
