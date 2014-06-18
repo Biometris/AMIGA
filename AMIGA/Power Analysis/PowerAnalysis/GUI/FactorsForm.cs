@@ -213,6 +213,13 @@ namespace AmigaPowerAnalysis.GUI {
             }
         }
 
+        private void dataGridViewFactors_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e) {
+            if (e.Row.Index == 0) {
+                e.Cancel = true;
+                showError("Invalid operation", "Cannot delete variety.");
+            }
+        }
+
         private void showError(string title, string message) {
             MessageBox.Show(
                     message,
