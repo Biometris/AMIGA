@@ -74,7 +74,7 @@ namespace AmigaPowerAnalysis.GUI {
                 startInfo.UseShellExecute = false;
                 startInfo.FileName = @"C:\Program Files\Gen16ed\Bin\GenBatch.exe";
                 startInfo.WindowStyle = ProcessWindowStyle.Normal;
-                startInfo.Arguments = string.Format("in=\"{0}\\AmigaPowerAnalysis.gen\" in2=\"{1}\" out=\"{2}\" out2=\"{3}\"", applicationDirectory, comparisonInputFilename, logFilename, comparisonOutputFilename);
+                startInfo.Arguments = string.Format("in=\"{0}\\Resources\\AmigaPowerAnalysis.gen\" in2=\"{1}\" out=\"{2}\" out2=\"{3}\"", applicationDirectory, comparisonInputFilename, logFilename, comparisonOutputFilename);
                 try {
                     using (Process exeProcess = Process.Start(startInfo)) {
                         exeProcess.WaitForExit();

@@ -1,0 +1,168 @@
+
+enquire   ch=2 ; filetype=input  ; open=inopen  ; name=infile
+enquire   ch=2 ; filetype=output ; open=outopen ; name=outfile
+
+SET [WORKINGDIRECTORY='D:/Data/AMIGA/AmigaTool/Power Analysis/PowerAnalysis/Resources']
+
+if inopen.eq.0
+    text      project ; 'New2-0'
+
+    text      dir ; 'D:/Diverse Opdrachten/AMIGA/Power Analysis/Projects/'
+    calculate pos = getposition(project ; '-')
+    concatena [subdir] project ; width=getposition(project ; '-') - 1
+    txconstru [infile] dir, subdir, '/', project, '.csv'
+    open      infile ; channel=2 ; filetype=input
+    sfilename [inputname=infile] directory=dir ; surname=sur
+    txconstru [outfile] dir, sur, '-Output.csv'
+    text      profile ; 'Lyles.pro'
+    print     infile
+    print outfile
+  else
+    close     ch=2 ; filetype=output
+    text      profile ; 'Lyles.pro'
+endif
+
+scalar    ch
+open      profile ; channel=ch ; filetype=input
+input     [print=*] ch
+close     channel=ch ; filetype=input
+
+" Completely randomized than one loop is sufficient "
+
+" Simulation settings "
+
+scalar    ngridLOC ; 3
+\variate   nBlocks ; !(2,4,6,8,10,12,14,16)
+\variate   nBlocks ; !(2,4,8,16,32,64)  " For fitting "
+scalar    alfa ; 0.05
+scalar    seed ; 342894
+
+scalar    powerdist ; 1.5
+text      design ; 'splitplot'
+text      design ; 'randomized'
+text      design ; 'block'
+
+text      models ; !t(LN,NB)
+text      models ; !t(LN,SQ,OP)
+text      models ; !t(LN,SQ,OP,NB)
+text      models ; !t(LN,SQ,OP)
+text      models ; !t(LN,SQ,OP)
+
+" Some extra options "
+calculate init = urand(seed ; 1)
+
+" Import Data from Simulation tool "
+text      [nvalues=1] dummy, distribution, method, IsLogNormal, \
+          IsLogNormal, IsSquareRoot, IsOPoisson, IsNegBin
+scalar    lowerLOC, upperLOC, cvComparator, cvBlock, powerdist, alfa, \
+          ngridLOC, seed, ndatasets
+variate   nBlocks
+scalar    nitems ; 0
+for read=lowerLOC, upperLOC, cvComparator, cvBlock, distribution, \
+      powerdist, alfa, ngridLOC, nBlocks, method, seed, ndatasets, \
+      IsLogNormal, IsSquareRoot, IsOPoisson, IsNegBin
+  read    [print=* ; channel=2 ; end=*] dummy
+  getattrib [attribute=stype] read ; save=att
+  if att[].eqs.'variate'
+      print 'variate'
+      read    [print=# ; channel=2 ; setn=yes] read
+    else
+      read    [print=* ; channel=2] read
+  endif
+  print read
+  calculate nitems = nitems + 2
+endfor
+text      models, ismodels ; !t(LN,SQ,OP,NB)
+equate    !t(#IsLogNormal, #IsSquareRoot, #IsOPoisson, #IsNegBin) ; ismodels
+subset    [ismodels.in.'True'] models
+print     models, ismodels
+close     channel=2 ; filetype=input
+fileread  [print=* ; name=infile ; skip=nitems ; imethod=read ; \
+          separator=',' ; maxcat=0 ; isave=isave]
+sreplace  ['OverdispersedPoisson' ; 'opoisson'] distribution
+sreplace  ['PowerLaw' ; 'power'] distribution
+
+
+" Create design matrix from input file "
+L1CREATE  [isave] MUCOMPARATOR=meanComparator ; MEAN=zz ; COMPARISON=comparison ; \
+          DUMMY=dum ; MODIFIERS=Modifiers
+
+" create grid for looping loop over loc/nblocks values "
+" for a randomized design the non-centrality parameter is proportional "
+calculate loglowerloc, logupperloc = log(lowerLOC, upperLOC)
+fgrid     [min=loglowerloc ; max=logupperloc ; ngrid=ngridLOC] gridratio
+calculate gridratio[] = exp(gridratio[])
+if flagRan = (design.eqs.'randomized') .or. (cvBlock.eq.0)
+    variate   ratio ; gridratio[]
+    variate   nreps ; 2 + 0*ratio
+  else
+    fgrid     [values=gridratio[], nBlocks] grid
+    variate   ratio, nreps ; grid[] ; deci=*,0
+endif
+
+calculate nloop = nvalues(ratio)
+decimals  ratio
+
+" main looping "
+for [ntimes=nloop ; index=ii]
+  scalar    iiratio, iireps ; (ratio, nreps)$[ii]
+  PRINT     [IPRINT=* ; SQUASH=yes] iiratio, iireps ; FIELD=10 ; DECI=3,0
+  l2lyles   [dist=#distribution ; power=powerdist ; design=#design ; sign=alfa ; \
+            mucomp=meanComparator ; cvcomp=cvComparator ; cvblock=cvBlock ; \
+            mean=Mean ; comparison=comparison ; dummy=dum ; \
+            modifiers=Modifiers ; loclower=lowerLOC ; locupper=upperLOC ; \
+            analysis=#models] iiratio ; iireps ; qnc[ii] ; qpow[ii] ; qdf[ii]
+endfor
+variate   df ; !(#qdf) ; deci=0
+vequate   qnc,qpow ; nc,pow
+
+" Expand for randomized "
+print flagRan
+if flagRan
+  scalar    nplots ; nvalues(Mean)
+  calculate npars = 2*nplots - mean(df)
+  fgrid     [values=ratio, nBlocks] grid
+  variate   ratio, nreps ; grid[]
+  groups    ratio, nreps ; fRatio, fReps
+  tabulate  [class=fRatio, fReps] nplots*fReps - npars ; mean=tdf
+  variate   df ; tdf ; decimals=0
+
+  pointer   [nvalues=nvalues(nc)] tnc, ttnc, pow
+  table     [class=fRatio] tnc[] ; nc[]
+  table     [class=fRatio, fReps] tNreps, ttnc[]
+  tabulate  1*fReps ; mean=tNreps
+  calculate ttnc[] = tnc[] * tNreps/2
+  variate   nc[] ; ttnc[]
+  calculate critvalChi = edchi(1-alfa + 0*df ; 1)
+  calculate critvalF = edf(1-alfa + 0*df ; 1 ; df)
+  for [index=ii] qq=nc[] ; pp=pow[] ; type=2,2,1,2,1
+    if (type.eq.1)
+        variate   pp ; CUCHI(critvalChi ; 1 ; qq)
+      else
+        variate   pp ; CUF(critvalF ; 1 ; df ; qq)
+    endif
+  endfor
+endif
+print   nc[1...5,8,9,10] ; fi=10 ; de=3
+print   pow[1...5,8,9,10] ; fi=10 ; de=3
+
+" Export "
+text      names ; !t(\
+          Ratio, \
+          LogRatio, \
+          NumberReplicates, \
+          PowerDifferenceLogNormal, \
+          PowerDifferenceSquaredRoot, \
+          PowerDifferenceOverdispersedPoisson, \
+          PowerDifferenceNegativeBinomial, \
+          PowerEquivalenceLogNormal, \
+          PowerEquivalenceSquaredRoot, \
+          PowerEquivalenceOverdispersedPoison, \
+          PowerEquivalenceNegativeBinomial)
+
+calculate logratio = log(ratio)
+export    [outfile=outfile ; method=overwrite] \
+          ratio, logratio, nreps, pow[1,2,4,5, 6,7,9,10] ; columns=#names
+
+
+stop

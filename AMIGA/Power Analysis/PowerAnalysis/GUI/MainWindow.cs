@@ -79,6 +79,7 @@ namespace AmigaPowerAnalysis.GUI {
             }
             var runSimulationDialog = new RunPowerAnalysisDialog(_project, _currentProjectFilename);
             runSimulationDialog.ShowDialog();
+            this.updateTabs();
         }
 
         private void tabControl_SelectedIndexChanged(object sender, EventArgs e) {
