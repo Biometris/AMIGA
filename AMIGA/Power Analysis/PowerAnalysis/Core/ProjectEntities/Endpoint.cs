@@ -18,6 +18,7 @@ namespace AmigaPowerAnalysis.Core {
                 Endpoint = this,
                 IsDefault = true,
             });
+            NonInteractionFactorLevelCombinations = new List<ModifierFactorLevelCombination>();
         }
 
         public Endpoint(string name, EndpointType endpointType) : this() {
@@ -208,11 +209,17 @@ namespace AmigaPowerAnalysis.Core {
         /// Updates the list of modifier factor level combinations.
         /// </summary>
         public void UpdateNonInteractionFactorLevelCombinations() {
-            NonInteractionFactorLevelCombinations = FactorLevelCombinationsCreator
-                .GenerateInteractionCombinations(NonInteractionFactors.ToList())
-                .Select(flc => new ModifierFactorLevelCombination() {
-                    FactorLevelCombination = flc,
-                }).ToList();
+            var newCombinations = FactorLevelCombinationsCreator.GenerateInteractionCombinations(NonInteractionFactors.ToList());
+            var newCombinationNames = newCombinations.Select(c => c.Label);
+            NonInteractionFactorLevelCombinations.RemoveAll(c => newCombinationNames.Contains(c.FactorLevelCombinationName));
+            foreach (var newCombination in newCombinations) {
+                if (!NonInteractionFactorLevelCombinations.Any(c => c.FactorLevelCombinationName == newCombination.Label)) {
+                    NonInteractionFactorLevelCombinations.Add(new ModifierFactorLevelCombination() {
+                        FactorLevelCombination = newCombination,
+                    });
+                }
+            }
+            Comparisons.ForEach(c => c.UpdateComparisonFactorLevelCombinations());
         }
     }
 }

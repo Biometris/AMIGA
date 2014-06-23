@@ -69,12 +69,15 @@ namespace AmigaPowerAnalysis.GUI {
                 var comparisonInputFilename = Path.Combine(filesPath, string.Format("{0}-{1}.csv", projectName, i));
                 var comparisonOutputFilename = Path.Combine(filesPath, string.Format("{0}-{1}-Output.csv", projectName, i));
                 var logFilename = Path.Combine(filesPath, string.Format("{0}-{1}.log", projectName, i));
+                var scriptsDirectory = string.Format("{0}\\Resources", applicationDirectory);
+                var scriptFilename = string.Format("{0}\\AmigaPowerAnalysis.gen", scriptsDirectory);
+                var lylesScriptFilename = string.Format("{0}\\Lyles.pro", scriptsDirectory);
                 var startInfo = new ProcessStartInfo();
                 startInfo.CreateNoWindow = false;
                 startInfo.UseShellExecute = false;
                 startInfo.FileName = @"C:\Program Files\Gen16ed\Bin\GenBatch.exe";
                 startInfo.WindowStyle = ProcessWindowStyle.Normal;
-                startInfo.Arguments = string.Format("in=\"{0}\\Resources\\AmigaPowerAnalysis.gen\" in2=\"{1}\" out=\"{2}\" out2=\"{3}\"", applicationDirectory, comparisonInputFilename, logFilename, comparisonOutputFilename);
+                startInfo.Arguments = string.Format("in=\"{0}\" in2=\"{1}\" in3=\"{2}\" out=\"{3}\" out2=\"{4}\"", scriptFilename, lylesScriptFilename, comparisonInputFilename, logFilename, comparisonOutputFilename);
                 try {
                     using (Process exeProcess = Process.Start(startInfo)) {
                         exeProcess.WaitForExit();

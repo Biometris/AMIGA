@@ -1,4 +1,3 @@
-
 enquire   ch=2 ; filetype=input  ; open=inopen  ; name=infile
 enquire   ch=2 ; filetype=output ; open=outopen ; name=outfile
 
@@ -6,7 +5,6 @@ SET [WORKINGDIRECTORY='D:/Data/AMIGA/AmigaTool/Power Analysis/PowerAnalysis/Reso
 
 if inopen.eq.0
     text      project ; 'test-0'
-
     text      dir ; 'D:/Data/AMIGA/AmigaTool/TestData/'
     calculate pos = getposition(project ; '-')
     concatena [subdir] project ; width=getposition(project ; '-') - 1

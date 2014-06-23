@@ -108,6 +108,24 @@ namespace AmigaPowerAnalysis.Core {
         }
 
         /// <summary>
+        /// Adds a factor to the list of factors.
+        /// </summary>
+        /// <param name="endpoint"></param>
+        public void AddFactor(Factor factor) {
+            Factors.Add(factor);
+            UpdateEndpointFactors();
+        }
+
+        /// <summary>
+        /// Removes a factor from the list of factors.
+        /// </summary>
+        /// <param name="endpoint"></param>
+        public void RemoveFactor(Factor factor) {
+            Factors.Remove(factor);
+            UpdateEndpointFactors();
+        }
+
+        /// <summary>
         /// Updates the factors of the endpoints.
         /// </summary>
         public void UpdateEndpointFactors() {
@@ -126,6 +144,15 @@ namespace AmigaPowerAnalysis.Core {
                         endpoint.UpdateNonInteractionFactorLevelCombinations();
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// Updates the factor level combinations of the comparisons of this project.
+        /// </summary>
+        public void UpdateEndpointFactorLevels() {
+            foreach (var endpoint in Endpoints) {
+                endpoint.UpdateNonInteractionFactorLevelCombinations();
             }
         }
 

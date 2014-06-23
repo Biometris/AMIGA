@@ -120,5 +120,22 @@ namespace AmigaPowerAnalysis.Core {
                 }).ToList();
             }
         }
+
+        /// <summary>
+        /// Updates the list of comparison factor level combinations.
+        /// </summary>
+        public void UpdateComparisonFactorLevelCombinations() {
+            var newCombinations = FactorLevelCombinationsCreator.GenerateInteractionCombinations(InteractionFactors);
+            var newCombinationNames = newCombinations.Select(c => c.Label);
+            ComparisonFactorLevelCombinations.RemoveAll(c => newCombinationNames.Contains(c.FactorLevelCombinationName));
+            foreach (var newCombination in newCombinations) {
+                if (!ComparisonFactorLevelCombinations.Any(c => c.FactorLevelCombinationName == newCombination.Label)) {
+                    ComparisonFactorLevelCombinations.Add(new ComparisonFactorLevelCombination() {
+                        Comparison = this,
+                        FactorLevelCombination = newCombination,
+                    });
+                }
+            }
+        }
     }
 }

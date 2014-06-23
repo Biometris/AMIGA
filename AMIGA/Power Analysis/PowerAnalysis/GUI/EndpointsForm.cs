@@ -40,10 +40,7 @@ namespace AmigaPowerAnalysis.GUI {
         public event EventHandler TabVisibilitiesChanged;
 
         private void createDataGridEndpoints() {
-            var endpointsBindingSouce = new BindingSource(_project.Endpoints, null);
-            endpointsBindingSouce.AddingNew += new AddingNewEventHandler(endpointsBindingSouce_AddingNew);
             dataGridViewEndpoints.AutoGenerateColumns = false;
-            dataGridViewEndpoints.DataSource = endpointsBindingSouce;
 
             var column = new DataGridViewTextBoxColumn();
             column.DataPropertyName = "Name";
@@ -84,18 +81,39 @@ namespace AmigaPowerAnalysis.GUI {
             column.Name = "LocUpper";
             column.ValueType = typeof(double);
             dataGridViewEndpoints.Columns.Add(column);
+
+            updateDataGridViewEndpoints();
         }
 
-        private void endpointsBindingSouce_AddingNew(object sender, AddingNewEventArgs e) {
-            e.NewObject = new Endpoint("New endpoint", _project.EndpointTypes.First());
+        private void updateDataGridViewEndpoints() {
+            if (_project.Endpoints.Count > 0) {
+                var endpointsBindingSouce = new BindingSource(_project.Endpoints, null);
+                dataGridViewEndpoints.DataSource = endpointsBindingSouce;
+                dataGridViewEndpoints.Update();
+            } else {
+                dataGridViewEndpoints.DataSource = null;
+                dataGridViewEndpoints.Update();
+            }
         }
 
-        private void dataGridViewEndpoints_UserAddedRow(object sender, DataGridViewRowEventArgs e) {
-            _project.UpdateEndpointFactors();
+        private void addEndpointButton_Click(object sender, EventArgs e) {
+            var endpointNames = _project.Endpoints.Select(ep => ep.Name).ToList();
+            var newEndpointName = string.Format("New endpoint");
+            var i = 0;
+            while (endpointNames.Contains(newEndpointName)) {
+                newEndpointName = string.Format("New endpoint {0}", i++);
+            }
+            _project.AddEndpoint(new Endpoint(newEndpointName, _project.EndpointTypes.First()));
+            updateDataGridViewEndpoints();
         }
 
-        private void dataGridViewEndpoints_UserDeletedRow(object sender, DataGridViewRowEventArgs e) {
-            _project.UpdateEndpointFactors();
+        private void buttonDeleteEndpoint_Click(object sender, EventArgs e) {
+            if (dataGridViewEndpoints.SelectedRows.Count == 1) {
+                _project.RemoveEndpoint(_project.Endpoints[dataGridViewEndpoints.CurrentRow.Index]);
+                updateDataGridViewEndpoints();
+            } else {
+                showError("Invalid selection", "Please select one entire row in order to remove its corresponding endpoint.");
+            }
         }
 
         private void dataGridViewEndpoints_CellValidating(object sender, DataGridViewCellValidatingEventArgs e) {

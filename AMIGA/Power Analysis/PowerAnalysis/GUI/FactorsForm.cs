@@ -39,10 +39,6 @@ namespace AmigaPowerAnalysis.GUI {
         public event EventHandler TabVisibilitiesChanged;
 
         private void createDataGridFactors() {
-            var factorsBindingSouce = new BindingSource(_project.Factors, null);
-            dataGridViewFactors.AutoGenerateColumns = false;
-            dataGridViewFactors.DataSource = factorsBindingSouce;
-
             var column = new DataGridViewTextBoxColumn();
             column.DataPropertyName = "Name";
             column.Name = "Name";
@@ -59,11 +55,17 @@ namespace AmigaPowerAnalysis.GUI {
             combo.Visible = _project.DesignSettings.ExperimentalDesignType == ExperimentalDesignType.SplitPlots;
             dataGridViewFactors.Columns.Add(combo);
 
+            updateDataGridFactors();
+        }
+
+        private void updateDataGridFactors() {
+            var factorsBindingSouce = new BindingSource(_project.Factors, null);
+            dataGridViewFactors.AutoGenerateColumns = false;
+            dataGridViewFactors.DataSource = factorsBindingSouce;
+
             dataGridViewFactors.Rows[0].ReadOnly = true;
             dataGridViewFactors.Rows[0].DefaultCellStyle.BackColor = Color.LightGray;
             dataGridViewFactors.Rows[0].Cells["ExperimentUnitType"].ReadOnly = false;
-
-            factorsBindingSouce.AddingNew += new AddingNewEventHandler(factorsBindingSouceSource_AddingNew);
         }
 
         private void createDataGridFactorLevels() {
@@ -104,21 +106,64 @@ namespace AmigaPowerAnalysis.GUI {
                     dataGridViewFactorLevels.Rows[1].ReadOnly = true;
                     dataGridViewFactorLevels.Rows[1].DefaultCellStyle.BackColor = Color.LightGray;
                 }
-
-                factorLevelsBindingSouce.AddingNew += new AddingNewEventHandler(factorLevelsBindingSouce_AddingNew);
             }
         }
 
-        private void factorLevelsBindingSouce_AddingNew(object sender, AddingNewEventArgs e) {
-            e.NewObject = new FactorLevel() {
-                Label = "Label",
-                Parent = _currentFactor,
-                Level = _currentFactor.GetUniqueFactorLevel(),
-            };
+        private void buttonAddFactor_Click(object sender, EventArgs e) {
+            var factorNames = _project.Factors.Select(ep => ep.Name).ToList();
+            var newFactorName = string.Format("New factor");
+            var i = 0;
+            while (factorNames.Contains(newFactorName)) {
+                newFactorName = string.Format("New factor {0}", i++);
+            }
+            _project.AddFactor(new Factor(newFactorName, 2));
+            _project.UpdateEndpointFactors();
+            updateDataGridFactors();
+            updateDataGridFactorLevels();
         }
 
-        private void factorsBindingSouceSource_AddingNew(object sender, AddingNewEventArgs e) {
-            e.NewObject = new Factor("New factor", 2);
+        private void buttonRemoveFactor_Click(object sender, EventArgs e) {
+            var currentRow = dataGridViewFactorLevels.CurrentRow.Index;
+            if (dataGridViewFactors.SelectedRows.Count == 1) {
+                if (currentRow == 0) {
+                    showError("Invalid operation", "Cannot delete variety.");
+                } else {
+                    _project.RemoveFactor(_project.Factors[dataGridViewFactors.CurrentRow.Index]);
+                    _project.UpdateEndpointFactors();
+                    updateDataGridFactors();
+                }
+            } else {
+                showError("Invalid selection", "Please select one entire row in order to remove its corresponding factor.");
+            }
+        }
+
+        private void addFactorLevelButton_Click(object sender, EventArgs e) {
+            if (_currentFactor != null) {
+                _currentFactor.FactorLevels.Add(new FactorLevel() {
+                    Label = "Label",
+                    Parent = _currentFactor,
+                    Level = _currentFactor.GetUniqueFactorLevel(),
+                });
+                _project.UpdateEndpointFactorLevels();
+                updateDataGridFactorLevels();
+            }
+        }
+
+        private void buttonRemoveFactorLevel_Click(object sender, EventArgs e) {
+            if (dataGridViewFactorLevels.SelectedRows.Count == 1) {
+                var currentRow = dataGridViewFactorLevels.CurrentRow.Index;
+                if (_currentFactor.FactorLevels.Count <= 2) {
+                    showError("Invalid operation", "A factor should have at least two levels.");
+                } else if (_currentFactor.Name == "Variety" && currentRow < 2) {
+                    showError("Invalid operation", "Cannot delete GMO or comparator level of the variety.");
+                } else {
+                    _currentFactor.FactorLevels.Remove(_currentFactor.FactorLevels[currentRow]);
+                    _project.UpdateEndpointFactorLevels();
+                    updateDataGridFactorLevels();
+                }
+            } else {
+                showError("Invalid selection", "Please select one entire row in order to remove its corresponding factor level.");
+            }
         }
 
         private void dataGridFactors_SelectionChanged(object sender, EventArgs e) {
@@ -126,14 +171,6 @@ namespace AmigaPowerAnalysis.GUI {
             dataGridViewFactorLevels.Refresh();
             _currentFactor = _project.Factors.ElementAt(dataGridViewFactors.CurrentRow.Index);
             updateDataGridFactorLevels();
-        }
-
-        private void dataGridFactors_RowsRemoved(object sender, DataGridViewRowsRemovedEventArgs e) {
-            _project.UpdateEndpointFactors();
-        }
-
-        private void dataGridFactors_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e) {
-            _project.UpdateEndpointFactors();
         }
 
         private void dataGridFactors_CellValidating(object sender, DataGridViewCellValidatingEventArgs e) {
@@ -204,21 +241,11 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void dataGridViewFactorLevels_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e) {
-            if (_currentFactor.FactorLevels.Count <= 2) {
-                e.Cancel = true;
-                showError("Invalid operation", "A factor should have at least two levels.");
-            }
-            if (_currentFactor.Name == "Variety" && e.Row.Index < 2) {
-                e.Cancel = true;
-                showError("Invalid operation", "Cannot delete GMO or comparator level of the variety.");
-            }
+
         }
 
         private void dataGridViewFactors_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e) {
-            if (e.Row.Index == 0) {
-                e.Cancel = true;
-                showError("Invalid operation", "Cannot delete variety.");
-            }
+
         }
 
         private void showError(string title, string message) {
