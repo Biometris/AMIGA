@@ -8,8 +8,8 @@ namespace AmigaPowerAnalysis.Core {
         /// Generates all combinations of factor levels of the specified factors. If the list of factors
         /// contains less than two elements, an empty list is returned.
         /// </summary>
-        /// <param name="factors"></param>
-        /// <returns></returns>
+        /// <param name="factors">The list of factors for which the combinations need to be created.</param>
+        /// <returns>A list of factor level combinations.</returns>
         public static List<FactorLevelCombination> GenerateInteractionCombinations(List<Factor> factors) {
             if (factors.Count >= 1) {
                 return generateAllCombinations(factors);

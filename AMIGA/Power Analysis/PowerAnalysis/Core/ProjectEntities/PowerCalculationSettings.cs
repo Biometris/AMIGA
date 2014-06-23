@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace AmigaPowerAnalysis.Core {
@@ -13,17 +14,19 @@ namespace AmigaPowerAnalysis.Core {
         Equivalence,
     }
 
-    public enum AnalysisMethodType {
-        LogNormal,
-        SquareRoot,
-        OverdispersedPoisson,
-        NegativeBinomial,
+    [Flags]
+    public enum AnalysisMethodType : int {
+        None = 0,
+        LogNormal = 1,
+        SquareRoot = 2,
+        OverdispersedPoisson = 4,
+        NegativeBinomial = 8,
     }
 
     public sealed class PowerCalculationSettings {
 
         public PowerCalculationSettings() {
-            SelectedAnalysisMethodTypes = new List<AnalysisMethodType>();
+            SelectedAnalysisMethodTypes = AnalysisMethodType.LogNormal;
             SignificanceLevel = 0.05;
             NumberOfRatios = 5;
             NumberOfReplications = new List<int> { 2, 4, 8, 16, 32 };
@@ -72,7 +75,7 @@ namespace AmigaPowerAnalysis.Core {
         /// The selected analysis methods.
         /// </summary>
         [DataMember]
-        public List<AnalysisMethodType> SelectedAnalysisMethodTypes { get; set; }
+        public AnalysisMethodType SelectedAnalysisMethodTypes { get; set; }
 
         /// <summary>
         /// Use log normal analysis method.
@@ -80,13 +83,13 @@ namespace AmigaPowerAnalysis.Core {
         public bool IsLogNormal {
             set{
                 if (value) {
-                    this.AddAnalysisMethodType(AnalysisMethodType.LogNormal);
+                    SelectedAnalysisMethodTypes |= AnalysisMethodType.LogNormal;
                 } else {
-                    this.RemoveAnalysisMethodType(AnalysisMethodType.LogNormal);
+                    SelectedAnalysisMethodTypes &= AnalysisMethodType.LogNormal;
                 }
             }
             get {
-                return SelectedAnalysisMethodTypes.Contains(AnalysisMethodType.LogNormal);
+                return SelectedAnalysisMethodTypes.HasFlag(AnalysisMethodType.LogNormal);
             }
         }
 
@@ -96,13 +99,13 @@ namespace AmigaPowerAnalysis.Core {
         public bool IsSquareRoot {
             set{
                 if (value) {
-                    this.AddAnalysisMethodType(AnalysisMethodType.SquareRoot);
+                    SelectedAnalysisMethodTypes |= AnalysisMethodType.SquareRoot;
                 } else {
-                    this.RemoveAnalysisMethodType(AnalysisMethodType.SquareRoot);
+                    SelectedAnalysisMethodTypes &= AnalysisMethodType.SquareRoot;
                 }
             }
             get {
-                return SelectedAnalysisMethodTypes.Contains(AnalysisMethodType.SquareRoot);
+                return SelectedAnalysisMethodTypes.HasFlag(AnalysisMethodType.SquareRoot);
             }
         }
 
@@ -112,13 +115,13 @@ namespace AmigaPowerAnalysis.Core {
         public bool IsOverdispersedPoisson {
             set{
                 if (value) {
-                    this.AddAnalysisMethodType(AnalysisMethodType.OverdispersedPoisson);
+                    SelectedAnalysisMethodTypes |= AnalysisMethodType.OverdispersedPoisson;
                 } else {
-                    this.RemoveAnalysisMethodType(AnalysisMethodType.OverdispersedPoisson);
+                    SelectedAnalysisMethodTypes &= AnalysisMethodType.OverdispersedPoisson;
                 }
             }
             get {
-                return SelectedAnalysisMethodTypes.Contains(AnalysisMethodType.OverdispersedPoisson);
+                return SelectedAnalysisMethodTypes.HasFlag(AnalysisMethodType.OverdispersedPoisson);
             }
         }
 
@@ -128,33 +131,13 @@ namespace AmigaPowerAnalysis.Core {
         public bool IsNegativeBinomial {
             set{
                 if (value) {
-                    this.AddAnalysisMethodType(AnalysisMethodType.NegativeBinomial);
+                    SelectedAnalysisMethodTypes |= AnalysisMethodType.NegativeBinomial;
                 } else {
-                    this.RemoveAnalysisMethodType(AnalysisMethodType.NegativeBinomial);
+                    SelectedAnalysisMethodTypes &= AnalysisMethodType.NegativeBinomial;
                 }
             }
             get {
-                return SelectedAnalysisMethodTypes.Contains(AnalysisMethodType.NegativeBinomial);
-            }
-        }
-
-        /// <summary>
-        /// Adds an analysis method to the list of selected analysis method types.
-        /// </summary>
-        /// <param name="analysisMethodType"></param>
-        public void AddAnalysisMethodType(AnalysisMethodType analysisMethodType) {
-            if (!SelectedAnalysisMethodTypes.Contains(analysisMethodType)) {
-                SelectedAnalysisMethodTypes.Add(analysisMethodType);
-            }
-        }
-
-        /// <summary>
-        /// Removes an analysis method from the list of selected analysis method types.
-        /// </summary>
-        /// <param name="analyisMethodType"></param>
-        public void RemoveAnalysisMethodType(AnalysisMethodType analyisMethodType) {
-            if (SelectedAnalysisMethodTypes.Contains(analyisMethodType)) {
-                SelectedAnalysisMethodTypes.RemoveAll(amt => amt == analyisMethodType);
+                return SelectedAnalysisMethodTypes.HasFlag(AnalysisMethodType.NegativeBinomial);
             }
         }
     }

@@ -28,10 +28,10 @@ namespace AmigaPowerAnalysis.GUI {
         public string Description { get; private set; }
 
         public void Activate() {
-            checkBoxMethodForAnalysesLN.Checked = _project.PowerCalculationSettings.SelectedAnalysisMethodTypes.Contains(AnalysisMethodType.LogNormal);
-            checkBoxMethodForAnalysesSQ.Checked = _project.PowerCalculationSettings.SelectedAnalysisMethodTypes.Contains(AnalysisMethodType.SquareRoot);
-            checkBoxMethodForAnalysesOP.Checked = _project.PowerCalculationSettings.SelectedAnalysisMethodTypes.Contains(AnalysisMethodType.OverdispersedPoisson);
-            checkBoxMethodForAnalysesNB.Checked = _project.PowerCalculationSettings.SelectedAnalysisMethodTypes.Contains(AnalysisMethodType.NegativeBinomial);
+            checkBoxMethodForAnalysesLN.Checked = _project.PowerCalculationSettings.IsLogNormal;
+            checkBoxMethodForAnalysesSQ.Checked = _project.PowerCalculationSettings.IsSquareRoot;
+            checkBoxMethodForAnalysesOP.Checked = _project.PowerCalculationSettings.IsOverdispersedPoisson;
+            checkBoxMethodForAnalysesNB.Checked = _project.PowerCalculationSettings.IsNegativeBinomial;
             textBoxSignificanceLevel.Text = _project.PowerCalculationSettings.SignificanceLevel.ToString();
             textBoxNumberOfRatios.Text = _project.PowerCalculationSettings.NumberOfRatios.ToString();
             textBoxNumberOfReplications.Text = string.Join(", ", _project.PowerCalculationSettings.NumberOfReplications.Select(r => r.ToString()).ToList());
@@ -93,35 +93,19 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void checkBoxMethodForAnalysesLN_CheckedChanged(object sender, EventArgs e) {
-            if (checkBoxMethodForAnalysesLN.Checked) {
-                _project.PowerCalculationSettings.AddAnalysisMethodType(AnalysisMethodType.LogNormal);
-            } else {
-                _project.PowerCalculationSettings.RemoveAnalysisMethodType(AnalysisMethodType.LogNormal);
-            }
+            _project.PowerCalculationSettings.IsLogNormal = checkBoxMethodForAnalysesLN.Checked;
         }
 
         private void checkBoxMethodForAnalysesSQ_CheckedChanged(object sender, EventArgs e) {
-            if (checkBoxMethodForAnalysesSQ.Checked) {
-                _project.PowerCalculationSettings.AddAnalysisMethodType(AnalysisMethodType.SquareRoot);
-            } else {
-                _project.PowerCalculationSettings.RemoveAnalysisMethodType(AnalysisMethodType.SquareRoot);
-            }
+            _project.PowerCalculationSettings.IsSquareRoot = checkBoxMethodForAnalysesSQ.Checked;
         }
 
         private void checkBoxMethodForAnalysesOP_CheckedChanged(object sender, EventArgs e) {
-            if (checkBoxMethodForAnalysesOP.Checked) {
-                _project.PowerCalculationSettings.AddAnalysisMethodType(AnalysisMethodType.OverdispersedPoisson);
-            } else {
-                _project.PowerCalculationSettings.RemoveAnalysisMethodType(AnalysisMethodType.OverdispersedPoisson);
-            }
+            _project.PowerCalculationSettings.IsOverdispersedPoisson = checkBoxMethodForAnalysesOP.Checked;
         }
 
         private void checkBoxMethodForAnalysesNB_CheckedChanged(object sender, EventArgs e) {
-            if (checkBoxMethodForAnalysesNB.Checked) {
-                _project.PowerCalculationSettings.AddAnalysisMethodType(AnalysisMethodType.NegativeBinomial);
-            } else {
-                _project.PowerCalculationSettings.RemoveAnalysisMethodType(AnalysisMethodType.NegativeBinomial);
-            }
+            _project.PowerCalculationSettings.IsNegativeBinomial = checkBoxMethodForAnalysesNB.Checked;
         }
 
         private void comboBoxMethodForPowerCalculation_SelectionChangeCommitted(object sender, EventArgs e) {

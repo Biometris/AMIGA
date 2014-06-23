@@ -113,6 +113,7 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void factorLevelsBindingSouce_AddingNew(object sender, AddingNewEventArgs e) {
             e.NewObject = new FactorLevel() {
+                Label = "Label",
                 Parent = _currentFactor,
                 Level = _currentFactor.GetUniqueFactorLevel(),
             };
@@ -123,6 +124,8 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void dataGridFactors_SelectionChanged(object sender, EventArgs e) {
+            dataGridViewFactorLevels.DataSource = null;
+            dataGridViewFactorLevels.Refresh();
             _currentFactor = _project.Factors.ElementAt(dataGridViewFactors.CurrentRow.Index);
             updateDataGridFactorLevels();
         }
@@ -162,7 +165,7 @@ namespace AmigaPowerAnalysis.GUI {
                     showError("Invalid data", dataGridViewFactorLevels.Rows[e.RowIndex].ErrorText);
                     e.Cancel = true;
                 } else {
-                    var newFactorLabelNames =  _currentFactor.FactorLevels.Select(fl => fl.Label).ToList();
+                    var newFactorLabelNames = _currentFactor.FactorLevels.Select(fl => fl.Label).ToList();
                     newFactorLabelNames[e.RowIndex] = newValue;
                     if (newFactorLabelNames.Distinct().Count() < newFactorLabelNames.Count) {
                         dataGridViewFactorLevels.Rows[e.RowIndex].ErrorText = "Duplicate factor label names are not allowed.";
