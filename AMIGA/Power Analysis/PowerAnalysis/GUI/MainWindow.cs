@@ -98,37 +98,49 @@ namespace AmigaPowerAnalysis.GUI {
         #region Actions
 
         private void newProject() {
-            closeProject();
-            loadProject(ProjectManager.CreateNewProject());
-            _currentProjectFilename = null;
+            try {
+                closeProject();
+                loadProject(ProjectManager.CreateNewProject());
+                _currentProjectFilename = null;
+            } catch (Exception ex) {
+                ShowErrorMessage(ex);
+            }
         }
 
         private void openProjectDialog() {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Amiga Power Analysis files (*.apa)|*.apa|All files (*.*)|*.*";
-            openFileDialog.FilterIndex = 1;
-            openFileDialog.RestoreDirectory = true;
-            openFileDialog.InitialDirectory = Properties.Settings.Default.LastOpenedDirectory;
-            if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                Properties.Settings.Default.LastOpenedDirectory = Path.GetDirectoryName(openFileDialog.FileName);
-                Properties.Settings.Default.Save();
-                var project = ProjectManager.LoadProject(openFileDialog.FileName);
-                _currentProjectFilename = openFileDialog.FileName;
-                loadProject(project);
+            try {
+                OpenFileDialog openFileDialog = new OpenFileDialog();
+                openFileDialog.Filter = "Amiga Power Analysis files (*.apa)|*.apa|All files (*.*)|*.*";
+                openFileDialog.FilterIndex = 1;
+                openFileDialog.RestoreDirectory = true;
+                openFileDialog.InitialDirectory = Properties.Settings.Default.LastOpenedDirectory;
+                if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                    Properties.Settings.Default.LastOpenedDirectory = Path.GetDirectoryName(openFileDialog.FileName);
+                    Properties.Settings.Default.Save();
+                    var project = ProjectManager.LoadProject(openFileDialog.FileName);
+                    _currentProjectFilename = openFileDialog.FileName;
+                    loadProject(project);
+                }
+            } catch (Exception ex) {
+                ShowErrorMessage(ex);
             }
         }
 
         private void saveAsDialog() {
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "Amiga Power Analysis files (*.apa)|*.apa|All files (*.*)|*.*";
-            saveFileDialog.FilterIndex = 1;
-            saveFileDialog.RestoreDirectory = true;
-            saveFileDialog.InitialDirectory = Properties.Settings.Default.LastOpenedDirectory;
-            if (saveFileDialog.ShowDialog() == DialogResult.OK) {
-                Properties.Settings.Default.LastOpenedDirectory = Path.GetDirectoryName(saveFileDialog.FileName);
-                Properties.Settings.Default.Save();
-                ProjectManager.SaveProject(_project, saveFileDialog.FileName);
-                _currentProjectFilename = saveFileDialog.FileName;
+            try {
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.Filter = "Amiga Power Analysis files (*.apa)|*.apa|All files (*.*)|*.*";
+                saveFileDialog.FilterIndex = 1;
+                saveFileDialog.RestoreDirectory = true;
+                saveFileDialog.InitialDirectory = Properties.Settings.Default.LastOpenedDirectory;
+                if (saveFileDialog.ShowDialog() == DialogResult.OK) {
+                    Properties.Settings.Default.LastOpenedDirectory = Path.GetDirectoryName(saveFileDialog.FileName);
+                    Properties.Settings.Default.Save();
+                    ProjectManager.SaveProject(_project, saveFileDialog.FileName);
+                    _currentProjectFilename = saveFileDialog.FileName;
+                }
+            } catch (Exception ex) {
+                ShowErrorMessage(ex);
             }
         }
 
@@ -137,15 +149,15 @@ namespace AmigaPowerAnalysis.GUI {
                 closeProject();
                 _project = project;
 
-                _selectionForms.Add(new EndpointsForm(_project));
-                _selectionForms.Add(new EndpointsDataForm(_project));
-                _selectionForms.Add(new FactorsForm(_project));
-                _selectionForms.Add(new DesignForm(_project));
-                _selectionForms.Add(new InteractionsForm(_project));
-                _selectionForms.Add(new ComparisonsForm(_project));
-                _selectionForms.Add(new ModifiersForm(_project));
-                _selectionForms.Add(new PowerAnalysisSettingsForm(_project));
-                _selectionForms.Add(new AnalysisResultsForm(_project));
+                _selectionForms.Add(new SelectionFormContainer(new EndpointsForm(_project)));
+                _selectionForms.Add(new SelectionFormContainer(new EndpointsDataForm(_project)));
+                _selectionForms.Add(new SelectionFormContainer(new FactorsForm(_project)));
+                _selectionForms.Add(new SelectionFormContainer(new DesignForm(_project)));
+                _selectionForms.Add(new SelectionFormContainer(new InteractionsForm(_project)));
+                _selectionForms.Add(new SelectionFormContainer(new ComparisonsForm(_project)));
+                _selectionForms.Add(new SelectionFormContainer(new ModifiersForm(_project)));
+                _selectionForms.Add(new SelectionFormContainer(new PowerAnalysisSettingsForm(_project)));
+                _selectionForms.Add(new SelectionFormContainer(new AnalysisResultsForm(_project)));
 
                 _selectionForms.ForEach(s => s.TabVisibilitiesChanged += onVisibilitySettingsChanged);
 
@@ -155,13 +167,7 @@ namespace AmigaPowerAnalysis.GUI {
 
                 updateTabs();
             } catch (Exception ex) {
-                MessageBox.Show(
-                    "An error occurred while opening the project. An invalid project file may have been provided or the project file may be corrupted.",
-                    "Error opening project.", 
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error,
-                    MessageBoxDefaultButton.Button1);
-                _logger.Log(ex.Message);
+                ShowErrorMessage(ex);
                 closeProject();
                 return;
             }
@@ -169,7 +175,7 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void closeProject() {
             _selectionForms.Clear();
-            _selectionForms.Add(new IntroductionForm());
+            _selectionForms.Add(new SelectionFormContainer(new IntroductionForm()));
             this.tabControl.TabPages.Clear();
             this.saveAsToolStripMenuItem.Enabled = false;
             this.saveToolStripMenuItem.Enabled = false;
@@ -202,6 +208,16 @@ namespace AmigaPowerAnalysis.GUI {
             if (selectedTab != null) {
                 this.tabControl.SelectTab(selectedTab);
             }
+        }
+
+        private void ShowErrorMessage(Exception ex) {
+            MessageBox.Show(
+                "An error occurred while opening the project. An invalid project file may have been provided or the project file may be corrupted.",
+                "Error opening project.",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error,
+                MessageBoxDefaultButton.Button1);
+            _logger.Log(ex.Message);
         }
 
         #endregion

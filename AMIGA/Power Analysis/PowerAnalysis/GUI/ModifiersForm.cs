@@ -19,8 +19,6 @@ namespace AmigaPowerAnalysis.GUI {
             _project = project;
             Name = "Modifiers";
             Description = "The power of tests will be lower if data are uninformative or less informative, e.g. if counts are very low (<5), or fractions are close to 0 or 1. In principle, the specified means and CVs are sufficient ot perform the power analysis, but it should be specified if other factors in the design are expected to make part of the data less informative. Please provide a CV if you expect a large variation between blocks or main plots in a split-plot design. For fixed factors, indicate levels where data may become less informative (e.g. counts less than 5, or all binomial results positive or all negative).";
-            this.textBoxTabTitle.Text = Name;
-            this.textBoxTabDescription.Text = Description;
             checkBoxUseBlockModifier.Checked = _project.UseBlockModifier;
             checkBoxUseMainPlotModifier.Checked = _project.UseMainPlotModifier;
             checkBoxUseFactorModifiers.Checked = _project.UseFactorModifiers;

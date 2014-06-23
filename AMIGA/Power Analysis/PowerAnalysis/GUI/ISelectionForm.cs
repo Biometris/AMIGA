@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace AmigaPowerAnalysis.GUI {
     public interface ISelectionForm {
 
-        string Name { get; set; }
+        string Name { get; }
 
         string Description { get; }
 

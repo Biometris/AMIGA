@@ -61,6 +61,11 @@ namespace AmigaPowerAnalysis.Core {
         public List<double> FactorLevels { get; set; }
 
         /// <summary>
+        /// The cumulated frequency of the factor levels.
+        /// </summary>
+        public int Frequency { get; set; }
+
+        /// <summary>
         /// The mean.
         /// </summary>
         public double Mean { get; set; }

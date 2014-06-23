@@ -41,16 +41,16 @@
             this.checkBoxMethodForAnalysesOP = new System.Windows.Forms.CheckBox();
             this.checkBoxMethodForAnalysesNB = new System.Windows.Forms.CheckBox();
             this.groupBoxMethodsForAnalysis = new System.Windows.Forms.GroupBox();
-            this.panelTabDescription = new System.Windows.Forms.Panel();
-            this.textBoxTabTitle = new System.Windows.Forms.TextBox();
-            this.textBoxTabDescription = new System.Windows.Forms.TextBox();
+            this.flowLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.groupBoxOptions.SuspendLayout();
             this.groupBoxMethodsForAnalysis.SuspendLayout();
-            this.panelTabDescription.SuspendLayout();
+            this.flowLayoutPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBoxOptions
             // 
+            this.groupBoxOptions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBoxOptions.Controls.Add(this.textBoxSeedForRandomNumbers);
             this.groupBoxOptions.Controls.Add(this.labelSeedForRandomNumbers);
             this.groupBoxOptions.Controls.Add(this.textBoxNumberSimulatedDatasets);
@@ -63,10 +63,10 @@
             this.groupBoxOptions.Controls.Add(this.labelNumberOfRatios);
             this.groupBoxOptions.Controls.Add(this.textBoxSignificanceLevel);
             this.groupBoxOptions.Controls.Add(this.labelSignificanceLevel);
-            this.groupBoxOptions.Dock = System.Windows.Forms.DockStyle.Top;
-            this.groupBoxOptions.Location = new System.Drawing.Point(10, 107);
+            this.groupBoxOptions.Location = new System.Drawing.Point(0, 0);
+            this.groupBoxOptions.Margin = new System.Windows.Forms.Padding(0);
             this.groupBoxOptions.Name = "groupBoxOptions";
-            this.groupBoxOptions.Size = new System.Drawing.Size(854, 196);
+            this.groupBoxOptions.Size = new System.Drawing.Size(851, 162);
             this.groupBoxOptions.TabIndex = 9;
             this.groupBoxOptions.TabStop = false;
             this.groupBoxOptions.Text = "Options";
@@ -231,64 +231,38 @@
             // 
             // groupBoxMethodsForAnalysis
             // 
+            this.groupBoxMethodsForAnalysis.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBoxMethodsForAnalysis.Controls.Add(this.checkBoxMethodForAnalysesNB);
             this.groupBoxMethodsForAnalysis.Controls.Add(this.checkBoxMethodForAnalysesLN);
             this.groupBoxMethodsForAnalysis.Controls.Add(this.checkBoxMethodForAnalysesOP);
             this.groupBoxMethodsForAnalysis.Controls.Add(this.checkBoxMethodForAnalysesSQ);
-            this.groupBoxMethodsForAnalysis.Dock = System.Windows.Forms.DockStyle.Top;
-            this.groupBoxMethodsForAnalysis.Location = new System.Drawing.Point(10, 303);
+            this.groupBoxMethodsForAnalysis.Location = new System.Drawing.Point(0, 167);
+            this.groupBoxMethodsForAnalysis.Margin = new System.Windows.Forms.Padding(0, 5, 0, 0);
             this.groupBoxMethodsForAnalysis.Name = "groupBoxMethodsForAnalysis";
-            this.groupBoxMethodsForAnalysis.Size = new System.Drawing.Size(854, 138);
+            this.groupBoxMethodsForAnalysis.Size = new System.Drawing.Size(851, 138);
             this.groupBoxMethodsForAnalysis.TabIndex = 10;
             this.groupBoxMethodsForAnalysis.TabStop = false;
             this.groupBoxMethodsForAnalysis.Text = "Methods for Analysis";
             // 
-            // panelTabDescription
+            // flowLayoutPanel
             // 
-            this.panelTabDescription.AutoSize = true;
-            this.panelTabDescription.Controls.Add(this.textBoxTabDescription);
-            this.panelTabDescription.Controls.Add(this.textBoxTabTitle);
-            this.panelTabDescription.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelTabDescription.Location = new System.Drawing.Point(10, 10);
-            this.panelTabDescription.Name = "panelTabDescription";
-            this.panelTabDescription.Size = new System.Drawing.Size(854, 97);
-            this.panelTabDescription.TabIndex = 8;
-            // 
-            // textBoxTabTitle
-            // 
-            this.textBoxTabTitle.BackColor = System.Drawing.Color.White;
-            this.textBoxTabTitle.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBoxTabTitle.Dock = System.Windows.Forms.DockStyle.Top;
-            this.textBoxTabTitle.Font = new System.Drawing.Font("Arial", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxTabTitle.Location = new System.Drawing.Point(0, 0);
-            this.textBoxTabTitle.Name = "textBoxTabTitle";
-            this.textBoxTabTitle.ReadOnly = true;
-            this.textBoxTabTitle.Size = new System.Drawing.Size(854, 22);
-            this.textBoxTabTitle.TabIndex = 7;
-            this.textBoxTabTitle.Text = "Tab title";
-            // 
-            // textBoxTabDescription
-            // 
-            this.textBoxTabDescription.BackColor = System.Drawing.SystemColors.Window;
-            this.textBoxTabDescription.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBoxTabDescription.Dock = System.Windows.Forms.DockStyle.Top;
-            this.textBoxTabDescription.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxTabDescription.Location = new System.Drawing.Point(0, 22);
-            this.textBoxTabDescription.Multiline = true;
-            this.textBoxTabDescription.Name = "textBoxTabDescription";
-            this.textBoxTabDescription.ReadOnly = true;
-            this.textBoxTabDescription.Size = new System.Drawing.Size(854, 75);
-            this.textBoxTabDescription.TabIndex = 6;
-            this.textBoxTabDescription.Text = "Description";
+            this.flowLayoutPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.flowLayoutPanel.Controls.Add(this.groupBoxOptions);
+            this.flowLayoutPanel.Controls.Add(this.groupBoxMethodsForAnalysis);
+            this.flowLayoutPanel.Location = new System.Drawing.Point(13, 13);
+            this.flowLayoutPanel.Name = "flowLayoutPanel";
+            this.flowLayoutPanel.Size = new System.Drawing.Size(848, 477);
+            this.flowLayoutPanel.TabIndex = 11;
             // 
             // PowerAnalysisSettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.Controls.Add(this.groupBoxMethodsForAnalysis);
-            this.Controls.Add(this.groupBoxOptions);
-            this.Controls.Add(this.panelTabDescription);
+            this.Controls.Add(this.flowLayoutPanel);
             this.Name = "PowerAnalysisSettingsForm";
             this.Padding = new System.Windows.Forms.Padding(10);
             this.Size = new System.Drawing.Size(874, 503);
@@ -296,10 +270,8 @@
             this.groupBoxOptions.PerformLayout();
             this.groupBoxMethodsForAnalysis.ResumeLayout(false);
             this.groupBoxMethodsForAnalysis.PerformLayout();
-            this.panelTabDescription.ResumeLayout(false);
-            this.panelTabDescription.PerformLayout();
+            this.flowLayoutPanel.ResumeLayout(false);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -323,8 +295,6 @@
         private System.Windows.Forms.GroupBox groupBoxMethodsForAnalysis;
         private System.Windows.Forms.TextBox textBoxSeedForRandomNumbers;
         private System.Windows.Forms.Label labelSeedForRandomNumbers;
-        private System.Windows.Forms.Panel panelTabDescription;
-        private System.Windows.Forms.TextBox textBoxTabDescription;
-        private System.Windows.Forms.TextBox textBoxTabTitle;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel;
     }
 }

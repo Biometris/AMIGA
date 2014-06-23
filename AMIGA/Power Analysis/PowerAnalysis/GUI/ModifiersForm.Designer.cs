@@ -35,9 +35,6 @@
             this.groupBoxFactorModifiers = new System.Windows.Forms.GroupBox();
             this.checkBoxUseFactorModifiers = new System.Windows.Forms.CheckBox();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.panelTabDescription = new System.Windows.Forms.Panel();
-            this.textBoxTabTitle = new System.Windows.Forms.TextBox();
-            this.textBoxTabDescription = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFactorModifiers)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewEndpoints)).BeginInit();
             this.groupBoxBlockModifiers.SuspendLayout();
@@ -46,7 +43,6 @@
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
-            this.panelTabDescription.SuspendLayout();
             this.SuspendLayout();
             // 
             // dataGridViewFactorModifiers
@@ -64,7 +60,7 @@
             this.dataGridViewFactorModifiers.RowHeadersWidth = 24;
             this.dataGridViewFactorModifiers.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dataGridViewFactorModifiers.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewFactorModifiers.Size = new System.Drawing.Size(518, 161);
+            this.dataGridViewFactorModifiers.Size = new System.Drawing.Size(518, 252);
             this.dataGridViewFactorModifiers.TabIndex = 0;
             this.dataGridViewFactorModifiers.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dataGridViewFactorModifiers_DataError);
             // 
@@ -84,22 +80,22 @@
             this.dataGridViewEndpoints.RowHeadersWidth = 24;
             this.dataGridViewEndpoints.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dataGridViewEndpoints.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewEndpoints.Size = new System.Drawing.Size(260, 161);
+            this.dataGridViewEndpoints.Size = new System.Drawing.Size(260, 252);
             this.dataGridViewEndpoints.TabIndex = 1;
             this.dataGridViewEndpoints.SelectionChanged += new System.EventHandler(this.dataGridViewEndpoints_SelectionChanged);
             // 
             // groupBoxBlockModifiers
             // 
+            this.groupBoxBlockModifiers.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBoxBlockModifiers.AutoSize = true;
-            this.groupBoxBlockModifiers.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.groupBoxBlockModifiers.Controls.Add(this.textBoxCVForMainPlots);
             this.groupBoxBlockModifiers.Controls.Add(this.labelCVForMainPlots);
             this.groupBoxBlockModifiers.Controls.Add(this.textBoxCVForBlocks);
             this.groupBoxBlockModifiers.Controls.Add(this.labelCVForBlocks);
             this.groupBoxBlockModifiers.Controls.Add(this.checkBoxUseBlockModifier);
             this.groupBoxBlockModifiers.Controls.Add(this.checkBoxUseMainPlotModifier);
-            this.groupBoxBlockModifiers.Dock = System.Windows.Forms.DockStyle.Top;
-            this.groupBoxBlockModifiers.Location = new System.Drawing.Point(10, 107);
+            this.groupBoxBlockModifiers.Location = new System.Drawing.Point(10, 10);
             this.groupBoxBlockModifiers.Name = "groupBoxBlockModifiers";
             this.groupBoxBlockModifiers.Padding = new System.Windows.Forms.Padding(3, 3, 3, 0);
             this.groupBoxBlockModifiers.Size = new System.Drawing.Size(782, 125);
@@ -166,11 +162,11 @@
             // 
             // groupBoxFactorModifiers
             // 
+            this.groupBoxFactorModifiers.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBoxFactorModifiers.AutoSize = true;
-            this.groupBoxFactorModifiers.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.groupBoxFactorModifiers.Controls.Add(this.checkBoxUseFactorModifiers);
-            this.groupBoxFactorModifiers.Dock = System.Windows.Forms.DockStyle.Top;
-            this.groupBoxFactorModifiers.Location = new System.Drawing.Point(10, 232);
+            this.groupBoxFactorModifiers.Location = new System.Drawing.Point(10, 135);
             this.groupBoxFactorModifiers.Name = "groupBoxFactorModifiers";
             this.groupBoxFactorModifiers.Padding = new System.Windows.Forms.Padding(3, 3, 3, 0);
             this.groupBoxFactorModifiers.Size = new System.Drawing.Size(782, 49);
@@ -184,18 +180,20 @@
             this.checkBoxUseFactorModifiers.Location = new System.Drawing.Point(6, 19);
             this.checkBoxUseFactorModifiers.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
             this.checkBoxUseFactorModifiers.Name = "checkBoxUseFactorModifiers";
-            this.checkBoxUseFactorModifiers.Size = new System.Drawing.Size(453, 17);
+            this.checkBoxUseFactorModifiers.Size = new System.Drawing.Size(458, 17);
             this.checkBoxUseFactorModifiers.TabIndex = 8;
-            this.checkBoxUseFactorModifiers.Text = "I there an expectation that other experimental factors will lower the mean compar" +
-    "ator level?";
+            this.checkBoxUseFactorModifiers.Text = "Is there an expectation that other experimental factors will lower the mean compa" +
+    "rator level?";
             this.checkBoxUseFactorModifiers.UseVisualStyleBackColor = true;
             this.checkBoxUseFactorModifiers.CheckedChanged += new System.EventHandler(this.checkBoxUseFactorModifiers_CheckedChanged);
             // 
             // splitContainer1
             // 
-            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
-            this.splitContainer1.Location = new System.Drawing.Point(10, 281);
+            this.splitContainer1.Location = new System.Drawing.Point(10, 190);
             this.splitContainer1.Name = "splitContainer1";
             // 
             // splitContainer1.Panel1
@@ -205,47 +203,9 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.dataGridViewFactorModifiers);
-            this.splitContainer1.Size = new System.Drawing.Size(782, 161);
+            this.splitContainer1.Size = new System.Drawing.Size(782, 252);
             this.splitContainer1.SplitterDistance = 260;
             this.splitContainer1.TabIndex = 11;
-            // 
-            // panelTabDescription
-            // 
-            this.panelTabDescription.AutoSize = true;
-            this.panelTabDescription.Controls.Add(this.textBoxTabDescription);
-            this.panelTabDescription.Controls.Add(this.textBoxTabTitle);
-            this.panelTabDescription.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelTabDescription.Location = new System.Drawing.Point(10, 10);
-            this.panelTabDescription.Name = "panelTabDescription";
-            this.panelTabDescription.Size = new System.Drawing.Size(782, 97);
-            this.panelTabDescription.TabIndex = 12;
-            // 
-            // textBoxTabTitle
-            // 
-            this.textBoxTabTitle.BackColor = System.Drawing.Color.White;
-            this.textBoxTabTitle.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBoxTabTitle.Dock = System.Windows.Forms.DockStyle.Top;
-            this.textBoxTabTitle.Font = new System.Drawing.Font("Arial", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxTabTitle.Location = new System.Drawing.Point(0, 0);
-            this.textBoxTabTitle.Name = "textBoxTabTitle";
-            this.textBoxTabTitle.ReadOnly = true;
-            this.textBoxTabTitle.Size = new System.Drawing.Size(782, 22);
-            this.textBoxTabTitle.TabIndex = 7;
-            this.textBoxTabTitle.Text = "Tab title";
-            // 
-            // textBoxTabDescription
-            // 
-            this.textBoxTabDescription.BackColor = System.Drawing.SystemColors.Window;
-            this.textBoxTabDescription.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBoxTabDescription.Dock = System.Windows.Forms.DockStyle.Top;
-            this.textBoxTabDescription.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxTabDescription.Location = new System.Drawing.Point(0, 22);
-            this.textBoxTabDescription.Multiline = true;
-            this.textBoxTabDescription.Name = "textBoxTabDescription";
-            this.textBoxTabDescription.ReadOnly = true;
-            this.textBoxTabDescription.Size = new System.Drawing.Size(782, 75);
-            this.textBoxTabDescription.TabIndex = 6;
-            this.textBoxTabDescription.Text = "Description";
             // 
             // ModifiersForm
             // 
@@ -255,7 +215,6 @@
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.groupBoxFactorModifiers);
             this.Controls.Add(this.groupBoxBlockModifiers);
-            this.Controls.Add(this.panelTabDescription);
             this.Name = "ModifiersForm";
             this.Padding = new System.Windows.Forms.Padding(10);
             this.Size = new System.Drawing.Size(802, 452);
@@ -269,8 +228,6 @@
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
-            this.panelTabDescription.ResumeLayout(false);
-            this.panelTabDescription.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -290,8 +247,5 @@
         private System.Windows.Forms.Label labelCVForMainPlots;
         private System.Windows.Forms.TextBox textBoxCVForBlocks;
         private System.Windows.Forms.Label labelCVForBlocks;
-        private System.Windows.Forms.Panel panelTabDescription;
-        private System.Windows.Forms.TextBox textBoxTabDescription;
-        private System.Windows.Forms.TextBox textBoxTabTitle;
     }
 }

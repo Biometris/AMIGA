@@ -108,6 +108,12 @@
     <Compile Include="GUI\AnalysisResultsForm.Designer.cs">
       <DependentUpon>AnalysisResultsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\SelectionFormContainer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\SelectionFormContainer.Designer.cs">
+      <DependentUpon>SelectionFormContainer.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\IntroductionForm.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -182,6 +188,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\AnalysisResultsForm.resx">
       <DependentUpon>AnalysisResultsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\SelectionFormContainer.resx">
+      <DependentUpon>SelectionFormContainer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\IntroductionForm.resx">
       <DependentUpon>IntroductionForm.cs</DependentUpon>

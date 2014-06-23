@@ -18,8 +18,6 @@ namespace AmigaPowerAnalysis.GUI {
             InitializeComponent();
             Name = "Introduction";
             Description = "Welcome to Amiga Power Analysis. With this tool you can...";
-            this.textBoxTabTitle.Text = Name;
-            this.textBoxTabDescription.Text = Description;
         }
 
         public void Activate() {

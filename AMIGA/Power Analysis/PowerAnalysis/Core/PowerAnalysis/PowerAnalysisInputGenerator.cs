@@ -12,7 +12,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
         /// <param name="powerCalculationSettings">The general power analysis settings.</param>
         /// <param name="records">The power analysis input records of the comparison of interest.</param>
         /// <param name="filename">The name of the file to which the settings are written.</param>
-        public void PowerAnalysisInputToCsv(Endpoint endpoint, PowerCalculationSettings powerCalculationSettings, List<InputPowerAnalysisRecord> records, string filename) {
+        public void PowerAnalysisInputToCsv(Endpoint endpoint, DesignSettings designSettings, PowerCalculationSettings powerCalculationSettings, List<InputPowerAnalysisRecord> records, string filename) {
             var separator = ",";
             var stringBuilder = new StringBuilder();
 
@@ -26,6 +26,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             stringBuilder.AppendLine(string.Format("SignificanceLevel\r\n {0} :", powerCalculationSettings.SignificanceLevel.ToString()));
             stringBuilder.AppendLine(string.Format("NumberOfRatios\r\n {0} :", powerCalculationSettings.NumberOfRatios.ToString()));
             stringBuilder.AppendLine(string.Format("NumberOfReplications\r\n {0} :", string.Join(" ", powerCalculationSettings.NumberOfReplications.Select(r => r.ToString()).ToList())));
+            stringBuilder.AppendLine(string.Format("ExperimentalDesignType\r\n {0} :", designSettings.ExperimentalDesignType));
             stringBuilder.AppendLine(string.Format("PowerCalculationMethod\r\n {0} :", powerCalculationSettings.PowerCalculationMethod.ToString()));
             stringBuilder.AppendLine(string.Format("RandomNumberSeed\r\n {0} :", powerCalculationSettings.Seed.ToString()));
 
@@ -47,6 +48,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             foreach (var factor in records.First().Factors) {
                 headers.Add(factor);
             }
+            headers.Add("Frequency");
             headers.Add("Mean");
             headers.Add("Comparison");
 
@@ -65,6 +67,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                 foreach (var factor in record.FactorLevels) {
                     line.Add(factor.ToString());
                 }
+                line.Add(record.Frequency.ToString());
                 line.Add(record.Mean.ToString());
                 line.Add(record.Comparison.ToString());
                 stringBuilder.AppendLine(string.Join(separator, line));
@@ -125,8 +128,11 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                             MainPlot = counter,
                             SubPlot = 1,
                             Variety = varietyLevel.Label,
-                            FactorLevels = factorLevels,
                             Factors = factors,
+                            FactorLevels = factorLevels,
+                            Frequency = varietyLevel.Frequency
+                                * interactionLevels.FactorLevelCombination.Items.Select(fl => fl.Frequency).Aggregate((n1, n2) => n1 * n2)
+                                * modifierLevel.FactorLevelCombination.Items.Select(fl => fl.Frequency).Aggregate((n1, n2) => n1 * n2),
                             Mean = comparison.Endpoint.UseModifier ? modifierLevel.Modifier * mean : mean,
                             Comparison = (ComparisonType)comparisonType,
                         });
@@ -146,6 +152,8 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                         FactorLevels = factorLevels,
                         Factors = factors,
                         Mean = mean,
+                        Frequency = varietyLevel.Frequency
+                            * interactionLevels.FactorLevelCombination.Items.Select(fl => fl.Frequency).Aggregate((n1, n2) => n1 * n2),
                         Comparison = (ComparisonType)comparisonType,
                     });
                     counter++;
@@ -184,6 +192,8 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                         FactorLevels = factorLevels,
                         Factors = factors,
                         Mean = comparison.Endpoint.UseModifier ? modifierLevel.Modifier * mean : mean,
+                        Frequency = varietyLevel.Frequency
+                            * modifierLevel.FactorLevelCombination.Items.Select(fl => fl.Frequency).Aggregate((n1, n2) => n1 * n2),
                         Comparison = (ComparisonType)comparisonType,
                     });
                     counter++;
@@ -200,6 +210,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                     FactorLevels = new List<double>(),
                     Factors = new List<string>(),
                     Mean = mean,
+                    Frequency = varietyLevel.Frequency,
                     Comparison = (ComparisonType)comparisonType,
                 });
                 counter++;

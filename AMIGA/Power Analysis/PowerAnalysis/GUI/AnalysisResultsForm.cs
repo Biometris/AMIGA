@@ -23,8 +23,6 @@ namespace AmigaPowerAnalysis.GUI {
             InitializeComponent();
             Name = "Results";
             Description = "Choose endpoint in table. Choose method of analysis if more have been investigated. Power is shown for difference tests (upper graphs) and equivalence tests (lower graphs), both as a function of the number of replicates (left) and the Ratio GMO/CMP (right).";
-            this.textBoxTabTitle.Text = Name;
-            this.textBoxTabDescription.Text = Description;
             this.comboBoxAnalysisType.DataSource = Enum.GetValues(typeof(AnalysisMethodType));
             this.comboBoxAnalysisType.SelectedIndex = 1;
             _project = project;

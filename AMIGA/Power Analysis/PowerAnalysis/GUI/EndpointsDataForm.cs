@@ -25,8 +25,6 @@ namespace AmigaPowerAnalysis.GUI {
             InitializeComponent();
             Name = "Endpoints data";
             Description = "For each endpoint, indicate the distribution type. For binomial data specify the binomial total. For Taylor's law enter the power. Specify expected values of mean and coefficient of variation (CV) for the comparator variety. Indicate if more there are observations in time series per plot (repeated measures). Indicate if more zeroes are expected than corresponds to the chosen distribution (Excess zeroes).";
-            this.textBoxTabTitle.Text = Name;
-            this.textBoxTabDescription.Text = Description;
             _project = project;
             createDataGridEndpoints();
         }
