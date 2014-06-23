@@ -6,12 +6,18 @@ PARAMETER 'MUCOMPARATOR', 'MEAN', 'COMPARISON', 'DUMMY', 'MODIFIERS' ; \
           TYPE='scalar', 2('variate'), 'pointer', 'factor' ; \
           SET=yes ; DECLARED=no ; PRESENT=no
 
+\DUMMY     Endpoint, ComparisonId, NumberOfInteractions, NumberOfModifiers, \
+\          Block, MainPlot, SubPlot, Variety, Ranking, Spraying, Mean, \
+\          Comparison ; ISAVE[]
+
 DUMMY     Endpoint, ComparisonId, NumberOfInteractions, NumberOfModifiers, \
-          Block, MainPlot, SubPlot, Variety, Ranking, Spraying, Mean, \
-          Comparison ; ISAVE[]
+          Block, MainPlot, SubPlot, Variety; ISAVE[1...8]
 
 TXCONSTRU [tsave] ISAVE
+
 CALCULATE posfactor[1,2] = POSITION('Variety','Mean' ; tsave)  - (0,1)
+calc posmean,poscomp=posfactor[2]+(1,2)
+DUMMY     Mean, Comparison; ISAVE[#posmean,#poscomp]
 VARIATE   ifactor ; !(posfactor[1]...posfactor[2]) ; DECIMALS=0
 CALCULATE nfactor = NVALUES(ifactor)
 GROUPS    [REDEFINE=yes] ISAVE[#ifactor]
