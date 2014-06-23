@@ -32,13 +32,13 @@
             // 
             // panelTabDescription
             // 
-            this.panelTabDescription.AutoScroll = true;
+            this.panelTabDescription.AutoSize = true;
             this.panelTabDescription.Controls.Add(this.textBoxTabDescription);
             this.panelTabDescription.Controls.Add(this.textBoxTabTitle);
             this.panelTabDescription.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTabDescription.Location = new System.Drawing.Point(0, 0);
             this.panelTabDescription.Name = "panelTabDescription";
-            this.panelTabDescription.Size = new System.Drawing.Size(874, 116);
+            this.panelTabDescription.Size = new System.Drawing.Size(874, 104);
             this.panelTabDescription.TabIndex = 10;
             // 
             // textBoxTabDescription
@@ -74,17 +74,19 @@
             // 
             // panelSelectionForm
             // 
+            this.panelSelectionForm.AutoSize = true;
             this.panelSelectionForm.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelSelectionForm.Location = new System.Drawing.Point(0, 116);
+            this.panelSelectionForm.Location = new System.Drawing.Point(0, 104);
             this.panelSelectionForm.Margin = new System.Windows.Forms.Padding(0);
             this.panelSelectionForm.Name = "panelSelectionForm";
-            this.panelSelectionForm.Size = new System.Drawing.Size(874, 387);
+            this.panelSelectionForm.Size = new System.Drawing.Size(874, 399);
             this.panelSelectionForm.TabIndex = 11;
             // 
             // SelectionFormContainer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScroll = true;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.Controls.Add(this.panelSelectionForm);
             this.Controls.Add(this.panelTabDescription);
@@ -94,6 +96,7 @@
             this.panelTabDescription.ResumeLayout(false);
             this.panelTabDescription.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 

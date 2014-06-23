@@ -196,6 +196,7 @@ namespace AmigaPowerAnalysis.GUI {
                     var tab = new TabPage(selectionForm.Name);
                     tab.Name = selectionForm.Name;
                     tab.Controls.Add(form);
+                    tab.AutoScroll = true;
                     this.tabControl.TabPages.Insert(visibleTabCount, tab);
                 } else if (currentTab != null && !selectionForm.IsVisible()) {
                     this.tabControl.TabPages.Remove(currentTab);
