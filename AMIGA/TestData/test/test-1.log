@@ -1,0 +1,249 @@
+GenStat 64-bit Release 16.2  (PC/Windows 7)          23 June 2014 16:01:01
+Copyright 2013, VSN International Ltd.
+Registered to: Plant Research International
+
+   1
+   2  enquire   ch=2 ; filetype=input  ; open=inopen  ; name=infile
+   3  enquire   ch=2 ; filetype=output ; open=outopen ; name=outfile
+   4
+   5  SET [WORKINGDIRECTORY='D:/Data/AMIGA/AmigaTool/Power Analysis/PowerAnalysis/Resources']
+   6
+   7  if inopen.eq.0
+   8      text      project ; 'test-0'
+   9
+  10      text      dir ; 'D:/Data/AMIGA/AmigaTool/TestData/'
+  11      calculate pos = getposition(project ; '-')
+  12      concatena [subdir] project ; width=getposition(project ; '-') - 1
+  13      txconstru [infile] dir, subdir, '/', project, '.csv'
+  14      open      infile ; channel=2 ; filetype=input
+  15      sfilename [inputname=infile] directory=dir ; surname=sur
+  16      txconstru [outfile] dir, sur, '-Output.csv'
+  17      text      profile ; 'Lyles.pro'
+  18      print     infile
+  19      print outfile
+  20    else
+  21      close     ch=2 ; filetype=output
+  22      text      profile ; 'Lyles.pro'
+  23  endif
+  24
+  25  scalar    ch
+  26  open      profile ; channel=ch ; filetype=input
+  27  input     [print=*] ch
+  28  close     channel=ch ; filetype=input
+  29
+  30
+  31  " Completely randomized than one loop is sufficient "
+  32
+  33  " Simulation settings "
+  34
+  35  \scalar    ngridLOC ; 3
+  36  \variate   nBlocks ; !(2,4,6,8,10,12,14,16)
+  37  \variate   nBlocks ; !(2,4,8,16,32,64)  " For fitting "
+  38  \scalar    alfa ; 0.05
+  39  \scalar    seed ; 342894
+  40
+  41  \scalar    powerdist ; 1.5
+  42  \text      design ; 'splitplot'
+  43  \text      design ; 'randomized'
+  44  \text      design ; 'block'
+  45  \text      models ; !t(LN,NB)
+  46  \text      models ; !t(LN,SQ,OP)
+  47  \text      models ; !t(LN,SQ,OP,NB)
+  48  \text      models ; !t(LN,SQ,OP)
+  49  \text      models ; !t(LN,SQ,OP)
+  50
+  51  " Import Data from Simulation tool "
+  52  text      [nvalues=1] dummy, distribution, design, method, IsLogNormal, \
+  53            IsLogNormal, IsSquareRoot, IsOPoisson, IsNegBin
+  54  scalar    lowerLOC, upperLOC, cvComparator, cvBlock, powerdist, alfa, \
+  55            ngridLOC, seed, ndatasets
+  56  variate   nBlocks
+  57  scalar    nitems ; 0
+  58  for read=lowerLOC, upperLOC, cvComparator, cvBlock, distribution, \
+  59        powerdist, alfa, ngridLOC, nBlocks, design, method, seed, ndatasets, \
+  60        IsLogNormal, IsSquareRoot, IsOPoisson, IsNegBin
+  61    read    [print=* ; channel=2 ; end=*] dummy
+  62    getattrib [attribute=stype] read ; save=att
+  63    if att[].eqs.'variate'
+  64        print 'variate'
+  65        read    [print=# ; channel=2 ; setn=yes] read
+  66      else
+  67        read    [print=* ; channel=2] read
+  68    endif
+  69    \print read
+  70    calculate nitems = nitems + 2
+  71  endfor
+
+
+variate
+
+
+    Identifier   Minimum      Mean   Maximum    Values   Missing
+       nBlocks     2.000     21.00     64.00         6         0
+
+  72
+  73  prin lowerLOC, upperLOC, cvComparator, cvBlock, distribution, \
+  74        powerdist, alfa, ngridLOC, nBlocks, design, method, seed, ndatasets, \
+  75        IsLogNormal, IsSquareRoot, IsOPoisson, IsNegBin
+
+    lowerLOC    upperLOC cvComparator     cvBlock distribution   powerdist
+           *       3.000        200.0           0      Poisson           0
+
+
+
+
+
+
+        alfa    ngridLOC     nBlocks                   design      method
+     0.05000       19.00        2.00 RandomizedCompleteBlocks Approximate
+                                4.00
+                                8.00
+                               16.00
+                               32.00
+                               64.00
+
+        seed   ndatasets IsLogNormal IsSquareRoot IsOPoisson IsNegBin
+       12345       100.0        True         True       True    False
+
+
+
+
+
+
+  76
+  77  text      models, ismodels ; !t(LN,SQ,OP,NB)
+  78  equate    !t(#IsLogNormal, #IsSquareRoot, #IsOPoisson, #IsNegBin) ; ismodels
+  79  subset    [ismodels.in.'True'] models
+  80  print     models, ismodels
+
+models ismodels
+    LN     True
+    SQ     True
+    OP     True
+          False
+
+  81  close     channel=2 ; filetype=input
+  82  fileread  [print=* ; name=infile ; skip=nitems ; imethod=read ; \
+  83            separator=',' ; maxcat=0 ; isave=isave]
+  84  sreplace  ['OverdispersedPoisson' ; 'opoisson'] distribution
+  85  sreplace  ['PowerLaw' ; 'power'] distribution
+  86
+  87  sreplace  ['CompletelyRandomized' ; 'randomized'] design
+  88  sreplace  ['RandomizedCompleteBlocks' ; 'block'] design
+  89  sreplace  ['SplitPlot' ; 'splitplot'] design
+  90
+  91  prin isave
+
+               isave
+            Endpoint
+        ComparisonId
+NumberOfInteractions
+   NumberOfModifiers
+               Block
+            MainPlot
+             SubPlot
+             Variety
+                bbbb
+           Frequency
+                Mean
+          Comparison
+
+  92
+  93  " Some extra options "
+  94  calculate init = urand(seed ; 1)
+  95
+  96  " Create design matrix from input file "
+  97  L1CREATE  [isave] MUCOMPARATOR=meanComparator ; MEAN=zz ; COMPARISON=comparison ; \
+  98            DUMMY=dum ; MODIFIERS=Modifiers
+  99
+ 100  " create grid for looping loop over loc/nblocks values "
+ 101  " for a randomized design the non-centrality parameter is proportional "
+ 102  calculate loglowerloc, logupperloc = log(lowerLOC, upperLOC)
+ 103  fgrid     [min=loglowerloc ; max=logupperloc ; ngrid=ngridLOC] gridratio
+
+******** Fault, code VA 3, statement 43 in procedure FGRID
+
+Command:  FACTOR [NVALUES=length ; LEVELS=val[ii]] fgrid[ii]
+Invalid value(s).
+Structure val[1] has an invalid value at unit 1.
+
+
+A fatal fault has occurred - the rest of this job will be ignored
+ 104  calculate gridratio[] = exp(gridratio[])
+ 105  if flagRan = (design.eqs.'randomized') .or. (cvBlock.eq.0)
+ 106      variate   ratio ; gridratio[]
+ 107      variate   nreps ; 2 + 0*ratio
+ 108    else
+ 109      fgrid     [values=gridratio[], nBlocks] grid
+ 110      variate   ratio, nreps ; grid[] ; deci=*,0
+ 111  endif
+ 112
+ 113  calculate nloop = nvalues(ratio)
+ 114  decimals  ratio
+ 115
+ 116  " main looping "
+ 117  for [ntimes=nloop ; index=ii]
+ 118    scalar    iiratio, iireps ; (ratio, nreps)$[ii]
+ 119    PRINT     [IPRINT=* ; SQUASH=yes] iiratio, iireps ; FIELD=10 ; DECI=3,0
+ 120    l2lyles   [dist=#distribution ; power=powerdist ; design=#design ; sign=alfa ; \
+ 121              mucomp=meanComparator ; cvcomp=cvComparator ; cvblock=cvBlock ; \
+ 122              mean=Mean ; comparison=comparison ; dummy=dum ; \
+ 123              modifiers=Modifiers ; loclower=lowerLOC ; locupper=upperLOC ; \
+ 124              analysis=#models] iiratio ; iireps ; qnc[ii] ; qpow[ii] ; qdf[ii]
+ 125  endfor
+ 126  variate   df ; !(#qdf) ; deci=0
+ 127  vequate   qnc,qpow ; nc,pow
+ 128
+ 129  " Expand for randomized "
+ 130  print flagRan
+ 131  if flagRan
+ 132    scalar    nplots ; nvalues(Mean)
+ 133    calculate npars = 2*nplots - mean(df)
+ 134    fgrid     [values=ratio, nBlocks] grid
+ 135    variate   ratio, nreps ; grid[]
+ 136    groups    ratio, nreps ; fRatio, fReps
+ 137    tabulate  [class=fRatio, fReps] nplots*fReps - npars ; mean=tdf
+ 138    variate   df ; tdf ; decimals=0
+ 139
+ 140    pointer   [nvalues=nvalues(nc)] tnc, ttnc, pow
+ 141    table     [class=fRatio] tnc[] ; nc[]
+ 142    table     [class=fRatio, fReps] tNreps, ttnc[]
+ 143    tabulate  1*fReps ; mean=tNreps
+ 144    calculate ttnc[] = tnc[] * tNreps/2
+ 145    variate   nc[] ; ttnc[]
+ 146    calculate critvalChi = edchi(1-alfa + 0*df ; 1)
+ 147    calculate critvalF = edf(1-alfa + 0*df ; 1 ; df)
+ 148    for [index=ii] qq=nc[] ; pp=pow[] ; type=2,2,1,2,1
+ 149      if (type.eq.1)
+ 150          variate   pp ; CUCHI(critvalChi ; 1 ; qq)
+ 151        else
+ 152          variate   pp ; CUF(critvalF ; 1 ; df ; qq)
+ 153      endif
+ 154    endfor
+ 155  endif
+ 156  print   nc[1...5,8,9,10] ; fi=10 ; de=3
+ 157  print   pow[1...5,8,9,10] ; fi=10 ; de=3
+ 158
+ 159  " Export "
+ 160  text      names ; !t(\
+ 161            Ratio, \
+ 162            LogRatio, \
+ 163            NumberReplicates, \
+ 164            PowerDifferenceLogNormal, \
+ 165            PowerDifferenceSquaredRoot, \
+ 166            PowerDifferenceOverdispersedPoisson, \
+ 167            PowerDifferenceNegativeBinomial, \
+ 168            PowerEquivalenceLogNormal, \
+ 169            PowerEquivalenceSquaredRoot, \
+ 170            PowerEquivalenceOverdispersedPoison, \
+ 171            PowerEquivalenceNegativeBinomial)
+ 172
+ 173  calculate logratio = log(ratio)
+ 174  export    [outfile=outfile ; method=overwrite] \
+ 175            ratio, logratio, nreps, pow[1,2,4,5, 6,7,9,10] ; columns=#names
+ 176
+ 177
+ 178  stop
+
+********* End of job. Current data space: 1 block, peak usage 4% at line 83.
+
