@@ -94,7 +94,7 @@
     <Compile Include="Core\ProjectEntities\FactorLevel.cs" />
     <Compile Include="Core\ProjectEntities\FactorLevelCombination.cs" />
     <Compile Include="Core\ProjectEntities\FactorLevelCombinationsCreator.cs" />
-    <Compile Include="Core\ProjectEntities\InputPowerAnalysis.cs" />
+    <Compile Include="Core\ProjectEntities\InputPowerAnalysisRecord.cs" />
     <Compile Include="Core\ProjectEntities\PowerCalculationSettings.cs" />
     <Compile Include="GUI\ComparisonsForm.cs">
       <SubType>UserControl</SubType>
@@ -107,6 +107,12 @@
     </Compile>
     <Compile Include="GUI\AnalysisResultsForm.Designer.cs">
       <DependentUpon>AnalysisResultsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\IntroductionForm.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\IntroductionForm.Designer.cs">
+      <DependentUpon>IntroductionForm.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\RunPowerAnalysisDialog.cs">
       <SubType>Form</SubType>
@@ -177,6 +183,9 @@
     <EmbeddedResource Include="GUI\AnalysisResultsForm.resx">
       <DependentUpon>AnalysisResultsForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="GUI\IntroductionForm.resx">
+      <DependentUpon>IntroductionForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GUI\RunPowerAnalysisDialog.resx">
       <DependentUpon>RunPowerAnalysisDialog.cs</DependentUpon>
     </EmbeddedResource>
@@ -233,6 +242,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\CoverImage.jpg" />
     <EmbeddedResource Include="Resources\amiga_icon.ico" />
     <Content Include="Resources\amiga_logo.png" />
   </ItemGroup>

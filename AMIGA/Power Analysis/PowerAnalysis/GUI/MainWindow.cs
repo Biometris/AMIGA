@@ -169,10 +169,12 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void closeProject() {
             _selectionForms.Clear();
+            _selectionForms.Add(new IntroductionForm());
             this.tabControl.TabPages.Clear();
             this.saveAsToolStripMenuItem.Enabled = false;
             this.saveToolStripMenuItem.Enabled = false;
             this.closeToolStripMenuItem.Enabled = false;
+            updateTabs();
         }
 
         private void updateTabs() {

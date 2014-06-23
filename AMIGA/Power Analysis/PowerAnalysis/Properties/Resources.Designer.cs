@@ -59,5 +59,15 @@ namespace AmigaPowerAnalysis.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap CoverImage {
+            get {
+                object obj = ResourceManager.GetObject("CoverImage", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }

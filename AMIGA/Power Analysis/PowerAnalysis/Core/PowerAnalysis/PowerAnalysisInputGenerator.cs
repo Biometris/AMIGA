@@ -12,7 +12,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
         /// <param name="powerCalculationSettings">The general power analysis settings.</param>
         /// <param name="records">The power analysis input records of the comparison of interest.</param>
         /// <param name="filename">The name of the file to which the settings are written.</param>
-        public void PowerAnalysisInputToCsv(Endpoint endpoint, PowerCalculationSettings powerCalculationSettings, List<InputPowerAnalysis> records, string filename) {
+        public void PowerAnalysisInputToCsv(Endpoint endpoint, PowerCalculationSettings powerCalculationSettings, List<InputPowerAnalysisRecord> records, string filename) {
             var separator = ",";
             var stringBuilder = new StringBuilder();
 
@@ -77,8 +77,8 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             }
         }
 
-        public List<InputPowerAnalysis> GetComparisonInputPowerAnalysisRecords(Comparison comparison) {
-            var records = new List<InputPowerAnalysis>();
+        public List<InputPowerAnalysisRecord> GetComparisonInputPowerAnalysisRecords(Comparison comparison) {
+            var records = new List<InputPowerAnalysisRecord>();
             var counter = 1;
             foreach (var varietyLevel in comparison.Endpoint.VarietyFactor.FactorLevels) {
                 var isGMO = varietyLevel.Label == "GMO";
@@ -96,8 +96,8 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             return records;
         }
 
-        private static List<InputPowerAnalysis> createInputPowerAnalysisRecordsPerInteraction(Comparison comparison, int counter, FactorLevel varietyLevel, bool isGMO, bool isComparator) {
-            var records = new List<InputPowerAnalysis>();
+        private static List<InputPowerAnalysisRecord> createInputPowerAnalysisRecordsPerInteraction(Comparison comparison, int counter, FactorLevel varietyLevel, bool isGMO, bool isComparator) {
+            var records = new List<InputPowerAnalysisRecord>();
             foreach (var interactionLevels in comparison.ComparisonFactorLevelCombinations) {
                 double mean;
                 int comparisonType;
@@ -117,7 +117,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                         factorLevels.AddRange(modifierLevel.FactorLevelCombination.Items.Select(il => il.Level).ToList());
                         var factors = interactionLevels.FactorLevelCombination.Items.Select(il => il.Parent.Name).ToList();
                         factors.AddRange(modifierLevel.FactorLevelCombination.Items.Select(il => il.Parent.Name).ToList());
-                        records.Add(new InputPowerAnalysis() {
+                        records.Add(new InputPowerAnalysisRecord() {
                             Endpoint = comparison.Endpoint.Name,
                             NumberOfInteractions = comparison.Endpoint.InteractionFactors.Count(),
                             NumberOfModifiers = comparison.Endpoint.UseModifier ? comparison.Endpoint.NonInteractionFactors.Count() : 0,
@@ -135,7 +135,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                 } else {
                     var factorLevels = interactionLevels.FactorLevelCombination.Items.Select(il => il.Level).ToList();
                     var factors = interactionLevels.FactorLevelCombination.Items.Select(il => il.Parent.Name).ToList();
-                    records.Add(new InputPowerAnalysis() {
+                    records.Add(new InputPowerAnalysisRecord() {
                         Endpoint = comparison.Endpoint.Name,
                         NumberOfInteractions = comparison.Endpoint.InteractionFactors.Count(),
                         NumberOfModifiers = comparison.Endpoint.UseModifier ? comparison.Endpoint.NonInteractionFactors.Count() : 0,
@@ -154,8 +154,8 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             return records;
         }
 
-        private static List<InputPowerAnalysis> createInputPowerAnalysisRecordsForNoInteraction(Comparison comparison, int counter, FactorLevel varietyLevel, bool isGMO, bool isComparator) {
-            var records = new List<InputPowerAnalysis>();
+        private static List<InputPowerAnalysisRecord> createInputPowerAnalysisRecordsForNoInteraction(Comparison comparison, int counter, FactorLevel varietyLevel, bool isGMO, bool isComparator) {
+            var records = new List<InputPowerAnalysisRecord>();
             double mean;
             int comparisonType;
             if (isGMO) {
@@ -173,7 +173,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                 foreach (var modifierLevel in comparison.Endpoint.NonInteractionFactorLevelCombinations) {
                     var factorLevels = modifierLevel.FactorLevelCombination.Items.Select(il => il.Level).ToList();
                     var factors = modifierLevel.FactorLevelCombination.Items.Select(il => il.Parent.Name).ToList();
-                    records.Add(new InputPowerAnalysis() {
+                    records.Add(new InputPowerAnalysisRecord() {
                         Endpoint = comparison.Endpoint.Name,
                         NumberOfInteractions = comparison.Endpoint.InteractionFactors.Count(),
                         NumberOfModifiers = comparison.Endpoint.UseModifier ? comparison.Endpoint.NonInteractionFactors.Count() : 0,
@@ -189,7 +189,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                     counter++;
                 }
             } else {
-                records.Add(new InputPowerAnalysis() {
+                records.Add(new InputPowerAnalysisRecord() {
                     Endpoint = comparison.Endpoint.Name,
                     NumberOfInteractions = comparison.Endpoint.InteractionFactors.Count(),
                     NumberOfModifiers = 0,
