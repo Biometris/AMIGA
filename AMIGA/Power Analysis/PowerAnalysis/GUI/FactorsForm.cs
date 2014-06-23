@@ -116,10 +116,10 @@ namespace AmigaPowerAnalysis.GUI {
             while (factorNames.Contains(newFactorName)) {
                 newFactorName = string.Format("New factor {0}", i++);
             }
-            _project.AddFactor(new Factor(newFactorName, 2));
+            var newFactor = new Factor(newFactorName, 2);
+            _project.AddFactor(newFactor);
             _project.UpdateEndpointFactors();
             updateDataGridFactors();
-            updateDataGridFactorLevels();
         }
 
         private void buttonRemoveFactor_Click(object sender, EventArgs e) {
@@ -140,7 +140,7 @@ namespace AmigaPowerAnalysis.GUI {
         private void addFactorLevelButton_Click(object sender, EventArgs e) {
             if (_currentFactor != null) {
                 _currentFactor.FactorLevels.Add(new FactorLevel() {
-                    Label = "Label",
+                    Label = string.Format("Label {0}", _currentFactor.GetUniqueFactorLevel()),
                     Parent = _currentFactor,
                     Level = _currentFactor.GetUniqueFactorLevel(),
                 });
@@ -238,14 +238,6 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void dataGridViewFactorLevels_DataError(object sender, DataGridViewDataErrorEventArgs e) {
             showError("Invalid data", e.Exception.Message);
-        }
-
-        private void dataGridViewFactorLevels_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e) {
-
-        }
-
-        private void dataGridViewFactors_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e) {
-
         }
 
         private void showError(string title, string message) {

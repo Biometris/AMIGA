@@ -59,7 +59,6 @@
             this.dataGridViewFactorLevels.TabIndex = 4;
             this.dataGridViewFactorLevels.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.dataGridViewFactorLevels_CellValidating);
             this.dataGridViewFactorLevels.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dataGridViewFactorLevels_DataError);
-            this.dataGridViewFactorLevels.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.dataGridViewFactorLevels_UserDeletingRow);
             // 
             // dataGridViewFactors
             // 
@@ -83,7 +82,6 @@
             this.dataGridViewFactors.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.dataGridFactors_CellValidating);
             this.dataGridViewFactors.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dataGridFactors_DataError);
             this.dataGridViewFactors.SelectionChanged += new System.EventHandler(this.dataGridFactors_SelectionChanged);
-            this.dataGridViewFactors.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.dataGridViewFactors_UserDeletingRow);
             // 
             // splitContainerFactors
             // 
