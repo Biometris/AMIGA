@@ -5,9 +5,9 @@ enquire   ch=2 ; filetype=output ; open=outopen ; name=outfile
 SET [WORKINGDIRECTORY='D:/Data/AMIGA/AmigaTool/Power Analysis/PowerAnalysis/Resources']
 
 if inopen.eq.0
-    text      project ; 'ExampleRS-0'
+    text      project ; 'test-0'
 
-    text      dir ; 'D:/Data/AMIGA/AmigaTool/Projects/'
+    text      dir ; 'D:/Data/AMIGA/AmigaTool/TestData/'
     calculate pos = getposition(project ; '-')
     concatena [subdir] project ; width=getposition(project ; '-') - 1
     txconstru [infile] dir, subdir, '/', project, '.csv'
@@ -41,7 +41,7 @@ close     channel=ch ; filetype=input
 \scalar    powerdist ; 1.5
 \text      design ; 'splitplot'
 \text      design ; 'randomized'
-text      design ; 'block'
+\text      design ; 'block'
 \text      models ; !t(LN,NB)
 \text      models ; !t(LN,SQ,OP)
 \text      models ; !t(LN,SQ,OP,NB)
@@ -49,14 +49,14 @@ text      design ; 'block'
 \text      models ; !t(LN,SQ,OP)
 
 " Import Data from Simulation tool "
-text      [nvalues=1] dummy, distribution, method, IsLogNormal, \
+text      [nvalues=1] dummy, distribution, design, method, IsLogNormal, \
           IsLogNormal, IsSquareRoot, IsOPoisson, IsNegBin
 scalar    lowerLOC, upperLOC, cvComparator, cvBlock, powerdist, alfa, \
           ngridLOC, seed, ndatasets
 variate   nBlocks
 scalar    nitems ; 0
 for read=lowerLOC, upperLOC, cvComparator, cvBlock, distribution, \
-      powerdist, alfa, ngridLOC, nBlocks, method, seed, ndatasets, \
+      powerdist, alfa, ngridLOC, nBlocks, design, method, seed, ndatasets, \
       IsLogNormal, IsSquareRoot, IsOPoisson, IsNegBin
   read    [print=* ; channel=2 ; end=*] dummy
   getattrib [attribute=stype] read ; save=att
@@ -71,7 +71,7 @@ for read=lowerLOC, upperLOC, cvComparator, cvBlock, distribution, \
 endfor
 
 prin lowerLOC, upperLOC, cvComparator, cvBlock, distribution, \
-      powerdist, alfa, ngridLOC, nBlocks, method, seed, ndatasets, \
+      powerdist, alfa, ngridLOC, nBlocks, design, method, seed, ndatasets, \
       IsLogNormal, IsSquareRoot, IsOPoisson, IsNegBin
 
 text      models, ismodels ; !t(LN,SQ,OP,NB)
@@ -83,6 +83,10 @@ fileread  [print=* ; name=infile ; skip=nitems ; imethod=read ; \
           separator=',' ; maxcat=0 ; isave=isave]
 sreplace  ['OverdispersedPoisson' ; 'opoisson'] distribution
 sreplace  ['PowerLaw' ; 'power'] distribution
+
+sreplace  ['CompletelyRandomized' ; 'randomized'] design
+sreplace  ['RandomizedCompleteBlocks' ; 'block'] design
+sreplace  ['SplitPlot' ; 'splitplot'] design
 
 prin isave
 

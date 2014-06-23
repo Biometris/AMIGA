@@ -15,9 +15,9 @@ DUMMY     Endpoint, ComparisonId, NumberOfInteractions, NumberOfModifiers, \
 
 TXCONSTRU [tsave] ISAVE
 
-CALCULATE posfactor[1,2] = POSITION('Variety','Mean' ; tsave)  - (0,1)
-calc posmean,poscomp=posfactor[2]+(1,2)
-DUMMY     Mean, Comparison; ISAVE[#posmean,#poscomp]
+CALCULATE posfactor[1,2] = POSITION('Variety','Frequency' ; tsave)  - (0,1)
+calc posfreq,posmean,poscomp=posfactor[2]+(1,2,3)
+DUMMY     Frequency, Mean, Comparison; ISAVE[#posfreq,#posmean,#poscomp]
 VARIATE   ifactor ; !(posfactor[1]...posfactor[2]) ; DECIMALS=0
 CALCULATE nfactor = NVALUES(ifactor)
 GROUPS    [REDEFINE=yes] ISAVE[#ifactor]
