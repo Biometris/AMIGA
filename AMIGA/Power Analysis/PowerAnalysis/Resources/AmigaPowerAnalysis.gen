@@ -48,6 +48,8 @@ for read=lowerLOC, upperLOC, cvComparator, cvBlock, distribution, \
   calculate nitems = nitems + 2
 endfor
 
+calc lowerLOC,upperLOC=mvreplace(lowerLOC,upperLOC;1)
+
 prin lowerLOC, upperLOC, cvComparator, cvBlock, distribution, \
       powerdist, alfa, ngridLOC, nBlocks, design, method, seed, ndatasets, \
       IsLogNormal, IsSquareRoot, IsOPoisson, IsNegBin
