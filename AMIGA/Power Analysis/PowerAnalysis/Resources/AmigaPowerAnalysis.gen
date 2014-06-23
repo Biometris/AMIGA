@@ -1,51 +1,32 @@
-enquire   ch=2 ; filetype=input  ; open=inopen  ; name=infile
-enquire   ch=2 ; filetype=output ; open=outopen ; name=outfile
+enquire   ch=2 ; filetype=input  ; open=in2open  ; name=lylesfile
+enquire   ch=3 ; filetype=input  ; open=in3open  ; name=infile
+enquire   ch=2 ; filetype=output ; open=out2open ; name=outfile
+close channel=2 ; filetype=output
 
-SET [WORKINGDIRECTORY='D:/Data/AMIGA/AmigaTool/Power Analysis/PowerAnalysis/Resources']
+\SET [WORKINGDIRECTORY='D:/Data/AMIGA/AmigaTool/Power Analysis/PowerAnalysis/Resources']
 
-if inopen.eq.0
+if in3open.eq.0
     text      project ; 'test-0'
     text      dir ; 'D:/Data/AMIGA/AmigaTool/TestData/'
     calculate pos = getposition(project ; '-')
     concatena [subdir] project ; width=getposition(project ; '-') - 1
     txconstru [infile] dir, subdir, '/', project, '.csv'
-    open      infile ; channel=2 ; filetype=input
+    open      infile ; channel=3 ; filetype=input
     sfilename [inputname=infile] directory=dir ; surname=sur
     txconstru [outfile] dir, sur, '-Output.csv'
-    text      profile ; 'Lyles.pro'
+    open      'D:/Data/AMIGA/AmigaTool/Power Analysis/PowerAnalysis/Resources/Lyles.pro' ; channel=2 ; filetype=input
     print     infile
-    print outfile
-  else
-    close     ch=2 ; filetype=output
-    text      profile ; 'Lyles.pro'
+    print     outfile
 endif
 
-scalar    ch
-open      profile ; channel=ch ; filetype=input
-input     [print=*] ch
-close     channel=ch ; filetype=input
+" Include Lyles procedures "
+input     [print=*] 2
+close     channel=2 ; filetype=input
 
 
 " Completely randomized than one loop is sufficient "
 
 " Simulation settings "
-
-\scalar    ngridLOC ; 3
-\variate   nBlocks ; !(2,4,6,8,10,12,14,16)
-\variate   nBlocks ; !(2,4,8,16,32,64)  " For fitting "
-\scalar    alfa ; 0.05
-\scalar    seed ; 342894
-
-\scalar    powerdist ; 1.5
-\text      design ; 'splitplot'
-\text      design ; 'randomized'
-\text      design ; 'block'
-\text      models ; !t(LN,NB)
-\text      models ; !t(LN,SQ,OP)
-\text      models ; !t(LN,SQ,OP,NB)
-\text      models ; !t(LN,SQ,OP)
-\text      models ; !t(LN,SQ,OP)
-
 " Import Data from Simulation tool "
 text      [nvalues=1] dummy, distribution, design, method, IsLogNormal, \
           IsLogNormal, IsSquareRoot, IsOPoisson, IsNegBin
@@ -56,15 +37,14 @@ scalar    nitems ; 0
 for read=lowerLOC, upperLOC, cvComparator, cvBlock, distribution, \
       powerdist, alfa, ngridLOC, nBlocks, design, method, seed, ndatasets, \
       IsLogNormal, IsSquareRoot, IsOPoisson, IsNegBin
-  read    [print=* ; channel=2 ; end=*] dummy
+  read    [print=* ; channel=3 ; end=*] dummy
   getattrib [attribute=stype] read ; save=att
   if att[].eqs.'variate'
       print 'variate'
-      read    [print=# ; channel=2 ; setn=yes] read
+      read    [print=# ; channel=3 ; setn=yes] read
     else
-      read    [print=* ; channel=2] read
+      read    [print=* ; channel=3] read
   endif
-  \print read
   calculate nitems = nitems + 2
 endfor
 
@@ -76,7 +56,7 @@ text      models, ismodels ; !t(LN,SQ,OP,NB)
 equate    !t(#IsLogNormal, #IsSquareRoot, #IsOPoisson, #IsNegBin) ; ismodels
 subset    [ismodels.in.'True'] models
 print     models, ismodels
-close     channel=2 ; filetype=input
+close     channel=3 ; filetype=input
 fileread  [print=* ; name=infile ; skip=nitems ; imethod=read ; \
           separator=',' ; maxcat=0 ; isave=isave]
 sreplace  ['OverdispersedPoisson' ; 'opoisson'] distribution
@@ -171,6 +151,5 @@ text      names ; !t(\
 calculate logratio = log(ratio)
 export    [outfile=outfile ; method=overwrite] \
           ratio, logratio, nreps, pow[1,2,4,5, 6,7,9,10] ; columns=#names
-
 
 stop
