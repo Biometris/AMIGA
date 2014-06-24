@@ -7,14 +7,14 @@ using System.Windows.Forms;
 using AmigaPowerAnalysis.Core;
 
 namespace AmigaPowerAnalysis.GUI {
-    public partial class ModifiersForm : UserControl, ISelectionForm {
+    public partial class ModifiersPanel : UserControl, ISelectionForm {
 
         private Project _project;
 
         private Endpoint _currentEndpoint;
         private List<ModifierFactorLevelCombination> _currentFactorModifiers;
 
-        public ModifiersForm(Project project) {
+        public ModifiersPanel(Project project) {
             InitializeComponent();
             _project = project;
             Name = "Modifiers";

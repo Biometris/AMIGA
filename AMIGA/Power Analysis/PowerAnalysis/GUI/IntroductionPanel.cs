@@ -10,11 +10,11 @@ using System.Windows.Forms;
 using AmigaPowerAnalysis.Core;
 
 namespace AmigaPowerAnalysis.GUI {
-    public partial class IntroductionForm : UserControl, ISelectionForm {
+    public partial class IntroductionPanel : UserControl, ISelectionForm {
 
         public string Description { get; private set; }
 
-        public IntroductionForm() {
+        public IntroductionPanel() {
             InitializeComponent();
             Name = "Introduction";
             Description = "Welcome to Amiga Power Analysis for environmental risk assessment (ERA) using field trials. With this tool you can calculate the necessary replication for assessing differences and equivalences between a genetically modified organism (GMO) and a comparator plant variety.\r\nThe tool allows to specify the experimental design, additional factors in the experiment, and the method of statistical analysis that will be used.";

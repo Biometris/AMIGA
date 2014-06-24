@@ -1,5 +1,5 @@
 ﻿namespace AmigaPowerAnalysis.GUI {
-    partial class EndpointTypesForm {
+    partial class EndpointTypesPanel {
         /// <summary> 
         /// Required designer variable.
         /// </summary>

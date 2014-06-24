@@ -16,13 +16,13 @@ using AmigaPowerAnalysis.Core;
 // TODO LOC must be positive
 
 namespace AmigaPowerAnalysis.GUI {
-    public partial class EndpointsForm : UserControl, ISelectionForm {
+    public partial class EndpointsPanel : UserControl, ISelectionForm {
 
         private Project _project;
 
         public string Description { get; private set; }
 
-        public EndpointsForm(Project project) {
+        public EndpointsPanel(Project project) {
             InitializeComponent();
             Name = "Endpoints";
             Description = "Enter a list of endpoints. For each endpoint indicate its group. The power analysis will be based on all primary endpoints. Results for other endpoints will be shown for information only. For each endpoint provide the measurement type and limits of concern (LoC). Provide a lower LoC, an upper LoC, or both.";

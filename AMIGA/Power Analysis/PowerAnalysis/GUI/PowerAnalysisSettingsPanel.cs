@@ -12,11 +12,11 @@ using AmigaPowerAnalysis.Helpers;
 // TODO LOC must be positive
 
 namespace AmigaPowerAnalysis.GUI {
-    public partial class PowerAnalysisSettingsForm : UserControl, ISelectionForm {
+    public partial class PowerAnalysisSettingsPanel : UserControl, ISelectionForm {
 
         private Project _project;
 
-        public PowerAnalysisSettingsForm(Project project) {
+        public PowerAnalysisSettingsPanel(Project project) {
             InitializeComponent();
             Name = "Simulation settings";
             Description = "Specify how to perform the power analysis and which methods of analysis are to be compared. It is advised first to use the Approximate method (Lyles) because it is much faster.";

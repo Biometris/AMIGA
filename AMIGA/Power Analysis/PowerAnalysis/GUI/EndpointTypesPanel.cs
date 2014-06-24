@@ -17,7 +17,7 @@ using AmigaPowerAnalysis.Core.Distributions;
 // TODO LOC must be positive
 
 namespace AmigaPowerAnalysis.GUI {
-    public partial class EndpointTypesForm : UserControl, ISelectionForm {
+    public partial class EndpointTypesPanel : UserControl, ISelectionForm {
 
         private Project _project;
 
@@ -25,7 +25,7 @@ namespace AmigaPowerAnalysis.GUI {
 
         public string Description { get; private set; }
 
-        public EndpointTypesForm(Project project) {
+        public EndpointTypesPanel(Project project) {
             InitializeComponent();
             var endpointTypeProvider = new EndpointTypeProvider();
             _endpointTypes = endpointTypeProvider.GetAvailableEndpointTypes();

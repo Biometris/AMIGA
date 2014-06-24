@@ -9,8 +9,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace AmigaPowerAnalysis.GUI {
-    public partial class SelectionPaneForm : Form {
-        public SelectionPaneForm(UserControl selectionForm) {
+    public partial class SelectionPanelForm : Form {
+        public SelectionPanelForm(UserControl selectionForm) {
             InitializeComponent();
             selectionForm.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelSelectionForm.Controls.Add(selectionForm);

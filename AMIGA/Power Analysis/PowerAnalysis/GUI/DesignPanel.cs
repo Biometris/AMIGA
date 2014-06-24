@@ -20,13 +20,13 @@ using AmigaPowerAnalysis.Core;
 // TODO Frequency off factor levels must be postitive
 
 namespace AmigaPowerAnalysis.GUI {
-    public partial class DesignForm : UserControl, ISelectionForm {
+    public partial class DesignPanel : UserControl, ISelectionForm {
 
         private Project _project;
 
         private Factor _currentFactor;
 
-        public DesignForm(Project project) {
+        public DesignPanel(Project project) {
             InitializeComponent();
             _project = project;
             Name = "Design";

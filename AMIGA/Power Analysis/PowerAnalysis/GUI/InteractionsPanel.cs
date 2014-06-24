@@ -6,13 +6,13 @@ using System.Windows.Forms;
 using AmigaPowerAnalysis.Core;
 
 namespace AmigaPowerAnalysis.GUI {
-    public partial class InteractionsForm : UserControl, ISelectionForm {
+    public partial class InteractionsPanel : UserControl, ISelectionForm {
 
         private Project _project;
 
         private DataTable _interactionsDataTable = new DataTable();
 
-        public InteractionsForm(Project project) {
+        public InteractionsPanel(Project project) {
             InitializeComponent();
             _project = project;
             Name = "Interactions";

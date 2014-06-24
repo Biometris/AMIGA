@@ -10,7 +10,7 @@ using System.Windows.Forms;
 using AmigaPowerAnalysis.Core;
 
 namespace AmigaPowerAnalysis.GUI {
-    public partial class ComparisonsForm : UserControl, ISelectionForm {
+    public partial class ComparisonsPanel : UserControl, ISelectionForm {
 
         private Project _project;
 
@@ -18,7 +18,7 @@ namespace AmigaPowerAnalysis.GUI {
         private List<Comparison> _comparisons;
         private List<ComparisonFactorLevelCombination> _currentComparisonFactorLevels;
 
-        public ComparisonsForm(Project project) {
+        public ComparisonsPanel(Project project) {
             InitializeComponent();
             _project = project;
             Name = "Comparisons";

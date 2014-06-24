@@ -1,5 +1,5 @@
 ﻿namespace AmigaPowerAnalysis.GUI {
-    partial class SelectionPaneContainer {
+    partial class SelectionPanelContainer {
         /// <summary> 
         /// Required designer variable.
         /// </summary>

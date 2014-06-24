@@ -8,13 +8,13 @@ using AmigaPowerAnalysis.Core;
 // TODO The Variety factor should not have an Interaction checkbox
 
 namespace AmigaPowerAnalysis.GUI {
-    public partial class FactorsForm : UserControl, ISelectionForm {
+    public partial class FactorsPanel : UserControl, ISelectionForm {
 
         private Project _project;
 
         private Factor _currentFactor;
 
-        public FactorsForm(Project project) {
+        public FactorsPanel(Project project) {
             InitializeComponent();
             _project = project;
             Name = "Factors";

@@ -1,5 +1,5 @@
 ﻿namespace AmigaPowerAnalysis.GUI {
-    partial class FactorsForm {
+    partial class FactorsPanel {
         /// <summary> 
         /// Required designer variable.
         /// </summary>

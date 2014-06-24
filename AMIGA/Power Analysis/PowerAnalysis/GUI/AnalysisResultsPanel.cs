@@ -12,14 +12,14 @@ using AmigaPowerAnalysis.Core.Charting;
 // TODO LOC must be positive
 
 namespace AmigaPowerAnalysis.GUI {
-    public partial class AnalysisResultsForm : UserControl, ISelectionForm {
+    public partial class AnalysisResultsPanel : UserControl, ISelectionForm {
 
         private Project _project;
         private List<Comparison> _comparisons;
         private Comparison _currentComparison;
         private AnalysisMethodType _currentAnalysisType = AnalysisMethodType.OverdispersedPoisson;
 
-        public AnalysisResultsForm(Project project) {
+        public AnalysisResultsPanel(Project project) {
             InitializeComponent();
             Name = "Results";
             Description = "Choose endpoint in table. Choose method of analysis if more have been investigated. Power is shown for difference tests (upper graphs) and equivalence tests (lower graphs), both as a function of the number of replicates (left) and the Ratio GMO/CMP (right).";

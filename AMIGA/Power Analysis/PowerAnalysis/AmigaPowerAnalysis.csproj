@@ -97,35 +97,35 @@
     <Compile Include="Core\ProjectEntities\FactorLevelCombinationsCreator.cs" />
     <Compile Include="Core\ProjectEntities\InputPowerAnalysisRecord.cs" />
     <Compile Include="Core\ProjectEntities\PowerCalculationSettings.cs" />
-    <Compile Include="GUI\ComparisonsForm.cs">
+    <Compile Include="GUI\ComparisonsPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="GUI\ComparisonsForm.Designer.cs">
-      <DependentUpon>ComparisonsForm.cs</DependentUpon>
+    <Compile Include="GUI\ComparisonsPanel.Designer.cs">
+      <DependentUpon>ComparisonsPanel.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\AnalysisResultsForm.cs">
+    <Compile Include="GUI\AnalysisResultsPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="GUI\AnalysisResultsForm.Designer.cs">
-      <DependentUpon>AnalysisResultsForm.cs</DependentUpon>
+    <Compile Include="GUI\AnalysisResultsPanel.Designer.cs">
+      <DependentUpon>AnalysisResultsPanel.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\EndpointTypesForm.cs">
+    <Compile Include="GUI\EndpointTypesPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="GUI\EndpointTypesForm.Designer.cs">
-      <DependentUpon>EndpointTypesForm.cs</DependentUpon>
+    <Compile Include="GUI\EndpointTypesPanel.Designer.cs">
+      <DependentUpon>EndpointTypesPanel.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\SelectionPaneContainer.cs">
+    <Compile Include="GUI\SelectionPanelContainer.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="GUI\SelectionPaneContainer.Designer.cs">
-      <DependentUpon>SelectionPaneContainer.cs</DependentUpon>
+    <Compile Include="GUI\SelectionPanelContainer.Designer.cs">
+      <DependentUpon>SelectionPanelContainer.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\IntroductionForm.cs">
+    <Compile Include="GUI\IntroductionPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="GUI\IntroductionForm.Designer.cs">
-      <DependentUpon>IntroductionForm.cs</DependentUpon>
+    <Compile Include="GUI\IntroductionPanel.Designer.cs">
+      <DependentUpon>IntroductionPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\RunPowerAnalysisDialog.cs">
       <SubType>Form</SubType>
@@ -133,47 +133,47 @@
     <Compile Include="GUI\RunPowerAnalysisDialog.Designer.cs">
       <DependentUpon>RunPowerAnalysisDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\PowerAnalysisSettingsForm.cs">
+    <Compile Include="GUI\PowerAnalysisSettingsPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="GUI\PowerAnalysisSettingsForm.Designer.cs">
-      <DependentUpon>PowerAnalysisSettingsForm.cs</DependentUpon>
+    <Compile Include="GUI\PowerAnalysisSettingsPanel.Designer.cs">
+      <DependentUpon>PowerAnalysisSettingsPanel.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\ModifiersForm.cs">
+    <Compile Include="GUI\ModifiersPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="GUI\ModifiersForm.Designer.cs">
-      <DependentUpon>ModifiersForm.cs</DependentUpon>
+    <Compile Include="GUI\ModifiersPanel.Designer.cs">
+      <DependentUpon>ModifiersPanel.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\FactorsForm.cs">
+    <Compile Include="GUI\FactorsPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="GUI\FactorsForm.Designer.cs">
-      <DependentUpon>FactorsForm.cs</DependentUpon>
+    <Compile Include="GUI\FactorsPanel.Designer.cs">
+      <DependentUpon>FactorsPanel.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\EndpointsDataForm.cs">
+    <Compile Include="GUI\EndpointsDataPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="GUI\EndpointsDataForm.Designer.cs">
-      <DependentUpon>EndpointsDataForm.cs</DependentUpon>
+    <Compile Include="GUI\EndpointsDataPanel.Designer.cs">
+      <DependentUpon>EndpointsDataPanel.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\DesignForm.cs">
+    <Compile Include="GUI\DesignPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="GUI\DesignForm.Designer.cs">
-      <DependentUpon>DesignForm.cs</DependentUpon>
+    <Compile Include="GUI\DesignPanel.Designer.cs">
+      <DependentUpon>DesignPanel.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\EndpointsForm.cs">
+    <Compile Include="GUI\EndpointsPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="GUI\EndpointsForm.Designer.cs">
-      <DependentUpon>EndpointsForm.cs</DependentUpon>
+    <Compile Include="GUI\EndpointsPanel.Designer.cs">
+      <DependentUpon>EndpointsPanel.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\InteractionsForm.cs">
+    <Compile Include="GUI\InteractionsPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="GUI\InteractionsForm.Designer.cs">
-      <DependentUpon>InteractionsForm.cs</DependentUpon>
+    <Compile Include="GUI\InteractionsPanel.Designer.cs">
+      <DependentUpon>InteractionsPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\ISelectionForm.cs" />
     <Compile Include="GUI\MainWindow.cs">
@@ -182,11 +182,11 @@
     <Compile Include="GUI\MainWindow.Designer.cs">
       <DependentUpon>MainWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\SelectionPaneForm.cs">
+    <Compile Include="GUI\SelectionPanelForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GUI\SelectionPaneForm.Designer.cs">
-      <DependentUpon>SelectionPaneForm.cs</DependentUpon>
+    <Compile Include="GUI\SelectionPanelForm.Designer.cs">
+      <DependentUpon>SelectionPanelForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Helpers\CsvWriter.cs" />
     <Compile Include="Helpers\ListExtensionMethods.cs" />
@@ -196,50 +196,50 @@
     <Compile Include="Program.cs" />
     <Compile Include="Core\Project.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="GUI\ComparisonsForm.resx">
-      <DependentUpon>ComparisonsForm.cs</DependentUpon>
+    <EmbeddedResource Include="GUI\ComparisonsPanel.resx">
+      <DependentUpon>ComparisonsPanel.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GUI\AnalysisResultsForm.resx">
-      <DependentUpon>AnalysisResultsForm.cs</DependentUpon>
+    <EmbeddedResource Include="GUI\AnalysisResultsPanel.resx">
+      <DependentUpon>AnalysisResultsPanel.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GUI\EndpointTypesForm.resx">
-      <DependentUpon>EndpointTypesForm.cs</DependentUpon>
+    <EmbeddedResource Include="GUI\EndpointTypesPanel.resx">
+      <DependentUpon>EndpointTypesPanel.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GUI\SelectionPaneContainer.resx">
-      <DependentUpon>SelectionPaneContainer.cs</DependentUpon>
+    <EmbeddedResource Include="GUI\SelectionPanelContainer.resx">
+      <DependentUpon>SelectionPanelContainer.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GUI\IntroductionForm.resx">
-      <DependentUpon>IntroductionForm.cs</DependentUpon>
+    <EmbeddedResource Include="GUI\IntroductionPanel.resx">
+      <DependentUpon>IntroductionPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\RunPowerAnalysisDialog.resx">
       <DependentUpon>RunPowerAnalysisDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GUI\PowerAnalysisSettingsForm.resx">
-      <DependentUpon>PowerAnalysisSettingsForm.cs</DependentUpon>
+    <EmbeddedResource Include="GUI\PowerAnalysisSettingsPanel.resx">
+      <DependentUpon>PowerAnalysisSettingsPanel.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GUI\ModifiersForm.resx">
-      <DependentUpon>ModifiersForm.cs</DependentUpon>
+    <EmbeddedResource Include="GUI\ModifiersPanel.resx">
+      <DependentUpon>ModifiersPanel.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GUI\FactorsForm.resx">
-      <DependentUpon>FactorsForm.cs</DependentUpon>
+    <EmbeddedResource Include="GUI\FactorsPanel.resx">
+      <DependentUpon>FactorsPanel.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GUI\EndpointsDataForm.resx">
-      <DependentUpon>EndpointsDataForm.cs</DependentUpon>
+    <EmbeddedResource Include="GUI\EndpointsDataPanel.resx">
+      <DependentUpon>EndpointsDataPanel.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GUI\DesignForm.resx">
-      <DependentUpon>DesignForm.cs</DependentUpon>
+    <EmbeddedResource Include="GUI\DesignPanel.resx">
+      <DependentUpon>DesignPanel.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GUI\EndpointsForm.resx">
-      <DependentUpon>EndpointsForm.cs</DependentUpon>
+    <EmbeddedResource Include="GUI\EndpointsPanel.resx">
+      <DependentUpon>EndpointsPanel.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GUI\InteractionsForm.resx">
-      <DependentUpon>InteractionsForm.cs</DependentUpon>
+    <EmbeddedResource Include="GUI\InteractionsPanel.resx">
+      <DependentUpon>InteractionsPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\MainWindow.resx">
       <DependentUpon>MainWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GUI\SelectionPaneForm.resx">
-      <DependentUpon>SelectionPaneForm.cs</DependentUpon>
+    <EmbeddedResource Include="GUI\SelectionPanelForm.resx">
+      <DependentUpon>SelectionPanelForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

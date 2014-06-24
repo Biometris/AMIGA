@@ -1,5 +1,5 @@
 ﻿namespace AmigaPowerAnalysis.GUI {
-    partial class InteractionsForm {
+    partial class InteractionsPanel {
         /// <summary> 
         /// Required designer variable.
         /// </summary>
