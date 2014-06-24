@@ -71,6 +71,8 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void toolstripAbout_Click(object sender, EventArgs e) {
+            var aboutDialog = new AboutForm();
+            aboutDialog.ShowDialog();
         }
 
         private void goToolStripMenuItem_Click(object sender, EventArgs e) {
