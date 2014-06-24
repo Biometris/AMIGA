@@ -13,6 +13,14 @@ namespace AmigaPowerAnalysis.Core {
     public sealed class EndpointType {
 
         public EndpointType() {
+            Primary = false;
+            Measurement = MeasurementType.Count;
+            BinomialTotal = 0;
+            LocLower = 1;
+            LocUpper = 2;
+            MuComparator = 100;
+            CvComparator = 20;
+            DistributionType = DistributionType.Poisson;
         }
 
         public EndpointType(string name, bool primary, MeasurementType measurement, int binomialTotal, double locLower, double locUpper, double muComparator, double cvComparator, DistributionType distributionType) {

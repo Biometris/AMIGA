@@ -122,10 +122,25 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void addEndpointTypeButton_Click(object sender, EventArgs e) {
+            var endpointTypeNames = _endpointTypes.Select(ep => ep.Name).ToList();
+            var newEndpointTypeName = string.Format("New endpoint type");
+            var i = 0;
+            while (endpointTypeNames.Contains(newEndpointTypeName)) {
+                newEndpointTypeName = string.Format("New endpoint type {0}", i++);
+            }
+            _endpointTypes.Add(new EndpointType() {
+                Name = newEndpointTypeName,
+            });
+            updateDataGridViewEndpointTypes();
         }
 
         private void buttonDeleteEndpointType_Click(object sender, EventArgs e) {
-
+            if (dataGridViewEndpointGroups.SelectedRows.Count == 1) {
+                _endpointTypes.Remove(_endpointTypes[dataGridViewEndpointGroups.CurrentRow.Index]);
+                updateDataGridViewEndpointTypes();
+            } else {
+                showError("Invalid selection", "Please select one entire row in order to remove its corresponding endpoint group.");
+            }
         }
 
         private void dataGridViewEndpointTypes_CellValidating(object sender, DataGridViewCellValidatingEventArgs e) {
