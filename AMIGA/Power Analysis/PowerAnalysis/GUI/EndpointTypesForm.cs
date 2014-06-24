@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using AmigaPowerAnalysis.Core;
+using AmigaPowerAnalysis.Core.Distributions;
 
 // TODO Obligatory to first enter a name for a new endpoint
 // TODO Binomial totals greyed out for non fractions
@@ -20,14 +21,19 @@ namespace AmigaPowerAnalysis.GUI {
 
         private Project _project;
 
+        private List<EndpointType> _endpointTypes;
+
         public string Description { get; private set; }
 
         public EndpointTypesForm(Project project) {
             InitializeComponent();
+            var endpointTypeProvider = new EndpointTypeProvider();
+            _endpointTypes = endpointTypeProvider.GetAvailableEndpointTypes();
             Name = "Endpoints";
             Description = "Enter a list of endpoints. For each endpoint indicate its group. The power analysis will be based on all primary endpoints. Results for other endpoints will be shown for information only. For each endpoint provide the measurement type and limits of concern (LoC). Provide a lower LoC, an upper LoC, or both.";
             _project = project;
             createDataGridEndpointTypes();
+
         }
 
         public void Activate() {
@@ -40,98 +46,93 @@ namespace AmigaPowerAnalysis.GUI {
         public event EventHandler TabVisibilitiesChanged;
 
         private void createDataGridEndpointTypes() {
-            dataGridViewEndpoints.AutoGenerateColumns = false;
+            dataGridViewEndpointGroups.AutoGenerateColumns = false;
 
             var column = new DataGridViewTextBoxColumn();
             column.DataPropertyName = "Name";
             column.Name = "Name";
-            dataGridViewEndpoints.Columns.Add(column);
+            dataGridViewEndpointGroups.Columns.Add(column);
 
-            var _availableEndpointTypes = _project.EndpointTypes.Select(h => new { Name = h.Name, EndpointType = h }).ToList();
             var combo = new DataGridViewComboBoxColumn();
-            combo.DataSource = _availableEndpointTypes;
-            combo.DataPropertyName = "EndpointType";
-            combo.DisplayMember = "Name";
-            combo.ValueMember = "EndpointType";
-            combo.HeaderText = "Endpoint group";
-            combo.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
-            dataGridViewEndpoints.Columns.Add(combo);
-
-            var checkbox = new DataGridViewCheckBoxColumn();
-            checkbox.DataPropertyName = "Primary";
-            checkbox.Name = "Primary";
-            dataGridViewEndpoints.Columns.Add(checkbox);
-
-            combo = new DataGridViewComboBoxColumn();
             combo.DataSource = Enum.GetValues(typeof(MeasurementType));
             combo.DataPropertyName = "Measurement";
             combo.ValueType = typeof(MeasurementType);
             combo.HeaderText = "Measurement type";
             combo.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
-            dataGridViewEndpoints.Columns.Add(combo);
+            dataGridViewEndpointGroups.Columns.Add(combo);
+
+            column = new DataGridViewTextBoxColumn();
+            column.DataPropertyName = "MuComparator";
+            column.Name = "MuComparator";
+            column.HeaderText = "Mean";
+            column.ValueType = typeof(double);
+            dataGridViewEndpointGroups.Columns.Add(column);
+
+            column = new DataGridViewTextBoxColumn();
+            column.DataPropertyName = "CvComparator";
+            column.Name = "CvComparator";
+            column.HeaderText = "CV";
+            column.ValueType = typeof(double);
+            dataGridViewEndpointGroups.Columns.Add(column);
 
             column = new DataGridViewTextBoxColumn();
             column.DataPropertyName = "LocLower";
             column.Name = "LocLower";
             column.ValueType = typeof(double);
-            dataGridViewEndpoints.Columns.Add(column);
+            dataGridViewEndpointGroups.Columns.Add(column);
 
             column = new DataGridViewTextBoxColumn();
             column.DataPropertyName = "LocUpper";
             column.Name = "LocUpper";
             column.ValueType = typeof(double);
-            dataGridViewEndpoints.Columns.Add(column);
+            dataGridViewEndpointGroups.Columns.Add(column);
+
+            combo = new DataGridViewComboBoxColumn();
+            combo.DataSource = Enum.GetValues(typeof(DistributionType));
+            combo.DataPropertyName = "DistributionType";
+            combo.ValueType = typeof(DistributionType);
+            combo.HeaderText = "DistributionType";
+            combo.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
+            dataGridViewEndpointGroups.Columns.Add(combo);
+
+            column = new DataGridViewTextBoxColumn();
+            column.DataPropertyName = "BinomialTotal";
+            column.Name = "BinomialTotal";
+            column.HeaderText = "Binomial total";
+            column.ValueType = typeof(int);
+            dataGridViewEndpointGroups.Columns.Add(column);
+
+            column = new DataGridViewTextBoxColumn();
+            column.DataPropertyName = "PowerLawPower";
+            column.Name = "PowerLawPower";
+            column.HeaderText = "p (power law)";
+            column.ValueType = typeof(double);
+            dataGridViewEndpointGroups.Columns.Add(column);
 
             updateDataGridViewEndpointTypes();
         }
 
         private void updateDataGridViewEndpointTypes() {
-            if (_project.Endpoints.Count > 0) {
-                var endpointsBindingSouce = new BindingSource(_project.Endpoints, null);
-                dataGridViewEndpoints.DataSource = endpointsBindingSouce;
-                dataGridViewEndpoints.Update();
+            if (_endpointTypes.Count > 0) {
+                var endpointsBindingSouce = new BindingSource(_endpointTypes, null);
+                dataGridViewEndpointGroups.DataSource = endpointsBindingSouce;
+                dataGridViewEndpointGroups.Update();
             } else {
-                dataGridViewEndpoints.DataSource = null;
-                dataGridViewEndpoints.Update();
+                dataGridViewEndpointGroups.DataSource = null;
+                dataGridViewEndpointGroups.Update();
             }
         }
 
         private void addEndpointTypeButton_Click(object sender, EventArgs e) {
-            var endpointNames = _project.Endpoints.Select(ep => ep.Name).ToList();
-            var newEndpointName = string.Format("New endpoint type");
-            var i = 0;
-            while (endpointNames.Contains(newEndpointName)) {
-                newEndpointName = string.Format("New endpoint type {0}", i++);
-            }
-            _project.AddEndpoint(new Endpoint(newEndpointName, _project.EndpointTypes.First()));
-            updateDataGridViewEndpointTypes();
         }
 
         private void buttonDeleteEndpointType_Click(object sender, EventArgs e) {
-            if (dataGridViewEndpoints.SelectedRows.Count == 1) {
-                _project.RemoveEndpoint(_project.Endpoints[dataGridViewEndpoints.CurrentRow.Index]);
-                updateDataGridViewEndpointTypes();
-            } else {
-                showError("Invalid selection", "Please select one entire row in order to remove its corresponding endpoint type.");
-            }
+
         }
 
         private void dataGridViewEndpointTypes_CellValidating(object sender, DataGridViewCellValidatingEventArgs e) {
-            if (dataGridViewEndpoints.Columns[e.ColumnIndex].Name == "Name") {
-                var newValue = e.FormattedValue.ToString();
-                if (string.IsNullOrEmpty(newValue)) {
-                    dataGridViewEndpoints.Rows[e.RowIndex].ErrorText = "Endpoint name cannot not be empty.";
-                    showError("Invalid data", dataGridViewEndpoints.Rows[e.RowIndex].ErrorText);
-                    e.Cancel = true;
-                } else {
-                    var newEndpointNames = _project.Endpoints.Select(ep => ep.Name).ToList();
-                    newEndpointNames[e.RowIndex] = newValue;
-                    if (newEndpointNames.Distinct().Count() < newEndpointNames.Count) {
-                        dataGridViewEndpoints.Rows[e.RowIndex].ErrorText = "Duplicate endpoint names are not allowed.";
-                        showError("Invalid data", dataGridViewEndpoints.Rows[e.RowIndex].ErrorText);
-                        e.Cancel = true;
-                    }
-                }
+            if (dataGridViewEndpointGroups.Columns[e.ColumnIndex].Name == "Name") {
+
             }
         }
 

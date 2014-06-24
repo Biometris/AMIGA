@@ -66,8 +66,8 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void toolstripEndpointTypes_Click(object sender, EventArgs e) {
-            var endpointGroupsForm = new SelectionFormContainer(new EndpointTypesForm(_project));
-            endpointGroupsForm.Show();
+            var endpointGroupsForm = new SelectionPaneForm(new EndpointTypesForm(_project));
+            endpointGroupsForm.ShowDialog();
         }
 
         private void toolstripAbout_Click(object sender, EventArgs e) {
@@ -158,15 +158,15 @@ namespace AmigaPowerAnalysis.GUI {
                 closeProject();
                 _project = project;
 
-                _selectionForms.Add(new SelectionFormContainer(new EndpointsForm(_project)));
-                _selectionForms.Add(new SelectionFormContainer(new EndpointsDataForm(_project)));
-                _selectionForms.Add(new SelectionFormContainer(new FactorsForm(_project)));
-                _selectionForms.Add(new SelectionFormContainer(new DesignForm(_project)));
-                _selectionForms.Add(new SelectionFormContainer(new InteractionsForm(_project)));
-                _selectionForms.Add(new SelectionFormContainer(new ComparisonsForm(_project)));
-                _selectionForms.Add(new SelectionFormContainer(new ModifiersForm(_project)));
-                _selectionForms.Add(new SelectionFormContainer(new PowerAnalysisSettingsForm(_project)));
-                _selectionForms.Add(new SelectionFormContainer(new AnalysisResultsForm(_project)));
+                _selectionForms.Add(new SelectionPaneContainer(new EndpointsForm(_project)));
+                _selectionForms.Add(new SelectionPaneContainer(new EndpointsDataForm(_project)));
+                _selectionForms.Add(new SelectionPaneContainer(new FactorsForm(_project)));
+                _selectionForms.Add(new SelectionPaneContainer(new DesignForm(_project)));
+                _selectionForms.Add(new SelectionPaneContainer(new InteractionsForm(_project)));
+                _selectionForms.Add(new SelectionPaneContainer(new ComparisonsForm(_project)));
+                _selectionForms.Add(new SelectionPaneContainer(new ModifiersForm(_project)));
+                _selectionForms.Add(new SelectionPaneContainer(new PowerAnalysisSettingsForm(_project)));
+                _selectionForms.Add(new SelectionPaneContainer(new AnalysisResultsForm(_project)));
 
                 _selectionForms.ForEach(s => s.TabVisibilitiesChanged += onVisibilitySettingsChanged);
 
@@ -184,7 +184,7 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void closeProject() {
             _selectionForms.Clear();
-            _selectionForms.Add(new SelectionFormContainer(new IntroductionForm()));
+            _selectionForms.Add(new SelectionPaneContainer(new IntroductionForm()));
             this.tabControl.TabPages.Clear();
             this.saveAsToolStripMenuItem.Enabled = false;
             this.saveToolStripMenuItem.Enabled = false;

@@ -10,11 +10,11 @@ using System.Windows.Forms;
 using AmigaPowerAnalysis.Core;
 
 namespace AmigaPowerAnalysis.GUI {
-    public partial class SelectionFormContainer : UserControl, ISelectionForm {
+    public partial class SelectionPaneContainer : UserControl, ISelectionForm {
 
         private ISelectionForm _selectionForm;
 
-        public SelectionFormContainer(UserControl selectionForm) {
+        public SelectionPaneContainer(UserControl selectionForm) {
             InitializeComponent();
             if (selectionForm is ISelectionForm) {
                 _selectionForm = selectionForm as ISelectionForm;

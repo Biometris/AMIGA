@@ -115,11 +115,11 @@
     <Compile Include="GUI\EndpointTypesForm.Designer.cs">
       <DependentUpon>EndpointTypesForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\SelectionFormContainer.cs">
+    <Compile Include="GUI\SelectionPaneContainer.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="GUI\SelectionFormContainer.Designer.cs">
-      <DependentUpon>SelectionFormContainer.cs</DependentUpon>
+    <Compile Include="GUI\SelectionPaneContainer.Designer.cs">
+      <DependentUpon>SelectionPaneContainer.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\IntroductionForm.cs">
       <SubType>UserControl</SubType>
@@ -182,6 +182,12 @@
     <Compile Include="GUI\MainWindow.Designer.cs">
       <DependentUpon>MainWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\SelectionPaneForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\SelectionPaneForm.Designer.cs">
+      <DependentUpon>SelectionPaneForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Helpers\CsvWriter.cs" />
     <Compile Include="Helpers\ListExtensionMethods.cs" />
     <Compile Include="Helpers\Log\ILogger.cs" />
@@ -199,8 +205,8 @@
     <EmbeddedResource Include="GUI\EndpointTypesForm.resx">
       <DependentUpon>EndpointTypesForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GUI\SelectionFormContainer.resx">
-      <DependentUpon>SelectionFormContainer.cs</DependentUpon>
+    <EmbeddedResource Include="GUI\SelectionPaneContainer.resx">
+      <DependentUpon>SelectionPaneContainer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\IntroductionForm.resx">
       <DependentUpon>IntroductionForm.cs</DependentUpon>
@@ -231,6 +237,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\MainWindow.resx">
       <DependentUpon>MainWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\SelectionPaneForm.resx">
+      <DependentUpon>SelectionPaneForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
