@@ -211,7 +211,7 @@ namespace AmigaPowerAnalysis.Core {
         public void UpdateNonInteractionFactorLevelCombinations() {
             var newCombinations = FactorLevelCombinationsCreator.GenerateInteractionCombinations(NonInteractionFactors.ToList());
             var newCombinationNames = newCombinations.Select(c => c.Label);
-            NonInteractionFactorLevelCombinations.RemoveAll(c => newCombinationNames.Contains(c.FactorLevelCombinationName));
+            NonInteractionFactorLevelCombinations.RemoveAll(c => !newCombinationNames.Contains(c.FactorLevelCombinationName));
             foreach (var newCombination in newCombinations) {
                 if (!NonInteractionFactorLevelCombinations.Any(c => c.FactorLevelCombinationName == newCombination.Label)) {
                     NonInteractionFactorLevelCombinations.Add(new ModifierFactorLevelCombination() {
