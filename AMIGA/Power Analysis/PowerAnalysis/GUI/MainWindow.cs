@@ -65,10 +65,19 @@ namespace AmigaPowerAnalysis.GUI {
             }
         }
 
+        private void toolstripEndpointTypes_Click(object sender, EventArgs e) {
+            var endpointGroupsForm = new SelectionFormContainer(new EndpointTypesForm(_project));
+            endpointGroupsForm.Show();
+        }
+
         private void toolstripAbout_Click(object sender, EventArgs e) {
         }
 
         private void goToolStripMenuItem_Click(object sender, EventArgs e) {
+            runPowerAnalysis();
+        }
+
+        private void runPowerAnalysis() {
             if (string.IsNullOrEmpty(_currentProjectFilename)) {
                 MessageBox.Show("Please save the project first.",
                    "Save project first",

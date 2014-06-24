@@ -101,7 +101,7 @@ namespace AmigaPowerAnalysis.Core.Charting {
             var model = CreatePlotModel(testType, analysisMethodType, PlotType.Ratio);
 
             var horizontalAxis = new LinearAxis() {
-                Title = "(Log)Ratio",
+                Title = "Log(ratio)",
                 MajorGridlineStyle = LineStyle.Solid,
                 MinorGridlineStyle = LineStyle.Dot,
                 Position = AxisPosition.Bottom,

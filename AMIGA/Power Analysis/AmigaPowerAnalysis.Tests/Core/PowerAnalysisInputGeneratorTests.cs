@@ -19,7 +19,8 @@ namespace AmigaPowerAnalysis.Tests {
 
             var comparison = project.GetComparisons().First();
             var inputGenerator = new PowerAnalysisInputGenerator();
-            var records = inputGenerator.GetComparisonInputPowerAnalysisRecords(comparison);
+            var inputPowerAnalysis = inputGenerator.CreateInputPowerAnalysis(comparison, project.DesignSettings, project.PowerCalculationSettings, 1);
+            var records = inputPowerAnalysis.InputRecords;
 
             // 2 variety levels
             Assert.AreEqual(2, records.Count);
@@ -36,7 +37,8 @@ namespace AmigaPowerAnalysis.Tests {
 
             var comparison = project.GetComparisons().First();
             var inputGenerator = new PowerAnalysisInputGenerator();
-            var records = inputGenerator.GetComparisonInputPowerAnalysisRecords(comparison);
+            var inputPowerAnalysis = inputGenerator.CreateInputPowerAnalysis(comparison, project.DesignSettings, project.PowerCalculationSettings, 1);
+            var records = inputPowerAnalysis.InputRecords;
 
             // 2 variety levels * 3 levels spraying = 6 records
             Assert.AreEqual(6, records.Count);

@@ -130,6 +130,7 @@
             this.toolstripEndpointTypes.Name = "toolstripEndpointTypes";
             this.toolstripEndpointTypes.Size = new System.Drawing.Size(156, 22);
             this.toolstripEndpointTypes.Text = "Endpoint Types";
+            this.toolstripEndpointTypes.Click += new System.EventHandler(this.toolstripEndpointTypes_Click);
             // 
             // goToolStripMenuItem
             // 

@@ -8,79 +8,47 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
         /// <summary>
         /// Writes the power analysis settings for an endpoint to a csv file.
         /// </summary>
-        /// <param name="endpoint">The endpoint of interest.</param>
-        /// <param name="powerCalculationSettings">The general power analysis settings.</param>
-        /// <param name="records">The power analysis input records of the comparison of interest.</param>
+        /// <param name="inputPowerAnalysis">The power analysis input.</param>
         /// <param name="filename">The name of the file to which the settings are written.</param>
-        public void PowerAnalysisInputToCsv(Endpoint endpoint, DesignSettings designSettings, PowerCalculationSettings powerCalculationSettings, List<InputPowerAnalysisRecord> records, string filename) {
-            var separator = ",";
-            var stringBuilder = new StringBuilder();
-
-            stringBuilder.AppendLine(string.Format("LocLower\r\n {0} :", endpoint.LocLower));
-            stringBuilder.AppendLine(string.Format("LocUpper\r\n {0} :", endpoint.LocUpper));
-            stringBuilder.AppendLine(string.Format("CVComparator\r\n {0} :", endpoint.CvComparator));
-            stringBuilder.AppendLine(string.Format("CVBlocks\r\n {0} :", endpoint.CVForBlocks));
-            stringBuilder.AppendLine(string.Format("Distribution\r\n {0} :", endpoint.DistributionType.ToString()));
-            stringBuilder.AppendLine(string.Format("PowerLawPower\r\n {0} :", endpoint.PowerLawPower.ToString()));
-
-            stringBuilder.AppendLine(string.Format("SignificanceLevel\r\n {0} :", powerCalculationSettings.SignificanceLevel.ToString()));
-            stringBuilder.AppendLine(string.Format("NumberOfRatios\r\n {0} :", powerCalculationSettings.NumberOfRatios.ToString()));
-            stringBuilder.AppendLine(string.Format("NumberOfReplications\r\n {0} :", string.Join(" ", powerCalculationSettings.NumberOfReplications.Select(r => r.ToString()).ToList())));
-            stringBuilder.AppendLine(string.Format("ExperimentalDesignType\r\n {0} :", designSettings.ExperimentalDesignType));
-            stringBuilder.AppendLine(string.Format("PowerCalculationMethod\r\n {0} :", powerCalculationSettings.PowerCalculationMethod.ToString()));
-            stringBuilder.AppendLine(string.Format("RandomNumberSeed\r\n {0} :", powerCalculationSettings.Seed.ToString()));
-
-            stringBuilder.AppendLine(string.Format("NumberOfSimulatedDataSets\r\n {0} :", powerCalculationSettings.NumberOfSimulatedDataSets.ToString()));
-            stringBuilder.AppendLine(string.Format("IsLogNormal\r\n {0} :", powerCalculationSettings.IsLogNormal.ToString()));
-            stringBuilder.AppendLine(string.Format("IsSquareRoot\r\n {0} :", powerCalculationSettings.IsSquareRoot.ToString()));
-            stringBuilder.AppendLine(string.Format("IsOverdispersedPoisson\r\n {0} :", powerCalculationSettings.IsOverdispersedPoisson.ToString()));
-            stringBuilder.AppendLine(string.Format("IsNegativeBinomial\r\n {0} :", powerCalculationSettings.IsNegativeBinomial.ToString()));
-
-            var headers = new List<string>();
-            headers.Add("Endpoint");
-            headers.Add("ComparisonId");
-            headers.Add("NumberOfInteractions");
-            headers.Add("NumberOfModifiers");
-            headers.Add("Block");
-            headers.Add("MainPlot");
-            headers.Add("SubPlot");
-            headers.Add("Variety");
-            foreach (var factor in records.First().Factors) {
-                headers.Add(factor);
-            }
-            headers.Add("Frequency");
-            headers.Add("Mean");
-            headers.Add("Comparison");
-
-            stringBuilder.AppendLine(string.Join(separator, headers));
-
-            foreach (var record in records) {
-                var line = new List<string>();
-                line.Add(record.Endpoint.ToString());
-                line.Add(record.ComparisonId.ToString());
-                line.Add(record.NumberOfInteractions.ToString());
-                line.Add(record.NumberOfModifiers.ToString());
-                line.Add(record.Block.ToString());
-                line.Add(record.MainPlot.ToString());
-                line.Add(record.SubPlot.ToString());
-                line.Add(record.Variety.ToString());
-                foreach (var factor in record.FactorLevels) {
-                    line.Add(factor.ToString());
-                }
-                line.Add(record.Frequency.ToString());
-                line.Add(record.Mean.ToString());
-                line.Add(record.Comparison.ToString());
-                stringBuilder.AppendLine(string.Join(separator, line));
-            }
-
-            var csvString = stringBuilder.ToString();
+        public void PowerAnalysisInputToCsv(InputPowerAnalysis inputPowerAnalysis, string filename) {
             using (var file = new System.IO.StreamWriter(filename)) {
-                file.WriteLine(csvString);
+                file.WriteLine(inputPowerAnalysis.Print());
                 file.Close();
             }
         }
 
-        public List<InputPowerAnalysisRecord> GetComparisonInputPowerAnalysisRecords(Comparison comparison) {
+        public InputPowerAnalysis CreateInputPowerAnalysis(Comparison comparison, DesignSettings designSettings, PowerCalculationSettings powerCalculationSettings, int idComparison) {
+            var inputPowerAnalysis = new InputPowerAnalysis() {
+                ComparisonId = idComparison,
+                Endpoint = comparison.Endpoint.Name,
+            };
+
+            inputPowerAnalysis.SimulationSettings.Add("LocLower", comparison.Endpoint.LocLower.ToString());
+            inputPowerAnalysis.SimulationSettings.Add("LocUpper", comparison.Endpoint.LocUpper.ToString());
+            inputPowerAnalysis.SimulationSettings.Add("CVComparator", comparison.Endpoint.CvComparator.ToString());
+            inputPowerAnalysis.SimulationSettings.Add("CVBlocks", comparison.Endpoint.CVForBlocks.ToString());
+            inputPowerAnalysis.SimulationSettings.Add("Distribution", comparison.Endpoint.DistributionType.ToString());
+            inputPowerAnalysis.SimulationSettings.Add("PowerLawPower", comparison.Endpoint.PowerLawPower.ToString());
+
+            inputPowerAnalysis.SimulationSettings.Add("SignificanceLevel", powerCalculationSettings.SignificanceLevel.ToString());
+            inputPowerAnalysis.SimulationSettings.Add("NumberOfRatios", powerCalculationSettings.NumberOfRatios.ToString());
+            inputPowerAnalysis.SimulationSettings.Add("NumberOfReplications", string.Join(" ", powerCalculationSettings.NumberOfReplications.Select(r => r.ToString()).ToList()));
+            inputPowerAnalysis.SimulationSettings.Add("ExperimentalDesignType", designSettings.ExperimentalDesignType.ToString());
+            inputPowerAnalysis.SimulationSettings.Add("PowerCalculationMethod", powerCalculationSettings.PowerCalculationMethod.ToString());
+            inputPowerAnalysis.SimulationSettings.Add("RandomNumberSeed", powerCalculationSettings.Seed.ToString());
+
+            inputPowerAnalysis.SimulationSettings.Add("NumberOfSimulatedDataSets", powerCalculationSettings.NumberOfSimulatedDataSets.ToString());
+            inputPowerAnalysis.SimulationSettings.Add("IsLogNormal", powerCalculationSettings.IsLogNormal.ToString());
+            inputPowerAnalysis.SimulationSettings.Add("IsSquareRoot", powerCalculationSettings.IsSquareRoot.ToString());
+            inputPowerAnalysis.SimulationSettings.Add("IsOverdispersedPoisson", powerCalculationSettings.IsOverdispersedPoisson.ToString());
+            inputPowerAnalysis.SimulationSettings.Add("IsNegativeBinomial", powerCalculationSettings.IsNegativeBinomial.ToString());
+
+            inputPowerAnalysis.InputRecords = getComparisonInputPowerAnalysisRecords(comparison);
+
+            return inputPowerAnalysis;
+        }
+
+        private List<InputPowerAnalysisRecord> getComparisonInputPowerAnalysisRecords(Comparison comparison) {
             var records = new List<InputPowerAnalysisRecord>();
             var counter = 1;
             foreach (var varietyLevel in comparison.Endpoint.VarietyFactor.FactorLevels) {

@@ -68,6 +68,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Charting\AnalysisResultsChartGenerator.cs" />
+    <Compile Include="Core\ProjectEntities\InputPowerAnalysis.cs" />
     <Compile Include="Core\ProjectEntities\OutputPowerAnalysisRecord.cs" />
     <Compile Include="Core\PowerAnalysis\PowerAnalysisOutputReader.cs" />
     <Compile Include="Core\ProjectEntities\OutputPowerAnalysis.cs" />
@@ -107,6 +108,12 @@
     </Compile>
     <Compile Include="GUI\AnalysisResultsForm.Designer.cs">
       <DependentUpon>AnalysisResultsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\EndpointTypesForm.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\EndpointTypesForm.Designer.cs">
+      <DependentUpon>EndpointTypesForm.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\SelectionFormContainer.cs">
       <SubType>UserControl</SubType>
@@ -188,6 +195,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\AnalysisResultsForm.resx">
       <DependentUpon>AnalysisResultsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\EndpointTypesForm.resx">
+      <DependentUpon>EndpointTypesForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\SelectionFormContainer.resx">
       <DependentUpon>SelectionFormContainer.cs</DependentUpon>

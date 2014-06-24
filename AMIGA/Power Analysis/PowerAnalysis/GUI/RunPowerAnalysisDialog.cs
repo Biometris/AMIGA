@@ -54,11 +54,9 @@ namespace AmigaPowerAnalysis.GUI {
             // Create input files for power analysis
             for (int i = 0; i < comparisons.Count(); ++i) {
                 _powerAnalysisBackgroundWorker.ReportProgress((int)(i * progressStep), string.Format("compiling analysis input for comparison {0} of {1}...", i + 1, comparisons.Count()));
-                var comparison = comparisons.ElementAt(i);
-                var comparisonRecords = inputGenerator.GetComparisonInputPowerAnalysisRecords(comparison);
-                comparisonRecords.ForEach(r => r.ComparisonId = i);
+                var inputPowerAnalysis = inputGenerator.CreateInputPowerAnalysis(comparisons.ElementAt(i), _project.DesignSettings, _project.PowerCalculationSettings, i);
                 var comparisonFilename = Path.Combine(filesPath, string.Format("{0}-{1}.csv", projectName, i));
-                inputGenerator.PowerAnalysisInputToCsv(comparison.Endpoint, _project.DesignSettings, _project.PowerCalculationSettings, comparisonRecords, comparisonFilename);
+                inputGenerator.PowerAnalysisInputToCsv(inputPowerAnalysis, comparisonFilename);
             }
 
             var applicationDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
