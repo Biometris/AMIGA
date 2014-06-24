@@ -11,31 +11,6 @@ namespace AmigaPowerAnalysis.Core {
     public sealed class InputPowerAnalysisRecord {
 
         /// <summary>
-        /// The endpoint of interest in the comparison.
-        /// </summary>
-        public string Endpoint { get; set; }
-
-        /// <summary>
-        /// The Id of the comparison.
-        /// </summary>
-        public int ComparisonId { get; set; }
-
-        /// <summary>
-        /// The number of interaction factors.
-        /// </summary>
-        public int NumberOfInteractions { get; set; }
-
-        /// <summary>
-        /// The number of modifier factors.
-        /// </summary>
-        public int NumberOfModifiers { get; set; }
-
-        /// <summary>
-        /// The block id.
-        /// </summary>
-        public int Block { get; set; }
-
-        /// <summary>
         /// The main plot id.
         /// </summary>
         public int MainPlot { get; set; }

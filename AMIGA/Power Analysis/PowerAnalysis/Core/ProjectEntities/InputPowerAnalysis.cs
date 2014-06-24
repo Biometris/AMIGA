@@ -39,16 +39,14 @@ namespace AmigaPowerAnalysis.Core {
             var separator = ",";
             var stringBuilder = new StringBuilder();
 
+            stringBuilder.AppendLine(string.Format("{0}\r\n {1} :", "ComparisonId", ComparisonId));
+            stringBuilder.AppendLine(string.Format("{0}\r\n {1} :", "Endpoint", Endpoint));
+
             foreach (var simulationSetting in SimulationSettings) {
                 stringBuilder.AppendLine(string.Format("{0}\r\n {1} :", simulationSetting.Key, simulationSetting.Value));
             }
 
             var headers = new List<string>();
-            headers.Add("Endpoint");
-            headers.Add("ComparisonId");
-            headers.Add("NumberOfInteractions");
-            headers.Add("NumberOfModifiers");
-            headers.Add("Block");
             headers.Add("MainPlot");
             headers.Add("SubPlot");
             headers.Add("Variety");
@@ -63,11 +61,6 @@ namespace AmigaPowerAnalysis.Core {
 
             foreach (var record in InputRecords) {
                 var line = new List<string>();
-                line.Add(Endpoint);
-                line.Add(ComparisonId.ToString());
-                line.Add(record.NumberOfInteractions.ToString());
-                line.Add(record.NumberOfModifiers.ToString());
-                line.Add(record.Block.ToString());
                 line.Add(record.MainPlot.ToString());
                 line.Add(record.SubPlot.ToString());
                 line.Add(record.Variety.ToString());

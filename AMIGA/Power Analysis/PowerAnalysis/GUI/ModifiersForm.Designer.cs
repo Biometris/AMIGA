@@ -105,7 +105,7 @@
             // 
             // textBoxCVForMainPlots
             // 
-            this.textBoxCVForMainPlots.Location = new System.Drawing.Point(99, 92);
+            this.textBoxCVForMainPlots.Location = new System.Drawing.Point(139, 92);
             this.textBoxCVForMainPlots.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
             this.textBoxCVForMainPlots.Name = "textBoxCVForMainPlots";
             this.textBoxCVForMainPlots.Size = new System.Drawing.Size(85, 20);
@@ -117,13 +117,13 @@
             this.labelCVForMainPlots.AutoSize = true;
             this.labelCVForMainPlots.Location = new System.Drawing.Point(6, 95);
             this.labelCVForMainPlots.Name = "labelCVForMainPlots";
-            this.labelCVForMainPlots.Size = new System.Drawing.Size(89, 13);
+            this.labelCVForMainPlots.Size = new System.Drawing.Size(126, 13);
             this.labelCVForMainPlots.TabIndex = 12;
-            this.labelCVForMainPlots.Text = "CV for main plots:";
+            this.labelCVForMainPlots.Text = "Default CV for main plots:";
             // 
             // textBoxCVForBlocks
             // 
-            this.textBoxCVForBlocks.Location = new System.Drawing.Point(99, 41);
+            this.textBoxCVForBlocks.Location = new System.Drawing.Point(139, 41);
             this.textBoxCVForBlocks.Name = "textBoxCVForBlocks";
             this.textBoxCVForBlocks.Size = new System.Drawing.Size(85, 20);
             this.textBoxCVForBlocks.TabIndex = 11;
@@ -134,9 +134,9 @@
             this.labelCVForBlocks.AutoSize = true;
             this.labelCVForBlocks.Location = new System.Drawing.Point(6, 45);
             this.labelCVForBlocks.Name = "labelCVForBlocks";
-            this.labelCVForBlocks.Size = new System.Drawing.Size(73, 13);
+            this.labelCVForBlocks.Size = new System.Drawing.Size(110, 13);
             this.labelCVForBlocks.TabIndex = 10;
-            this.labelCVForBlocks.Text = "CV for blocks:";
+            this.labelCVForBlocks.Text = "Default CV for blocks:";
             // 
             // checkBoxUseBlockModifier
             // 

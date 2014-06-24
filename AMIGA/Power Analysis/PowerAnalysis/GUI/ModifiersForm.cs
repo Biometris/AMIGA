@@ -43,7 +43,7 @@ namespace AmigaPowerAnalysis.GUI {
         public event EventHandler TabVisibilitiesChanged;
 
         private void updateVisibilities() {
-            dataGridViewEndpoints.Visible = _project.UseFactorModifiers;
+            dataGridViewEndpoints.Visible = _project.UseFactorModifiers || _project.UseBlockModifier;
             labelCVForBlocks.Visible = _project.UseBlockModifier;
             textBoxCVForBlocks.Visible = _project.UseBlockModifier;
             if (dataGridViewEndpoints.Columns.Contains("CVForBlocks")) {
@@ -130,7 +130,10 @@ namespace AmigaPowerAnalysis.GUI {
                 textBox.Text = Regex.Replace(textBox.Text, "[^0-9.]", "");
                 Double.TryParse(textBox.Text, out value);
             }
-            _project.CVForBlocks = value;
+            if (_project.CVForBlocks != value) {
+                _project.CVForBlocks = value;
+                _project.Endpoints.ForEach(ep => ep.CVForBlocks = value);
+            }
             textBox.Text = value.ToString();
         }
 
@@ -141,7 +144,9 @@ namespace AmigaPowerAnalysis.GUI {
                 textBox.Text = Regex.Replace(textBox.Text, "[^0-9.]", "");
                 Double.TryParse(textBox.Text, out value);
             }
-            _project.CVForMainPlots = value;
+            if (_project.CVForMainPlots != value) {
+                _project.CVForMainPlots = value;
+            }
             textBox.Text = value.ToString();
         }
 

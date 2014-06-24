@@ -34,6 +34,10 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             inputPowerAnalysis.SimulationSettings.Add("NumberOfRatios", powerCalculationSettings.NumberOfRatios.ToString());
             inputPowerAnalysis.SimulationSettings.Add("NumberOfReplications", string.Join(" ", powerCalculationSettings.NumberOfReplications.Select(r => r.ToString()).ToList()));
             inputPowerAnalysis.SimulationSettings.Add("ExperimentalDesignType", designSettings.ExperimentalDesignType.ToString());
+
+            inputPowerAnalysis.SimulationSettings.Add("NumberOfInteractions", comparison.Endpoint.InteractionFactors.Count().ToString());
+            inputPowerAnalysis.SimulationSettings.Add("NumberOfModifiers", (comparison.Endpoint.UseModifier ? comparison.Endpoint.NonInteractionFactors.Count() : 0).ToString());
+
             inputPowerAnalysis.SimulationSettings.Add("PowerCalculationMethod", powerCalculationSettings.PowerCalculationMethod.ToString());
             inputPowerAnalysis.SimulationSettings.Add("RandomNumberSeed", powerCalculationSettings.Seed.ToString());
 
@@ -89,10 +93,6 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                         var factors = interactionLevels.FactorLevelCombination.Items.Select(il => il.Parent.Name).ToList();
                         factors.AddRange(modifierLevel.FactorLevelCombination.Items.Select(il => il.Parent.Name).ToList());
                         records.Add(new InputPowerAnalysisRecord() {
-                            Endpoint = comparison.Endpoint.Name,
-                            NumberOfInteractions = comparison.Endpoint.InteractionFactors.Count(),
-                            NumberOfModifiers = comparison.Endpoint.UseModifier ? comparison.Endpoint.NonInteractionFactors.Count() : 0,
-                            Block = 1,
                             MainPlot = counter,
                             SubPlot = 1,
                             Variety = varietyLevel.Label,
@@ -110,10 +110,6 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                     var factorLevels = interactionLevels.FactorLevelCombination.Items.Select(il => il.Level).ToList();
                     var factors = interactionLevels.FactorLevelCombination.Items.Select(il => il.Parent.Name).ToList();
                     records.Add(new InputPowerAnalysisRecord() {
-                        Endpoint = comparison.Endpoint.Name,
-                        NumberOfInteractions = comparison.Endpoint.InteractionFactors.Count(),
-                        NumberOfModifiers = comparison.Endpoint.UseModifier ? comparison.Endpoint.NonInteractionFactors.Count() : 0,
-                        Block = 1,
                         MainPlot = counter,
                         SubPlot = 1,
                         Variety = varietyLevel.Label,
@@ -150,10 +146,6 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                     var factorLevels = modifierLevel.FactorLevelCombination.Items.Select(il => il.Level).ToList();
                     var factors = modifierLevel.FactorLevelCombination.Items.Select(il => il.Parent.Name).ToList();
                     records.Add(new InputPowerAnalysisRecord() {
-                        Endpoint = comparison.Endpoint.Name,
-                        NumberOfInteractions = comparison.Endpoint.InteractionFactors.Count(),
-                        NumberOfModifiers = comparison.Endpoint.UseModifier ? comparison.Endpoint.NonInteractionFactors.Count() : 0,
-                        Block = 1,
                         MainPlot = counter,
                         SubPlot = 1,
                         Variety = varietyLevel.Label,
@@ -168,10 +160,6 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                 }
             } else {
                 records.Add(new InputPowerAnalysisRecord() {
-                    Endpoint = comparison.Endpoint.Name,
-                    NumberOfInteractions = comparison.Endpoint.InteractionFactors.Count(),
-                    NumberOfModifiers = 0,
-                    Block = 1,
                     MainPlot = counter,
                     SubPlot = 1,
                     Variety = varietyLevel.Label,
