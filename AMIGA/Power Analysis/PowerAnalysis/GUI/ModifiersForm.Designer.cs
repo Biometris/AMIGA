@@ -110,7 +110,6 @@
             this.textBoxCVForMainPlots.Name = "textBoxCVForMainPlots";
             this.textBoxCVForMainPlots.Size = new System.Drawing.Size(85, 20);
             this.textBoxCVForMainPlots.TabIndex = 13;
-            this.textBoxCVForMainPlots.Validating += new System.ComponentModel.CancelEventHandler(this.textBoxCVForMainPlots_Validating);
             // 
             // labelCVForMainPlots
             // 

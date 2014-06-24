@@ -133,6 +133,7 @@ namespace AmigaPowerAnalysis.GUI {
             if (_project.CVForBlocks != value) {
                 _project.CVForBlocks = value;
                 _project.Endpoints.ForEach(ep => ep.CVForBlocks = value);
+                dataGridViewEndpoints.Refresh();
             }
             textBox.Text = value.ToString();
         }
@@ -144,9 +145,10 @@ namespace AmigaPowerAnalysis.GUI {
                 textBox.Text = Regex.Replace(textBox.Text, "[^0-9.]", "");
                 Double.TryParse(textBox.Text, out value);
             }
-            if (_project.CVForMainPlots != value) {
-                _project.CVForMainPlots = value;
+            if (_project.CVForBlocks != value) {
+                _project.CVForBlocks = value;
             }
+            _project.CVForMainPlots = value;
             textBox.Text = value.ToString();
         }
 
