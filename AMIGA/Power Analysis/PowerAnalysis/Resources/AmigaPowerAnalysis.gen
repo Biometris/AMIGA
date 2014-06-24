@@ -15,11 +15,11 @@ if in3open.eq.0
     sfilename [inputname=infile] directory=dir ; surname=sur
     txconstru [outfile] dir, sur, '-Output.csv'
     open      'D:/Data/AMIGA/AmigaTool/Power Analysis/PowerAnalysis/Resources/Lyles.pro' ; channel=2 ; filetype=input
-    print     infile
-    print     outfile
 endif
 
 " Include Lyles procedures "
+print     infile
+print     outfile
 input     [print=*] 2
 close     channel=2 ; filetype=input
 
@@ -28,15 +28,15 @@ close     channel=2 ; filetype=input
 
 " Simulation settings "
 " Import Data from Simulation tool "
-text      [nvalues=1] dummy, distribution, design, method, IsLogNormal, \
-          IsLogNormal, IsSquareRoot, IsOPoisson, IsNegBin
-scalar    lowerLOC, upperLOC, cvComparator, cvBlock, powerdist, alfa, \
-          ngridLOC, seed, ndatasets
+text      [nvalues=1] endpoint, dummy, distribution, design,\
+          method, IsLogNormal, IsSquareRoot, IsOPoisson, IsNegBin
+scalar    comparisonId, lowerLOC, upperLOC, cvComparator, cvBlock, powerdist, alfa, \
+          ngridLOC, seed, ndatasets, nIntFac, nModFac
 variate   nBlocks
 scalar    nitems ; 0
-for read=lowerLOC, upperLOC, cvComparator, cvBlock, distribution, \
-      powerdist, alfa, ngridLOC, nBlocks, design, method, seed, ndatasets, \
-      IsLogNormal, IsSquareRoot, IsOPoisson, IsNegBin
+for read=comparisonId, endpoint, lowerLOC, upperLOC, cvComparator, cvBlock, distribution, \
+      powerdist, alfa, ngridLOC, nBlocks, design, nIntFac, nModFac, method, seed, \
+      ndatasets, IsLogNormal, IsSquareRoot, IsOPoisson, IsNegBin
   read    [print=* ; channel=3 ; end=*] dummy
   getattrib [attribute=stype] read ; save=att
   if att[].eqs.'variate'
@@ -47,41 +47,47 @@ for read=lowerLOC, upperLOC, cvComparator, cvBlock, distribution, \
   endif
   calculate nitems = nitems + 2
 endfor
+close     channel=3 ; filetype=input
 
+"Missing LoCs are set to 1"
 calc lowerLOC,upperLOC=mvreplace(lowerLOC,upperLOC;1)
 
-prin lowerLOC, upperLOC, cvComparator, cvBlock, distribution, \
-      powerdist, alfa, ngridLOC, nBlocks, design, method, seed, ndatasets, \
+"Replace some labels by shorter forms"
+sreplace  ['OverdispersedPoisson' ; 'opoisson'] distribution
+sreplace  ['PowerLaw' ; 'power'] distribution
+sreplace  ['CompletelyRandomized' ; 'randomized'] design
+sreplace  ['RandomizedCompleteBlocks' ; 'block'] design
+sreplace  ['SplitPlot' ; 'splitplot'] design
+
+prin comparisonId, endpoint, lowerLOC, upperLOC, cvComparator, cvBlock, distribution, \
+      powerdist, alfa, ngridLOC, nBlocks, design, nIntFac, nModFac, method, seed, ndatasets, \
       IsLogNormal, IsSquareRoot, IsOPoisson, IsNegBin
 
 text      models, ismodels ; !t(LN,SQ,OP,NB)
 equate    !t(#IsLogNormal, #IsSquareRoot, #IsOPoisson, #IsNegBin) ; ismodels
 subset    [ismodels.in.'True'] models
 print     models, ismodels
-close     channel=3 ; filetype=input
+
+"Read data"
 fileread  [print=* ; name=infile ; skip=nitems ; imethod=read ; \
           separator=',' ; maxcat=0 ; isave=isave]
-sreplace  ['OverdispersedPoisson' ; 'opoisson'] distribution
-sreplace  ['PowerLaw' ; 'power'] distribution
-
-sreplace  ['CompletelyRandomized' ; 'randomized'] design
-sreplace  ['RandomizedCompleteBlocks' ; 'block'] design
-sreplace  ['SplitPlot' ; 'splitplot'] design
-
 prin isave
 
 " Some extra options "
 calculate init = urand(seed ; 1)
 
 " Create design matrix from input file "
-L1CREATE  [isave] MUCOMPARATOR=meanComparator ; MEAN=zz ; COMPARISON=comparison ; \
+L1CREATE  [isave; NINTFAC=nIntFac; NMODFAC=nModFac]\
+          MUCOMPARATOR=meanComparator ; MEAN=zz ; COMPARISON=comparison ; \
           DUMMY=dum ; MODIFIERS=Modifiers
+prin meanComparator,comparison,dum[],Modifiers
 
 " create grid for looping loop over loc/nblocks values "
 " for a randomized design the non-centrality parameter is proportional "
 calculate loglowerloc, logupperloc = log(lowerLOC, upperLOC)
 fgrid     [min=loglowerloc ; max=logupperloc ; ngrid=ngridLOC] gridratio
 calculate gridratio[] = exp(gridratio[])
+prin design,cvBlock
 if flagRan = (design.eqs.'randomized') .or. (cvBlock.eq.0)
     variate   ratio ; gridratio[]
     variate   nreps ; 2 + 0*ratio
@@ -89,6 +95,7 @@ if flagRan = (design.eqs.'randomized') .or. (cvBlock.eq.0)
     fgrid     [values=gridratio[], nBlocks] grid
     variate   ratio, nreps ; grid[] ; deci=*,0
 endif
+prin ratio,nreps
 
 calculate nloop = nvalues(ratio)
 decimals  ratio

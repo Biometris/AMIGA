@@ -1,6 +1,9 @@
 PROCEDURE 'L1CREATE'
-OPTION    'ISAVE' ; MODE=p ; TYPE='pointer' ; \
+
+OPTION    'ISAVE', 'NINTFAC', 'NMODFAC' ; \
+          MODE=p ; TYPE='pointer',2('scalar') ; \
           SET=yes ; DECLARED=yes ; PRESENT=yes
+
 PARAMETER 'MUCOMPARATOR', 'MEAN', 'COMPARISON', 'DUMMY', 'MODIFIERS' ; \
           MODE=p ; \
           TYPE='scalar', 2('variate'), 'pointer', 'factor' ; \
@@ -10,17 +13,18 @@ PARAMETER 'MUCOMPARATOR', 'MEAN', 'COMPARISON', 'DUMMY', 'MODIFIERS' ; \
 \          Block, MainPlot, SubPlot, Variety, Ranking, Spraying, Mean, \
 \          Comparison ; ISAVE[]
 
-DUMMY     Endpoint, ComparisonId, NumberOfInteractions, NumberOfModifiers, \
-          Block, MainPlot, SubPlot, Variety; ISAVE[1...8]
+DUMMY     "Endpoint, ComparisonId, NumberOfInteractions, NumberOfModifiers, \
+          Block," MainPlot, SubPlot, Variety; ISAVE[1...3]
+SCALAR    NumberOfInteractions, NumberOfModifiers; #NINTFAC, #NMODFAC
 
 TXCONSTRU [tsave] ISAVE
-
 CALCULATE posfactor[1,2] = POSITION('Variety','Frequency' ; tsave)  - (0,1)
-calc posfreq,posmean,poscomp=posfactor[2]+(1,2,3)
-DUMMY     Frequency, Mean, Comparison; ISAVE[#posfreq,#posmean,#poscomp]
 VARIATE   ifactor ; !(posfactor[1]...posfactor[2]) ; DECIMALS=0
 CALCULATE nfactor = NVALUES(ifactor)
 GROUPS    [REDEFINE=yes] ISAVE[#ifactor]
+
+calc posfreq,posmean,poscomp=posfactor[2]+(1,2,3)
+DUMMY     Frequency, Mean, Comparison; ISAVE[#posfreq,#posmean,#poscomp]
 
 " Redefine ordering of factor labels of Variety; this ensures that dum[1]
   defines the parameter of interest "
