@@ -25,27 +25,43 @@
         private void InitializeComponent() {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SelectionPanelForm));
             this.panelSelectionForm = new System.Windows.Forms.Panel();
+            this.buttonClose = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // panelSelectionForm
             // 
+            this.panelSelectionForm.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.panelSelectionForm.AutoSize = true;
-            this.panelSelectionForm.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelSelectionForm.Location = new System.Drawing.Point(0, 0);
             this.panelSelectionForm.Margin = new System.Windows.Forms.Padding(0);
             this.panelSelectionForm.Name = "panelSelectionForm";
-            this.panelSelectionForm.Size = new System.Drawing.Size(484, 291);
+            this.panelSelectionForm.Size = new System.Drawing.Size(928, 473);
             this.panelSelectionForm.TabIndex = 12;
             // 
-            // SelectionPaneForm
+            // buttonClose
+            // 
+            this.buttonClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonClose.Location = new System.Drawing.Point(826, 476);
+            this.buttonClose.Name = "buttonClose";
+            this.buttonClose.Size = new System.Drawing.Size(90, 27);
+            this.buttonClose.TabIndex = 13;
+            this.buttonClose.Text = "Ok";
+            this.buttonClose.UseVisualStyleBackColor = true;
+            this.buttonClose.Click += new System.EventHandler(this.buttonClose_Click);
+            // 
+            // SelectionPanelForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(484, 291);
+            this.BackColor = System.Drawing.SystemColors.Window;
+            this.ClientSize = new System.Drawing.Size(928, 513);
+            this.Controls.Add(this.buttonClose);
             this.Controls.Add(this.panelSelectionForm);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimizeBox = false;
-            this.Name = "SelectionPaneForm";
+            this.Name = "SelectionPanelForm";
             this.ShowInTaskbar = false;
             this.Text = "SelectionPaneForm";
             this.TopMost = true;
@@ -57,5 +73,6 @@
         #endregion
 
         private System.Windows.Forms.Panel panelSelectionForm;
+        private System.Windows.Forms.Button buttonClose;
     }
 }

@@ -16,5 +16,9 @@ namespace AmigaPowerAnalysis.GUI {
             this.panelSelectionForm.Controls.Add(selectionForm);
             this.Name = selectionForm.Name;
         }
+
+        private void buttonClose_Click(object sender, EventArgs e) {
+            this.Close();
+        }
     }
 }

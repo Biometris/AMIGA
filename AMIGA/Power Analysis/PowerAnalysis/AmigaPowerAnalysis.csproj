@@ -279,7 +279,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\CoverImage.jpg" />
     <Content Include="Resources\FieldTrial.jpg" />
     <EmbeddedResource Include="Resources\amiga_icon.ico" />
     <Content Include="Resources\amiga_logo.png" />

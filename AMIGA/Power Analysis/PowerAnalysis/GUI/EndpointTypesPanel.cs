@@ -24,14 +24,16 @@ namespace AmigaPowerAnalysis.GUI {
 
         public string Description { get; private set; }
 
-        public EndpointTypesPanel(Project project) {
+        public EndpointTypesPanel(Project project) {    
             InitializeComponent();
             var endpointTypeProvider = new EndpointTypeProvider();
             _endpointTypes = endpointTypeProvider.GetAvailableEndpointTypes();
-            Name = "Endpoints";
-            Description = "Enter a list of endpoints. For each endpoint indicate its group. The power analysis will be based on all primary endpoints. Results for other endpoints will be shown for information only. For each endpoint provide the measurement type and limits of concern (LoC). Provide a lower LoC, an upper LoC, or both.";
+            Name = "Endpoint Groups";
+            Description = "TODO";
             _project = project;
-            createDataGridEndpointTypes();
+            createDataGridDefaultEndpointGroups();
+            createDataGridProjectEndpointGroups();
+            updateVisibilities();
         }
 
         public void Activate() {
@@ -41,15 +43,23 @@ namespace AmigaPowerAnalysis.GUI {
             return true;
         }
 
+        public void updateVisibilities() {
+            if (_project != null && _project.EndpointTypes.Count > 0) {
+                splitContainer.Panel2.Show();
+            } else {
+                splitContainer.Panel2.Hide();
+            }
+        }
+
         public event EventHandler TabVisibilitiesChanged;
 
-        private void createDataGridEndpointTypes() {
-            dataGridViewEndpointGroups.AutoGenerateColumns = false;
+        private void createDataGridDefaultEndpointGroups() {
+            dataGridViewDefaultEndpointGroups.AutoGenerateColumns = false;
 
             var column = new DataGridViewTextBoxColumn();
             column.DataPropertyName = "Name";
             column.Name = "Name";
-            dataGridViewEndpointGroups.Columns.Add(column);
+            dataGridViewDefaultEndpointGroups.Columns.Add(column);
 
             var combo = new DataGridViewComboBoxColumn();
             combo.DataSource = Enum.GetValues(typeof(MeasurementType));
@@ -57,33 +67,33 @@ namespace AmigaPowerAnalysis.GUI {
             combo.ValueType = typeof(MeasurementType);
             combo.HeaderText = "Measurement type";
             combo.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
-            dataGridViewEndpointGroups.Columns.Add(combo);
+            dataGridViewDefaultEndpointGroups.Columns.Add(combo);
 
             column = new DataGridViewTextBoxColumn();
             column.DataPropertyName = "MuComparator";
             column.Name = "MuComparator";
             column.HeaderText = "Mean";
             column.ValueType = typeof(double);
-            dataGridViewEndpointGroups.Columns.Add(column);
+            dataGridViewDefaultEndpointGroups.Columns.Add(column);
 
             column = new DataGridViewTextBoxColumn();
             column.DataPropertyName = "CvComparator";
             column.Name = "CvComparator";
             column.HeaderText = "CV";
             column.ValueType = typeof(double);
-            dataGridViewEndpointGroups.Columns.Add(column);
+            dataGridViewDefaultEndpointGroups.Columns.Add(column);
 
             column = new DataGridViewTextBoxColumn();
             column.DataPropertyName = "LocLower";
             column.Name = "LocLower";
             column.ValueType = typeof(double);
-            dataGridViewEndpointGroups.Columns.Add(column);
+            dataGridViewDefaultEndpointGroups.Columns.Add(column);
 
             column = new DataGridViewTextBoxColumn();
             column.DataPropertyName = "LocUpper";
             column.Name = "LocUpper";
             column.ValueType = typeof(double);
-            dataGridViewEndpointGroups.Columns.Add(column);
+            dataGridViewDefaultEndpointGroups.Columns.Add(column);
 
             combo = new DataGridViewComboBoxColumn();
             combo.DataSource = Enum.GetValues(typeof(DistributionType));
@@ -91,37 +101,115 @@ namespace AmigaPowerAnalysis.GUI {
             combo.ValueType = typeof(DistributionType);
             combo.HeaderText = "DistributionType";
             combo.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
-            dataGridViewEndpointGroups.Columns.Add(combo);
+            dataGridViewDefaultEndpointGroups.Columns.Add(combo);
 
             column = new DataGridViewTextBoxColumn();
             column.DataPropertyName = "BinomialTotal";
             column.Name = "BinomialTotal";
             column.HeaderText = "Binomial total";
             column.ValueType = typeof(int);
-            dataGridViewEndpointGroups.Columns.Add(column);
+            dataGridViewDefaultEndpointGroups.Columns.Add(column);
 
             column = new DataGridViewTextBoxColumn();
             column.DataPropertyName = "PowerLawPower";
             column.Name = "PowerLawPower";
             column.HeaderText = "p (power law)";
             column.ValueType = typeof(double);
-            dataGridViewEndpointGroups.Columns.Add(column);
+            dataGridViewDefaultEndpointGroups.Columns.Add(column);
 
-            updateDataGridViewEndpointTypes();
+            updateDataGridViewDefaultEndpointGroups();
         }
 
-        private void updateDataGridViewEndpointTypes() {
+        private void updateDataGridViewDefaultEndpointGroups() {
             if (_endpointTypes.Count > 0) {
                 var endpointsBindingSouce = new BindingSource(_endpointTypes, null);
-                dataGridViewEndpointGroups.DataSource = endpointsBindingSouce;
-                dataGridViewEndpointGroups.Update();
+                dataGridViewDefaultEndpointGroups.DataSource = endpointsBindingSouce;
+                dataGridViewDefaultEndpointGroups.Update();
             } else {
-                dataGridViewEndpointGroups.DataSource = null;
-                dataGridViewEndpointGroups.Update();
+                dataGridViewDefaultEndpointGroups.DataSource = null;
+                dataGridViewDefaultEndpointGroups.Update();
             }
         }
 
-        private void addEndpointTypeButton_Click(object sender, EventArgs e) {
+        private void createDataGridProjectEndpointGroups() {
+            dataGridViewDefaultEndpointGroups.AutoGenerateColumns = false;
+
+            var column = new DataGridViewTextBoxColumn();
+            column.DataPropertyName = "Name";
+            column.Name = "Name";
+            dataGridViewProjectEndpointGroups.Columns.Add(column);
+
+            var combo = new DataGridViewComboBoxColumn();
+            combo.DataSource = Enum.GetValues(typeof(MeasurementType));
+            combo.DataPropertyName = "Measurement";
+            combo.ValueType = typeof(MeasurementType);
+            combo.HeaderText = "Measurement type";
+            combo.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
+            dataGridViewProjectEndpointGroups.Columns.Add(combo);
+
+            column = new DataGridViewTextBoxColumn();
+            column.DataPropertyName = "MuComparator";
+            column.Name = "MuComparator";
+            column.HeaderText = "Mean";
+            column.ValueType = typeof(double);
+            dataGridViewProjectEndpointGroups.Columns.Add(column);
+
+            column = new DataGridViewTextBoxColumn();
+            column.DataPropertyName = "CvComparator";
+            column.Name = "CvComparator";
+            column.HeaderText = "CV";
+            column.ValueType = typeof(double);
+            dataGridViewProjectEndpointGroups.Columns.Add(column);
+
+            column = new DataGridViewTextBoxColumn();
+            column.DataPropertyName = "LocLower";
+            column.Name = "LocLower";
+            column.ValueType = typeof(double);
+            dataGridViewProjectEndpointGroups.Columns.Add(column);
+
+            column = new DataGridViewTextBoxColumn();
+            column.DataPropertyName = "LocUpper";
+            column.Name = "LocUpper";
+            column.ValueType = typeof(double);
+            dataGridViewProjectEndpointGroups.Columns.Add(column);
+
+            combo = new DataGridViewComboBoxColumn();
+            combo.DataSource = Enum.GetValues(typeof(DistributionType));
+            combo.DataPropertyName = "DistributionType";
+            combo.ValueType = typeof(DistributionType);
+            combo.HeaderText = "DistributionType";
+            combo.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
+            dataGridViewProjectEndpointGroups.Columns.Add(combo);
+
+            column = new DataGridViewTextBoxColumn();
+            column.DataPropertyName = "BinomialTotal";
+            column.Name = "BinomialTotal";
+            column.HeaderText = "Binomial total";
+            column.ValueType = typeof(int);
+            dataGridViewProjectEndpointGroups.Columns.Add(column);
+
+            column = new DataGridViewTextBoxColumn();
+            column.DataPropertyName = "PowerLawPower";
+            column.Name = "PowerLawPower";
+            column.HeaderText = "p (power law)";
+            column.ValueType = typeof(double);
+            dataGridViewProjectEndpointGroups.Columns.Add(column);
+
+            updateDataGridViewProjectEndpointGroups();
+        }
+
+        private void updateDataGridViewProjectEndpointGroups() {
+            if (_project != null && _project.EndpointTypes.Count > 0) {
+                var endpointsBindingSouce = new BindingSource(_project.EndpointTypes, null);
+                dataGridViewProjectEndpointGroups.DataSource = endpointsBindingSouce;
+                dataGridViewProjectEndpointGroups.Update();
+            } else {
+                dataGridViewProjectEndpointGroups.DataSource = null;
+                dataGridViewProjectEndpointGroups.Update();
+            }
+        }
+
+        private void buttonAddDefaultEndpointGroup_Click(object sender, EventArgs e) {
             var endpointTypeNames = _endpointTypes.Select(ep => ep.Name).ToList();
             var newEndpointTypeName = string.Format("New endpoint type");
             var i = 0;
@@ -131,20 +219,51 @@ namespace AmigaPowerAnalysis.GUI {
             _endpointTypes.Add(new EndpointType() {
                 Name = newEndpointTypeName,
             });
-            updateDataGridViewEndpointTypes();
+            updateDataGridViewDefaultEndpointGroups();
         }
 
-        private void buttonDeleteEndpointType_Click(object sender, EventArgs e) {
-            if (dataGridViewEndpointGroups.SelectedRows.Count == 1) {
-                _endpointTypes.Remove(_endpointTypes[dataGridViewEndpointGroups.CurrentRow.Index]);
-                updateDataGridViewEndpointTypes();
+        private void buttonDeleteDefaultEndpointGroup_Click(object sender, EventArgs e) {
+            if (dataGridViewDefaultEndpointGroups.SelectedRows.Count == 1) {
+                _endpointTypes.Remove(_endpointTypes[dataGridViewDefaultEndpointGroups.CurrentRow.Index]);
+                updateDataGridViewDefaultEndpointGroups();
             } else {
                 showError("Invalid selection", "Please select one entire row in order to remove its corresponding endpoint group.");
             }
         }
 
+        private void buttonAddProjectEndpointGroup_Click(object sender, EventArgs e) {
+            if (_project != null && _project.EndpointTypes.Count > 0) {
+                var endpointTypeNames = _project.EndpointTypes.Select(ep => ep.Name).ToList();
+                var newEndpointTypeName = string.Format("New endpoint type");
+                var i = 0;
+                while (endpointTypeNames.Contains(newEndpointTypeName)) {
+                    newEndpointTypeName = string.Format("New endpoint type {0}", i++);
+                }
+                _project.EndpointTypes.Add(new EndpointType() {
+                    Name = newEndpointTypeName,
+                });
+                updateDataGridViewProjectEndpointGroups();
+            }
+        }
+
+        private void buttonDeleteProjectEndpointGroup_Click(object sender, EventArgs e) {
+            if (_project != null && _project.EndpointTypes.Count > 0) {
+                if (dataGridViewDefaultEndpointGroups.SelectedRows.Count == 1) {
+                    var selectedEndpointType = _project.EndpointTypes[dataGridViewDefaultEndpointGroups.CurrentRow.Index];
+                    if (!_project.Endpoints.Any(ep => ep.EndpointType == selectedEndpointType)) {
+                        _project.EndpointTypes.Remove(selectedEndpointType);
+                    } else {
+                        showError("Invalid selection", "Cannot delete endpoint group because it is referenced by one of the endpoints of the project.");
+                    }
+                    updateDataGridViewDefaultEndpointGroups();
+                } else {
+                    showError("Invalid selection", "Please select one entire row in order to remove its corresponding endpoint group.");
+                }
+            }
+        }
+
         private void dataGridViewEndpointTypes_CellValidating(object sender, DataGridViewCellValidatingEventArgs e) {
-            if (dataGridViewEndpointGroups.Columns[e.ColumnIndex].Name == "Name") {
+            if (dataGridViewDefaultEndpointGroups.Columns[e.ColumnIndex].Name == "Name") {
 
             }
         }
