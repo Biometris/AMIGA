@@ -248,16 +248,49 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void buttonDeleteProjectEndpointGroup_Click(object sender, EventArgs e) {
             if (_project != null && _project.EndpointTypes.Count > 0) {
-                if (dataGridViewDefaultEndpointGroups.SelectedRows.Count == 1) {
-                    var selectedEndpointType = _project.EndpointTypes[dataGridViewDefaultEndpointGroups.CurrentRow.Index];
+                if (dataGridViewProjectEndpointGroups.SelectedRows.Count == 1) {
+                    var selectedEndpointType = _project.EndpointTypes[dataGridViewProjectEndpointGroups.CurrentRow.Index];
                     if (!_project.Endpoints.Any(ep => ep.EndpointType == selectedEndpointType)) {
                         _project.EndpointTypes.Remove(selectedEndpointType);
+                        updateDataGridViewProjectEndpointGroups();
                     } else {
                         showError("Invalid selection", "Cannot delete endpoint group because it is referenced by one of the endpoints of the project.");
                     }
                     updateDataGridViewDefaultEndpointGroups();
                 } else {
                     showError("Invalid selection", "Please select one entire row in order to remove its corresponding endpoint group.");
+                }
+            }
+        }
+
+        private void buttonAddToProject_Click(object sender, EventArgs e) {
+            if (_project != null && _project.EndpointTypes.Count > 0) {
+                if (dataGridViewDefaultEndpointGroups.SelectedRows.Count == 1) {
+                    var selectedEndpointType = _endpointTypes[dataGridViewDefaultEndpointGroups.CurrentRow.Index];
+                    if (!_project.EndpointTypes.Any(ep => ep.Name == selectedEndpointType.Name)) {
+                        _project.EndpointTypes.Add(selectedEndpointType);
+                        updateDataGridViewProjectEndpointGroups();
+                    } else {
+                        showError("Invalid selection", "The project already contains an endpoint group with the same name.");
+                    }
+                } else {
+                    showError("Invalid selection", "Please select one entire row in order to copy its corresponding endpoint group to the endpoint groups of the project.");
+                }
+            }
+        }
+
+        private void buttonAddToDefault_Click(object sender, EventArgs e) {
+            if (_project != null && _project.EndpointTypes.Count > 0) {
+                if (dataGridViewProjectEndpointGroups.SelectedRows.Count == 1) {
+                    var selectedEndpointType = _project.EndpointTypes[dataGridViewProjectEndpointGroups.CurrentRow.Index];
+                    if (!_endpointTypes.Any(ep => ep.Name == selectedEndpointType.Name)) {
+                        _endpointTypes.Add(selectedEndpointType);
+                        updateDataGridViewDefaultEndpointGroups();
+                    } else {
+                        showError("Invalid selection", "There already exists a default endpoint with the same name.");
+                    }
+                } else {
+                    showError("Invalid selection", "Please select one entire row in order to copy its corresponding endpoint group to your default endpoint.");
                 }
             }
         }

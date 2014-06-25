@@ -141,6 +141,7 @@
             this.buttonAddToDefault.Size = new System.Drawing.Size(32, 27);
             this.buttonAddToDefault.TabIndex = 7;
             this.buttonAddToDefault.UseVisualStyleBackColor = true;
+            this.buttonAddToDefault.Click += new System.EventHandler(this.buttonAddToDefault_Click);
             // 
             // buttonAddToProject
             // 
@@ -151,6 +152,7 @@
             this.buttonAddToProject.Size = new System.Drawing.Size(32, 27);
             this.buttonAddToProject.TabIndex = 6;
             this.buttonAddToProject.UseVisualStyleBackColor = true;
+            this.buttonAddToProject.Click += new System.EventHandler(this.buttonAddToProject_Click);
             // 
             // panelProjectEndpointGroups
             // 
