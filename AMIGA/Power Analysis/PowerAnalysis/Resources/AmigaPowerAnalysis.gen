@@ -6,7 +6,7 @@ close channel=2 ; filetype=output
 \SET [WORKINGDIRECTORY='D:/Data/AMIGA/AmigaTool/Power Analysis/PowerAnalysis/Resources']
 
 if in3open.eq.0
-    text      project ; 'test-0'
+    text      project ; 'test-1'
     text      dir ; 'D:/Data/AMIGA/AmigaTool/TestData/'
     calculate pos = getposition(project ; '-')
     concatena [subdir] project ; width=getposition(project ; '-') - 1
@@ -16,15 +16,15 @@ if in3open.eq.0
     txconstru [outfile] dir, sur, '-Output.csv'
     open      'D:/Data/AMIGA/AmigaTool/Power Analysis/PowerAnalysis/Resources/Lyles.pro' ; channel=2 ; filetype=input
 endif
-
-" Include Lyles procedures "
 print     infile
 print     outfile
+
+" Include Lyles procedures "
 input     [print=*] 2
 close     channel=2 ; filetype=input
 
 
-" Completely randomized than one loop is sufficient "
+" Completely randomized, then one loop is sufficient "
 
 " Simulation settings "
 " Import Data from Simulation tool "
@@ -49,8 +49,10 @@ for read=comparisonId, endpoint, lowerLOC, upperLOC, cvComparator, cvBlock, dist
 endfor
 close     channel=3 ; filetype=input
 
-"Missing LoCs are set to 1"
-calc lowerLOC,upperLOC=mvreplace(lowerLOC,upperLOC;1)
+"Missing LoCs are set to a value close to 1"
+scal eps; 1e-10
+calc lowerLOC=mvreplace(lowerLOC;1+eps)
+calc upperLOC=mvreplace(upperLOC;1-eps)
 
 "Replace some labels by shorter forms"
 sreplace  ['OverdispersedPoisson' ; 'opoisson'] distribution
@@ -73,7 +75,7 @@ fileread  [print=* ; name=infile ; skip=nitems ; imethod=read ; \
           separator=',' ; maxcat=0 ; isave=isave]
 prin isave
 
-" Some extra options "
+" Initialize random generator "
 calculate init = urand(seed ; 1)
 
 " Create design matrix from input file "
@@ -83,7 +85,7 @@ L1CREATE  [isave; NINTFAC=nIntFac; NMODFAC=nModFac]\
 prin meanComparator,comparison,dum[],Modifiers
 
 " create grid for looping loop over loc/nblocks values "
-" for a randomized design the non-centrality parameter is proportional "
+" for a completely randomized design the non-centrality parameter is proportional "
 calculate loglowerloc, logupperloc = log(lowerLOC, upperLOC)
 fgrid     [min=loglowerloc ; max=logupperloc ; ngrid=ngridLOC] gridratio
 calculate gridratio[] = exp(gridratio[])
@@ -112,6 +114,8 @@ for [ntimes=nloop ; index=ii]
 endfor
 variate   df ; !(#qdf) ; deci=0
 vequate   qnc,qpow ; nc,pow
+\print   nc[1...5,8,9,10] ; fi=10 ; de=3
+\print   pow[1...5,8,9,10] ; fi=10 ; de=3
 
 " Expand for randomized "
 print flagRan
@@ -128,20 +132,26 @@ if flagRan
   table     [class=fRatio] tnc[] ; nc[]
   table     [class=fRatio, fReps] tNreps, ttnc[]
   tabulate  1*fReps ; mean=tNreps
-  calculate ttnc[] = tnc[] * tNreps/2
+  "analytical expression to derive non-centrality for other Nreps than 2:"
+  calculate ttnc[] = tnc[] * tNreps/2   
   variate   nc[] ; ttnc[]
   calculate critvalChi = edchi(1-alfa + 0*df ; 1)
   calculate critvalF = edf(1-alfa + 0*df ; 1 ; df)
   for [index=ii] qq=nc[] ; pp=pow[] ; type=2,2,1,2,1
+    "to prevent non-convergance CUCHI or CUF"
+    scal qqmax; 100  "For non-centrality 100 the power is in practice 1.000
+                     (TODO: check if always true)"
+    calc qq=qq*(qq<qqmax)+qqmax*(qq>=qqmax)
     if (type.eq.1)
         variate   pp ; CUCHI(critvalChi ; 1 ; qq)
       else
         variate   pp ; CUF(critvalF ; 1 ; df ; qq)
     endif
+  \prin type,critvalChi,critvalF,df,qq,pp; fiel=10
   endfor
 endif
-print   nc[1...5,8,9,10] ; fi=10 ; de=3
-print   pow[1...5,8,9,10] ; fi=10 ; de=3
+print   nc[1...10] ; fi=8 ; de=3
+print   pow[1...10] ; fi=8 ; de=3
 
 " Export "
 text      names ; !t(\

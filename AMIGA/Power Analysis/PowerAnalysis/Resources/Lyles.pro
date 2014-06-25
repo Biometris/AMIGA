@@ -127,6 +127,9 @@ POINTER   [NVALUES=NVALUES(DUMMY)] qdum, zdum
 VARIATE   [NVALUES=iiplots] qdum[], qmean, qcomparison, qsig2, qvar
 EQUATE    MEAN, COMPARISON, DUMMY[] ; qmean, qcomparison, qdum[]
 
+" Store comparator means"
+VARIATE compmean; qmean
+
 " Apply Ratio effect"
 CALCULATE qmean = ((1-qdum[1]) + qdum[1]*iiRatio) * qmean
 
@@ -148,16 +151,18 @@ IF (DESIGN.eqs.'RANDOMIZED')
   ELSE
     FAULT   [EXPL=!t('Misspecification of design')]
 ENDIF
+
 " Apply Blocking effect by means of Blom scores "
 IF design.eqs.'BLOCK'
   VARIATE   [VALUES=1...#iiReps] blockeff
   CALCULATE blockeff = EXP(sigBlock*NED((blockeff-0.375)/(iiReps+0.25)))
   CALCULATE qmean = qmean * NEWLEVELS(qBlock ; blockeff)
+  CALCULATE compmean = compmean * NEWLEVELS(qBlock ; blockeff)
 ENDIF
 
 " Deal with distribution and calculate overdispersion factor "
 TEXT      dist ; DISTRIBUTION
-IF DISTRIBUTION.eqs.'NEGATIVE'
+IF DISTRIBUTION.eqs.'NEGATIVEBINOMIAL'
     CALCULATE sig2NB = (CVCOMPARATOR/100)**2 - 1/MUCOMPARATOR
     CALCULATE qsig2 = sig2NB
     CALCULATE qvar = qmean + qsig2*qmean*qmean
@@ -177,13 +182,15 @@ IF DISTRIBUTION.eqs.'NEGATIVE'
   ELSE
     FAULT     [DIAG=fault ; expl=!t('Wrong setting of DISTRIBUTION')]
 ENDIF
+\prin qmean,qsig2,qvar,qcomparison,qdum[]
+\exit [co=jo] 1
 
 " Looping over DIFFERENT values in qmean to create synthetic dataset"
 GROUPS    qmean ; fMean ; LEVELS=levMean
 CALCULATE nlevMean = NVALUES(levMean)
 VARIATE   [NVALUES=nlevMean] nobs, sumww, factor ; DECI=0,4,0
 VARIATE   [NVALUES=iiplots] eeLN, vvLN, eeSQ, vvSQ
-POINTER   [NVALUES=iiplots] ww, yy
+POINTER   [NVALUES=iiplots] ww, yy, mm
 
 FOR [NTIMES=nlevMean ; INDEX=jj]
   SCALAR    kmean ; (levMean)$[jj]
@@ -200,13 +207,17 @@ FOR [NTIMES=nlevMean ; INDEX=jj]
     VARIATE   [VALUES=#lowcount...#uppcount] yydum, wwdum
     CNTPROBAB [DIST=#dist] yydum ; MEAN=kmean ; DISP=ksig2 ; PROB=wwdum
     CALCULATE sumww$[jj] = (ksumww = SUM(wwdum))
+    VARIATE   [VALUES=#nobs$[jj](compmean$[jj])] mmdum
     EXIT      [CONTROL=for] (ksumww.GT.minimumProbSum)
   ENDFOR
   " Copy values "
   RESTRICT  qmean ; qmean.EQ.kmean ; SAVESET=saveset
   RESTRICT  qmean
+  \prin kmean, saveset
   CALCULATE yy[#saveset] = yydum
   CALCULATE ww[#saveset] = wwdum
+  CALCULATE mm[#saveset] = mmdum
+  \prin yy[],ww[]
   " For LN and SQ "
   CALCULATE ee1 = SUM(wwdum * LOG(yydum+1))
   CALCULATE vv1 = SUM(wwdum * (LOG(yydum+1)-ee1)**2)
@@ -217,7 +228,7 @@ FOR [NTIMES=nlevMean ; INDEX=jj]
   CALCULATE (eeSQ)$[saveset] = ee1
   CALCULATE (vvSQ)$[saveset] = vv1
 ENDFOR
-VARIATE   response, weight ; !(#yy), !(#ww)
+VARIATE   response, weight, meancomp ; !(#yy), !(#ww), !(#mm)
 
 " Expand design and define model "
 CALCULATE fullNobs = NEWLEVELS(fMean ; nobs)
@@ -236,6 +247,9 @@ IF design.EQS.'BLOCK'
   FCLASSIFI [OUT=modelH1] #modelH1 + zBlock
 ENDIF
 
+
+\prin response,weight,meancomp
+
 " Define models; ensure that zdum[1] is last parameter "
 FCLASSIFI [OUT=modelH0] #modelH1 - zdum[1]
 GETATTRIB [ATTRIBUTE=stype] modelH0 ; SAVE=amodel
@@ -248,9 +262,7 @@ IF amodel[].eqs.'*'
     FCLASSIFI [OUT=modelH1] #modelH0 + zdum[1]
     FORMULA   terms ; modelH1
 ENDIF
-" Calculate offsets for equivalence testing "
-CALCULATE loglowerLOC,logupperLOC = LOG(LOCLOWER, LOCUPPER)
-VARIATE   lowOffset,uppOffset ; (loglowerLOC,logupperLOC) * (zdum[1].eq.1)
+
 
 SCALAR    LNnc,SQnc,POnc,OPnc,NBnc, LNnce,SQnce,POnce,OPnce,NBnce
 SCALAR    powLN,powSQ,powPO,powOP,powNB, powLNe,powSQe,powPOe,powOPe,powNBe
@@ -266,13 +278,31 @@ IF 'LN'.IN.ANALYSIS  " LN: logarithmic transformation "
   FIT       [PRINT=* ; NOMES=lev,res,disp] #modelH0
   RKEEP     DEV=Ddev0 ; DF=df0 ; TDF=tdf0
   ADD       [PRINT=* ; NOMES=lev,res,disp] zdum[1]
-  RKEEP     DEV=dev1 ; DF=df1 ; TDF=tdf1
+  RKEEP     DEV=dev1 ; DF=df1 ; TDF=tdf1; ESTI=esti
 
   " Degrees of freedom for residual; critical F "
   CALCULATE iidf = iiplots - (nParameters = tdf1 - df1 + 1)
   CALCULATE critvalF = EDF(1-SIGNIFICANCELEVEL ; 1 ; iidf)
   CALCULATE LNnc = (Dnoncentral = BOUND((Ddev0-dev1)/meanVariance ; 0 ; mis))
   CALCULATE powLN = CUF(critvalF ; 1 ; iidf ; Dnoncentral)
+
+  " Calculate offsets for equivalence testing "
+  \CALCULATE loglowerLOC,logupperLOC = LOG(LOCLOWER, LOCUPPER)
+  CALCULATE lowOffset,uppOffset =\
+    LOG((LOCLOWER,LOCUPPER*meancomp+1)/(meancomp+1)) * (zdum[1].eq.1)
+
+  CALCULATE effGMO = esti$[nParameters]
+  IF (effGMO.LE.0)
+      MODEL     [DIST=normal ; WEIGHT=weight ; OFFSET=lowOffset] tresponse
+    ELSE
+      MODEL     [DIST=normal ; WEIGHT=weight ; OFFSET=uppOffset] tresponse
+  ENDIF
+  TERMS     #terms
+  FIT       [PRINT=* ; NOMES=lev,res,disp] #modelH0
+  RKEEP     DEV=Edev0 
+  CALCULATE LNnce = (Enoncentral = BOUND((Edev0-dev1)/meanVariance ; 0 ; mis))
+  CALCULATE powLNe = CUF(critvalF ; 1 ; iidf ; Enoncentral)
+
 ENDIF
 
 IF 'SQ'.IN.ANALYSIS  " SQ: squared root transformation "
@@ -284,16 +314,36 @@ IF 'SQ'.IN.ANALYSIS  " SQ: squared root transformation "
   FIT       [PRINT=* ; NOMES=lev,res,disp] #modelH0
   RKEEP     DEV=Ddev0 ; DF=df0 ; TDF=tdf0
   ADD       [PRINT=* ; NOMES=lev,res,disp] zdum[1]
-  RKEEP     DEV=dev1 ; DF=df1 ; TDF=tdf1
+  RKEEP     DEV=dev1 ; DF=df1 ; TDF=tdf1; ESTI=esti
 
   " Degrees of freedom for residual; critical F "
   CALCULATE iidf = iiplots - (nParameters = tdf1 - df1 + 1)
   CALCULATE critvalF = EDF(1-SIGNIFICANCELEVEL ; 1 ; iidf)
   CALCULATE SQnc = (Dnoncentral = BOUND((Ddev0-dev1)/meanVariance; 0; mis))
   CALCULATE powSQ = CUF(critvalF ; 1 ; iidf ; Dnoncentral)
+
+  " Calculate offsets for equivalence testing "
+  \CALCULATE loglowerLOC,logupperLOC = LOG(LOCLOWER, LOCUPPER)
+  CALCULATE lowOffset,uppOffset =\
+    (SQRT(LOCLOWER,LOCUPPER*meancomp)- SQRT(meancomp)) * (zdum[1].eq.1)
+
+  CALCULATE effGMO = esti$[nParameters]
+  IF (effGMO.LE.0)
+      MODEL     [DIST=normal ; WEIGHT=weight ; OFFSET=lowOffset] tresponse
+    ELSE
+      MODEL     [DIST=normal ; WEIGHT=weight ; OFFSET=uppOffset] tresponse
+  ENDIF
+  TERMS     #terms
+  FIT       [PRINT=* ; NOMES=lev,res,disp] #modelH0
+  RKEEP     DEV=Edev0 
+  CALCULATE SQnce = (Enoncentral = BOUND((Edev0-dev1)/meanVariance ; 0 ; mis))
+  CALCULATE powSQe = CUF(critvalF ; 1 ; iidf ; Enoncentral)
+
 ENDIF
 
-IF SUM(!t('PO','OP').IN.ANALYSIS)  " PO: Poisson "
+IF SUM(!t('PO','OP').IN.ANALYSIS)  
+
+  " PO: Poisson "
   PRINT     [IPRINT=* ; SQUASH=yes] 'OP'
   MODEL     [DIST=poisson ; WEIGHT=weight] response
   TERMS     #terms
@@ -305,6 +355,10 @@ IF SUM(!t('PO','OP').IN.ANALYSIS)  " PO: Poisson "
   CALCULATE powPO = CUCHI(critvalChi ; 1 ; Dnoncentral)
 
   " PO: equivalence "
+  " Calculate offsets for equivalence testing "
+  CALCULATE loglowerLOC,logupperLOC = LOG(LOCLOWER, LOCUPPER)
+  VARIATE   lowOffset,uppOffset ; (loglowerLOC,logupperLOC) * (zdum[1].eq.1)
+
   CALCULATE effGMO = esti$[nParameters]
   IF (effGMO.LE.0)
       MODEL     [DIST=poisson ; WEIGHT=weight ; OFFSET=lowOffset] response
@@ -337,6 +391,10 @@ IF 'NB'.IN.ANALYSIS  " NB: negative binomial "
   CALCULATE powNB = CUCHI(critvalChi ; 1 ; Dnoncentral)
 
   " NB: equivalence "
+  " Calculate offsets for equivalence testing "
+  CALCULATE loglowerLOC,logupperLOC = LOG(LOCLOWER, LOCUPPER)
+  VARIATE   lowOffset,uppOffset ; (loglowerLOC,logupperLOC) * (zdum[1].eq.1)
+
   CALCULATE effGMO = esti$[nParameters]
   IF (effGMO.LE.0)
       MODEL     [DIST=negative ; LINK=log ; WEIGHT=weight ; OFFSET=lowOffset] \
