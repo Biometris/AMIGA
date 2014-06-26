@@ -128,15 +128,15 @@
             // toolstripEndpointTypes
             // 
             this.toolstripEndpointTypes.Name = "toolstripEndpointTypes";
-            this.toolstripEndpointTypes.Size = new System.Drawing.Size(156, 22);
-            this.toolstripEndpointTypes.Text = "Endpoint Types";
+            this.toolstripEndpointTypes.Size = new System.Drawing.Size(163, 22);
+            this.toolstripEndpointTypes.Text = "Endpoint Groups";
             this.toolstripEndpointTypes.Click += new System.EventHandler(this.toolstripEndpointTypes_Click);
             // 
             // goToolStripMenuItem
             // 
             this.goToolStripMenuItem.Name = "goToolStripMenuItem";
-            this.goToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
-            this.goToolStripMenuItem.Text = "Go";
+            this.goToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+            this.goToolStripMenuItem.Text = "Run simulation";
             this.goToolStripMenuItem.Click += new System.EventHandler(this.goToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
@@ -150,7 +150,7 @@
             // toolstripAbout
             // 
             this.toolstripAbout.Name = "toolstripAbout";
-            this.toolstripAbout.Size = new System.Drawing.Size(107, 22);
+            this.toolstripAbout.Size = new System.Drawing.Size(152, 22);
             this.toolstripAbout.Text = "About";
             this.toolstripAbout.Click += new System.EventHandler(this.toolstripAbout_Click);
             // 
