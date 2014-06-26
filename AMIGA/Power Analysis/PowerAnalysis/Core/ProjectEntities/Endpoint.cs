@@ -14,7 +14,7 @@ namespace AmigaPowerAnalysis.Core {
             Factors = new List<EndpointFactorSettings>();
             Comparisons = new List<Comparison>();
             Comparisons.Add(new Comparison() {
-                Name = string.Format("Default"),
+                Name = string.Format("GMO vs. Comparator"),
                 Endpoint = this,
                 IsDefault = true,
             });
