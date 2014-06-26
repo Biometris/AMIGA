@@ -41,59 +41,59 @@ namespace AmigaPowerAnalysis.GUI {
             var comparisons = _project.GetComparisons();
             var projectPath = Path.GetDirectoryName(_projectFilename);
             var projectName = Path.GetFileNameWithoutExtension(_projectFilename);
+
+            var applicationDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            var scriptsDirectory = string.Format("{0}\\Resources", applicationDirectory);
+            var scriptFilename = string.Format("{0}\\AmigaPowerAnalysis.gen", scriptsDirectory);
+            var lylesScriptFilename = string.Format("{0}\\Lyles.pro", scriptsDirectory);
+            
             var filesPath = Path.Combine(projectPath, projectName);
             if (!Directory.Exists(filesPath)) {
                 Directory.CreateDirectory(filesPath);
             }
 
             var inputGenerator = new PowerAnalysisInputGenerator();
+            var outputReader = new PowerAnalysisOutputReader();
 
             var numberOfComparisons = comparisons.Count();
-            var progressStep = 10D / numberOfComparisons;
+            var progressStep = 100D / numberOfComparisons;
 
-            // Create input files for power analysis
+
             for (int i = 0; i < comparisons.Count(); ++i) {
-                _powerAnalysisBackgroundWorker.ReportProgress((int)(i * progressStep), string.Format("compiling analysis input for comparison {0} of {1}...", i + 1, comparisons.Count()));
-                var inputPowerAnalysis = inputGenerator.CreateInputPowerAnalysis(comparisons.ElementAt(i), _project.DesignSettings, _project.PowerCalculationSettings, i);
-                var comparisonFilename = Path.Combine(filesPath, string.Format("{0}-{1}.csv", projectName, i));
-                inputGenerator.PowerAnalysisInputToCsv(inputPowerAnalysis, comparisonFilename);
-            }
-
-            var applicationDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-
-            progressStep = 80D / numberOfComparisons;
-            for (int i = 0; i < comparisons.Count(); ++i) {
-                _powerAnalysisBackgroundWorker.ReportProgress((int)(10 + i * progressStep), string.Format("running analysis for comparison {0} of {1}...", i + 1, comparisons.Count()));
-                var comparisonInputFilename = Path.Combine(filesPath, string.Format("{0}-{1}.csv", projectName, i));
-                var comparisonOutputFilename = Path.Combine(filesPath, string.Format("{0}-{1}-Output.csv", projectName, i));
-                var logFilename = Path.Combine(filesPath, string.Format("{0}-{1}.log", projectName, i));
-                var scriptsDirectory = string.Format("{0}\\Resources", applicationDirectory);
-                var scriptFilename = string.Format("{0}\\AmigaPowerAnalysis.gen", scriptsDirectory);
-                var lylesScriptFilename = string.Format("{0}\\Lyles.pro", scriptsDirectory);
-                var startInfo = new ProcessStartInfo();
-                startInfo.CreateNoWindow = false;
-                startInfo.UseShellExecute = false;
-                startInfo.FileName = @"C:\Program Files\Gen16ed\Bin\GenBatch.exe";
-                startInfo.WindowStyle = ProcessWindowStyle.Normal;
-                startInfo.Arguments = string.Format("in=\"{0}\" in2=\"{1}\" in3=\"{2}\" out=\"{3}\" out2=\"{4}\"", scriptFilename, lylesScriptFilename, comparisonInputFilename, logFilename, comparisonOutputFilename);
                 try {
+                    var comparisonInputFilename = Path.Combine(filesPath, string.Format("{0}-{1}.csv", projectName, i));
+                    var comparisonOutputFilename = Path.Combine(filesPath, string.Format("{0}-{1}-Output.csv", projectName, i));
+                    var comparisonLogFilename = Path.Combine(filesPath, string.Format("{0}-{1}.log", projectName, i));
+
+                    // Create input file for power analysis
+                    _powerAnalysisBackgroundWorker.ReportProgress((int)(i * progressStep), string.Format("compiling analysis input for comparison {0} of {1}...", i + 1, comparisons.Count()));
+                    var inputPowerAnalysis = inputGenerator.CreateInputPowerAnalysis(comparisons.ElementAt(i), _project.DesignSettings, _project.PowerCalculationSettings, i);
+                    inputGenerator.PowerAnalysisInputToCsv(inputPowerAnalysis, comparisonInputFilename);
+
+                    // Run power analysis
+                    _powerAnalysisBackgroundWorker.ReportProgress((int)(i * progressStep), string.Format("running analysis for comparison {0} of {1}...", i + 1, comparisons.Count()));
+                    var startInfo = new ProcessStartInfo();
+                    startInfo.CreateNoWindow = false;
+                    startInfo.UseShellExecute = false;
+                    startInfo.FileName = @"C:\Program Files\Gen16ed\Bin\GenBatch.exe";
+                    startInfo.WindowStyle = ProcessWindowStyle.Normal;
+                    startInfo.Arguments = string.Format("in=\"{0}\" in2=\"{1}\" in3=\"{2}\" out=\"{3}\" out2=\"{4}\"", scriptFilename, lylesScriptFilename, comparisonInputFilename, comparisonLogFilename, comparisonOutputFilename);
                     using (Process exeProcess = Process.Start(startInfo)) {
                         exeProcess.WaitForExit();
                     }
+
+                    // Read output file of power analysis
+                    _powerAnalysisBackgroundWorker.ReportProgress((int)(i * progressStep), string.Format("reading analysis output for comparison {0} of {1}...", i + 1, comparisons.Count()));
+                    var comparison = comparisons.ElementAt(i);
+                    comparison.OutputPowerAnalysis = outputReader.ReadOutputPowerAnalysis(comparisonOutputFilename);
+
                 } catch {
                     // TODO: Log error.
                 }
+
             }
 
-            // Create output files for power analysis
-            var outputReader = new PowerAnalysisOutputReader();
-            progressStep = 10D / numberOfComparisons; 
-            for (int i = 0; i < comparisons.Count(); ++i) {
-                _powerAnalysisBackgroundWorker.ReportProgress((int)(90 + i * progressStep), string.Format("reading analysis output for comparison {0} of {1}...", i + 1, comparisons.Count()));
-                var comparison = comparisons.ElementAt(i);
-                var comparisonFilename = Path.Combine(filesPath, string.Format("{0}-{1}-Output.csv", projectName, i));
-                comparison.OutputPowerAnalysis = outputReader.ReadOutputPowerAnalysis(comparisonFilename);
-            }
+
         }
 
         private void progressChanged(object sender, ProgressChangedEventArgs e) {
