@@ -169,7 +169,11 @@ namespace AmigaPowerAnalysis.GUI {
         private void dataGridFactors_SelectionChanged(object sender, EventArgs e) {
             dataGridViewFactorLevels.DataSource = null;
             dataGridViewFactorLevels.Refresh();
-            _currentFactor = _project.Factors.ElementAt(dataGridViewFactors.CurrentRow.Index);
+            if (dataGridViewFactors.CurrentRow.Index < _project.Factors.Count) {
+                _currentFactor = _project.Factors.ElementAt(dataGridViewFactors.CurrentRow.Index);
+            } else {
+                _currentFactor = null;
+            }
             updateDataGridFactorLevels();
         }
 
