@@ -79,20 +79,6 @@ namespace AmigaPowerAnalysis.GUI {
             runPowerAnalysis();
         }
 
-        private void runPowerAnalysis() {
-            if (string.IsNullOrEmpty(_currentProjectFilename)) {
-                MessageBox.Show("Please save the project first.",
-                   "Save project first",
-                   MessageBoxButtons.OK,
-                   MessageBoxIcon.Exclamation,
-                   MessageBoxDefaultButton.Button1);
-                return;
-            }
-            var runSimulationDialog = new RunPowerAnalysisDialog(_project, _currentProjectFilename);
-            runSimulationDialog.ShowDialog();
-            this.updateTabs();
-        }
-
         private void tabControl_SelectedIndexChanged(object sender, EventArgs e) {
             if (tabControl.SelectedTab != null) {
                 var selectedForm = tabControl.SelectedTab.Controls.Cast<Control>().FirstOrDefault(x => x is ISelectionForm) as ISelectionForm;
@@ -102,6 +88,10 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void onVisibilitySettingsChanged(object sender, EventArgs e) {
             updateTabs();
+        }
+
+        private void onRunButtonPressed(object sender, EventArgs e) {
+            runPowerAnalysis();
         }
 
         #endregion
@@ -114,7 +104,7 @@ namespace AmigaPowerAnalysis.GUI {
                 loadProject(ProjectManager.CreateNewProject());
                 _currentProjectFilename = null;
             } catch (Exception ex) {
-                ShowErrorMessage(ex);
+                showErrorMessage(ex);
             }
         }
 
@@ -133,7 +123,7 @@ namespace AmigaPowerAnalysis.GUI {
                     loadProject(project);
                 }
             } catch (Exception ex) {
-                ShowErrorMessage(ex);
+                showErrorMessage(ex);
             }
         }
 
@@ -151,7 +141,7 @@ namespace AmigaPowerAnalysis.GUI {
                     _currentProjectFilename = saveFileDialog.FileName;
                 }
             } catch (Exception ex) {
-                ShowErrorMessage(ex);
+                showErrorMessage(ex);
             }
         }
 
@@ -168,6 +158,9 @@ namespace AmigaPowerAnalysis.GUI {
                 _selectionForms.Add(new SelectionPanelContainer(new ComparisonsPanel(_project)));
                 _selectionForms.Add(new SelectionPanelContainer(new ModifiersPanel(_project)));
                 _selectionForms.Add(new SelectionPanelContainer(new PowerAnalysisSettingsPanel(_project)));
+                var runPanel = new RunPanel(_project);
+                runPanel.RunButtonPressed += onRunButtonPressed;
+                _selectionForms.Add(new SelectionPanelContainer(runPanel));
                 _selectionForms.Add(new SelectionPanelContainer(new AnalysisResultsPanel(_project)));
 
                 _selectionForms.ForEach(s => s.TabVisibilitiesChanged += onVisibilitySettingsChanged);
@@ -178,7 +171,7 @@ namespace AmigaPowerAnalysis.GUI {
 
                 updateTabs();
             } catch (Exception ex) {
-                ShowErrorMessage(ex);
+                showErrorMessage(ex);
                 closeProject();
                 return;
             }
@@ -222,7 +215,21 @@ namespace AmigaPowerAnalysis.GUI {
             }
         }
 
-        private void ShowErrorMessage(Exception ex) {
+        private void runPowerAnalysis() {
+            if (string.IsNullOrEmpty(_currentProjectFilename)) {
+                MessageBox.Show("Please save the project first.",
+                   "Save project first",
+                   MessageBoxButtons.OK,
+                   MessageBoxIcon.Exclamation,
+                   MessageBoxDefaultButton.Button1);
+                return;
+            }
+            var runSimulationDialog = new RunPowerAnalysisDialog(_project, _currentProjectFilename);
+            runSimulationDialog.ShowDialog();
+            this.updateTabs();
+        }
+
+        private void showErrorMessage(Exception ex) {
             MessageBox.Show(
                 "An error occurred while opening the project. An invalid project file may have been provided or the project file may be corrupted.",
                 "Error opening project.",

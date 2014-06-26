@@ -48,11 +48,13 @@
     <ApplicationIcon>Resources\amiga_icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="OxyPlot">
-      <HintPath>..\packages\OxyPlot.WindowsForms.2014.1.312.1\lib\NET45\OxyPlot.dll</HintPath>
+    <Reference Include="OxyPlot, Version=2014.1.318.1, Culture=neutral, PublicKeyToken=638079a8f0bd61e9, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\OxyPlot.WindowsForms.2014.1.318.1\lib\NET45\OxyPlot.dll</HintPath>
     </Reference>
-    <Reference Include="OxyPlot.WindowsForms">
-      <HintPath>..\packages\OxyPlot.WindowsForms.2014.1.312.1\lib\NET45\OxyPlot.WindowsForms.dll</HintPath>
+    <Reference Include="OxyPlot.WindowsForms, Version=2014.1.318.1, Culture=neutral, PublicKeyToken=245eacd6b5d2d338, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\OxyPlot.WindowsForms.2014.1.318.1\lib\NET45\OxyPlot.WindowsForms.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -114,6 +116,12 @@
     </Compile>
     <Compile Include="GUI\AnalysisResultsPanel.Designer.cs">
       <DependentUpon>AnalysisResultsPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\RunPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\RunPanel.Designer.cs">
+      <DependentUpon>RunPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\EndpointTypesPanel.cs">
       <SubType>UserControl</SubType>
@@ -210,6 +218,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\AnalysisResultsPanel.resx">
       <DependentUpon>AnalysisResultsPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\RunPanel.resx">
+      <DependentUpon>RunPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\EndpointTypesPanel.resx">
       <DependentUpon>EndpointTypesPanel.cs</DependentUpon>
