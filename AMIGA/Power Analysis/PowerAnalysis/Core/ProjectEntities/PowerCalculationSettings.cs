@@ -16,7 +16,6 @@ namespace AmigaPowerAnalysis.Core {
 
     [Flags]
     public enum AnalysisMethodType : int {
-        None = 0,
         LogNormal = 1,
         SquareRoot = 2,
         OverdispersedPoisson = 4,
@@ -82,10 +81,10 @@ namespace AmigaPowerAnalysis.Core {
         /// </summary>
         public bool IsLogNormal {
             set{
-                if (value) {
+                if (value && !SelectedAnalysisMethodTypes.HasFlag(AnalysisMethodType.LogNormal)) {
                     SelectedAnalysisMethodTypes |= AnalysisMethodType.LogNormal;
-                } else {
-                    SelectedAnalysisMethodTypes &= AnalysisMethodType.LogNormal;
+                } else if (!value && SelectedAnalysisMethodTypes.HasFlag(AnalysisMethodType.LogNormal)) {
+                    SelectedAnalysisMethodTypes &= ~AnalysisMethodType.LogNormal;
                 }
             }
             get {
@@ -98,10 +97,10 @@ namespace AmigaPowerAnalysis.Core {
         /// </summary>
         public bool IsSquareRoot {
             set{
-                if (value) {
+                if (value && !SelectedAnalysisMethodTypes.HasFlag(AnalysisMethodType.SquareRoot)) {
                     SelectedAnalysisMethodTypes |= AnalysisMethodType.SquareRoot;
-                } else {
-                    SelectedAnalysisMethodTypes &= AnalysisMethodType.SquareRoot;
+                } else if (!value && SelectedAnalysisMethodTypes.HasFlag(AnalysisMethodType.SquareRoot)) {
+                    SelectedAnalysisMethodTypes &= ~AnalysisMethodType.SquareRoot;
                 }
             }
             get {
@@ -114,10 +113,10 @@ namespace AmigaPowerAnalysis.Core {
         /// </summary>
         public bool IsOverdispersedPoisson {
             set{
-                if (value) {
+                if (value && !SelectedAnalysisMethodTypes.HasFlag(AnalysisMethodType.OverdispersedPoisson)) {
                     SelectedAnalysisMethodTypes |= AnalysisMethodType.OverdispersedPoisson;
-                } else {
-                    SelectedAnalysisMethodTypes &= AnalysisMethodType.OverdispersedPoisson;
+                } else if (!value && SelectedAnalysisMethodTypes.HasFlag(AnalysisMethodType.OverdispersedPoisson)) {
+                    SelectedAnalysisMethodTypes &= ~AnalysisMethodType.OverdispersedPoisson;
                 }
             }
             get {
@@ -130,10 +129,10 @@ namespace AmigaPowerAnalysis.Core {
         /// </summary>
         public bool IsNegativeBinomial {
             set{
-                if (value) {
+                if (value && !SelectedAnalysisMethodTypes.HasFlag(AnalysisMethodType.NegativeBinomial)) {
                     SelectedAnalysisMethodTypes |= AnalysisMethodType.NegativeBinomial;
-                } else {
-                    SelectedAnalysisMethodTypes &= AnalysisMethodType.NegativeBinomial;
+                } else if (!value && SelectedAnalysisMethodTypes.HasFlag(AnalysisMethodType.NegativeBinomial)) {
+                    SelectedAnalysisMethodTypes &= ~AnalysisMethodType.NegativeBinomial;
                 }
             }
             get {

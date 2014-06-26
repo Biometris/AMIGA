@@ -18,7 +18,7 @@ namespace AmigaPowerAnalysis.GUI {
 
         public SimulationPanel(Project project) {
             InitializeComponent();
-            Name = "Simulation settings";
+            Name = "Simulation";
             Description = "Specify how to perform the power analysis and which methods of analysis are to be compared. It is advised first to use the Approximate method (Lyles) because it is much faster.";
             _project = project;
         }
