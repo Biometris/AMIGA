@@ -1,5 +1,5 @@
 ﻿namespace AmigaPowerAnalysis.GUI {
-    partial class PowerAnalysisSettingsPanel {
+    partial class SimulationPanel {
         /// <summary> 
         /// Required designer variable.
         /// </summary>
@@ -248,8 +248,7 @@
             // 
             // buttonRunPowerAnalysis
             // 
-            this.buttonRunPowerAnalysis.BackColor = System.Drawing.Color.LimeGreen;
-            this.buttonRunPowerAnalysis.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonRunPowerAnalysis.BackColor = System.Drawing.SystemColors.Control;
             this.buttonRunPowerAnalysis.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonRunPowerAnalysis.Location = new System.Drawing.Point(15, 13);
             this.buttonRunPowerAnalysis.Name = "buttonRunPowerAnalysis";
@@ -259,7 +258,7 @@
             this.buttonRunPowerAnalysis.UseVisualStyleBackColor = false;
             this.buttonRunPowerAnalysis.Click += new System.EventHandler(this.buttonRunPowerAnalysis_Click);
             // 
-            // PowerAnalysisSettingsPanel
+            // SimulationPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -269,7 +268,7 @@
             this.Controls.Add(this.groupBoxOptions);
             this.Controls.Add(this.groupBoxMethodsForAnalysis);
             this.MinimumSize = new System.Drawing.Size(500, 400);
-            this.Name = "PowerAnalysisSettingsPanel";
+            this.Name = "SimulationPanel";
             this.Padding = new System.Windows.Forms.Padding(10);
             this.Size = new System.Drawing.Size(1522, 423);
             this.groupBoxOptions.ResumeLayout(false);

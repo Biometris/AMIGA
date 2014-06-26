@@ -153,11 +153,11 @@
     <Compile Include="GUI\RunPowerAnalysisDialog.Designer.cs">
       <DependentUpon>RunPowerAnalysisDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\PowerAnalysisSettingsPanel.cs">
+    <Compile Include="GUI\SimulationPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="GUI\PowerAnalysisSettingsPanel.Designer.cs">
-      <DependentUpon>PowerAnalysisSettingsPanel.cs</DependentUpon>
+    <Compile Include="GUI\SimulationPanel.Designer.cs">
+      <DependentUpon>SimulationPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\ModifiersPanel.cs">
       <SubType>UserControl</SubType>
@@ -243,8 +243,8 @@
     <EmbeddedResource Include="GUI\RunPowerAnalysisDialog.resx">
       <DependentUpon>RunPowerAnalysisDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GUI\PowerAnalysisSettingsPanel.resx">
-      <DependentUpon>PowerAnalysisSettingsPanel.cs</DependentUpon>
+    <EmbeddedResource Include="GUI\SimulationPanel.resx">
+      <DependentUpon>SimulationPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\ModifiersPanel.resx">
       <DependentUpon>ModifiersPanel.cs</DependentUpon>

@@ -157,7 +157,7 @@ namespace AmigaPowerAnalysis.GUI {
                 _selectionForms.Add(new SelectionPanelContainer(new InteractionsPanel(_project)));
                 _selectionForms.Add(new SelectionPanelContainer(new ComparisonsPanel(_project)));
                 _selectionForms.Add(new SelectionPanelContainer(new ModifiersPanel(_project)));
-                var simulationPanel = new PowerAnalysisSettingsPanel(_project);
+                var simulationPanel = new SimulationPanel(_project);
                 _selectionForms.Add(new SelectionPanelContainer(simulationPanel));
                 simulationPanel.RunButtonPressed += onRunButtonPressed;
                 _selectionForms.Add(new SelectionPanelContainer(new AnalysisResultsPanel(_project)));
