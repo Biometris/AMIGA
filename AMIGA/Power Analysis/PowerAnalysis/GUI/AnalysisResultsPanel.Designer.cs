@@ -32,6 +32,7 @@
             this.plotViewDifferenceLog = new OxyPlot.WindowsForms.PlotView();
             this.plotViewEquivalenceRepetitions = new OxyPlot.WindowsForms.PlotView();
             this.plotViewDifferenceRepetitions = new OxyPlot.WindowsForms.PlotView();
+            this.buttonShowInputData = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerComparisons)).BeginInit();
             this.splitContainerComparisons.Panel1.SuspendLayout();
             this.splitContainerComparisons.Panel2.SuspendLayout();
@@ -84,6 +85,7 @@
             // 
             // panelResultPlots
             // 
+            this.panelResultPlots.Controls.Add(this.buttonShowInputData);
             this.panelResultPlots.Controls.Add(this.comboBoxAnalysisType);
             this.panelResultPlots.Controls.Add(this.tableLayoutPanel);
             this.panelResultPlots.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -175,14 +177,25 @@
             this.plotViewDifferenceRepetitions.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
             this.plotViewDifferenceRepetitions.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
             // 
-            // AnalysisResultsForm
+            // buttonShowInputData
+            // 
+            this.buttonShowInputData.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonShowInputData.Location = new System.Drawing.Point(251, 0);
+            this.buttonShowInputData.Name = "buttonShowInputData";
+            this.buttonShowInputData.Size = new System.Drawing.Size(122, 23);
+            this.buttonShowInputData.TabIndex = 7;
+            this.buttonShowInputData.Text = "Show input data";
+            this.buttonShowInputData.UseVisualStyleBackColor = true;
+            this.buttonShowInputData.Click += new System.EventHandler(this.buttonShowInputData_Click);
+            // 
+            // AnalysisResultsPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.Controls.Add(this.splitContainerComparisons);
             this.Margin = new System.Windows.Forms.Padding(0);
-            this.Name = "AnalysisResultsForm";
+            this.Name = "AnalysisResultsPanel";
             this.Padding = new System.Windows.Forms.Padding(10);
             this.Size = new System.Drawing.Size(874, 503);
             this.splitContainerComparisons.Panel1.ResumeLayout(false);
@@ -207,5 +220,6 @@
         private OxyPlot.WindowsForms.PlotView plotViewEquivalenceLog;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel;
         private System.Windows.Forms.ComboBox comboBoxAnalysisType;
+        private System.Windows.Forms.Button buttonShowInputData;
     }
 }

@@ -92,5 +92,12 @@ namespace AmigaPowerAnalysis.GUI {
             _currentAnalysisType = analysisType;
             updateAnalysisOutputPanel();
         }
+
+        private void buttonShowInputData_Click(object sender, EventArgs e) {
+            if (_currentComparison != null && _currentComparison.OutputPowerAnalysis != null) {
+                var htmlReportForm = new HtmlReportForm(_currentComparison.OutputPowerAnalysis.InputPowerAnalysis.ToHtml());
+                htmlReportForm.ShowDialog();
+            }
+        }
     }
 }

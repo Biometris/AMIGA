@@ -157,10 +157,9 @@ namespace AmigaPowerAnalysis.GUI {
                 _selectionForms.Add(new SelectionPanelContainer(new InteractionsPanel(_project)));
                 _selectionForms.Add(new SelectionPanelContainer(new ComparisonsPanel(_project)));
                 _selectionForms.Add(new SelectionPanelContainer(new ModifiersPanel(_project)));
-                _selectionForms.Add(new SelectionPanelContainer(new PowerAnalysisSettingsPanel(_project)));
-                var runPanel = new RunPanel(_project);
-                runPanel.RunButtonPressed += onRunButtonPressed;
-                _selectionForms.Add(new SelectionPanelContainer(runPanel));
+                var simulationPanel = new PowerAnalysisSettingsPanel(_project);
+                _selectionForms.Add(new SelectionPanelContainer(simulationPanel));
+                simulationPanel.RunButtonPressed += onRunButtonPressed;
                 _selectionForms.Add(new SelectionPanelContainer(new AnalysisResultsPanel(_project)));
 
                 _selectionForms.ForEach(s => s.TabVisibilitiesChanged += onVisibilitySettingsChanged);

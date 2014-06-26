@@ -73,10 +73,10 @@ namespace AmigaPowerAnalysis.GUI {
                     // Run power analysis
                     _powerAnalysisBackgroundWorker.ReportProgress((int)(i * progressStep), string.Format("running analysis for comparison {0} of {1}...", i + 1, comparisons.Count()));
                     var startInfo = new ProcessStartInfo();
-                    startInfo.CreateNoWindow = false;
+                    startInfo.CreateNoWindow = true;
                     startInfo.UseShellExecute = false;
                     startInfo.FileName = @"C:\Program Files\Gen16ed\Bin\GenBatch.exe";
-                    startInfo.WindowStyle = ProcessWindowStyle.Normal;
+                    startInfo.WindowStyle = ProcessWindowStyle.Hidden;
                     startInfo.Arguments = string.Format("in=\"{0}\" in2=\"{1}\" in3=\"{2}\" out=\"{3}\" out2=\"{4}\"", scriptFilename, lylesScriptFilename, comparisonInputFilename, comparisonLogFilename, comparisonOutputFilename);
                     using (Process exeProcess = Process.Start(startInfo)) {
                         exeProcess.WaitForExit();
@@ -86,14 +86,12 @@ namespace AmigaPowerAnalysis.GUI {
                     _powerAnalysisBackgroundWorker.ReportProgress((int)(i * progressStep), string.Format("reading analysis output for comparison {0} of {1}...", i + 1, comparisons.Count()));
                     var comparison = comparisons.ElementAt(i);
                     comparison.OutputPowerAnalysis = outputReader.ReadOutputPowerAnalysis(comparisonOutputFilename);
+                    comparison.OutputPowerAnalysis.InputPowerAnalysis = inputPowerAnalysis;
 
                 } catch {
                     // TODO: Log error.
                 }
-
             }
-
-
         }
 
         private void progressChanged(object sender, ProgressChangedEventArgs e) {

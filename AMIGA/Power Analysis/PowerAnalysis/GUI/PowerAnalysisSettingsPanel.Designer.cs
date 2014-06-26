@@ -41,6 +41,7 @@
             this.checkBoxMethodForAnalysesOP = new System.Windows.Forms.CheckBox();
             this.checkBoxMethodForAnalysesNB = new System.Windows.Forms.CheckBox();
             this.groupBoxMethodsForAnalysis = new System.Windows.Forms.GroupBox();
+            this.buttonRunPowerAnalysis = new System.Windows.Forms.Button();
             this.groupBoxOptions.SuspendLayout();
             this.groupBoxMethodsForAnalysis.SuspendLayout();
             this.SuspendLayout();
@@ -62,10 +63,10 @@
             this.groupBoxOptions.Controls.Add(this.labelNumberOfRatios);
             this.groupBoxOptions.Controls.Add(this.textBoxSignificanceLevel);
             this.groupBoxOptions.Controls.Add(this.labelSignificanceLevel);
-            this.groupBoxOptions.Location = new System.Drawing.Point(13, 10);
+            this.groupBoxOptions.Location = new System.Drawing.Point(15, 56);
             this.groupBoxOptions.Margin = new System.Windows.Forms.Padding(0);
             this.groupBoxOptions.Name = "groupBoxOptions";
-            this.groupBoxOptions.Size = new System.Drawing.Size(553, 200);
+            this.groupBoxOptions.Size = new System.Drawing.Size(1501, 200);
             this.groupBoxOptions.TabIndex = 9;
             this.groupBoxOptions.TabStop = false;
             this.groupBoxOptions.Text = "Options";
@@ -237,26 +238,40 @@
             this.groupBoxMethodsForAnalysis.Controls.Add(this.checkBoxMethodForAnalysesLN);
             this.groupBoxMethodsForAnalysis.Controls.Add(this.checkBoxMethodForAnalysesOP);
             this.groupBoxMethodsForAnalysis.Controls.Add(this.checkBoxMethodForAnalysesSQ);
-            this.groupBoxMethodsForAnalysis.Location = new System.Drawing.Point(13, 215);
+            this.groupBoxMethodsForAnalysis.Location = new System.Drawing.Point(15, 261);
             this.groupBoxMethodsForAnalysis.Margin = new System.Windows.Forms.Padding(0, 5, 0, 0);
             this.groupBoxMethodsForAnalysis.Name = "groupBoxMethodsForAnalysis";
-            this.groupBoxMethodsForAnalysis.Size = new System.Drawing.Size(551, 152);
+            this.groupBoxMethodsForAnalysis.Size = new System.Drawing.Size(1499, 152);
             this.groupBoxMethodsForAnalysis.TabIndex = 10;
             this.groupBoxMethodsForAnalysis.TabStop = false;
             this.groupBoxMethodsForAnalysis.Text = "Methods for Analysis";
             // 
-            // PowerAnalysisSettingsForm
+            // buttonRunPowerAnalysis
+            // 
+            this.buttonRunPowerAnalysis.BackColor = System.Drawing.Color.LimeGreen;
+            this.buttonRunPowerAnalysis.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonRunPowerAnalysis.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonRunPowerAnalysis.Location = new System.Drawing.Point(15, 13);
+            this.buttonRunPowerAnalysis.Name = "buttonRunPowerAnalysis";
+            this.buttonRunPowerAnalysis.Size = new System.Drawing.Size(102, 35);
+            this.buttonRunPowerAnalysis.TabIndex = 11;
+            this.buttonRunPowerAnalysis.Text = "Run";
+            this.buttonRunPowerAnalysis.UseVisualStyleBackColor = false;
+            this.buttonRunPowerAnalysis.Click += new System.EventHandler(this.buttonRunPowerAnalysis_Click);
+            // 
+            // PowerAnalysisSettingsPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.BackColor = System.Drawing.SystemColors.Window;
+            this.Controls.Add(this.buttonRunPowerAnalysis);
             this.Controls.Add(this.groupBoxOptions);
             this.Controls.Add(this.groupBoxMethodsForAnalysis);
             this.MinimumSize = new System.Drawing.Size(500, 400);
-            this.Name = "PowerAnalysisSettingsForm";
+            this.Name = "PowerAnalysisSettingsPanel";
             this.Padding = new System.Windows.Forms.Padding(10);
-            this.Size = new System.Drawing.Size(574, 400);
+            this.Size = new System.Drawing.Size(1522, 423);
             this.groupBoxOptions.ResumeLayout(false);
             this.groupBoxOptions.PerformLayout();
             this.groupBoxMethodsForAnalysis.ResumeLayout(false);
@@ -286,5 +301,6 @@
         private System.Windows.Forms.GroupBox groupBoxMethodsForAnalysis;
         private System.Windows.Forms.TextBox textBoxSeedForRandomNumbers;
         private System.Windows.Forms.Label labelSeedForRandomNumbers;
+        private System.Windows.Forms.Button buttonRunPowerAnalysis;
     }
 }

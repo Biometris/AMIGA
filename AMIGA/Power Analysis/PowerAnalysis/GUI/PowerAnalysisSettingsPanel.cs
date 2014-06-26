@@ -45,6 +45,15 @@ namespace AmigaPowerAnalysis.GUI {
 
         public event EventHandler TabVisibilitiesChanged;
 
+        public event EventHandler RunButtonPressed;
+
+        private void onRunButtonPressed() {
+            var runButtonPressed = RunButtonPressed;
+            if (runButtonPressed != null) {
+                runButtonPressed(this, null);
+            }
+        }
+
         private void textBoxSignificanceLevel_Validating(object sender, CancelEventArgs e) {
             var textBox = sender as TextBox;
             double value;
@@ -110,6 +119,10 @@ namespace AmigaPowerAnalysis.GUI {
             PowerCalculationMethod powerCalculationMethod;
             Enum.TryParse<PowerCalculationMethod>(comboBoxMethodForPowerCalculation.SelectedValue.ToString(), out powerCalculationMethod);
             _project.PowerCalculationSettings.PowerCalculationMethod = powerCalculationMethod;
+        }
+
+        private void buttonRunPowerAnalysis_Click(object sender, EventArgs e) {
+            onRunButtonPressed();
         }
     }
 }
