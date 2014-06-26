@@ -5,8 +5,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace AmigaPowerAnalysis.Helpers {
-    public static class StringToIntegerRangeExtension {
+namespace AmigaPowerAnalysis.Helpers.ClassExtensionMethods {
+    public static class StringExtensionMethods {
 
         /// <summary>
         /// Parses a string representing a range of values into a sequence of integers.

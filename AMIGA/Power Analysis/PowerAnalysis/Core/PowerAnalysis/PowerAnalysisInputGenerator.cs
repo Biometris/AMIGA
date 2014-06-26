@@ -21,6 +21,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             var inputPowerAnalysis = new InputPowerAnalysis() {
                 ComparisonId = idComparison,
                 Endpoint = comparison.Endpoint.Name,
+                SelectedAnalysisMethodTypes = powerCalculationSettings.SelectedAnalysisMethodTypes,
             };
 
             inputPowerAnalysis.SimulationSettings.Add("LocLower", comparison.Endpoint.LocLower.ToString());

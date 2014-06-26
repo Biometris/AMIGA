@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 
 namespace AmigaPowerAnalysis.Core {
@@ -16,9 +18,13 @@ namespace AmigaPowerAnalysis.Core {
 
     [Flags]
     public enum AnalysisMethodType : int {
+        [Display(Name="Log-Normal")]
         LogNormal = 1,
+        [Display(Name="Square root")]
         SquareRoot = 2,
+        [Display(Name="Overdispersed Poisson")]
         OverdispersedPoisson = 4,
+        [Display(Name="Negative binomial")]
         NegativeBinomial = 8,
     }
 

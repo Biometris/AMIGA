@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using AmigaPowerAnalysis.Core;
 using AmigaPowerAnalysis.Core.Charting;
+using AmigaPowerAnalysis.Core.Reporting;
+using AmigaPowerAnalysis.Helpers.ClassExtensionMethods;
+using OxyPlot.WindowsForms;
 
 // TODO Obligatory to first enter a name for a new endpoint
 // TODO Binomial totals greyed out for non fractions
@@ -23,8 +27,7 @@ namespace AmigaPowerAnalysis.GUI {
             InitializeComponent();
             Name = "Results";
             Description = "Choose endpoint in table. Choose method of analysis if more have been investigated. Power is shown for difference tests (upper graphs) and equivalence tests (lower graphs), both as a function of the number of replicates (left) and the Ratio GMO/CMP (right).";
-            this.comboBoxAnalysisType.DataSource = Enum.GetValues(typeof(AnalysisMethodType));
-            this.comboBoxAnalysisType.SelectedIndex = 1;
+            this.comboBoxAnalysisType.Visible = false;
             _project = project;
         }
 
@@ -84,6 +87,16 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void dataGridViewComparisons_SelectionChanged(object sender, EventArgs e) {
             _currentComparison = _project.GetComparisons().ElementAt(dataGridViewComparisons.CurrentRow.Index);
+            if (_currentComparison != null) {
+                var selectedAnalysisMethodTypes = _currentComparison.OutputPowerAnalysis.InputPowerAnalysis.SelectedAnalysisMethodTypes.GetFlags<AnalysisMethodType>().ToArray();
+                this.comboBoxAnalysisType.DataSource = selectedAnalysisMethodTypes;
+                if (selectedAnalysisMethodTypes.Count() > 0) {
+                    this.comboBoxAnalysisType.SelectedIndex = 0;
+                }
+                this.comboBoxAnalysisType.Visible = true;
+            } else {
+                this.comboBoxAnalysisType.Visible = false;
+            }
             updateAnalysisOutputPanel();
         }
 
@@ -96,7 +109,7 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void buttonShowInputData_Click(object sender, EventArgs e) {
             if (_currentComparison != null && _currentComparison.OutputPowerAnalysis != null) {
-                var htmlReportForm = new HtmlReportForm(_currentComparison.OutputPowerAnalysis.InputPowerAnalysis.ToHtml());
+                var htmlReportForm = new HtmlReportForm(ComparisonSummaryReportGenerator.GenerateReport(_currentComparison));
                 htmlReportForm.ShowDialog();
             }
         }
