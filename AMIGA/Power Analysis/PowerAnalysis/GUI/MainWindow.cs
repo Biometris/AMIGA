@@ -9,6 +9,7 @@ using AmigaPowerAnalysis.Core;
 using AmigaPowerAnalysis.Core.PowerAnalysis;
 using AmigaPowerAnalysis.Helpers;
 using AmigaPowerAnalysis.Helpers.Log;
+using AmigaPowerAnalysis.Properties;
 
 namespace AmigaPowerAnalysis.GUI {
     public partial class MainWindow : Form {
@@ -36,6 +37,25 @@ namespace AmigaPowerAnalysis.GUI {
         #endregion
 
         #region Events
+
+        private void MainWindow_Load(object sender, EventArgs e) {
+            if (Settings.Default.WindowLocation != null) {
+                this.Location = Settings.Default.WindowLocation;
+            }
+            if (Settings.Default.WindowSize != null) {
+                this.Size = Settings.Default.WindowSize;
+            }
+        }
+
+        private void MainWindow_FormClosing(object sender, FormClosingEventArgs e) {
+            Settings.Default.WindowLocation = this.Location;
+            if (this.WindowState == FormWindowState.Normal) {
+                Settings.Default.WindowSize = this.Size;
+            } else {
+                Settings.Default.WindowSize = this.RestoreBounds.Size;
+            }
+            Settings.Default.Save();
+        }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e) {
             Application.Exit();

@@ -150,7 +150,7 @@
             // toolstripAbout
             // 
             this.toolstripAbout.Name = "toolstripAbout";
-            this.toolstripAbout.Size = new System.Drawing.Size(152, 22);
+            this.toolstripAbout.Size = new System.Drawing.Size(107, 22);
             this.toolstripAbout.Text = "About";
             this.toolstripAbout.Click += new System.EventHandler(this.toolstripAbout_Click);
             // 
@@ -179,6 +179,8 @@
             this.MainMenuStrip = this.menuStrip;
             this.Name = "MainWindow";
             this.Text = "Amiga Power Analysis";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainWindow_FormClosing);
+            this.Load += new System.EventHandler(this.MainWindow_Load);
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
             this.ResumeLayout(false);
