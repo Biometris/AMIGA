@@ -123,12 +123,12 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void buttonRemoveFactor_Click(object sender, EventArgs e) {
-            var currentRow = dataGridViewFactorLevels.CurrentRow.Index;
+            var currentRow = dataGridViewFactors.CurrentRow.Index;
             if (dataGridViewFactors.SelectedRows.Count == 1) {
                 if (currentRow == 0) {
                     showError("Invalid operation", "Cannot delete variety.");
                 } else {
-                    _project.RemoveFactor(_project.Factors[dataGridViewFactors.CurrentRow.Index]);
+                    _project.RemoveFactor(_project.Factors[currentRow]);
                     _project.UpdateEndpointFactors();
                     updateDataGridFactors();
                 }
