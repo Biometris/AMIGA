@@ -44,7 +44,6 @@
             this.Controls.Add(this.webBrowserHtmlReport);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "HtmlReportForm";
-            this.Text = "HtmlReportForm";
             this.ResumeLayout(false);
 
         }

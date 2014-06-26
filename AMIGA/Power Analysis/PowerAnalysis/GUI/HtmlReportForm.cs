@@ -15,10 +15,14 @@ namespace AmigaPowerAnalysis.GUI {
         public HtmlReportForm(string htmlContent) {
             InitializeComponent();
 
+            this.Text = "Summary of comparison";
+
             if (webBrowserHtmlReport.Document == null) {
                 webBrowserHtmlReport.Navigate("about:blank");
             }
             var doc = webBrowserHtmlReport.Document.OpenNew(true);
+            webBrowserHtmlReport.IsWebBrowserContextMenuEnabled = false;
+            //webBrowserHtmlReport.AllowWebBrowserDrop = false;
 
             var _assembly = Assembly.GetExecutingAssembly();
             var _textStreamReader = new StreamReader(_assembly.GetManifestResourceStream("AmigaPowerAnalysis.Resources.print.css"));
