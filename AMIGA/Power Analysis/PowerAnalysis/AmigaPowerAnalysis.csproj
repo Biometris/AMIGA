@@ -300,6 +300,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\FieldTrial.jpg" />
+    <None Include="Resources\PrintStyleSheet.bmp" />
+    <EmbeddedResource Include="Resources\print.css" />
     <EmbeddedResource Include="Resources\amiga_icon.ico" />
     <Content Include="Resources\amiga_logo.png" />
   </ItemGroup>

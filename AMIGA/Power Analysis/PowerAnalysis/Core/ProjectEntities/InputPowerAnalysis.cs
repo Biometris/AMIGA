@@ -104,10 +104,7 @@ namespace AmigaPowerAnalysis.Core {
 
             stringBuilder.AppendLine(string.Format("<h1>Simulation data {0}</h1>", Endpoint));
             stringBuilder.AppendLine("<table>");
-            stringBuilder.AppendLine("<tr><td>" + string.Join("</td><td>", headers) + "</td></tr>");
-            stringBuilder.AppendLine("</table>");
-
-            stringBuilder.AppendLine("<table>");
+            stringBuilder.AppendLine("<tr><th>" + string.Join("</th><th>", headers) + "</th></tr>");
             foreach (var record in InputRecords) {
                 var line = new List<string>();
                 line.Add(record.MainPlot.ToString());

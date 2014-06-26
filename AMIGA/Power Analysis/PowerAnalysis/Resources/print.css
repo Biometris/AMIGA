@@ -1,0 +1,60 @@
+﻿h1 
+{
+    font-size: 14pt;
+}
+
+h2 
+{
+    font-size: 12pt;
+}
+
+h3
+{
+    font-size: 11pt;
+}
+
+h1, h2, h3 
+{
+    margin-bottom: .3em;
+}
+
+p
+{
+    margin: 2px 0;
+}
+
+body
+{
+    font: 10pt verdana;
+}
+
+table
+{
+    font-size: 9pt;
+    vertical-align: top;
+    border-collapse: collapse;
+    border: #999 1px solid;
+    margin: 5px 0 10px 0;
+}
+
+table th
+{
+    background-color: #ccc;
+    font-weight: bold;
+    padding: 2px 8px 2px 4px;
+    text-align: left;
+}
+
+table td
+{
+    min-height: 1em;
+    padding: 0px 8px 0px 4px;
+    border: #999 1px solid;
+}
+
+table tbody th
+{
+    background-color: transparent;
+    min-height: 1em;
+    padding: 0px 8px 0px 4px;
+}
