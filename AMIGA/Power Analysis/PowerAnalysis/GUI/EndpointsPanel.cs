@@ -57,11 +57,6 @@ namespace AmigaPowerAnalysis.GUI {
             combo.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
             dataGridViewEndpoints.Columns.Add(combo);
 
-            var checkbox = new DataGridViewCheckBoxColumn();
-            checkbox.DataPropertyName = "Primary";
-            checkbox.Name = "Primary";
-            dataGridViewEndpoints.Columns.Add(checkbox);
-
             combo = new DataGridViewComboBoxColumn();
             combo.DataSource = Enum.GetValues(typeof(MeasurementType));
             combo.DataPropertyName = "Measurement";
