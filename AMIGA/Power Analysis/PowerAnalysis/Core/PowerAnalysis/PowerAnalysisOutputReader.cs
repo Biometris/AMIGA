@@ -18,9 +18,9 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                     .Select(str => double.TryParse(str.Trim(), out parsedVal) ? parsedVal : double.NaN)
                     .ToArray();
                 var record = new OutputPowerAnalysisRecord() {
-                    LevelOfConcern = values[0],
-                    Ratio = values[1],
-                    LogRatio = values[2],
+                    Ratio = values[0],
+                    LogRatio = values[1],
+                    LevelOfConcern = values[2],
                     NumberOfReplicates = (int)values[3],
                     PowerDifferenceLogNormal = values[4],
                     PowerDifferenceSquareRoot = values[5],
