@@ -49,10 +49,27 @@ for read=comparisonId, endpoint, lowerLOC, upperLOC, cvComparator, cvBlock, dist
 endfor
 close     channel=3 ; filetype=input
 
+"adapt ngridloc for cases with both a lower and an upper loc"
+calc twosided=(lowerLOC+upperLOC==lowerLOC+upperLOC)
+calc twosided=mvreplace(twosided;0)
+prin lowerLOC,upperLOC,twosided
+calc ngridLOC=ngridLOC+(ngridLOC-1)*twosided
+
+"Missing LoCs are set to 1"
+calc gridlowerLOC=mvreplace(lowerLOC;1)
+calc gridupperLOC=mvreplace(upperLOC;1)
+
+" create grid for looping loop over loc/nblocks values "
+" for a completely randomized design the non-centrality parameter is proportional "
+calculate loglowerloc, logupperloc = log(lowerLOC, upperLOC)
+fgrid     [min=loglowerloc ; max=logupperloc ; ngrid=ngridLOC] gridratio
+calculate gridratio[] = exp(gridratio[])
+prin gridratio[]
+
 "Missing LoCs are set to a value close to 1"
-scal eps; 1e-10
-calc lowerLOC=mvreplace(lowerLOC;1+eps)
-calc upperLOC=mvreplace(upperLOC;1-eps)
+\scal eps; 1e-10
+\calc lowerLOC=mvreplace(lowerLOC;1+eps)
+\calc upperLOC=mvreplace(upperLOC;1-eps)
 
 "Replace some labels by shorter forms"
 sreplace  ['OverdispersedPoisson' ; 'opoisson'] distribution
@@ -84,11 +101,6 @@ L1CREATE  [isave; NINTFAC=nIntFac; NMODFAC=nModFac]\
           DUMMY=dum ; MODIFIERS=Modifiers
 prin meanComparator,comparison,dum[],Modifiers
 
-" create grid for looping loop over loc/nblocks values "
-" for a completely randomized design the non-centrality parameter is proportional "
-calculate loglowerloc, logupperloc = log(lowerLOC, upperLOC)
-fgrid     [min=loglowerloc ; max=logupperloc ; ngrid=ngridLOC] gridratio
-calculate gridratio[] = exp(gridratio[])
 prin design,cvBlock
 if flagRan = (design.eqs.'randomized') .or. (cvBlock.eq.0)
     variate   ratio ; gridratio[]
@@ -151,15 +163,20 @@ if flagRan
   \prin type,critvalChi,critvalF,df,qq,pp; fiel=10
   endfor
 endif
-print   ratio, nreps, nc[1...5] ; fi=8 ; de=3,0,5(3)
-print   ratio, nreps, pow[1...5] ; fi=8 ; de=3,0,5(3)
-print   ratio, nreps, nc[6...10] ; fi=8 ; de=3,0,5(3)
-print   ratio, nreps, pow[6...10] ; fi=8 ; de=3,0,5(3)
+
+calculate concern = (log(ratio)/logupperloc)*(ratio>=1) +\
+                       (log(ratio)/loglowerloc)*(ratio<1)
+
+print   ratio, concern, nreps, nc[1...5] ; fi=8 ; de=3,2,0,5(3)
+print   ratio, concern, nreps, pow[1...5] ; fi=8 ; de=3,2,0,5(3)
+print   ratio, concern, nreps, nc[6...10] ; fi=8 ; de=3,2,0,5(3)
+print   ratio, concern, nreps, pow[6...10] ; fi=8 ; de=3,2,0,5(3)
 
 " Export "
 text      names ; !t(\
           Ratio, \
           LogRatio, \
+          ConcernLevel, \
           NumberReplicates, \
           PowerDifferenceLogNormal, \
           PowerDifferenceSquaredRoot, \
@@ -172,6 +189,7 @@ text      names ; !t(\
 
 calculate logratio = log(ratio)
 export    [outfile=outfile ; method=overwrite] \
-          ratio, logratio, nreps, pow[1,2,4,5, 6,7,9,10] ; columns=#names
+          ratio, logratio, concern, nreps, pow[1,2,4,5, 6,7,9,10] ;\
+          columns=#names
 
 stop
