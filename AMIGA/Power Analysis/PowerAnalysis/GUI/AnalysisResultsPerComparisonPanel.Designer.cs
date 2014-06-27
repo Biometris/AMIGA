@@ -1,5 +1,5 @@
 ﻿namespace AmigaPowerAnalysis.GUI {
-    partial class AnalysisResultsPanel {
+    partial class AnalysisResultsPerComparisonPanel {
         /// <summary> 
         /// Required designer variable.
         /// </summary>
@@ -74,6 +74,7 @@
             this.dataGridViewComparisons.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewComparisons.MultiSelect = false;
             this.dataGridViewComparisons.Name = "dataGridViewComparisons";
+            this.dataGridViewComparisons.ReadOnly = true;
             this.dataGridViewComparisons.RowHeadersVisible = false;
             this.dataGridViewComparisons.RowHeadersWidth = 24;
             this.dataGridViewComparisons.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;

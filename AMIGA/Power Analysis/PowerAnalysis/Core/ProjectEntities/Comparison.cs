@@ -34,6 +34,12 @@ namespace AmigaPowerAnalysis.Core {
         public Endpoint Endpoint { get; set; }
 
         /// <summary>
+        /// Whether the comparison is primary (true) or secondary (false).
+        /// </summary>
+        [DataMember(Order = 0)]
+        public bool IsPrimary { get; set; }
+
+        /// <summary>
         /// The mu of the comparator.
         /// </summary>
         [DataMember(Order = 1)]

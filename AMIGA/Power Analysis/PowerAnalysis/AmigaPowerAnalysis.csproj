@@ -119,6 +119,12 @@
     <Compile Include="GUI\AnalysisResultsPanel.Designer.cs">
       <DependentUpon>AnalysisResultsPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\AnalysisResultsPerComparisonPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\AnalysisResultsPerComparisonPanel.Designer.cs">
+      <DependentUpon>AnalysisResultsPerComparisonPanel.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\HtmlReportForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -227,6 +233,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\AnalysisResultsPanel.resx">
       <DependentUpon>AnalysisResultsPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\AnalysisResultsPerComparisonPanel.resx">
+      <DependentUpon>AnalysisResultsPerComparisonPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\HtmlReportForm.resx">
       <DependentUpon>HtmlReportForm.cs</DependentUpon>

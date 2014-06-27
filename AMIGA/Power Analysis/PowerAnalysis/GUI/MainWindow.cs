@@ -32,9 +32,11 @@ namespace AmigaPowerAnalysis.GUI {
                 _currentProjectFilename = value;
                 if (!string.IsNullOrEmpty(_currentProjectFilename)) {
                     this.Text = "Amiga Power Analysis - " + Path.GetFileNameWithoutExtension(_currentProjectFilename);
-                    var analysisResultPanel = _selectionForms.Where(s => s is AnalysisResultsPanel).Single() as AnalysisResultsPanel;
+                    var analysisResultsPanel = _selectionForms.Where(s => s is AnalysisResultsPanel).Single() as AnalysisResultsPanel;
+                    var analysisResultsPerPanel = _selectionForms.Where(s => s is AnalysisResultsPerComparisonPanel).Single() as AnalysisResultsPerComparisonPanel;
                     var filesPath = getCurrentProjectFilesPath();
-                    analysisResultPanel.ProjectFilesPath = filesPath;
+                    analysisResultsPanel.ProjectFilesPath = filesPath;
+                    analysisResultsPerPanel.ProjectFilesPath = filesPath;
                 } else {
                     this.Text = "Amiga Power Analysis";
                 }
@@ -206,6 +208,7 @@ namespace AmigaPowerAnalysis.GUI {
                 _selectionForms.Add(simulationPanel);
                 simulationPanel.RunButtonPressed += onRunButtonPressed;
                 _selectionForms.Add(new AnalysisResultsPanel(_project));
+                _selectionForms.Add(new AnalysisResultsPerComparisonPanel(_project));
 
                 _selectionForms.ForEach(s => s.TabVisibilitiesChanged += onVisibilitySettingsChanged);
 

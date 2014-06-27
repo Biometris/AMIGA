@@ -16,7 +16,7 @@ using OxyPlot.WindowsForms;
 // TODO LOC must be positive
 
 namespace AmigaPowerAnalysis.GUI {
-    public partial class AnalysisResultsPanel : UserControl, ISelectionForm {
+    public partial class AnalysisResultsPerComparisonPanel : UserControl, ISelectionForm {
 
         public event EventHandler TabVisibilitiesChanged;
 
@@ -26,9 +26,9 @@ namespace AmigaPowerAnalysis.GUI {
         private AnalysisMethodType _currentAnalysisType = AnalysisMethodType.OverdispersedPoisson;
         private string _currentProjectPath;
 
-        public AnalysisResultsPanel(Project project) {
+        public AnalysisResultsPerComparisonPanel(Project project) {
             InitializeComponent();
-            Name = "Results";
+            Name = "Results per comparison";
             Description = "Choose endpoint in table. Choose method of analysis if more have been investigated. Power is shown for difference tests (upper graphs) and equivalence tests (lower graphs), both as a function of the number of replicates (left) and the Ratio GMO/CMP (right).";
             this.comboBoxAnalysisType.Visible = false;
             _project = project;
@@ -76,18 +76,10 @@ namespace AmigaPowerAnalysis.GUI {
             combo.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
             dataGridViewComparisons.Columns.Add(combo);
 
-            var checkbox = new DataGridViewCheckBoxColumn();
-            checkbox.DataPropertyName = "IsPrimary";
-            checkbox.Name = "IsPrimary";
-            checkbox.HeaderText = "Primary";
-            dataGridViewComparisons.Columns.Add(checkbox);
-
             _comparisons = _project.GetComparisons().Where(c => c.OutputPowerAnalysis != null).ToList();
             var comparisonsBindingSouce = new BindingSource(_comparisons, null);
             dataGridViewComparisons.AutoGenerateColumns = false;
             dataGridViewComparisons.DataSource = comparisonsBindingSouce;
-            dataGridViewComparisons.Columns[0].ReadOnly = true;
-            dataGridViewComparisons.Columns[1].ReadOnly = true;
         }
 
         private void updateAnalysisOutputPanel() {
