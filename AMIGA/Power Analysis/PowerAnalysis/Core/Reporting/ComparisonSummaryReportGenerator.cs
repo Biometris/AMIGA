@@ -11,15 +11,12 @@ using OxyPlot.WindowsForms;
 namespace AmigaPowerAnalysis.Core.Reporting {
     public static class ComparisonSummaryReportGenerator {
 
-        public static string GenerateReport(Comparison comparison) {
+        public static string GenerateReport(Comparison comparison, string tempPath) {
 
             var _selectedAnalysisMethodTypes = AnalysisMethodType.LogNormal
                 | AnalysisMethodType.SquareRoot
                 | AnalysisMethodType.NegativeBinomial
                 | AnalysisMethodType.OverdispersedPoisson;
-
-            var tempPath = Path.GetTempPath();
-            //tempPath = @"D:\Projects\Amiga\Source\TestData\ssss";
 
             var comparisonInputDataHtml = generateComparisonInputDataHtml(comparison.OutputPowerAnalysis.InputPowerAnalysis);
 
@@ -77,7 +74,7 @@ namespace AmigaPowerAnalysis.Core.Reporting {
 
         private static string generateComparisonChartsHtml(Comparison comparison, AnalysisMethodType _selectedAnalysisMethodTypes, string tempPath) {
             var stringBuilder = new StringBuilder();
-
+            var fileBaseId = comparison.OutputPowerAnalysis.InputPowerAnalysis.ComparisonId + "_" + comparison.OutputPowerAnalysis.InputPowerAnalysis.Endpoint;
             string imageFilename;
             foreach (var analysisMethodType in comparison.OutputPowerAnalysis.InputPowerAnalysis.SelectedAnalysisMethodTypes.GetFlags<AnalysisMethodType>()) {
 
@@ -86,25 +83,25 @@ namespace AmigaPowerAnalysis.Core.Reporting {
 
                 stringBuilder.Append("<tr>");
 
-                imageFilename = Path.Combine(tempPath, Path.GetRandomFileName() + ".png");
+                imageFilename = Path.Combine(tempPath, fileBaseId + "_" + analysisMethodType.ToString() + "_Replicates_Difference.png");
                 var plotDifferenceReplicates = AnalysisResultsChartGenerator.CreatePlotViewReplicates(comparison.OutputPowerAnalysis, TestType.Difference, analysisMethodType);
                 PngExporter.Export(plotDifferenceReplicates, imageFilename, 400, 300);
                 stringBuilder.Append("<td><img src=\"" + imageFilename + "\" /></td>");
 
-                imageFilename = Path.Combine(tempPath, Path.GetRandomFileName() + ".png");
-                var plotDifferenceLogRatio = AnalysisResultsChartGenerator.CreatePlotViewLog(comparison.OutputPowerAnalysis, TestType.Difference, analysisMethodType);
+                imageFilename = Path.Combine(tempPath, fileBaseId + "_" + analysisMethodType.ToString() + "_Ratio_Difference.png");
+                var plotDifferenceLogRatio = AnalysisResultsChartGenerator.CreatePlotViewLogRatio(comparison.OutputPowerAnalysis, TestType.Difference, analysisMethodType);
                 PngExporter.Export(plotDifferenceLogRatio, imageFilename, 400, 300);
                 stringBuilder.Append("<td><img src=\"" + imageFilename + "\" /></td>");
 
                 stringBuilder.Append("</tr><tr>");
 
-                imageFilename = Path.Combine(tempPath, Path.GetRandomFileName() + ".png");
+                imageFilename = Path.Combine(tempPath, fileBaseId + "_" + analysisMethodType.ToString() + "_Replicates_Equivalence.png");
                 var plotEquivalenceReplicates = AnalysisResultsChartGenerator.CreatePlotViewReplicates(comparison.OutputPowerAnalysis, TestType.Equivalence, analysisMethodType);
                 PngExporter.Export(plotEquivalenceReplicates, imageFilename, 400, 300);
                 stringBuilder.Append("<td><img src=\"" + imageFilename + "\" /></td>");
 
-                imageFilename = Path.Combine(tempPath, Path.GetRandomFileName() + ".png");
-                var plotEquivalenceLogRatio = AnalysisResultsChartGenerator.CreatePlotViewLog(comparison.OutputPowerAnalysis, TestType.Equivalence, analysisMethodType);
+                imageFilename = Path.Combine(tempPath, fileBaseId + "_" + analysisMethodType.ToString() + "_Ratio_Equivalence.png");
+                var plotEquivalenceLogRatio = AnalysisResultsChartGenerator.CreatePlotViewLogRatio(comparison.OutputPowerAnalysis, TestType.Equivalence, analysisMethodType);
                 PngExporter.Export(plotEquivalenceLogRatio, imageFilename, 400, 300);
                 stringBuilder.Append("<td><img src=\"" + imageFilename + "\" /></td>");
 

@@ -18,10 +18,13 @@ using OxyPlot.WindowsForms;
 namespace AmigaPowerAnalysis.GUI {
     public partial class AnalysisResultsPanel : UserControl, ISelectionForm {
 
+        public event EventHandler TabVisibilitiesChanged;
+
         private Project _project;
         private List<Comparison> _comparisons;
         private Comparison _currentComparison;
         private AnalysisMethodType _currentAnalysisType = AnalysisMethodType.OverdispersedPoisson;
+        private string _currentProjectPath;
 
         public AnalysisResultsPanel(Project project) {
             InitializeComponent();
@@ -32,6 +35,11 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         public string Description { get; private set; }
+
+        public string ProjectFilesPath {
+            get { return _currentProjectPath; }
+            set { _currentProjectPath = value; }
+        }
 
         public void Activate() {
             updateDataGridComparisons();
@@ -48,8 +56,6 @@ namespace AmigaPowerAnalysis.GUI {
             }
             return false;
         }
-
-        public event EventHandler TabVisibilitiesChanged;
 
         private void updateDataGridComparisons() {
             dataGridViewComparisons.Columns.Clear();
@@ -80,8 +86,8 @@ namespace AmigaPowerAnalysis.GUI {
             if (_currentComparison != null) {
                 plotViewDifferenceRepetitions.Model = AnalysisResultsChartGenerator.CreatePlotViewReplicates(_currentComparison.OutputPowerAnalysis, TestType.Difference, _currentAnalysisType);
                 plotViewEquivalenceRepetitions.Model = AnalysisResultsChartGenerator.CreatePlotViewReplicates(_currentComparison.OutputPowerAnalysis, TestType.Equivalence, _currentAnalysisType);
-                plotViewDifferenceLog.Model = AnalysisResultsChartGenerator.CreatePlotViewLog(_currentComparison.OutputPowerAnalysis, TestType.Difference, _currentAnalysisType);
-                plotViewEquivalenceLog.Model = AnalysisResultsChartGenerator.CreatePlotViewLog(_currentComparison.OutputPowerAnalysis, TestType.Equivalence, _currentAnalysisType);
+                plotViewDifferenceLog.Model = AnalysisResultsChartGenerator.CreatePlotViewLogRatio(_currentComparison.OutputPowerAnalysis, TestType.Difference, _currentAnalysisType);
+                plotViewEquivalenceLog.Model = AnalysisResultsChartGenerator.CreatePlotViewLogRatio(_currentComparison.OutputPowerAnalysis, TestType.Equivalence, _currentAnalysisType);
             }
         }
 
@@ -109,7 +115,9 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void buttonShowInputData_Click(object sender, EventArgs e) {
             if (_currentComparison != null && _currentComparison.OutputPowerAnalysis != null) {
-                var htmlReportForm = new HtmlReportForm(ComparisonSummaryReportGenerator.GenerateReport(_currentComparison));
+                //var tempPath = Path.GetTempPath();
+                //tempPath = @"D:\Projects\Amiga\Source\TestData\ssss";
+                var htmlReportForm = new HtmlReportForm(ComparisonSummaryReportGenerator.GenerateReport(_currentComparison, _currentProjectPath));
                 htmlReportForm.ShowDialog();
             }
         }

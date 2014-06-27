@@ -97,7 +97,7 @@ namespace AmigaPowerAnalysis.Core.Charting {
             return model;
         }
 
-        public static PlotModel CreatePlotViewLog(OutputPowerAnalysis outputPowerAnalysis, TestType testType, AnalysisMethodType analysisMethodType) {
+        public static PlotModel CreatePlotViewLogRatio(OutputPowerAnalysis outputPowerAnalysis, TestType testType, AnalysisMethodType analysisMethodType) {
             var model = CreatePlotModel(testType, analysisMethodType, PlotType.Ratio);
 
             var horizontalAxis = new LinearAxis() {

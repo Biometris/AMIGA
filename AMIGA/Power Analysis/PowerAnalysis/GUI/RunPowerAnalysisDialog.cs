@@ -46,7 +46,7 @@ namespace AmigaPowerAnalysis.GUI {
             var scriptsDirectory = string.Format("{0}\\Resources", applicationDirectory);
             var scriptFilename = string.Format("{0}\\AmigaPowerAnalysis.gen", scriptsDirectory);
             var lylesScriptFilename = string.Format("{0}\\Lyles.pro", scriptsDirectory);
-            
+
             var filesPath = Path.Combine(projectPath, projectName);
             if (!Directory.Exists(filesPath)) {
                 Directory.CreateDirectory(filesPath);
