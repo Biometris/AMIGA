@@ -50,6 +50,12 @@ namespace AmigaPowerAnalysis.GUI {
             var filesPath = Path.Combine(projectPath, projectName);
             if (!Directory.Exists(filesPath)) {
                 Directory.CreateDirectory(filesPath);
+            } else {
+                try {
+                    Directory.Delete(filesPath, true);
+                    Directory.CreateDirectory(filesPath);
+                } catch (Exception) {
+                }
             }
 
             var inputGenerator = new PowerAnalysisInputGenerator();

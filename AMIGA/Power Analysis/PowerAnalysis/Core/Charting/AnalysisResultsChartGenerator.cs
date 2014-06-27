@@ -56,7 +56,7 @@ namespace AmigaPowerAnalysis.Core.Charting {
             model.Axes.Add(horizontalAxis);
 
             if (powerAnalysisOutputRecords != null) {
-                var ratioGroups = powerAnalysisOutputRecords.GroupBy(r => r.Ratio);
+                var ratioGroups = powerAnalysisOutputRecords.GroupBy(r => r.Ratio).Where(g => !double.IsNaN(g.Key));
                 for (int i = 0; i < ratioGroups.Count(); ++i) {
                     var ratioGroup = ratioGroups.ElementAt(i);
                     var series = new LineSeries() {
@@ -122,7 +122,7 @@ namespace AmigaPowerAnalysis.Core.Charting {
             model.Axes.Add(horizontalAxis);
 
             if (powerAnalysisOutputRecords != null) {
-                var replicateGroups = powerAnalysisOutputRecords.GroupBy(r => r.NumberOfReplicates);
+                var replicateGroups = powerAnalysisOutputRecords.GroupBy(r => r.NumberOfReplicates).Where(g => !double.IsNaN(g.Key));
                 for (int i = 0; i < replicateGroups.Count(); ++i) {
                     var replicateGroup = replicateGroups.ElementAt(i);
                     var series = new LineSeries() {
@@ -189,7 +189,7 @@ namespace AmigaPowerAnalysis.Core.Charting {
             model.Axes.Add(horizontalAxis);
 
             if (powerAnalysisOutputRecords != null) {
-                var levelOfConcernGroups = powerAnalysisOutputRecords.GroupBy(r => r.LevelOfConcern);
+                var levelOfConcernGroups = powerAnalysisOutputRecords.GroupBy(r => r.LevelOfConcern).Where(g => !double.IsNaN(g.Key));
                 for (int i = 0; i < levelOfConcernGroups.Count(); ++i) {
                     var levelOfConcernGroup = levelOfConcernGroups.ElementAt(i);
                     var series = new LineSeries() {
@@ -255,7 +255,7 @@ namespace AmigaPowerAnalysis.Core.Charting {
             model.Axes.Add(horizontalAxis);
 
             if (powerAnalysisOutputRecords != null) {
-                var replicateGroups = powerAnalysisOutputRecords.GroupBy(r => r.NumberOfReplicates);
+                var replicateGroups = powerAnalysisOutputRecords.GroupBy(r => r.NumberOfReplicates).Where(g => !double.IsNaN(g.Key));
                 for (int i = 0; i < replicateGroups.Count(); ++i) {
                     var replicateGroup = replicateGroups.ElementAt(i);
                     var series = new LineSeries() {
