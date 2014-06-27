@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Runtime.Serialization;
+using System.Windows.Forms;
 using AmigaPowerAnalysis.Core.Distributions;
 
 namespace AmigaPowerAnalysis.Core {
@@ -19,8 +20,7 @@ namespace AmigaPowerAnalysis.Core {
         }
 
         public static void LoadMyEndpointTypes() {
-            var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            var filename = Path.Combine(appData, "MyEndpointTypes.xml");
+            var filename = Path.Combine(Application.LocalUserAppDataPath, "MyEndpointTypes.xml");
             if (File.Exists(filename)) {
                 try {
                     var serializer = new DataContractSerializer(typeof(List<EndpointType>));
@@ -39,8 +39,7 @@ namespace AmigaPowerAnalysis.Core {
         }
 
         public static void StoreMyEndpointTypes() {
-            var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            var filename = Path.Combine(appData, "MyEndpointTypes.xml");
+            var filename = Path.Combine(Application.LocalUserAppDataPath, "MyEndpointTypes.xml");
             var serializer = new DataContractSerializer(typeof(List<EndpointType>), null, 0x7FFF, false, true, null);
             using (var fileWriter = new FileStream(filename, FileMode.Create)) {
                 serializer.WriteObject(fileWriter, MyEndpointTypes);
