@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using OxyPlot;
+using OxyPlot.Annotations;
 using OxyPlot.Axes;
 using OxyPlot.Series;
 
@@ -29,6 +30,13 @@ namespace AmigaPowerAnalysis.Core.Charting {
                 Maximum = 1,
             };
             plotModel.Axes.Add(verticalAxis);
+
+            var lineAnnotation = new LineAnnotation() {
+                Type = LineAnnotationType.Horizontal,
+                Y = 0.8,
+                Color = OxyColors.Red,
+            };
+            plotModel.Annotations.Add(lineAnnotation);
 
             return plotModel;
         }
