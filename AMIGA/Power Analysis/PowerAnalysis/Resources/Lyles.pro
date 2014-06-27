@@ -176,6 +176,9 @@ IF DISTRIBUTION.eqs.'NEGATIVEBINOMIAL'
     TEXT      dist ; 'NEGATIVEBINOMIAL'
     CALCULATE sig2PW = (CVCOMPARATOR/100)**2 * MUCOMPARATOR**(2-POWERLAW)
     CALCULATE qsig2 = sig2PW*qmean**(POWERLAW-2) - 1/qmean
+    if min(qsig2)<=0
+      prin qsig2
+    endif
     CALCULATE qvar = sig2PW*qmean**POWERLAW
   ELSIF DISTRIBUTION.eqs.'POISSON'
     TEXT      dist ; 'poisson'

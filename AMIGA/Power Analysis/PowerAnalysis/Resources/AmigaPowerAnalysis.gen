@@ -6,7 +6,7 @@ close channel=2 ; filetype=output
 \SET [WORKINGDIRECTORY='D:/Data/AMIGA/AmigaTool/Power Analysis/PowerAnalysis/Resources']
 
 if in3open.eq.0
-    text      project ; 'test1-0'
+    text      project ; 'test1-1'
     text      dir ; 'D:/Data/AMIGA/AmigaTool/TestData/'
     calculate pos = getposition(project ; '-')
     concatena [subdir] project ; width=getposition(project ; '-') - 1
@@ -49,11 +49,15 @@ for read=comparisonId, endpoint, lowerLOC, upperLOC, cvComparator, cvBlock, dist
 endfor
 close     channel=3 ; filetype=input
 
-"adapt ngridloc for cases with both a lower and an upper loc"
+"one or twosided?"
 calc twosided=(lowerLOC+upperLOC==lowerLOC+upperLOC)
 calc twosided=mvreplace(twosided;0)
-prin lowerLOC,upperLOC,twosided
-calc ngridLOC=ngridLOC+(ngridLOC-1)*twosided
+calc onesidedlow=.not.twosided .and. (lowerLOC==lowerLOC)
+calc onesidedlow=mvreplace(onesidedlow;0)
+calc onesidedupp=.not.twosided .and. (upperLOC==upperLOC)
+calc onesidedupp=mvreplace(onesidedupp;0)
+prin lowerLOC,upperLOC,twosided,onesidedlow,onesidedupp
+\calc ngridLOC=ngridLOC+(ngridLOC-1)*twosided
 
 "Missing LoCs are set to 1"
 calc gridlowerLOC=mvreplace(lowerLOC;1)
@@ -61,8 +65,15 @@ calc gridupperLOC=mvreplace(upperLOC;1)
 
 " create grid for looping loop over loc/nblocks values "
 " for a completely randomized design the non-centrality parameter is proportional "
-calculate loglowerloc, logupperloc = log(lowerLOC, upperLOC)
-fgrid     [min=loglowerloc ; max=logupperloc ; ngrid=ngridLOC] gridratio
+calculate loglowerloc, logupperloc = log(gridlowerLOC, gridupperLOC)
+if twosided
+  fgrid     [min=loglowerloc ; max=0 ; ngrid=ngridLOC] gridratio1
+  fgrid     [min=0 ; max=logupperloc ; ngrid=ngridLOC] gridratio2
+  subset [gridratio2[1]/=0] gridratio2[1]
+  variate   gridratio[1]; !(#gridratio1[1],#gridratio2[1])
+else "onesided"
+  fgrid     [min=loglowerloc ; max=logupperloc ; ngrid=ngridLOC] gridratio
+endif
 calculate gridratio[] = exp(gridratio[])
 prin gridratio[]
 
@@ -109,6 +120,14 @@ if flagRan = (design.eqs.'randomized') .or. (cvBlock.eq.0)
     fgrid     [values=gridratio[], nBlocks] grid
     variate   ratio, nreps ; grid[] ; deci=*,0
 endif
+
+"Missing LoCs are set to a value close to 1"
+scal eps; 1e-10
+calc lowerLOC=mvreplace(lowerLOC;1+eps)
+calc upperLOC=mvreplace(upperLOC;1-eps)
+calc ratioeps=(1-eps)*(ratio==1.and.onesidedlow) +\
+           (1+eps)*(ratio==1.and.onesidedupp) +\
+           ratio * (ratio/=1.or.twosided)
 prin ratio,nreps
 
 calculate nloop = nvalues(ratio)
@@ -117,7 +136,7 @@ decimals  ratio
 " main looping "
 for [ntimes=nloop ; index=ii]
 \for [ntimes=1 ; index=ii]
-  scalar    iiratio, iireps ; (ratio, nreps)$[ii]
+  scalar    iiratio, iireps ; (ratioeps, nreps)$[ii]
   PRINT     [IPRINT=* ; SQUASH=yes] iiratio, iireps ; FIELD=10 ; DECI=3,0
   l2lyles   [dist=#distribution ; power=powerdist ; design=#design ; sign=alfa ; \
             mucomp=meanComparator ; cvcomp=cvComparator ; cvblock=cvBlock ; \
