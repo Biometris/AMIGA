@@ -124,7 +124,7 @@
             this.labelMethodForPowerCalculation.Name = "labelMethodForPowerCalculation";
             this.labelMethodForPowerCalculation.Size = new System.Drawing.Size(146, 13);
             this.labelMethodForPowerCalculation.TabIndex = 6;
-            this.labelMethodForPowerCalculation.Text = "Method for Power Calculation";
+            this.labelMethodForPowerCalculation.Text = "Method for Power Calculation (currently only Approximate is implemented)";
             // 
             // textBoxNumberOfReplications
             // 
