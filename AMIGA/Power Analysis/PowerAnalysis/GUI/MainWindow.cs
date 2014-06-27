@@ -221,6 +221,7 @@ namespace AmigaPowerAnalysis.GUI {
                 this.closeToolStripMenuItem.Enabled = true;
                 this.saveAsToolStripMenuItem.Enabled = true;
                 this.saveToolStripMenuItem.Enabled = true;
+                this.goToolStripMenuItem.Enabled = true;
 
                 updateTabs();
             } catch (Exception ex) {
@@ -237,6 +238,7 @@ namespace AmigaPowerAnalysis.GUI {
             this.saveAsToolStripMenuItem.Enabled = false;
             this.saveToolStripMenuItem.Enabled = false;
             this.closeToolStripMenuItem.Enabled = false;
+            this.goToolStripMenuItem.Enabled = false;
             updateTabs();
         }
 
