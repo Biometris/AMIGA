@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Amiga Power Analysis")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Wageningen University and Research")]
+[assembly: AssemblyCompany("Wageningen University and Research centre (WUR)")]
 [assembly: AssemblyProduct("Amiga Power Analysis")]
-[assembly: AssemblyCopyright("Copyright © Wageningen University and Research 2014")]
+[assembly: AssemblyCopyright("Copyright © Wageningen University and Research centre 2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

@@ -153,12 +153,14 @@ IF (DESIGN.eqs.'RANDOMIZED')
 ENDIF
 
 " Apply Blocking effect by means of Blom scores "
+\prin qmean,compmean
 IF design.eqs.'BLOCK'
   VARIATE   [VALUES=1...#iiReps] blockeff
   CALCULATE blockeff = EXP(sigBlock*NED((blockeff-0.375)/(iiReps+0.25)))
   CALCULATE qmean = qmean * NEWLEVELS(qBlock ; blockeff)
   CALCULATE compmean = compmean * NEWLEVELS(qBlock ; blockeff)
 ENDIF
+\prin qmean,compmean
 
 " Deal with distribution and calculate overdispersion factor "
 TEXT      dist ; DISTRIBUTION
@@ -187,6 +189,8 @@ ENDIF
 
 " Looping over DIFFERENT values in qmean to create synthetic dataset"
 GROUPS    qmean ; fMean ; LEVELS=levMean
+TABULATE  [prin=*; clas=fMean] compmean; mean=tcompmean
+VARIATE   [val=#tcompmean] vcompmean
 CALCULATE nlevMean = NVALUES(levMean)
 VARIATE   [NVALUES=nlevMean] nobs, sumww, factor ; DECI=0,4,0
 VARIATE   [NVALUES=iiplots] eeLN, vvLN, eeSQ, vvSQ
@@ -207,7 +211,8 @@ FOR [NTIMES=nlevMean ; INDEX=jj]
     VARIATE   [VALUES=#lowcount...#uppcount] yydum, wwdum
     CNTPROBAB [DIST=#dist] yydum ; MEAN=kmean ; DISP=ksig2 ; PROB=wwdum
     CALCULATE sumww$[jj] = (ksumww = SUM(wwdum))
-    VARIATE   [VALUES=#nobs$[jj](compmean$[jj])] mmdum
+    VARIATE   [VALUES=#nobs$[jj](vcompmean$[jj])] mmdum
+    \prin kmean,vcompmean$[jj]
     EXIT      [CONTROL=for] (ksumww.GT.minimumProbSum)
   ENDFOR
   " Copy values "
@@ -327,6 +332,8 @@ IF 'SQ'.IN.ANALYSIS  " SQ: squared root transformation "
   CALCULATE lowOffset,uppOffset =\
     (SQRT(LOCLOWER,LOCUPPER*meancomp)- SQRT(meancomp)) * (zdum[1].eq.1)
 
+\prin esti$[nParameters],meancomp
+\prin tresponse,weight,lowOffset,uppOffset
   CALCULATE effGMO = esti$[nParameters]
   IF (effGMO.LE.0)
       MODEL     [DIST=normal ; WEIGHT=weight ; OFFSET=lowOffset] tresponse

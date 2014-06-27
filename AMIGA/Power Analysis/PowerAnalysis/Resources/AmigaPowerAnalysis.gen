@@ -6,7 +6,7 @@ close channel=2 ; filetype=output
 \SET [WORKINGDIRECTORY='D:/Data/AMIGA/AmigaTool/Power Analysis/PowerAnalysis/Resources']
 
 if in3open.eq.0
-    text      project ; 'test-1'
+    text      project ; 'test1-0'
     text      dir ; 'D:/Data/AMIGA/AmigaTool/TestData/'
     calculate pos = getposition(project ; '-')
     concatena [subdir] project ; width=getposition(project ; '-') - 1
@@ -104,6 +104,7 @@ decimals  ratio
 
 " main looping "
 for [ntimes=nloop ; index=ii]
+\for [ntimes=1 ; index=ii]
   scalar    iiratio, iireps ; (ratio, nreps)$[ii]
   PRINT     [IPRINT=* ; SQUASH=yes] iiratio, iireps ; FIELD=10 ; DECI=3,0
   l2lyles   [dist=#distribution ; power=powerdist ; design=#design ; sign=alfa ; \
@@ -150,8 +151,10 @@ if flagRan
   \prin type,critvalChi,critvalF,df,qq,pp; fiel=10
   endfor
 endif
-print   nc[1...10] ; fi=8 ; de=3
-print   pow[1...10] ; fi=8 ; de=3
+print   ratio, nreps, nc[1...5] ; fi=8 ; de=3,0,5(3)
+print   ratio, nreps, pow[1...5] ; fi=8 ; de=3,0,5(3)
+print   ratio, nreps, nc[6...10] ; fi=8 ; de=3,0,5(3)
+print   ratio, nreps, pow[6...10] ; fi=8 ; de=3,0,5(3)
 
 " Export "
 text      names ; !t(\
