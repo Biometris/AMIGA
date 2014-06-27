@@ -13,13 +13,16 @@ namespace AmigaPowerAnalysis.Core.Charting {
 
         private static PlotModel CreatePlotModel(TestType testType, AnalysisMethodType analysisMethodType, PlotType plotType) {
             var plotModel = new PlotModel() {
+                Title = testType.ToString() + " " + analysisMethodType.ToString(),
+                TitleFontSize = 12,
+                DefaultFontSize = 12,
                 LegendPlacement = LegendPlacement.Outside,
                 LegendPosition = LegendPosition.RightTop,
                 LegendBorder = OxyColors.Black,
             };
 
             var verticalAxis = new LinearAxis() {
-                Title = testType.ToString() + " " + analysisMethodType.ToString(),
+                Title = "Power",
                 MajorGridlineStyle = LineStyle.Solid,
                 MinorGridlineStyle = LineStyle.Dot,
                 Minimum = 0,
