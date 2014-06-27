@@ -42,17 +42,17 @@ namespace AmigaPowerAnalysis.GUI {
         public void Activate() {
             updateDataGridComparisons();
             updateVisibilities();
+            var selectedAnalysisMethodTypes = _comparisons.First().OutputPowerAnalysis.InputPowerAnalysis.SelectedAnalysisMethodTypes.GetFlags<AnalysisMethodType>().ToArray();
+            this.comboBoxAnalysisType.DataSource = selectedAnalysisMethodTypes;
+            if (selectedAnalysisMethodTypes.Count() > 0) {
+                this.comboBoxAnalysisType.SelectedIndex = 0;
+            }
         }
 
         private void updateVisibilities() {
             var primaryComparisons = _comparisons.Where(c => c.OutputPowerAnalysis != null && c.IsPrimary).ToList();
             if (primaryComparisons.Count > 0) {
                 comboBoxAnalysisType.Visible = true;
-                var selectedAnalysisMethodTypes = primaryComparisons.First().OutputPowerAnalysis.InputPowerAnalysis.SelectedAnalysisMethodTypes.GetFlags<AnalysisMethodType>().ToArray();
-                this.comboBoxAnalysisType.DataSource = selectedAnalysisMethodTypes;
-                if (selectedAnalysisMethodTypes.Count() > 0) {
-                    this.comboBoxAnalysisType.SelectedIndex = 0;
-                }
                 updateAnalysisOutputPanel();
             } else {
                 comboBoxAnalysisType.Visible = false;
