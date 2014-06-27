@@ -160,8 +160,7 @@
             this.labelNumberOfRatios.Name = "labelNumberOfRatios";
             this.labelNumberOfRatios.Size = new System.Drawing.Size(395, 13);
             this.labelNumberOfRatios.TabIndex = 2;
-            this.labelNumberOfRatios.Text = "Number of Ratios in between the limits of concern for which to calculate the powe" +
-    "r";
+            this.labelNumberOfRatios.Text = "Number of Ratios between 1 and each limit of concern for which to calculate the power";
             // 
             // textBoxSignificanceLevel
             // 
