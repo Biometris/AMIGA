@@ -24,7 +24,7 @@ namespace AmigaPowerAnalysis.GUI {
         private List<Comparison> _comparisons;
         private Comparison _currentComparison;
         private AnalysisMethodType _currentAnalysisType = AnalysisMethodType.OverdispersedPoisson;
-        private string _currentProjectPath;
+        private string _currentProjectFilesPath;
 
         public AnalysisResultsPerComparisonPanel(Project project) {
             InitializeComponent();
@@ -36,9 +36,9 @@ namespace AmigaPowerAnalysis.GUI {
 
         public string Description { get; private set; }
 
-        public string ProjectFilesPath {
-            get { return _currentProjectPath; }
-            set { _currentProjectPath = value; }
+        public string CurrentProjectFilesPath {
+            get { return _currentProjectFilesPath; }
+            set { _currentProjectFilesPath = value; }
         }
 
         public void Activate() {
@@ -117,7 +117,7 @@ namespace AmigaPowerAnalysis.GUI {
             if (_currentComparison != null && _currentComparison.OutputPowerAnalysis != null) {
                 //var tempPath = Path.GetTempPath();
                 //tempPath = @"D:\Projects\Amiga\Source\TestData\ssss";
-                var htmlReportForm = new HtmlReportForm(ComparisonSummaryReportGenerator.GenerateReport(_currentComparison, _currentProjectPath));
+                var htmlReportForm = new HtmlReportForm(ComparisonSummaryReportGenerator.GenerateComparisonReport(_currentComparison, _currentProjectFilesPath));
                 htmlReportForm.ShowDialog();
             }
         }

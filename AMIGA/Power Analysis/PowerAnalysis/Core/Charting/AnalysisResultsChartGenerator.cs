@@ -17,8 +17,8 @@ namespace AmigaPowerAnalysis.Core.Charting {
         private static PlotModel CreatePlotModel(TestType testType, AnalysisMethodType analysisMethodType, PlotType plotType) {
             var plotModel = new PlotModel() {
                 Title = testType.ToString() + " " + analysisMethodType.ToString(),
-                TitleFontSize = 12,
-                DefaultFontSize = 12,
+                TitleFontSize = 11,
+                DefaultFontSize = 11,
                 LegendPlacement = LegendPlacement.Outside,
                 LegendPosition = LegendPosition.RightTop,
                 LegendBorder = OxyColors.Black,

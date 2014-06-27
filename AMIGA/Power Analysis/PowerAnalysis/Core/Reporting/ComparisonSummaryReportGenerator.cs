@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using AmigaPowerAnalysis.Core.Charting;
@@ -11,18 +12,25 @@ using OxyPlot.WindowsForms;
 namespace AmigaPowerAnalysis.Core.Reporting {
     public static class ComparisonSummaryReportGenerator {
 
-        public static string GenerateReport(Comparison comparison, string tempPath) {
+        public static string GenerateComparisonReport(Comparison comparison, string tempPath) {
+            var html = string.Empty;
+            html += comparison.OutputPowerAnalysis.InputPowerAnalysis.SelectedAnalysisMethodTypes;
+            html += generateComparisonInputDataHtml(comparison.OutputPowerAnalysis.InputPowerAnalysis);
+            html += generateComparisonChartsHtml(comparison, tempPath);
+            html += "<h1>Output data</h1>";
+            html += generateComparisonOutputHtml(comparison.OutputPowerAnalysis.OutputRecords);
+            return html;
+        }
 
-            var _selectedAnalysisMethodTypes = AnalysisMethodType.LogNormal
-                | AnalysisMethodType.SquareRoot
-                | AnalysisMethodType.NegativeBinomial
-                | AnalysisMethodType.OverdispersedPoisson;
-
-            var comparisonInputDataHtml = generateComparisonInputDataHtml(comparison.OutputPowerAnalysis.InputPowerAnalysis);
-
-            var comparisonChartsHtml = generateComparisonChartsHtml(comparison, _selectedAnalysisMethodTypes, tempPath);
-
-            return comparisonInputDataHtml + comparisonChartsHtml;
+        public static string GenerateAnalysisReport(IEnumerable<Comparison> comparisons, string tempPath) {
+            var html = "";
+            html += generateComparisonsChartHtml(comparisons, tempPath);
+            foreach (var comparison in comparisons) {
+                var selectedAnalysisMethodTypes = comparison.OutputPowerAnalysis.InputPowerAnalysis.SelectedAnalysisMethodTypes;
+                html += generateComparisonInputDataHtml(comparison.OutputPowerAnalysis.InputPowerAnalysis);
+                html += generateComparisonChartsHtml(comparison, tempPath);
+            }
+            return html;
         }
 
         /// <summary>
@@ -72,7 +80,7 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             return stringBuilder.ToString();
         }
 
-        private static string generateComparisonChartsHtml(Comparison comparison, AnalysisMethodType _selectedAnalysisMethodTypes, string tempPath) {
+        private static string generateComparisonChartsHtml(Comparison comparison, string tempPath) {
             var stringBuilder = new StringBuilder();
             var fileBaseId = comparison.OutputPowerAnalysis.InputPowerAnalysis.ComparisonId + "_" + comparison.OutputPowerAnalysis.InputPowerAnalysis.Endpoint;
             string imageFilename;
@@ -112,5 +120,96 @@ namespace AmigaPowerAnalysis.Core.Reporting {
 
             return stringBuilder.ToString();
         }
+
+        private static string generateComparisonsChartHtml(IEnumerable<Comparison> comparisons, string tempPath) {
+            var records = comparisons.SelectMany(c => c.OutputPowerAnalysis.OutputRecords)
+                .GroupBy(r => new { r.LevelOfConcern, r.NumberOfReplicates })
+                .Select(g => new OutputPowerAnalysisRecord() {
+                    LevelOfConcern = g.Key.LevelOfConcern,
+                    NumberOfReplicates = g.Key.NumberOfReplicates,
+                    Ratio = double.NaN,
+                    LogRatio = double.NaN,
+                    PowerDifferenceLogNormal = g.Min(r => r.PowerDifferenceLogNormal),
+                    PowerDifferenceSquareRoot = g.Min(r => r.PowerDifferenceSquareRoot),
+                    PowerDifferenceOverdispersedPoisson = g.Min(r => r.PowerDifferenceOverdispersedPoisson),
+                    PowerDifferenceNegativeBinomial = g.Min(r => r.PowerDifferenceNegativeBinomial),
+                    PowerEquivalenceLogNormal = g.Min(r => r.PowerEquivalenceLogNormal),
+                    PowerEquivalenceSquareRoot = g.Min(r => r.PowerEquivalenceSquareRoot),
+                    PowerEquivalenceOverdispersedPoisson = g.Min(r => r.PowerEquivalenceOverdispersedPoisson),
+                    PowerEquivalenceNegativeBinomial = g.Min(r => r.PowerEquivalenceNegativeBinomial),
+                })
+                .ToList();
+
+            var stringBuilder = new StringBuilder();
+            stringBuilder.AppendLine("<h1>Comparisons charts primary comparisons</h1>");
+
+            var fileBaseId = "Aggregate_";
+            string imageFilename;
+            foreach (var analysisMethodType in comparisons.First().OutputPowerAnalysis.InputPowerAnalysis.SelectedAnalysisMethodTypes.GetFlags<AnalysisMethodType>()) {
+
+                stringBuilder.Append("<h1>" + analysisMethodType.GetDisplayName() + "</h1>");
+                stringBuilder.Append("<table>");
+                stringBuilder.Append("<tr>");
+
+                imageFilename = Path.Combine(tempPath, fileBaseId + analysisMethodType.ToString() + "_Replicates_Difference.png");
+                var plotDifferenceReplicates = AnalysisResultsChartGenerator.CreatePlotViewReplicatesLevelOfConcern(records, TestType.Difference, analysisMethodType);
+                PngExporter.Export(plotDifferenceReplicates, imageFilename, 400, 300);
+                stringBuilder.Append("<td><img src=\"" + imageFilename + "\" /></td>");
+
+                imageFilename = Path.Combine(tempPath, fileBaseId + analysisMethodType.ToString() + "_LevelOfConcern_Difference.png");
+                var plotDifferenceLogRatio = AnalysisResultsChartGenerator.CreatePlotViewLevelOfConcernReplicates(records, TestType.Difference, analysisMethodType);
+                PngExporter.Export(plotDifferenceLogRatio, imageFilename, 400, 300);
+                stringBuilder.Append("<td><img src=\"" + imageFilename + "\" /></td>");
+
+                stringBuilder.Append("</tr><tr>");
+
+                imageFilename = Path.Combine(tempPath, fileBaseId + analysisMethodType.ToString() + "_Replicates_Equivalence.png");
+                var plotEquivalenceReplicates = AnalysisResultsChartGenerator.CreatePlotViewReplicatesLevelOfConcern(records, TestType.Equivalence, analysisMethodType);
+                PngExporter.Export(plotEquivalenceReplicates, imageFilename, 400, 300);
+                stringBuilder.Append("<td><img src=\"" + imageFilename + "\" /></td>");
+
+                imageFilename = Path.Combine(tempPath, fileBaseId + analysisMethodType.ToString() + "_LevelOfConcern_Equivalence.png");
+                var plotEquivalenceLogRatio = AnalysisResultsChartGenerator.CreatePlotViewLevelOfConcernReplicates(records, TestType.Equivalence, analysisMethodType);
+                PngExporter.Export(plotEquivalenceLogRatio, imageFilename, 400, 300);
+                stringBuilder.Append("<td><img src=\"" + imageFilename + "\" /></td>");
+
+                stringBuilder.Append("</tr>");
+                stringBuilder.Append("</table>");
+            }
+
+            stringBuilder.AppendLine("<h1>Comparisons data</h1>");
+            stringBuilder.Append(generateComparisonOutputHtml(records));
+
+            return stringBuilder.ToString();
+        }
+
+        private static string generateComparisonOutputHtml(IEnumerable<OutputPowerAnalysisRecord> records) {
+            var stringBuilder = new StringBuilder();
+            stringBuilder.Append("<table>");
+            var elementType = typeof(OutputPowerAnalysisRecord);
+            PropertyInfo[] properties = elementType.GetProperties();
+            stringBuilder.Append("<tr>");
+            foreach (var propInfo in properties) {
+                var propertyInfo = propInfo.PropertyType;
+                var columnType = Nullable.GetUnderlyingType(propertyInfo) ?? propertyInfo;
+                stringBuilder.Append(string.Format("<th>{0}</th>", propInfo.Name));
+            }
+            stringBuilder.Append("</tr>");
+            foreach (var item in records) {
+                stringBuilder.Append("<tr>");
+                foreach (PropertyInfo propInfo in properties) {
+                    var value = propInfo.GetValue(item, null) ?? DBNull.Value;
+                    if (value is double) {
+                        stringBuilder.Append(string.Format("<td>{0:0.###}</td>", (double)value));
+                    } else {
+                        stringBuilder.Append(string.Format("<td>{0}</td>", value.ToString()));
+                    }
+                }
+                stringBuilder.Append("</tr>");
+            }
+            stringBuilder.Append("</table>");
+            return stringBuilder.ToString();
+        }
+
     }
 }

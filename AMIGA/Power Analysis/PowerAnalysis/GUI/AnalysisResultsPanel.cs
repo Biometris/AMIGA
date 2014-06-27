@@ -23,7 +23,7 @@ namespace AmigaPowerAnalysis.GUI {
         private Project _project;
         private List<Comparison> _comparisons;
         private AnalysisMethodType _currentAnalysisType = AnalysisMethodType.OverdispersedPoisson;
-        private string _currentProjectPath;
+        private string _currentProjectFilePath;
 
         public AnalysisResultsPanel(Project project) {
             InitializeComponent();
@@ -34,9 +34,9 @@ namespace AmigaPowerAnalysis.GUI {
 
         public string Description { get; private set; }
 
-        public string ProjectFilesPath {
-            get { return _currentProjectPath; }
-            set { _currentProjectPath = value; }
+        public string CurrentProjectFilesPath {
+            get { return _currentProjectFilePath; }
+            set { _currentProjectFilePath = value; }
         }
 
         public void Activate() {
@@ -138,12 +138,13 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void buttonShowInputData_Click(object sender, EventArgs e) {
-            //if (_currentComparison != null && _currentComparison.OutputPowerAnalysis != null) {
-            //    //var tempPath = Path.GetTempPath();
-            //    //tempPath = @"D:\Projects\Amiga\Source\TestData\ssss";
-            //    var htmlReportForm = new HtmlReportForm(ComparisonSummaryReportGenerator.GenerateReport(_currentComparison, _currentProjectPath));
-            //    htmlReportForm.ShowDialog();
-            //}
+            var primaryComparisons = _comparisons.Where(c => c.OutputPowerAnalysis != null && c.IsPrimary).ToList();
+            if (primaryComparisons.Count > 0) {
+                var tempPath = Path.GetTempPath();
+                tempPath = @"D:\Projects\Amiga\Source\TestData\ssss";
+                var htmlReportForm = new HtmlReportForm(ComparisonSummaryReportGenerator.GenerateAnalysisReport(primaryComparisons, _currentProjectFilePath));
+                htmlReportForm.ShowDialog();
+            }
         }
 
         private void dataGridViewComparisons_CellValueChanged(object sender, DataGridViewCellEventArgs e) {

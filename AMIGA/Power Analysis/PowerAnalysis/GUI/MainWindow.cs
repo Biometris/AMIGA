@@ -35,8 +35,8 @@ namespace AmigaPowerAnalysis.GUI {
                     var analysisResultsPanel = _selectionForms.Where(s => s is AnalysisResultsPanel).Single() as AnalysisResultsPanel;
                     var analysisResultsPerPanel = _selectionForms.Where(s => s is AnalysisResultsPerComparisonPanel).Single() as AnalysisResultsPerComparisonPanel;
                     var filesPath = getCurrentProjectFilesPath();
-                    analysisResultsPanel.ProjectFilesPath = filesPath;
-                    analysisResultsPerPanel.ProjectFilesPath = filesPath;
+                    analysisResultsPanel.CurrentProjectFilesPath = filesPath;
+                    analysisResultsPerPanel.CurrentProjectFilesPath = filesPath;
                 } else {
                     this.Text = "Amiga Power Analysis";
                 }
