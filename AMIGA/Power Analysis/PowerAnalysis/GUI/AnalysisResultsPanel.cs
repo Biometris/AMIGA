@@ -29,7 +29,7 @@ namespace AmigaPowerAnalysis.GUI {
         public AnalysisResultsPanel(Project project) {
             InitializeComponent();
             Name = "Results";
-            Description = "Choose endpoint in table. Choose method of analysis if more have been investigated. Power is shown for difference tests (upper graphs) and equivalence tests (lower graphs), both as a function of the number of replicates (left) and the Ratio GMO/CMP (right).";
+            Description = "Choose primary endpoint in table. The power analysis is based on the mimum power across all primary endpoints. Results for other endpoints will be shown for information only in the next tab. Choose method of analysis if more have been investigated.\r\n\r\nPower is shown for difference tests (upper graphs) and equivalence tests (lower graphs), both as a function of the number of replicates (left) and the natural log of the Ratio GMO/CMP (right).";
             this.comboBoxAnalysisType.Visible = false;
             _project = project;
         }

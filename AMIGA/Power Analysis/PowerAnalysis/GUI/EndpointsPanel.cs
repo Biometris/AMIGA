@@ -25,7 +25,7 @@ namespace AmigaPowerAnalysis.GUI {
         public EndpointsPanel(Project project) {
             InitializeComponent();
             Name = "Endpoints";
-            Description = "Enter a list of endpoints. For each endpoint indicate its group. The power analysis will be based on all primary endpoints. Results for other endpoints will be shown for information only. For each endpoint provide the measurement type and limits of concern (LoC). Provide a lower LoC, an upper LoC, or both.";
+            Description = "Enter a list of endpoints. For each endpoint indicate its group (retrieves default settings), and if needed adapt the measurement type and limits of concern (LoC).\r\nEndpoint groups can be edited under the Options menu.\r\nLimits of Concern are ratios of the expected values for the GMO and the Comparator. Within these limits there is no concern about safety.\r\n\r\nProvide a lower LoC, an upper LoC, or both. Unspecified (NaN) means no concern for changes in that direction.";
             _project = project;
             createDataGridEndpoints();
         }
@@ -93,10 +93,10 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void addEndpointButton_Click(object sender, EventArgs e) {
             var endpointNames = _project.Endpoints.Select(ep => ep.Name).ToList();
-            var newEndpointName = string.Format("New endpoint");
-            var i = 0;
+            var newEndpointName = string.Format("Endpoint 1");
+            var i = 2;
             while (endpointNames.Contains(newEndpointName)) {
-                newEndpointName = string.Format("New endpoint {0}", i++);
+                newEndpointName = string.Format("Endpoint {0}", i++);
             }
             _project.AddEndpoint(new Endpoint(newEndpointName, _project.EndpointTypes.First()));
             updateDataGridViewEndpoints();

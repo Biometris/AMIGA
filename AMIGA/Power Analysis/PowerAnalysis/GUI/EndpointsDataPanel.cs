@@ -24,7 +24,7 @@ namespace AmigaPowerAnalysis.GUI {
         public EndpointsDataPanel(Project project) {
             InitializeComponent();
             Name = "Endpoints data";
-            Description = "For each endpoint, indicate the distribution type. For binomial data specify the binomial total. For Taylor's law enter the power. Specify expected values of mean and coefficient of variation (CV) for the comparator variety. Indicate if more there are observations in time series per plot (repeated measures). Indicate if more zeroes are expected than corresponds to the chosen distribution (Excess zeroes).";
+            Description = "For each endpoint, if needed adapt its distribution type, the binomial total (for fractions), and the power (for Taylor's Power law distribution).\r\nIf needed adapt expected values of mean and coefficient of variation (CV) for the comparator variety.\r\nIndicate if more there are observations in time series per plot (Repeated measures, not yet implemented).\r\nIndicate if more zeroes are expected than corresponds to the chosen distribution (Excess zeroes, not yet implemented).";
             _project = project;
             createDataGridEndpoints();
         }
@@ -53,7 +53,7 @@ namespace AmigaPowerAnalysis.GUI {
             combo.DataSource = Enum.GetValues(typeof(MeasurementType));
             combo.DataPropertyName = "Measurement";
             combo.ValueType = typeof(MeasurementType);
-            combo.HeaderText = "Measurement";
+            combo.HeaderText = "Measurement type";
             combo.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
             dataGridViewEndpoints.Columns.Add(combo);
 
@@ -61,14 +61,14 @@ namespace AmigaPowerAnalysis.GUI {
             combo.DataSource = Enum.GetValues(typeof(DistributionType));
             combo.DataPropertyName = "DistributionType";
             combo.ValueType = typeof(DistributionType);
-            combo.HeaderText = "DistributionType";
+            combo.HeaderText = "Distribution";
             combo.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
             dataGridViewEndpoints.Columns.Add(combo);
 
             column = new DataGridViewTextBoxColumn();
             column.DataPropertyName = "BinomialTotal";
             column.Name = "BinomialTotal";
-            column.HeaderText = "Binomial total";
+            column.HeaderText = "Binomial total (fractions)";
             column.ValueType = typeof(int);
             dataGridViewEndpoints.Columns.Add(column);
 
