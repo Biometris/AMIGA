@@ -12,8 +12,7 @@ namespace AmigaPowerAnalysis.Tests {
         [TestMethod]
         public void TestOnlyVarietyFactor() {
             var project = new Project();
-            var endpointTypeProvider = new EndpointTypeProvider();
-            project.EndpointTypes = endpointTypeProvider.GetAvailableEndpointTypes();
+            project.EndpointTypes = EndpointTypeProvider.DefaultEndpointTypes();
             project.AddEndpoint(new Endpoint("Beatle", project.EndpointTypes.First(ept => ept.Name == "Predator")));
             project.UpdateEndpointFactors();
 
@@ -29,8 +28,7 @@ namespace AmigaPowerAnalysis.Tests {
         [TestMethod]
         public void TestSingleInteractionFactor() {
             var project = new Project();
-            var endpointTypeProvider = new EndpointTypeProvider();
-            project.EndpointTypes = endpointTypeProvider.GetAvailableEndpointTypes();
+            project.EndpointTypes = EndpointTypeProvider.DefaultEndpointTypes();
             project.AddEndpoint(new Endpoint("Beatle", project.EndpointTypes.First(ept => ept.Name == "Predator")));
             project.Factors.Add(new Factor("Spraying", 3));
             project.UpdateEndpointFactors();

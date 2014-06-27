@@ -12,8 +12,9 @@ namespace AmigaPowerAnalysis.GUI {
     public partial class SelectionPanelForm : Form {
         public SelectionPanelForm(UserControl selectionForm) {
             InitializeComponent();
-            selectionForm.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelSelectionForm.Controls.Add(selectionForm);
+            var selectionPanelContainer = new SelectionPanelContainer(selectionForm);
+            selectionPanelContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelSelectionForm.Controls.Add(selectionPanelContainer);
             this.Name = selectionForm.Name;
         }
 

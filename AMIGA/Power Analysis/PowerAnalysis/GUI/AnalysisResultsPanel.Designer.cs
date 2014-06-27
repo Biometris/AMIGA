@@ -29,10 +29,10 @@
             this.buttonShowInputData = new System.Windows.Forms.Button();
             this.comboBoxAnalysisType = new System.Windows.Forms.ComboBox();
             this.tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.plotViewEquivalenceLog = new OxyPlot.WindowsForms.PlotView();
-            this.plotViewDifferenceLog = new OxyPlot.WindowsForms.PlotView();
-            this.plotViewEquivalenceRepetitions = new OxyPlot.WindowsForms.PlotView();
-            this.plotViewDifferenceRepetitions = new OxyPlot.WindowsForms.PlotView();
+            this.plotViewEquivalenceLevelOfConcern = new OxyPlot.WindowsForms.PlotView();
+            this.plotViewDifferenceLevelOfConcern = new OxyPlot.WindowsForms.PlotView();
+            this.plotViewEquivalenceReplicates = new OxyPlot.WindowsForms.PlotView();
+            this.plotViewDifferenceReplicates = new OxyPlot.WindowsForms.PlotView();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerComparisons)).BeginInit();
             this.splitContainerComparisons.Panel1.SuspendLayout();
             this.splitContainerComparisons.Panel2.SuspendLayout();
@@ -80,6 +80,8 @@
             this.dataGridViewComparisons.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridViewComparisons.Size = new System.Drawing.Size(283, 477);
             this.dataGridViewComparisons.TabIndex = 3;
+            this.dataGridViewComparisons.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewComparisons_CellValueChanged);
+            this.dataGridViewComparisons.CurrentCellDirtyStateChanged += new System.EventHandler(this.dataGridViewComparisons_CurrentCellDirtyStateChanged);
             this.dataGridViewComparisons.SelectionChanged += new System.EventHandler(this.dataGridViewComparisons_SelectionChanged);
             // 
             // panelResultPlots
@@ -123,10 +125,10 @@
             this.tableLayoutPanel.ColumnCount = 2;
             this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel.Controls.Add(this.plotViewEquivalenceLog, 1, 1);
-            this.tableLayoutPanel.Controls.Add(this.plotViewDifferenceLog, 1, 0);
-            this.tableLayoutPanel.Controls.Add(this.plotViewEquivalenceRepetitions, 0, 1);
-            this.tableLayoutPanel.Controls.Add(this.plotViewDifferenceRepetitions, 0, 0);
+            this.tableLayoutPanel.Controls.Add(this.plotViewEquivalenceLevelOfConcern, 1, 1);
+            this.tableLayoutPanel.Controls.Add(this.plotViewDifferenceLevelOfConcern, 1, 0);
+            this.tableLayoutPanel.Controls.Add(this.plotViewEquivalenceReplicates, 0, 1);
+            this.tableLayoutPanel.Controls.Add(this.plotViewDifferenceReplicates, 0, 0);
             this.tableLayoutPanel.Location = new System.Drawing.Point(0, 21);
             this.tableLayoutPanel.Name = "tableLayoutPanel";
             this.tableLayoutPanel.RowCount = 2;
@@ -137,55 +139,55 @@
             // 
             // plotViewEquivalenceLog
             // 
-            this.plotViewEquivalenceLog.BackColor = System.Drawing.SystemColors.Window;
-            this.plotViewEquivalenceLog.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.plotViewEquivalenceLog.Location = new System.Drawing.Point(283, 231);
-            this.plotViewEquivalenceLog.Name = "plotViewEquivalenceLog";
-            this.plotViewEquivalenceLog.PanCursor = System.Windows.Forms.Cursors.Hand;
-            this.plotViewEquivalenceLog.Size = new System.Drawing.Size(275, 222);
-            this.plotViewEquivalenceLog.TabIndex = 4;
-            this.plotViewEquivalenceLog.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
-            this.plotViewEquivalenceLog.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
-            this.plotViewEquivalenceLog.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
+            this.plotViewEquivalenceLevelOfConcern.BackColor = System.Drawing.SystemColors.Window;
+            this.plotViewEquivalenceLevelOfConcern.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.plotViewEquivalenceLevelOfConcern.Location = new System.Drawing.Point(283, 231);
+            this.plotViewEquivalenceLevelOfConcern.Name = "plotViewEquivalenceLog";
+            this.plotViewEquivalenceLevelOfConcern.PanCursor = System.Windows.Forms.Cursors.Hand;
+            this.plotViewEquivalenceLevelOfConcern.Size = new System.Drawing.Size(275, 222);
+            this.plotViewEquivalenceLevelOfConcern.TabIndex = 4;
+            this.plotViewEquivalenceLevelOfConcern.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
+            this.plotViewEquivalenceLevelOfConcern.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
+            this.plotViewEquivalenceLevelOfConcern.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
             // 
             // plotViewDifferenceLog
             // 
-            this.plotViewDifferenceLog.BackColor = System.Drawing.SystemColors.Window;
-            this.plotViewDifferenceLog.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.plotViewDifferenceLog.Location = new System.Drawing.Point(283, 3);
-            this.plotViewDifferenceLog.Name = "plotViewDifferenceLog";
-            this.plotViewDifferenceLog.PanCursor = System.Windows.Forms.Cursors.Hand;
-            this.plotViewDifferenceLog.Size = new System.Drawing.Size(275, 222);
-            this.plotViewDifferenceLog.TabIndex = 2;
-            this.plotViewDifferenceLog.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
-            this.plotViewDifferenceLog.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
-            this.plotViewDifferenceLog.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
+            this.plotViewDifferenceLevelOfConcern.BackColor = System.Drawing.SystemColors.Window;
+            this.plotViewDifferenceLevelOfConcern.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.plotViewDifferenceLevelOfConcern.Location = new System.Drawing.Point(283, 3);
+            this.plotViewDifferenceLevelOfConcern.Name = "plotViewDifferenceLog";
+            this.plotViewDifferenceLevelOfConcern.PanCursor = System.Windows.Forms.Cursors.Hand;
+            this.plotViewDifferenceLevelOfConcern.Size = new System.Drawing.Size(275, 222);
+            this.plotViewDifferenceLevelOfConcern.TabIndex = 2;
+            this.plotViewDifferenceLevelOfConcern.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
+            this.plotViewDifferenceLevelOfConcern.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
+            this.plotViewDifferenceLevelOfConcern.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
             // 
             // plotViewEquivalenceRepetitions
             // 
-            this.plotViewEquivalenceRepetitions.BackColor = System.Drawing.SystemColors.Window;
-            this.plotViewEquivalenceRepetitions.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.plotViewEquivalenceRepetitions.Location = new System.Drawing.Point(3, 231);
-            this.plotViewEquivalenceRepetitions.Name = "plotViewEquivalenceRepetitions";
-            this.plotViewEquivalenceRepetitions.PanCursor = System.Windows.Forms.Cursors.Hand;
-            this.plotViewEquivalenceRepetitions.Size = new System.Drawing.Size(274, 222);
-            this.plotViewEquivalenceRepetitions.TabIndex = 3;
-            this.plotViewEquivalenceRepetitions.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
-            this.plotViewEquivalenceRepetitions.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
-            this.plotViewEquivalenceRepetitions.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
+            this.plotViewEquivalenceReplicates.BackColor = System.Drawing.SystemColors.Window;
+            this.plotViewEquivalenceReplicates.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.plotViewEquivalenceReplicates.Location = new System.Drawing.Point(3, 231);
+            this.plotViewEquivalenceReplicates.Name = "plotViewEquivalenceRepetitions";
+            this.plotViewEquivalenceReplicates.PanCursor = System.Windows.Forms.Cursors.Hand;
+            this.plotViewEquivalenceReplicates.Size = new System.Drawing.Size(274, 222);
+            this.plotViewEquivalenceReplicates.TabIndex = 3;
+            this.plotViewEquivalenceReplicates.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
+            this.plotViewEquivalenceReplicates.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
+            this.plotViewEquivalenceReplicates.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
             // 
             // plotViewDifferenceRepetitions
             // 
-            this.plotViewDifferenceRepetitions.BackColor = System.Drawing.SystemColors.Window;
-            this.plotViewDifferenceRepetitions.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.plotViewDifferenceRepetitions.Location = new System.Drawing.Point(3, 3);
-            this.plotViewDifferenceRepetitions.Name = "plotViewDifferenceRepetitions";
-            this.plotViewDifferenceRepetitions.PanCursor = System.Windows.Forms.Cursors.Hand;
-            this.plotViewDifferenceRepetitions.Size = new System.Drawing.Size(274, 222);
-            this.plotViewDifferenceRepetitions.TabIndex = 0;
-            this.plotViewDifferenceRepetitions.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
-            this.plotViewDifferenceRepetitions.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
-            this.plotViewDifferenceRepetitions.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
+            this.plotViewDifferenceReplicates.BackColor = System.Drawing.SystemColors.Window;
+            this.plotViewDifferenceReplicates.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.plotViewDifferenceReplicates.Location = new System.Drawing.Point(3, 3);
+            this.plotViewDifferenceReplicates.Name = "plotViewDifferenceRepetitions";
+            this.plotViewDifferenceReplicates.PanCursor = System.Windows.Forms.Cursors.Hand;
+            this.plotViewDifferenceReplicates.Size = new System.Drawing.Size(274, 222);
+            this.plotViewDifferenceReplicates.TabIndex = 0;
+            this.plotViewDifferenceReplicates.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
+            this.plotViewDifferenceReplicates.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
+            this.plotViewDifferenceReplicates.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
             // 
             // AnalysisResultsPanel
             // 
@@ -213,10 +215,10 @@
         private System.Windows.Forms.SplitContainer splitContainerComparisons;
         private System.Windows.Forms.DataGridView dataGridViewComparisons;
         private System.Windows.Forms.Panel panelResultPlots;
-        private OxyPlot.WindowsForms.PlotView plotViewDifferenceRepetitions;
-        private OxyPlot.WindowsForms.PlotView plotViewEquivalenceRepetitions;
-        private OxyPlot.WindowsForms.PlotView plotViewDifferenceLog;
-        private OxyPlot.WindowsForms.PlotView plotViewEquivalenceLog;
+        private OxyPlot.WindowsForms.PlotView plotViewDifferenceReplicates;
+        private OxyPlot.WindowsForms.PlotView plotViewEquivalenceReplicates;
+        private OxyPlot.WindowsForms.PlotView plotViewDifferenceLevelOfConcern;
+        private OxyPlot.WindowsForms.PlotView plotViewEquivalenceLevelOfConcern;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel;
         private System.Windows.Forms.ComboBox comboBoxAnalysisType;
         private System.Windows.Forms.Button buttonShowInputData;

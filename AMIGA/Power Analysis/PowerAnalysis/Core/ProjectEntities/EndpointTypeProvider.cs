@@ -1,29 +1,63 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
+using System.Runtime.Serialization;
 using AmigaPowerAnalysis.Core.Distributions;
 
 namespace AmigaPowerAnalysis.Core {
-    public sealed class EndpointTypeProvider {
+    public static class EndpointTypeProvider {
 
-        private List<EndpointType> _endpointTypes;
+        public static List<EndpointType> MyEndpointTypes;
 
-        public EndpointTypeProvider() {
-            // TODO WinForm to define default endpoint type and to save these in an XML file (or Registry) for retrieval
-            _endpointTypes = new List<EndpointType>();
-            _endpointTypes.Add(new EndpointType("Non-Target insects counts", true, MeasurementType.Count, 0, 0.5, 2, 10, 100, DistributionType.PowerLaw));
-            _endpointTypes.Add(new EndpointType("Non-Target insects presence", true, MeasurementType.Fraction, 0, 0.5, 2, 10, 100, DistributionType.BinomialLogitNormal));
-            _endpointTypes.Add(new EndpointType("Soil biology", true, MeasurementType.Count, 0, double.NaN, 3, 10, 50, DistributionType.LogNormal));
-            _endpointTypes.Add(new EndpointType("Soil physics", true, MeasurementType.Nonnegative, 100, 0.5, double.NaN, 0.4, 0.02, DistributionType.LogNormal));
-            _endpointTypes.Add(new EndpointType("Weeds", true, MeasurementType.Nonnegative, 0, 0.25, 4, 20, 4, DistributionType.LogNormal));
-            _endpointTypes.Add(new EndpointType("Economics", true, MeasurementType.Nonnegative, 0, 0.2, double.NaN, 500, 10, DistributionType.LogNormal));
-            _endpointTypes.Add(new EndpointType("Yield", true, MeasurementType.Nonnegative, 0, 0.8, 1.2, 80, 0.5, DistributionType.LogNormal));
+        public static List<EndpointType> NewProjectDefaultEndpointTypes() {
+            var endpointTypes = new List<EndpointType>();
+            foreach (var endpointType in MyEndpointTypes) {
+                endpointTypes.Add(endpointType.Clone());
+            }
+            return endpointTypes;
         }
 
-        /// <summary>
-        /// Returns a list of available endpoint types.
-        /// </summary>Non
-        /// <returns></returns>
-        public List<EndpointType> GetAvailableEndpointTypes() {
-            return _endpointTypes;
+        public static void LoadMyEndpointTypes() {
+            var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            var filename = Path.Combine(appData, "MyEndpointTypes.xml");
+            if (File.Exists(filename)) {
+                try {
+                    var serializer = new DataContractSerializer(typeof(List<EndpointType>));
+                    using (var fileStream = new FileStream(filename, FileMode.Open)) {
+                        MyEndpointTypes = (List<EndpointType>)serializer.ReadObject(fileStream);
+                        fileStream.Close();
+                    }
+                } catch (Exception ex) {
+                    var msg = ex.Message;
+                }
+            }
+
+            if (MyEndpointTypes == null) {
+                MyEndpointTypes = DefaultEndpointTypes();
+            }
+        }
+
+        public static void StoreMyEndpointTypes() {
+            var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            var filename = Path.Combine(appData, "MyEndpointTypes.xml");
+            var serializer = new DataContractSerializer(typeof(List<EndpointType>), null, 0x7FFF, false, true, null);
+            using (var fileWriter = new FileStream(filename, FileMode.Create)) {
+                serializer.WriteObject(fileWriter, MyEndpointTypes);
+                fileWriter.Close();
+            }
+        }
+
+        public static List<EndpointType> DefaultEndpointTypes() {
+            var endpointTypes = new List<EndpointType>();
+            endpointTypes.Add(new EndpointType("Non-Target insects counts", true, MeasurementType.Count, 0, 0.5, 2, 10, 100, DistributionType.PowerLaw));
+            endpointTypes.Add(new EndpointType("Non-Target insects presence", true, MeasurementType.Fraction, 0, 0.5, 2, 10, 100, DistributionType.BinomialLogitNormal));
+            endpointTypes.Add(new EndpointType("Soil biology", true, MeasurementType.Count, 0, double.NaN, 3, 10, 50, DistributionType.LogNormal));
+            endpointTypes.Add(new EndpointType("Soil physics", true, MeasurementType.Nonnegative, 100, 0.5, double.NaN, 0.4, 0.02, DistributionType.LogNormal));
+            endpointTypes.Add(new EndpointType("Weeds", true, MeasurementType.Nonnegative, 0, 0.25, 4, 20, 4, DistributionType.LogNormal));
+            endpointTypes.Add(new EndpointType("Economics", true, MeasurementType.Nonnegative, 0, 0.2, double.NaN, 500, 10, DistributionType.LogNormal));
+            endpointTypes.Add(new EndpointType("Yield", true, MeasurementType.Nonnegative, 0, 0.8, 1.2, 80, 0.5, DistributionType.LogNormal));
+            return endpointTypes;
         }
     }
 }

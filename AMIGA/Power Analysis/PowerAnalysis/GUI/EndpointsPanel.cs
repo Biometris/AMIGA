@@ -39,8 +39,17 @@ namespace AmigaPowerAnalysis.GUI {
 
         public event EventHandler TabVisibilitiesChanged;
 
+        public void UpdateForm() {
+            updateDataGridViewEndpoints();
+        }
+
         private void createDataGridEndpoints() {
             dataGridViewEndpoints.AutoGenerateColumns = false;
+            updateDataGridViewEndpoints();
+        }
+
+        private void updateDataGridViewEndpoints() {
+            dataGridViewEndpoints.Columns.Clear();
 
             var column = new DataGridViewTextBoxColumn();
             column.DataPropertyName = "Name";
@@ -75,12 +84,8 @@ namespace AmigaPowerAnalysis.GUI {
             column.DataPropertyName = "LocUpper";
             column.Name = "LocUpper";
             column.ValueType = typeof(double);
-            dataGridViewEndpoints.Columns.Add(column);
+            dataGridViewEndpoints.Columns.Add(column); 
 
-            updateDataGridViewEndpoints();
-        }
-
-        private void updateDataGridViewEndpoints() {
             if (_project.Endpoints.Count > 0) {
                 var endpointsBindingSouce = new BindingSource(_project.Endpoints, null);
                 dataGridViewEndpoints.DataSource = endpointsBindingSouce;

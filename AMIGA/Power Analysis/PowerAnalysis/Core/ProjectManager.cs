@@ -12,8 +12,7 @@ namespace AmigaPowerAnalysis.Core {
 
         public static Project CreateNewProject() {
             var project = new Project();
-            var endpointTypeProvider = new EndpointTypeProvider();
-            project.EndpointTypes = endpointTypeProvider.GetAvailableEndpointTypes();
+            project.EndpointTypes = EndpointTypeProvider.NewProjectDefaultEndpointTypes();
             //project.Endpoints.Add(new Endpoint("Beatle", project.EndpointTypes.First(ept => ept.Name == "Predator")));
             //project.Endpoints.Add(new Endpoint("Giraffe", project.EndpointTypes.First(ept => ept.Name == "Herbivore")));
             //project.Factors.Add(new Factor("Spraying", 3));

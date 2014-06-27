@@ -13,7 +13,6 @@ namespace AmigaPowerAnalysis.Core {
     public sealed class EndpointType {
 
         public EndpointType() {
-            Primary = false;
             Measurement = MeasurementType.Count;
             BinomialTotal = 0;
             LocLower = 1;
@@ -25,7 +24,6 @@ namespace AmigaPowerAnalysis.Core {
 
         public EndpointType(string name, bool primary, MeasurementType measurement, int binomialTotal, double locLower, double locUpper, double muComparator, double cvComparator, DistributionType distributionType) {
             Name = name;
-            Primary = primary;
             Measurement = measurement;
             BinomialTotal = binomialTotal;
             LocLower = locLower;
@@ -35,17 +33,15 @@ namespace AmigaPowerAnalysis.Core {
             DistributionType = distributionType;
         }
 
+        public EndpointType Clone() {
+            return (EndpointType)this.MemberwiseClone();
+        }
+
         /// <summary>
         /// Name of endpoint; e.g. Predator, Detrivore.
         /// </summary>
         [DataMember]
         public string Name { get; set; }
-
-        /// <summary>
-        /// Whether the endpoint is primary (true) or secondary (false).
-        /// </summary>
-        [DataMember]
-        public bool Primary { get; set; }
 
         /// <summary>
         /// The Mu of the comparator.

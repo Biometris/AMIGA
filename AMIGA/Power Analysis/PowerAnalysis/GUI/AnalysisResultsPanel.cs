@@ -22,7 +22,6 @@ namespace AmigaPowerAnalysis.GUI {
 
         private Project _project;
         private List<Comparison> _comparisons;
-        private Comparison _currentComparison;
         private AnalysisMethodType _currentAnalysisType = AnalysisMethodType.OverdispersedPoisson;
         private string _currentProjectPath;
 
@@ -30,7 +29,6 @@ namespace AmigaPowerAnalysis.GUI {
             InitializeComponent();
             Name = "Results";
             Description = "Choose primary endpoint in table. The power analysis is based on the mimum power across all primary endpoints. Results for other endpoints will be shown for information only in the next tab. Choose method of analysis if more have been investigated.\r\n\r\nPower is shown for difference tests (upper graphs) and equivalence tests (lower graphs), both as a function of the number of replicates (left) and the natural log of the Ratio GMO/CMP (right).";
-            this.comboBoxAnalysisType.Visible = false;
             _project = project;
         }
 
@@ -43,10 +41,21 @@ namespace AmigaPowerAnalysis.GUI {
 
         public void Activate() {
             updateDataGridComparisons();
-            if (_project.GetComparisons().Any(c => c.OutputPowerAnalysis != null)) {
-                splitContainerComparisons.Visible = true;
+            updateVisibilities();
+        }
+
+        private void updateVisibilities() {
+            var primaryComparisons = _comparisons.Where(c => c.OutputPowerAnalysis != null && c.IsPrimary).ToList();
+            if (primaryComparisons.Count > 0) {
+                comboBoxAnalysisType.Visible = true;
+                var selectedAnalysisMethodTypes = primaryComparisons.First().OutputPowerAnalysis.InputPowerAnalysis.SelectedAnalysisMethodTypes.GetFlags<AnalysisMethodType>().ToArray();
+                this.comboBoxAnalysisType.DataSource = selectedAnalysisMethodTypes;
+                if (selectedAnalysisMethodTypes.Count() > 0) {
+                    this.comboBoxAnalysisType.SelectedIndex = 0;
+                }
+                updateAnalysisOutputPanel();
             } else {
-                splitContainerComparisons.Visible = false;
+                comboBoxAnalysisType.Visible = false;
             }
         }
 
@@ -91,26 +100,33 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void updateAnalysisOutputPanel() {
-            if (_currentComparison != null) {
-                plotViewDifferenceRepetitions.Model = AnalysisResultsChartGenerator.CreatePlotViewReplicates(_currentComparison.OutputPowerAnalysis, TestType.Difference, _currentAnalysisType);
-                plotViewEquivalenceRepetitions.Model = AnalysisResultsChartGenerator.CreatePlotViewReplicates(_currentComparison.OutputPowerAnalysis, TestType.Equivalence, _currentAnalysisType);
-                plotViewDifferenceLog.Model = AnalysisResultsChartGenerator.CreatePlotViewLogRatio(_currentComparison.OutputPowerAnalysis, TestType.Difference, _currentAnalysisType);
-                plotViewEquivalenceLog.Model = AnalysisResultsChartGenerator.CreatePlotViewLogRatio(_currentComparison.OutputPowerAnalysis, TestType.Equivalence, _currentAnalysisType);
+            var primaryComparisons = _comparisons.Where(c => c.OutputPowerAnalysis != null && c.IsPrimary).ToList();
+            if (primaryComparisons.Count > 0) {
+                var records = primaryComparisons.SelectMany(c => c.OutputPowerAnalysis.OutputRecords)
+                    .GroupBy(r => new { r.LevelOfConcern, r.NumberOfReplicates })
+                    .Select(g => new OutputPowerAnalysisRecord() {
+                        LevelOfConcern = g.Key.LevelOfConcern,
+                        NumberOfReplicates = g.Key.NumberOfReplicates,
+                        Ratio = double.NaN,
+                        LogRatio = double.NaN,
+                        PowerDifferenceLogNormal = g.Min(r => r.PowerDifferenceLogNormal),
+                        PowerDifferenceSquareRoot = g.Min(r => r.PowerDifferenceSquareRoot),
+                        PowerDifferenceOverdispersedPoisson = g.Min(r => r.PowerDifferenceOverdispersedPoisson),
+                        PowerDifferenceNegativeBinomial = g.Min(r => r.PowerDifferenceNegativeBinomial),
+                        PowerEquivalenceLogNormal = g.Min(r => r.PowerEquivalenceLogNormal),
+                        PowerEquivalenceSquareRoot = g.Min(r => r.PowerEquivalenceSquareRoot),
+                        PowerEquivalenceOverdispersedPoisson = g.Min(r => r.PowerEquivalenceOverdispersedPoisson),
+                        PowerEquivalenceNegativeBinomial = g.Min(r => r.PowerEquivalenceNegativeBinomial),
+                    })
+                    .ToList();
+                plotViewDifferenceReplicates.Model = AnalysisResultsChartGenerator.CreatePlotViewReplicatesLevelOfConcern(records, TestType.Difference, _currentAnalysisType);
+                plotViewEquivalenceReplicates.Model = AnalysisResultsChartGenerator.CreatePlotViewReplicatesLevelOfConcern(records, TestType.Equivalence, _currentAnalysisType);
+                plotViewDifferenceLevelOfConcern.Model = AnalysisResultsChartGenerator.CreatePlotViewLevelOfConcernReplicates(records, TestType.Difference, _currentAnalysisType);
+                plotViewEquivalenceLevelOfConcern.Model = AnalysisResultsChartGenerator.CreatePlotViewLevelOfConcernReplicates(records, TestType.Equivalence, _currentAnalysisType);
             }
         }
 
         private void dataGridViewComparisons_SelectionChanged(object sender, EventArgs e) {
-            _currentComparison = _project.GetComparisons().ElementAt(dataGridViewComparisons.CurrentRow.Index);
-            if (_currentComparison != null) {
-                var selectedAnalysisMethodTypes = _currentComparison.OutputPowerAnalysis.InputPowerAnalysis.SelectedAnalysisMethodTypes.GetFlags<AnalysisMethodType>().ToArray();
-                this.comboBoxAnalysisType.DataSource = selectedAnalysisMethodTypes;
-                if (selectedAnalysisMethodTypes.Count() > 0) {
-                    this.comboBoxAnalysisType.SelectedIndex = 0;
-                }
-                this.comboBoxAnalysisType.Visible = true;
-            } else {
-                this.comboBoxAnalysisType.Visible = false;
-            }
             updateAnalysisOutputPanel();
         }
 
@@ -122,11 +138,22 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void buttonShowInputData_Click(object sender, EventArgs e) {
-            if (_currentComparison != null && _currentComparison.OutputPowerAnalysis != null) {
-                //var tempPath = Path.GetTempPath();
-                //tempPath = @"D:\Projects\Amiga\Source\TestData\ssss";
-                var htmlReportForm = new HtmlReportForm(ComparisonSummaryReportGenerator.GenerateReport(_currentComparison, _currentProjectPath));
-                htmlReportForm.ShowDialog();
+            //if (_currentComparison != null && _currentComparison.OutputPowerAnalysis != null) {
+            //    //var tempPath = Path.GetTempPath();
+            //    //tempPath = @"D:\Projects\Amiga\Source\TestData\ssss";
+            //    var htmlReportForm = new HtmlReportForm(ComparisonSummaryReportGenerator.GenerateReport(_currentComparison, _currentProjectPath));
+            //    htmlReportForm.ShowDialog();
+            //}
+        }
+
+        private void dataGridViewComparisons_CellValueChanged(object sender, DataGridViewCellEventArgs e) {
+            updateAnalysisOutputPanel();
+            updateVisibilities();
+        }
+
+        private void dataGridViewComparisons_CurrentCellDirtyStateChanged(object sender, EventArgs e) {
+            if (dataGridViewComparisons.IsCurrentCellDirty) {
+                dataGridViewComparisons.CommitEdit(DataGridViewDataErrorContexts.Commit);
             }
         }
     }

@@ -24,12 +24,13 @@ namespace AmigaPowerAnalysis.GUI {
 
         public string Description { get; private set; }
 
-        public EndpointTypesPanel(Project project) {    
+        public event EventHandler TabVisibilitiesChanged;
+
+        public EndpointTypesPanel(Project project) {
             InitializeComponent();
-            var endpointTypeProvider = new EndpointTypeProvider();
-            _endpointTypes = endpointTypeProvider.GetAvailableEndpointTypes();
+            _endpointTypes = EndpointTypeProvider.MyEndpointTypes;
             Name = "Endpoint Groups";
-            Description = "TODO";
+            Description = "This form allows you to modify your default endpoint groups.";
             _project = project;
             createDataGridDefaultEndpointGroups();
             createDataGridProjectEndpointGroups();
@@ -46,12 +47,14 @@ namespace AmigaPowerAnalysis.GUI {
         public void updateVisibilities() {
             if (_project != null && _project.EndpointTypes.Count > 0) {
                 splitContainer.Panel2.Show();
+                buttonAddToProject.Visible = true;
+                buttonAddToDefault.Visible = true;
             } else {
                 splitContainer.Panel2.Hide();
+                buttonAddToProject.Visible = false;
+                buttonAddToDefault.Visible = false;
             }
         }
-
-        public event EventHandler TabVisibilitiesChanged;
 
         private void createDataGridDefaultEndpointGroups() {
             dataGridViewDefaultEndpointGroups.AutoGenerateColumns = false;

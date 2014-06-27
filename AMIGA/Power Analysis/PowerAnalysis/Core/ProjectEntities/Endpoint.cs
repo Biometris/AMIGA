@@ -43,7 +43,6 @@ namespace AmigaPowerAnalysis.Core {
             set {
                 _endpointType = value;
                 if (_endpointType != null) {
-                    Primary = _endpointType.Primary;
                     BinomialTotal = _endpointType.BinomialTotal;
                     PowerLawPower = _endpointType.PowerLawPower;
                     Measurement = _endpointType.Measurement;
@@ -67,12 +66,6 @@ namespace AmigaPowerAnalysis.Core {
         /// </summary>
         [DataMember(Order = 2)]
         public bool ExcessZeroes { get; set; }
-
-        /// <summary>
-        /// Whether the endpoint is primary (true) or secondary (false).
-        /// </summary>
-        [DataMember(Order = 2)]
-        public bool Primary { get; set; }
 
         /// <summary>
         /// The Mu of the comparator.

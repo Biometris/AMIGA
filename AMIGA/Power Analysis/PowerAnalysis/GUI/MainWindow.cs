@@ -72,6 +72,7 @@ namespace AmigaPowerAnalysis.GUI {
             if (Settings.Default.WindowSize != null) {
                 this.Size = Settings.Default.WindowSize;
             }
+            EndpointTypeProvider.LoadMyEndpointTypes();
         }
 
         private void MainWindow_FormClosing(object sender, FormClosingEventArgs e) {
@@ -82,6 +83,7 @@ namespace AmigaPowerAnalysis.GUI {
                 Settings.Default.WindowSize = this.RestoreBounds.Size;
             }
             Settings.Default.Save();
+            EndpointTypeProvider.StoreMyEndpointTypes();
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e) {
@@ -115,6 +117,10 @@ namespace AmigaPowerAnalysis.GUI {
         private void toolstripEndpointTypes_Click(object sender, EventArgs e) {
             var endpointGroupsForm = new SelectionPanelForm(new EndpointTypesPanel(_project));
             endpointGroupsForm.ShowDialog();
+            var endpointsPanel = _selectionForms.Where(s => s is EndpointsPanel).FirstOrDefault() as EndpointsPanel;
+            if (endpointsPanel != null) {
+                endpointsPanel.UpdateForm();
+            }
         }
 
         private void toolstripAbout_Click(object sender, EventArgs e) {

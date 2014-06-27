@@ -4,6 +4,7 @@
 
         public double Ratio { get; set; }
         public double LogRatio { get; set; }
+        public double LevelOfConcern { get; set; }
         public int NumberOfReplicates { get; set; }
 
         public double PowerDifferenceLogNormal { get; set; }

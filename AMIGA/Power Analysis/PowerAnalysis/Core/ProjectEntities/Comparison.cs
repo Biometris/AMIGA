@@ -11,6 +11,7 @@ namespace AmigaPowerAnalysis.Core {
         private double _cvComparator;
 
         public Comparison() {
+            IsPrimary = true;
             ComparisonFactorLevelCombinations = new List<ComparisonFactorLevelCombination>();
             InteractionFactors = new List<Factor>();
         }

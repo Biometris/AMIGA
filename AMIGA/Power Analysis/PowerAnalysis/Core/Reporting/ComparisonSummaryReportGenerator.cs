@@ -84,24 +84,24 @@ namespace AmigaPowerAnalysis.Core.Reporting {
                 stringBuilder.Append("<tr>");
 
                 imageFilename = Path.Combine(tempPath, fileBaseId + "_" + analysisMethodType.ToString() + "_Replicates_Difference.png");
-                var plotDifferenceReplicates = AnalysisResultsChartGenerator.CreatePlotViewReplicates(comparison.OutputPowerAnalysis, TestType.Difference, analysisMethodType);
+                var plotDifferenceReplicates = AnalysisResultsChartGenerator.CreatePlotViewReplicatesLogRatio(comparison.OutputPowerAnalysis.OutputRecords, TestType.Difference, analysisMethodType);
                 PngExporter.Export(plotDifferenceReplicates, imageFilename, 400, 300);
                 stringBuilder.Append("<td><img src=\"" + imageFilename + "\" /></td>");
 
                 imageFilename = Path.Combine(tempPath, fileBaseId + "_" + analysisMethodType.ToString() + "_Ratio_Difference.png");
-                var plotDifferenceLogRatio = AnalysisResultsChartGenerator.CreatePlotViewLogRatio(comparison.OutputPowerAnalysis, TestType.Difference, analysisMethodType);
+                var plotDifferenceLogRatio = AnalysisResultsChartGenerator.CreatePlotViewLogRatioReplicates(comparison.OutputPowerAnalysis.OutputRecords, TestType.Difference, analysisMethodType);
                 PngExporter.Export(plotDifferenceLogRatio, imageFilename, 400, 300);
                 stringBuilder.Append("<td><img src=\"" + imageFilename + "\" /></td>");
 
                 stringBuilder.Append("</tr><tr>");
 
                 imageFilename = Path.Combine(tempPath, fileBaseId + "_" + analysisMethodType.ToString() + "_Replicates_Equivalence.png");
-                var plotEquivalenceReplicates = AnalysisResultsChartGenerator.CreatePlotViewReplicates(comparison.OutputPowerAnalysis, TestType.Equivalence, analysisMethodType);
+                var plotEquivalenceReplicates = AnalysisResultsChartGenerator.CreatePlotViewReplicatesLogRatio(comparison.OutputPowerAnalysis.OutputRecords, TestType.Equivalence, analysisMethodType);
                 PngExporter.Export(plotEquivalenceReplicates, imageFilename, 400, 300);
                 stringBuilder.Append("<td><img src=\"" + imageFilename + "\" /></td>");
 
                 imageFilename = Path.Combine(tempPath, fileBaseId + "_" + analysisMethodType.ToString() + "_Ratio_Equivalence.png");
-                var plotEquivalenceLogRatio = AnalysisResultsChartGenerator.CreatePlotViewLogRatio(comparison.OutputPowerAnalysis, TestType.Equivalence, analysisMethodType);
+                var plotEquivalenceLogRatio = AnalysisResultsChartGenerator.CreatePlotViewLogRatioReplicates(comparison.OutputPowerAnalysis.OutputRecords, TestType.Equivalence, analysisMethodType);
                 PngExporter.Export(plotEquivalenceLogRatio, imageFilename, 400, 300);
                 stringBuilder.Append("<td><img src=\"" + imageFilename + "\" /></td>");
 

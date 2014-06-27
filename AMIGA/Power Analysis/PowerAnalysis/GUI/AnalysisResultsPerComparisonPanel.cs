@@ -84,10 +84,10 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void updateAnalysisOutputPanel() {
             if (_currentComparison != null) {
-                plotViewDifferenceRepetitions.Model = AnalysisResultsChartGenerator.CreatePlotViewReplicates(_currentComparison.OutputPowerAnalysis, TestType.Difference, _currentAnalysisType);
-                plotViewEquivalenceRepetitions.Model = AnalysisResultsChartGenerator.CreatePlotViewReplicates(_currentComparison.OutputPowerAnalysis, TestType.Equivalence, _currentAnalysisType);
-                plotViewDifferenceLog.Model = AnalysisResultsChartGenerator.CreatePlotViewLogRatio(_currentComparison.OutputPowerAnalysis, TestType.Difference, _currentAnalysisType);
-                plotViewEquivalenceLog.Model = AnalysisResultsChartGenerator.CreatePlotViewLogRatio(_currentComparison.OutputPowerAnalysis, TestType.Equivalence, _currentAnalysisType);
+                plotViewDifferenceRepetitions.Model = AnalysisResultsChartGenerator.CreatePlotViewReplicatesLogRatio(_currentComparison.OutputPowerAnalysis.OutputRecords, TestType.Difference, _currentAnalysisType);
+                plotViewEquivalenceRepetitions.Model = AnalysisResultsChartGenerator.CreatePlotViewReplicatesLogRatio(_currentComparison.OutputPowerAnalysis.OutputRecords, TestType.Equivalence, _currentAnalysisType);
+                plotViewDifferenceLog.Model = AnalysisResultsChartGenerator.CreatePlotViewLogRatioReplicates(_currentComparison.OutputPowerAnalysis.OutputRecords, TestType.Difference, _currentAnalysisType);
+                plotViewEquivalenceLog.Model = AnalysisResultsChartGenerator.CreatePlotViewLogRatioReplicates(_currentComparison.OutputPowerAnalysis.OutputRecords, TestType.Equivalence, _currentAnalysisType);
             }
         }
 

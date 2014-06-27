@@ -11,30 +11,28 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
 
         public OutputPowerAnalysis ReadOutputPowerAnalysis(string filename) {
             var outputRecords = new List<OutputPowerAnalysisRecord>();
-
             var lines = System.IO.File.ReadAllLines(filename);
-
             for (int i = 1; i < lines.Count(); ++i) {
                 double parsedVal;
                 var values = lines[i].Split(',')
                     .Select(str => double.TryParse(str.Trim(), out parsedVal) ? parsedVal : double.NaN)
                     .ToArray();
                 var record = new OutputPowerAnalysisRecord() {
-                    Ratio = values[0],
-                    LogRatio = values[1],
-                    NumberOfReplicates = (int)values[2],
-                    PowerDifferenceLogNormal = values[3],
-                    PowerDifferenceSquareRoot = values[4],
-                    PowerDifferenceOverdispersedPoisson = values[5],
-                    PowerDifferenceNegativeBinomial = values[6],
-                    PowerEquivalenceLogNormal = values[7],
-                    PowerEquivalenceSquareRoot = values[8],
-                    PowerEquivalenceOverdispersedPoisson = values[9],
-                    PowerEquivalenceNegativeBinomial = values[10],
+                    LevelOfConcern = values[0],
+                    Ratio = values[1],
+                    LogRatio = values[2],
+                    NumberOfReplicates = (int)values[3],
+                    PowerDifferenceLogNormal = values[4],
+                    PowerDifferenceSquareRoot = values[5],
+                    PowerDifferenceOverdispersedPoisson = values[6],
+                    PowerDifferenceNegativeBinomial = values[7],
+                    PowerEquivalenceLogNormal = values[8],
+                    PowerEquivalenceSquareRoot = values[9],
+                    PowerEquivalenceOverdispersedPoisson = values[10],
+                    PowerEquivalenceNegativeBinomial = values[11],
                 };
                 outputRecords.Add(record);
             }
-
             return new OutputPowerAnalysis() {
                 OutputRecords = outputRecords,
             };
