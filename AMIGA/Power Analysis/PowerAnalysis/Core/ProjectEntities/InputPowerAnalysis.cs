@@ -61,7 +61,8 @@ namespace AmigaPowerAnalysis.Core {
             headers.Add("SubPlot");
             headers.Add("Variety");
             foreach (var factor in InputRecords.First().Factors) {
-                headers.Add(factor);
+                var str = factor.Replace(' ', '_');
+                headers.Add(str);
             }
             headers.Add("Frequency");
             headers.Add("Mean");
