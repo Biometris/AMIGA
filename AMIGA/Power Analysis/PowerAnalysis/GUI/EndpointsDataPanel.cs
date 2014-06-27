@@ -52,6 +52,7 @@ namespace AmigaPowerAnalysis.GUI {
             var combo = new DataGridViewComboBoxColumn();
             combo.DataSource = Enum.GetValues(typeof(MeasurementType));
             combo.DataPropertyName = "Measurement";
+            combo.Name = "Measurement";
             combo.ValueType = typeof(MeasurementType);
             combo.HeaderText = "Measurement type";
             combo.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
@@ -104,6 +105,11 @@ namespace AmigaPowerAnalysis.GUI {
             checkbox.Name = "ExcessZeroes";
             checkbox.HeaderText = "Excess zeroes";
             dataGridViewEndpoints.Columns.Add(checkbox);
+
+            dataGridViewEndpoints.Columns["Name"].ReadOnly = true;
+            dataGridViewEndpoints.Columns["Measurement"].ReadOnly = true;
+            dataGridViewEndpoints.Columns["ExcessZeroes"].ReadOnly = true;
+            dataGridViewEndpoints.Columns["RepeatedMeasures"].ReadOnly = true;
         }
 
         private void dataGridViewEndpoints_DataError(object sender, DataGridViewDataErrorEventArgs e) {
