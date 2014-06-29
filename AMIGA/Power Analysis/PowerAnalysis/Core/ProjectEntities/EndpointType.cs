@@ -14,11 +14,11 @@ namespace AmigaPowerAnalysis.Core {
 
         public EndpointType() {
             Measurement = MeasurementType.Count;
-            BinomialTotal = 0;
-            LocLower = 1;
+            BinomialTotal = 10;
+            LocLower = 0.5;
             LocUpper = 2;
-            MuComparator = 100;
-            CvComparator = 20;
+            MuComparator = 10;
+            CvComparator = 100;
             DistributionType = DistributionType.Poisson;
         }
 

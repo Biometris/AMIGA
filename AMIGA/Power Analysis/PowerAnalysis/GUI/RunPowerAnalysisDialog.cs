@@ -77,7 +77,7 @@ namespace AmigaPowerAnalysis.GUI {
                     inputGenerator.PowerAnalysisInputToCsv(inputPowerAnalysis, comparisonInputFilename);
 
                     // Run power analysis
-                    _powerAnalysisBackgroundWorker.ReportProgress((int)(i * progressStep), string.Format("running analysis for comparison {0} of {1}...", i + 1, comparisons.Count()));
+                    _powerAnalysisBackgroundWorker.ReportProgress((int)((i+1) * progressStep), string.Format("running analysis for comparison {0} of {1}...", i + 1, comparisons.Count()));
                     var startInfo = new ProcessStartInfo();
                     startInfo.CreateNoWindow = true;
                     startInfo.UseShellExecute = false;

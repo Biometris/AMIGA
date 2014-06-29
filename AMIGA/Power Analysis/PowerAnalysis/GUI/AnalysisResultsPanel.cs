@@ -27,8 +27,8 @@ namespace AmigaPowerAnalysis.GUI {
 
         public AnalysisResultsPanel(Project project) {
             InitializeComponent();
-            Name = "Results";
-            Description = "Choose primary endpoint in table. The power analysis is based on the mimum power across all primary endpoints. Results for other endpoints will be shown for information only in the next tab. Choose method of analysis if more have been investigated.\r\n\r\nPower is shown for difference tests (upper graphs) and equivalence tests (lower graphs), both as a function of the number of replicates (left) and the natural log of the Ratio GMO/CMP (right).";
+            Name = "Primary results";
+            Description = "Select primary endpoints in table. The power analysis is based on the minimum power across all primary endpoints, in terms of Concern Standardized Differences (1 at the Limit of Concern ). Results for other endpoints will be shown for information only in the next tab. Choose method of analysis if more have been investigated.\r\n\r\nPower is shown for difference tests (upper graphs) and equivalence tests (lower graphs), both as a function of the number of replicates (left) and the Concern Standardized Difference (right).\r\nNote: Number of plots in design is Number of replicates times ....(number plots in a block)";
             _project = project;
         }
 

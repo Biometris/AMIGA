@@ -62,7 +62,7 @@ namespace AmigaPowerAnalysis.Core.Charting {
                     var series = new LineSeries() {
                         MarkerType = (MarkerType)(i % 7 + 1),
                     };
-                    series.Title = string.Format("Ratio = {0:0.##}", ratioGroup.Key);
+                    series.Title = string.Format("Ratio {0:0.##}", ratioGroup.Key);
                     if (testType == TestType.Difference && analysisMethodType == AnalysisMethodType.LogNormal) {
                         series.Points.AddRange(ratioGroup.Select(g => new DataPoint() {
                             X = g.NumberOfReplicates,
@@ -128,7 +128,7 @@ namespace AmigaPowerAnalysis.Core.Charting {
                     var series = new LineSeries() {
                         MarkerType = (MarkerType)(i % 7 + 1),
                     };
-                    series.Title = string.Format("Replicates = {0:0.##}", replicateGroup.Key);
+                    series.Title = string.Format("Repl {0:0.##}", replicateGroup.Key);
                     if (testType == TestType.Difference && analysisMethodType == AnalysisMethodType.LogNormal) {
                         series.Points.AddRange(replicateGroup.Select(g => new DataPoint() {
                             X = g.LogRatio,
@@ -195,7 +195,7 @@ namespace AmigaPowerAnalysis.Core.Charting {
                     var series = new LineSeries() {
                         MarkerType = (MarkerType)(i % 7 + 1),
                     };
-                    series.Title = string.Format("Level of concern = {0:0.##}", levelOfConcernGroup.Key);
+                    series.Title = string.Format("Concern {0:0.##}", levelOfConcernGroup.Key);
                     if (testType == TestType.Difference && analysisMethodType == AnalysisMethodType.LogNormal) {
                         series.Points.AddRange(levelOfConcernGroup.Select(g => new DataPoint() {
                             X = g.NumberOfReplicates,
@@ -247,7 +247,7 @@ namespace AmigaPowerAnalysis.Core.Charting {
             var model = CreatePlotModel(testType, analysisMethodType, PlotType.LevelOfConcern);
 
             var horizontalAxis = new LinearAxis() {
-                Title = "Level of concern",
+                Title = "Concern Standardized Difference",
                 MajorGridlineStyle = LineStyle.Solid,
                 MinorGridlineStyle = LineStyle.Dot,
                 Position = AxisPosition.Bottom,
@@ -261,7 +261,7 @@ namespace AmigaPowerAnalysis.Core.Charting {
                     var series = new LineSeries() {
                         MarkerType = (MarkerType)(i % 7 + 1),
                     };
-                    series.Title = string.Format("Replicates = {0:0.##}", replicateGroup.Key);
+                    series.Title = string.Format("Repl {0:0.##}", replicateGroup.Key);
                     if (testType == TestType.Difference && analysisMethodType == AnalysisMethodType.LogNormal) {
                         series.Points.AddRange(replicateGroup.Select(g => new DataPoint() {
                             X = g.LevelOfConcern,
