@@ -6,7 +6,7 @@ close channel=2 ; filetype=output
 \SET [WORKINGDIRECTORY='D:/Data/AMIGA/AmigaTool/Power Analysis/PowerAnalysis/Resources']
 
 if in3open.eq.0
-    text      project ; 'test1-1'
+    text      project ; 'test1-0'
     text      dir ; 'D:/Data/AMIGA/AmigaTool/TestData/'
     calculate pos = getposition(project ; '-')
     concatena [subdir] project ; width=getposition(project ; '-') - 1
@@ -50,15 +50,13 @@ endfor
 close     channel=3 ; filetype=input
 
 "one or twosided?"
-calc twosided=(lowerLOC+upperLOC==lowerLOC+upperLOC)
+calc twosided=(lowerLOC+upperLOC)/(lowerLOC+upperLOC)
 calc twosided=mvreplace(twosided;0)
 calc onesidedlow=.not.twosided .and. (lowerLOC==lowerLOC)
 calc onesidedlow=mvreplace(onesidedlow;0)
 calc onesidedupp=.not.twosided .and. (upperLOC==upperLOC)
 calc onesidedupp=mvreplace(onesidedupp;0)
 prin lowerLOC,upperLOC,twosided,onesidedlow,onesidedupp
-\calc ngridLOC=ngridLOC+(ngridLOC-1)*twosided
-
 "Missing LoCs are set to 1"
 calc gridlowerLOC=mvreplace(lowerLOC;1)
 calc gridupperLOC=mvreplace(upperLOC;1)
@@ -183,8 +181,14 @@ if flagRan
   endfor
 endif
 
-calculate concern = (log(ratio)/logupperloc)*(ratio>=1) +\
+if twosided
+  calculate concern = (log(ratio)/logupperloc)*(ratio>=1) +\
                        (log(ratio)/loglowerloc)*(ratio<1)
+elsif onesidedlow
+  calculate concern = (log(ratio)/loglowerloc)*(ratio<1)
+elsif onesidedupp
+  calculate concern = (log(ratio)/logupperloc)*(ratio>=1)
+endif
 
 print   ratio, concern, nreps, nc[1...5] ; fi=8 ; de=3,2,0,5(3)
 print   ratio, concern, nreps, pow[1...5] ; fi=8 ; de=3,2,0,5(3)
