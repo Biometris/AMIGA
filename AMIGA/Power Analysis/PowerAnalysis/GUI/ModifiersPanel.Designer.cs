@@ -144,7 +144,7 @@
             this.checkBoxUseBlockModifier.Name = "checkBoxUseBlockModifier";
             this.checkBoxUseBlockModifier.Size = new System.Drawing.Size(379, 17);
             this.checkBoxUseBlockModifier.TabIndex = 9;
-            this.checkBoxUseBlockModifier.Text = "Is there an expectation that there will be large differences between blocks?";
+            this.checkBoxUseBlockModifier.Text = "Are there large differences between blocks causing part of the data to be less informative (e.g. counts below 5, fractions equal to 0 or 1?";
             this.checkBoxUseBlockModifier.UseVisualStyleBackColor = true;
             this.checkBoxUseBlockModifier.CheckedChanged += new System.EventHandler(this.checkBoxUseBlockModifier_CheckedChanged);
             // 
@@ -155,7 +155,7 @@
             this.checkBoxUseMainPlotModifier.Name = "checkBoxUseMainPlotModifier";
             this.checkBoxUseMainPlotModifier.Size = new System.Drawing.Size(395, 17);
             this.checkBoxUseMainPlotModifier.TabIndex = 8;
-            this.checkBoxUseMainPlotModifier.Text = "Is there an expectation that there will be large differences between main plots?";
+            this.checkBoxUseMainPlotModifier.Text = "Are there large differences between main plotsw causing part of the data to be less informative (e.g. counts below 5, fractions equal to 0 or 1?";
             this.checkBoxUseMainPlotModifier.UseVisualStyleBackColor = true;
             this.checkBoxUseMainPlotModifier.CheckedChanged += new System.EventHandler(this.checkBoxUseMainPlotModifier_CheckedChanged);
             // 
@@ -181,8 +181,7 @@
             this.checkBoxUseFactorModifiers.Name = "checkBoxUseFactorModifiers";
             this.checkBoxUseFactorModifiers.Size = new System.Drawing.Size(458, 17);
             this.checkBoxUseFactorModifiers.TabIndex = 8;
-            this.checkBoxUseFactorModifiers.Text = "Is there an expectation that other experimental factors will lower the mean compa" +
-    "rator level?";
+            this.checkBoxUseFactorModifiers.Text = "Are there large differences between levels of factors (modifiers) causing part of the data to be less informative (e.g. counts below 5, fractions equal to 0 or 1?";
             this.checkBoxUseFactorModifiers.UseVisualStyleBackColor = true;
             this.checkBoxUseFactorModifiers.CheckedChanged += new System.EventHandler(this.checkBoxUseFactorModifiers_CheckedChanged);
             // 

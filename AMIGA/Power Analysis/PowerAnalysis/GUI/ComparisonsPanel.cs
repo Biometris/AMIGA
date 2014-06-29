@@ -22,7 +22,7 @@ namespace AmigaPowerAnalysis.GUI {
             InitializeComponent();
             _project = project;
             Name = "Comparisons";
-            Description = "The comparison GMO to CMP is made separately for levels of other factors. Per endpoint, indicate which levels of other factors should be included for the GMO and for the CMP.";
+            Description = "The comparison GMO to CMP is made separately for levels of other factors. Per endpoint, indicate which levels of these other factors should be included for the GMO and for the CMP.";
             createDataGridComparisons();
             createDataGridFactorLevels();
         }

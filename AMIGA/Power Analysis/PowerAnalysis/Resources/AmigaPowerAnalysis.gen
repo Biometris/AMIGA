@@ -52,9 +52,9 @@ close     channel=3 ; filetype=input
 "one or twosided?"
 calc twosided=(lowerLOC+upperLOC)/(lowerLOC+upperLOC)
 calc twosided=mvreplace(twosided;0)
-calc onesidedlow=.not.twosided .and. (lowerLOC==lowerLOC)
+calc onesidedlow=.not.twosided .and. (lowerLOC/lowerLOC)
 calc onesidedlow=mvreplace(onesidedlow;0)
-calc onesidedupp=.not.twosided .and. (upperLOC==upperLOC)
+calc onesidedupp=.not.twosided .and. (upperLOC/upperLOC)
 calc onesidedupp=mvreplace(onesidedupp;0)
 prin lowerLOC,upperLOC,twosided,onesidedlow,onesidedupp
 "Missing LoCs are set to 1"

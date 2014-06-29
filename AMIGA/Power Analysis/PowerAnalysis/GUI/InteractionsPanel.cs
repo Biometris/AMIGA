@@ -16,7 +16,7 @@ namespace AmigaPowerAnalysis.GUI {
             InitializeComponent();
             _project = project;
             Name = "Interactions";
-            Description = "In the previous screen it was indicated that interactions are not expected for all endpoints. Indicate per endpoint which factors are expected to have an interaction with the GMO-CMP Variety comparison.";
+            Description = "Indicate per endpoint which factors are expected to have an interaction with the GMO-CMP Variety comparison. The appropraite levels of these factors can then be chosen in the Comparison tab.";
             createDataGridInteractions();
         }
 

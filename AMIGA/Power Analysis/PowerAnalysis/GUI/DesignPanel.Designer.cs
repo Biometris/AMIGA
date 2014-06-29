@@ -67,7 +67,7 @@
             this.radioButtonSplitPlot.Size = new System.Drawing.Size(65, 17);
             this.radioButtonSplitPlot.TabIndex = 2;
             this.radioButtonSplitPlot.TabStop = true;
-            this.radioButtonSplitPlot.Text = "Split plot";
+            this.radioButtonSplitPlot.Text = "Split plot (not yet implemented)";
             this.radioButtonSplitPlot.UseVisualStyleBackColor = true;
             this.radioButtonSplitPlot.CheckedChanged += new System.EventHandler(this.radioButtonTypeOfDesign_CheckedChanged);
             // 
@@ -169,7 +169,7 @@
             this.checkBoxUseInteractions.Name = "checkBoxUseInteractions";
             this.checkBoxUseInteractions.Size = new System.Drawing.Size(214, 17);
             this.checkBoxUseInteractions.TabIndex = 7;
-            this.checkBoxUseInteractions.Text = "Do you expect interactions with variety?";
+            this.checkBoxUseInteractions.Text = "Adjust analysis for interaction with Variety? (i.e. are GMO vs. CMP comparison(s) dependent on levels of this factor?)";
             this.checkBoxUseInteractions.UseVisualStyleBackColor = true;
             this.checkBoxUseInteractions.CheckedChanged += new System.EventHandler(this.checkBoxUseInteractions_CheckedChanged);
             // 

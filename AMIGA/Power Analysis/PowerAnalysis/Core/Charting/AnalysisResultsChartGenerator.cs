@@ -195,7 +195,7 @@ namespace AmigaPowerAnalysis.Core.Charting {
                     var series = new LineSeries() {
                         MarkerType = (MarkerType)(i % 7 + 1),
                     };
-                    series.Title = string.Format("Concern {0:0.##}", levelOfConcernGroup.Key);
+                    series.Title = string.Format("CSD {0:0.##}", levelOfConcernGroup.Key);
                     if (testType == TestType.Difference && analysisMethodType == AnalysisMethodType.LogNormal) {
                         series.Points.AddRange(levelOfConcernGroup.Select(g => new DataPoint() {
                             X = g.NumberOfReplicates,

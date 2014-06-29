@@ -18,7 +18,7 @@ namespace AmigaPowerAnalysis.GUI {
             InitializeComponent();
             _project = project;
             Name = "Factors";
-            Description = "The main factor in the experiment is variety, with levels 1 (labelled GMO) and 2 (labelled Comparator).\r\nIf the design contains more varieties enter additional rows in the Levels table.\r\nIf numbers of plots per variety are not equal, change the (relative) frequencies.\r\nIf the design contains more factors (e.g. spraying treatments), add additional rows in the Factor table, and specify the levels and relative frequencies in the Levels table.";
+            Description = "The main factor in a GMO comparative evaluation experiment is always Variety, with levels 1 (labelled GMO) and 2 (labelled Comparator).\r\nIf the design contains more varieties enter additional rows in the Levels table.\r\nIf numbers of plots per variety are not equal, change the (relative) frequencies.\r\nIf the design contains more factors (e.g. spraying treatments), add additional rows in the Factor table, and specify the levels and relative frequencies in the Levels table.";
             createDataGridFactors();
             createDataGridFactorLevels();
         }
