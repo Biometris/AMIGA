@@ -122,11 +122,7 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e) {
-            if (!string.IsNullOrEmpty(CurrentProjectFilename)) {
-                ProjectManager.SaveProject(_project, CurrentProjectFilename);
-            } else {
-                saveAsDialog();
-            }
+            saveProject();
         }
 
         private void toolstripEndpointTypes_Click(object sender, EventArgs e) {
@@ -250,6 +246,14 @@ namespace AmigaPowerAnalysis.GUI {
             }
         }
 
+        private void saveProject() {
+            if (!string.IsNullOrEmpty(CurrentProjectFilename)) {
+                ProjectManager.SaveProject(_project, CurrentProjectFilename);
+            } else {
+                saveAsDialog();
+            }
+        }
+
         private void closeProject() {
             _selectionForms.Clear();
             _selectionForms.Add(new IntroductionPanel());
@@ -300,6 +304,7 @@ namespace AmigaPowerAnalysis.GUI {
             }
             var runSimulationDialog = new RunPowerAnalysisDialog(_project, CurrentProjectFilename);
             runSimulationDialog.ShowDialog();
+            this.saveProject();
             this.updateTabs();
         }
 
