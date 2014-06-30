@@ -28,12 +28,13 @@
             this.textBoxGenstatPath = new System.Windows.Forms.TextBox();
             this.buttonBrowseGenstatExecutable = new System.Windows.Forms.Button();
             this.buttonOk = new System.Windows.Forms.Button();
+            this.buttonCancel = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // labelGenstatDirective
             // 
             this.labelGenstatDirective.AutoSize = true;
-            this.labelGenstatDirective.Location = new System.Drawing.Point(12, 40);
+            this.labelGenstatDirective.Location = new System.Drawing.Point(12, 33);
             this.labelGenstatDirective.Name = "labelGenstatDirective";
             this.labelGenstatDirective.Size = new System.Drawing.Size(129, 13);
             this.labelGenstatDirective.TabIndex = 0;
@@ -42,14 +43,14 @@
             // textBoxGenstatPath
             // 
             this.textBoxGenstatPath.Enabled = false;
-            this.textBoxGenstatPath.Location = new System.Drawing.Point(147, 37);
+            this.textBoxGenstatPath.Location = new System.Drawing.Point(147, 30);
             this.textBoxGenstatPath.Name = "textBoxGenstatPath";
             this.textBoxGenstatPath.Size = new System.Drawing.Size(399, 20);
             this.textBoxGenstatPath.TabIndex = 1;
             // 
             // buttonBrowseGenstatExecutable
             // 
-            this.buttonBrowseGenstatExecutable.Location = new System.Drawing.Point(552, 34);
+            this.buttonBrowseGenstatExecutable.Location = new System.Drawing.Point(552, 29);
             this.buttonBrowseGenstatExecutable.Name = "buttonBrowseGenstatExecutable";
             this.buttonBrowseGenstatExecutable.Size = new System.Drawing.Size(75, 23);
             this.buttonBrowseGenstatExecutable.TabIndex = 2;
@@ -59,7 +60,7 @@
             // 
             // buttonOk
             // 
-            this.buttonOk.Location = new System.Drawing.Point(552, 351);
+            this.buttonOk.Location = new System.Drawing.Point(552, 72);
             this.buttonOk.Name = "buttonOk";
             this.buttonOk.Size = new System.Drawing.Size(75, 23);
             this.buttonOk.TabIndex = 3;
@@ -67,12 +68,23 @@
             this.buttonOk.UseVisualStyleBackColor = true;
             this.buttonOk.Click += new System.EventHandler(this.buttonOk_Click);
             // 
+            // buttonCancel
+            // 
+            this.buttonCancel.Location = new System.Drawing.Point(471, 72);
+            this.buttonCancel.Name = "buttonCancel";
+            this.buttonCancel.Size = new System.Drawing.Size(75, 23);
+            this.buttonCancel.TabIndex = 4;
+            this.buttonCancel.Text = "Cancel";
+            this.buttonCancel.UseVisualStyleBackColor = true;
+            this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.ClientSize = new System.Drawing.Size(639, 386);
+            this.ClientSize = new System.Drawing.Size(639, 108);
+            this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.buttonOk);
             this.Controls.Add(this.buttonBrowseGenstatExecutable);
             this.Controls.Add(this.textBoxGenstatPath);
@@ -92,5 +104,6 @@
         private System.Windows.Forms.TextBox textBoxGenstatPath;
         private System.Windows.Forms.Button buttonBrowseGenstatExecutable;
         private System.Windows.Forms.Button buttonOk;
+        private System.Windows.Forms.Button buttonCancel;
     }
 }

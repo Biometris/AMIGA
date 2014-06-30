@@ -61,6 +61,7 @@ namespace AmigaPowerAnalysis.GUI {
             combo = new DataGridViewComboBoxColumn();
             combo.DataSource = Enum.GetValues(typeof(DistributionType));
             combo.DataPropertyName = "DistributionType";
+            combo.Name = "DistributionType";
             combo.ValueType = typeof(DistributionType);
             combo.HeaderText = "Distribution";
             combo.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
@@ -123,6 +124,17 @@ namespace AmigaPowerAnalysis.GUI {
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error,
                     MessageBoxDefaultButton.Button1);
+        }
+
+        private void dataGridViewEndpoints_CellValueChanged(object sender, DataGridViewCellEventArgs e) {
+            if (dataGridViewEndpoints.Columns[e.ColumnIndex].Name == "DistributionType") {
+                var value = dataGridViewEndpoints.Rows[e.RowIndex].Cells["DistributionType"].Value.ToString();
+                if (value == DistributionType.PowerLaw.ToString()) {
+                    dataGridViewEndpoints.Rows[e.RowIndex].Cells["PowerLawPower"].Value = 1.7;
+                } else {
+                    dataGridViewEndpoints.Rows[e.RowIndex].Cells["PowerLawPower"].Value = 0;
+                }
+            }
         }
     }
 }

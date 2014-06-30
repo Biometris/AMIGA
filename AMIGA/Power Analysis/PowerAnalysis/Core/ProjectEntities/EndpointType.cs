@@ -22,7 +22,7 @@ namespace AmigaPowerAnalysis.Core {
             DistributionType = DistributionType.Poisson;
         }
 
-        public EndpointType(string name, bool primary, MeasurementType measurement, int binomialTotal, double locLower, double locUpper, double muComparator, double cvComparator, DistributionType distributionType) {
+        public EndpointType(string name, bool primary, MeasurementType measurement, int binomialTotal, double locLower, double locUpper, double muComparator, double cvComparator, DistributionType distributionType, double powerLawPower) {
             Name = name;
             Measurement = measurement;
             BinomialTotal = binomialTotal;
@@ -31,6 +31,7 @@ namespace AmigaPowerAnalysis.Core {
             MuComparator = muComparator;
             CvComparator = cvComparator;
             DistributionType = distributionType;
+            PowerLawPower = powerLawPower;
         }
 
         public EndpointType Clone() {

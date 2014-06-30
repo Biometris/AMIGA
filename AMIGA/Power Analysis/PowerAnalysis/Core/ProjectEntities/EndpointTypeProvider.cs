@@ -49,13 +49,13 @@ namespace AmigaPowerAnalysis.Core {
 
         public static List<EndpointType> DefaultEndpointTypes() {
             var endpointTypes = new List<EndpointType>();
-            endpointTypes.Add(new EndpointType("Non-Target insects counts", true, MeasurementType.Count, 0, 0.5, 2, 10, 100, DistributionType.PowerLaw));
-            endpointTypes.Add(new EndpointType("Non-Target insects presence", true, MeasurementType.Fraction, 0, 0.5, 2, 10, 100, DistributionType.BinomialLogitNormal));
-            endpointTypes.Add(new EndpointType("Soil biology", true, MeasurementType.Count, 0, double.NaN, 3, 10, 50, DistributionType.LogNormal));
-            endpointTypes.Add(new EndpointType("Soil physics", true, MeasurementType.Nonnegative, 100, 0.5, double.NaN, 0.4, 0.02, DistributionType.LogNormal));
-            endpointTypes.Add(new EndpointType("Weeds", true, MeasurementType.Nonnegative, 0, 0.25, 4, 20, 4, DistributionType.LogNormal));
-            endpointTypes.Add(new EndpointType("Economics", true, MeasurementType.Nonnegative, 0, 0.2, double.NaN, 500, 10, DistributionType.LogNormal));
-            endpointTypes.Add(new EndpointType("Yield", true, MeasurementType.Nonnegative, 0, 0.8, 1.2, 80, 0.5, DistributionType.LogNormal));
+            endpointTypes.Add(new EndpointType("Non-Target insects counts", true, MeasurementType.Count, 0, 0.5, 2, 10, 100, DistributionType.PowerLaw, 1.7));
+            endpointTypes.Add(new EndpointType("Non-Target insects presence", true, MeasurementType.Fraction, 0, 0.5, 2, 10, 100, DistributionType.BinomialLogitNormal, 0));
+            endpointTypes.Add(new EndpointType("Soil biology", true, MeasurementType.Count, 0, double.NaN, 3, 10, 50, DistributionType.LogNormal, 0));
+            endpointTypes.Add(new EndpointType("Soil physics", true, MeasurementType.Nonnegative, 100, 0.5, double.NaN, 0.4, 0.02, DistributionType.LogNormal, 0));
+            endpointTypes.Add(new EndpointType("Weeds", true, MeasurementType.Nonnegative, 0, 0.25, 4, 20, 4, DistributionType.LogNormal, 0));
+            endpointTypes.Add(new EndpointType("Economics", true, MeasurementType.Nonnegative, 0, 0.2, double.NaN, 500, 10, DistributionType.LogNormal, 0));
+            endpointTypes.Add(new EndpointType("Yield", true, MeasurementType.Nonnegative, 0, 0.8, 1.2, 80, 0.5, DistributionType.LogNormal, 0));
             return endpointTypes;
         }
     }
