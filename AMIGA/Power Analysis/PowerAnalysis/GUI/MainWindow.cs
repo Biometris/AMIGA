@@ -85,6 +85,12 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void MainWindow_FormClosing(object sender, FormClosingEventArgs e) {
+            if (_project != null) {
+                var confirmationBox = MessageBox.Show(@"Do you really want to quit? All unsaved changes will be lost.", @"Quit Amiga Power Analysis", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (confirmationBox != DialogResult.Yes) {
+                    e.Cancel = true;
+                }
+            }
             Settings.Default.WindowLocation = this.Location;
             if (this.WindowState == FormWindowState.Normal) {
                 Settings.Default.WindowSize = this.Size;
