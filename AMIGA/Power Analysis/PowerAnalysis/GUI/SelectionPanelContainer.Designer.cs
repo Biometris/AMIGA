@@ -24,9 +24,9 @@
         /// </summary>
         private void InitializeComponent() {
             this.panelTabDescription = new System.Windows.Forms.Panel();
+            this.textBoxTabDescription = new System.Windows.Forms.RichTextBox();
             this.textBoxTabTitle = new System.Windows.Forms.TextBox();
             this.panelSelectionForm = new System.Windows.Forms.Panel();
-            this.textBoxTabDescription = new System.Windows.Forms.RichTextBox();
             this.panelTabDescription.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -40,31 +40,6 @@
             this.panelTabDescription.Name = "panelTabDescription";
             this.panelTabDescription.Size = new System.Drawing.Size(874, 133);
             this.panelTabDescription.TabIndex = 10;
-            // 
-            // textBoxTabTitle
-            // 
-            this.textBoxTabTitle.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxTabTitle.BackColor = System.Drawing.Color.White;
-            this.textBoxTabTitle.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBoxTabTitle.Font = new System.Drawing.Font("Arial", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxTabTitle.Location = new System.Drawing.Point(5, 5);
-            this.textBoxTabTitle.Margin = new System.Windows.Forms.Padding(5);
-            this.textBoxTabTitle.Name = "textBoxTabTitle";
-            this.textBoxTabTitle.ReadOnly = true;
-            this.textBoxTabTitle.Size = new System.Drawing.Size(864, 22);
-            this.textBoxTabTitle.TabIndex = 9;
-            this.textBoxTabTitle.Text = "Tab title";
-            // 
-            // panelSelectionForm
-            // 
-            this.panelSelectionForm.AutoSize = true;
-            this.panelSelectionForm.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelSelectionForm.Location = new System.Drawing.Point(0, 133);
-            this.panelSelectionForm.Margin = new System.Windows.Forms.Padding(0);
-            this.panelSelectionForm.Name = "panelSelectionForm";
-            this.panelSelectionForm.Size = new System.Drawing.Size(874, 370);
-            this.panelSelectionForm.TabIndex = 11;
             // 
             // textBoxTabDescription
             // 
@@ -80,7 +55,34 @@
             this.textBoxTabDescription.ReadOnly = true;
             this.textBoxTabDescription.Size = new System.Drawing.Size(864, 95);
             this.textBoxTabDescription.TabIndex = 10;
+            this.textBoxTabDescription.TabStop = false;
             this.textBoxTabDescription.Text = "";
+            // 
+            // textBoxTabTitle
+            // 
+            this.textBoxTabTitle.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxTabTitle.BackColor = System.Drawing.Color.White;
+            this.textBoxTabTitle.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBoxTabTitle.Font = new System.Drawing.Font("Arial", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxTabTitle.Location = new System.Drawing.Point(5, 5);
+            this.textBoxTabTitle.Margin = new System.Windows.Forms.Padding(5);
+            this.textBoxTabTitle.Name = "textBoxTabTitle";
+            this.textBoxTabTitle.ReadOnly = true;
+            this.textBoxTabTitle.Size = new System.Drawing.Size(864, 22);
+            this.textBoxTabTitle.TabIndex = 9;
+            this.textBoxTabTitle.TabStop = false;
+            this.textBoxTabTitle.Text = "Tab title";
+            // 
+            // panelSelectionForm
+            // 
+            this.panelSelectionForm.AutoSize = true;
+            this.panelSelectionForm.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelSelectionForm.Location = new System.Drawing.Point(0, 133);
+            this.panelSelectionForm.Margin = new System.Windows.Forms.Padding(0);
+            this.panelSelectionForm.Name = "panelSelectionForm";
+            this.panelSelectionForm.Size = new System.Drawing.Size(874, 370);
+            this.panelSelectionForm.TabIndex = 11;
             // 
             // SelectionPanelContainer
             // 

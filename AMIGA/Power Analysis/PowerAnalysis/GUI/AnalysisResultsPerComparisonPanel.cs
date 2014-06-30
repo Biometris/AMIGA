@@ -117,7 +117,7 @@ namespace AmigaPowerAnalysis.GUI {
             if (_currentComparison != null && _currentComparison.OutputPowerAnalysis != null) {
                 //var tempPath = Path.GetTempPath();
                 //tempPath = @"D:\Projects\Amiga\Source\TestData\ssss";
-                var htmlReportForm = new HtmlReportForm(ComparisonSummaryReportGenerator.GenerateComparisonReport(_currentComparison, _currentProjectFilesPath));
+                var htmlReportForm = new HtmlReportForm(ComparisonSummaryReportGenerator.GenerateComparisonReport(_currentComparison, _currentProjectFilesPath), Path.GetFileNameWithoutExtension(_currentProjectFilesPath), _currentProjectFilesPath);
                 htmlReportForm.ShowDialog();
             }
         }

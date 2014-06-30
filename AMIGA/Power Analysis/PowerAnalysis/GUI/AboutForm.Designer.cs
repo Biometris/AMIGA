@@ -130,7 +130,6 @@
             this.textBoxDescription.Multiline = true;
             this.textBoxDescription.Name = "textBoxDescription";
             this.textBoxDescription.ReadOnly = true;
-            this.textBoxDescription.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.textBoxDescription.Size = new System.Drawing.Size(449, 188);
             this.textBoxDescription.TabIndex = 23;
             this.textBoxDescription.TabStop = false;

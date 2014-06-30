@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -59,6 +60,20 @@ namespace AmigaPowerAnalysis.Helpers.ClassExtensionMethods {
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Can be used to replace characters from a string that are not valid as a filename by any other string, eg "_"
+        /// Example: string validfilename = invalidfilename.ReplaceInvalidChars("_");
+        /// </summary>
+        /// <param name="filename">The filename.</param>
+        /// <param name="replacement">The replacement.</param>
+        /// <returns></returns>
+        public static string ReplaceInvalidChars(this string filename, string replacement) {
+            if (filename == null || filename.Length == 0) return String.Empty;
+            string regexSearch = new string(Path.GetInvalidFileNameChars()) + new string(Path.GetInvalidPathChars());
+            Regex replaceInvalidChars = new Regex(string.Format("[{0}]", Regex.Escape(regexSearch)));
+            return replaceInvalidChars.Replace(filename, replacement);
         }
     }
 }

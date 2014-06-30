@@ -321,11 +321,27 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\FieldTrial.jpg" />
+    <Content Include="Resources\WkHtmlToPdf\libeay32.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\WkHtmlToPdf\libgcc_s_dw2-1.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\WkHtmlToPdf\mingwm10.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\WkHtmlToPdf\ssleay32.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\WkHtmlToPdf\wkhtmltopdf.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Resources\PrintStyleSheet.bmp" />
     <EmbeddedResource Include="Resources\print.css" />
     <EmbeddedResource Include="Resources\amiga_icon.ico" />
     <Content Include="Resources\amiga_logo.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
