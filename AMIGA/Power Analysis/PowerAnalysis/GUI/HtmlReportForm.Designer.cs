@@ -33,10 +33,10 @@
             // webBrowserHtmlReport
             // 
             this.webBrowserHtmlReport.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.webBrowserHtmlReport.Location = new System.Drawing.Point(0, 0);
+            this.webBrowserHtmlReport.Location = new System.Drawing.Point(0, 25);
             this.webBrowserHtmlReport.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowserHtmlReport.Name = "webBrowserHtmlReport";
-            this.webBrowserHtmlReport.Size = new System.Drawing.Size(866, 672);
+            this.webBrowserHtmlReport.Size = new System.Drawing.Size(866, 647);
             this.webBrowserHtmlReport.TabIndex = 0;
             // 
             // toolStrip
@@ -68,8 +68,8 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(866, 672);
-            this.Controls.Add(this.toolStrip);
             this.Controls.Add(this.webBrowserHtmlReport);
+            this.Controls.Add(this.toolStrip);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "HtmlReportForm";
             this.toolStrip.ResumeLayout(false);

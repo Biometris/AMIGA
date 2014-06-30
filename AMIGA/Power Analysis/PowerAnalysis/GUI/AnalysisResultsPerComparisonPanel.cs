@@ -84,10 +84,11 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void updateAnalysisOutputPanel() {
             if (_currentComparison != null) {
-                plotViewDifferenceRepetitions.Model = AnalysisResultsChartGenerator.CreatePlotViewReplicatesLogRatio(_currentComparison.OutputPowerAnalysis.OutputRecords, TestType.Difference, _currentAnalysisType);
-                plotViewEquivalenceRepetitions.Model = AnalysisResultsChartGenerator.CreatePlotViewReplicatesLogRatio(_currentComparison.OutputPowerAnalysis.OutputRecords, TestType.Equivalence, _currentAnalysisType);
+                plotViewDifferenceReplicates.Model = AnalysisResultsChartGenerator.CreatePlotViewReplicatesLogRatio(_currentComparison.OutputPowerAnalysis.OutputRecords, TestType.Difference, _currentAnalysisType);
+                plotViewEquivalenceReplicates.Model = AnalysisResultsChartGenerator.CreatePlotViewReplicatesLogRatio(_currentComparison.OutputPowerAnalysis.OutputRecords, TestType.Equivalence, _currentAnalysisType);
                 plotViewDifferenceLog.Model = AnalysisResultsChartGenerator.CreatePlotViewLogRatioReplicates(_currentComparison.OutputPowerAnalysis.OutputRecords, TestType.Difference, _currentAnalysisType);
                 plotViewEquivalenceLog.Model = AnalysisResultsChartGenerator.CreatePlotViewLogRatioReplicates(_currentComparison.OutputPowerAnalysis.OutputRecords, TestType.Equivalence, _currentAnalysisType);
+                labelPlotsPerBlock.Text = string.Format("{0} plots per block", _currentComparison.OutputPowerAnalysis.InputPowerAnalysis.InputRecords.Count);
             }
         }
 

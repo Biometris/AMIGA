@@ -125,6 +125,14 @@ namespace AmigaPowerAnalysis.GUI {
                 plotViewEquivalenceReplicates.Model = AnalysisResultsChartGenerator.CreatePlotViewReplicatesLevelOfConcern(records, TestType.Equivalence, _currentAnalysisType);
                 plotViewDifferenceLevelOfConcern.Model = AnalysisResultsChartGenerator.CreatePlotViewLevelOfConcernReplicates(records, TestType.Difference, _currentAnalysisType);
                 plotViewEquivalenceLevelOfConcern.Model = AnalysisResultsChartGenerator.CreatePlotViewLevelOfConcernReplicates(records, TestType.Equivalence, _currentAnalysisType);
+                var plotsPerBlockCounts = primaryComparisons.Select(pc => pc.OutputPowerAnalysis.InputPowerAnalysis.InputRecords.Count);
+                var minPlotsPerBlockCount = plotsPerBlockCounts.Min();
+                var maxPlotsPerBlockCount = plotsPerBlockCounts.Max();
+                if (minPlotsPerBlockCount == maxPlotsPerBlockCount) {
+                    labelPlotsPerBlock.Text = string.Format("{0} plots per block", minPlotsPerBlockCount);
+                } else {
+                    labelPlotsPerBlock.Text = string.Format("between {0} and {1} plots per block", minPlotsPerBlockCount, maxPlotsPerBlockCount);
+                }
             }
             updateVisibilities();
         }
