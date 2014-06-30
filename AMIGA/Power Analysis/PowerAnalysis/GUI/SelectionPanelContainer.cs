@@ -58,5 +58,9 @@ namespace AmigaPowerAnalysis.GUI {
                 tabVisibilitiesChanged(this, null);
             }
         }
+
+        private void textBoxTabDescription_LinkClicked(object sender, LinkClickedEventArgs e) {
+            System.Diagnostics.Process.Start(e.LinkText);
+        }
     }
 }

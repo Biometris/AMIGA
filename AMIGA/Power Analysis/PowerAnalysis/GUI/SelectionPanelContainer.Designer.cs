@@ -48,7 +48,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxTabDescription.BackColor = System.Drawing.SystemColors.Window;
             this.textBoxTabDescription.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBoxTabDescription.Cursor = System.Windows.Forms.Cursors.Default;
+            this.textBoxTabDescription.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.textBoxTabDescription.Font = new System.Drawing.Font("Arial", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxTabDescription.Location = new System.Drawing.Point(10, 35);
             this.textBoxTabDescription.Name = "textBoxTabDescription";
@@ -57,6 +57,7 @@
             this.textBoxTabDescription.TabIndex = 10;
             this.textBoxTabDescription.TabStop = false;
             this.textBoxTabDescription.Text = "";
+            this.textBoxTabDescription.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.textBoxTabDescription_LinkClicked);
             // 
             // textBoxTabTitle
             // 
