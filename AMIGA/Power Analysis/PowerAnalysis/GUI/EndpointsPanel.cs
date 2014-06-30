@@ -132,6 +132,10 @@ namespace AmigaPowerAnalysis.GUI {
                         e.Cancel = true;
                     }
                 }
+            } else if (dataGridViewEndpoints.Columns[e.ColumnIndex].Name == "LocLower" || dataGridViewEndpoints.Columns[e.ColumnIndex].Name == "LocUpper") {
+                if (string.IsNullOrEmpty(e.FormattedValue.ToString())) {
+                    dataGridViewEndpoints.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = double.NaN;
+                }
             }
         }
 
