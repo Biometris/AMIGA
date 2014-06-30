@@ -28,13 +28,13 @@ CALCULATE nfactor = NVALUES(ifactor)
 " Expand structures by the given frequencies, 
   first for variates, then for texts"
 
-\prin ISAVE[1...posfactor[2]],Mean,Comparison,Frequency
+prin ISAVE[1...posfactor[2]],Mean,Comparison,Frequency
 FEXPAND MainPlot,SubPlot,ISAVE[#addfactor],Mean; NOBS=Frequency;\
     VARIATE=MainPlot,SubPlot,ISAVE[#addfactor],Mean
 TEXT txtVariety,txtComparison; Variety,Comparison
 DELETE [REDEFINE=y] Variety,Comparison
 FEXPAND txtVariety,txtComparison; NOBS=Frequency; FACTOR=Variety,Comparison
-\prin ISAVE[1...posfactor[2]],Mean,Comparison
+prin ISAVE[1...posfactor[2]],Mean,Comparison
 
 " Create other factors"
 GROUPS    [REDEFINE=yes] ISAVE[#addfactor]
@@ -244,7 +244,7 @@ FOR [NTIMES=nlevMean ; INDEX=jj]
   CALCULATE yy[#saveset] = yydum
   CALCULATE ww[#saveset] = wwdum
   CALCULATE mm[#saveset] = mmdum
-  \prin yy[],ww[]
+  \prin yy[#saveset],ww[#saveset]
   " For LN and SQ "
   CALCULATE ee1 = SUM(wwdum * LOG(yydum+1))
   CALCULATE vv1 = SUM(wwdum * (LOG(yydum+1)-ee1)**2)
