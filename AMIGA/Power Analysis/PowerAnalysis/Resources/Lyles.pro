@@ -319,7 +319,7 @@ IF 'LN'.IN.ANALYSIS  " LN: logarithmic transformation "
 
 ENDIF
 
-IF 'SQ'.IN.ANALYSIS  " SQ: squared root transformation "
+IF 'SQ'.IN.ANALYSIS  " SQ: square root transformation "
   PRINT     [IPRINT=* ; SQUASH=yes] 'SQ'
   VARIATE   tresponse ; SQRT(response)
   CALCULATE meanVariance = MEAN(vvSQ)

@@ -189,7 +189,7 @@
             this.checkBoxMethodForAnalysesLN.Name = "checkBoxMethodForAnalysesLN";
             this.checkBoxMethodForAnalysesLN.Size = new System.Drawing.Size(142, 17);
             this.checkBoxMethodForAnalysesLN.TabIndex = 11;
-            this.checkBoxMethodForAnalysesLN.Text = "Log(y + 1) transformation";
+            this.checkBoxMethodForAnalysesLN.Text = "Log(N+1) transformation";
             this.checkBoxMethodForAnalysesLN.UseVisualStyleBackColor = true;
             this.checkBoxMethodForAnalysesLN.CheckedChanged += new System.EventHandler(this.checkBoxMethodForAnalysesLN_CheckedChanged);
             // 
@@ -200,7 +200,7 @@
             this.checkBoxMethodForAnalysesSQ.Name = "checkBoxMethodForAnalysesSQ";
             this.checkBoxMethodForAnalysesSQ.Size = new System.Drawing.Size(156, 17);
             this.checkBoxMethodForAnalysesSQ.TabIndex = 12;
-            this.checkBoxMethodForAnalysesSQ.Text = "Squared root transformation";
+            this.checkBoxMethodForAnalysesSQ.Text = "Square Root transformation";
             this.checkBoxMethodForAnalysesSQ.UseVisualStyleBackColor = true;
             this.checkBoxMethodForAnalysesSQ.CheckedChanged += new System.EventHandler(this.checkBoxMethodForAnalysesSQ_CheckedChanged);
             // 
@@ -213,7 +213,7 @@
             this.checkBoxMethodForAnalysesOP.Name = "checkBoxMethodForAnalysesOP";
             this.checkBoxMethodForAnalysesOP.Size = new System.Drawing.Size(196, 17);
             this.checkBoxMethodForAnalysesOP.TabIndex = 13;
-            this.checkBoxMethodForAnalysesOP.Text = "Log linear model with overdispersion";
+            this.checkBoxMethodForAnalysesOP.Text = "Log-linear model with overdispersion";
             this.checkBoxMethodForAnalysesOP.UseVisualStyleBackColor = true;
             this.checkBoxMethodForAnalysesOP.CheckedChanged += new System.EventHandler(this.checkBoxMethodForAnalysesOP_CheckedChanged);
             // 
@@ -224,7 +224,7 @@
             this.checkBoxMethodForAnalysesNB.Name = "checkBoxMethodForAnalysesNB";
             this.checkBoxMethodForAnalysesNB.Size = new System.Drawing.Size(199, 17);
             this.checkBoxMethodForAnalysesNB.TabIndex = 14;
-            this.checkBoxMethodForAnalysesNB.Text = "Negative binomial model with log link";
+            this.checkBoxMethodForAnalysesNB.Text = "Negative Binomial model with log link";
             this.checkBoxMethodForAnalysesNB.UseVisualStyleBackColor = true;
             this.checkBoxMethodForAnalysesNB.CheckedChanged += new System.EventHandler(this.checkBoxMethodForAnalysesNB_CheckedChanged);
             // 
