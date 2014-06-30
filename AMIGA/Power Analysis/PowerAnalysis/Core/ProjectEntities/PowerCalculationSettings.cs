@@ -12,7 +12,9 @@ namespace AmigaPowerAnalysis.Core {
     }
 
     public enum TestType {
+        [Display(Name = "Difference test")]
         Difference,
+        [Display(Name = "Equivalence test")]
         Equivalence,
     }
 

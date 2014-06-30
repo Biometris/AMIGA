@@ -4,6 +4,7 @@ using OxyPlot;
 using OxyPlot.Annotations;
 using OxyPlot.Axes;
 using OxyPlot.Series;
+using AmigaPowerAnalysis.Helpers.ClassExtensionMethods;
 
 namespace AmigaPowerAnalysis.Core.Charting {
     public static class AnalysisResultsChartGenerator {
@@ -16,7 +17,7 @@ namespace AmigaPowerAnalysis.Core.Charting {
 
         private static PlotModel CreatePlotModel(TestType testType, AnalysisMethodType analysisMethodType, PlotType plotType) {
             var plotModel = new PlotModel() {
-                Title = testType.ToString() + " " + analysisMethodType.ToString(),
+                Title = testType.GetDisplayName() + " " + analysisMethodType.GetDisplayName(),
                 TitleFontSize = 11,
                 DefaultFontSize = 11,
                 LegendPlacement = LegendPlacement.Outside,
