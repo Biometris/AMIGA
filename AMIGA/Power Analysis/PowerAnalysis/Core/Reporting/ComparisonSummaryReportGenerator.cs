@@ -14,32 +14,43 @@ namespace AmigaPowerAnalysis.Core.Reporting {
 
         public static string GenerateComparisonReport(Comparison comparison, string tempPath) {
             var html = string.Empty;
-            html += comparison.OutputPowerAnalysis.InputPowerAnalysis.SelectedAnalysisMethodTypes;
             html += generateComparisonInputDataHtml(comparison.OutputPowerAnalysis.InputPowerAnalysis);
             html += generateComparisonChartsHtml(comparison, tempPath);
-            html += "<h1>Output data</h1>";
             html += generateComparisonOutputHtml(comparison.OutputPowerAnalysis.OutputRecords);
             return html;
         }
 
         public static string GenerateAnalysisReport(IEnumerable<Comparison> comparisons, string tempPath) {
             var html = "";
-            html += generateComparisonsChartHtml(comparisons, tempPath);
-            foreach (var comparison in comparisons) {
-                var selectedAnalysisMethodTypes = comparison.OutputPowerAnalysis.InputPowerAnalysis.SelectedAnalysisMethodTypes;
+            var primaryComparisons = comparisons.Where(c => c.IsPrimary);
+            html += generatePrimaryComparisonsSummary(comparisons);
+            html += generateComparisonsChartHtml(primaryComparisons, tempPath);
+            html += "<h1>Results per primary comparison</h1>";
+            foreach (var comparison in primaryComparisons) {
+                html += string.Format("<h1>Results comparison {0} - {1}</h1>", comparison.Name, comparison.OutputPowerAnalysis.InputPowerAnalysis.Endpoint);
                 html += generateComparisonInputDataHtml(comparison.OutputPowerAnalysis.InputPowerAnalysis);
                 html += generateComparisonChartsHtml(comparison, tempPath);
+                html += generateComparisonOutputHtml(comparison.OutputPowerAnalysis.OutputRecords);
             }
             return html;
         }
 
-        /// <summary>
-        /// Writes the power analysis input to a html string.
-        /// </summary>
+        private static string generatePrimaryComparisonsSummary(IEnumerable<Comparison> comparisons) {
+            var stringBuilder = new StringBuilder();
+            stringBuilder.AppendLine(string.Format("<h1>Summary primary comparisons</h1>"));
+            stringBuilder.AppendLine("<table>");
+            stringBuilder.AppendLine("<tr><th>Comparison</th><th>Primary</th></tr>");
+            foreach (var comparison in comparisons) {
+                stringBuilder.AppendLine(string.Format("<tr><td>{0}</td><td>{1}</td></tr>", comparison.Name, comparison.IsPrimary ? "Yes" : "No"));
+            }
+            stringBuilder.AppendLine("</table>");
+            return stringBuilder.ToString();
+        }
+
         private static string generateComparisonInputDataHtml(InputPowerAnalysis inputPowerAnalysis) {
             var stringBuilder = new StringBuilder();
 
-            stringBuilder.AppendLine(string.Format("<h1>Simulation settings {0}</h1>", inputPowerAnalysis.Endpoint));
+            stringBuilder.AppendLine(string.Format("<h2>Simulation settings</h2>"));
             stringBuilder.AppendLine("<table>");
             stringBuilder.AppendLine(string.Format("<tr><td>{0}</td><td>{1}</td></tr>", "ComparisonId", inputPowerAnalysis.ComparisonId));
             stringBuilder.AppendLine(string.Format("<tr><td>{0}</td><td>{1}</td></tr>", "Endpoint", inputPowerAnalysis.Endpoint));
@@ -59,7 +70,7 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             headers.Add("Mean");
             headers.Add("Comparison");
 
-            stringBuilder.AppendLine(string.Format("<h1>Simulation data {0}</h1>", inputPowerAnalysis.Endpoint));
+            stringBuilder.AppendLine(string.Format("<h2>Simulation data</h2>"));
             stringBuilder.AppendLine("<table>");
             stringBuilder.AppendLine("<tr><th>" + string.Join("</th><th>", headers) + "</th></tr>");
             foreach (var record in inputPowerAnalysis.InputRecords) {
@@ -86,7 +97,7 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             string imageFilename;
             foreach (var analysisMethodType in comparison.OutputPowerAnalysis.InputPowerAnalysis.SelectedAnalysisMethodTypes.GetFlags<AnalysisMethodType>()) {
 
-                stringBuilder.Append("<h1>" + analysisMethodType.GetDisplayName() + "</h1>");
+                stringBuilder.Append("<h2>" + analysisMethodType.GetDisplayName() + "</h2>");
                 stringBuilder.Append("<table>");
 
                 stringBuilder.Append("<tr>");
@@ -141,13 +152,13 @@ namespace AmigaPowerAnalysis.Core.Reporting {
                 .ToList();
 
             var stringBuilder = new StringBuilder();
-            stringBuilder.AppendLine("<h1>Comparisons charts primary comparisons</h1>");
+            stringBuilder.AppendLine("<h2>Comparisons charts primary comparisons</h2>");
 
             var fileBaseId = "Aggregate_";
             string imageFilename;
             foreach (var analysisMethodType in comparisons.First().OutputPowerAnalysis.InputPowerAnalysis.SelectedAnalysisMethodTypes.GetFlags<AnalysisMethodType>()) {
 
-                stringBuilder.Append("<h1>" + analysisMethodType.GetDisplayName() + "</h1>");
+                stringBuilder.Append("<h2>" + analysisMethodType.GetDisplayName() + "</h2>");
                 stringBuilder.Append("<table>");
                 stringBuilder.Append("<tr>");
 
@@ -177,7 +188,6 @@ namespace AmigaPowerAnalysis.Core.Reporting {
                 stringBuilder.Append("</table>");
             }
 
-            stringBuilder.AppendLine("<h1>Comparisons data</h1>");
             stringBuilder.Append(generateComparisonOutputHtml(records));
 
             return stringBuilder.ToString();
@@ -185,6 +195,7 @@ namespace AmigaPowerAnalysis.Core.Reporting {
 
         private static string generateComparisonOutputHtml(IEnumerable<OutputPowerAnalysisRecord> records) {
             var stringBuilder = new StringBuilder();
+            stringBuilder.Append("<h2>Output data</h2>");
             stringBuilder.Append("<table>");
             var elementType = typeof(OutputPowerAnalysisRecord);
             PropertyInfo[] properties = elementType.GetProperties();
