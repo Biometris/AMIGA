@@ -47,15 +47,17 @@ namespace AmigaPowerAnalysis.GUI {
             if (selectedAnalysisMethodTypes.Count() > 0) {
                 this.comboBoxAnalysisType.SelectedIndex = 0;
             }
+            updateAnalysisOutputPanel();
         }
 
         private void updateVisibilities() {
             var primaryComparisons = _comparisons.Where(c => c.OutputPowerAnalysis != null && c.IsPrimary).ToList();
             if (primaryComparisons.Count > 0) {
                 comboBoxAnalysisType.Visible = true;
-                updateAnalysisOutputPanel();
+                splitContainerComparisons.Panel2.Show();
             } else {
                 comboBoxAnalysisType.Visible = false;
+                splitContainerComparisons.Panel2.Hide();
             }
         }
 
@@ -124,6 +126,7 @@ namespace AmigaPowerAnalysis.GUI {
                 plotViewDifferenceLevelOfConcern.Model = AnalysisResultsChartGenerator.CreatePlotViewLevelOfConcernReplicates(records, TestType.Difference, _currentAnalysisType);
                 plotViewEquivalenceLevelOfConcern.Model = AnalysisResultsChartGenerator.CreatePlotViewLevelOfConcernReplicates(records, TestType.Equivalence, _currentAnalysisType);
             }
+            updateVisibilities();
         }
 
         private void dataGridViewComparisons_SelectionChanged(object sender, EventArgs e) {
