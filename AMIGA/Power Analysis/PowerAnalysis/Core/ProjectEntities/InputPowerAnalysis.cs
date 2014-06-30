@@ -25,6 +25,18 @@ namespace AmigaPowerAnalysis.Core {
         public int ComparisonId { get; set; }
 
         /// <summary>
+        /// Lower Limit of Concern.
+        /// </summary>
+        [DataMember]
+        public double LocLower { get; set; }
+
+        /// <summary>
+        /// Upper Limit of Concern.
+        /// </summary>
+        [DataMember]
+        public double LocUpper { get; set; }
+
+        /// <summary>
         /// The selected analysis methods.
         /// </summary>
         [DataMember]
@@ -51,6 +63,8 @@ namespace AmigaPowerAnalysis.Core {
 
             stringBuilder.AppendLine(string.Format("{0}\r\n {1} :", "ComparisonId", ComparisonId));
             stringBuilder.AppendLine(string.Format("{0}\r\n '{1}' :", "Endpoint", Endpoint));
+            stringBuilder.AppendLine(string.Format("{0}\r\n '{1}' :", "LocLower", LocLower));
+            stringBuilder.AppendLine(string.Format("{0}\r\n '{1}' :", "LocUpper", LocUpper));
 
             foreach (var simulationSetting in SimulationSettings) {
                 stringBuilder.AppendLine(string.Format("{0}\r\n {1} :", simulationSetting.Key, simulationSetting.Value));

@@ -94,6 +94,8 @@ namespace AmigaPowerAnalysis.GUI {
                 plotViewDifferenceLog.Model = AnalysisResultsChartGenerator.CreatePlotViewLogRatioReplicates(_currentComparison.OutputPowerAnalysis.OutputRecords, TestType.Difference, _currentAnalysisType);
                 plotViewEquivalenceLog.Model = AnalysisResultsChartGenerator.CreatePlotViewLogRatioReplicates(_currentComparison.OutputPowerAnalysis.OutputRecords, TestType.Equivalence, _currentAnalysisType);
                 labelPlotsPerBlock.Text = string.Format("{0} plots per block", _currentComparison.OutputPowerAnalysis.InputPowerAnalysis.InputRecords.Sum(ir => ir.Frequency));
+                labelLocLowerValue.Text = string.Format("{0:0.###}", _currentComparison.OutputPowerAnalysis.InputPowerAnalysis.LocLower);
+                labelLocUpperValue.Text = string.Format("{0:0.###}", _currentComparison.OutputPowerAnalysis.InputPowerAnalysis.LocUpper);
             }
         }
 

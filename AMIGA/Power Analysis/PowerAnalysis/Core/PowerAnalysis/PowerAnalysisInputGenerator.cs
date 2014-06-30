@@ -22,11 +22,11 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             var inputPowerAnalysis = new InputPowerAnalysis() {
                 ComparisonId = idComparison,
                 Endpoint = comparison.Endpoint.Name,
+                LocLower = comparison.Endpoint.LocLower,
+                LocUpper = comparison.Endpoint.LocUpper,
                 SelectedAnalysisMethodTypes = powerCalculationSettings.SelectedAnalysisMethodTypes,
             };
 
-            inputPowerAnalysis.SimulationSettings.Add("LocLower", comparison.Endpoint.LocLower.ToString());
-            inputPowerAnalysis.SimulationSettings.Add("LocUpper", comparison.Endpoint.LocUpper.ToString());
             inputPowerAnalysis.SimulationSettings.Add("CVComparator", comparison.Endpoint.CvComparator.ToString());
             inputPowerAnalysis.SimulationSettings.Add("CVBlocks", comparison.Endpoint.CVForBlocks.ToString());
             inputPowerAnalysis.SimulationSettings.Add("Distribution", comparison.Endpoint.DistributionType.ToString());
