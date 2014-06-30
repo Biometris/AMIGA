@@ -45,6 +45,11 @@ namespace AmigaPowerAnalysis.GUI {
             updateDataGridComparisons();
             if (_project.GetComparisons().Any(c => c.OutputPowerAnalysis != null)) {
                 splitContainerComparisons.Visible = true;
+                var selectedAnalysisMethodTypes = _comparisons.First().OutputPowerAnalysis.InputPowerAnalysis.SelectedAnalysisMethodTypes.GetFlags<AnalysisMethodType>().ToArray();
+                this.comboBoxAnalysisType.DataSource = selectedAnalysisMethodTypes;
+                if (selectedAnalysisMethodTypes.Count() > 0) {
+                    this.comboBoxAnalysisType.SelectedIndex = 0;
+                }
             } else {
                 splitContainerComparisons.Visible = false;
             }
@@ -95,11 +100,6 @@ namespace AmigaPowerAnalysis.GUI {
         private void dataGridViewComparisons_SelectionChanged(object sender, EventArgs e) {
             _currentComparison = _project.GetComparisons().ElementAt(dataGridViewComparisons.CurrentRow.Index);
             if (_currentComparison != null) {
-                var selectedAnalysisMethodTypes = _currentComparison.OutputPowerAnalysis.InputPowerAnalysis.SelectedAnalysisMethodTypes.GetFlags<AnalysisMethodType>().ToArray();
-                this.comboBoxAnalysisType.DataSource = selectedAnalysisMethodTypes;
-                if (selectedAnalysisMethodTypes.Count() > 0) {
-                    this.comboBoxAnalysisType.SelectedIndex = 0;
-                }
                 this.comboBoxAnalysisType.Visible = true;
             } else {
                 this.comboBoxAnalysisType.Visible = false;
