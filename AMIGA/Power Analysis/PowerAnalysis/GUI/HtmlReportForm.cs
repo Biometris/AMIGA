@@ -66,6 +66,7 @@ namespace AmigaPowerAnalysis.GUI {
                 p.StartInfo.Arguments = "\"" + filenameHtml + "\"  \"" + filenamePdf + "\"";
                 p.StartInfo.UseShellExecute = false;
                 p.Start();
+                p.WaitForExit();
 
                 File.Delete(filenameHtml);
                 Process.Start(filenamePdf);

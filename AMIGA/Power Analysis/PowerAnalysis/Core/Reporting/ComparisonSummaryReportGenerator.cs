@@ -192,7 +192,7 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             foreach (var propInfo in properties) {
                 var propertyInfo = propInfo.PropertyType;
                 var columnType = Nullable.GetUnderlyingType(propertyInfo) ?? propertyInfo;
-                stringBuilder.Append(string.Format("<th>{0}</th>", propInfo.Name));
+                stringBuilder.Append(string.Format("<th>{0}</th>", propInfo.GetShortName()));
             }
             stringBuilder.Append("</tr>");
             foreach (var item in records) {

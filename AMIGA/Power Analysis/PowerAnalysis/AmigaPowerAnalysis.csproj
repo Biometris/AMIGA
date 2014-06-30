@@ -223,6 +223,7 @@
       <DependentUpon>SelectionPanelForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Helpers\ClassExtensionMethods\EnumExtensionMethods.cs" />
+    <Compile Include="Helpers\ClassExtensionMethods\MemberInfoExtensionMethods.cs" />
     <Compile Include="Helpers\CsvWriter.cs" />
     <Compile Include="Helpers\ClassExtensionMethods\ListExtensionMethods.cs" />
     <Compile Include="Helpers\Log\ILogger.cs" />
