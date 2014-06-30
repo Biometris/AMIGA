@@ -34,7 +34,7 @@
             // labelGenstatDirective
             // 
             this.labelGenstatDirective.AutoSize = true;
-            this.labelGenstatDirective.Location = new System.Drawing.Point(12, 33);
+            this.labelGenstatDirective.Location = new System.Drawing.Point(12, 36);
             this.labelGenstatDirective.Name = "labelGenstatDirective";
             this.labelGenstatDirective.Size = new System.Drawing.Size(129, 13);
             this.labelGenstatDirective.TabIndex = 0;
@@ -43,7 +43,7 @@
             // textBoxGenstatPath
             // 
             this.textBoxGenstatPath.Enabled = false;
-            this.textBoxGenstatPath.Location = new System.Drawing.Point(147, 30);
+            this.textBoxGenstatPath.Location = new System.Drawing.Point(147, 33);
             this.textBoxGenstatPath.Name = "textBoxGenstatPath";
             this.textBoxGenstatPath.Size = new System.Drawing.Size(399, 20);
             this.textBoxGenstatPath.TabIndex = 1;
@@ -52,7 +52,7 @@
             // 
             this.buttonBrowseGenstatExecutable.Location = new System.Drawing.Point(552, 29);
             this.buttonBrowseGenstatExecutable.Name = "buttonBrowseGenstatExecutable";
-            this.buttonBrowseGenstatExecutable.Size = new System.Drawing.Size(75, 23);
+            this.buttonBrowseGenstatExecutable.Size = new System.Drawing.Size(75, 28);
             this.buttonBrowseGenstatExecutable.TabIndex = 2;
             this.buttonBrowseGenstatExecutable.Text = "...";
             this.buttonBrowseGenstatExecutable.UseVisualStyleBackColor = true;
@@ -60,9 +60,9 @@
             // 
             // buttonOk
             // 
-            this.buttonOk.Location = new System.Drawing.Point(552, 72);
+            this.buttonOk.Location = new System.Drawing.Point(552, 73);
             this.buttonOk.Name = "buttonOk";
-            this.buttonOk.Size = new System.Drawing.Size(75, 23);
+            this.buttonOk.Size = new System.Drawing.Size(75, 28);
             this.buttonOk.TabIndex = 3;
             this.buttonOk.Text = "Ok";
             this.buttonOk.UseVisualStyleBackColor = true;
@@ -70,9 +70,9 @@
             // 
             // buttonCancel
             // 
-            this.buttonCancel.Location = new System.Drawing.Point(471, 72);
+            this.buttonCancel.Location = new System.Drawing.Point(471, 73);
             this.buttonCancel.Name = "buttonCancel";
-            this.buttonCancel.Size = new System.Drawing.Size(75, 23);
+            this.buttonCancel.Size = new System.Drawing.Size(75, 28);
             this.buttonCancel.TabIndex = 4;
             this.buttonCancel.Text = "Cancel";
             this.buttonCancel.UseVisualStyleBackColor = true;

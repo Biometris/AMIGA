@@ -40,7 +40,7 @@
             this.dataGridViewEndpoints.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewEndpoints.BackgroundColor = System.Drawing.Color.White;
             this.dataGridViewEndpoints.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewEndpoints.Location = new System.Drawing.Point(13, 13);
+            this.dataGridViewEndpoints.Location = new System.Drawing.Point(13, 46);
             this.dataGridViewEndpoints.Name = "dataGridViewEndpoints";
             this.dataGridViewEndpoints.RowHeadersWidth = 24;
             this.dataGridViewEndpoints.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
@@ -51,8 +51,8 @@
             // 
             // addEndpointButton
             // 
-            this.addEndpointButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.addEndpointButton.Location = new System.Drawing.Point(618, 463);
+            this.addEndpointButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.addEndpointButton.Location = new System.Drawing.Point(618, 13);
             this.addEndpointButton.Name = "addEndpointButton";
             this.addEndpointButton.Size = new System.Drawing.Size(112, 27);
             this.addEndpointButton.TabIndex = 3;
@@ -62,8 +62,8 @@
             // 
             // buttonDeleteEndpoint
             // 
-            this.buttonDeleteEndpoint.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonDeleteEndpoint.Location = new System.Drawing.Point(736, 463);
+            this.buttonDeleteEndpoint.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonDeleteEndpoint.Location = new System.Drawing.Point(736, 13);
             this.buttonDeleteEndpoint.Name = "buttonDeleteEndpoint";
             this.buttonDeleteEndpoint.Size = new System.Drawing.Size(125, 27);
             this.buttonDeleteEndpoint.TabIndex = 4;
@@ -71,7 +71,7 @@
             this.buttonDeleteEndpoint.UseVisualStyleBackColor = true;
             this.buttonDeleteEndpoint.Click += new System.EventHandler(this.buttonDeleteEndpoint_Click);
             // 
-            // EndpointsForm
+            // EndpointsPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -79,7 +79,7 @@
             this.Controls.Add(this.buttonDeleteEndpoint);
             this.Controls.Add(this.addEndpointButton);
             this.Controls.Add(this.dataGridViewEndpoints);
-            this.Name = "EndpointsForm";
+            this.Name = "EndpointsPanel";
             this.Padding = new System.Windows.Forms.Padding(10);
             this.Size = new System.Drawing.Size(874, 503);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewEndpoints)).EndInit();

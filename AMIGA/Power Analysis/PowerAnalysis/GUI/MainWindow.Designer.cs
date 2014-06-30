@@ -184,6 +184,7 @@
             this.ClientSize = new System.Drawing.Size(752, 481);
             this.Controls.Add(this.tabControl);
             this.Controls.Add(this.menuStrip);
+            this.DoubleBuffered = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip;
             this.Name = "MainWindow";

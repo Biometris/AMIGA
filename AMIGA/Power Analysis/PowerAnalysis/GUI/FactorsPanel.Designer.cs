@@ -49,13 +49,13 @@
             this.dataGridViewFactorLevels.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewFactorLevels.BackgroundColor = System.Drawing.Color.White;
             this.dataGridViewFactorLevels.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewFactorLevels.Location = new System.Drawing.Point(0, 0);
+            this.dataGridViewFactorLevels.Location = new System.Drawing.Point(0, 39);
             this.dataGridViewFactorLevels.MultiSelect = false;
             this.dataGridViewFactorLevels.Name = "dataGridViewFactorLevels";
             this.dataGridViewFactorLevels.RowHeadersWidth = 24;
             this.dataGridViewFactorLevels.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dataGridViewFactorLevels.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewFactorLevels.Size = new System.Drawing.Size(380, 374);
+            this.dataGridViewFactorLevels.Size = new System.Drawing.Size(380, 368);
             this.dataGridViewFactorLevels.TabIndex = 4;
             this.dataGridViewFactorLevels.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.dataGridViewFactorLevels_CellValidating);
             this.dataGridViewFactorLevels.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dataGridViewFactorLevels_DataError);
@@ -71,13 +71,13 @@
             this.dataGridViewFactors.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewFactors.BackgroundColor = System.Drawing.Color.White;
             this.dataGridViewFactors.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewFactors.Location = new System.Drawing.Point(0, 0);
+            this.dataGridViewFactors.Location = new System.Drawing.Point(0, 39);
             this.dataGridViewFactors.MultiSelect = false;
             this.dataGridViewFactors.Name = "dataGridViewFactors";
             this.dataGridViewFactors.RowHeadersWidth = 24;
             this.dataGridViewFactors.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dataGridViewFactors.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewFactors.Size = new System.Drawing.Size(259, 374);
+            this.dataGridViewFactors.Size = new System.Drawing.Size(259, 368);
             this.dataGridViewFactors.TabIndex = 3;
             this.dataGridViewFactors.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.dataGridFactors_CellValidating);
             this.dataGridViewFactors.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dataGridFactors_DataError);
@@ -107,8 +107,8 @@
             // 
             // buttonRemoveFactor
             // 
-            this.buttonRemoveFactor.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonRemoveFactor.Location = new System.Drawing.Point(134, 380);
+            this.buttonRemoveFactor.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonRemoveFactor.Location = new System.Drawing.Point(134, 0);
             this.buttonRemoveFactor.Name = "buttonRemoveFactor";
             this.buttonRemoveFactor.Size = new System.Drawing.Size(125, 27);
             this.buttonRemoveFactor.TabIndex = 8;
@@ -118,8 +118,8 @@
             // 
             // buttonAddFactor
             // 
-            this.buttonAddFactor.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonAddFactor.Location = new System.Drawing.Point(16, 380);
+            this.buttonAddFactor.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonAddFactor.Location = new System.Drawing.Point(16, 0);
             this.buttonAddFactor.Name = "buttonAddFactor";
             this.buttonAddFactor.Size = new System.Drawing.Size(112, 27);
             this.buttonAddFactor.TabIndex = 7;
@@ -129,8 +129,8 @@
             // 
             // buttonRemoveFactorLevel
             // 
-            this.buttonRemoveFactorLevel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonRemoveFactorLevel.Location = new System.Drawing.Point(255, 380);
+            this.buttonRemoveFactorLevel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonRemoveFactorLevel.Location = new System.Drawing.Point(255, 0);
             this.buttonRemoveFactorLevel.Name = "buttonRemoveFactorLevel";
             this.buttonRemoveFactorLevel.Size = new System.Drawing.Size(125, 27);
             this.buttonRemoveFactorLevel.TabIndex = 6;
@@ -140,8 +140,8 @@
             // 
             // addFactorLevelButton
             // 
-            this.addFactorLevelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.addFactorLevelButton.Location = new System.Drawing.Point(137, 380);
+            this.addFactorLevelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.addFactorLevelButton.Location = new System.Drawing.Point(137, 0);
             this.addFactorLevelButton.Name = "addFactorLevelButton";
             this.addFactorLevelButton.Size = new System.Drawing.Size(112, 27);
             this.addFactorLevelButton.TabIndex = 5;
@@ -149,13 +149,13 @@
             this.addFactorLevelButton.UseVisualStyleBackColor = true;
             this.addFactorLevelButton.Click += new System.EventHandler(this.addFactorLevelButton_Click);
             // 
-            // FactorsForm
+            // FactorsPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.Controls.Add(this.splitContainerFactors);
-            this.Name = "FactorsForm";
+            this.Name = "FactorsPanel";
             this.Padding = new System.Windows.Forms.Padding(10);
             this.Size = new System.Drawing.Size(663, 427);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFactorLevels)).EndInit();

@@ -125,7 +125,7 @@ namespace AmigaPowerAnalysis.GUI {
                 plotViewEquivalenceReplicates.Model = AnalysisResultsChartGenerator.CreatePlotViewReplicatesLevelOfConcern(records, TestType.Equivalence, _currentAnalysisType);
                 plotViewDifferenceLevelOfConcern.Model = AnalysisResultsChartGenerator.CreatePlotViewLevelOfConcernReplicates(records, TestType.Difference, _currentAnalysisType);
                 plotViewEquivalenceLevelOfConcern.Model = AnalysisResultsChartGenerator.CreatePlotViewLevelOfConcernReplicates(records, TestType.Equivalence, _currentAnalysisType);
-                var plotsPerBlockCounts = primaryComparisons.Select(pc => pc.OutputPowerAnalysis.InputPowerAnalysis.InputRecords.Count);
+                var plotsPerBlockCounts = primaryComparisons.Select(pc => pc.OutputPowerAnalysis.InputPowerAnalysis.InputRecords.Sum(ir => ir.Frequency));
                 var minPlotsPerBlockCount = plotsPerBlockCounts.Min();
                 var maxPlotsPerBlockCount = plotsPerBlockCounts.Max();
                 if (minPlotsPerBlockCount == maxPlotsPerBlockCount) {

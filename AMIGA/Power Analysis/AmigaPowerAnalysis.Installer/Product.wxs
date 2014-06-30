@@ -22,6 +22,8 @@
 
     <Feature Id="ProductFeature" Title="AmigaPowerAnalysis" Level="1" Display="expand" ConfigurableDirectory='INSTALLFOLDER'>
       <ComponentGroupRef Id="ApplicationComponentGroup" />
+      <ComponentGroupRef Id="PowerAnalysisScriptsGroup" />
+      <ComponentGroupRef Id="WkHtmlToPdfGroup" />
       <ComponentRef Id="ProgramMenuSubFolderComponent"/>
       <ComponentRef Id="DesktopShortcutComponent"/>
     </Feature>
@@ -38,7 +40,12 @@
     <Directory Id="TARGETDIR" Name="SourceDir">
       <!-- Root of the application folder -->
       <Directory Id="ProgramFilesFolder">
-        <Directory Id="INSTALLFOLDER" Name="AmigaPowerAnalysis"/>
+        <Directory Id="INSTALLFOLDER" Name="AmigaPowerAnalysis">
+          <Directory Id="Resources" Name="Resources">
+            <Directory Id="WkHtmlToPdf" Name="WkHtmlToPdf">
+            </Directory>
+          </Directory>
+        </Directory>
       </Directory>
       <!-- Root of the programs menu folder -->
       <Directory Id="ProgramMenuFolder">
@@ -82,12 +89,22 @@
       <Component Guid="{83ECBA92-89F6-4054-9F00-9948D9FF2303}">
         <File Source="..\PowerAnalysis\bin\Release\OxyPlot.WindowsForms.dll" KeyPath="yes" />
       </Component>
+    </ComponentGroup>
+  </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="PowerAnalysisScriptsGroup" Directory="Resources">
       <Component Guid="{C7F7EB39-302B-49C5-B10C-A7ACC4DED51A}">
         <File Source="..\PowerAnalysis\bin\Release\Resources\AmigaPowerAnalysis.gen" KeyPath="yes" />
       </Component>
       <Component Guid="{FB2AAB26-0208-41CB-B7A5-11A9266FEC74}">
         <File Source="..\PowerAnalysis\bin\Release\Resources\Lyles.pro" KeyPath="yes" />
       </Component>
+    </ComponentGroup>
+  </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="WkHtmlToPdfGroup" Directory="WkHtmlToPdf">
       <Component Guid="{7FFE1027-1E4E-4182-ABF2-598C6D50D98D}">
         <File Source="..\PowerAnalysis\bin\Release\Resources\WkHtmlToPdf\libeay32.dll" KeyPath="yes" />
       </Component>

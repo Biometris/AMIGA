@@ -62,5 +62,19 @@ namespace AmigaPowerAnalysis.GUI {
         private void textBoxTabDescription_LinkClicked(object sender, LinkClickedEventArgs e) {
             System.Diagnostics.Process.Start(e.LinkText);
         }
+
+        private void panelSelectionForm_SizeChanged(object sender, EventArgs e) {
+            //this.textBoxTabDescription.Height = 10;
+            //Size sz = new Size(this.textBoxTabDescription.ClientSize.Width, int.MaxValue);
+            //TextFormatFlags flags = TextFormatFlags.WordBreak;
+            //int padding = 3;
+            //int borders = this.textBoxTabDescription.Height - this.textBoxTabDescription.ClientSize.Height;
+            //sz = TextRenderer.MeasureText(this.textBoxTabDescription.Text, this.textBoxTabDescription.Font, sz, flags);
+            //int h = sz.Height + borders + padding;
+            //while (this.textBoxTabDescription.Top + h > this.ClientSize.Height - 10) {
+            //    h = this.ClientSize.Height - 10 - this.textBoxTabDescription.Top;
+            //}
+            //this.textBoxTabDescription.Height = h;
+        }
     }
 }
