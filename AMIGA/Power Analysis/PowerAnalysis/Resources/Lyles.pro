@@ -114,6 +114,8 @@ PARAMETER 'RATIO', 'NREPLICATES', 'NONCENTRALITY', 'POWER', 'DF' ; MODE=p ; \
 
 SCALAR    mis
 SCALAR    minimumProbSum ; 0.9999
+SCALAR    eps; 1e-5 "NB dispersion minimum"
+
 
 CALLS     CNTPROBABILITY
 
@@ -177,7 +179,11 @@ IF DISTRIBUTION.eqs.'NEGATIVEBINOMIAL'
     CALCULATE sig2PW = (CVCOMPARATOR/100)**2 * MUCOMPARATOR**(2-POWERLAW)
     CALCULATE qsig2 = sig2PW*qmean**(POWERLAW-2) - 1/qmean
     if min(qsig2)<=0
-      prin qsig2
+      calc qsig2new=qsig2*(qsig2>=eps)+eps*(qsig2<eps)
+      prin 'Warning: CV too low for Neg. bin. distribution. ',\
+           'Dispersion negative, values changed to small positive'
+      prin qsig2,qsig2new
+      calc qsig2=qsig2new
     endif
     CALCULATE qvar = sig2PW*qmean**POWERLAW
   ELSIF DISTRIBUTION.eqs.'POISSON'

@@ -6,7 +6,7 @@ close channel=2 ; filetype=output
 \SET [WORKINGDIRECTORY='D:/Data/AMIGA/AmigaTool/Power Analysis/PowerAnalysis/Resources']
 
 if in3open.eq.0
-    text      project ; 'test1-0'
+    text      project ; 'ValthermondJuly2013-5'
     text      dir ; 'D:/Data/AMIGA/AmigaTool/TestData/'
     calculate pos = getposition(project ; '-')
     concatena [subdir] project ; width=getposition(project ; '-') - 1

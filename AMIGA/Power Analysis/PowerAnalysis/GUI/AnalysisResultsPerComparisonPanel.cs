@@ -29,7 +29,7 @@ namespace AmigaPowerAnalysis.GUI {
         public AnalysisResultsPerComparisonPanel(Project project) {
             InitializeComponent();
             Name = "Results per comparison";
-            Description = "Choose endpoint in table. Choose method of analysis if more have been investigated. Power is shown for difference tests (upper graphs) and equivalence tests (lower graphs), both as a function of the number of replicates (left) and the Ratio GMO/CMP (right).\r\nNote: Number of plots in design is Number of replicates times ....(number plots in a block)";
+            Description = "Choose endpoint in table. Choose method of analysis if more have been investigated. Power is shown for difference tests (upper graphs) and equivalence tests (lower graphs), both as a function of the number of replicates (left) and the Ratio GMO/CMP (right).\r\nNote: Number of plots in design is Number of replicates times Number of plots per block";
             this.comboBoxAnalysisType.Visible = false;
             _project = project;
         }
