@@ -59,8 +59,10 @@ namespace AmigaPowerAnalysis.GUI {
             } else {
                 try {
                     Directory.Delete(filesPath, true);
+                    Thread.Sleep(100);
                     Directory.CreateDirectory(filesPath);
-                } catch (Exception) {
+                } catch (Exception ex) {
+                    var msg = ex.Message;
                 }
             }
 
@@ -100,7 +102,7 @@ namespace AmigaPowerAnalysis.GUI {
                     comparison.OutputPowerAnalysis.InputPowerAnalysis = inputPowerAnalysis;
 
                 } catch (Exception ex) {
-                    showError("Power analysis error", string.Format("An error occurred while executing the power analysis simulation. Message: {0}.", ex.Message));
+                    showError("Power analysis error", string.Format("An error occurred while executing the power analysis simulation. Message: {0}", ex.Message));
                     return;
                     // TODO: Log error.
                 }
