@@ -19,12 +19,25 @@ SCALAR    NumberOfInteractions, NumberOfModifiers; #NINTFAC, #NMODFAC
 
 TXCONSTRU [tsave] ISAVE
 CALCULATE posfactor[1,2] = POSITION('Variety','Frequency' ; tsave)  - (0,1)
-VARIATE   ifactor ; !(posfactor[1]...posfactor[2]) ; DECIMALS=0
-CALCULATE nfactor = NVALUES(ifactor)
-GROUPS    [REDEFINE=yes] ISAVE[#ifactor]
-
 calc posfreq,posmean,poscomp=posfactor[2]+(1,2,3)
 DUMMY     Frequency, Mean, Comparison; ISAVE[#posfreq,#posmean,#poscomp]
+VARIATE   addfactor ; !(4...posfactor[2]) ; DECIMALS=0
+VARIATE   ifactor ; !(posfactor[1]...posfactor[2]) ; DECIMALS=0
+CALCULATE nfactor = NVALUES(ifactor)
+
+" Expand structures by the given frequencies, 
+  first for variates, then for texts"
+
+\prin ISAVE[1...posfactor[2]],Mean,Comparison,Frequency
+FEXPAND MainPlot,SubPlot,ISAVE[#addfactor],Mean; NOBS=Frequency;\
+    VARIATE=MainPlot,SubPlot,ISAVE[#addfactor],Mean
+TEXT txtVariety,txtComparison; Variety,Comparison
+DELETE [REDEFINE=y] Variety,Comparison
+FEXPAND txtVariety,txtComparison; NOBS=Frequency; FACTOR=Variety,Comparison
+\prin ISAVE[1...posfactor[2]],Mean,Comparison
+
+" Create other factors"
+GROUPS    [REDEFINE=yes] ISAVE[#addfactor]
 
 " Redefine ordering of factor labels of Variety; this ensures that dum[1]
   defines the parameter of interest "
