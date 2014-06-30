@@ -47,6 +47,12 @@ namespace AmigaPowerAnalysis.GUI {
             var scriptFilename = string.Format("{0}\\AmigaPowerAnalysis.gen", scriptsDirectory);
             var lylesScriptFilename = string.Format("{0}\\Lyles.pro", scriptsDirectory);
 
+            var genstatPath = Properties.Settings.Default.GenstatPath;
+            if (string.IsNullOrEmpty(genstatPath) || !File.Exists(genstatPath)) {
+                showError("Cannot find GenStat path", "The GenStat executable GenBatch.exe cannot be found. Please go to options -> settings to specify this path.");
+                return;
+            }
+
             var filesPath = Path.Combine(projectPath, projectName);
             if (!Directory.Exists(filesPath)) {
                 Directory.CreateDirectory(filesPath);
@@ -64,7 +70,6 @@ namespace AmigaPowerAnalysis.GUI {
             var numberOfComparisons = comparisons.Count();
             var progressStep = 100D / numberOfComparisons;
 
-
             for (int i = 0; i < comparisons.Count(); ++i) {
                 try {
                     var comparisonInputFilename = Path.Combine(filesPath, string.Format("{0}-{1}.csv", projectName, i));
@@ -81,7 +86,7 @@ namespace AmigaPowerAnalysis.GUI {
                     var startInfo = new ProcessStartInfo();
                     startInfo.CreateNoWindow = true;
                     startInfo.UseShellExecute = false;
-                    startInfo.FileName = @"C:\Program Files\Gen16ed\Bin\GenBatch.exe";
+                    startInfo.FileName = genstatPath;
                     startInfo.WindowStyle = ProcessWindowStyle.Hidden;
                     startInfo.Arguments = string.Format("in=\"{0}\" in2=\"{1}\" in3=\"{2}\" out=\"{3}\" out2=\"{4}\"", scriptFilename, lylesScriptFilename, comparisonInputFilename, comparisonLogFilename, comparisonOutputFilename);
                     using (Process exeProcess = Process.Start(startInfo)) {
@@ -94,7 +99,9 @@ namespace AmigaPowerAnalysis.GUI {
                     comparison.OutputPowerAnalysis = outputReader.ReadOutputPowerAnalysis(comparisonOutputFilename);
                     comparison.OutputPowerAnalysis.InputPowerAnalysis = inputPowerAnalysis;
 
-                } catch {
+                } catch (Exception ex) {
+                    showError("Power analysis error", string.Format("An error occurred while executing the power analysis simulation. Message: {0}.", ex.Message));
+                    return;
                     // TODO: Log error.
                 }
             }
@@ -116,6 +123,15 @@ namespace AmigaPowerAnalysis.GUI {
         private void runWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
             this.Close();
             //MessageBox.Show("Done");
+        }
+
+        private void showError(string title, string message) {
+            MessageBox.Show(
+                    message,
+                    title,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error,
+                    MessageBoxDefaultButton.Button1);
         }
     }
 }

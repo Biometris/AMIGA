@@ -58,5 +58,17 @@ namespace AmigaPowerAnalysis.Properties {
                 this["WindowSize"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string GenstatPath {
+            get {
+                return ((string)(this["GenstatPath"]));
+            }
+            set {
+                this["GenstatPath"] = value;
+            }
+        }
     }
 }

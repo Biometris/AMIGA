@@ -73,6 +73,15 @@ namespace AmigaPowerAnalysis.GUI {
                 this.Size = Settings.Default.WindowSize;
             }
             EndpointTypeProvider.LoadMyEndpointTypes();
+
+            var currentGenstatPath = Properties.Settings.Default.GenstatPath;
+            if (string.IsNullOrEmpty(currentGenstatPath)) {
+                var defaultGenstatDirective = @"C:\Program Files\Gen16ed\Bin\GenBatch.exe";
+                if (File.Exists(defaultGenstatDirective)) {
+                    Properties.Settings.Default.GenstatPath = defaultGenstatDirective;
+                    Properties.Settings.Default.Save();
+                }
+            }
         }
 
         private void MainWindow_FormClosing(object sender, FormClosingEventArgs e) {
@@ -130,6 +139,10 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void goToolStripMenuItem_Click(object sender, EventArgs e) {
             runPowerAnalysis();
+        }
+
+        private void settingsToolStripMenuItem_Click(object sender, EventArgs e) {
+            openSettingsDialog();
         }
 
         private void tabControl_SelectedIndexChanged(object sender, EventArgs e) {
@@ -282,6 +295,11 @@ namespace AmigaPowerAnalysis.GUI {
             var runSimulationDialog = new RunPowerAnalysisDialog(_project, CurrentProjectFilename);
             runSimulationDialog.ShowDialog();
             this.updateTabs();
+        }
+
+        private void openSettingsDialog() {
+            var settingsForm = new SettingsForm();
+            settingsForm.ShowDialog();
         }
 
         private void showErrorMessage(Exception ex) {
