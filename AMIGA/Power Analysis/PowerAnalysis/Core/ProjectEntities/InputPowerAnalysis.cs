@@ -63,8 +63,8 @@ namespace AmigaPowerAnalysis.Core {
 
             stringBuilder.AppendLine(string.Format("{0}\r\n {1} :", "ComparisonId", ComparisonId));
             stringBuilder.AppendLine(string.Format("{0}\r\n '{1}' :", "Endpoint", Endpoint));
-            stringBuilder.AppendLine(string.Format("{0}\r\n '{1}' :", "LocLower", LocLower));
-            stringBuilder.AppendLine(string.Format("{0}\r\n '{1}' :", "LocUpper", LocUpper));
+            stringBuilder.AppendLine(string.Format("{0}\r\n {1} :", "LocLower", LocLower));
+            stringBuilder.AppendLine(string.Format("{0}\r\n {1} :", "LocUpper", LocUpper));
 
             foreach (var simulationSetting in SimulationSettings) {
                 stringBuilder.AppendLine(string.Format("{0}\r\n {1} :", simulationSetting.Key, simulationSetting.Value));
