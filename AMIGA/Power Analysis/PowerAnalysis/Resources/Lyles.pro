@@ -18,23 +18,27 @@ DUMMY     "Endpoint, ComparisonId, NumberOfInteractions, NumberOfModifiers, \
 SCALAR    NumberOfInteractions, NumberOfModifiers; #NINTFAC, #NMODFAC
 
 TXCONSTRU [tsave] ISAVE
-CALCULATE posfactor[1,2] = POSITION('Variety','Frequency' ; tsave)  - (0,1)
-calc posfreq,posmean,poscomp=posfactor[2]+(1,2,3)
+CALCULATE posvariety,posfreq = POSITION('Variety','Frequency' ; tsave)
+calc posmean,poscomp=posfreq +(1,2)
 DUMMY     Frequency, Mean, Comparison; ISAVE[#posfreq,#posmean,#poscomp]
-VARIATE   addfactor ; !(4...posfactor[2]) ; DECIMALS=0
-VARIATE   ifactor ; !(posfactor[1]...posfactor[2]) ; DECIMALS=0
+calc posfirstfac=posvariety+1
+calc poslastfac=posfreq-1
+calc poslastaddfac=poslastfac*(poslastfac>=posfirstfac)+\
+                   posfirstfac*(poslastfac<posfirstfac)
+VARIATE   addfactor ; !(posfirstfac...poslastaddfac) ; DECIMALS=0
+VARIATE   ifactor ; !(posvariety...poslastfac) ; DECIMALS=0
 CALCULATE nfactor = NVALUES(ifactor)
 
 " Expand structures by the given frequencies, 
   first for variates, then for texts"
 
-prin ISAVE[1...posfactor[2]],Mean,Comparison,Frequency
+prin ISAVE[1...poslastfac],Mean,Comparison,Frequency
 FEXPAND MainPlot,SubPlot,ISAVE[#addfactor],Mean; NOBS=Frequency;\
     VARIATE=MainPlot,SubPlot,ISAVE[#addfactor],Mean
 TEXT txtVariety,txtComparison; Variety,Comparison
 DELETE [REDEFINE=y] Variety,Comparison
 FEXPAND txtVariety,txtComparison; NOBS=Frequency; FACTOR=Variety,Comparison
-prin ISAVE[1...posfactor[2]],Mean,Comparison
+prin ISAVE[1...poslastfac],Mean,Comparison
 
 " Create other factors"
 GROUPS    [REDEFINE=yes] ISAVE[#addfactor]
