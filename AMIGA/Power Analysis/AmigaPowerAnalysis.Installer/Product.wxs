@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?define ProductVersion = "1.0.0.0"?>
+<?define ProductVersion = "1.0.1.0"?>
 <?define ProductUpgradeCode = "{DE4FBCF5-135D-4A27-9D4B-8246CEDF13D2}"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
   <Product Id="*" Name="AmigaPowerAnalysis" Manufacturer="Wageningen UR" Language="1033"
