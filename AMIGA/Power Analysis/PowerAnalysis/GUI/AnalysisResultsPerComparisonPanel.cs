@@ -116,6 +116,11 @@ namespace AmigaPowerAnalysis.GUI {
             updateAnalysisOutputPanel();
         }
 
+        private void buttonShowSettings_Click(object sender, EventArgs e) {
+            var htmlReportForm = new HtmlReportForm(ComparisonSummaryReportGenerator.GenerateComparisonSettingsReport(_currentComparison, _currentProjectFilesPath), Path.GetFileNameWithoutExtension(_currentProjectFilesPath), _currentProjectFilesPath);
+            htmlReportForm.ShowDialog();
+        }
+
         private void buttonShowInputData_Click(object sender, EventArgs e) {
             if (_currentComparison != null && _currentComparison.OutputPowerAnalysis != null) {
                 //var tempPath = Path.GetTempPath();

@@ -12,14 +12,6 @@ using OxyPlot.WindowsForms;
 namespace AmigaPowerAnalysis.Core.Reporting {
     public static class ComparisonSummaryReportGenerator {
 
-        public static string GenerateComparisonReport(Comparison comparison, string tempPath) {
-            var html = string.Empty;
-            html += generateComparisonInputDataHtml(comparison.OutputPowerAnalysis.InputPowerAnalysis);
-            html += generateComparisonChartsHtml(comparison, tempPath);
-            html += generateComparisonOutputHtml(comparison.OutputPowerAnalysis.OutputRecords);
-            return html;
-        }
-
         public static string GenerateAnalysisReport(IEnumerable<Comparison> comparisons, string tempPath) {
             var html = "";
             var primaryComparisons = comparisons.Where(c => c.IsPrimary);
@@ -28,10 +20,26 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             html += "<h1>Results per primary comparison</h1>";
             foreach (var comparison in primaryComparisons) {
                 html += string.Format("<h1>Results comparison {0} - {1}</h1>", comparison.Name, comparison.OutputPowerAnalysis.InputPowerAnalysis.Endpoint);
+                html += generateComparisonSettingsHtml(comparison.OutputPowerAnalysis.InputPowerAnalysis);
                 html += generateComparisonInputDataHtml(comparison.OutputPowerAnalysis.InputPowerAnalysis);
                 html += generateComparisonChartsHtml(comparison, tempPath);
                 html += generateComparisonOutputHtml(comparison.OutputPowerAnalysis.OutputRecords);
             }
+            return html;
+        }
+
+        public static string GenerateComparisonReport(Comparison comparison, string tempPath) {
+            var html = string.Empty;
+            html += generateComparisonSettingsHtml(comparison.OutputPowerAnalysis.InputPowerAnalysis);
+            html += generateComparisonInputDataHtml(comparison.OutputPowerAnalysis.InputPowerAnalysis);
+            html += generateComparisonChartsHtml(comparison, tempPath);
+            html += generateComparisonOutputHtml(comparison.OutputPowerAnalysis.OutputRecords);
+            return html;
+        }
+
+        public static string GenerateComparisonSettingsReport(Comparison comparison, string tempPath) {
+            var html = string.Empty;
+            html += generateComparisonSettingsHtml(comparison.OutputPowerAnalysis.InputPowerAnalysis);
             return html;
         }
 
@@ -47,9 +55,8 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             return stringBuilder.ToString();
         }
 
-        private static string generateComparisonInputDataHtml(InputPowerAnalysis inputPowerAnalysis) {
+        private static string generateComparisonSettingsHtml(InputPowerAnalysis inputPowerAnalysis) {
             var stringBuilder = new StringBuilder();
-
             stringBuilder.AppendLine(string.Format("<h2>Simulation settings</h2>"));
             stringBuilder.AppendLine("<table>");
             stringBuilder.AppendLine(string.Format("<tr><td>{0}</td><td>{1}</td></tr>", "ComparisonId", inputPowerAnalysis.ComparisonId));
@@ -58,7 +65,11 @@ namespace AmigaPowerAnalysis.Core.Reporting {
                 stringBuilder.AppendLine(string.Format("<tr><td>{0}</td><td>{1}</td></tr>", simulationSetting.Key, simulationSetting.Value));
             }
             stringBuilder.AppendLine("</table>");
+            return stringBuilder.ToString();
+        }
 
+        private static string generateComparisonInputDataHtml(InputPowerAnalysis inputPowerAnalysis) {
+            var stringBuilder = new StringBuilder();
             var headers = new List<string>();
             headers.Add("MainPlot");
             headers.Add("SubPlot");

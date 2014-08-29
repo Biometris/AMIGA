@@ -35,6 +35,7 @@ namespace AmigaPowerAnalysis.GUI {
             var endpointsBindingSouce = new BindingSource(_project.Endpoints, null);
             dataGridViewEndpoints.AutoGenerateColumns = false;
             dataGridViewEndpoints.DataSource = endpointsBindingSouce;
+            updateEditableColumns();
         }
 
         public bool IsVisible() {
@@ -113,7 +114,6 @@ namespace AmigaPowerAnalysis.GUI {
             dataGridViewEndpoints.Columns["ExcessZeroes"].DefaultCellStyle.BackColor = Color.LightGray;
             dataGridViewEndpoints.Columns["RepeatedMeasures"].ReadOnly = true;
             dataGridViewEndpoints.Columns["RepeatedMeasures"].DefaultCellStyle.BackColor = Color.LightGray;
-            updateEditableColumns();
         }
 
         private void updateEditableColumns() {

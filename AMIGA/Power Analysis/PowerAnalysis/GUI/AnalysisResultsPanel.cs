@@ -148,11 +148,10 @@ namespace AmigaPowerAnalysis.GUI {
             updateAnalysisOutputPanel();
         }
 
-        private void buttonShowInputData_Click(object sender, EventArgs e) {
+        private void buttonShowReport_Click(object sender, EventArgs e) {
             var primaryComparisons = _comparisons.Where(c => c.OutputPowerAnalysis != null && c.IsPrimary).ToList();
             if (primaryComparisons.Count > 0) {
                 var tempPath = Path.GetTempPath();
-                tempPath = @"D:\Projects\Amiga\Source\TestData\ssss";
                 var htmlReportForm = new HtmlReportForm(ComparisonSummaryReportGenerator.GenerateAnalysisReport(_comparisons, _currentProjectFilePath), Path.GetFileNameWithoutExtension(_currentProjectFilePath), _currentProjectFilePath);
                 htmlReportForm.ShowDialog();
             }
