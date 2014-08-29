@@ -105,6 +105,7 @@ namespace AmigaPowerAnalysis.GUI {
             }
             _project.AddEndpoint(new Endpoint(newEndpointName, _project.EndpointTypes.First()));
             updateDataGridViewEndpoints();
+            dataGridViewEndpoints.CurrentCell = dataGridViewEndpoints.Rows[dataGridViewEndpoints.RowCount - 1].Cells[0];
         }
 
         private void buttonDeleteEndpoint_Click(object sender, EventArgs e) {
