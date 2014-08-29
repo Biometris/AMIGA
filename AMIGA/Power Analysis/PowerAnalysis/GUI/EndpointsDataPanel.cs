@@ -110,7 +110,23 @@ namespace AmigaPowerAnalysis.GUI {
             dataGridViewEndpoints.Columns["Name"].ReadOnly = true;
             dataGridViewEndpoints.Columns["Measurement"].ReadOnly = true;
             dataGridViewEndpoints.Columns["ExcessZeroes"].ReadOnly = true;
+            dataGridViewEndpoints.Columns["ExcessZeroes"].DefaultCellStyle.BackColor = Color.LightGray;
             dataGridViewEndpoints.Columns["RepeatedMeasures"].ReadOnly = true;
+            dataGridViewEndpoints.Columns["RepeatedMeasures"].DefaultCellStyle.BackColor = Color.LightGray;
+            updateEditableColumns();
+        }
+
+        private void updateEditableColumns() {
+            for (int i = 0; i < _project.Endpoints.Count(); ++i) {
+                if (_project.Endpoints[i].Measurement != MeasurementType.Fraction) {
+                    dataGridViewEndpoints.Rows[i].Cells["BinomialTotal"].ReadOnly = true;
+                    dataGridViewEndpoints.Rows[i].Cells["BinomialTotal"].Style.BackColor = Color.LightGray;
+                }
+                if (_project.Endpoints[i].DistributionType != DistributionType.PowerLaw) {
+                    dataGridViewEndpoints.Rows[i].Cells["PowerLawPower"].ReadOnly = true;
+                    dataGridViewEndpoints.Rows[i].Cells["PowerLawPower"].Style.BackColor = Color.LightGray;
+                }
+            }
         }
 
         private void dataGridViewEndpoints_DataError(object sender, DataGridViewDataErrorEventArgs e) {
@@ -135,6 +151,7 @@ namespace AmigaPowerAnalysis.GUI {
                     dataGridViewEndpoints.Rows[e.RowIndex].Cells["PowerLawPower"].Value = 0;
                 }
             }
+            updateEditableColumns();
         }
     }
 }
