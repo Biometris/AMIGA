@@ -53,6 +53,7 @@ namespace AmigaPowerAnalysis.GUI {
             labelCVForMainPlots.Visible = (_project.DesignSettings.ExperimentalDesignType == ExperimentalDesignType.SplitPlots) && _project.UseMainPlotModifier;
             textBoxCVForMainPlots.Visible = (_project.DesignSettings.ExperimentalDesignType == ExperimentalDesignType.SplitPlots) && _project.UseMainPlotModifier;
             dataGridViewFactorModifiers.Visible = _project.UseFactorModifiers;
+            groupBoxFactorModifiers.Visible = _project.Endpoints.Any(ep => ep.NonInteractionFactors.Count() > 0);
         }
 
         private void createDataGridEndpoints() {

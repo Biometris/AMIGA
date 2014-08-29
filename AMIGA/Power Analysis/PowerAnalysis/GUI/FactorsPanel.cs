@@ -98,14 +98,12 @@ namespace AmigaPowerAnalysis.GUI {
                 var factorLevelsBindingSouce = new BindingSource(factorLevels, null);
                 dataGridViewFactorLevels.AutoGenerateColumns = false;
                 dataGridViewFactorLevels.DataSource = factorLevelsBindingSouce;
-
                 dataGridViewFactorLevels.Refresh();
                 if (_currentFactor.Name == "Variety" && dataGridViewFactorLevels.Rows.Count >= 2) {
                     dataGridViewFactorLevels.Rows[0].Cells[0].ReadOnly = true;
                     dataGridViewFactorLevels.Rows[0].Cells[0].Style.BackColor = Color.LightGray;
                     dataGridViewFactorLevels.Rows[0].Cells[1].ReadOnly = true;
                     dataGridViewFactorLevels.Rows[0].Cells[1].Style.BackColor = Color.LightGray;
-
                     dataGridViewFactorLevels.Rows[1].Cells[0].ReadOnly = true;
                     dataGridViewFactorLevels.Rows[1].Cells[0].Style.BackColor = Color.LightGray;
                     dataGridViewFactorLevels.Rows[1].Cells[1].ReadOnly = true;
