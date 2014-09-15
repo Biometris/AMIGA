@@ -50,7 +50,7 @@ namespace AmigaPowerAnalysis.Core {
                 FactorLevels.Add(new FactorLevel() {
                     Parent = this,
                     Level = Convert.ToDouble(i + 1),
-                    Label = string.Format("Level {0}", i+1),
+                    Label = string.Format("Label {0}", i+1),
                     Frequency = 1,
                 });
             }
@@ -85,6 +85,15 @@ namespace AmigaPowerAnalysis.Core {
         /// </summary>
         [DataMember]
         public ExperimentUnitType ExperimentUnitType { get; set; }
+
+        /// <summary>
+        /// True if this factor is the variety factor.
+        /// </summary>
+        public bool IsVarietyFactor {
+            get {
+                return Name == "Variety";
+            }
+        }
 
         /// <summary>
         /// Create a new unique level for generating a new factor level.

@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 using System.Linq;
 using System.Text;
 
-namespace AmigaPowerAnalysis.Core {
+namespace AmigaPowerAnalysis.Core.PowerAnalysis {
 
     public sealed class InputPowerAnalysis {
 

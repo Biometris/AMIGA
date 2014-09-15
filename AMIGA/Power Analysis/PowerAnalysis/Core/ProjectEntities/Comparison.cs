@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
+using AmigaPowerAnalysis.Core.PowerAnalysis;
 
 namespace AmigaPowerAnalysis.Core {
 

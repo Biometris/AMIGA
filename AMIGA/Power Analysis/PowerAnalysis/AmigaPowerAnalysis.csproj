@@ -71,10 +71,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Charting\AnalysisResultsChartGenerator.cs" />
-    <Compile Include="Core\ProjectEntities\InputPowerAnalysis.cs" />
-    <Compile Include="Core\ProjectEntities\OutputPowerAnalysisRecord.cs" />
+    <Compile Include="Core\DataAnalysis\AnalysisDataTemplateRecord.cs" />
+    <Compile Include="Core\DataAnalysis\AnalysisDataTemplateGenerator.cs" />
+    <Compile Include="Core\DataAnalysis\AnalysisDataTemplate.cs" />
+    <Compile Include="Core\PowerAnalysis\InputPowerAnalysis.cs" />
+    <Compile Include="Core\PowerAnalysis\OutputPowerAnalysisRecord.cs" />
     <Compile Include="Core\PowerAnalysis\PowerAnalysisOutputReader.cs" />
-    <Compile Include="Core\ProjectEntities\OutputPowerAnalysis.cs" />
+    <Compile Include="Core\PowerAnalysis\OutputPowerAnalysis.cs" />
     <Compile Include="Core\PowerAnalysis\PowerAnalysisInputGenerator.cs" />
     <Compile Include="Core\ProjectManager.cs" />
     <Compile Include="Core\ProjectEntities\Comparison.cs" />
@@ -98,7 +101,7 @@
     <Compile Include="Core\ProjectEntities\FactorLevel.cs" />
     <Compile Include="Core\ProjectEntities\FactorLevelCombination.cs" />
     <Compile Include="Core\ProjectEntities\FactorLevelCombinationsCreator.cs" />
-    <Compile Include="Core\ProjectEntities\InputPowerAnalysisRecord.cs" />
+    <Compile Include="Core\PowerAnalysis\InputPowerAnalysisRecord.cs" />
     <Compile Include="Core\ProjectEntities\PowerCalculationSettings.cs" />
     <Compile Include="Core\Reporting\ComparisonSummaryReportGenerator.cs" />
     <Compile Include="GUI\AboutForm.cs">
@@ -124,6 +127,12 @@
     </Compile>
     <Compile Include="GUI\AnalysisResultsPerComparisonPanel.Designer.cs">
       <DependentUpon>AnalysisResultsPerComparisonPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\AnalysisTemplatePanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\AnalysisTemplatePanel.Designer.cs">
+      <DependentUpon>AnalysisTemplatePanel.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\HtmlReportForm.cs">
       <SubType>Form</SubType>
@@ -243,6 +252,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\AnalysisResultsPerComparisonPanel.resx">
       <DependentUpon>AnalysisResultsPerComparisonPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\AnalysisTemplatePanel.resx">
+      <DependentUpon>AnalysisTemplatePanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\HtmlReportForm.resx">
       <DependentUpon>HtmlReportForm.cs</DependentUpon>

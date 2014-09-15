@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using AmigaPowerAnalysis.Core.Charting;
+using AmigaPowerAnalysis.Core.PowerAnalysis;
 using AmigaPowerAnalysis.Helpers.ClassExtensionMethods;
 using OxyPlot.WindowsForms;
 
@@ -232,6 +233,5 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             stringBuilder.Append("</table>");
             return stringBuilder.ToString();
         }
-
     }
 }

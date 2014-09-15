@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace AmigaPowerAnalysis.Core {
+namespace AmigaPowerAnalysis.Core.PowerAnalysis {
 
     public enum ComparisonType {
         Exclude = 0,

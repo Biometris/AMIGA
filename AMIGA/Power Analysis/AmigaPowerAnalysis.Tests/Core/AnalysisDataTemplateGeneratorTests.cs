@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Linq;
 using AmigaPowerAnalysis.Core;
+using AmigaPowerAnalysis.Core.DataAnalysis;
 using AmigaPowerAnalysis.Core.PowerAnalysis;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace AmigaPowerAnalysis.Tests {
 
     [TestClass]
-    public class PowerAnalysisInputGeneratorTests {
+    public class AnalysisDataTemplateGeneratorTests {
 
         [TestMethod]
         public void TestOnlyVarietyFactor() {
@@ -17,9 +18,9 @@ namespace AmigaPowerAnalysis.Tests {
             project.UpdateEndpointFactors();
 
             var comparison = project.GetComparisons().First();
-            var inputGenerator = new PowerAnalysisInputGenerator();
-            var inputPowerAnalysis = inputGenerator.CreateInputPowerAnalysis(comparison, project.DesignSettings, project.PowerCalculationSettings, 1);
-            var records = inputPowerAnalysis.InputRecords;
+            var generator = new AnalysisDataTemplateGenerator();
+            var template = generator.CreateAnalysisDataTemplate(project, 2);
+            var records = template.AnalysisDataTemplateRecords;
 
             // 2 variety levels
             Assert.AreEqual(2, records.Count);
@@ -30,16 +31,25 @@ namespace AmigaPowerAnalysis.Tests {
             var project = new Project();
             project.EndpointTypes = EndpointTypeProvider.DefaultEndpointTypes();
             project.AddEndpoint(new Endpoint("Beatle", project.EndpointTypes.First()));
-            project.Factors.Add(new Factor("Spraying", 3));
+
+            var spraying = new Factor("Spraying", 3);
+            spraying.FactorLevels.First().Frequency = 2;
+            project.Factors.Add(spraying);
+
+            var replicates = 3;
+
             project.UpdateEndpointFactors();
 
             var comparison = project.GetComparisons().First();
-            var inputGenerator = new PowerAnalysisInputGenerator();
-            var inputPowerAnalysis = inputGenerator.CreateInputPowerAnalysis(comparison, project.DesignSettings, project.PowerCalculationSettings, 1);
-            var records = inputPowerAnalysis.InputRecords;
+            var generator = new AnalysisDataTemplateGenerator();
+            var template = generator.CreateAnalysisDataTemplate(project, replicates);
+            var records = template.AnalysisDataTemplateRecords;
 
-            // 2 variety levels * 3 levels spraying = 6 records
-            Assert.AreEqual(6, records.Count);
+            // 2 variety levels
+            // 3 levels spraying with frequencies (2,1,1) = total 4
+            // 3 replicates
+            // 2 * 4 * 3 = 24 records
+            Assert.AreEqual(24, records.Count);
         }
     }
 }

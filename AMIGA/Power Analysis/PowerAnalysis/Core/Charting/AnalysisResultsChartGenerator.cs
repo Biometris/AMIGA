@@ -5,6 +5,7 @@ using OxyPlot.Annotations;
 using OxyPlot.Axes;
 using OxyPlot.Series;
 using AmigaPowerAnalysis.Helpers.ClassExtensionMethods;
+using AmigaPowerAnalysis.Core.PowerAnalysis;
 
 namespace AmigaPowerAnalysis.Core.Charting {
     public static class AnalysisResultsChartGenerator {

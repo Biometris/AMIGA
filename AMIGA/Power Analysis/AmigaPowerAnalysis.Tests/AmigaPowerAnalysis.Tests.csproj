@@ -50,6 +50,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Core\AnalysisDataTemplateGeneratorTests.cs" />
     <Compile Include="Core\PowerAnalysisInputGeneratorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

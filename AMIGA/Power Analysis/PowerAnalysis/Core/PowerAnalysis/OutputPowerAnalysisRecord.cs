@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-namespace AmigaPowerAnalysis.Core {
+namespace AmigaPowerAnalysis.Core.PowerAnalysis {
 
     public sealed class OutputPowerAnalysisRecord {
 

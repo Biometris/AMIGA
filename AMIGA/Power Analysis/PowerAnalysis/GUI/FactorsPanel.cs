@@ -99,7 +99,7 @@ namespace AmigaPowerAnalysis.GUI {
                 dataGridViewFactorLevels.AutoGenerateColumns = false;
                 dataGridViewFactorLevels.DataSource = factorLevelsBindingSouce;
                 dataGridViewFactorLevels.Refresh();
-                if (_currentFactor.Name == "Variety" && dataGridViewFactorLevels.Rows.Count >= 2) {
+                if (_currentFactor.IsVarietyFactor && dataGridViewFactorLevels.Rows.Count >= 2) {
                     dataGridViewFactorLevels.Rows[0].Cells[0].ReadOnly = true;
                     dataGridViewFactorLevels.Rows[0].Cells[0].Style.BackColor = Color.LightGray;
                     dataGridViewFactorLevels.Rows[0].Cells[1].ReadOnly = true;
@@ -157,7 +157,7 @@ namespace AmigaPowerAnalysis.GUI {
                 var currentRow = dataGridViewFactorLevels.CurrentRow.Index;
                 if (_currentFactor.FactorLevels.Count <= 2) {
                     showError("Invalid operation", "A factor should have at least two levels.");
-                } else if (_currentFactor.Name == "Variety" && currentRow < 2) {
+                } else if (_currentFactor.IsVarietyFactor && currentRow < 2) {
                     showError("Invalid operation", "Cannot delete GMO or comparator level of the variety.");
                 } else {
                     _currentFactor.FactorLevels.Remove(_currentFactor.FactorLevels[currentRow]);
