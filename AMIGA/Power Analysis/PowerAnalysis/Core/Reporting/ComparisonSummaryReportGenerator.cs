@@ -75,7 +75,7 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             headers.Add("MainPlot");
             headers.Add("SubPlot");
             headers.Add("Variety");
-            foreach (var factor in inputPowerAnalysis.InputRecords.First().Factors) {
+            foreach (var factor in inputPowerAnalysis.Factors) {
                 headers.Add(factor);
             }
             headers.Add("Frequency");

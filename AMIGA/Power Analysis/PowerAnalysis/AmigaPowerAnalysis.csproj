@@ -81,7 +81,7 @@
     <Compile Include="Core\PowerAnalysis\PowerAnalysisInputGenerator.cs" />
     <Compile Include="Core\ProjectManager.cs" />
     <Compile Include="Core\ProjectEntities\Comparison.cs" />
-    <Compile Include="Core\ProjectEntities\ModifierFactorLevelCombination.cs" />
+    <Compile Include="Core\ProjectEntities\Modifier.cs" />
     <Compile Include="Core\ProjectEntities\DesignSettings.cs" />
     <Compile Include="Core\Distributions\PoissonLogNormalDistribution.cs" />
     <Compile Include="Core\Distributions\PowerLawDistribution.cs" />
@@ -315,6 +315,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="app.config" />
+    <None Include="Diagram\CoreDiagram.cd" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

@@ -3,10 +3,10 @@
 namespace AmigaPowerAnalysis.Core {
 
     [DataContract]
-    public sealed class ModifierFactorLevelCombination {
+    public sealed class Modifier {
 
-        public ModifierFactorLevelCombination() {
-            Modifier = 1;
+        public Modifier() {
+            ModifierFactor = 1;
         }
 
         /// <summary>
@@ -19,7 +19,7 @@ namespace AmigaPowerAnalysis.Core {
         /// The modifier for this factor level combination.
         /// </summary>
         [DataMember(Order = 0)]
-        public double Modifier { get; set; }
+        public double ModifierFactor { get; set; }
 
         /// <summary>
         /// The label of this factor level combination.

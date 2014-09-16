@@ -166,7 +166,7 @@ namespace AmigaPowerAnalysis.Core {
                 foreach (var endpoint in Endpoints) {
                     for (int i = 1; i < Factors.Count; ++i) {
                         var factor = Factors.ElementAt(i);
-                        endpoint.RemoveInteractionFactor(factor);
+                        endpoint.SetFactorType(factor, false);
                     }
                 }
             }
@@ -181,11 +181,7 @@ namespace AmigaPowerAnalysis.Core {
                 foreach (var endpoint in Endpoints) {
                     for (int i = 1; i < Factors.Count; ++i) {
                         var factor = Factors.ElementAt(i);
-                        if (factor.IsInteractionWithVariety) {
-                            endpoint.AddInteractionFactor(factor);
-                        } else {
-                            endpoint.RemoveInteractionFactor(factor);
-                        }
+                        endpoint.SetFactorType(factor, factor.IsInteractionWithVariety);
                     }
                 }
             }

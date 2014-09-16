@@ -12,7 +12,7 @@ namespace AmigaPowerAnalysis.GUI {
         private Project _project;
 
         private Endpoint _currentEndpoint;
-        private List<ModifierFactorLevelCombination> _currentFactorModifiers;
+        private List<Modifier> _currentFactorModifiers;
 
         public ModifiersPanel(Project project) {
             InitializeComponent();
@@ -81,8 +81,8 @@ namespace AmigaPowerAnalysis.GUI {
             dataGridViewFactorModifiers.Columns.Add(column);
 
             column = new DataGridViewTextBoxColumn();
-            column.DataPropertyName = "Modifier";
-            column.Name = "Modifier";
+            column.DataPropertyName = "ModifierFactor";
+            column.Name = "ModifierFactor";
             column.HeaderText = "Multiplication factor for the Comparator Mean";
             column.ValueType = typeof(double);
             dataGridViewFactorModifiers.Columns.Add(column);
@@ -105,7 +105,7 @@ namespace AmigaPowerAnalysis.GUI {
         private void dataGridViewEndpoints_SelectionChanged(object sender, EventArgs e) {
             _currentEndpoint = _project.Endpoints.ElementAt(dataGridViewEndpoints.CurrentRow.Index);
             var factorFactorLevelTuples = _currentEndpoint.InteractionFactors.SelectMany(f => f.FactorLevels, (ifc, fl) => new Tuple<Factor, FactorLevel>(ifc, fl)).ToList();
-            _currentFactorModifiers = _currentEndpoint.NonInteractionFactorLevelCombinations;
+            _currentFactorModifiers = _currentEndpoint.Modifiers;
             updateDataGridFactorModifiers();
         }
 

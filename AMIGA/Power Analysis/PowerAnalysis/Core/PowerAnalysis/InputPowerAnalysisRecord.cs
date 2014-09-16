@@ -26,11 +26,6 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
         public string Variety { get; set; }
 
         /// <summary>
-        /// The factors.
-        /// </summary>
-        public List<string> Factors { get; set; }
-
-        /// <summary>
         /// The levels of the factors.
         /// </summary>
         public List<double> FactorLevels { get; set; }

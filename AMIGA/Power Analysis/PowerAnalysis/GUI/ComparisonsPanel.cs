@@ -16,7 +16,7 @@ namespace AmigaPowerAnalysis.GUI {
 
         private Comparison _currentComparison;
         private List<Comparison> _comparisons;
-        private List<ComparisonFactorLevelCombination> _currentComparisonFactorLevels;
+        private List<VarietyInteraction> _currentComparisonFactorLevels;
 
         public ComparisonsPanel(Project project) {
             InitializeComponent();
@@ -108,7 +108,7 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void dataGridComparisons_SelectionChanged(object sender, EventArgs e) {
             _currentComparison = _project.GetComparisons().ElementAt(dataGridViewComparisons.CurrentRow.Index);
-            _currentComparisonFactorLevels = _currentComparison.ComparisonFactorLevelCombinations;
+            _currentComparisonFactorLevels = _currentComparison.VarietyInteractions;
             updateDataGridFactorLevels();
         }
 

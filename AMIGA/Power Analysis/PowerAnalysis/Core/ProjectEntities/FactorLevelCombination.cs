@@ -43,5 +43,16 @@ namespace AmigaPowerAnalysis.Core {
             Items.ForEach(i => newFactorLevelCombination.Add(i));
             return newFactorLevelCombination;
         }
+
+        /// <summary>
+        /// Returns true if this factor level combination is a superset
+        /// of the other factor level combination (i.e., the other factor
+        /// level combination is a subset of this one).
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Contains(FactorLevelCombination other) {
+            return other.Items.All(i => Items.Contains(i));
+        }
     }
 }

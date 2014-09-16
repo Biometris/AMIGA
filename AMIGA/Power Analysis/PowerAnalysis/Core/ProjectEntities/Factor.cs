@@ -14,8 +14,7 @@ namespace AmigaPowerAnalysis.Core {
     public sealed class Factor {
 
         public static Factor CreateVarietyFactor() {
-            var factor = new Factor() {
-                Name = "Variety",
+            var factor = new Factor("Variety") {
                 IncludeInAssessment = true,
             };
             factor.FactorLevels.Add(new FactorLevel() {
@@ -33,9 +32,12 @@ namespace AmigaPowerAnalysis.Core {
             return factor;
         }
 
-        public Factor() {
+        public Factor(string name) {
+            Name = name;
             FactorLevels = new List<FactorLevel>();
             ExperimentUnitType = ExperimentUnitType.SubPlot;
+            IncludeInAssessment = false;
+            IsInteractionWithVariety = false;
         }
 
         /// <summary>
@@ -43,9 +45,7 @@ namespace AmigaPowerAnalysis.Core {
         /// </summary>
         /// <param name="name">Name of factor</param>
         /// <param name="numberOfLevels">Number of levels of Factor</param>
-        public Factor(string name, int numberOfLevels) : this() {
-            IncludeInAssessment = false;
-            Name = name;
+        public Factor(string name, int numberOfLevels) : this(name) {
             for (int i = 0; i < numberOfLevels; i++) {
                 FactorLevels.Add(new FactorLevel() {
                     Parent = this,

@@ -13,8 +13,7 @@ namespace AmigaPowerAnalysis.Core {
 
         public Comparison() {
             IsPrimary = true;
-            ComparisonFactorLevelCombinations = new List<ComparisonFactorLevelCombination>();
-            InteractionFactors = new List<Factor>();
+            VarietyInteractions = new List<VarietyInteraction>();
         }
 
         /// <summary>
@@ -82,16 +81,10 @@ namespace AmigaPowerAnalysis.Core {
         }
 
         /// <summary>
-        /// Contains the interaction factors for this comparison.
-        /// </summary>
-        [DataMember(Order = 1)]
-        public List<Factor> InteractionFactors { get; set; }
-
-        /// <summary>
         /// Contains a list of factor level 
         /// </summary>
         [DataMember(Order = 1)]
-        public List<ComparisonFactorLevelCombination> ComparisonFactorLevelCombinations { get; set; }
+        public List<VarietyInteraction> VarietyInteractions { get; set; }
 
         /// <summary>
         /// Contains the output of a power analysis.
@@ -100,45 +93,16 @@ namespace AmigaPowerAnalysis.Core {
         public OutputPowerAnalysis OutputPowerAnalysis { get; set; }
 
         /// <summary>
-        /// Adds a factor as interaction factor for all the comparisons of this endpoint.
-        /// </summary>
-        /// <param name="factor"></param>
-        public void AddInteractionFactor(Factor factor) {
-            if (!InteractionFactors.Any(ifc => ifc == factor)) {
-                InteractionFactors.Add(factor);
-                var combinations = FactorLevelCombinationsCreator.GenerateInteractionCombinations(InteractionFactors);
-                ComparisonFactorLevelCombinations = combinations.Select(flc => new ComparisonFactorLevelCombination() {
-                        Comparison = this,
-                        FactorLevelCombination = flc,
-                    }).ToList();
-            }
-        }
-
-        /// <summary>
-        /// Removes the provided factor as interaction factor for all comparisons of this endpoint.
-        /// </summary>
-        /// <param name="factor"></param>
-        public void RemoveInteractionFactor(Factor factor) {
-            if (InteractionFactors.Contains(factor)) {
-                InteractionFactors.RemoveAll(ifc => ifc == factor);
-                var combinations = FactorLevelCombinationsCreator.GenerateInteractionCombinations(InteractionFactors);
-                ComparisonFactorLevelCombinations = combinations.Select(flc => new ComparisonFactorLevelCombination() {
-                    Comparison = this,
-                    FactorLevelCombination = flc,
-                }).ToList();
-            }
-        }
-
-        /// <summary>
         /// Updates the list of comparison factor level combinations.
         /// </summary>
         public void UpdateComparisonFactorLevelCombinations() {
-            var newCombinations = FactorLevelCombinationsCreator.GenerateInteractionCombinations(InteractionFactors);
+            var interactionFactors = Endpoint.InteractionFactors;
+            var newCombinations = FactorLevelCombinationsCreator.GenerateInteractionCombinations(interactionFactors);
             var newCombinationNames = newCombinations.Select(c => c.Label);
-            ComparisonFactorLevelCombinations.RemoveAll(c => newCombinationNames.Contains(c.FactorLevelCombinationName));
+            VarietyInteractions.Clear();
             foreach (var newCombination in newCombinations) {
-                if (!ComparisonFactorLevelCombinations.Any(c => c.FactorLevelCombinationName == newCombination.Label)) {
-                    ComparisonFactorLevelCombinations.Add(new ComparisonFactorLevelCombination() {
+                if (!VarietyInteractions.Any(c => c.FactorLevelCombinationName == newCombination.Label)) {
+                    VarietyInteractions.Add(new VarietyInteraction() {
                         Comparison = this,
                         FactorLevelCombination = newCombination,
                     });

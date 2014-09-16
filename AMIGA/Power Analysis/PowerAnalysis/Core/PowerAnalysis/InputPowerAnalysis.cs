@@ -19,6 +19,11 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
         public string Endpoint { get; set; }
 
         /// <summary>
+        /// The factors.
+        /// </summary>
+        public List<string> Factors { get; set; }
+
+        /// <summary>
         /// The id of the comparison.
         /// </summary>
         [DataMember]
@@ -74,7 +79,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             headers.Add("MainPlot");
             headers.Add("SubPlot");
             headers.Add("Variety");
-            foreach (var factor in InputRecords.First().Factors) {
+            foreach (var factor in Factors) {
                 var str = factor.Replace(' ', '_');
                 headers.Add(str);
             }

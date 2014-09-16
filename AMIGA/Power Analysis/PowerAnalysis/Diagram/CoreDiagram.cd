@@ -1,0 +1,193 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="AmigaPowerAnalysis.Core.Project">
+    <Position X="0.75" Y="0.5" Width="3" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <AssociationLine Name="Endpoints" Type="AmigaPowerAnalysis.Core.Endpoint" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="3.75" Y="2.562" />
+        <Point X="4.125" Y="2.562" />
+        <Point X="4.125" Y="6.427" />
+        <Point X="5.5" Y="6.427" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="Factors" Type="AmigaPowerAnalysis.Core.Factor" FixedFromPoint="true">
+      <Path>
+        <Point X="3.75" Y="1.438" />
+        <Point X="5.5" Y="1.438" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="VarietyFactor" Type="AmigaPowerAnalysis.Core.Factor" FixedFromPoint="true">
+      <Path>
+        <Point X="3.75" Y="2.062" />
+        <Point X="5.5" Y="2.062" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAEAIANgAMAAAEAIElACIAAAAACAQAQAAAAQAAAAACA=</HashCode>
+      <FileName>Core\Project.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="VarietyFactor" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="Endpoints" />
+      <Property Name="Factors" />
+      <Property Name="EndpointTypes" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="AmigaPowerAnalysis.Core.Endpoint">
+    <Position X="5.5" Y="5.25" Width="3" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <AssociationLine Name="InteractionFactors" Type="AmigaPowerAnalysis.Core.Factor" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="8.5" Y="6.624" />
+        <Point X="9.508" Y="6.624" />
+        <Point X="9.508" Y="1.875" />
+        <Point X="8.5" Y="1.875" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="NonInteractionFactors" Type="AmigaPowerAnalysis.Core.Factor" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="8.5" Y="6.362" />
+        <Point X="9.11" Y="6.362" />
+        <Point X="9.11" Y="2.312" />
+        <Point X="8.5" Y="2.312" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="EndpointType" Type="AmigaPowerAnalysis.Core.EndpointType" FixedFromPoint="true">
+      <Path>
+        <Point X="5.5" Y="7.016" />
+        <Point X="3.75" Y="7.016" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="Comparisons" Type="AmigaPowerAnalysis.Core.Comparison" FixedFromPoint="true">
+      <Path>
+        <Point X="8.5" Y="7.67" />
+        <Point X="10.5" Y="7.67" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAVAACQIkAAAAIAgQKAIQABAACCACBAAAQAgEAAAA=</HashCode>
+      <FileName>Core\ProjectEntities\Endpoint.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="EndpointType" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="Factors" />
+      <Property Name="InteractionFactors" />
+      <Property Name="NonInteractionFactors" />
+      <Property Name="Comparisons" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="AmigaPowerAnalysis.Core.Factor">
+    <Position X="5.5" Y="0.5" Width="3" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAIAAgAAAAAAAAQAAQEAAAgAAAAEAAAAAAI=</HashCode>
+      <FileName>Core\ProjectEntities\Factor.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="FactorLevels" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="AmigaPowerAnalysis.Core.EndpointFactorSettings">
+    <Position X="5.5" Y="3.25" Width="3" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAABAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Core\ProjectEntities\EndpointFactor.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Factor" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="AmigaPowerAnalysis.Core.EndpointType">
+    <Position X="0.75" Y="5.25" Width="3" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAAAAAAAAAAAIAAQABAACCAAAAAAQAgEAABA=</HashCode>
+      <FileName>Core\ProjectEntities\EndpointType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AmigaPowerAnalysis.Core.Comparison">
+    <Position X="10.5" Y="5.25" Width="3" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <AssociationLine Name="Endpoint" Type="AmigaPowerAnalysis.Core.Endpoint" FixedToPoint="true">
+      <Path>
+        <Point X="10.5" Y="7.278" />
+        <Point X="8.5" Y="7.278" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AQACAUAAAAAAAAAAAEAAAAQABCAACAAAAAAAAAAAEAA=</HashCode>
+      <FileName>Core\ProjectEntities\Comparison.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Endpoint" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="VarietyInteractions" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="AmigaPowerAnalysis.Core.FactorLevel">
+    <Position X="10.5" Y="0.5" Width="3" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAECAAAAAAAAAAQAAAAIAAAAABAAgAAAAAAAA=</HashCode>
+      <FileName>Core\ProjectEntities\FactorLevel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AmigaPowerAnalysis.Core.VarietyInteraction">
+    <Position X="15" Y="5.25" Width="3" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>BAAAAAgAACQEEgABAAAAAASAQAAABAAAAAgAAAAAAAA=</HashCode>
+      <FileName>Core\ProjectEntities\ComparisonFactorLevelCombination.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="FactorLevelCombination" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="AmigaPowerAnalysis.Core.FactorLevelCombination">
+    <Position X="15" Y="0.5" Width="3" />
+    <TypeIdentifier>
+      <HashCode>CAIAAAAAEAAACAAAAAAAAAAAAAAAAAAAAAAAAAAQAAA=</HashCode>
+      <FileName>Core\ProjectEntities\FactorLevelCombination.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Items" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="AmigaPowerAnalysis.Core.Modifier">
+    <Position X="15" Y="3.25" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAEAAAAAAAAAAAAAAAABCAAAAAAAAAAAAA=</HashCode>
+      <FileName>Core\ProjectEntities\Modifier.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="FactorLevelCombination" />
+    </ShowAsAssociation>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

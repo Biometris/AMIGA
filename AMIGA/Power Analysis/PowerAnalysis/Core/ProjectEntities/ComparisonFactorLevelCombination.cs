@@ -1,10 +1,11 @@
 ﻿using System.Linq;
 using System.Runtime.Serialization;
+using AmigaPowerAnalysis.Core.PowerAnalysis;
 
 namespace AmigaPowerAnalysis.Core {
 
     [DataContract]
-    public sealed class ComparisonFactorLevelCombination {
+    public sealed class VarietyInteraction {
 
         private bool? _isComparisonLevelGMO;
         private bool? _isComparisonLevelComparator;
@@ -12,7 +13,7 @@ namespace AmigaPowerAnalysis.Core {
         private double _meanGMO;
         private double _meanComparator;
 
-        public ComparisonFactorLevelCombination() {
+        public VarietyInteraction() {
             _meanGMO = double.NaN;
             _meanComparator = double.NaN;
         }
@@ -116,6 +117,34 @@ namespace AmigaPowerAnalysis.Core {
             get {
                 return FactorLevelCombination.Label;
             }
+        }
+
+        /// <summary>
+        /// Returns the mean for the given variety level.
+        /// </summary>
+        /// <param name="variety"></param>
+        /// <returns></returns>
+        public double GetMean(string variety) {
+            if (variety == "GMO") {
+                return MeanGMO;
+            } else if (variety == "Comparator") {
+                return MeanComparator;
+            }
+            return Comparison.Endpoint.MuComparator;
+        }
+
+        /// <summary>
+        /// Returns the mean for the given variety level.
+        /// </summary>
+        /// <param name="variety"></param>
+        /// <returns></returns>
+        public ComparisonType GetComparisonType(string variety) {
+            if (variety == "GMO" && IsComparisonLevelGMO) {
+                return ComparisonType.IncludeGMO;
+            } else if (variety == "Comparator" && IsComparisonLevelComparator) {
+                return ComparisonType.IncludeComparator;
+            }
+            return ComparisonType.Exclude;
         }
     }
 }

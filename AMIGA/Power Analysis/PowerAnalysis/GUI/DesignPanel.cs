@@ -204,14 +204,8 @@ namespace AmigaPowerAnalysis.GUI {
                 if (dataGridViewFactors.IsCurrentCellDirty) {
                     dataGridViewFactors.CommitEdit(DataGridViewDataErrorContexts.Commit);
                     var factor = _project.Factors.ElementAt(cell.RowIndex);
-                    if (factor.IsInteractionWithVariety) {
-                        foreach (var endpoint in _project.Endpoints) {
-                            endpoint.AddInteractionFactor(factor);
-                        }
-                    } else {
-                        foreach (var endpoint in _project.Endpoints) {
-                            endpoint.RemoveInteractionFactor(factor);
-                        }
+                    foreach (var endpoint in _project.Endpoints) {
+                        endpoint.SetFactorType(factor, factor.IsInteractionWithVariety);
                     }
                 }
             }
