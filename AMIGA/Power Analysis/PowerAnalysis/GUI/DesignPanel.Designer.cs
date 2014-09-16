@@ -29,14 +29,10 @@
             this.radioButtonCompletelyRandomized = new System.Windows.Forms.RadioButton();
             this.dataGridViewFactorLevels = new System.Windows.Forms.DataGridView();
             this.dataGridViewFactors = new System.Windows.Forms.DataGridView();
-            this.checkBoxUseDefaultInteractions = new System.Windows.Forms.CheckBox();
-            this.groupBoxInteractions = new System.Windows.Forms.GroupBox();
-            this.checkBoxUseInteractions = new System.Windows.Forms.CheckBox();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.groupBoxTypeOfDesign.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFactorLevels)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFactors)).BeginInit();
-            this.groupBoxInteractions.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
@@ -64,7 +60,7 @@
             this.radioButtonSplitPlot.AutoSize = true;
             this.radioButtonSplitPlot.Location = new System.Drawing.Point(11, 67);
             this.radioButtonSplitPlot.Name = "radioButtonSplitPlot";
-            this.radioButtonSplitPlot.Size = new System.Drawing.Size(65, 17);
+            this.radioButtonSplitPlot.Size = new System.Drawing.Size(168, 17);
             this.radioButtonSplitPlot.TabIndex = 2;
             this.radioButtonSplitPlot.TabStop = true;
             this.radioButtonSplitPlot.Text = "Split plot (not yet implemented)";
@@ -111,7 +107,7 @@
             this.dataGridViewFactorLevels.RowHeadersWidth = 24;
             this.dataGridViewFactorLevels.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dataGridViewFactorLevels.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewFactorLevels.Size = new System.Drawing.Size(419, 213);
+            this.dataGridViewFactorLevels.Size = new System.Drawing.Size(419, 295);
             this.dataGridViewFactorLevels.TabIndex = 4;
             // 
             // dataGridViewFactors
@@ -130,48 +126,9 @@
             this.dataGridViewFactors.RowHeadersWidth = 24;
             this.dataGridViewFactors.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dataGridViewFactors.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewFactors.Size = new System.Drawing.Size(214, 213);
+            this.dataGridViewFactors.Size = new System.Drawing.Size(214, 295);
             this.dataGridViewFactors.TabIndex = 3;
-            this.dataGridViewFactors.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridFactors_CellValueChanged);
-            this.dataGridViewFactors.CurrentCellDirtyStateChanged += new System.EventHandler(this.dataGridFactors_CurrentCellDirtyStateChanged);
             this.dataGridViewFactors.SelectionChanged += new System.EventHandler(this.dataGridFactors_SelectionChanged);
-            // 
-            // checkBoxUseDefaultInteractions
-            // 
-            this.checkBoxUseDefaultInteractions.AutoSize = true;
-            this.checkBoxUseDefaultInteractions.Location = new System.Drawing.Point(11, 43);
-            this.checkBoxUseDefaultInteractions.Name = "checkBoxUseDefaultInteractions";
-            this.checkBoxUseDefaultInteractions.Size = new System.Drawing.Size(276, 17);
-            this.checkBoxUseDefaultInteractions.TabIndex = 6;
-            this.checkBoxUseDefaultInteractions.Text = "Use the interactions specified below for all endpoints.";
-            this.checkBoxUseDefaultInteractions.UseVisualStyleBackColor = true;
-            this.checkBoxUseDefaultInteractions.CheckedChanged += new System.EventHandler(this.checkBoxUseDefaultInteractions_CheckedChanged);
-            // 
-            // groupBoxInteractions
-            // 
-            this.groupBoxInteractions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBoxInteractions.AutoSize = true;
-            this.groupBoxInteractions.Controls.Add(this.checkBoxUseInteractions);
-            this.groupBoxInteractions.Controls.Add(this.checkBoxUseDefaultInteractions);
-            this.groupBoxInteractions.Location = new System.Drawing.Point(13, 118);
-            this.groupBoxInteractions.Name = "groupBoxInteractions";
-            this.groupBoxInteractions.Padding = new System.Windows.Forms.Padding(3, 3, 3, 0);
-            this.groupBoxInteractions.Size = new System.Drawing.Size(637, 76);
-            this.groupBoxInteractions.TabIndex = 7;
-            this.groupBoxInteractions.TabStop = false;
-            this.groupBoxInteractions.Text = "Interactions";
-            // 
-            // checkBoxUseInteractions
-            // 
-            this.checkBoxUseInteractions.AutoSize = true;
-            this.checkBoxUseInteractions.Location = new System.Drawing.Point(11, 20);
-            this.checkBoxUseInteractions.Name = "checkBoxUseInteractions";
-            this.checkBoxUseInteractions.Size = new System.Drawing.Size(214, 17);
-            this.checkBoxUseInteractions.TabIndex = 7;
-            this.checkBoxUseInteractions.Text = "Adjust analysis for interaction with Variety? (i.e. are GMO vs. CMP comparison(s) dependent on levels of this factor?)";
-            this.checkBoxUseInteractions.UseVisualStyleBackColor = true;
-            this.checkBoxUseInteractions.CheckedChanged += new System.EventHandler(this.checkBoxUseInteractions_CheckedChanged);
             // 
             // splitContainer
             // 
@@ -179,7 +136,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.splitContainer.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
-            this.splitContainer.Location = new System.Drawing.Point(13, 201);
+            this.splitContainer.Location = new System.Drawing.Point(13, 119);
             this.splitContainer.Name = "splitContainer";
             // 
             // splitContainer.Panel1
@@ -189,27 +146,24 @@
             // splitContainer.Panel2
             // 
             this.splitContainer.Panel2.Controls.Add(this.dataGridViewFactorLevels);
-            this.splitContainer.Size = new System.Drawing.Size(637, 213);
+            this.splitContainer.Size = new System.Drawing.Size(637, 295);
             this.splitContainer.SplitterDistance = 214;
             this.splitContainer.TabIndex = 9;
             // 
-            // DesignForm
+            // DesignPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.Controls.Add(this.groupBoxTypeOfDesign);
-            this.Controls.Add(this.groupBoxInteractions);
             this.Controls.Add(this.splitContainer);
-            this.Name = "DesignForm";
+            this.Name = "DesignPanel";
             this.Padding = new System.Windows.Forms.Padding(10);
             this.Size = new System.Drawing.Size(663, 427);
             this.groupBoxTypeOfDesign.ResumeLayout(false);
             this.groupBoxTypeOfDesign.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFactorLevels)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFactors)).EndInit();
-            this.groupBoxInteractions.ResumeLayout(false);
-            this.groupBoxInteractions.PerformLayout();
             this.splitContainer.Panel1.ResumeLayout(false);
             this.splitContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
@@ -227,9 +181,6 @@
         private System.Windows.Forms.RadioButton radioButtonCompletelyRandomized;
         private System.Windows.Forms.DataGridView dataGridViewFactorLevels;
         private System.Windows.Forms.DataGridView dataGridViewFactors;
-        private System.Windows.Forms.CheckBox checkBoxUseDefaultInteractions;
-        private System.Windows.Forms.GroupBox groupBoxInteractions;
-        private System.Windows.Forms.CheckBox checkBoxUseInteractions;
         private System.Windows.Forms.SplitContainer splitContainer;
     }
 }
