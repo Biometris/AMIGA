@@ -53,9 +53,10 @@ namespace AmigaPowerAnalysis.GUI {
             } else {
                 checkBoxUseInteractions.Visible = true;
                 checkBoxUseDefaultInteractions.Visible = _project.DesignSettings.UseInteractions;
+                checkBoxUseDefaultInteractions.Checked = _project.DesignSettings.UseDefaultInteractions;
                 dataGridViewFactors.Visible = _project.DesignSettings.UseInteractions;
                 dataGridViewFactorLevels.Visible = _project.DesignSettings.UseInteractions;
-                dataGridInteractions.Visible = !_project.DesignSettings.UseDefaultInteractions;
+                dataGridInteractions.Visible = _project.DesignSettings.UseInteractions && !_project.DesignSettings.UseDefaultInteractions;
             }
         }
 
@@ -155,6 +156,9 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void checkBoxUseInteractions_CheckedChanged(object sender, EventArgs e) {
             _project.SetUseInteractions(checkBoxUseInteractions.Checked);
+            updateDataGridInteractions();
+            updateDataGridViewFactors();
+            updateDataGridFactorLevels();
             updateVisibilities();
         }
 

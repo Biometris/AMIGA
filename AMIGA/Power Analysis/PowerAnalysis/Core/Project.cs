@@ -163,12 +163,14 @@ namespace AmigaPowerAnalysis.Core {
         public void SetUseInteractions(bool useInteractions) {
             DesignSettings.UseInteractions = useInteractions;
             if (!useInteractions) {
+                Factors.ForEach(f => f.IsInteractionWithVariety = false);
                 foreach (var endpoint in Endpoints) {
                     for (int i = 1; i < Factors.Count; ++i) {
                         var factor = Factors.ElementAt(i);
                         endpoint.SetFactorType(factor, false);
                     }
                 }
+                DesignSettings.UseDefaultInteractions = true;
             }
         }
 
