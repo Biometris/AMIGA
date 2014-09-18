@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AmigaPowerAnalysis.Core;
 using AmigaPowerAnalysis.Core.PowerAnalysis;
@@ -82,6 +83,46 @@ namespace AmigaPowerAnalysis.Tests {
 
             // 2 variety levels * 3 levels spraying * 2 levels raking = 12 records
             Assert.AreEqual(12, records.Count);
+        }
+
+        [TestMethod]
+        public void TestMultipleInteractionsAndModifiers() {
+            var project = new Project();
+            var endpointType = EndpointTypeProvider.DefaultEndpointTypes().First();
+            var endpoint = new Endpoint("Beatle", endpointType);
+            var factorInteraction1 = new Factor("Interaction 1", 3) {
+                IsInteractionWithVariety = false
+            };
+            var factorModifier1 = new Factor("Modifier 1", 2) {
+                IsInteractionWithVariety = true
+            };
+            var factorInteraction2 = new Factor("Interaction 2", 3) {
+                IsInteractionWithVariety = false
+            };
+            var factorModifier2 = new Factor("Modifier 2", 2) {
+                IsInteractionWithVariety = true
+            };
+            project.AddFactor(factorInteraction1);
+            project.AddFactor(factorModifier1);
+            project.AddFactor(factorInteraction2);
+            project.AddFactor(factorModifier2);
+            project.AddEndpoint(endpoint);
+
+            var comparison = project.GetComparisons().First();
+            var inputGenerator = new PowerAnalysisInputGenerator();
+            var inputPowerAnalysis = inputGenerator.CreateInputPowerAnalysis(comparison, project.DesignSettings, project.PowerCalculationSettings, 1);
+            var records = inputPowerAnalysis.InputRecords;
+
+            // 2 variety levels * 3 * 3 interaction factor levels * 2 * 2 modifier levels = 48 records
+            Assert.AreEqual(72, records.Count);
+
+            var expectedFactorHeaders = new List<string> {
+                factorInteraction1.Name,
+                factorModifier1.Name,
+                factorInteraction2.Name,
+                factorModifier2.Name,
+            };
+            CollectionAssert.AreEqual(expectedFactorHeaders, inputPowerAnalysis.Factors);
         }
     }
 }

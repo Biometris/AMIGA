@@ -35,7 +35,7 @@ namespace AmigaPowerAnalysis.Core.DataAnalysis {
         /// <summary>
         /// The replicate id.
         /// </summary>
-        public int Replicate { get; set; }
+        public int Block { get; set; }
 
         /// <summary>
         /// The levels of the factors.

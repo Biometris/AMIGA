@@ -45,7 +45,7 @@ namespace AmigaPowerAnalysis.Core.DataAnalysis {
                         Variety = rep.Variety,
                         FactorLevels = rep.FactorLevels,
                         FrequencyReplicate = rep.FrequencyReplicate,
-                        Replicate = i + 1
+                        Block = i + 1
                     }))
                 .Select(r => new AnalysisDataTemplateRecord() {
                     MainPlot = r.MainPlot,
@@ -53,8 +53,11 @@ namespace AmigaPowerAnalysis.Core.DataAnalysis {
                     Variety = r.Variety,
                     FactorLevels = r.FactorLevels,
                     FrequencyReplicate = r.FrequencyReplicate,
-                    Replicate = r.Replicate
+                    Block = r.Block
                 })
+                .OrderBy(r => r.Block)
+                .ThenBy(r => r.MainPlot)
+                .ThenBy(r => r.SubPlot)
                 .ToList();
 
             var analysisDataTemplate = new AnalysisDataTemplate() {
