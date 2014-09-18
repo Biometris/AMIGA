@@ -93,9 +93,9 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                 var line = new List<string>();
                 line.Add(record.MainPlot.ToString());
                 line.Add(record.SubPlot.ToString());
-                line.Add(record.Variety.ToString());
+                line.Add(string.Format("'{0}'", record.Variety));
                 foreach (var factor in record.FactorLevels) {
-                    line.Add(factor.ToString());
+                    line.Add(string.Format("'{0}'", factor));
                 }
                 line.Add(record.Frequency.ToString());
                 line.Add(record.Mean.ToString());

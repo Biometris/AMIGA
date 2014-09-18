@@ -28,7 +28,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
         /// <summary>
         /// The levels of the factors.
         /// </summary>
-        public List<double> FactorLevels { get; set; }
+        public List<string> FactorLevels { get; set; }
 
         /// <summary>
         /// The cumulated frequency of the factor levels.

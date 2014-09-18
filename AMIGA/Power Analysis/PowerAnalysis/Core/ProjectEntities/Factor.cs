@@ -19,13 +19,11 @@ namespace AmigaPowerAnalysis.Core {
             };
             factor.FactorLevels.Add(new FactorLevel() {
                 Parent = factor,
-                Level = 1,
                 Label = "GMO",
                 Frequency = 1,
             });
             factor.FactorLevels.Add(new FactorLevel() {
                 Parent = factor,
-                Level = 2,
                 Label = "Comparator",
                 Frequency = 1,
             });
@@ -49,7 +47,6 @@ namespace AmigaPowerAnalysis.Core {
             for (int i = 0; i < numberOfLevels; i++) {
                 FactorLevels.Add(new FactorLevel() {
                     Parent = this,
-                    Level = Convert.ToDouble(i + 1),
                     Label = string.Format("Label {0}", i+1),
                     Frequency = 1,
                 });
@@ -99,11 +96,14 @@ namespace AmigaPowerAnalysis.Core {
         /// Create a new unique level for generating a new factor level.
         /// </summary>
         /// <returns></returns>
-        public double GetUniqueFactorLevel() {
-            if (this.FactorLevels != null && this.FactorLevels.Count > 0) {
-                return Math.Ceiling(this.FactorLevels.Max(fl => fl.Level) + 1);
+        public string GetUniqueFactorLabel() {
+            string newLabel = string.Format("Label {0}", this.FactorLevels.Count + 1);
+            int counter = 1;
+            while (this.FactorLevels.Any(fl => fl.Label == newLabel)) {
+                newLabel = string.Format("Label {0}", counter);
+                counter++;
             }
-            return 1;
+            return newLabel;
         }
     }
 }

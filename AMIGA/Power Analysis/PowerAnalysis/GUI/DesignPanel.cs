@@ -94,15 +94,7 @@ namespace AmigaPowerAnalysis.GUI {
             var column = new DataGridViewTextBoxColumn();
             column.DataPropertyName = "Label";
             column.Name = "Label";
-            column.HeaderText = "Label";
-            column.ReadOnly = true;
-            dataGridViewFactorLevels.Columns.Add(column);
-
-            column = new DataGridViewTextBoxColumn();
-            column.DataPropertyName = "Level";
-            column.Name = "Level";
             column.HeaderText = "Level";
-            column.ValueType = typeof(double);
             column.ReadOnly = true;
             dataGridViewFactorLevels.Columns.Add(column);
 

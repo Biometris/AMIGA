@@ -19,12 +19,6 @@ namespace AmigaPowerAnalysis.Core {
         public Factor Parent { get; set; }
 
         /// <summary>
-        /// The (numeric) level of this factor level.
-        /// </summary>
-        [DataMember]
-        public double Level { get; set; }
-
-        /// <summary>
         /// The label of this factor level.
         /// </summary>
         [DataMember]

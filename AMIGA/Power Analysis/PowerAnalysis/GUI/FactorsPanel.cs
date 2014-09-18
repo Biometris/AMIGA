@@ -72,14 +72,7 @@ namespace AmigaPowerAnalysis.GUI {
             var column = new DataGridViewTextBoxColumn();
             column.DataPropertyName = "Label";
             column.Name = "Label";
-            column.HeaderText = "Label";
-            dataGridViewFactorLevels.Columns.Add(column);
-
-            column = new DataGridViewTextBoxColumn();
-            column.DataPropertyName = "Level";
-            column.Name = "Level";
             column.HeaderText = "Level";
-            column.ValueType = typeof(double);
             dataGridViewFactorLevels.Columns.Add(column);
 
             column = new DataGridViewTextBoxColumn();
@@ -143,9 +136,8 @@ namespace AmigaPowerAnalysis.GUI {
         private void addFactorLevelButton_Click(object sender, EventArgs e) {
             if (_currentFactor != null) {
                 _currentFactor.FactorLevels.Add(new FactorLevel() {
-                    Label = string.Format("Label {0}", _currentFactor.GetUniqueFactorLevel()),
+                    Label =_currentFactor.GetUniqueFactorLabel(),
                     Parent = _currentFactor,
-                    Level = _currentFactor.GetUniqueFactorLevel(),
                 });
                 _project.UpdateEndpointFactorLevels();
                 updateDataGridFactorLevels();
@@ -211,18 +203,6 @@ namespace AmigaPowerAnalysis.GUI {
                     newFactorLabelNames[e.RowIndex] = newValue;
                     if (newFactorLabelNames.Distinct().Count() < newFactorLabelNames.Count) {
                         dataGridViewFactorLevels.Rows[e.RowIndex].ErrorText = "Duplicate factor label names are not allowed.";
-                        e.Cancel = true;
-                        showError("Invalid data", dataGridViewFactorLevels.Rows[e.RowIndex].ErrorText);
-                    }
-                }
-            }
-            if (dataGridViewFactorLevels.Columns[e.ColumnIndex].Name == "Level") {
-                double newValue;
-                if (double.TryParse(e.FormattedValue.ToString(), out newValue)) {
-                    var newFactorLevels = _currentFactor.FactorLevels.Select(fl => fl.Level).ToList();
-                    newFactorLevels[e.RowIndex] = newValue;
-                    if (newFactorLevels.Distinct().Count() < newFactorLevels.Count) {
-                        dataGridViewFactorLevels.Rows[e.RowIndex].ErrorText = "Duplicate factor levels are not allowed.";
                         e.Cancel = true;
                         showError("Invalid data", dataGridViewFactorLevels.Rows[e.RowIndex].ErrorText);
                     }
