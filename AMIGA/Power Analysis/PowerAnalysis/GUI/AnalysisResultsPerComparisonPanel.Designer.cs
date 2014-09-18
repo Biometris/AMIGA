@@ -129,7 +129,7 @@
             this.flowLayoutPanelComparisonInfo.Dock = System.Windows.Forms.DockStyle.Top;
             this.flowLayoutPanelComparisonInfo.Location = new System.Drawing.Point(5, 5);
             this.flowLayoutPanelComparisonInfo.Name = "flowLayoutPanelComparisonInfo";
-            this.flowLayoutPanelComparisonInfo.Size = new System.Drawing.Size(549, 22);
+            this.flowLayoutPanelComparisonInfo.Size = new System.Drawing.Size(549, 18);
             this.flowLayoutPanelComparisonInfo.TabIndex = 14;
             // 
             // labelBlockSize
@@ -214,10 +214,10 @@
             // 
             this.plotView.BackColor = System.Drawing.SystemColors.Window;
             this.plotView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.plotView.Location = new System.Drawing.Point(5, 56);
+            this.plotView.Location = new System.Drawing.Point(5, 52);
             this.plotView.Name = "plotView";
             this.plotView.PanCursor = System.Windows.Forms.Cursors.Hand;
-            this.plotView.Size = new System.Drawing.Size(549, 414);
+            this.plotView.Size = new System.Drawing.Size(549, 418);
             this.plotView.TabIndex = 2;
             this.plotView.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
             this.plotView.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
@@ -229,7 +229,7 @@
             this.plotTypePanel.Controls.Add(this.comboBoxTestType);
             this.plotTypePanel.Controls.Add(this.comboBoxAnalysisPlotTypes);
             this.plotTypePanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.plotTypePanel.Location = new System.Drawing.Point(5, 27);
+            this.plotTypePanel.Location = new System.Drawing.Point(5, 23);
             this.plotTypePanel.Name = "plotTypePanel";
             this.plotTypePanel.Size = new System.Drawing.Size(549, 29);
             this.plotTypePanel.TabIndex = 16;
