@@ -31,6 +31,12 @@ namespace AmigaPowerAnalysis.GUI {
             Name = "Overall results";
             Description = "The power analysis is based on the minimum power across the primary comparisons, in terms of Concern Standardized Differences (CSD, equals 1 at the Limit of Concern ).\r\nSelect primary comparisons. Choose method of analysis if more have been investigated.\r\n\r\nPower is shown for difference tests (upper graphs) and equivalence tests (lower graphs), both as a function of the number of replicates (left) and the Concern Standardized Difference (right).\r\nNote: Number of plots in design is Number of replicates times Number of plots per block";
             _project = project;
+            var testTypes = Enum.GetValues(typeof(TestType));
+            this.comboBoxTestType.DataSource = testTypes;
+            this.comboBoxTestType.SelectedIndex = 0;
+            var plotTypes = new List<AnalysisPlotType>() { AnalysisPlotType.Replicates, AnalysisPlotType.LevelOfConcern };
+            this.comboBoxAnalysisPlotTypes.DataSource = plotTypes;
+            this.comboBoxAnalysisPlotTypes.SelectedIndex = 0;
         }
 
         public string Description { get; private set; }
@@ -103,39 +109,44 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void updateAnalysisOutputPanel() {
-            var primaryComparisons = _comparisons.Where(c => c.OutputPowerAnalysis != null && c.IsPrimary).ToList();
-            if (primaryComparisons.Count > 0) {
-                var records = primaryComparisons.SelectMany(c => c.OutputPowerAnalysis.OutputRecords)
-                    .GroupBy(r => new { r.LevelOfConcern, r.NumberOfReplicates })
-                    .Select(g => new OutputPowerAnalysisRecord() {
-                        LevelOfConcern = g.Key.LevelOfConcern,
-                        NumberOfReplicates = g.Key.NumberOfReplicates,
-                        Ratio = double.NaN,
-                        LogRatio = double.NaN,
-                        PowerDifferenceLogNormal = g.Min(r => r.PowerDifferenceLogNormal),
-                        PowerDifferenceSquareRoot = g.Min(r => r.PowerDifferenceSquareRoot),
-                        PowerDifferenceOverdispersedPoisson = g.Min(r => r.PowerDifferenceOverdispersedPoisson),
-                        PowerDifferenceNegativeBinomial = g.Min(r => r.PowerDifferenceNegativeBinomial),
-                        PowerEquivalenceLogNormal = g.Min(r => r.PowerEquivalenceLogNormal),
-                        PowerEquivalenceSquareRoot = g.Min(r => r.PowerEquivalenceSquareRoot),
-                        PowerEquivalenceOverdispersedPoisson = g.Min(r => r.PowerEquivalenceOverdispersedPoisson),
-                        PowerEquivalenceNegativeBinomial = g.Min(r => r.PowerEquivalenceNegativeBinomial),
-                    })
-                    .ToList();
-                plotViewDifferenceReplicates.Model = AnalysisResultsChartGenerator.CreatePlotViewReplicatesLevelOfConcern(records, TestType.Difference, _currentAnalysisType);
-                plotViewEquivalenceReplicates.Model = AnalysisResultsChartGenerator.CreatePlotViewReplicatesLevelOfConcern(records, TestType.Equivalence, _currentAnalysisType);
-                plotViewDifferenceLevelOfConcern.Model = AnalysisResultsChartGenerator.CreatePlotViewLevelOfConcernReplicates(records, TestType.Difference, _currentAnalysisType);
-                plotViewEquivalenceLevelOfConcern.Model = AnalysisResultsChartGenerator.CreatePlotViewLevelOfConcernReplicates(records, TestType.Equivalence, _currentAnalysisType);
-                var plotsPerBlockCounts = primaryComparisons.Select(pc => pc.OutputPowerAnalysis.InputPowerAnalysis.InputRecords.Sum(ir => ir.Frequency));
-                var minPlotsPerBlockCount = plotsPerBlockCounts.Min();
-                var maxPlotsPerBlockCount = plotsPerBlockCounts.Max();
-                if (minPlotsPerBlockCount == maxPlotsPerBlockCount) {
-                    labelPlotsPerBlock.Text = string.Format("{0} plots per block", minPlotsPerBlockCount);
-                } else {
-                    labelPlotsPerBlock.Text = string.Format("between {0} and {1} plots per block", minPlotsPerBlockCount, maxPlotsPerBlockCount);
+            if (_comparisons != null) {
+                var primaryComparisons = _comparisons.Where(c => c.OutputPowerAnalysis != null && c.IsPrimary).ToList();
+                if (primaryComparisons.Count > 0) {
+                    var records = primaryComparisons.SelectMany(c => c.OutputPowerAnalysis.OutputRecords)
+                        .GroupBy(r => new { r.LevelOfConcern, r.NumberOfReplicates })
+                        .Select(g => new OutputPowerAnalysisRecord() {
+                            LevelOfConcern = g.Key.LevelOfConcern,
+                            NumberOfReplicates = g.Key.NumberOfReplicates,
+                            Ratio = double.NaN,
+                            LogRatio = double.NaN,
+                            PowerDifferenceLogNormal = g.Min(r => r.PowerDifferenceLogNormal),
+                            PowerDifferenceSquareRoot = g.Min(r => r.PowerDifferenceSquareRoot),
+                            PowerDifferenceOverdispersedPoisson = g.Min(r => r.PowerDifferenceOverdispersedPoisson),
+                            PowerDifferenceNegativeBinomial = g.Min(r => r.PowerDifferenceNegativeBinomial),
+                            PowerEquivalenceLogNormal = g.Min(r => r.PowerEquivalenceLogNormal),
+                            PowerEquivalenceSquareRoot = g.Min(r => r.PowerEquivalenceSquareRoot),
+                            PowerEquivalenceOverdispersedPoisson = g.Min(r => r.PowerEquivalenceOverdispersedPoisson),
+                            PowerEquivalenceNegativeBinomial = g.Min(r => r.PowerEquivalenceNegativeBinomial),
+                        })
+                        .ToList();
+                    var plotType = (AnalysisPlotType)comboBoxAnalysisPlotTypes.SelectedValue;
+                    var testType = (TestType)comboBoxTestType.SelectedValue;
+                    if (plotType == AnalysisPlotType.Replicates) {
+                        plotView.Model = AnalysisResultsChartGenerator.CreatePlotViewReplicatesLevelOfConcern(records, testType, _currentAnalysisType);
+                    } else if (plotType == AnalysisPlotType.LevelOfConcern) {
+                        plotView.Model = AnalysisResultsChartGenerator.CreatePlotViewLevelOfConcernReplicates(records, testType, _currentAnalysisType);
+                    }
+                    var plotsPerBlockCounts = primaryComparisons.Select(pc => pc.OutputPowerAnalysis.InputPowerAnalysis.InputRecords.Sum(ir => ir.Frequency));
+                    var minPlotsPerBlockCount = plotsPerBlockCounts.Min();
+                    var maxPlotsPerBlockCount = plotsPerBlockCounts.Max();
+                    if (minPlotsPerBlockCount == maxPlotsPerBlockCount) {
+                        labelPlotsPerBlock.Text = string.Format("{0} plots per block", minPlotsPerBlockCount);
+                    } else {
+                        labelPlotsPerBlock.Text = string.Format("between {0} and {1} plots per block", minPlotsPerBlockCount, maxPlotsPerBlockCount);
+                    }
                 }
+                updateVisibilities();
             }
-            updateVisibilities();
         }
 
         private void dataGridViewComparisons_SelectionChanged(object sender, EventArgs e) {
@@ -146,6 +157,14 @@ namespace AmigaPowerAnalysis.GUI {
             AnalysisMethodType analysisType;
             Enum.TryParse<AnalysisMethodType>(comboBoxAnalysisType.SelectedValue.ToString(), out analysisType);
             _currentAnalysisType = analysisType;
+            updateAnalysisOutputPanel();
+        }
+
+        private void comboBoxTestType_SelectedIndexChanged(object sender, EventArgs e) {
+            updateAnalysisOutputPanel();
+        }
+
+        private void comboBoxAnalysisPlotTypes_SelectedIndexChanged(object sender, EventArgs e) {
             updateAnalysisOutputPanel();
         }
 

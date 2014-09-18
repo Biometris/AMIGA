@@ -31,11 +31,11 @@
             this.labelPlotsPerBlock = new System.Windows.Forms.Label();
             this.buttonShowReport = new System.Windows.Forms.Button();
             this.comboBoxAnalysisType = new System.Windows.Forms.ComboBox();
-            this.tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.plotViewEquivalenceLevelOfConcern = new OxyPlot.WindowsForms.PlotView();
-            this.plotViewDifferenceLevelOfConcern = new OxyPlot.WindowsForms.PlotView();
-            this.plotViewEquivalenceReplicates = new OxyPlot.WindowsForms.PlotView();
-            this.plotViewDifferenceReplicates = new OxyPlot.WindowsForms.PlotView();
+            this.plotView = new OxyPlot.WindowsForms.PlotView();
+            this.plotTypePanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.comboBoxTestType = new System.Windows.Forms.ComboBox();
+            this.comboBoxAnalysisPlotTypes = new System.Windows.Forms.ComboBox();
+            this.flowLayoutPanelReport = new System.Windows.Forms.FlowLayoutPanel();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerComparisons)).BeginInit();
             this.splitContainerComparisons.Panel1.SuspendLayout();
             this.splitContainerComparisons.Panel2.SuspendLayout();
@@ -43,7 +43,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewComparisons)).BeginInit();
             this.panelResultPlots.SuspendLayout();
             this.flowLayoutPanelComparisonInfo.SuspendLayout();
-            this.tableLayoutPanel.SuspendLayout();
+            this.plotTypePanel.SuspendLayout();
+            this.flowLayoutPanelReport.SuspendLayout();
             this.SuspendLayout();
             // 
             // splitContainerComparisons
@@ -90,13 +91,15 @@
             // 
             // panelResultPlots
             // 
+            this.panelResultPlots.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panelResultPlots.Controls.Add(this.plotView);
+            this.panelResultPlots.Controls.Add(this.flowLayoutPanelReport);
+            this.panelResultPlots.Controls.Add(this.plotTypePanel);
             this.panelResultPlots.Controls.Add(this.flowLayoutPanelComparisonInfo);
-            this.panelResultPlots.Controls.Add(this.buttonShowReport);
-            this.panelResultPlots.Controls.Add(this.comboBoxAnalysisType);
-            this.panelResultPlots.Controls.Add(this.tableLayoutPanel);
             this.panelResultPlots.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelResultPlots.Location = new System.Drawing.Point(0, 0);
             this.panelResultPlots.Name = "panelResultPlots";
+            this.panelResultPlots.Padding = new System.Windows.Forms.Padding(5);
             this.panelResultPlots.Size = new System.Drawing.Size(561, 477);
             this.panelResultPlots.TabIndex = 0;
             // 
@@ -104,9 +107,10 @@
             // 
             this.flowLayoutPanelComparisonInfo.Controls.Add(this.labelBlockSize);
             this.flowLayoutPanelComparisonInfo.Controls.Add(this.labelPlotsPerBlock);
-            this.flowLayoutPanelComparisonInfo.Location = new System.Drawing.Point(0, 27);
+            this.flowLayoutPanelComparisonInfo.Dock = System.Windows.Forms.DockStyle.Top;
+            this.flowLayoutPanelComparisonInfo.Location = new System.Drawing.Point(5, 5);
             this.flowLayoutPanelComparisonInfo.Name = "flowLayoutPanelComparisonInfo";
-            this.flowLayoutPanelComparisonInfo.Size = new System.Drawing.Size(561, 18);
+            this.flowLayoutPanelComparisonInfo.Size = new System.Drawing.Size(549, 18);
             this.flowLayoutPanelComparisonInfo.TabIndex = 13;
             // 
             // labelBlockSize
@@ -131,7 +135,7 @@
             // buttonShowReport
             // 
             this.buttonShowReport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonShowReport.Location = new System.Drawing.Point(486, 0);
+            this.buttonShowReport.Location = new System.Drawing.Point(471, 3);
             this.buttonShowReport.Name = "buttonShowReport";
             this.buttonShowReport.Size = new System.Drawing.Size(75, 23);
             this.buttonShowReport.TabIndex = 7;
@@ -143,83 +147,65 @@
             // 
             this.comboBoxAnalysisType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxAnalysisType.FormattingEnabled = true;
-            this.comboBoxAnalysisType.Location = new System.Drawing.Point(0, 0);
+            this.comboBoxAnalysisType.Location = new System.Drawing.Point(3, 3);
             this.comboBoxAnalysisType.Name = "comboBoxAnalysisType";
             this.comboBoxAnalysisType.Size = new System.Drawing.Size(182, 21);
             this.comboBoxAnalysisType.TabIndex = 6;
             this.comboBoxAnalysisType.SelectedIndexChanged += new System.EventHandler(this.comboBoxAnalysisType_SelectedIndexChanged);
             // 
-            // tableLayoutPanel
+            // plotView
             // 
-            this.tableLayoutPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tableLayoutPanel.ColumnCount = 2;
-            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel.Controls.Add(this.plotViewEquivalenceLevelOfConcern, 1, 1);
-            this.tableLayoutPanel.Controls.Add(this.plotViewDifferenceLevelOfConcern, 1, 0);
-            this.tableLayoutPanel.Controls.Add(this.plotViewEquivalenceReplicates, 0, 1);
-            this.tableLayoutPanel.Controls.Add(this.plotViewDifferenceReplicates, 0, 0);
-            this.tableLayoutPanel.Location = new System.Drawing.Point(0, 44);
-            this.tableLayoutPanel.Name = "tableLayoutPanel";
-            this.tableLayoutPanel.RowCount = 2;
-            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel.Size = new System.Drawing.Size(561, 433);
-            this.tableLayoutPanel.TabIndex = 5;
+            this.plotView.BackColor = System.Drawing.SystemColors.Window;
+            this.plotView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.plotView.Location = new System.Drawing.Point(5, 52);
+            this.plotView.Name = "plotView";
+            this.plotView.PanCursor = System.Windows.Forms.Cursors.Hand;
+            this.plotView.Size = new System.Drawing.Size(549, 389);
+            this.plotView.TabIndex = 2;
+            this.plotView.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
+            this.plotView.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
+            this.plotView.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
             // 
-            // plotViewEquivalenceLevelOfConcern
+            // plotTypePanel
             // 
-            this.plotViewEquivalenceLevelOfConcern.BackColor = System.Drawing.SystemColors.Window;
-            this.plotViewEquivalenceLevelOfConcern.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.plotViewEquivalenceLevelOfConcern.Location = new System.Drawing.Point(283, 219);
-            this.plotViewEquivalenceLevelOfConcern.Name = "plotViewEquivalenceLevelOfConcern";
-            this.plotViewEquivalenceLevelOfConcern.PanCursor = System.Windows.Forms.Cursors.Hand;
-            this.plotViewEquivalenceLevelOfConcern.Size = new System.Drawing.Size(275, 211);
-            this.plotViewEquivalenceLevelOfConcern.TabIndex = 4;
-            this.plotViewEquivalenceLevelOfConcern.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
-            this.plotViewEquivalenceLevelOfConcern.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
-            this.plotViewEquivalenceLevelOfConcern.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
+            this.plotTypePanel.Controls.Add(this.comboBoxAnalysisType);
+            this.plotTypePanel.Controls.Add(this.comboBoxTestType);
+            this.plotTypePanel.Controls.Add(this.comboBoxAnalysisPlotTypes);
+            this.plotTypePanel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.plotTypePanel.Location = new System.Drawing.Point(5, 23);
+            this.plotTypePanel.Name = "plotTypePanel";
+            this.plotTypePanel.Size = new System.Drawing.Size(549, 29);
+            this.plotTypePanel.TabIndex = 17;
             // 
-            // plotViewDifferenceLevelOfConcern
+            // comboBoxTestType
             // 
-            this.plotViewDifferenceLevelOfConcern.BackColor = System.Drawing.SystemColors.Window;
-            this.plotViewDifferenceLevelOfConcern.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.plotViewDifferenceLevelOfConcern.Location = new System.Drawing.Point(283, 3);
-            this.plotViewDifferenceLevelOfConcern.Name = "plotViewDifferenceLevelOfConcern";
-            this.plotViewDifferenceLevelOfConcern.PanCursor = System.Windows.Forms.Cursors.Hand;
-            this.plotViewDifferenceLevelOfConcern.Size = new System.Drawing.Size(275, 210);
-            this.plotViewDifferenceLevelOfConcern.TabIndex = 2;
-            this.plotViewDifferenceLevelOfConcern.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
-            this.plotViewDifferenceLevelOfConcern.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
-            this.plotViewDifferenceLevelOfConcern.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
+            this.comboBoxTestType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxTestType.FormattingEnabled = true;
+            this.comboBoxTestType.Location = new System.Drawing.Point(191, 3);
+            this.comboBoxTestType.Name = "comboBoxTestType";
+            this.comboBoxTestType.Size = new System.Drawing.Size(182, 21);
+            this.comboBoxTestType.TabIndex = 7;
+            this.comboBoxTestType.SelectedIndexChanged += new System.EventHandler(this.comboBoxTestType_SelectedIndexChanged);
             // 
-            // plotViewEquivalenceReplicates
+            // comboBoxAnalysisPlotTypes
             // 
-            this.plotViewEquivalenceReplicates.BackColor = System.Drawing.SystemColors.Window;
-            this.plotViewEquivalenceReplicates.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.plotViewEquivalenceReplicates.Location = new System.Drawing.Point(3, 219);
-            this.plotViewEquivalenceReplicates.Name = "plotViewEquivalenceReplicates";
-            this.plotViewEquivalenceReplicates.PanCursor = System.Windows.Forms.Cursors.Hand;
-            this.plotViewEquivalenceReplicates.Size = new System.Drawing.Size(274, 211);
-            this.plotViewEquivalenceReplicates.TabIndex = 3;
-            this.plotViewEquivalenceReplicates.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
-            this.plotViewEquivalenceReplicates.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
-            this.plotViewEquivalenceReplicates.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
+            this.comboBoxAnalysisPlotTypes.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxAnalysisPlotTypes.FormattingEnabled = true;
+            this.comboBoxAnalysisPlotTypes.Location = new System.Drawing.Point(3, 30);
+            this.comboBoxAnalysisPlotTypes.Name = "comboBoxAnalysisPlotTypes";
+            this.comboBoxAnalysisPlotTypes.Size = new System.Drawing.Size(182, 21);
+            this.comboBoxAnalysisPlotTypes.TabIndex = 8;
+            this.comboBoxAnalysisPlotTypes.SelectedIndexChanged += new System.EventHandler(this.comboBoxAnalysisPlotTypes_SelectedIndexChanged);
             // 
-            // plotViewDifferenceReplicates
+            // flowLayoutPanelReport
             // 
-            this.plotViewDifferenceReplicates.BackColor = System.Drawing.SystemColors.Window;
-            this.plotViewDifferenceReplicates.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.plotViewDifferenceReplicates.Location = new System.Drawing.Point(3, 3);
-            this.plotViewDifferenceReplicates.Name = "plotViewDifferenceReplicates";
-            this.plotViewDifferenceReplicates.PanCursor = System.Windows.Forms.Cursors.Hand;
-            this.plotViewDifferenceReplicates.Size = new System.Drawing.Size(274, 210);
-            this.plotViewDifferenceReplicates.TabIndex = 0;
-            this.plotViewDifferenceReplicates.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
-            this.plotViewDifferenceReplicates.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
-            this.plotViewDifferenceReplicates.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
+            this.flowLayoutPanelReport.Controls.Add(this.buttonShowReport);
+            this.flowLayoutPanelReport.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.flowLayoutPanelReport.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
+            this.flowLayoutPanelReport.Location = new System.Drawing.Point(5, 441);
+            this.flowLayoutPanelReport.Name = "flowLayoutPanelReport";
+            this.flowLayoutPanelReport.Size = new System.Drawing.Size(549, 29);
+            this.flowLayoutPanelReport.TabIndex = 18;
             // 
             // AnalysisResultsPanel
             // 
@@ -239,7 +225,8 @@
             this.panelResultPlots.ResumeLayout(false);
             this.flowLayoutPanelComparisonInfo.ResumeLayout(false);
             this.flowLayoutPanelComparisonInfo.PerformLayout();
-            this.tableLayoutPanel.ResumeLayout(false);
+            this.plotTypePanel.ResumeLayout(false);
+            this.flowLayoutPanelReport.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -249,15 +236,15 @@
         private System.Windows.Forms.SplitContainer splitContainerComparisons;
         private System.Windows.Forms.DataGridView dataGridViewComparisons;
         private System.Windows.Forms.Panel panelResultPlots;
-        private OxyPlot.WindowsForms.PlotView plotViewDifferenceReplicates;
-        private OxyPlot.WindowsForms.PlotView plotViewEquivalenceReplicates;
-        private OxyPlot.WindowsForms.PlotView plotViewDifferenceLevelOfConcern;
-        private OxyPlot.WindowsForms.PlotView plotViewEquivalenceLevelOfConcern;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel;
+        private OxyPlot.WindowsForms.PlotView plotView;
         private System.Windows.Forms.ComboBox comboBoxAnalysisType;
         private System.Windows.Forms.Button buttonShowReport;
         private System.Windows.Forms.Label labelBlockSize;
         private System.Windows.Forms.Label labelPlotsPerBlock;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanelComparisonInfo;
+        private System.Windows.Forms.FlowLayoutPanel plotTypePanel;
+        private System.Windows.Forms.ComboBox comboBoxTestType;
+        private System.Windows.Forms.ComboBox comboBoxAnalysisPlotTypes;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanelReport;
     }
 }
