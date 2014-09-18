@@ -33,9 +33,9 @@
       <Property Name="VarietyFactor" />
     </ShowAsAssociation>
     <ShowAsCollectionAssociation>
+      <Property Name="EndpointTypes" />
       <Property Name="Endpoints" />
       <Property Name="Factors" />
-      <Property Name="EndpointTypes" />
     </ShowAsCollectionAssociation>
   </Class>
   <Class Name="AmigaPowerAnalysis.Core.Endpoint">
@@ -44,6 +44,18 @@
       <Compartment Name="Fields" Collapsed="true" />
       <Compartment Name="Methods" Collapsed="true" />
     </Compartments>
+    <AssociationLine Name="EndpointType" Type="AmigaPowerAnalysis.Core.EndpointType" FixedFromPoint="true">
+      <Path>
+        <Point X="5.5" Y="7.016" />
+        <Point X="3.75" Y="7.016" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="Comparisons" Type="AmigaPowerAnalysis.Core.Comparison" FixedFromPoint="true">
+      <Path>
+        <Point X="8.5" Y="7.67" />
+        <Point X="10.5" Y="7.67" />
+      </Path>
+    </AssociationLine>
     <AssociationLine Name="InteractionFactors" Type="AmigaPowerAnalysis.Core.Factor" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
       <Path>
         <Point X="8.5" Y="6.624" />
@@ -60,20 +72,8 @@
         <Point X="8.5" Y="2.312" />
       </Path>
     </AssociationLine>
-    <AssociationLine Name="EndpointType" Type="AmigaPowerAnalysis.Core.EndpointType" FixedFromPoint="true">
-      <Path>
-        <Point X="5.5" Y="7.016" />
-        <Point X="3.75" Y="7.016" />
-      </Path>
-    </AssociationLine>
-    <AssociationLine Name="Comparisons" Type="AmigaPowerAnalysis.Core.Comparison" FixedFromPoint="true">
-      <Path>
-        <Point X="8.5" Y="7.67" />
-        <Point X="10.5" Y="7.67" />
-      </Path>
-    </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AAAAVAACQIkAAAAIAgQKAIQABAACCACBAAAQAgEAAAA=</HashCode>
+      <HashCode>AAAAVAACQIkAAAAIAAQKAIQABAACCACBAAAQAgEAAAA=</HashCode>
       <FileName>Core\ProjectEntities\Endpoint.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -81,9 +81,9 @@
     </ShowAsAssociation>
     <ShowAsCollectionAssociation>
       <Property Name="Factors" />
+      <Property Name="Comparisons" />
       <Property Name="InteractionFactors" />
       <Property Name="NonInteractionFactors" />
-      <Property Name="Comparisons" />
     </ShowAsCollectionAssociation>
   </Class>
   <Class Name="AmigaPowerAnalysis.Core.Factor">
@@ -92,7 +92,7 @@
       <Compartment Name="Methods" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAIAAgAAAAAAAAQAAQEAAAgAAAAEAAAAAAI=</HashCode>
+      <HashCode>AAAAAAAAIAIAAAAAAAAAAAQAAQEAAAgAAAAEAAAAAAI=</HashCode>
       <FileName>Core\ProjectEntities\Factor.cs</FileName>
     </TypeIdentifier>
     <ShowAsCollectionAssociation>
@@ -151,7 +151,7 @@
       <Compartment Name="Methods" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAECAAAAAAAAAAQAAAAIAAAAABAAgAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAECAAAAAAAAAAQAAAAIAAAAAAAAgAAAAAAAA=</HashCode>
       <FileName>Core\ProjectEntities\FactorLevel.cs</FileName>
     </TypeIdentifier>
   </Class>
