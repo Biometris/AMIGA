@@ -9,12 +9,6 @@ using AmigaPowerAnalysis.Core.Reporting;
 using AmigaPowerAnalysis.Helpers.ClassExtensionMethods;
 using OxyPlot.WindowsForms;
 
-// TODO Obligatory to first enter a name for a new endpoint
-// TODO Binomial totals greyed out for non fractions
-// TODO Binomial totals must be positive
-// TODO LOC=NaN should be displayed as empty textbox; also empty textbox store as to NaN. Possibly better to use null
-// TODO LOC must be positive
-
 namespace AmigaPowerAnalysis.GUI {
     public partial class AnalysisResultsPerComparisonPanel : UserControl, ISelectionForm {
 
@@ -31,6 +25,12 @@ namespace AmigaPowerAnalysis.GUI {
             Name = "Results per comparison";
             Description = "Choose endpoint in table. Choose method of analysis if more have been investigated. Power is shown for difference tests (upper graphs) and equivalence tests (lower graphs), both as a function of the number of replicates (left) and the Ratio GMO/CMP (right).\r\nNote: Number of plots in design is Number of replicates times Number of plots per block";
             this.comboBoxAnalysisType.Visible = false;
+            var testTypes = Enum.GetValues(typeof(TestType));
+            this.comboBoxTestType.DataSource = testTypes;
+            this.comboBoxTestType.SelectedIndex = 0;
+            var plotTypes = new List<AnalysisPlotType>() { AnalysisPlotType.Replicates, AnalysisPlotType.Ratio };
+            this.comboBoxAnalysisPlotTypes.DataSource = plotTypes;
+            this.comboBoxAnalysisPlotTypes.SelectedIndex = 0;
             _project = project;
         }
 
@@ -46,6 +46,7 @@ namespace AmigaPowerAnalysis.GUI {
             if (_project.GetComparisons().Any(c => c.OutputPowerAnalysis != null)) {
                 splitContainerComparisons.Visible = true;
                 var selectedAnalysisMethodTypes = _comparisons.First().OutputPowerAnalysis.InputPowerAnalysis.SelectedAnalysisMethodTypes.GetFlags<AnalysisMethodType>().ToArray();
+                this.comboBoxAnalysisType.Visible = selectedAnalysisMethodTypes.Count() > 1;
                 this.comboBoxAnalysisType.DataSource = selectedAnalysisMethodTypes;
                 if (selectedAnalysisMethodTypes.Count() > 0) {
                     this.comboBoxAnalysisType.SelectedIndex = 0;
@@ -89,10 +90,13 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void updateAnalysisOutputPanel() {
             if (_currentComparison != null) {
-                plotViewDifferenceReplicates.Model = AnalysisResultsChartGenerator.CreatePlotViewReplicatesLogRatio(_currentComparison.OutputPowerAnalysis.OutputRecords, TestType.Difference, _currentAnalysisType);
-                plotViewEquivalenceReplicates.Model = AnalysisResultsChartGenerator.CreatePlotViewReplicatesLogRatio(_currentComparison.OutputPowerAnalysis.OutputRecords, TestType.Equivalence, _currentAnalysisType);
-                plotViewDifferenceLog.Model = AnalysisResultsChartGenerator.CreatePlotViewLogRatioReplicates(_currentComparison.OutputPowerAnalysis.OutputRecords, TestType.Difference, _currentAnalysisType);
-                plotViewEquivalenceLog.Model = AnalysisResultsChartGenerator.CreatePlotViewLogRatioReplicates(_currentComparison.OutputPowerAnalysis.OutputRecords, TestType.Equivalence, _currentAnalysisType);
+                var plotType = (AnalysisPlotType)comboBoxAnalysisPlotTypes.SelectedValue;
+                var testType = (TestType)comboBoxTestType.SelectedValue;
+                if (plotType == AnalysisPlotType.Replicates) {
+                    plotView.Model = AnalysisResultsChartGenerator.CreatePlotViewReplicatesLogRatio(_currentComparison.OutputPowerAnalysis.OutputRecords, testType, _currentAnalysisType);
+                } else if (plotType == AnalysisPlotType.Ratio) {
+                    plotView.Model = AnalysisResultsChartGenerator.CreatePlotViewLogRatioReplicates(_currentComparison.OutputPowerAnalysis.OutputRecords, testType, _currentAnalysisType);
+                }
                 labelPlotsPerBlock.Text = string.Format("{0} plots per block", _currentComparison.OutputPowerAnalysis.InputPowerAnalysis.InputRecords.Sum(ir => ir.Frequency));
                 labelLocLowerValue.Text = string.Format("{0:0.###}", _currentComparison.OutputPowerAnalysis.InputPowerAnalysis.LocLower);
                 labelLocUpperValue.Text = string.Format("{0:0.###}", _currentComparison.OutputPowerAnalysis.InputPowerAnalysis.LocUpper);
@@ -128,6 +132,14 @@ namespace AmigaPowerAnalysis.GUI {
                 var htmlReportForm = new HtmlReportForm(ComparisonSummaryReportGenerator.GenerateComparisonReport(_currentComparison, _currentProjectFilesPath), Path.GetFileNameWithoutExtension(_currentProjectFilesPath), _currentProjectFilesPath);
                 htmlReportForm.ShowDialog();
             }
+        }
+
+        private void comboBoxTestType_SelectedIndexChanged(object sender, EventArgs e) {
+            updateAnalysisOutputPanel();
+        }
+
+        private void comboBoxAnalysisPlotTypes_SelectedIndexChanged(object sender, EventArgs e) {
+            updateAnalysisOutputPanel();
         }
     }
 }

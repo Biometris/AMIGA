@@ -8,15 +8,16 @@ using OxyPlot.Axes;
 using OxyPlot.Series;
 
 namespace AmigaPowerAnalysis.Core.Charting {
+
+    public enum AnalysisPlotType {
+        Replicates,
+        Ratio,
+        LevelOfConcern,
+    }
+
     public static class AnalysisResultsChartGenerator {
 
-        private enum PlotType {
-            Replicates,
-            Ratio,
-            LevelOfConcern,
-        }
-
-        private static PlotModel CreatePlotModel(TestType testType, AnalysisMethodType analysisMethodType, PlotType plotType) {
+        private static PlotModel CreatePlotModel(TestType testType, AnalysisMethodType analysisMethodType, AnalysisPlotType plotType) {
             var plotModel = new PlotModel() {
                 Title = testType.GetDisplayName() + " " + analysisMethodType.GetDisplayName(),
                 TitleFontSize = 11,
@@ -46,7 +47,7 @@ namespace AmigaPowerAnalysis.Core.Charting {
         }
 
         public static PlotModel CreatePlotViewReplicatesLogRatio(List<OutputPowerAnalysisRecord> powerAnalysisOutputRecords, TestType testType, AnalysisMethodType analysisMethodType) {
-            var model = CreatePlotModel(testType, analysisMethodType, PlotType.Replicates);
+            var model = CreatePlotModel(testType, analysisMethodType, AnalysisPlotType.Replicates);
 
             var horizontalAxis = new LogarithmicAxis() {
                 Title = "Replicates",
@@ -113,7 +114,7 @@ namespace AmigaPowerAnalysis.Core.Charting {
         }
 
         public static PlotModel CreatePlotViewLogRatioReplicates(List<OutputPowerAnalysisRecord> powerAnalysisOutputRecords, TestType testType, AnalysisMethodType analysisMethodType) {
-            var model = CreatePlotModel(testType, analysisMethodType, PlotType.Ratio);
+            var model = CreatePlotModel(testType, analysisMethodType, AnalysisPlotType.Ratio);
 
             var horizontalAxis = new LinearAxis() {
                 Title = "Log(ratio)",
@@ -179,7 +180,7 @@ namespace AmigaPowerAnalysis.Core.Charting {
         }
 
         public static PlotModel CreatePlotViewReplicatesLevelOfConcern(List<OutputPowerAnalysisRecord> powerAnalysisOutputRecords, TestType testType, AnalysisMethodType analysisMethodType) {
-            var model = CreatePlotModel(testType, analysisMethodType, PlotType.Replicates);
+            var model = CreatePlotModel(testType, analysisMethodType, AnalysisPlotType.Replicates);
 
             var horizontalAxis = new LogarithmicAxis() {
                 Title = "Replicates",
@@ -246,7 +247,7 @@ namespace AmigaPowerAnalysis.Core.Charting {
         }
 
         public static PlotModel CreatePlotViewLevelOfConcernReplicates(List<OutputPowerAnalysisRecord> powerAnalysisOutputRecords, TestType testType, AnalysisMethodType analysisMethodType) {
-            var model = CreatePlotModel(testType, analysisMethodType, PlotType.LevelOfConcern);
+            var model = CreatePlotModel(testType, analysisMethodType, AnalysisPlotType.LevelOfConcern);
 
             var horizontalAxis = new LinearAxis() {
                 Title = "Concern Standardized Difference",
