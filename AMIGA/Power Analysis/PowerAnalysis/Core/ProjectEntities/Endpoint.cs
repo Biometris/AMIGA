@@ -83,7 +83,7 @@ namespace AmigaPowerAnalysis.Core {
         /// Gets and sets the CV for the blocks for this endpoint.
         /// </summary>
         [DataMember(Order = 2)]
-        public double CVForBlocks { get; set; }
+        public double CvForBlocks { get; set; }
 
         /// <summary>
         /// The distribution type of this endpoint.

@@ -24,25 +24,42 @@
         /// </summary>
         private void InitializeComponent() {
             this.panelModelInfo = new System.Windows.Forms.Panel();
+            this.buttonGenerateDataTemplate = new System.Windows.Forms.Button();
             this.dataGridViewComparisons = new System.Windows.Forms.DataGridView();
             this.splitContainerComparisons = new System.Windows.Forms.SplitContainer();
-            this.buttonGenerateDataTemplate = new System.Windows.Forms.Button();
+            this.flowLayoutPanelReport = new System.Windows.Forms.FlowLayoutPanel();
+            this.textBoxGeneratedAnalysisScript = new System.Windows.Forms.TextBox();
             this.panelModelInfo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewComparisons)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerComparisons)).BeginInit();
             this.splitContainerComparisons.Panel1.SuspendLayout();
             this.splitContainerComparisons.Panel2.SuspendLayout();
             this.splitContainerComparisons.SuspendLayout();
+            this.flowLayoutPanelReport.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelModelInfo
             // 
-            this.panelModelInfo.Controls.Add(this.buttonGenerateDataTemplate);
+            this.panelModelInfo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panelModelInfo.Controls.Add(this.textBoxGeneratedAnalysisScript);
+            this.panelModelInfo.Controls.Add(this.flowLayoutPanelReport);
             this.panelModelInfo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelModelInfo.Location = new System.Drawing.Point(0, 0);
             this.panelModelInfo.Name = "panelModelInfo";
+            this.panelModelInfo.Padding = new System.Windows.Forms.Padding(5);
             this.panelModelInfo.Size = new System.Drawing.Size(561, 477);
             this.panelModelInfo.TabIndex = 0;
+            // 
+            // buttonGenerateDataTemplate
+            // 
+            this.buttonGenerateDataTemplate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonGenerateDataTemplate.Location = new System.Drawing.Point(403, 3);
+            this.buttonGenerateDataTemplate.Name = "buttonGenerateDataTemplate";
+            this.buttonGenerateDataTemplate.Size = new System.Drawing.Size(143, 23);
+            this.buttonGenerateDataTemplate.TabIndex = 0;
+            this.buttonGenerateDataTemplate.Text = "Generate data template";
+            this.buttonGenerateDataTemplate.UseVisualStyleBackColor = true;
+            this.buttonGenerateDataTemplate.Click += new System.EventHandler(this.buttonGenerateDataTemplate_Click);
             // 
             // dataGridViewComparisons
             // 
@@ -84,16 +101,26 @@
             this.splitContainerComparisons.SplitterDistance = 283;
             this.splitContainerComparisons.TabIndex = 9;
             // 
-            // buttonGenerateDataTemplate
+            // flowLayoutPanelReport
             // 
-            this.buttonGenerateDataTemplate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonGenerateDataTemplate.Location = new System.Drawing.Point(415, 3);
-            this.buttonGenerateDataTemplate.Name = "buttonGenerateDataTemplate";
-            this.buttonGenerateDataTemplate.Size = new System.Drawing.Size(143, 23);
-            this.buttonGenerateDataTemplate.TabIndex = 0;
-            this.buttonGenerateDataTemplate.Text = "Generate data template";
-            this.buttonGenerateDataTemplate.UseVisualStyleBackColor = true;
-            this.buttonGenerateDataTemplate.Click += new System.EventHandler(this.buttonGenerateDataTemplate_Click);
+            this.flowLayoutPanelReport.Controls.Add(this.buttonGenerateDataTemplate);
+            this.flowLayoutPanelReport.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.flowLayoutPanelReport.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
+            this.flowLayoutPanelReport.Location = new System.Drawing.Point(5, 441);
+            this.flowLayoutPanelReport.Name = "flowLayoutPanelReport";
+            this.flowLayoutPanelReport.Size = new System.Drawing.Size(549, 29);
+            this.flowLayoutPanelReport.TabIndex = 18;
+            // 
+            // textBoxGeneratedAnalysisScript
+            // 
+            this.textBoxGeneratedAnalysisScript.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.textBoxGeneratedAnalysisScript.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textBoxGeneratedAnalysisScript.Location = new System.Drawing.Point(5, 5);
+            this.textBoxGeneratedAnalysisScript.Multiline = true;
+            this.textBoxGeneratedAnalysisScript.Name = "textBoxGeneratedAnalysisScript";
+            this.textBoxGeneratedAnalysisScript.ReadOnly = true;
+            this.textBoxGeneratedAnalysisScript.Size = new System.Drawing.Size(549, 436);
+            this.textBoxGeneratedAnalysisScript.TabIndex = 19;
             // 
             // AnalysisTemplatePanel
             // 
@@ -106,11 +133,13 @@
             this.Padding = new System.Windows.Forms.Padding(10);
             this.Size = new System.Drawing.Size(874, 503);
             this.panelModelInfo.ResumeLayout(false);
+            this.panelModelInfo.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewComparisons)).EndInit();
             this.splitContainerComparisons.Panel1.ResumeLayout(false);
             this.splitContainerComparisons.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerComparisons)).EndInit();
             this.splitContainerComparisons.ResumeLayout(false);
+            this.flowLayoutPanelReport.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -121,6 +150,8 @@
         private System.Windows.Forms.DataGridView dataGridViewComparisons;
         private System.Windows.Forms.SplitContainer splitContainerComparisons;
         private System.Windows.Forms.Button buttonGenerateDataTemplate;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanelReport;
+        private System.Windows.Forms.TextBox textBoxGeneratedAnalysisScript;
 
     }
 }

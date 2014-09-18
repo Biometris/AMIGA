@@ -23,30 +23,21 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                 Endpoint = comparison.Endpoint.Name,
                 LocLower = comparison.Endpoint.LocLower,
                 LocUpper = comparison.Endpoint.LocUpper,
+                DistributionType = comparison.Endpoint.DistributionType,
+                PowerLawPower = comparison.Endpoint.PowerLawPower,
                 SelectedAnalysisMethodTypes = powerCalculationSettings.SelectedAnalysisMethodTypes,
+                CvComparator = comparison.Endpoint.CvComparator,
+                CvForBlocks = comparison.Endpoint.CvForBlocks,
+                NumberOfInteractions = comparison.Endpoint.InteractionFactors.Count(),
+                NumberOfModifiers = (comparison.Endpoint.UseModifier ? comparison.Endpoint.NonInteractionFactors.Count() : 0),
+                SignificanceLevel = powerCalculationSettings.SignificanceLevel,
+                NumberOfRatios = powerCalculationSettings.NumberOfRatios,
+                NumberOfReplications = powerCalculationSettings.NumberOfReplications,
+                ExperimentalDesignType = designSettings.ExperimentalDesignType,
+                PowerCalculationMethodType = powerCalculationSettings.PowerCalculationMethod,
+                RandomNumberSeed = powerCalculationSettings.Seed,
+                NumberOfSimulatedDataSets = powerCalculationSettings.NumberOfSimulatedDataSets,
             };
-
-            inputPowerAnalysis.SimulationSettings.Add("CVComparator", comparison.Endpoint.CvComparator.ToString());
-            inputPowerAnalysis.SimulationSettings.Add("CVBlocks", comparison.Endpoint.CVForBlocks.ToString());
-            inputPowerAnalysis.SimulationSettings.Add("Distribution", comparison.Endpoint.DistributionType.ToString());
-            inputPowerAnalysis.SimulationSettings.Add("PowerLawPower", comparison.Endpoint.PowerLawPower.ToString());
-
-            inputPowerAnalysis.SimulationSettings.Add("SignificanceLevel", powerCalculationSettings.SignificanceLevel.ToString());
-            inputPowerAnalysis.SimulationSettings.Add("NumberOfRatios", powerCalculationSettings.NumberOfRatios.ToString());
-            inputPowerAnalysis.SimulationSettings.Add("NumberOfReplications", string.Join(" ", powerCalculationSettings.NumberOfReplications.Select(r => r.ToString()).ToList()));
-            inputPowerAnalysis.SimulationSettings.Add("ExperimentalDesignType", designSettings.ExperimentalDesignType.ToString());
-
-            inputPowerAnalysis.SimulationSettings.Add("NumberOfInteractions", comparison.Endpoint.InteractionFactors.Count().ToString());
-            inputPowerAnalysis.SimulationSettings.Add("NumberOfModifiers", (comparison.Endpoint.UseModifier ? comparison.Endpoint.NonInteractionFactors.Count() : 0).ToString());
-
-            inputPowerAnalysis.SimulationSettings.Add("PowerCalculationMethod", powerCalculationSettings.PowerCalculationMethod.ToString());
-            inputPowerAnalysis.SimulationSettings.Add("RandomNumberSeed", powerCalculationSettings.Seed.ToString());
-
-            inputPowerAnalysis.SimulationSettings.Add("NumberOfSimulatedDataSets", powerCalculationSettings.NumberOfSimulatedDataSets.ToString());
-            inputPowerAnalysis.SimulationSettings.Add("IsLogNormal", powerCalculationSettings.IsLogNormal.ToString());
-            inputPowerAnalysis.SimulationSettings.Add("IsSquareRoot", powerCalculationSettings.IsSquareRoot.ToString());
-            inputPowerAnalysis.SimulationSettings.Add("IsOverdispersedPoisson", powerCalculationSettings.IsOverdispersedPoisson.ToString());
-            inputPowerAnalysis.SimulationSettings.Add("IsNegativeBinomial", powerCalculationSettings.IsNegativeBinomial.ToString());
 
             inputPowerAnalysis.InputRecords = getComparisonInputPowerAnalysisRecords(comparison);
 

@@ -84,6 +84,7 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void updatePanelModelInfo() {
+
         }
 
         private void dataGridViewComparisons_SelectionChanged(object sender, EventArgs e) {

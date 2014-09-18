@@ -133,7 +133,7 @@ namespace AmigaPowerAnalysis.GUI {
             }
             if (_project.CVForBlocks != value) {
                 _project.CVForBlocks = value;
-                _project.Endpoints.ForEach(ep => ep.CVForBlocks = value);
+                _project.Endpoints.ForEach(ep => ep.CvForBlocks = value);
                 dataGridViewEndpoints.Refresh();
             }
             textBox.Text = value.ToString();
