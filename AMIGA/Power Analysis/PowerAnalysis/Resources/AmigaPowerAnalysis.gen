@@ -3,10 +3,10 @@ enquire   ch=3 ; filetype=input  ; open=in3open  ; name=infile
 enquire   ch=2 ; filetype=output ; open=out2open ; name=outfile
 close channel=2 ; filetype=output
 
-\SET [WORKINGDIRECTORY='D:/Data/AMIGA/AmigaTool/Power Analysis/PowerAnalysis/Resources']
+SET [WORKINGDIRECTORY='D:/Data/AMIGA/AmigaTool/Power Analysis/PowerAnalysis/Resources']
 
 if in3open.eq.0
-    text      project ; 'ValthermondJuly2013-0'
+    text      project ; 'ValthermondJuly2013new-0'
     text      dir ; 'D:/Data/AMIGA/AmigaTool/TestData/'
     calculate pos = getposition(project ; '-')
     concatena [subdir] project ; width=getposition(project ; '-') - 1
@@ -34,20 +34,28 @@ scalar    comparisonId, lowerLOC, upperLOC, cvComparator, cvBlock, powerdist, al
           ngridLOC, seed, ndatasets, nIntFac, nModFac
 variate   nBlocks
 scalar    nitems ; 0
-for read=comparisonId, endpoint, lowerLOC, upperLOC, cvComparator, cvBlock, distribution, \
-      powerdist, alfa, ngridLOC, nBlocks, design, nIntFac, nModFac, method, seed, \
+for read=comparisonId, endpoint, lowerLOC, upperLOC, distribution, powerdist, \
+      cvComparator, cvBlock, \
+      nIntFac, nModFac, alfa, ngridLOC, nBlocks, design, method, seed, \
       ndatasets, IsLogNormal, IsSquareRoot, IsOPoisson, IsNegBin
   read    [print=* ; channel=3 ; end=*] dummy
+  \prin dummy
   getattrib [attribute=stype] read ; save=att
+  \prin att[]
   if att[].eqs.'variate'
       print 'variate'
       read    [print=# ; channel=3 ; setn=yes] read
     else
       read    [print=* ; channel=3] read
   endif
+  \prin read
   calculate nitems = nitems + 2
+  \prin nitems
 endfor
 close     channel=3 ; filetype=input
+
+\stop
+
 
 "one or twosided?"
 calc twosided=(lowerLOC+upperLOC)/(lowerLOC+upperLOC)
@@ -100,6 +108,7 @@ print     models, ismodels
 fileread  [print=* ; name=infile ; skip=nitems ; imethod=read ; \
           separator=',' ; maxcat=0 ; isave=isave]
 prin isave
+prin Comparison
 
 " Initialize random generator "
 calculate init = urand(seed ; 1)
