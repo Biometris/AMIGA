@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace AmigaPowerAnalysis.Core.PowerAnalysis {
@@ -51,6 +52,14 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             factors.AddRange(comparison.Endpoint.InteractionFactors);
             factors.AddRange(comparison.Endpoint.NonInteractionFactors);
             var allFactorLevelCombinations = FactorLevelCombinationsCreator.GenerateInteractionCombinations(factors);
+            Func<string, ComparisonType> defaultComparison = s => {
+                if (s == "GMO") {
+                    return ComparisonType.IncludeGMO;
+                } else if (s == "Comparator") {
+                    return ComparisonType.IncludeComparator;
+                }
+                return ComparisonType.Exclude;
+            };
             var records = allFactorLevelCombinations
                 .Select((r, i) => new {
                     MainPlot = i + 1,
@@ -69,7 +78,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                     Modifier = (comparison.Endpoint.UseModifier && r.NonInteractionFactorLevelCombination != null) ? r.NonInteractionFactorLevelCombination.ModifierFactor : 1,
                     Frequency = r.Frequency,
                     Mean = (r.InteractionFactorLevelCombination != null) ? r.InteractionFactorLevelCombination.GetMean(r.Variety) : comparison.Endpoint.MuComparator,
-                    Comparison = (r.InteractionFactorLevelCombination != null) ? r.InteractionFactorLevelCombination.GetComparisonType(r.Variety) : ComparisonType.Exclude,
+                    Comparison = (r.InteractionFactorLevelCombination != null) ? r.InteractionFactorLevelCombination.GetComparisonType(r.Variety) : defaultComparison(r.Variety),
                 })
                 .Select(r => new InputPowerAnalysisRecord() {
                     MainPlot = r.MainPlot,
