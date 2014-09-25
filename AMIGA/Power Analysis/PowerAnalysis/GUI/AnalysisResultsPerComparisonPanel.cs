@@ -22,7 +22,7 @@ namespace AmigaPowerAnalysis.GUI {
 
         public AnalysisResultsPerComparisonPanel(Project project) {
             InitializeComponent();
-            Name = "Results per comparison";
+            Name = "Results per Endpoint";
             Description = "Choose endpoint in table. Choose method of analysis if more have been investigated. Power is shown for difference tests or equivalence tests,and as a function of the number of replicates or the Ratio GMO/CMP (on a ln scale).\r\nNote: Number of plots in design is Number of replicates times Number of plots per block";
             this.comboBoxAnalysisType.Visible = false;
             var testTypes = Enum.GetValues(typeof(TestType));
