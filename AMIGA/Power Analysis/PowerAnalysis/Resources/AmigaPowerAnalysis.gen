@@ -3,7 +3,7 @@ enquire   ch=3 ; filetype=input  ; open=in3open  ; name=infile
 enquire   ch=2 ; filetype=output ; open=out2open ; name=outfile
 close channel=2 ; filetype=output
 
-SET [WORKINGDIRECTORY='D:/Data/AMIGA/AmigaTool/Power Analysis/PowerAnalysis/Resources']
+\SET [WORKINGDIRECTORY='D:/Data/AMIGA/AmigaTool/Power Analysis/PowerAnalysis/Resources']
 
 if in3open.eq.0
     text      project ; 'ValthermondJuly2013new-0'
