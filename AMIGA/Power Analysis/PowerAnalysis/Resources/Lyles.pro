@@ -18,6 +18,7 @@ DUMMY     "Endpoint, ComparisonId, NumberOfInteractions, NumberOfModifiers, \
 SCALAR    NumberOfInteractions, NumberOfModifiers; #NINTFAC, #NMODFAC
 
 TXCONSTRU [tsave] ISAVE
+\prin tsave
 CALCULATE posvariety,posfreq = POSITION('Variety','Frequency' ; tsave)
 calc posmean,poscomp=posfreq +(1,2)
 DUMMY     Frequency, Mean, Comparison; ISAVE[#posfreq,#posmean,#poscomp]
@@ -29,19 +30,22 @@ VARIATE   addfactor ; !(posfirstfac...poslastaddfac) ; DECIMALS=0
 VARIATE   ifactor ; !(posvariety...poslastfac) ; DECIMALS=0
 CALCULATE nfactor = NVALUES(ifactor)
 
+" Create other factors"
+GROUPS    [REDEFINE=yes] ISAVE[#addfactor]
+
 " Expand structures by the given frequencies, 
   first for variates, then for texts"
 
-prin ISAVE[1...poslastfac],Mean,Comparison,Frequency
-FEXPAND MainPlot,SubPlot,ISAVE[#addfactor],Mean; NOBS=Frequency;\
-    VARIATE=MainPlot,SubPlot,ISAVE[#addfactor],Mean
-TEXT txtVariety,txtComparison; Variety,Comparison
+\prin ISAVE[1...poslastfac],Mean,Comparison,Frequency
+FEXPAND MainPlot,SubPlot,Mean; NOBS=Frequency;\
+    VARIATE=MainPlot,SubPlot,Mean
+TEXT txtVariety,txtComparison,txtISAVE[#addfactor];\
+    Variety,Comparison,ISAVE[#addfactor]
 DELETE [REDEFINE=y] Variety,Comparison
-FEXPAND txtVariety,txtComparison; NOBS=Frequency; FACTOR=Variety,Comparison
-prin ISAVE[1...poslastfac],Mean,Comparison
+FEXPAND txtVariety,txtComparison,txtISAVE[#addfactor]; NOBS=Frequency;\
+    FACTOR=Variety,Comparison,ISAVE[#addfactor]
+\prin ISAVE[1...poslastfac],Mean,Comparison
 
-" Create other factors"
-GROUPS    [REDEFINE=yes] ISAVE[#addfactor]
 
 " Redefine ordering of factor labels of Variety; this ensures that dum[1]
   defines the parameter of interest "
@@ -59,9 +63,11 @@ FACAMEND  Variety  ; newlabels
 " Define comparison "
 VARIATE   COMPARISON ; (Comparison.IN.'IncludeGMO') - \
           (Comparison.IN.'IncludeComparator') ; decimals=0
+\prin Mean,Comparison,COMPARISON
 RESTRICT  Mean ; ABS(COMPARISON )
 CALCULATE MUCOMPARATOR = MEAN(Mean)
 RESTRICT  Mean
+\exit [co=jo] 1
 
 " Determine interaction factors and create dummies for Interaction*Variety "
 CALCULATE nInteractions = MEAN(NumberOfInteractions)
@@ -232,6 +238,7 @@ FOR [NTIMES=nlevMean ; INDEX=jj]
     " Use different factors to ensure that the sum of the probs equals 1 "
     CALCULATE factor$[jj] = ff
     CALCULATE lowcount = BOUND(floor(kmean - ff*ksd) ; 0 ; mis)
+\prin jj,ff,ksd,kmean,mis,lowcount
     CALCULATE uppcount = CEILING(kmean + ff*ksd)
     CALCULATE nobs$[jj] = uppcount - lowcount + 1
     VARIATE   [VALUES=#lowcount...#uppcount] yydum, wwdum
