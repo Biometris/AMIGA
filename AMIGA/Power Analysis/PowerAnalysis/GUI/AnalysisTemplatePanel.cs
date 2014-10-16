@@ -99,11 +99,24 @@ namespace AmigaPowerAnalysis.GUI {
                 OverwritePrompt = true
             };
             if (saveFileDialog.ShowDialog() == DialogResult.OK) {
-                var generator = new AnalysisDataTemplateGenerator();
-                var template = generator.CreateAnalysisDataTemplate(_project, 3);
-                generator.AnalysisDataTemplateToCsv(template, saveFileDialog.FileName);
-                System.Diagnostics.Process.Start(saveFileDialog.FileName);
+                try {
+                    var generator = new AnalysisDataTemplateGenerator();
+                    var template = generator.CreateAnalysisDataTemplate(_project, 3);
+                    generator.AnalysisDataTemplateToCsv(template, saveFileDialog.FileName);
+                    System.Diagnostics.Process.Start(saveFileDialog.FileName);
+                } catch (Exception ex) {
+                    this.showError("Error while exporting data template", ex.Message);
+                }
             }
+        }
+
+        private void showError(string title, string message) {
+            MessageBox.Show(
+                    message,
+                    title,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error,
+                    MessageBoxDefaultButton.Button1);
         }
     }
 }

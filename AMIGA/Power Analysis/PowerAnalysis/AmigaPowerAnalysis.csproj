@@ -82,7 +82,7 @@
     <Compile Include="Core\PowerAnalysis\PowerAnalysisInputGenerator.cs" />
     <Compile Include="Core\ProjectManager.cs" />
     <Compile Include="Core\ProjectEntities\Comparison.cs" />
-    <Compile Include="Core\ProjectEntities\Modifier.cs" />
+    <Compile Include="Core\ProjectEntities\ModifierFactorLevelCombination.cs" />
     <Compile Include="Core\ProjectEntities\DesignSettings.cs" />
     <Compile Include="Core\Distributions\PoissonLogNormalDistribution.cs" />
     <Compile Include="Core\Distributions\PowerLawDistribution.cs" />
@@ -94,7 +94,7 @@
     <Compile Include="Core\Distributions\IDistribution.cs" />
     <Compile Include="Core\Distributions\PoissonDistribution.cs" />
     <Compile Include="Core\ProjectEntities\Endpoint.cs" />
-    <Compile Include="Core\ProjectEntities\ComparisonFactorLevelCombination.cs" />
+    <Compile Include="Core\ProjectEntities\InteractionFactorLevelCombination.cs" />
     <Compile Include="Core\ProjectEntities\EndpointFactor.cs" />
     <Compile Include="Core\ProjectEntities\EndpointTypeProvider.cs" />
     <Compile Include="Core\ProjectEntities\EndpointType.cs" />
@@ -134,6 +134,12 @@
     </Compile>
     <Compile Include="GUI\AnalysisTemplatePanel.Designer.cs">
       <DependentUpon>AnalysisTemplatePanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\InteractionsPerEndpointPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\InteractionsPerEndpointPanel.Designer.cs">
+      <DependentUpon>InteractionsPerEndpointPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\HtmlReportForm.cs">
       <SubType>Form</SubType>
@@ -234,6 +240,7 @@
     </Compile>
     <Compile Include="Helpers\ClassExtensionMethods\EnumExtensionMethods.cs" />
     <Compile Include="Helpers\ClassExtensionMethods\MemberInfoExtensionMethods.cs" />
+    <Compile Include="Helpers\CollectionComparison\MultiSetComparer.cs" />
     <Compile Include="Helpers\CsvWriter.cs" />
     <Compile Include="Helpers\ClassExtensionMethods\ListExtensionMethods.cs" />
     <Compile Include="Helpers\Log\ILogger.cs" />
@@ -256,6 +263,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\AnalysisTemplatePanel.resx">
       <DependentUpon>AnalysisTemplatePanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\InteractionsPerEndpointPanel.resx">
+      <DependentUpon>InteractionsPerEndpointPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\HtmlReportForm.resx">
       <DependentUpon>HtmlReportForm.cs</DependentUpon>

@@ -223,6 +223,7 @@ namespace AmigaPowerAnalysis.GUI {
                 _selectionForms.Add(new FactorsPanel(_project));
                 _selectionForms.Add(new DesignPanel(_project));
                 _selectionForms.Add(new InteractionsPanel(_project));
+                _selectionForms.Add(new InteractionsPerEndpointPanel(_project));
                 _selectionForms.Add(new ComparisonsPanel(_project));
                 _selectionForms.Add(new ModifiersPanel(_project));
                 var simulationPanel = new SimulationPanel(_project);

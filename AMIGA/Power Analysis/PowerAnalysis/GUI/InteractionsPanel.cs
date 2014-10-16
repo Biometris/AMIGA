@@ -10,55 +10,78 @@ namespace AmigaPowerAnalysis.GUI {
 
         private Project _project;
 
-        private Factor _currentFactor;
-
-        private DataTable _interactionsDataTable;
-
         public InteractionsPanel(Project project) {
             InitializeComponent();
             _project = project;
             Name = "Interactions";
             Description = "Indicate per endpoint which factors are expected to have an interaction with the GMO-CMP Variety comparison. The appropraite levels of these factors can then be chosen in the Comparison tab.";
             createDataGridFactors();
-            createDataGridFactorLevels();
-            createDataGridInteractions();
+            createDataGridViewInteractionFactorLevelCombinations();
             updateVisibilities();
         }
 
         public string Description { get; private set; }
 
-        public void Activate() {
-            var factorsBindingSouce = new BindingSource(_project.Factors, null);
-            checkBoxUseInteractions.Checked = _project.DesignSettings.UseInteractions;
-            checkBoxUseDefaultInteractions.Checked = _project.DesignSettings.UseDefaultInteractions;
-            updateDataGridInteractions();
-            updateDataGridViewFactors();
-            updateDataGridFactorLevels();
-            updateVisibilities();
-        }
-
         public bool IsVisible() {
             return true;
         }
 
-        public event EventHandler TabVisibilitiesChanged;
+        public void Activate() {
+            checkBoxUseInteractions.Checked = _project.DesignSettings.UseInteractions;
+            checkBoxUseDefaultInteractions.Checked = _project.DesignSettings.UseDefaultInteractions;
+            updateDataGridViewFactors();
+            updateDataGridViewInteractionFactorLevelCombinations();
+            updateVisibilities();
+        }
 
         private void updateVisibilities() {
             if (_project.Factors.Count <= 1) {
                 checkBoxUseDefaultInteractions.Visible = false;
                 checkBoxUseInteractions.Visible = false;
                 dataGridViewFactors.Visible = false;
-                dataGridViewFactorLevels.Visible = false;
-                dataGridInteractions.Visible = false;
             } else {
                 checkBoxUseInteractions.Visible = true;
-                checkBoxUseDefaultInteractions.Visible = _project.DesignSettings.UseInteractions;
-                checkBoxUseDefaultInteractions.Checked = _project.DesignSettings.UseDefaultInteractions;
+                checkBoxUseDefaultInteractions.Visible = _project.DesignSettings.UseInteractions && _project.Endpoints.Count > 1;
                 dataGridViewFactors.Visible = _project.DesignSettings.UseInteractions;
-                dataGridViewFactorLevels.Visible = _project.DesignSettings.UseInteractions;
-                dataGridInteractions.Visible = _project.DesignSettings.UseInteractions && !_project.DesignSettings.UseDefaultInteractions;
+                dataGridViewInteractionFactorLevelCombinations.Visible = _project.DesignSettings.UseInteractions;
+                if (_project.Factors.Count > 1 && dataGridViewFactors.Visible) {
+                    var currencyManager = (CurrencyManager)BindingContext[dataGridViewFactors.DataSource];
+                    currencyManager.SuspendBinding();
+                    dataGridViewFactors.Rows[0].Visible = false;
+                    currencyManager.ResumeBinding();
+                }
+
+                if (_project.DesignSettings.UseDefaultInteractions) {
+                    dataGridViewFactors.Enabled = true;
+                    dataGridViewFactors.ForeColor = SystemColors.ControlText;
+                    dataGridViewFactors.ColumnHeadersDefaultCellStyle.ForeColor = SystemColors.Window;
+                    dataGridViewFactors.ColumnHeadersDefaultCellStyle.ForeColor = SystemColors.ControlText;
+                    dataGridViewFactors.EnableHeadersVisualStyles = true;
+
+                    dataGridViewInteractionFactorLevelCombinations.Enabled = true;
+                    dataGridViewInteractionFactorLevelCombinations.ForeColor = SystemColors.ControlText;
+                    dataGridViewInteractionFactorLevelCombinations.ColumnHeadersDefaultCellStyle.BackColor = SystemColors.Window;
+                    dataGridViewInteractionFactorLevelCombinations.ColumnHeadersDefaultCellStyle.ForeColor = SystemColors.ControlText;
+                    dataGridViewInteractionFactorLevelCombinations.EnableHeadersVisualStyles = true;
+                } else {
+                    dataGridViewFactors.Enabled = false;
+                    dataGridViewFactors.ForeColor = Color.Gray;
+                    dataGridViewFactors.ColumnHeadersDefaultCellStyle.BackColor = SystemColors.Control;
+                    dataGridViewFactors.ColumnHeadersDefaultCellStyle.ForeColor = SystemColors.GrayText;
+                    dataGridViewFactors.EnableHeadersVisualStyles = false;
+                    dataGridViewFactors.ClearSelection();
+
+                    dataGridViewInteractionFactorLevelCombinations.Enabled = false;
+                    dataGridViewInteractionFactorLevelCombinations.ForeColor = Color.Gray;
+                    dataGridViewInteractionFactorLevelCombinations.ColumnHeadersDefaultCellStyle.BackColor = SystemColors.Control;
+                    dataGridViewInteractionFactorLevelCombinations.ColumnHeadersDefaultCellStyle.ForeColor = SystemColors.GrayText;
+                    dataGridViewInteractionFactorLevelCombinations.EnableHeadersVisualStyles = false;
+                    dataGridViewInteractionFactorLevelCombinations.CurrentCell = null;
+                }
             }
         }
+
+        public event EventHandler TabVisibilitiesChanged;
 
         private void createDataGridFactors() {
             var column = new DataGridViewTextBoxColumn();
@@ -73,97 +96,56 @@ namespace AmigaPowerAnalysis.GUI {
             checkbox.Name = "IsInteractionWithVariety";
             checkbox.HeaderText = "Interaction";
             dataGridViewFactors.Columns.Add(checkbox);
+
+            updateDataGridViewFactors();
         }
 
-        private void createDataGridFactorLevels() {
-            var column = new DataGridViewTextBoxColumn();
-            column.DataPropertyName = "Label";
-            column.Name = "Label";
-            column.HeaderText = "Level";
-            column.ReadOnly = true;
-            dataGridViewFactorLevels.Columns.Add(column);
-
-            var checkbox = new DataGridViewCheckBoxColumn();
-            checkbox.DataPropertyName = "IsComparisonLevelGMO";
-            checkbox.Name = "IsComparisonLevelGMO";
-            dataGridViewFactorLevels.Columns.Add(checkbox);
-
-            checkbox = new DataGridViewCheckBoxColumn();
-            checkbox.DataPropertyName = "IsComparisonLevelComparator";
-            checkbox.Name = "IsComparisonLevelComparator";
-            dataGridViewFactorLevels.Columns.Add(checkbox);
-
-            updateDataGridFactorLevels();
-        }
-
-        private void createDataGridInteractions() {
-            updateDataGridInteractions();
+        private void createDataGridViewInteractionFactorLevelCombinations() {
+            updateDataGridViewInteractionFactorLevelCombinations();
         }
 
         private void updateDataGridViewFactors() {
             var factorsBindingSouce = new BindingSource(_project.Factors, null);
             dataGridViewFactors.AutoGenerateColumns = false;
             dataGridViewFactors.DataSource = factorsBindingSouce;
-            dataGridViewFactors.Rows[0].ReadOnly = true;
-            dataGridViewFactors.Rows[0].DefaultCellStyle.BackColor = Color.LightGray;
         }
 
-        private void updateDataGridFactorLevels() {
-            if (_currentFactor != null) {
-                var factorLevels = _currentFactor.FactorLevels;
-                var factorLevelsBindingSouce = new BindingSource(factorLevels, null);
-                dataGridViewFactorLevels.AutoGenerateColumns = false;
-                dataGridViewFactorLevels.DataSource = factorLevelsBindingSouce;
-                if (dataGridViewFactorLevels.Columns.Count > 0) {
-                    dataGridViewFactorLevels.Columns["IsComparisonLevelGMO"].Visible = _currentFactor.IsInteractionWithVariety;
-                    dataGridViewFactorLevels.Columns["IsComparisonLevelComparator"].Visible = _currentFactor.IsInteractionWithVariety;
-                }
+        private void updateDataGridViewInteractionFactorLevelCombinations() {
+            dataGridViewInteractionFactorLevelCombinations.DataSource = null;
+            var dataTable = new DataTable();
+            var interactionFactors = _project.Factors.Where(f => f.IsInteractionWithVariety).ToList();
+            foreach (var interactionFactor in interactionFactors) {
+                dataTable.Columns.Add(interactionFactor.Name, typeof(string));
             }
-        }
-
-        private void updateDataGridInteractions() {
-            _interactionsDataTable = new DataTable();
-            dataGridInteractions.DataSource = _interactionsDataTable;
-            _interactionsDataTable.Columns.Clear();
-            _interactionsDataTable.Columns.Add("Endpoint");
-            for (int i = 1; i < _project.Factors.Count; ++i) {
-                _interactionsDataTable.Columns.Add(_project.Factors.ElementAt(i).Name, typeof(bool));
-                if (!_project.Factors.ElementAt(i).IsInteractionWithVariety) {
-                    dataGridInteractions.Columns[i].ReadOnly = true;
-                    dataGridInteractions.Columns[i].DefaultCellStyle.BackColor = Color.LightGray;
+            dataTable.Columns.Add("Interaction GMO", typeof(bool));
+            dataTable.Columns.Add("Interaction Comparator", typeof(bool));
+            foreach (var factorLevelCombination in _project.DefaultInteractionFactorLevelCombinations) {
+                DataRow row = dataTable.NewRow();
+                foreach (var factorLevel in factorLevelCombination.Items) {
+                    row[factorLevel.Parent.Name] = factorLevel.Label;
                 }
+                row["Interaction GMO"] = factorLevelCombination.IsComparisonLevelGMO;
+                row["Interaction Comparator"] = factorLevelCombination.IsComparisonLevelComparator;
+                dataTable.Rows.Add(row);
             }
-            for (int i = 0; i < _project.Endpoints.Count; ++i) {
-                DataRow row = _interactionsDataTable.NewRow();
-                row["Endpoint"] = _project.Endpoints.ElementAt(i).Name;
-                var endpointInteractions = _project.Endpoints.ElementAt(i).InteractionFactors;
-                for (int j = 0; j < endpointInteractions.Count(); ++j) {
-                    if (_interactionsDataTable.Columns.Contains(endpointInteractions.ElementAt(j).Name)) {
-                        row[endpointInteractions.ElementAt(j).Name] = true;
-                    }
-                }
-                _interactionsDataTable.Rows.Add(row);
+            dataGridViewInteractionFactorLevelCombinations.Columns.Clear();
+            dataGridViewInteractionFactorLevelCombinations.DataSource = dataTable;
+            for (int i = 0; i < interactionFactors.Count; ++i) {
+                dataGridViewInteractionFactorLevelCombinations.Columns[i].ReadOnly = true;
             }
         }
 
         private void checkBoxUseInteractions_CheckedChanged(object sender, EventArgs e) {
             _project.SetUseInteractions(checkBoxUseInteractions.Checked);
-            updateDataGridInteractions();
             updateDataGridViewFactors();
-            updateDataGridFactorLevels();
+            updateDataGridViewInteractionFactorLevelCombinations();
             updateVisibilities();
         }
 
         private void dataGridViewFactors_CellValueChanged(object sender, DataGridViewCellEventArgs e) {
             var editedCell = this.dataGridViewFactors.Rows[e.RowIndex].Cells[e.ColumnIndex];
             var newValue = editedCell.Value;
-            if (e.ColumnIndex == dataGridViewFactors.Columns["IsInteractionWithVariety"].Index) {
-                if (dataGridViewFactorLevels.Columns.Count > 0) {
-                    dataGridViewFactorLevels.Columns["IsComparisonLevelGMO"].Visible = _currentFactor.IsInteractionWithVariety;
-                    dataGridViewFactorLevels.Columns["IsComparisonLevelComparator"].Visible = _currentFactor.IsInteractionWithVariety;
-                }
-            }
-            updateDataGridInteractions();
+            updateDataGridViewInteractionFactorLevelCombinations();
         }
 
         private void dataGridViewFactors_CurrentCellDirtyStateChanged(object sender, EventArgs e) {
@@ -172,36 +154,32 @@ namespace AmigaPowerAnalysis.GUI {
                 if (dataGridViewFactors.IsCurrentCellDirty) {
                     dataGridViewFactors.CommitEdit(DataGridViewDataErrorContexts.Commit);
                     var factor = _project.Factors.ElementAt(cell.RowIndex);
-                    foreach (var endpoint in _project.Endpoints) {
-                        endpoint.SetFactorType(factor, factor.IsInteractionWithVariety);
-                    }
+                    _project.SetFactorType(factor, factor.IsInteractionWithVariety);
+                    updateDataGridViewInteractionFactorLevelCombinations();
                 }
             }
-            updateDataGridInteractions();
-        }
-
-        private void dataGridViewFactors_SelectionChanged(object sender, EventArgs e) {
-            if (dataGridViewFactors.CurrentRow.Index < _project.Factors.Count) {
-                _currentFactor = _project.Factors.ElementAt(dataGridViewFactors.CurrentRow.Index);
-            }
-            updateDataGridFactorLevels();
-        }
-
-        private void dataGridViewFactorLevels_CellValueChanged(object sender, DataGridViewCellEventArgs e) {
-            updateDataGridFactorLevels();
         }
 
         private void checkBoxUseDefaultInteractions_CheckedChanged(object sender, EventArgs e) {
             _project.SetDefaultInteractions(checkBoxUseDefaultInteractions.Checked);
+            var tabVisibilitiesChanged = TabVisibilitiesChanged;
+            if (tabVisibilitiesChanged != null) {
+                tabVisibilitiesChanged(this, null);
+            }
             updateVisibilities();
         }
 
-        private void dataGridInteractions_CellValueChanged(object sender, DataGridViewCellEventArgs e) {
-            if (e.ColumnIndex > 0 && e.ColumnIndex - 1 < _project.Factors.Count) {
-                var endpoint = _project.Endpoints.ElementAt(e.RowIndex);
-                var factor = _project.Factors.ElementAt(e.ColumnIndex);
-                var isChecked = (bool)_interactionsDataTable.Rows[e.RowIndex][e.ColumnIndex];
-                endpoint.SetFactorType(factor, isChecked);
+        private void dataGridViewInteractionFactorLevelCombinations_CellValueChanged(object sender, DataGridViewCellEventArgs e) {
+            if (e.RowIndex < _project.DefaultInteractionFactorLevelCombinations.Count) {
+                var factorLevelCombination = _project.DefaultInteractionFactorLevelCombinations[e.RowIndex];
+                if (e.ColumnIndex == dataGridViewInteractionFactorLevelCombinations.Columns["Interaction GMO"].Index) {
+                    var isChecked = (bool)dataGridViewInteractionFactorLevelCombinations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
+                    factorLevelCombination.IsComparisonLevelGMO = (bool)dataGridViewInteractionFactorLevelCombinations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
+                } else if (e.ColumnIndex == dataGridViewInteractionFactorLevelCombinations.Columns["Interaction Comparator"].Index) {
+                    var isChecked = (bool)dataGridViewInteractionFactorLevelCombinations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
+                    factorLevelCombination.IsComparisonLevelComparator = (bool)dataGridViewInteractionFactorLevelCombinations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
+                }
+                _project.UpdateEndpointFactorLevels();
             }
         }
     }

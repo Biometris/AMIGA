@@ -12,7 +12,7 @@ namespace AmigaPowerAnalysis.GUI {
         private Project _project;
 
         private Endpoint _currentEndpoint;
-        private List<Modifier> _currentFactorModifiers;
+        private List<ModifierFactorLevelCombination> _currentFactorModifiers;
 
         public RunPanel(Project project) {
             InitializeComponent();

@@ -53,6 +53,7 @@
     <Compile Include="Core\AnalysisDataTemplateGeneratorTests.cs" />
     <Compile Include="Core\PowerAnalysisInputGeneratorTests.cs" />
     <Compile Include="Core\FactorTests.cs" />
+    <Compile Include="Core\FactoLevelCombinationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

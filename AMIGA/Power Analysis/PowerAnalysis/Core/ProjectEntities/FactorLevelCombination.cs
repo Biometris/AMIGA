@@ -1,11 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
+using AmigaPowerAnalysis.Helpers.CollectionComparison;
 
 namespace AmigaPowerAnalysis.Core {
 
     [DataContract]
-    public sealed class FactorLevelCombination {
+    public class FactorLevelCombination : IEquatable<FactorLevelCombination> {
 
         public FactorLevelCombination() {
             Items = new List<FactorLevel>();
@@ -53,6 +55,45 @@ namespace AmigaPowerAnalysis.Core {
         /// <returns></returns>
         public bool Contains(FactorLevelCombination other) {
             return other.Items.All(i => Items.Contains(i));
+        }
+
+        public bool Equals(FactorLevelCombination other) {
+            if (other == null) {
+                return false;
+            }
+            var equal = this.Items.All(i => other.Items.Contains(i)) && other.Items.All(i => Items.Contains(i));
+            return equal;
+        }
+
+        public override bool Equals(object obj) {
+            var emp = obj as FactorLevelCombination;
+            if (emp != null) {
+                return Equals(emp);
+            } else {
+                return false;
+            }
+        }
+
+        public override int GetHashCode() {
+            int hash = 17;
+            foreach (var item in Items) {
+                hash = hash * 23 + item.GetHashCode();
+            }
+            return hash;
+        }
+
+        public static bool operator ==(FactorLevelCombination first, FactorLevelCombination second) {
+            if (object.ReferenceEquals(first, second)) return true;
+            if (object.ReferenceEquals(first, null)) return false;
+            if (object.ReferenceEquals(second, null)) return false;
+            return first.Equals(second);
+        }
+
+        public static bool operator !=(FactorLevelCombination first, FactorLevelCombination second) {
+            if (object.ReferenceEquals(first, second)) return false;
+            if (object.ReferenceEquals(first, null)) return true;
+            if (object.ReferenceEquals(second, null)) return true;
+            return !first.Equals(second);
         }
     }
 }

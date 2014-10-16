@@ -11,9 +11,12 @@ namespace AmigaPowerAnalysis.Core {
         private double _muComparator;
         private double _cvComparator;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Comparison"/> class.
+        /// </summary>
         public Comparison() {
             IsPrimary = true;
-            VarietyInteractions = new List<VarietyInteraction>();
+            VarietyInteractions = new List<InteractionFactorLevelCombination>();
         }
 
         /// <summary>
@@ -84,7 +87,7 @@ namespace AmigaPowerAnalysis.Core {
         /// Contains a list of factor level 
         /// </summary>
         [DataMember(Order = 1)]
-        public List<VarietyInteraction> VarietyInteractions { get; set; }
+        public List<InteractionFactorLevelCombination> VarietyInteractions { get; set; }
 
         /// <summary>
         /// Contains the output of a power analysis.
@@ -95,17 +98,11 @@ namespace AmigaPowerAnalysis.Core {
         /// <summary>
         /// Updates the list of comparison factor level combinations.
         /// </summary>
-        public void UpdateComparisonFactorLevelCombinations() {
-            var interactionFactors = Endpoint.InteractionFactors;
-            var newCombinations = FactorLevelCombinationsCreator.GenerateInteractionCombinations(interactionFactors);
-            var newCombinationNames = newCombinations.Select(c => c.Label);
-            VarietyInteractions.Clear();
-            foreach (var newCombination in newCombinations) {
-                if (!VarietyInteractions.Any(c => c.FactorLevelCombinationName == newCombination.Label)) {
-                    VarietyInteractions.Add(new VarietyInteraction() {
-                        Comparison = this,
-                        FactorLevelCombination = newCombination,
-                    });
+        public void UpdateComparisonFactorLevelCombinations(List<InteractionFactorLevelCombination> InteractionFactorLevelCombinations) {
+            VarietyInteractions.RemoveAll(c => !InteractionFactorLevelCombinations.Contains(c));
+            foreach (var newCombination in InteractionFactorLevelCombinations) {
+                if (!VarietyInteractions.Contains(newCombination)) {
+                    VarietyInteractions.Add(newCombination);
                 }
             }
         }

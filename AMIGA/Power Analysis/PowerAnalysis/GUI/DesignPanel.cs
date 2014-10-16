@@ -32,7 +32,6 @@ namespace AmigaPowerAnalysis.GUI {
             Name = "Design";
             Description = "Specify the type of experimental design. When other factors have been specified, the GMO-CMP Variety comparisons can be expected to be the same for all levels of such a factor (no interaction) or different (interaction). Indicate if such interactions are expected for one or more endpoints. Uncheck the box 'Use interactions for all endpoints' will allow you to specify specific endpoints in the next screen. Note: Interactions with Variety will lower the effective replication, because comparisons are now needed at the separate levels of the other factor. For specified interactions in a split-plot design, indicate the level where the factor is randomised. For specified interactions, indicate both for the GMO and the CMP the levels of the additional factor that have to be compared.";
             createDataGridFactors();
-            createDataGridFactorLevels();
             this.radioButtonCompletelyRandomized.Checked = _project.DesignSettings.ExperimentalDesignType == ExperimentalDesignType.CompletelyRandomized;
             this.radioButtonRandomizedCompleteBlocks.Checked = _project.DesignSettings.ExperimentalDesignType == ExperimentalDesignType.RandomizedCompleteBlocks;
             this.radioButtonSplitPlot.Checked = _project.DesignSettings.ExperimentalDesignType == ExperimentalDesignType.SplitPlots;
@@ -61,12 +60,10 @@ namespace AmigaPowerAnalysis.GUI {
         private void updateVisibilities() {
             if (_project.Factors.Count <= 1) {
                 dataGridViewFactors.Visible = false;
-                dataGridViewFactorLevels.Visible = false;
                 radioButtonSplitPlot.Visible = false;
             } else {
                 radioButtonSplitPlot.Visible = true;
                 dataGridViewFactors.Visible = _project.DesignSettings.ExperimentalDesignType == ExperimentalDesignType.SplitPlots;
-                dataGridViewFactorLevels.Visible = _project.DesignSettings.ExperimentalDesignType == ExperimentalDesignType.SplitPlots;
             }
         }
 
@@ -87,26 +84,6 @@ namespace AmigaPowerAnalysis.GUI {
             combo.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
             combo.Visible = _project.DesignSettings.ExperimentalDesignType == ExperimentalDesignType.SplitPlots;
             dataGridViewFactors.Columns.Add(combo);
-
-        }
-
-        private void createDataGridFactorLevels() {
-            var column = new DataGridViewTextBoxColumn();
-            column.DataPropertyName = "Label";
-            column.Name = "Label";
-            column.HeaderText = "Level";
-            column.ReadOnly = true;
-            dataGridViewFactorLevels.Columns.Add(column);
-
-            column = new DataGridViewTextBoxColumn();
-            column.DataPropertyName = "Frequency";
-            column.Name = "Frequency";
-            column.HeaderText = "Frequency";
-            column.ValueType = typeof(int);
-            column.ReadOnly = true;
-            dataGridViewFactorLevels.Columns.Add(column);
-
-            updateDataGridFactorLevels();
         }
 
         private void updateDataGridViewFactors() {
@@ -118,20 +95,10 @@ namespace AmigaPowerAnalysis.GUI {
             dataGridViewFactors.Rows[0].Cells["ExperimentUnitType"].ReadOnly = false;
         }
 
-        private void updateDataGridFactorLevels() {
-            if (_currentFactor != null) {
-                var factorLevels = _currentFactor.FactorLevels;
-                var factorLevelsBindingSouce = new BindingSource(factorLevels, null);
-                dataGridViewFactorLevels.AutoGenerateColumns = false;
-                dataGridViewFactorLevels.DataSource = factorLevelsBindingSouce;
-            }
-        }
-
         private void dataGridFactors_SelectionChanged(object sender, EventArgs e) {
             if (dataGridViewFactors.CurrentRow != null && dataGridViewFactors.CurrentRow.Index < _project.Factors.Count) {
                 _currentFactor = _project.Factors.ElementAt(dataGridViewFactors.CurrentRow.Index);
             }
-            updateDataGridFactorLevels();
         }
 
         private void radioButtonTypeOfDesign_CheckedChanged(object sender, EventArgs e) {
@@ -142,11 +109,10 @@ namespace AmigaPowerAnalysis.GUI {
             } else if (this.radioButtonSplitPlot.Checked) {
                 _project.DesignSettings.ExperimentalDesignType = ExperimentalDesignType.SplitPlots;
             }
-            if (dataGridViewFactorLevels.ColumnCount > 0) {
+            if (dataGridViewFactors.ColumnCount > 0) {
                 dataGridViewFactors.Columns["ExperimentUnitType"].Visible = _project.DesignSettings.ExperimentalDesignType == ExperimentalDesignType.SplitPlots;
             }
             dataGridViewFactors.Visible = _project.DesignSettings.ExperimentalDesignType == ExperimentalDesignType.SplitPlots;
-            dataGridViewFactorLevels.Visible = _project.DesignSettings.ExperimentalDesignType == ExperimentalDesignType.SplitPlots;
         }
     }
 }

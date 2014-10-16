@@ -16,7 +16,7 @@ namespace AmigaPowerAnalysis.GUI {
 
         private Comparison _currentComparison;
         private List<Comparison> _comparisons;
-        private List<VarietyInteraction> _currentComparisonFactorLevels;
+        private List<InteractionFactorLevelCombination> _currentComparisonFactorLevels;
 
         public ComparisonsPanel(Project project) {
             InitializeComponent();
@@ -44,32 +44,34 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void createDataGridFactorLevels() {
             var column = new DataGridViewTextBoxColumn();
-            column.DataPropertyName = "FactorLevelCombinationName";
-            column.Name = "FactorLevelCombinationName";
-            column.HeaderText = "FactorLevelCombinationName";
+            column.DataPropertyName = "Label";
+            column.Name = "Label";
+            column.HeaderText = "Factor level combination";
             column.ReadOnly = true;
             dataGridViewFactorLevels.Columns.Add(column);
 
             var checkbox = new DataGridViewCheckBoxColumn();
             checkbox.DataPropertyName = "IsComparisonLevelGMO";
             checkbox.Name = "IsComparisonLevelGMO";
+            checkbox.HeaderText = "Comparison level GMO";
             dataGridViewFactorLevels.Columns.Add(checkbox);
 
             column = new DataGridViewTextBoxColumn();
             column.DataPropertyName = "MeanGMO";
             column.Name = "MeanGMO";
-            column.HeaderText = "MeanGMO";
+            column.HeaderText = "Mean GMO";
             dataGridViewFactorLevels.Columns.Add(column);
 
             checkbox = new DataGridViewCheckBoxColumn();
             checkbox.DataPropertyName = "IsComparisonLevelComparator";
             checkbox.Name = "IsComparisonLevelComparator";
+            checkbox.HeaderText = "Comparison level comparator";
             dataGridViewFactorLevels.Columns.Add(checkbox);
 
             column = new DataGridViewTextBoxColumn();
             column.DataPropertyName = "MeanComparator";
             column.Name = "MeanComparator";
-            column.HeaderText = "MeanComparator";
+            column.HeaderText = "Mean comparator";
             dataGridViewFactorLevels.Columns.Add(column);
         }
 

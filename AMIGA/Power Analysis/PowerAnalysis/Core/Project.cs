@@ -13,9 +13,9 @@ namespace AmigaPowerAnalysis.Core {
         public Project() {
             EndpointTypes = new List<EndpointType>();
             Endpoints = new List<Endpoint>();
-            VarietyFactor = Factor.CreateVarietyFactor();
             Factors = new List<Factor>();
-            Factors.Add(VarietyFactor);
+            DefaultInteractionFactorLevelCombinations = new List<InteractionFactorLevelCombination>();
+            Factors.Add(Factor.CreateVarietyFactor());
             DesignSettings = new DesignSettings();
             PowerCalculationSettings = new PowerCalculationSettings();
             UseFactorModifiers = false;
@@ -40,6 +40,12 @@ namespace AmigaPowerAnalysis.Core {
         /// </summary>
         [DataMember]
         public List<Factor> Factors { get; set; }
+
+        /// <summary>
+        /// The list of factors used in the experiment of this project.
+        /// </summary>
+        [DataMember]
+        public List<InteractionFactorLevelCombination> DefaultInteractionFactorLevelCombinations { get; set; }
 
         /// <summary>
         /// The experimental design of the project.
@@ -104,7 +110,6 @@ namespace AmigaPowerAnalysis.Core {
         /// <param name="endpoint"></param>
         public void RemoveEndpoint(Endpoint endpoint) {
             Endpoints.Remove(endpoint);
-            UpdateEndpointFactors();
         }
 
         /// <summary>
@@ -123,6 +128,15 @@ namespace AmigaPowerAnalysis.Core {
         public void RemoveFactor(Factor factor) {
             Factors.Remove(factor);
             UpdateEndpointFactors();
+        }
+
+        public void SetFactorType(Factor factor, bool isInteractionWithVariety) {
+            if (DesignSettings.UseDefaultInteractions) {
+                foreach (var endpoint in Endpoints) {
+                    endpoint.SetFactorType(factor, factor.IsInteractionWithVariety);
+                }
+            }
+            UpdateEndpointFactorLevels();
         }
 
         /// <summary>
@@ -145,13 +159,27 @@ namespace AmigaPowerAnalysis.Core {
                     }
                 }
             }
+            UpdateEndpointFactorLevels();
         }
 
         /// <summary>
         /// Updates the factor level combinations of the comparisons of this project.
         /// </summary>
         public void UpdateEndpointFactorLevels() {
+            var interactionFactors = Factors.Where(f => f.IsInteractionWithVariety).ToList();
+            var newCombinations = FactorLevelCombinationsCreator.GenerateInteractionCombinations(interactionFactors);
+            DefaultInteractionFactorLevelCombinations.RemoveAll(c => !newCombinations.Any(nc => c == nc));
+            foreach (var newCombination in newCombinations) {
+                if (!DefaultInteractionFactorLevelCombinations.Any(c => c == newCombination)) {
+                    DefaultInteractionFactorLevelCombinations.Add(new InteractionFactorLevelCombination(newCombination));
+                }
+            }
             foreach (var endpoint in Endpoints) {
+                if (DesignSettings.UseDefaultInteractions) {
+                    endpoint.UpdateInteractionFactorLevelCombinations(DefaultInteractionFactorLevelCombinations);
+                } else {
+                    endpoint.UpdateInteractionFactorLevelCombinations();
+                }
                 endpoint.UpdateNonInteractionFactorLevelCombinations();
             }
         }
@@ -172,6 +200,7 @@ namespace AmigaPowerAnalysis.Core {
                 }
                 DesignSettings.UseDefaultInteractions = true;
             }
+            UpdateEndpointFactorLevels();
         }
 
         /// <summary>
@@ -187,6 +216,7 @@ namespace AmigaPowerAnalysis.Core {
                     }
                 }
             }
+            UpdateEndpointFactorLevels();
         }
 
         /// <summary>

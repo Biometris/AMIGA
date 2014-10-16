@@ -18,7 +18,8 @@ namespace AmigaPowerAnalysis.Core {
                 Endpoint = this,
                 IsDefault = true,
             });
-            Modifiers = new List<Modifier>();
+            Modifiers = new List<ModifierFactorLevelCombination>();
+            Interactions = new List<InteractionFactorLevelCombination>();
         }
 
         public Endpoint(string name, EndpointType endpointType) : this() {
@@ -158,6 +159,12 @@ namespace AmigaPowerAnalysis.Core {
         }
 
         /// <summary>
+        /// Contains a list of modifiers for each factor level combination.
+        /// </summary>
+        [DataMember(Order = 2)]
+        public List<InteractionFactorLevelCombination> Interactions { get; set; }
+
+        /// <summary>
         /// Contains the modifier factors for this endpoint.
         /// </summary>
         public IEnumerable<Factor> NonInteractionFactors {
@@ -170,7 +177,7 @@ namespace AmigaPowerAnalysis.Core {
         /// Contains a list of modifiers for each factor level combination.
         /// </summary>
         [DataMember(Order = 2)]
-        public List<Modifier> Modifiers { get; set; }
+        public List<ModifierFactorLevelCombination> Modifiers { get; set; }
 
         /// <summary>
         /// Specifies the factor type of the provided factor for this endpoint and includes this factor
@@ -183,11 +190,13 @@ namespace AmigaPowerAnalysis.Core {
                 if (Factors.First(f => f.Factor == factor).FactorType != FactorType.InteractionFactor) {
                     Factors.First(f => f.Factor == factor).FactorType = FactorType.InteractionFactor;
                     UpdateNonInteractionFactorLevelCombinations();
+                    UpdateInteractionFactorLevelCombinations();
                 }
             } else {
                 if (Factors.First(f => f.Factor == factor).FactorType == FactorType.InteractionFactor) {
                     Factors.First(f => f.Factor == factor).FactorType = FactorType.ModifierFactor; 
                     UpdateNonInteractionFactorLevelCombinations();
+                    UpdateInteractionFactorLevelCombinations();
                 }
             }
         }
@@ -198,15 +207,41 @@ namespace AmigaPowerAnalysis.Core {
         public void UpdateNonInteractionFactorLevelCombinations() {
             var newCombinations = FactorLevelCombinationsCreator.GenerateInteractionCombinations(NonInteractionFactors.ToList());
             var newCombinationNames = newCombinations.Select(c => c.Label);
-            Modifiers.RemoveAll(c => !newCombinationNames.Contains(c.FactorLevelCombinationName));
+            Modifiers.RemoveAll(c => !newCombinationNames.Contains(c.Label));
             foreach (var newCombination in newCombinations) {
-                if (!Modifiers.Any(c => c.FactorLevelCombinationName == newCombination.Label)) {
-                    Modifiers.Add(new Modifier() {
-                        FactorLevelCombination = newCombination,
+                if (!Modifiers.Any(c => c.Label == newCombination.Label)) {
+                    Modifiers.Add(new ModifierFactorLevelCombination(newCombination));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Updates the list of modifier factor level combinations.
+        /// </summary>
+        public void UpdateInteractionFactorLevelCombinations(List<InteractionFactorLevelCombination> defaultInteractions = null) {
+            List<InteractionFactorLevelCombination> newInteractions;
+            if (defaultInteractions != null) {
+                newInteractions = defaultInteractions;
+            } else {
+                var newCombinations = FactorLevelCombinationsCreator.GenerateInteractionCombinations(InteractionFactors);
+                newInteractions = newCombinations.Select(c => new InteractionFactorLevelCombination(c)).ToList();
+            }
+            Interactions.RemoveAll(c => !newInteractions.Contains(c));
+            foreach (var newCombination in newInteractions) {
+                if (!Interactions.Contains(newCombination)) {
+                    Interactions.Add(new InteractionFactorLevelCombination(newCombination) {
+                        Endpoint = this
                     });
                 }
             }
-            Comparisons.ForEach(c => c.UpdateComparisonFactorLevelCombinations());
+            if (defaultInteractions != null) {
+                foreach (var di in defaultInteractions) {
+                    var interaction = Interactions.Single(i => i == di);
+                    interaction.IsComparisonLevelGMO = di.IsComparisonLevelGMO;
+                    interaction.IsComparisonLevelComparator = di.IsComparisonLevelComparator;
+                }
+            }
+            Comparisons.ForEach(c => c.UpdateComparisonFactorLevelCombinations(Interactions));
         }
     }
 }

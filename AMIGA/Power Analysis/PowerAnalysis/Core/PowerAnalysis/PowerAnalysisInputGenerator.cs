@@ -66,8 +66,8 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                     SubPlot = 1,
                     Variety = r.Items.First(f => f.Parent.IsVarietyFactor).Label,
                     FactorLevels = r.Items.Where(fl => !fl.Parent.IsVarietyFactor).Select(fl => fl.Label).ToList(),
-                    InteractionFactorLevelCombination = interactionFactorLevelCombinations.SingleOrDefault(flc => r.Contains(flc.FactorLevelCombination)),
-                    NonInteractionFactorLevelCombination = modifiers.SingleOrDefault(flc => r.Contains(flc.FactorLevelCombination)),
+                    InteractionFactorLevelCombination = interactionFactorLevelCombinations.SingleOrDefault(flc => r.Contains(flc)),
+                    NonInteractionFactorLevelCombination = modifiers.SingleOrDefault(flc => r.Contains(flc)),
                     Frequency = r.Items.Select(fl => fl.Frequency).Aggregate((n1, n2) => n1 * n2),
                 })
                 .Select(r => new {

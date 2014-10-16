@@ -142,9 +142,10 @@
             this.checkBoxUseBlockModifier.AutoSize = true;
             this.checkBoxUseBlockModifier.Location = new System.Drawing.Point(6, 18);
             this.checkBoxUseBlockModifier.Name = "checkBoxUseBlockModifier";
-            this.checkBoxUseBlockModifier.Size = new System.Drawing.Size(379, 17);
+            this.checkBoxUseBlockModifier.Size = new System.Drawing.Size(667, 17);
             this.checkBoxUseBlockModifier.TabIndex = 9;
-            this.checkBoxUseBlockModifier.Text = "Are there large differences between blocks causing part of the data to be less informative (e.g. counts below 5, fractions equal to 0 or 1?";
+            this.checkBoxUseBlockModifier.Text = "Are there large differences between blocks causing part of the data to be less in" +
+    "formative (e.g. counts below 5, fractions equal to 0 or 1?";
             this.checkBoxUseBlockModifier.UseVisualStyleBackColor = true;
             this.checkBoxUseBlockModifier.CheckedChanged += new System.EventHandler(this.checkBoxUseBlockModifier_CheckedChanged);
             // 
@@ -153,9 +154,10 @@
             this.checkBoxUseMainPlotModifier.AutoSize = true;
             this.checkBoxUseMainPlotModifier.Location = new System.Drawing.Point(6, 68);
             this.checkBoxUseMainPlotModifier.Name = "checkBoxUseMainPlotModifier";
-            this.checkBoxUseMainPlotModifier.Size = new System.Drawing.Size(395, 17);
+            this.checkBoxUseMainPlotModifier.Size = new System.Drawing.Size(683, 17);
             this.checkBoxUseMainPlotModifier.TabIndex = 8;
-            this.checkBoxUseMainPlotModifier.Text = "Are there large differences between main plotsw causing part of the data to be less informative (e.g. counts below 5, fractions equal to 0 or 1?";
+            this.checkBoxUseMainPlotModifier.Text = "Are there large differences between main plots causing part of the data to be les" +
+    "s informative (e.g. counts below 5, fractions equal to 0 or 1?";
             this.checkBoxUseMainPlotModifier.UseVisualStyleBackColor = true;
             this.checkBoxUseMainPlotModifier.CheckedChanged += new System.EventHandler(this.checkBoxUseMainPlotModifier_CheckedChanged);
             // 
@@ -179,9 +181,11 @@
             this.checkBoxUseFactorModifiers.Location = new System.Drawing.Point(6, 19);
             this.checkBoxUseFactorModifiers.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
             this.checkBoxUseFactorModifiers.Name = "checkBoxUseFactorModifiers";
-            this.checkBoxUseFactorModifiers.Size = new System.Drawing.Size(458, 17);
+            this.checkBoxUseFactorModifiers.Size = new System.Drawing.Size(760, 17);
             this.checkBoxUseFactorModifiers.TabIndex = 8;
-            this.checkBoxUseFactorModifiers.Text = "Are there large differences between levels of factors (modifiers) causing part of the data to be less informative (e.g. counts below 5, fractions equal to 0 or 1?";
+            this.checkBoxUseFactorModifiers.Text = "Are there large differences between levels of factors (modifiers) causing part of" +
+    " the data to be less informative (e.g. counts below 5, fractions equal to 0 or 1" +
+    "?";
             this.checkBoxUseFactorModifiers.UseVisualStyleBackColor = true;
             this.checkBoxUseFactorModifiers.CheckedChanged += new System.EventHandler(this.checkBoxUseFactorModifiers_CheckedChanged);
             // 
@@ -205,7 +209,7 @@
             this.splitContainer1.SplitterDistance = 260;
             this.splitContainer1.TabIndex = 11;
             // 
-            // ModifiersForm
+            // ModifiersPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -213,7 +217,7 @@
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.groupBoxFactorModifiers);
             this.Controls.Add(this.groupBoxBlockModifiers);
-            this.Name = "ModifiersForm";
+            this.Name = "ModifiersPanel";
             this.Padding = new System.Windows.Forms.Padding(10);
             this.Size = new System.Drawing.Size(802, 452);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFactorModifiers)).EndInit();

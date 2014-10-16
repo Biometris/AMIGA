@@ -12,7 +12,7 @@ namespace AmigaPowerAnalysis.GUI {
         private Project _project;
 
         private Endpoint _currentEndpoint;
-        private List<Modifier> _currentFactorModifiers;
+        private List<ModifierFactorLevelCombination> _currentFactorModifiers;
 
         public ModifiersPanel(Project project) {
             InitializeComponent();
@@ -74,8 +74,8 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void createDataGridFactorModifiers() {
             var column = new DataGridViewTextBoxColumn();
-            column.DataPropertyName = "FactorLevelCombinationName";
-            column.Name = "FactorLevelCombinationName";
+            column.DataPropertyName = "Label";
+            column.Name = "Label";
             column.HeaderText = "Factor level combination";
             column.ReadOnly = true;
             dataGridViewFactorModifiers.Columns.Add(column);

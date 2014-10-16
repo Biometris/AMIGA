@@ -104,5 +104,9 @@ namespace AmigaPowerAnalysis.Core {
             }
             return newLabel;
         }
+
+        public override int GetHashCode() {
+            return Name.GetHashCode();
+        }
     }
 }

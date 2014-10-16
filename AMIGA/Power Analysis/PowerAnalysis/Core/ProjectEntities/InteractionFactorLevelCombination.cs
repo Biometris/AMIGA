@@ -5,30 +5,31 @@ using AmigaPowerAnalysis.Core.PowerAnalysis;
 namespace AmigaPowerAnalysis.Core {
 
     [DataContract]
-    public sealed class VarietyInteraction {
+    public sealed class InteractionFactorLevelCombination : FactorLevelCombination {
 
-        private bool? _isComparisonLevelGMO;
-        private bool? _isComparisonLevelComparator;
+        private bool _isComparisonLevelGMO;
+        private bool _isComparisonLevelComparator;
 
         private double _meanGMO;
         private double _meanComparator;
 
-        public VarietyInteraction() {
+        public InteractionFactorLevelCombination() : base() {
             _meanGMO = double.NaN;
             _meanComparator = double.NaN;
+            _isComparisonLevelGMO = true;
+            _isComparisonLevelComparator = true;
+        }
+
+        public InteractionFactorLevelCombination(FactorLevelCombination factorLevelCombination)
+            : this() {
+            factorLevelCombination.Items.ForEach(flc => Items.Add(flc));
         }
 
         /// <summary>
         /// The comparison for which this factor level combination settings apply.
         /// </summary>
         [DataMember(Order = 0)]
-        public Comparison Comparison { get; set; }
-
-        /// <summary>
-        /// The factor level combination of interest.
-        /// </summary>
-        [DataMember(Order = 0)]
-        public FactorLevelCombination FactorLevelCombination { get; set; }
+        public Endpoint Endpoint { get; set; }
 
         /// <summary>
         /// Specifies whether this comparison interaction level is a GMO interaction level.
@@ -36,16 +37,28 @@ namespace AmigaPowerAnalysis.Core {
         [DataMember(Order = 1)]
         public bool IsComparisonLevelGMO {
             get {
-                if (_isComparisonLevelGMO != null) {
-                    return (bool)_isComparisonLevelGMO;
-                }
-                return FactorLevelCombination.Items.All(flc => flc.IsComparisonLevelGMO);
+                return _isComparisonLevelGMO;
             }
             set {
-                if (value != FactorLevelCombination.Items.All(flc => flc.IsComparisonLevelGMO)) {
-                    _isComparisonLevelGMO = value;
-                } else {
-                    _isComparisonLevelGMO = null;
+                _isComparisonLevelGMO = value;
+                if (_isComparisonLevelGMO) {
+                    _meanGMO = double.NaN;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Specifies whether this comparison interaction level is a comparator interaction level.
+        /// </summary>
+        [DataMember(Order=1)]
+        public bool IsComparisonLevelComparator {
+            get {
+                return _isComparisonLevelComparator;
+            }
+            set {
+                _isComparisonLevelComparator = value;
+                if (_isComparisonLevelComparator) {
+                    _meanComparator = double.NaN;
                 }
             }
         }
@@ -58,34 +71,16 @@ namespace AmigaPowerAnalysis.Core {
             get {
                 if (!double.IsNaN(_meanGMO)) {
                     return _meanGMO;
+                } else if (Endpoint != null) {
+                    return Endpoint.MuComparator;
                 }
-                return Comparison.Endpoint.MuComparator;
+                return double.NaN;
             }
             set {
-                if (IsComparisonLevelGMO || value == Comparison.Endpoint.MuComparator) {
+                if (IsComparisonLevelGMO || value == Endpoint.MuComparator) {
                     _meanGMO = double.NaN;
                 } else {
                     _meanGMO = value;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Specifies whether this comparison interaction level is a comparator interaction level.
-        /// </summary>
-        [DataMember(Order=1)]
-        public bool IsComparisonLevelComparator {
-            get {
-                if (_isComparisonLevelComparator != null) {
-                    return (bool)_isComparisonLevelComparator;
-                }
-                return FactorLevelCombination.Items.All(flc => flc.IsComparisonLevelComparator);
-            }
-            set {
-                if (value != FactorLevelCombination.Items.All(flc => flc.IsComparisonLevelComparator)) {
-                    _isComparisonLevelComparator = value;
-                } else {
-                    _isComparisonLevelComparator = null;
                 }
             }
         }
@@ -98,24 +93,17 @@ namespace AmigaPowerAnalysis.Core {
             get {
                 if (!double.IsNaN(_meanComparator)) {
                     return _meanComparator;
+                } else if (Endpoint != null) {
+                    return Endpoint.MuComparator;
                 }
-                return Comparison.Endpoint.MuComparator;
+                return double.NaN;
             }
             set {
-                if (IsComparisonLevelComparator || value == Comparison.Endpoint.MuComparator) {
+                if (IsComparisonLevelComparator || value == Endpoint.MuComparator) {
                     _meanComparator = double.NaN;
                 } else {
                     _meanComparator = value;
                 }
-            }
-        }
-
-        /// <summary>
-        /// The label of this factor level combination.
-        /// </summary>
-        public string FactorLevelCombinationName {
-            get {
-                return FactorLevelCombination.Label;
             }
         }
 
@@ -130,7 +118,10 @@ namespace AmigaPowerAnalysis.Core {
             } else if (variety == "Comparator") {
                 return MeanComparator;
             }
-            return Comparison.Endpoint.MuComparator;
+            if (Endpoint != null) {
+                return Endpoint.MuComparator;
+            }
+            return double.NaN;
         }
 
         /// <summary>
