@@ -9,8 +9,8 @@
       <Path>
         <Point X="3.75" Y="2.562" />
         <Point X="4.125" Y="2.562" />
-        <Point X="4.125" Y="6.427" />
-        <Point X="5.5" Y="6.427" />
+        <Point X="4.125" Y="6.276" />
+        <Point X="5.5" Y="6.276" />
       </Path>
     </AssociationLine>
     <AssociationLine Name="Factors" Type="AmigaPowerAnalysis.Core.Factor" FixedFromPoint="true">
@@ -26,7 +26,7 @@
       </Path>
     </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AAEAIANgAMAAAEAIElACIAAAAACAQAQAAAAQAAAAACA=</HashCode>
+      <HashCode>AAEAIANgAMBAAEAIElACIAAAAACAQAQBAAAQAAAAACA=</HashCode>
       <FileName>Core\Project.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -46,44 +46,69 @@
     </Compartments>
     <AssociationLine Name="EndpointType" Type="AmigaPowerAnalysis.Core.EndpointType" FixedFromPoint="true">
       <Path>
-        <Point X="5.5" Y="7.016" />
-        <Point X="3.75" Y="7.016" />
+        <Point X="5.5" Y="6.79" />
+        <Point X="3.75" Y="6.79" />
       </Path>
     </AssociationLine>
     <AssociationLine Name="Comparisons" Type="AmigaPowerAnalysis.Core.Comparison" FixedFromPoint="true">
       <Path>
-        <Point X="8.5" Y="7.67" />
-        <Point X="10.5" Y="7.67" />
+        <Point X="6.25" Y="9.18" />
+        <Point X="6.25" Y="9.75" />
       </Path>
     </AssociationLine>
     <AssociationLine Name="InteractionFactors" Type="AmigaPowerAnalysis.Core.Factor" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="8.5" Y="6.624" />
-        <Point X="9.508" Y="6.624" />
+        <Point X="8.5" Y="6.448" />
+        <Point X="9.508" Y="6.448" />
         <Point X="9.508" Y="1.875" />
         <Point X="8.5" Y="1.875" />
       </Path>
     </AssociationLine>
     <AssociationLine Name="NonInteractionFactors" Type="AmigaPowerAnalysis.Core.Factor" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="8.5" Y="6.362" />
-        <Point X="9.11" Y="6.362" />
+        <Point X="8.5" Y="6.22" />
+        <Point X="9.11" Y="6.22" />
         <Point X="9.11" Y="2.312" />
         <Point X="8.5" Y="2.312" />
       </Path>
     </AssociationLine>
+    <AssociationLine Name="VarietyFactor" Type="AmigaPowerAnalysis.Core.Factor" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="5.5" Y="5.762" />
+        <Point X="5.125" Y="5.762" />
+        <Point X="5.125" Y="2.375" />
+        <Point X="5.5" Y="2.375" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="Interactions" Type="AmigaPowerAnalysis.Core.InteractionFactorLevelCombination" FixedToPoint="true">
+      <Path>
+        <Point X="8.5" Y="6.687" />
+        <Point X="11.25" Y="6.687" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="Modifiers" Type="AmigaPowerAnalysis.Core.ModifierFactorLevelCombination" FixedFromPoint="true">
+      <Path>
+        <Point X="8.5" Y="8.375" />
+        <Point X="9.63" Y="8.375" Type="JumpStart" />
+        <Point X="9.797" Y="8.375" Type="JumpEnd" />
+        <Point X="11.25" Y="8.375" />
+      </Path>
+    </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AAAAVAACQIkAAAAIAAQKAIQABAACCACBAAAQAgEAAAA=</HashCode>
+      <HashCode>AAAAVAACQAkAAAAIAAQKBIQABAACCACBAAAQggEAAAA=</HashCode>
       <FileName>Core\ProjectEntities\Endpoint.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Property Name="EndpointType" />
+      <Property Name="VarietyFactor" />
     </ShowAsAssociation>
     <ShowAsCollectionAssociation>
       <Property Name="Factors" />
       <Property Name="Comparisons" />
       <Property Name="InteractionFactors" />
       <Property Name="NonInteractionFactors" />
+      <Property Name="Interactions" />
+      <Property Name="Modifiers" />
     </ShowAsCollectionAssociation>
   </Class>
   <Class Name="AmigaPowerAnalysis.Core.Factor">
@@ -92,7 +117,7 @@
       <Compartment Name="Methods" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAIAIAAAAAAAAAAAQAAQEAAAgAAAAEAAAAAAI=</HashCode>
+      <HashCode>AAAAAAAAIAIAAAAAAAAAAAQAAQEAAIgAAAAEAAAAAAI=</HashCode>
       <FileName>Core\ProjectEntities\Factor.cs</FileName>
     </TypeIdentifier>
     <ShowAsCollectionAssociation>
@@ -123,15 +148,23 @@
     </TypeIdentifier>
   </Class>
   <Class Name="AmigaPowerAnalysis.Core.Comparison">
-    <Position X="10.5" Y="5.25" Width="3" />
+    <Position X="5.5" Y="9.75" Width="3" />
     <Compartments>
       <Compartment Name="Methods" Collapsed="true" />
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
-    <AssociationLine Name="Endpoint" Type="AmigaPowerAnalysis.Core.Endpoint" FixedToPoint="true">
+    <AssociationLine Name="Endpoint" Type="AmigaPowerAnalysis.Core.Endpoint" ManuallyRouted="true" FixedToPoint="true">
       <Path>
-        <Point X="10.5" Y="7.278" />
-        <Point X="8.5" Y="7.278" />
+        <Point X="7.5" Y="9.75" />
+        <Point X="7.5" Y="9.18" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="VarietyInteractions" Type="AmigaPowerAnalysis.Core.InteractionFactorLevelCombination" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="8.5" Y="10.062" />
+        <Point X="9.714" Y="10.062" />
+        <Point X="9.714" Y="7.188" />
+        <Point X="11.25" Y="7.188" />
       </Path>
     </AssociationLine>
     <TypeIdentifier>
@@ -146,48 +179,53 @@
     </ShowAsCollectionAssociation>
   </Class>
   <Class Name="AmigaPowerAnalysis.Core.FactorLevel">
-    <Position X="10.5" Y="0.5" Width="3" />
+    <Position X="11.25" Y="0.5" Width="3" />
     <Compartments>
       <Compartment Name="Methods" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAECAAAAAAAAAAQAAAAIAAAAAAAAgAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAEAAAAAAAgAAAQAAAAIAAAIAAAAAAAAAAAiA=</HashCode>
       <FileName>Core\ProjectEntities\FactorLevel.cs</FileName>
     </TypeIdentifier>
+    <Lollipop Position="0.2" />
   </Class>
-  <Class Name="AmigaPowerAnalysis.Core.VarietyInteraction">
-    <Position X="15" Y="5.25" Width="3" />
+  <Class Name="AmigaPowerAnalysis.Core.InteractionFactorLevelCombination">
+    <Position X="11.25" Y="5.25" Width="3" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
       <Compartment Name="Methods" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>BAAAAAgAACQEEgABAAAAAASAQAAABAAAAAgAAAAAAAA=</HashCode>
-      <FileName>Core\ProjectEntities\ComparisonFactorLevelCombination.cs</FileName>
+      <HashCode>BAAAAAgAACQAEAABAEAAAASAQAAAAAAAAAgAAAAAAAA=</HashCode>
+      <FileName>Core\ProjectEntities\InteractionFactorLevelCombination.cs</FileName>
     </TypeIdentifier>
-    <ShowAsAssociation>
-      <Property Name="FactorLevelCombination" />
-    </ShowAsAssociation>
   </Class>
   <Class Name="AmigaPowerAnalysis.Core.FactorLevelCombination">
-    <Position X="15" Y="0.5" Width="3" />
+    <Position X="15.5" Y="6.25" Width="3" />
     <TypeIdentifier>
-      <HashCode>CAIAAAAAEAAACAAAAAAAAAAAAAAAAAAAAAAAAAAQAAA=</HashCode>
+      <HashCode>CAIAAAAAEAAACAAAgAAAAAAAAAAAAIAAAAAAAAAQAiA=</HashCode>
       <FileName>Core\ProjectEntities\FactorLevelCombination.cs</FileName>
     </TypeIdentifier>
     <ShowAsCollectionAssociation>
       <Property Name="Items" />
     </ShowAsCollectionAssociation>
+    <Lollipop Position="0.2" />
   </Class>
-  <Class Name="AmigaPowerAnalysis.Core.Modifier">
-    <Position X="15" Y="3.25" Width="3" />
+  <Class Name="AmigaPowerAnalysis.Core.ModifierFactorLevelCombination">
+    <Position X="11.25" Y="8.25" Width="3" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <InheritanceLine Type="AmigaPowerAnalysis.Core.FactorLevelCombination" FixedToPoint="true">
+      <Path>
+        <Point X="15.5" Y="8.625" />
+        <Point X="14.25" Y="8.625" />
+      </Path>
+    </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAEAAAAAAAAAAAAAAAABCAAAAAAAAAAAAA=</HashCode>
-      <FileName>Core\ProjectEntities\Modifier.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAA=</HashCode>
+      <FileName>Core\ProjectEntities\ModifierFactorLevelCombination.cs</FileName>
     </TypeIdentifier>
-    <ShowAsAssociation>
-      <Property Name="FactorLevelCombination" />
-    </ShowAsAssociation>
   </Class>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>
