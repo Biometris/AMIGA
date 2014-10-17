@@ -20,8 +20,8 @@ namespace AmigaPowerAnalysis.GUI {
         public ComparisonsPanel(Project project) {
             InitializeComponent();
             _project = project;
-            Name = "Comparisons";
-            Description = "The comparison GMO to CMP is made separately for levels of other factors. Per endpoint, indicate which levels of these other factors should be included for the GMO and for the CMP.\r\nFor unselected levels, you can optionally specify expected mean values. These levels are not used in the comparison, but the data may give additional information for the pooled variation.";
+            Name = "Additional Means";
+            Description = "There are data which are not directly involved in the comparison GMO to CMP. Such data may be useful for pooling variance estimates, but the usefulness may depend on the expected means. Indicate if you expect less informative data due to low means. If so, specify expected mean values.";
             createDataGridComparisons();
             createDataGridFactorLevels();
         }

@@ -77,7 +77,7 @@ namespace AmigaPowerAnalysis.Core {
                 return double.NaN;
             }
             set {
-                if (IsComparisonLevelGMO || value == Endpoint.MuComparator) {
+                if (IsComparisonLevelGMO || (Endpoint != null && value == Endpoint.MuComparator)) {
                     _meanGMO = double.NaN;
                 } else {
                     _meanGMO = value;
@@ -99,7 +99,7 @@ namespace AmigaPowerAnalysis.Core {
                 return double.NaN;
             }
             set {
-                if (IsComparisonLevelComparator || value == Endpoint.MuComparator) {
+                if (IsComparisonLevelComparator || (Endpoint != null && value == Endpoint.MuComparator)) {
                     _meanComparator = double.NaN;
                 } else {
                     _meanComparator = value;
