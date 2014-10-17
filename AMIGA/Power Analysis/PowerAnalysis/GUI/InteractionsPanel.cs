@@ -14,7 +14,7 @@ namespace AmigaPowerAnalysis.GUI {
             InitializeComponent();
             _project = project;
             Name = "Interactions";
-            Description = "Indicate per endpoint which factors are expected to have an interaction with the GMO-CMP Variety comparison. The appropraite levels of these factors can then be chosen in the Comparison tab.";
+            Description = "The GMO-CMP comparison may be restricted to a subset of levels of additional factors for the GMO and/or for the CMP. Indicate per endpoint any factors for which this is relevant, and uncheck the levels to be excluded.";
             createDataGridFactors();
             createDataGridViewInteractionFactorLevelCombinations();
             updateVisibilities();
