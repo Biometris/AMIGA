@@ -49,7 +49,7 @@
             this.dataGridViewFactorLevels.RowHeadersVisible = false;
             this.dataGridViewFactorLevels.RowHeadersWidth = 24;
             this.dataGridViewFactorLevels.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            this.dataGridViewFactorLevels.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dataGridViewFactorLevels.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.dataGridViewFactorLevels.Size = new System.Drawing.Size(512, 426);
             this.dataGridViewFactorLevels.TabIndex = 2;
             this.dataGridViewFactorLevels.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dataGridViewFactorLevels_DataError);
@@ -95,13 +95,13 @@
             this.splitContainerComparisons.SplitterDistance = 260;
             this.splitContainerComparisons.TabIndex = 4;
             // 
-            // ComparisonsForm
+            // ComparisonsPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.Controls.Add(this.splitContainerComparisons);
-            this.Name = "ComparisonsForm";
+            this.Name = "ComparisonsPanel";
             this.Padding = new System.Windows.Forms.Padding(10);
             this.Size = new System.Drawing.Size(802, 452);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFactorLevels)).EndInit();

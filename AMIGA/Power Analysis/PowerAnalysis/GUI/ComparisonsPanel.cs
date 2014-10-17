@@ -14,9 +14,8 @@ namespace AmigaPowerAnalysis.GUI {
 
         private Project _project;
 
-        private Comparison _currentComparison;
-        private List<Comparison> _comparisons;
-        private List<InteractionFactorLevelCombination> _currentComparisonFactorLevels;
+        private Endpoint _currentEndpoint;
+        private List<InteractionFactorLevelCombination> _currentEndpointFactorLevels;
 
         public ComparisonsPanel(Project project) {
             InitializeComponent();
@@ -42,6 +41,24 @@ namespace AmigaPowerAnalysis.GUI {
         private void createDataGridComparisons() {
         }
 
+        private void updateDataGridComparisons() {
+            dataGridViewComparisons.Columns.Clear();
+
+            var _availableEndpoints = _project.Endpoints.Select(h => new { Name = h.Name, Endpoint = h }).ToList();
+            var combo = new DataGridViewComboBoxColumn();
+            combo.DataSource = _availableEndpoints;
+            combo.DataPropertyName = "Name";
+            combo.DisplayMember = "Name";
+            combo.HeaderText = "Endpoint";
+            combo.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
+            dataGridViewComparisons.Columns.Add(combo);
+
+            var comparisonsBindingSouce = new BindingSource(_project.Endpoints, null);
+            dataGridViewComparisons.AutoGenerateColumns = false;
+            dataGridViewComparisons.DataSource = comparisonsBindingSouce;
+            updateDataGridFactorLevels();
+        }
+
         private void createDataGridFactorLevels() {
             var column = new DataGridViewTextBoxColumn();
             column.DataPropertyName = "Label";
@@ -54,6 +71,7 @@ namespace AmigaPowerAnalysis.GUI {
             checkbox.DataPropertyName = "IsComparisonLevelGMO";
             checkbox.Name = "IsComparisonLevelGMO";
             checkbox.HeaderText = "Comparison level GMO";
+            checkbox.ReadOnly = true;
             dataGridViewFactorLevels.Columns.Add(checkbox);
 
             column = new DataGridViewTextBoxColumn();
@@ -66,6 +84,7 @@ namespace AmigaPowerAnalysis.GUI {
             checkbox.DataPropertyName = "IsComparisonLevelComparator";
             checkbox.Name = "IsComparisonLevelComparator";
             checkbox.HeaderText = "Comparison level comparator";
+            checkbox.ReadOnly = true;
             dataGridViewFactorLevels.Columns.Add(checkbox);
 
             column = new DataGridViewTextBoxColumn();
@@ -75,42 +94,32 @@ namespace AmigaPowerAnalysis.GUI {
             dataGridViewFactorLevels.Columns.Add(column);
         }
 
-        private void updateDataGridComparisons() {
-            dataGridViewComparisons.Columns.Clear();
-
-            var column = new DataGridViewTextBoxColumn();
-            column.DataPropertyName = "Name";
-            column.Name = "Name";
-            dataGridViewComparisons.Columns.Add(column);
-
-            var _availableEndpoints = _project.Endpoints.Select(h => new { Name = h.Name, Endpoint = h }).ToList();
-            var combo = new DataGridViewComboBoxColumn();
-            combo.DataSource = _availableEndpoints;
-            combo.DataPropertyName = "Endpoint";
-            combo.DisplayMember = "Name";
-            combo.ValueMember = "Endpoint";
-            combo.HeaderText = "Endpoint";
-            combo.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
-            dataGridViewComparisons.Columns.Add(combo);
-
-            _comparisons = _project.GetComparisons().ToList();
-            var comparisonsBindingSouce = new BindingSource(_comparisons, null);
-            dataGridViewComparisons.AutoGenerateColumns = false;
-            dataGridViewComparisons.DataSource = comparisonsBindingSouce;
-            updateDataGridFactorLevels();
-        }
-
         private void updateDataGridFactorLevels() {
-            if (_currentComparisonFactorLevels != null) {
-                var factorLevelsBindingSouce = new BindingSource(_currentComparisonFactorLevels, null);
+            if (_currentEndpointFactorLevels != null) {
+                var factorLevelsBindingSouce = new BindingSource(_currentEndpointFactorLevels, null);
                 dataGridViewFactorLevels.AutoGenerateColumns = false;
                 dataGridViewFactorLevels.DataSource = factorLevelsBindingSouce;
             }
+            dataGridViewFactorLevels.Columns["IsComparisonLevelGMO"].DefaultCellStyle.BackColor = Color.LightGray;
+            dataGridViewFactorLevels.Columns["IsComparisonLevelComparator"].DefaultCellStyle.BackColor = Color.LightGray;
+            for (int i = 0; i < dataGridViewFactorLevels.Rows.Count; i++) {
+                if ((bool)dataGridViewFactorLevels.Rows[i].Cells["IsComparisonLevelGMO"].Value) {
+                    dataGridViewFactorLevels.Rows[i].Cells["MeanGMO"].Style.BackColor = Color.LightGray;
+                    dataGridViewFactorLevels.Rows[i].Cells["MeanGMO"].Style.ForeColor = Color.LightGray;
+                    dataGridViewFactorLevels.Rows[i].Cells["MeanGMO"].ReadOnly = true;
+                }
+                if ((bool)dataGridViewFactorLevels.Rows[i].Cells["IsComparisonLevelComparator"].Value) {
+                    dataGridViewFactorLevels.Rows[i].Cells["MeanComparator"].Style.BackColor = Color.LightGray;
+                    dataGridViewFactorLevels.Rows[i].Cells["MeanComparator"].Style.ForeColor = Color.LightGray;
+                    dataGridViewFactorLevels.Rows[i].Cells["MeanComparator"].ReadOnly = true;
+                }
+            }
+            dataGridViewFactorLevels.Refresh();
         }
 
         private void dataGridComparisons_SelectionChanged(object sender, EventArgs e) {
-            _currentComparison = _project.GetComparisons().ElementAt(dataGridViewComparisons.CurrentRow.Index);
-            _currentComparisonFactorLevels = _currentComparison.VarietyInteractions;
+            _currentEndpoint = _project.Endpoints.ElementAt(dataGridViewComparisons.CurrentRow.Index);
+            _currentEndpointFactorLevels = _currentEndpoint.Interactions;
             updateDataGridFactorLevels();
         }
 
