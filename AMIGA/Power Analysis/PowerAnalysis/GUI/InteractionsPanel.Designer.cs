@@ -104,8 +104,7 @@
             this.checkBoxUseInteractions.Name = "checkBoxUseInteractions";
             this.checkBoxUseInteractions.Size = new System.Drawing.Size(571, 17);
             this.checkBoxUseInteractions.TabIndex = 7;
-            this.checkBoxUseInteractions.Text = "Adjust analysis for interaction with Variety? (i.e. are GMO vs. CMP comparison(s)" +
-    " dependent on levels of this factor?)";
+            this.checkBoxUseInteractions.Text = "Exclude data from the GMO vs. CMP comparison based on selected factor levels";
             this.checkBoxUseInteractions.UseVisualStyleBackColor = true;
             this.checkBoxUseInteractions.CheckedChanged += new System.EventHandler(this.checkBoxUseInteractions_CheckedChanged);
             // 
@@ -116,7 +115,7 @@
             this.checkBoxUseDefaultInteractions.Name = "checkBoxUseDefaultInteractions";
             this.checkBoxUseDefaultInteractions.Size = new System.Drawing.Size(276, 17);
             this.checkBoxUseDefaultInteractions.TabIndex = 6;
-            this.checkBoxUseDefaultInteractions.Text = "Use the interactions specified below for all endpoints.";
+            this.checkBoxUseDefaultInteractions.Text = "Use the selection specified below for all endpoints";
             this.checkBoxUseDefaultInteractions.UseVisualStyleBackColor = true;
             this.checkBoxUseDefaultInteractions.CheckedChanged += new System.EventHandler(this.checkBoxUseDefaultInteractions_CheckedChanged);
             // 
