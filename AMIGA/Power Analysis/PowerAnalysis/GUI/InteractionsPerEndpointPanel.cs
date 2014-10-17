@@ -21,8 +21,8 @@ namespace AmigaPowerAnalysis.GUI {
         public InteractionsPerEndpointPanel(Project project) {
             InitializeComponent();
             _project = project;
-            Name = "Interactions per endpoint";
-            Description = "TODO description";
+            Name = "Exclude data per endpoint";
+            Description = "The GMO-CMP comparison may be restricted to a subset of levels of additional factors for the GMO and/or for the CMP. Indicate per endpoint any factors for which this is relevant, and uncheck the levels to be excluded.";
             createDataGridInteractions();
             createDataGridComparisons();
             createDataGridFactorLevels();
