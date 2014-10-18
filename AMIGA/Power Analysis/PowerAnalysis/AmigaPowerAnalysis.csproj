@@ -111,11 +111,11 @@
     <Compile Include="GUI\AboutForm.Designer.cs">
       <DependentUpon>AboutForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\ComparisonsPanel.cs">
+    <Compile Include="GUI\AdditionalMeansPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="GUI\ComparisonsPanel.Designer.cs">
-      <DependentUpon>ComparisonsPanel.cs</DependentUpon>
+    <Compile Include="GUI\AdditionalMeansPanel.Designer.cs">
+      <DependentUpon>AdditionalMeansPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\AnalysisResultsPanel.cs">
       <SubType>UserControl</SubType>
@@ -134,6 +134,12 @@
     </Compile>
     <Compile Include="GUI\AnalysisTemplatePanel.Designer.cs">
       <DependentUpon>AnalysisTemplatePanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\BlockModifiersPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\BlockModifiersPanel.Designer.cs">
+      <DependentUpon>BlockModifiersPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\InteractionsPerEndpointPanel.cs">
       <SubType>UserControl</SubType>
@@ -189,11 +195,11 @@
     <Compile Include="GUI\SimulationPanel.Designer.cs">
       <DependentUpon>SimulationPanel.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\ModifiersPanel.cs">
+    <Compile Include="GUI\FactorModifiersPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="GUI\ModifiersPanel.Designer.cs">
-      <DependentUpon>ModifiersPanel.cs</DependentUpon>
+    <Compile Include="GUI\FactorModifiersPanel.Designer.cs">
+      <DependentUpon>FactorModifiersPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\FactorsPanel.cs">
       <SubType>UserControl</SubType>
@@ -252,8 +258,8 @@
     <EmbeddedResource Include="GUI\AboutForm.resx">
       <DependentUpon>AboutForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GUI\ComparisonsPanel.resx">
-      <DependentUpon>ComparisonsPanel.cs</DependentUpon>
+    <EmbeddedResource Include="GUI\AdditionalMeansPanel.resx">
+      <DependentUpon>AdditionalMeansPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\AnalysisResultsPanel.resx">
       <DependentUpon>AnalysisResultsPanel.cs</DependentUpon>
@@ -263,6 +269,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\AnalysisTemplatePanel.resx">
       <DependentUpon>AnalysisTemplatePanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\BlockModifiersPanel.resx">
+      <DependentUpon>BlockModifiersPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\InteractionsPerEndpointPanel.resx">
       <DependentUpon>InteractionsPerEndpointPanel.cs</DependentUpon>
@@ -291,8 +300,8 @@
     <EmbeddedResource Include="GUI\SimulationPanel.resx">
       <DependentUpon>SimulationPanel.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GUI\ModifiersPanel.resx">
-      <DependentUpon>ModifiersPanel.cs</DependentUpon>
+    <EmbeddedResource Include="GUI\FactorModifiersPanel.resx">
+      <DependentUpon>FactorModifiersPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\FactorsPanel.resx">
       <DependentUpon>FactorsPanel.cs</DependentUpon>

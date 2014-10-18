@@ -10,14 +10,14 @@ using System.Windows.Forms;
 using AmigaPowerAnalysis.Core;
 
 namespace AmigaPowerAnalysis.GUI {
-    public partial class ComparisonsPanel : UserControl, ISelectionForm {
+    public partial class AdditionalMeansPanel : UserControl, ISelectionForm {
 
         private Project _project;
 
         private Endpoint _currentEndpoint;
         private List<InteractionFactorLevelCombination> _currentEndpointFactorLevels;
 
-        public ComparisonsPanel(Project project) {
+        public AdditionalMeansPanel(Project project) {
             InitializeComponent();
             _project = project;
             Name = "Additional Means";
@@ -105,12 +105,10 @@ namespace AmigaPowerAnalysis.GUI {
             for (int i = 0; i < dataGridViewFactorLevels.Rows.Count; i++) {
                 if ((bool)dataGridViewFactorLevels.Rows[i].Cells["IsComparisonLevelGMO"].Value) {
                     dataGridViewFactorLevels.Rows[i].Cells["MeanGMO"].Style.BackColor = Color.LightGray;
-                    dataGridViewFactorLevels.Rows[i].Cells["MeanGMO"].Style.ForeColor = Color.LightGray;
                     dataGridViewFactorLevels.Rows[i].Cells["MeanGMO"].ReadOnly = true;
                 }
                 if ((bool)dataGridViewFactorLevels.Rows[i].Cells["IsComparisonLevelComparator"].Value) {
                     dataGridViewFactorLevels.Rows[i].Cells["MeanComparator"].Style.BackColor = Color.LightGray;
-                    dataGridViewFactorLevels.Rows[i].Cells["MeanComparator"].Style.ForeColor = Color.LightGray;
                     dataGridViewFactorLevels.Rows[i].Cells["MeanComparator"].ReadOnly = true;
                 }
             }

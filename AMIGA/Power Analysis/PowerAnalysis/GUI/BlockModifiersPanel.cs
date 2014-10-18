@@ -7,30 +7,26 @@ using System.Windows.Forms;
 using AmigaPowerAnalysis.Core;
 
 namespace AmigaPowerAnalysis.GUI {
-    public partial class ModifiersPanel : UserControl, ISelectionForm {
+    public partial class BlockModifiersPanel : UserControl, ISelectionForm {
 
         private Project _project;
 
         private Endpoint _currentEndpoint;
-        private List<ModifierFactorLevelCombination> _currentFactorModifiers;
 
-        public ModifiersPanel(Project project) {
+        public BlockModifiersPanel(Project project) {
             InitializeComponent();
             _project = project;
-            Name = "Modifiers";
+            Name = "Block modifiers";
             Description = "The power of tests will be lower if data are uninformative or less informative, e.g. if counts are very low (<5), or fractions are close to 0 or 1. In principle, the already specified Comparator Means and CVs are sufficient to perform the power analysis. However, it should be specified if other factors in the design are expected to make part of the data less informative.\r\nPlease provide a CV if you expect a large variation between blocks or main plots in a split-plot design.\r\nFor fixed factors, provide multiplication factors for factor levels where data may become less informative (e.g. counts less than 5, or all binomial results positive or all negative).";
             checkBoxUseBlockModifier.Checked = _project.UseBlockModifier;
             checkBoxUseMainPlotModifier.Checked = _project.UseMainPlotModifier;
-            checkBoxUseFactorModifiers.Checked = _project.UseFactorModifiers;
             createDataGridEndpoints();
-            createDataGridFactorModifiers();
         }
 
         public string Description { get; private set; }
 
         public void Activate() {
             updateDataGridEndpoints();
-            updateDataGridFactorModifiers();
             updateVisibilities();
             textBoxCVForBlocks.Text = _project.CVForBlocks.ToString();
             textBoxCVForMainPlots.Text = _project.CVForMainPlots.ToString();
@@ -43,17 +39,12 @@ namespace AmigaPowerAnalysis.GUI {
         public event EventHandler TabVisibilitiesChanged;
 
         private void updateVisibilities() {
-            dataGridViewEndpoints.Visible = _project.UseFactorModifiers || _project.UseBlockModifier;
+            dataGridViewEndpoints.Visible = _project.UseBlockModifier;
             labelCVForBlocks.Visible = _project.UseBlockModifier;
             textBoxCVForBlocks.Visible = _project.UseBlockModifier;
-            if (dataGridViewEndpoints.Columns.Contains("CVForBlocks")) {
-                dataGridViewEndpoints.Columns["CVForBlocks"].Visible = _project.UseBlockModifier;
-            }
             checkBoxUseMainPlotModifier.Visible = _project.DesignSettings.ExperimentalDesignType == ExperimentalDesignType.SplitPlots;
             labelCVForMainPlots.Visible = (_project.DesignSettings.ExperimentalDesignType == ExperimentalDesignType.SplitPlots) && _project.UseMainPlotModifier;
             textBoxCVForMainPlots.Visible = (_project.DesignSettings.ExperimentalDesignType == ExperimentalDesignType.SplitPlots) && _project.UseMainPlotModifier;
-            dataGridViewFactorModifiers.Visible = _project.UseFactorModifiers;
-            groupBoxFactorModifiers.Visible = _project.Endpoints.Any(ep => ep.NonInteractionFactors.Count() > 0);
         }
 
         private void createDataGridEndpoints() {
@@ -72,41 +63,10 @@ namespace AmigaPowerAnalysis.GUI {
             dataGridViewEndpoints.Columns.Add(column);
         }
 
-        private void createDataGridFactorModifiers() {
-            var column = new DataGridViewTextBoxColumn();
-            column.DataPropertyName = "Label";
-            column.Name = "Label";
-            column.HeaderText = "Factor level combination";
-            column.ReadOnly = true;
-            dataGridViewFactorModifiers.Columns.Add(column);
-
-            column = new DataGridViewTextBoxColumn();
-            column.DataPropertyName = "ModifierFactor";
-            column.Name = "ModifierFactor";
-            column.HeaderText = "Multiplication factor for the Comparator Mean";
-            column.ValueType = typeof(double);
-            dataGridViewFactorModifiers.Columns.Add(column);
-        }
-
         private void updateDataGridEndpoints() {
             var endpointsBindingSouce = new BindingSource(_project.Endpoints, null);
             dataGridViewEndpoints.AutoGenerateColumns = false;
             dataGridViewEndpoints.DataSource = endpointsBindingSouce;
-        }
-
-        private void updateDataGridFactorModifiers() {
-            if (_currentEndpoint != null) {
-                var factorModifiersBindingSouce = new BindingSource(_currentFactorModifiers, null);
-                dataGridViewFactorModifiers.AutoGenerateColumns = false;
-                dataGridViewFactorModifiers.DataSource = factorModifiersBindingSouce;
-            }
-        }
-
-        private void dataGridViewEndpoints_SelectionChanged(object sender, EventArgs e) {
-            _currentEndpoint = _project.Endpoints.ElementAt(dataGridViewEndpoints.CurrentRow.Index);
-            var factorFactorLevelTuples = _currentEndpoint.InteractionFactors.SelectMany(f => f.FactorLevels, (ifc, fl) => new Tuple<Factor, FactorLevel>(ifc, fl)).ToList();
-            _currentFactorModifiers = _currentEndpoint.Modifiers;
-            updateDataGridFactorModifiers();
         }
 
         private void checkBoxUseBlockModifier_CheckedChanged(object sender, EventArgs e) {
@@ -116,11 +76,6 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void checkBoxUseMainPlotModifier_CheckedChanged(object sender, EventArgs e) {
             _project.UseMainPlotModifier = checkBoxUseMainPlotModifier.Checked;
-            updateVisibilities();
-        }
-
-        private void checkBoxUseFactorModifiers_CheckedChanged(object sender, EventArgs e) {
-            _project.SetUseFactorModifiers(checkBoxUseFactorModifiers.Checked);
             updateVisibilities();
         }
 
@@ -151,10 +106,6 @@ namespace AmigaPowerAnalysis.GUI {
             }
             _project.CVForMainPlots = value;
             textBox.Text = value.ToString();
-        }
-
-        private void dataGridViewFactorModifiers_DataError(object sender, DataGridViewDataErrorEventArgs e) {
-            showError("Invalid data", e.Exception.Message);
         }
 
         private void showError(string title, string message) {

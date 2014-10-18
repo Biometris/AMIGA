@@ -1,5 +1,5 @@
 ﻿namespace AmigaPowerAnalysis.GUI {
-    partial class ComparisonsPanel {
+    partial class AdditionalMeansPanel {
         /// <summary> 
         /// Required designer variable.
         /// </summary>

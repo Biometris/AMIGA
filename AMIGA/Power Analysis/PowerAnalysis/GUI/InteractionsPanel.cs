@@ -145,6 +145,8 @@ namespace AmigaPowerAnalysis.GUI {
         private void dataGridViewFactors_CellValueChanged(object sender, DataGridViewCellEventArgs e) {
             var editedCell = this.dataGridViewFactors.Rows[e.RowIndex].Cells[e.ColumnIndex];
             var newValue = editedCell.Value;
+            var factor = _project.Factors.ElementAt(editedCell.RowIndex);
+            _project.SetFactorType(factor, factor.IsInteractionWithVariety);
             updateDataGridViewInteractionFactorLevelCombinations();
         }
 
@@ -153,9 +155,6 @@ namespace AmigaPowerAnalysis.GUI {
             if (cell.ColumnIndex == dataGridViewFactors.Columns["IsInteractionWithVariety"].Index) {
                 if (dataGridViewFactors.IsCurrentCellDirty) {
                     dataGridViewFactors.CommitEdit(DataGridViewDataErrorContexts.Commit);
-                    var factor = _project.Factors.ElementAt(cell.RowIndex);
-                    _project.SetFactorType(factor, factor.IsInteractionWithVariety);
-                    updateDataGridViewInteractionFactorLevelCombinations();
                 }
             }
         }
