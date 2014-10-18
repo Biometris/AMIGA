@@ -52,9 +52,10 @@
             this.dataGridViewFactorLevels.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.dataGridViewFactorLevels.Size = new System.Drawing.Size(512, 426);
             this.dataGridViewFactorLevels.TabIndex = 2;
+            this.dataGridViewFactorLevels.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewFactorLevels_CellValueChanged);
             this.dataGridViewFactorLevels.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dataGridViewFactorLevels_DataError);
             // 
-            // dataGridViewComparisons
+            // dataGridViewEndpoints
             // 
             this.dataGridViewEndpoints.AllowUserToAddRows = false;
             this.dataGridViewEndpoints.AllowUserToDeleteRows = false;
@@ -65,7 +66,7 @@
             this.dataGridViewEndpoints.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewEndpoints.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewEndpoints.MultiSelect = false;
-            this.dataGridViewEndpoints.Name = "dataGridViewComparisons";
+            this.dataGridViewEndpoints.Name = "dataGridViewEndpoints";
             this.dataGridViewEndpoints.ReadOnly = true;
             this.dataGridViewEndpoints.RowHeadersVisible = false;
             this.dataGridViewEndpoints.RowHeadersWidth = 24;
@@ -95,13 +96,13 @@
             this.splitContainerComparisons.SplitterDistance = 260;
             this.splitContainerComparisons.TabIndex = 4;
             // 
-            // ComparisonsPanel
+            // AdditionalMeansPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.Controls.Add(this.splitContainerComparisons);
-            this.Name = "ComparisonsPanel";
+            this.Name = "AdditionalMeansPanel";
             this.Padding = new System.Windows.Forms.Padding(10);
             this.Size = new System.Drawing.Size(802, 452);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFactorLevels)).EndInit();

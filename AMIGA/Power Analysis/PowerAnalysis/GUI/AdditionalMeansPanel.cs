@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using AmigaPowerAnalysis.Core;
+using System.Text.RegularExpressions;
 
 namespace AmigaPowerAnalysis.GUI {
     public partial class AdditionalMeansPanel : UserControl, ISelectionForm {
@@ -96,6 +97,19 @@ namespace AmigaPowerAnalysis.GUI {
             _currentEndpoint = _project.Endpoints.ElementAt(dataGridViewEndpoints.CurrentRow.Index);
             _currentEndpointFactorLevels = _currentEndpoint.Interactions;
             updateDataGridFactorLevels();
+        }
+
+        private void dataGridViewFactorLevels_CellValueChanged(object sender, DataGridViewCellEventArgs e) {
+            var editedCell = dataGridViewFactorLevels.Rows[e.RowIndex].Cells[e.ColumnIndex];
+            var newValue = editedCell.Value;
+            if (_currentEndpointFactorLevels != null) {
+                if (editedCell.ColumnIndex == dataGridViewFactorLevels.Columns["Mean GMO"].Index) {
+                    _currentEndpointFactorLevels[e.RowIndex].MeanGMO = (double)newValue;
+                }
+                if (editedCell.ColumnIndex == dataGridViewFactorLevels.Columns["Mean Comparator"].Index) {
+                    _currentEndpointFactorLevels[e.RowIndex].MeanComparator = (double)newValue;
+                }
+            }
         }
 
         private void dataGridViewFactorLevels_DataError(object sender, DataGridViewDataErrorEventArgs e) {
