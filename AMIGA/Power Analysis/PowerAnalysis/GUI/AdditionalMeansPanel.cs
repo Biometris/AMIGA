@@ -22,14 +22,12 @@ namespace AmigaPowerAnalysis.GUI {
             _project = project;
             Name = "Additional Means";
             Description = "There are data which are not directly involved in the comparison GMO to CMP. Such data may be useful for pooling variance estimates, but the usefulness may depend on the expected means. Indicate if you expect less informative data due to low means. If so, specify expected mean values.";
-            createDataGridComparisons();
-            createDataGridFactorLevels();
         }
 
         public string Description { get; private set; }
 
         public void Activate() {
-            updateDataGridComparisons();
+            createDataGridEndpoints();
         }
 
         public bool IsVisible() {
@@ -38,11 +36,8 @@ namespace AmigaPowerAnalysis.GUI {
 
         public event EventHandler TabVisibilitiesChanged;
 
-        private void createDataGridComparisons() {
-        }
-
-        private void updateDataGridComparisons() {
-            dataGridViewComparisons.Columns.Clear();
+        private void createDataGridEndpoints() {
+            dataGridViewEndpoints.Columns.Clear();
 
             var _availableEndpoints = _project.Endpoints.Select(h => new { Name = h.Name, Endpoint = h }).ToList();
             var combo = new DataGridViewComboBoxColumn();
@@ -51,72 +46,54 @@ namespace AmigaPowerAnalysis.GUI {
             combo.DisplayMember = "Name";
             combo.HeaderText = "Endpoint";
             combo.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
-            dataGridViewComparisons.Columns.Add(combo);
+            dataGridViewEndpoints.Columns.Add(combo);
 
             var comparisonsBindingSouce = new BindingSource(_project.Endpoints, null);
-            dataGridViewComparisons.AutoGenerateColumns = false;
-            dataGridViewComparisons.DataSource = comparisonsBindingSouce;
+            dataGridViewEndpoints.AutoGenerateColumns = false;
+            dataGridViewEndpoints.DataSource = comparisonsBindingSouce;
             updateDataGridFactorLevels();
         }
 
-        private void createDataGridFactorLevels() {
-            var column = new DataGridViewTextBoxColumn();
-            column.DataPropertyName = "Label";
-            column.Name = "Label";
-            column.HeaderText = "Factor level combination";
-            column.ReadOnly = true;
-            dataGridViewFactorLevels.Columns.Add(column);
-
-            var checkbox = new DataGridViewCheckBoxColumn();
-            checkbox.DataPropertyName = "IsComparisonLevelGMO";
-            checkbox.Name = "IsComparisonLevelGMO";
-            checkbox.HeaderText = "Comparison level GMO";
-            checkbox.ReadOnly = true;
-            dataGridViewFactorLevels.Columns.Add(checkbox);
-
-            column = new DataGridViewTextBoxColumn();
-            column.DataPropertyName = "MeanGMO";
-            column.Name = "MeanGMO";
-            column.HeaderText = "Mean GMO";
-            dataGridViewFactorLevels.Columns.Add(column);
-
-            checkbox = new DataGridViewCheckBoxColumn();
-            checkbox.DataPropertyName = "IsComparisonLevelComparator";
-            checkbox.Name = "IsComparisonLevelComparator";
-            checkbox.HeaderText = "Comparison level comparator";
-            checkbox.ReadOnly = true;
-            dataGridViewFactorLevels.Columns.Add(checkbox);
-
-            column = new DataGridViewTextBoxColumn();
-            column.DataPropertyName = "MeanComparator";
-            column.Name = "MeanComparator";
-            column.HeaderText = "Mean comparator";
-            dataGridViewFactorLevels.Columns.Add(column);
-        }
-
         private void updateDataGridFactorLevels() {
+            dataGridViewFactorLevels.DataSource = null;
             if (_currentEndpointFactorLevels != null) {
-                var factorLevelsBindingSouce = new BindingSource(_currentEndpointFactorLevels, null);
-                dataGridViewFactorLevels.AutoGenerateColumns = false;
-                dataGridViewFactorLevels.DataSource = factorLevelsBindingSouce;
-            }
-            dataGridViewFactorLevels.Columns["IsComparisonLevelGMO"].DefaultCellStyle.BackColor = Color.LightGray;
-            dataGridViewFactorLevels.Columns["IsComparisonLevelComparator"].DefaultCellStyle.BackColor = Color.LightGray;
-            for (int i = 0; i < dataGridViewFactorLevels.Rows.Count; i++) {
-                if ((bool)dataGridViewFactorLevels.Rows[i].Cells["IsComparisonLevelGMO"].Value) {
-                    dataGridViewFactorLevels.Rows[i].Cells["MeanGMO"].Style.BackColor = Color.LightGray;
-                    dataGridViewFactorLevels.Rows[i].Cells["MeanGMO"].ReadOnly = true;
+                var dataTable = new DataTable();
+                var interactionFactors = _currentEndpoint.InteractionFactors.ToList();
+                foreach (var interactionFactor in interactionFactors) {
+                    dataTable.Columns.Add(interactionFactor.Name, typeof(string));
                 }
-                if ((bool)dataGridViewFactorLevels.Rows[i].Cells["IsComparisonLevelComparator"].Value) {
-                    dataGridViewFactorLevels.Rows[i].Cells["MeanComparator"].Style.BackColor = Color.LightGray;
-                    dataGridViewFactorLevels.Rows[i].Cells["MeanComparator"].ReadOnly = true;
+                dataTable.Columns.Add("Mean GMO", typeof(double));
+                dataTable.Columns.Add("Mean Comparator", typeof(double));
+                foreach (var factorLevelCombination in _currentEndpointFactorLevels) {
+                    DataRow row = dataTable.NewRow();
+                    foreach (var factorLevel in factorLevelCombination.Items) {
+                        row[factorLevel.Parent.Name] = factorLevel.Label;
+                    }
+                    row["Mean GMO"] = factorLevelCombination.MeanGMO;
+                    row["Mean Comparator"] = factorLevelCombination.MeanComparator;
+                    dataTable.Rows.Add(row);
+                }
+                dataGridViewFactorLevels.Columns.Clear();
+                dataGridViewFactorLevels.DataSource = dataTable;
+                for (int i = 0; i < interactionFactors.Count; ++i) {
+                    dataGridViewFactorLevels.Columns[i].ReadOnly = true;
+                }
+                for (int i = 0; i < dataGridViewFactorLevels.Rows.Count; i++) {
+                    if (_currentEndpointFactorLevels[i].IsComparisonLevelGMO) {
+                        dataGridViewFactorLevels.Rows[i].Cells["Mean GMO"].Style.BackColor = Color.LightGray;
+                        dataGridViewFactorLevels.Rows[i].Cells["Mean GMO"].ReadOnly = true;
+                    }
+                    if (_currentEndpointFactorLevels[i].IsComparisonLevelComparator) {
+                        dataGridViewFactorLevels.Rows[i].Cells["Mean Comparator"].Style.BackColor = Color.LightGray;
+                        dataGridViewFactorLevels.Rows[i].Cells["Mean Comparator"].ReadOnly = true;
+                    }
                 }
             }
             dataGridViewFactorLevels.Refresh();
         }
 
         private void dataGridComparisons_SelectionChanged(object sender, EventArgs e) {
-            _currentEndpoint = _project.Endpoints.ElementAt(dataGridViewComparisons.CurrentRow.Index);
+            _currentEndpoint = _project.Endpoints.ElementAt(dataGridViewEndpoints.CurrentRow.Index);
             _currentEndpointFactorLevels = _currentEndpoint.Interactions;
             updateDataGridFactorLevels();
         }
