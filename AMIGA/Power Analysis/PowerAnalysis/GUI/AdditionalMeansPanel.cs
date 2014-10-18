@@ -32,10 +32,8 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         public bool IsVisible() {
-            return true;
+            return _project != null && (_project.Endpoints.Any(ep => ep.Interactions.Any(epi => !epi.IsComparisonLevelGMO || !epi.IsComparisonLevelComparator)) || _project.VarietyFactor.FactorLevels.Count > 2);
         }
-
-        public event EventHandler TabVisibilitiesChanged;
 
         private void createDataGridEndpoints() {
             dataGridViewEndpoints.Columns.Clear();
@@ -115,6 +113,8 @@ namespace AmigaPowerAnalysis.GUI {
         private void dataGridViewFactorLevels_DataError(object sender, DataGridViewDataErrorEventArgs e) {
             showError("Invalid data", e.Exception.Message);
         }
+
+        public event EventHandler TabVisibilitiesChanged;
 
         private void showError(string title, string message) {
             MessageBox.Show(

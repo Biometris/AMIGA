@@ -36,8 +36,6 @@ namespace AmigaPowerAnalysis.GUI {
             return true;
         }
 
-        public event EventHandler TabVisibilitiesChanged;
-
         private void createDataGridFactors() {
             var column = new DataGridViewTextBoxColumn();
             column.DataPropertyName = "Name";
@@ -116,6 +114,7 @@ namespace AmigaPowerAnalysis.GUI {
             _project.AddFactor(newFactor);
             _project.UpdateEndpointFactors();
             updateDataGridFactors();
+            fireTabVisibilitiesChanged();
         }
 
         private void buttonRemoveFactor_Click(object sender, EventArgs e) {
@@ -127,6 +126,7 @@ namespace AmigaPowerAnalysis.GUI {
                     _project.RemoveFactor(_project.Factors[currentRow]);
                     _project.UpdateEndpointFactors();
                     updateDataGridFactors();
+                    fireTabVisibilitiesChanged();
                 }
             } else {
                 showError("Invalid selection", "Please select one entire row in order to remove its corresponding factor.");
@@ -234,6 +234,15 @@ namespace AmigaPowerAnalysis.GUI {
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error,
                     MessageBoxDefaultButton.Button1);
+        }
+
+        public event EventHandler TabVisibilitiesChanged;
+
+        private void fireTabVisibilitiesChanged() {
+            var tabVisibilitiesChanged = TabVisibilitiesChanged;
+            if (tabVisibilitiesChanged != null) {
+                tabVisibilitiesChanged(this, null);
+            }
         }
     }
 }

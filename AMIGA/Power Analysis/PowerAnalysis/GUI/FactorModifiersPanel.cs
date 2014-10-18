@@ -33,15 +33,13 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         public bool IsVisible() {
-            return true;
+            return _project != null && _project.Endpoints.Any(ep => ep.NonInteractionFactors.Count() > 0);
         }
-
-        public event EventHandler TabVisibilitiesChanged;
 
         private void updateVisibilities() {
             dataGridViewEndpoints.Visible = _project.UseFactorModifiers;
             dataGridViewFactorModifiers.Visible = _project.UseFactorModifiers;
-            groupBoxFactorModifiers.Enabled = _project.Endpoints.Any(ep => ep.NonInteractionFactors.Count() > 0);
+            groupBoxFactorModifiers.Visible = _project.Endpoints.Any(ep => ep.NonInteractionFactors.Count() > 0);
         }
 
         private void createDataGridEndpoints() {
@@ -106,6 +104,15 @@ namespace AmigaPowerAnalysis.GUI {
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error,
                     MessageBoxDefaultButton.Button1);
+        }
+
+        public event EventHandler TabVisibilitiesChanged;
+
+        private void fireTabVisibilitiesChanged() {
+            var tabVisibilitiesChanged = TabVisibilitiesChanged;
+            if (tabVisibilitiesChanged != null) {
+                tabVisibilitiesChanged(this, null);
+            }
         }
     }
 }

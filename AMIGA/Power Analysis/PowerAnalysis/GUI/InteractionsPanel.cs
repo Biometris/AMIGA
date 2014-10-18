@@ -23,7 +23,7 @@ namespace AmigaPowerAnalysis.GUI {
         public string Description { get; private set; }
 
         public bool IsVisible() {
-            return true;
+            return _project != null && _project.Factors.Count > 1;
         }
 
         public void Activate() {
@@ -80,8 +80,6 @@ namespace AmigaPowerAnalysis.GUI {
                 }
             }
         }
-
-        public event EventHandler TabVisibilitiesChanged;
 
         private void createDataGridFactors() {
             var column = new DataGridViewTextBoxColumn();
@@ -148,6 +146,7 @@ namespace AmigaPowerAnalysis.GUI {
             var factor = _project.Factors.ElementAt(editedCell.RowIndex);
             _project.SetFactorType(factor, factor.IsInteractionWithVariety);
             updateDataGridViewInteractionFactorLevelCombinations();
+            fireTabVisibilitiesChanged();
         }
 
         private void dataGridViewFactors_CurrentCellDirtyStateChanged(object sender, EventArgs e) {
@@ -161,11 +160,8 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void checkBoxUseDefaultInteractions_CheckedChanged(object sender, EventArgs e) {
             _project.SetDefaultInteractions(checkBoxUseDefaultInteractions.Checked);
-            var tabVisibilitiesChanged = TabVisibilitiesChanged;
-            if (tabVisibilitiesChanged != null) {
-                tabVisibilitiesChanged(this, null);
-            }
             updateVisibilities();
+            fireTabVisibilitiesChanged();
         }
 
         private void dataGridViewInteractionFactorLevelCombinations_CellValueChanged(object sender, DataGridViewCellEventArgs e) {
@@ -179,6 +175,22 @@ namespace AmigaPowerAnalysis.GUI {
                     factorLevelCombination.IsComparisonLevelComparator = (bool)dataGridViewInteractionFactorLevelCombinations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
                 }
                 _project.UpdateEndpointFactorLevels();
+                fireTabVisibilitiesChanged();
+            }
+        }
+
+        private void dataGridViewInteractionFactorLevelCombinations_CurrentCellDirtyStateChanged(object sender, EventArgs e) {
+            if (dataGridViewInteractionFactorLevelCombinations.IsCurrentCellDirty) {
+                dataGridViewInteractionFactorLevelCombinations.CommitEdit(DataGridViewDataErrorContexts.Commit);
+            }
+        }
+
+        public event EventHandler TabVisibilitiesChanged;
+
+        private void fireTabVisibilitiesChanged() {
+            var tabVisibilitiesChanged = TabVisibilitiesChanged;
+            if (tabVisibilitiesChanged != null) {
+                tabVisibilitiesChanged(this, null);
             }
         }
     }

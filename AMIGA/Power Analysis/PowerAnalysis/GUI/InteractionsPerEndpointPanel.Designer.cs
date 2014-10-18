@@ -50,7 +50,7 @@
             this.dataGridViewFactorLevels.RowHeadersWidth = 24;
             this.dataGridViewFactorLevels.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dataGridViewFactorLevels.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewFactorLevels.Size = new System.Drawing.Size(776, 162);
+            this.dataGridViewFactorLevels.Size = new System.Drawing.Size(776, 227);
             this.dataGridViewFactorLevels.TabIndex = 2;
             this.dataGridViewFactorLevels.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dataGridViewFactorLevels_DataError);
             // 
@@ -72,7 +72,7 @@
             // 
             this.splitContainerComparisons.Panel2.Controls.Add(this.dataGridViewFactorLevels);
             this.splitContainerComparisons.Size = new System.Drawing.Size(776, 426);
-            this.splitContainerComparisons.SplitterDistance = 260;
+            this.splitContainerComparisons.SplitterDistance = 195;
             this.splitContainerComparisons.TabIndex = 4;
             // 
             // dataGridViewEndpointInteractionFactors
@@ -91,18 +91,18 @@
             this.dataGridViewEndpointInteractionFactors.RowHeadersWidth = 24;
             this.dataGridViewEndpointInteractionFactors.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dataGridViewEndpointInteractionFactors.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewEndpointInteractionFactors.Size = new System.Drawing.Size(776, 260);
+            this.dataGridViewEndpointInteractionFactors.Size = new System.Drawing.Size(776, 195);
             this.dataGridViewEndpointInteractionFactors.TabIndex = 4;
             this.dataGridViewEndpointInteractionFactors.CurrentCellDirtyStateChanged += new System.EventHandler(this.dataGridViewEndpointInteractionFactors_CurrentCellDirtyStateChanged);
             this.dataGridViewEndpointInteractionFactors.SelectionChanged += new System.EventHandler(this.dataGridViewEndpointInteractionFactors_SelectionChanged);
             // 
-            // InteractionsPerComparisonPanel
+            // InteractionsPerEndpointPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.Controls.Add(this.splitContainerComparisons);
-            this.Name = "InteractionsPerComparisonPanel";
+            this.Name = "InteractionsPerEndpointPanel";
             this.Padding = new System.Windows.Forms.Padding(10);
             this.Size = new System.Drawing.Size(802, 452);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFactorLevels)).EndInit();

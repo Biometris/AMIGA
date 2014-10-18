@@ -96,13 +96,14 @@
             this.dataGridViewInteractionFactorLevelCombinations.Size = new System.Drawing.Size(415, 426);
             this.dataGridViewInteractionFactorLevelCombinations.TabIndex = 5;
             this.dataGridViewInteractionFactorLevelCombinations.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewInteractionFactorLevelCombinations_CellValueChanged);
+            this.dataGridViewInteractionFactorLevelCombinations.CurrentCellDirtyStateChanged += new System.EventHandler(this.dataGridViewInteractionFactorLevelCombinations_CurrentCellDirtyStateChanged);
             // 
             // checkBoxUseInteractions
             // 
             this.checkBoxUseInteractions.AutoSize = true;
             this.checkBoxUseInteractions.Location = new System.Drawing.Point(13, 13);
             this.checkBoxUseInteractions.Name = "checkBoxUseInteractions";
-            this.checkBoxUseInteractions.Size = new System.Drawing.Size(571, 17);
+            this.checkBoxUseInteractions.Size = new System.Drawing.Size(407, 17);
             this.checkBoxUseInteractions.TabIndex = 7;
             this.checkBoxUseInteractions.Text = "Exclude data from the GMO vs. CMP comparison based on selected factor levels";
             this.checkBoxUseInteractions.UseVisualStyleBackColor = true;
@@ -113,7 +114,7 @@
             this.checkBoxUseDefaultInteractions.AutoSize = true;
             this.checkBoxUseDefaultInteractions.Location = new System.Drawing.Point(13, 36);
             this.checkBoxUseDefaultInteractions.Name = "checkBoxUseDefaultInteractions";
-            this.checkBoxUseDefaultInteractions.Size = new System.Drawing.Size(276, 17);
+            this.checkBoxUseDefaultInteractions.Size = new System.Drawing.Size(261, 17);
             this.checkBoxUseDefaultInteractions.TabIndex = 6;
             this.checkBoxUseDefaultInteractions.Text = "Use the selection specified below for all endpoints";
             this.checkBoxUseDefaultInteractions.UseVisualStyleBackColor = true;

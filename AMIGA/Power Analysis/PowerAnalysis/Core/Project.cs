@@ -60,12 +60,6 @@ namespace AmigaPowerAnalysis.Core {
         public PowerCalculationSettings PowerCalculationSettings { get; set; }
 
         /// <summary>
-        /// Variety factor which includes GMO and Comparator.
-        /// </summary>
-        [DataMember]
-        public Factor VarietyFactor { get; set; }
-
-        /// <summary>
         /// Specifies whether design factors can be modifiers.
         /// </summary>
         [DataMember]
@@ -128,6 +122,15 @@ namespace AmigaPowerAnalysis.Core {
         public void RemoveFactor(Factor factor) {
             Factors.Remove(factor);
             UpdateEndpointFactors();
+        }
+
+        /// <summary>
+        /// Variety factor which includes GMO and Comparator.
+        /// </summary>
+        public Factor VarietyFactor {
+            get {
+                return Factors.SingleOrDefault(f => f.IsVarietyFactor);
+            }
         }
 
         public void SetFactorType(Factor factor, bool isInteractionWithVariety) {
