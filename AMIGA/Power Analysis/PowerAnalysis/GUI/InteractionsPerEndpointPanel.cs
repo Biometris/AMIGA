@@ -24,7 +24,6 @@ namespace AmigaPowerAnalysis.GUI {
             Name = "Exclude data per endpoint";
             Description = "The GMO-CMP comparison may be restricted to a subset of levels of additional factors for the GMO and/or for the CMP. Indicate per endpoint any factors for which this is relevant, and uncheck the levels to be excluded.";
             createDataGridInteractions();
-            createDataGridComparisons();
             createDataGridFactorLevels();
         }
 
@@ -36,11 +35,6 @@ namespace AmigaPowerAnalysis.GUI {
 
         public bool IsVisible() {
             return !_project.DesignSettings.UseDefaultInteractions;
-        }
-
-        public event EventHandler TabVisibilitiesChanged;
-
-        private void createDataGridComparisons() {
         }
 
         private void createDataGridInteractions() {
@@ -102,19 +96,11 @@ namespace AmigaPowerAnalysis.GUI {
             showError("Invalid data", e.Exception.Message);
         }
 
-        private void showError(string title, string message) {
-            MessageBox.Show(
-                    message,
-                    title,
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error,
-                    MessageBoxDefaultButton.Button1);
-        }
-
         private void dataGridViewEndpointInteractionFactors_SelectionChanged(object sender, EventArgs e) {
             _currentEndpoint = _project.Endpoints.ElementAt(dataGridViewEndpointInteractionFactors.CurrentRow.Index);
             _currentEndpointInteractionFactorLevels = _currentEndpoint.Interactions;
             updateDataGridFactorLevels();
+            fireTabVisibilitiesChanged();
         }
 
         private void dataGridViewEndpointInteractionFactors_CurrentCellDirtyStateChanged(object sender, EventArgs e) {
@@ -128,6 +114,32 @@ namespace AmigaPowerAnalysis.GUI {
                 var isChecked = (bool)_endpointInteractionFactorsDataTable.Rows[cell.RowIndex][cell.ColumnIndex];
                 endpoint.SetFactorType(factor, isChecked);
                 updateDataGridFactorLevels();
+                fireTabVisibilitiesChanged();
+            }
+        }
+
+        private void dataGridViewFactorLevels_CurrentCellDirtyStateChanged(object sender, EventArgs e) {
+            if (dataGridViewFactorLevels.IsCurrentCellDirty) {
+                dataGridViewFactorLevels.CommitEdit(DataGridViewDataErrorContexts.Commit);
+            }
+            fireTabVisibilitiesChanged();
+        }
+
+        private void showError(string title, string message) {
+            MessageBox.Show(
+                    message,
+                    title,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error,
+                    MessageBoxDefaultButton.Button1);
+        }
+
+        public event EventHandler TabVisibilitiesChanged;
+
+        private void fireTabVisibilitiesChanged() {
+            var tabVisibilitiesChanged = TabVisibilitiesChanged;
+            if (tabVisibilitiesChanged != null) {
+                tabVisibilitiesChanged(this, null);
             }
         }
     }
