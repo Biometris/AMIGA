@@ -54,6 +54,7 @@
             this.dataGridViewFactorModifiers.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridViewFactorModifiers.Size = new System.Drawing.Size(518, 383);
             this.dataGridViewFactorModifiers.TabIndex = 0;
+            this.dataGridViewFactorModifiers.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewFactorModifiers_CellValueChanged);
             this.dataGridViewFactorModifiers.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dataGridViewFactorModifiers_DataError);
             // 
             // dataGridViewEndpoints
@@ -121,14 +122,14 @@
             this.splitContainer1.SplitterDistance = 260;
             this.splitContainer1.TabIndex = 11;
             // 
-            // ModifiersPanel
+            // FactorModifiersPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.groupBoxFactorModifiers);
-            this.Name = "ModifiersPanel";
+            this.Name = "FactorModifiersPanel";
             this.Padding = new System.Windows.Forms.Padding(10);
             this.Size = new System.Drawing.Size(802, 452);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFactorModifiers)).EndInit();
