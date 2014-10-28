@@ -81,13 +81,13 @@
   <Fragment>
     <ComponentGroup Id="ApplicationComponentGroup" Directory="INSTALLFOLDER">
       <Component Guid="{B7149209-2DD9-421D-998F-531412A53B6C}">
-        <File Source="..\PowerAnalysis\bin\Release\AmigaPowerAnalysis.exe" KeyPath="yes" />
+        <File Source="..\AmigaPowerAnalysis.Core\bin\Release\AmigaPowerAnalysis.exe" KeyPath="yes" />
       </Component>
       <Component Guid="{5E1C1A2C-F3F5-4D69-B14F-F0C5F93E8683}">
-        <File Source="..\PowerAnalysis\bin\Release\OxyPlot.dll" KeyPath="yes" />
+        <File Source="..\AmigaPowerAnalysis.Core\bin\Release\OxyPlot.dll" KeyPath="yes" />
       </Component>
       <Component Guid="{83ECBA92-89F6-4054-9F00-9948D9FF2303}">
-        <File Source="..\PowerAnalysis\bin\Release\OxyPlot.WindowsForms.dll" KeyPath="yes" />
+        <File Source="..\AmigaPowerAnalysis.Core\bin\Release\OxyPlot.WindowsForms.dll" KeyPath="yes" />
       </Component>
     </ComponentGroup>
   </Fragment>
@@ -95,10 +95,10 @@
   <Fragment>
     <ComponentGroup Id="PowerAnalysisScriptsGroup" Directory="Resources">
       <Component Guid="{C7F7EB39-302B-49C5-B10C-A7ACC4DED51A}">
-        <File Source="..\PowerAnalysis\bin\Release\Resources\AmigaPowerAnalysis.gen" KeyPath="yes" />
+        <File Source="..\AmigaPowerAnalysis.Core\bin\Release\Resources\AmigaPowerAnalysis.gen" KeyPath="yes" />
       </Component>
       <Component Guid="{FB2AAB26-0208-41CB-B7A5-11A9266FEC74}">
-        <File Source="..\PowerAnalysis\bin\Release\Resources\Lyles.pro" KeyPath="yes" />
+        <File Source="..\AmigaPowerAnalysis.Core\bin\Release\Resources\Lyles.pro" KeyPath="yes" />
       </Component>
     </ComponentGroup>
   </Fragment>
@@ -106,19 +106,19 @@
   <Fragment>
     <ComponentGroup Id="WkHtmlToPdfGroup" Directory="WkHtmlToPdf">
       <Component Guid="{7FFE1027-1E4E-4182-ABF2-598C6D50D98D}">
-        <File Source="..\PowerAnalysis\bin\Release\Resources\WkHtmlToPdf\libeay32.dll" KeyPath="yes" />
+        <File Source="..\AmigaPowerAnalysis.Core\bin\Release\Resources\WkHtmlToPdf\libeay32.dll" KeyPath="yes" />
       </Component>
       <Component Guid="{4E8DFA84-C5BE-4ADE-BED6-733A2595A3D6}">
-        <File Source="..\PowerAnalysis\bin\Release\Resources\WkHtmlToPdf\libgcc_s_dw2-1.dll" KeyPath="yes" />
+        <File Source="..\AmigaPowerAnalysis.Core\bin\Release\Resources\WkHtmlToPdf\libgcc_s_dw2-1.dll" KeyPath="yes" />
       </Component>
       <Component Guid="{DFB00079-B3BA-4587-B8A9-A7B117BA0B54}">
-        <File Source="..\PowerAnalysis\bin\Release\Resources\WkHtmlToPdf\mingwm10.dll" KeyPath="yes" />
+        <File Source="..\AmigaPowerAnalysis.Core\bin\Release\Resources\WkHtmlToPdf\mingwm10.dll" KeyPath="yes" />
       </Component>
       <Component Guid="{1A34629C-E1C7-4F28-BFC6-70C2A0E3941C}">
-        <File Source="..\PowerAnalysis\bin\Release\Resources\WkHtmlToPdf\ssleay32.dll" KeyPath="yes" />
+        <File Source="..\AmigaPowerAnalysis.Core\bin\Release\Resources\WkHtmlToPdf\ssleay32.dll" KeyPath="yes" />
       </Component>
       <Component Guid="{E5ED8366-CDD2-477A-B946-62D6CFDD09DB}">
-        <File Source="..\PowerAnalysis\bin\Release\Resources\WkHtmlToPdf\wkhtmltopdf.exe" KeyPath="yes" />
+        <File Source="..\AmigaPowerAnalysis.Core\bin\Release\Resources\WkHtmlToPdf\wkhtmltopdf.exe" KeyPath="yes" />
       </Component>
     </ComponentGroup>
   </Fragment>
