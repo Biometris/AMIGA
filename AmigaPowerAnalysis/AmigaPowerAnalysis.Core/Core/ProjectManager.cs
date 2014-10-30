@@ -15,6 +15,11 @@ namespace AmigaPowerAnalysis.Core {
             return project;
         }
 
+        /// <summary>
+        /// Stores the project in a file with the specified name.
+        /// </summary>
+        /// <param name="project"></param>
+        /// <param name="filename"></param>
         public static void SaveProject(Project project, string filename) {
             var serializer = new DataContractSerializer(typeof(Project), null, 0x7FFF, false, true, null);
             using (var fileWriter = new FileStream(filename, FileMode.Create)) {
@@ -23,6 +28,11 @@ namespace AmigaPowerAnalysis.Core {
             }
         }
 
+        /// <summary>
+        /// Tries to load a project file from the given file name.
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <returns></returns>
         public static Project LoadProject(string filename) {
             var serializer = new DataContractSerializer(typeof(Project));
             using (var fileStream = new FileStream(filename, FileMode.Open)) {

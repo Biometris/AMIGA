@@ -13,7 +13,7 @@ namespace AmigaPowerAnalysis.GUI {
         public InteractionsPanel(Project project) {
             InitializeComponent();
             _project = project;
-            Name = "Exclude Data";
+            Name = "Exclude data";
             Description = "The GMO-CMP comparison may be restricted to a subset of levels of additional factors for the GMO and/or for the CMP. Indicate any factors for which this is relevant, and uncheck the levels to be excluded.";
             createDataGridFactors();
             createDataGridViewInteractionFactorLevelCombinations();
@@ -115,15 +115,13 @@ namespace AmigaPowerAnalysis.GUI {
             foreach (var interactionFactor in interactionFactors) {
                 dataTable.Columns.Add(interactionFactor.Name, typeof(string));
             }
-            dataTable.Columns.Add("Interaction GMO", typeof(bool));
-            dataTable.Columns.Add("Interaction Comparator", typeof(bool));
+            dataTable.Columns.Add("Interaction", typeof(bool));
             foreach (var factorLevelCombination in _project.DefaultInteractionFactorLevelCombinations) {
                 DataRow row = dataTable.NewRow();
                 foreach (var factorLevel in factorLevelCombination.Items) {
                     row[factorLevel.Parent.Name] = factorLevel.Label;
                 }
-                row["Interaction GMO"] = factorLevelCombination.IsComparisonLevelGMO;
-                row["Interaction Comparator"] = factorLevelCombination.IsComparisonLevelComparator;
+                row["Interaction"] = factorLevelCombination.IsComparisonLevel;
                 dataTable.Rows.Add(row);
             }
             dataGridViewInteractionFactorLevelCombinations.Columns.Clear();
@@ -167,12 +165,9 @@ namespace AmigaPowerAnalysis.GUI {
         private void dataGridViewInteractionFactorLevelCombinations_CellValueChanged(object sender, DataGridViewCellEventArgs e) {
             if (e.RowIndex < _project.DefaultInteractionFactorLevelCombinations.Count) {
                 var factorLevelCombination = _project.DefaultInteractionFactorLevelCombinations[e.RowIndex];
-                if (e.ColumnIndex == dataGridViewInteractionFactorLevelCombinations.Columns["Interaction GMO"].Index) {
+                if (e.ColumnIndex == dataGridViewInteractionFactorLevelCombinations.Columns["Interaction"].Index) {
                     var isChecked = (bool)dataGridViewInteractionFactorLevelCombinations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
-                    factorLevelCombination.IsComparisonLevelGMO = (bool)dataGridViewInteractionFactorLevelCombinations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
-                } else if (e.ColumnIndex == dataGridViewInteractionFactorLevelCombinations.Columns["Interaction Comparator"].Index) {
-                    var isChecked = (bool)dataGridViewInteractionFactorLevelCombinations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
-                    factorLevelCombination.IsComparisonLevelComparator = (bool)dataGridViewInteractionFactorLevelCombinations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
+                    factorLevelCombination.IsComparisonLevel = (bool)dataGridViewInteractionFactorLevelCombinations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
                 }
                 _project.UpdateEndpointFactorLevels();
                 fireTabVisibilitiesChanged();

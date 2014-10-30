@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace AmigaPowerAnalysis.Core.DataAnalysis {
     public sealed class AnalysisScriptGenerator {
@@ -17,6 +16,11 @@ namespace AmigaPowerAnalysis.Core.DataAnalysis {
             }
         }
 
+        /// <summary>
+        /// Creates the analysis script template.
+        /// </summary>
+        /// <param name="project"></param>
+        /// <returns></returns>
         public string CreateAnalysisScript(Project project) {
             var fixedEffects = new List<string>() { "Fixed Effect 1", "Fixed Effect 2" };
             var randomEffects = new List<string>() { "Random Effect 1", "Random Effect 2" };

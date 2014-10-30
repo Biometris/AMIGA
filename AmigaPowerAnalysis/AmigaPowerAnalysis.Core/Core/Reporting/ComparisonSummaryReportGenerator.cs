@@ -89,7 +89,6 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             var headers = new List<string>();
             headers.Add("MainPlot");
             headers.Add("SubPlot");
-            headers.Add("Variety");
             foreach (var factor in inputPowerAnalysis.Factors) {
                 headers.Add(factor);
             }
@@ -104,7 +103,6 @@ namespace AmigaPowerAnalysis.Core.Reporting {
                 var line = new List<string>();
                 line.Add(record.MainPlot.ToString());
                 line.Add(record.SubPlot.ToString());
-                line.Add(record.Variety.ToString());
                 foreach (var factor in record.FactorLevels) {
                     line.Add(factor.ToString());
                 }

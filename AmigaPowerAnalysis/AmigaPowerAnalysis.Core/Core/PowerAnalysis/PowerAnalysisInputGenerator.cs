@@ -17,6 +17,14 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             }
         }
 
+        /// <summary>
+        /// Creates a power analysis input object for the given comparison.
+        /// </summary>
+        /// <param name="comparison"></param>
+        /// <param name="designSettings"></param>
+        /// <param name="powerCalculationSettings"></param>
+        /// <param name="idComparison"></param>
+        /// <returns></returns>
         public InputPowerAnalysis CreateInputPowerAnalysis(Comparison comparison, DesignSettings designSettings, PowerCalculationSettings powerCalculationSettings, int idComparison) {
             var inputPowerAnalysis = new InputPowerAnalysis() {
                 ComparisonId = idComparison,
@@ -48,7 +56,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
         private List<InputPowerAnalysisRecord> getComparisonInputPowerAnalysisRecords(Comparison comparison) {
             var modifiers = comparison.Endpoint.Modifiers;
             var interactionFactorLevelCombinations = comparison.VarietyInteractions;
-            var factors = new List<Factor>() { comparison.Endpoint.VarietyFactor };
+            var factors = new List<Factor>();
             factors.AddRange(comparison.Endpoint.InteractionFactors);
             factors.AddRange(comparison.Endpoint.NonInteractionFactors);
             var allFactorLevelCombinations = FactorLevelCombinationsCreator.GenerateInteractionCombinations(factors);
@@ -64,8 +72,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                 .Select((r, i) => new {
                     MainPlot = i + 1,
                     SubPlot = 1,
-                    Variety = r.Items.First(f => f.Parent.IsVarietyFactor).Label,
-                    FactorLevels = r.Items.Where(fl => !fl.Parent.IsVarietyFactor).Select(fl => fl.Label).ToList(),
+                    FactorLevels = r.Items.Select(fl => fl.Label).ToList(),
                     InteractionFactorLevelCombination = interactionFactorLevelCombinations.SingleOrDefault(flc => r.Contains(flc)),
                     NonInteractionFactorLevelCombination = modifiers.SingleOrDefault(flc => r.Contains(flc)),
                     Frequency = r.Items.Select(fl => fl.Frequency).Aggregate((n1, n2) => n1 * n2),
@@ -73,17 +80,15 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                 .Select(r => new {
                     MainPlot = r.MainPlot,
                     SubPlot = r.SubPlot,
-                    Variety = r.Variety,
                     FactorLevels = r.FactorLevels,
                     Modifier = (comparison.Endpoint.UseModifier && r.NonInteractionFactorLevelCombination != null) ? r.NonInteractionFactorLevelCombination.ModifierFactor : 1,
                     Frequency = r.Frequency,
-                    Mean = (r.InteractionFactorLevelCombination != null) ? r.InteractionFactorLevelCombination.GetMean(r.Variety) : comparison.Endpoint.MuComparator,
-                    Comparison = (r.InteractionFactorLevelCombination != null) ? r.InteractionFactorLevelCombination.GetComparisonType(r.Variety) : defaultComparison(r.Variety),
+                    Mean = (r.InteractionFactorLevelCombination != null) ? r.InteractionFactorLevelCombination.Mean : comparison.Endpoint.MuComparator,
+                    Comparison = r.InteractionFactorLevelCombination.GetComparisonType(),
                 })
                 .Select(r => new InputPowerAnalysisRecord() {
                     MainPlot = r.MainPlot,
                     SubPlot = r.SubPlot,
-                    Variety = r.Variety,
                     FactorLevels = r.FactorLevels,
                     Frequency = r.Frequency,
                     Mean = r.Modifier * r.Mean,

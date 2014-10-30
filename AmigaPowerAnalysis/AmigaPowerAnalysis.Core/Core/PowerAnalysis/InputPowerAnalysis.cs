@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
-using System.Linq;
 using AmigaPowerAnalysis.Core.Distributions;
 
 namespace AmigaPowerAnalysis.Core.PowerAnalysis {
@@ -197,7 +197,6 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             var headers = new List<string>();
             headers.Add("MainPlot");
             headers.Add("SubPlot");
-            headers.Add("Variety");
             foreach (var factor in Factors) {
                 var str = factor.Replace(' ', '_');
                 headers.Add(str);
@@ -212,7 +211,6 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                 var line = new List<string>();
                 line.Add(record.MainPlot.ToString());
                 line.Add(record.SubPlot.ToString());
-                line.Add(string.Format("'{0}'", record.Variety));
                 foreach (var factor in record.FactorLevels) {
                     line.Add(string.Format("'{0}'", factor));
                 }

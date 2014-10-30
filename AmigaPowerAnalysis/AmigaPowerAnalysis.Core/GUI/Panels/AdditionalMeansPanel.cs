@@ -17,7 +17,7 @@ namespace AmigaPowerAnalysis.GUI {
         public AdditionalMeansPanel(Project project) {
             InitializeComponent();
             _project = project;
-            Name = "Additional Means";
+            Name = "Additional means";
             Description = "There are data which are not directly involved in the comparison GMO to CMP. Such data may be useful for pooling variance estimates, but the usefulness may depend on the expected means. Indicate if you expect less informative data due to low means. If so, specify expected mean values.";
         }
 
@@ -28,7 +28,7 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         public bool IsVisible() {
-            return _project != null && (_project.Endpoints.Any(ep => ep.Interactions.Any(epi => !epi.IsComparisonLevelGMO || !epi.IsComparisonLevelComparator)) || _project.VarietyFactor.FactorLevels.Count > 2);
+            return _project != null && (_project.Endpoints.Any(ep => ep.Interactions.Any(epi => !epi.IsComparisonLevel)) || _project.VarietyFactor.FactorLevels.Count > 2);
         }
 
         private void createDataGridEndpoints() {
@@ -57,15 +57,13 @@ namespace AmigaPowerAnalysis.GUI {
                 foreach (var interactionFactor in interactionFactors) {
                     dataTable.Columns.Add(interactionFactor.Name, typeof(string));
                 }
-                dataTable.Columns.Add("Mean GMO", typeof(double));
-                dataTable.Columns.Add("Mean Comparator", typeof(double));
+                dataTable.Columns.Add("Mean", typeof(double));
                 foreach (var factorLevelCombination in _currentEndpointFactorLevels) {
                     DataRow row = dataTable.NewRow();
                     foreach (var factorLevel in factorLevelCombination.Items) {
                         row[factorLevel.Parent.Name] = factorLevel.Label;
                     }
-                    row["Mean GMO"] = factorLevelCombination.MeanGMO;
-                    row["Mean Comparator"] = factorLevelCombination.MeanComparator;
+                    row["Mean"] = factorLevelCombination.Mean;
                     dataTable.Rows.Add(row);
                 }
                 dataGridViewFactorLevels.Columns.Clear();
@@ -74,13 +72,9 @@ namespace AmigaPowerAnalysis.GUI {
                     dataGridViewFactorLevels.Columns[i].ReadOnly = true;
                 }
                 for (int i = 0; i < dataGridViewFactorLevels.Rows.Count; i++) {
-                    if (_currentEndpointFactorLevels[i].IsComparisonLevelGMO) {
-                        dataGridViewFactorLevels.Rows[i].Cells["Mean GMO"].Style.BackColor = Color.LightGray;
-                        dataGridViewFactorLevels.Rows[i].Cells["Mean GMO"].ReadOnly = true;
-                    }
-                    if (_currentEndpointFactorLevels[i].IsComparisonLevelComparator) {
-                        dataGridViewFactorLevels.Rows[i].Cells["Mean Comparator"].Style.BackColor = Color.LightGray;
-                        dataGridViewFactorLevels.Rows[i].Cells["Mean Comparator"].ReadOnly = true;
+                    if (_currentEndpointFactorLevels[i].IsComparisonLevel) {
+                        dataGridViewFactorLevels.Rows[i].Cells["Mean"].Style.BackColor = Color.LightGray;
+                        dataGridViewFactorLevels.Rows[i].Cells["Mean"].ReadOnly = true;
                     }
                 }
             }
@@ -89,7 +83,7 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void dataGridComparisons_SelectionChanged(object sender, EventArgs e) {
             _currentEndpoint = _project.Endpoints.ElementAt(dataGridViewEndpoints.CurrentRow.Index);
-            _currentEndpointFactorLevels = _currentEndpoint.Interactions;
+            _currentEndpointFactorLevels = _currentEndpoint.Interactions.Where(i => !i.IsComparisonLevel).ToList();
             updateDataGridFactorLevels();
         }
 
@@ -97,11 +91,8 @@ namespace AmigaPowerAnalysis.GUI {
             var editedCell = dataGridViewFactorLevels.Rows[e.RowIndex].Cells[e.ColumnIndex];
             var newValue = editedCell.Value;
             if (_currentEndpointFactorLevels != null) {
-                if (editedCell.ColumnIndex == dataGridViewFactorLevels.Columns["Mean GMO"].Index) {
-                    _currentEndpointFactorLevels[e.RowIndex].MeanGMO = (double)newValue;
-                }
-                if (editedCell.ColumnIndex == dataGridViewFactorLevels.Columns["Mean Comparator"].Index) {
-                    _currentEndpointFactorLevels[e.RowIndex].MeanComparator = (double)newValue;
+                if (editedCell.ColumnIndex == dataGridViewFactorLevels.Columns["Mean"].Index) {
+                    _currentEndpointFactorLevels[e.RowIndex].Mean = (double)newValue;
                 }
             }
         }

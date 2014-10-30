@@ -237,8 +237,7 @@ namespace AmigaPowerAnalysis.Core {
             if (defaultInteractions != null) {
                 foreach (var di in defaultInteractions) {
                     var interaction = Interactions.Single(i => i == di);
-                    interaction.IsComparisonLevelGMO = di.IsComparisonLevelGMO;
-                    interaction.IsComparisonLevelComparator = di.IsComparisonLevelComparator;
+                    interaction.IsComparisonLevel = di.IsComparisonLevel;
                 }
             }
             Comparisons.ForEach(c => c.UpdateComparisonFactorLevelCombinations(Interactions));

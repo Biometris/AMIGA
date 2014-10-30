@@ -78,12 +78,6 @@ namespace AmigaPowerAnalysis.GUI {
         private void updateDataGridComparisons() {
             dataGridViewComparisons.Columns.Clear();
 
-            var column = new DataGridViewTextBoxColumn();
-            column.DataPropertyName = "Name";
-            column.Name = "Name";
-            column.HeaderText = "Comparison";
-            dataGridViewComparisons.Columns.Add(column);
-
             var _availableEndpoints = _project.Endpoints.Select(h => new { Name = h.Name, Endpoint = h }).ToList();
             var combo = new DataGridViewComboBoxColumn();
             combo.DataSource = _availableEndpoints;

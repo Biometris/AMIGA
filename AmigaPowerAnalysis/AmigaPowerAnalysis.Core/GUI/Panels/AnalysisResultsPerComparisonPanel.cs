@@ -22,7 +22,7 @@ namespace AmigaPowerAnalysis.GUI {
 
         public AnalysisResultsPerComparisonPanel(Project project) {
             InitializeComponent();
-            Name = "Results per Endpoint";
+            Name = "Results per endpoint";
             Description = "Choose endpoint in table. Choose method of analysis if more have been investigated. Power is shown for difference tests or equivalence tests, and as a function of the number of replicates or the Ratio GMO/CMP (on a ln scale).\r\nNote: Number of plots in design is Number of replicates times Number of plots per block";
             this.comboBoxAnalysisType.Visible = false;
             var testTypes = Enum.GetValues(typeof(TestType));
@@ -66,13 +66,8 @@ namespace AmigaPowerAnalysis.GUI {
         private void updateDataGridComparisons() {
             dataGridViewComparisons.Columns.Clear();
 
-            var column = new DataGridViewTextBoxColumn();
-            column.DataPropertyName = "Name";
-            column.Name = "Name";
-            column.HeaderText = "Comparison";
-            dataGridViewComparisons.Columns.Add(column);
-
             var _availableEndpoints = _project.Endpoints.Select(h => new { Name = h.Name, Endpoint = h }).ToList();
+
             var combo = new DataGridViewComboBoxColumn();
             combo.DataSource = _availableEndpoints;
             combo.DataPropertyName = "Endpoint";

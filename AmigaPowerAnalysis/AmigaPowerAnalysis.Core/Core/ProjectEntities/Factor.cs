@@ -15,6 +15,7 @@ namespace AmigaPowerAnalysis.Core {
         public static Factor CreateVarietyFactor() {
             var factor = new Factor("Variety") {
                 IncludeInAssessment = true,
+                IsInteractionWithVariety = true,
             };
             factor.FactorLevels.Add(new FactorLevel() {
                 Parent = factor,

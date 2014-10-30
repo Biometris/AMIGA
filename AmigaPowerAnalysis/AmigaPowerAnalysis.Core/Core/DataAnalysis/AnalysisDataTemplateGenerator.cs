@@ -22,7 +22,6 @@ namespace AmigaPowerAnalysis.Core.DataAnalysis {
                     .Select((rep, i) => new {
                         MainPlot = rep.MainPlot,
                         SubPlot = rep.SubPlot,
-                        Variety = rep.Variety,
                         FactorLevels = rep.FactorLevels,
                         FrequencyReplicate = i + 1
                     }))
@@ -30,7 +29,6 @@ namespace AmigaPowerAnalysis.Core.DataAnalysis {
                     .Select((rep, i) => new {
                         MainPlot = rep.MainPlot,
                         SubPlot = rep.SubPlot,
-                        Variety = rep.Variety,
                         FactorLevels = rep.FactorLevels,
                         FrequencyReplicate = rep.FrequencyReplicate,
                         Block = i + 1
@@ -38,7 +36,6 @@ namespace AmigaPowerAnalysis.Core.DataAnalysis {
                 .Select(r => new AnalysisDataTemplateRecord() {
                     MainPlot = r.MainPlot,
                     SubPlot = r.SubPlot,
-                    Variety = r.Variety,
                     FactorLevels = r.FactorLevels,
                     FrequencyReplicate = r.FrequencyReplicate,
                     Block = r.Block

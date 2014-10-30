@@ -21,11 +21,6 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
         public int SubPlot { get; set; }
 
         /// <summary>
-        /// The variety.
-        /// </summary>
-        public string Variety { get; set; }
-
-        /// <summary>
         /// The levels of the factors.
         /// </summary>
         public List<string> FactorLevels { get; set; }

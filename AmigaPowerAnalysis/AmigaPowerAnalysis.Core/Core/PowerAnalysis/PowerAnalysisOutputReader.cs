@@ -4,6 +4,11 @@ using System.Linq;
 namespace AmigaPowerAnalysis.Core.PowerAnalysis {
     public sealed class PowerAnalysisOutputReader {
 
+        /// <summary>
+        /// Reads the output of a power analysis and returns the output in an output object.
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <returns></returns>
         public OutputPowerAnalysis ReadOutputPowerAnalysis(string filename) {
             var outputRecords = new List<OutputPowerAnalysisRecord>();
             var lines = System.IO.File.ReadAllLines(filename);

@@ -7,17 +7,12 @@ namespace AmigaPowerAnalysis.Core {
     [DataContract]
     public sealed class InteractionFactorLevelCombination : FactorLevelCombination {
 
-        private bool _isComparisonLevelGMO;
-        private bool _isComparisonLevelComparator;
-
-        private double _meanGMO;
-        private double _meanComparator;
+        private bool _isComparisonLevel;
+        private double _mean;
 
         public InteractionFactorLevelCombination() : base() {
-            _meanGMO = double.NaN;
-            _meanComparator = double.NaN;
-            _isComparisonLevelGMO = true;
-            _isComparisonLevelComparator = true;
+            _mean = double.NaN;
+            _isComparisonLevel = true;
         }
 
         public InteractionFactorLevelCombination(FactorLevelCombination factorLevelCombination)
@@ -32,33 +27,26 @@ namespace AmigaPowerAnalysis.Core {
         public Endpoint Endpoint { get; set; }
 
         /// <summary>
-        /// Specifies whether this comparison interaction level is a GMO interaction level.
+        /// Returns the variety of this interaction factor level.
         /// </summary>
-        [DataMember(Order = 1)]
-        public bool IsComparisonLevelGMO {
+        public FactorLevel Variety {
             get {
-                return _isComparisonLevelGMO;
-            }
-            set {
-                _isComparisonLevelGMO = value;
-                if (_isComparisonLevelGMO) {
-                    _meanGMO = double.NaN;
-                }
+                return this.Items.Single(fl => fl.Parent.IsVarietyFactor);
             }
         }
 
         /// <summary>
-        /// Specifies whether this comparison interaction level is a comparator interaction level.
+        /// Specifies whether this comparison interaction level is a GMO interaction level.
         /// </summary>
-        [DataMember(Order=1)]
-        public bool IsComparisonLevelComparator {
+        [DataMember(Order = 1)]
+        public bool IsComparisonLevel {
             get {
-                return _isComparisonLevelComparator;
+                return _isComparisonLevel;
             }
             set {
-                _isComparisonLevelComparator = value;
-                if (_isComparisonLevelComparator) {
-                    _meanComparator = double.NaN;
+                _isComparisonLevel = value;
+                if (_isComparisonLevel) {
+                    _mean = double.NaN;
                 }
             }
         }
@@ -67,42 +55,20 @@ namespace AmigaPowerAnalysis.Core {
         /// The mean of the GMO for this level.
         /// </summary>
         [DataMember(Order = 2)]
-        public double MeanGMO {
+        public double Mean {
             get {
-                if (!double.IsNaN(_meanGMO)) {
-                    return _meanGMO;
+                if (!double.IsNaN(_mean)) {
+                    return _mean;
                 } else if (Endpoint != null) {
                     return Endpoint.MuComparator;
                 }
                 return double.NaN;
             }
             set {
-                if (IsComparisonLevelGMO || (Endpoint != null && value == Endpoint.MuComparator)) {
-                    _meanGMO = double.NaN;
+                if (IsComparisonLevel || (Endpoint != null && value == Endpoint.MuComparator)) {
+                    _mean = double.NaN;
                 } else {
-                    _meanGMO = value;
-                }
-            }
-        }
-
-        /// <summary>
-        /// The mean of the comparator for this level.
-        /// </summary>
-        [DataMember(Order = 2)]
-        public double MeanComparator {
-            get {
-                if (!double.IsNaN(_meanComparator)) {
-                    return _meanComparator;
-                } else if (Endpoint != null) {
-                    return Endpoint.MuComparator;
-                }
-                return double.NaN;
-            }
-            set {
-                if (IsComparisonLevelComparator || (Endpoint != null && value == Endpoint.MuComparator)) {
-                    _meanComparator = double.NaN;
-                } else {
-                    _meanComparator = value;
+                    _mean = value;
                 }
             }
         }
@@ -112,27 +78,10 @@ namespace AmigaPowerAnalysis.Core {
         /// </summary>
         /// <param name="variety"></param>
         /// <returns></returns>
-        public double GetMean(string variety) {
-            if (variety == "GMO") {
-                return MeanGMO;
-            } else if (variety == "Comparator") {
-                return MeanComparator;
-            }
-            if (Endpoint != null) {
-                return Endpoint.MuComparator;
-            }
-            return double.NaN;
-        }
-
-        /// <summary>
-        /// Returns the mean for the given variety level.
-        /// </summary>
-        /// <param name="variety"></param>
-        /// <returns></returns>
-        public ComparisonType GetComparisonType(string variety) {
-            if (variety == "GMO" && IsComparisonLevelGMO) {
+        public ComparisonType GetComparisonType() {
+            if (IsComparisonLevel && Variety.Label == "GMO") {
                 return ComparisonType.IncludeGMO;
-            } else if (variety == "Comparator" && IsComparisonLevelComparator) {
+            } else if (IsComparisonLevel && Variety.Label == "Comparator") {
                 return ComparisonType.IncludeComparator;
             }
             return ComparisonType.Exclude;
