@@ -22,9 +22,9 @@ namespace AmigaPowerAnalysis.Core.DataAnalysis {
                 .Select((r, i) => new {
                     MainPlot = i + 1,
                     SubPlot = 1,
-                    Variety = r.Items.First(f => f.Parent.IsVarietyFactor).Label,
-                    FactorLevels = r.Items.Where(f => !f.Parent.IsVarietyFactor).Select(fl => fl.Label).ToList(),
-                    Frequency = r.Items.Select(fl => fl.Frequency).Aggregate((n1, n2) => n1 * n2),
+                    Variety = r.Levels.First(f => f.Parent.IsVarietyFactor).Label,
+                    FactorLevels = r.Levels.Where(f => !f.Parent.IsVarietyFactor).Select(fl => fl.Label).ToList(),
+                    Frequency = r.Levels.Select(fl => fl.Frequency).Aggregate((n1, n2) => n1 * n2),
                 })
                 .SelectMany(r => Enumerable.Repeat(r, r.Frequency)
                     .Select((rep, i) => new {

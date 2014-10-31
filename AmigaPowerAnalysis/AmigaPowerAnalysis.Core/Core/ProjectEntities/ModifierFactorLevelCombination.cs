@@ -13,7 +13,7 @@ namespace AmigaPowerAnalysis.Core {
 
         public ModifierFactorLevelCombination(FactorLevelCombination factorLevelCombination)
             : this() {
-            factorLevelCombination.Items.ForEach(flc => Items.Add(flc));
+            factorLevelCombination.Levels.ForEach(flc => Levels.Add(flc));
         }
 
         /// <summary>

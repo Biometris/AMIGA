@@ -73,7 +73,7 @@ namespace AmigaPowerAnalysis.GUI {
                 dataTable.Columns.Add("Interaction", typeof(bool));
                 foreach (var factorLevelCombination in _currentEndpoint.Interactions) {
                     DataRow row = dataTable.NewRow();
-                    foreach (var factorLevel in factorLevelCombination.Items) {
+                    foreach (var factorLevel in factorLevelCombination.Levels) {
                         row[factorLevel.Parent.Name] = factorLevel.Label;
                     }
                     row["Interaction"] = factorLevelCombination.IsComparisonLevel;

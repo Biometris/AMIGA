@@ -253,6 +253,7 @@
     <Compile Include="GUI\Forms\SelectionPanelForm.Designer.cs">
       <DependentUpon>SelectionPanelForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\Wrappers\InteractionsWrapper.cs" />
     <Compile Include="Helpers\ClassExtensionMethods\EnumExtensionMethods.cs" />
     <Compile Include="Helpers\ClassExtensionMethods\MemberInfoExtensionMethods.cs" />
     <Compile Include="Helpers\CollectionComparison\MultiSetComparer.cs" />

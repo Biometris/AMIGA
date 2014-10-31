@@ -72,10 +72,10 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                 .Select((r, i) => new {
                     MainPlot = i + 1,
                     SubPlot = 1,
-                    FactorLevels = r.Items.Select(fl => fl.Label).ToList(),
+                    FactorLevels = r.Levels.Select(fl => fl.Label).ToList(),
                     InteractionFactorLevelCombination = interactionFactorLevelCombinations.SingleOrDefault(flc => r.Contains(flc)),
                     NonInteractionFactorLevelCombination = modifiers.SingleOrDefault(flc => r.Contains(flc)),
-                    Frequency = r.Items.Select(fl => fl.Frequency).Aggregate((n1, n2) => n1 * n2),
+                    Frequency = r.Levels.Select(fl => fl.Frequency).Aggregate((n1, n2) => n1 * n2),
                 })
                 .Select(r => new {
                     MainPlot = r.MainPlot,
@@ -84,7 +84,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                     Modifier = (comparison.Endpoint.UseModifier && r.NonInteractionFactorLevelCombination != null) ? r.NonInteractionFactorLevelCombination.ModifierFactor : 1,
                     Frequency = r.Frequency,
                     Mean = (r.InteractionFactorLevelCombination != null) ? r.InteractionFactorLevelCombination.Mean : comparison.Endpoint.MuComparator,
-                    Comparison = r.InteractionFactorLevelCombination.GetComparisonType(),
+                    Comparison = r.InteractionFactorLevelCombination.ComparisonType,
                 })
                 .Select(r => new InputPowerAnalysisRecord() {
                     MainPlot = r.MainPlot,

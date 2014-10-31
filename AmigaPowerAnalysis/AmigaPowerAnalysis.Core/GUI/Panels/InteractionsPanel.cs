@@ -1,14 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using AmigaPowerAnalysis.Core;
+using AmigaPowerAnalysis.GUI.Wrappers;
 
 namespace AmigaPowerAnalysis.GUI {
     public partial class InteractionsPanel : UserControl, ISelectionForm {
 
         private Project _project;
+        private List<InteractionsWrapper> _defaultInteractionLevels;
 
         public InteractionsPanel(Project project) {
             InitializeComponent();
@@ -111,17 +114,28 @@ namespace AmigaPowerAnalysis.GUI {
         private void updateDataGridViewInteractionFactorLevelCombinations() {
             dataGridViewInteractionFactorLevelCombinations.DataSource = null;
             var dataTable = new DataTable();
-            var interactionFactors = _project.Factors.Where(f => f.IsInteractionWithVariety).ToList();
+
+            // Create columns
+            var interactionFactors = _project.Factors.Where(f => f.IsInteractionWithVariety && !f.IsVarietyFactor).ToList();
             foreach (var interactionFactor in interactionFactors) {
                 dataTable.Columns.Add(interactionFactor.Name, typeof(string));
             }
-            dataTable.Columns.Add("Interaction", typeof(bool));
-            foreach (var factorLevelCombination in _project.DefaultInteractionFactorLevelCombinations) {
+            dataTable.Columns.Add("Comparison level GMO", typeof(bool));
+            dataTable.Columns.Add("Comparison level Comparator", typeof(bool));
+
+            // Create interaction wrappers
+            _defaultInteractionLevels = _project.DefaultInteractionFactorLevelCombinations
+                .GroupBy(ifl => ifl.NonVarietyFactorLevelCombination)
+                .Select(g => new InteractionsWrapper(g.ToList()))
+                .ToList();
+
+            foreach (var factorLevelCombination in _defaultInteractionLevels) {
                 DataRow row = dataTable.NewRow();
-                foreach (var factorLevel in factorLevelCombination.Items) {
+                foreach (var factorLevel in factorLevelCombination.Levels) {
                     row[factorLevel.Parent.Name] = factorLevel.Label;
                 }
-                row["Interaction"] = factorLevelCombination.IsComparisonLevel;
+                row["Comparison level GMO"] = factorLevelCombination.IsComparisonLevelGMO;
+                row["Comparison level Comparator"] = factorLevelCombination.IsComparisonLevelComparator;
                 dataTable.Rows.Add(row);
             }
             dataGridViewInteractionFactorLevelCombinations.Columns.Clear();
@@ -163,11 +177,14 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void dataGridViewInteractionFactorLevelCombinations_CellValueChanged(object sender, DataGridViewCellEventArgs e) {
-            if (e.RowIndex < _project.DefaultInteractionFactorLevelCombinations.Count) {
-                var factorLevelCombination = _project.DefaultInteractionFactorLevelCombinations[e.RowIndex];
-                if (e.ColumnIndex == dataGridViewInteractionFactorLevelCombinations.Columns["Interaction"].Index) {
+            if (e.RowIndex < _defaultInteractionLevels.Count) {
+                var factorLevelCombination = _defaultInteractionLevels[e.RowIndex];
+                if (e.ColumnIndex == dataGridViewInteractionFactorLevelCombinations.Columns["Comparison level GMO"].Index) {
                     var isChecked = (bool)dataGridViewInteractionFactorLevelCombinations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
-                    factorLevelCombination.IsComparisonLevel = (bool)dataGridViewInteractionFactorLevelCombinations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
+                    factorLevelCombination.IsComparisonLevelGMO = (bool)dataGridViewInteractionFactorLevelCombinations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
+                } else if (e.ColumnIndex == dataGridViewInteractionFactorLevelCombinations.Columns["Comparison level Comparator"].Index) {
+                    var isChecked = (bool)dataGridViewInteractionFactorLevelCombinations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
+                    factorLevelCombination.IsComparisonLevelComparator = (bool)dataGridViewInteractionFactorLevelCombinations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
                 }
                 _project.UpdateEndpointFactorLevels();
                 fireTabVisibilitiesChanged();

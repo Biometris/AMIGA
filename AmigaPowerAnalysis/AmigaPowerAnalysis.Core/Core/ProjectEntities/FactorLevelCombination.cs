@@ -10,21 +10,25 @@ namespace AmigaPowerAnalysis.Core {
     public class FactorLevelCombination : IEquatable<FactorLevelCombination> {
 
         public FactorLevelCombination() {
-            Items = new List<FactorLevel>();
+            Levels = new List<FactorLevel>();
+        }
+
+        public FactorLevelCombination(List<FactorLevel> levels) {
+            Levels = levels;
         }
 
         /// <summary>
         /// The factor levels that make up this factor level combination.
         /// </summary>
         [DataMember]
-        public List<FactorLevel> Items { get; set; }
+        public List<FactorLevel> Levels { get; set; }
 
         /// <summary>
         /// The label of this factor level combination.
         /// </summary>
         public string Label {
             get {
-                return string.Join(" - ", Items.Select(fl => string.Format("{0} ({1})", fl.Parent.Name, fl.Label)));
+                return string.Join(" - ", Levels.Select(fl => string.Format("{0} ({1})", fl.Parent.Name, fl.Label)));
             }
         }
 
@@ -33,7 +37,7 @@ namespace AmigaPowerAnalysis.Core {
         /// </summary>
         /// <param name="factorLevel"></param>
         public void Add(FactorLevel factorLevel) {
-            Items.Add(factorLevel);
+            Levels.Add(factorLevel);
         }
 
         /// <summary>
@@ -42,7 +46,7 @@ namespace AmigaPowerAnalysis.Core {
         /// <returns></returns>
         public FactorLevelCombination GetCopy() {
             var newFactorLevelCombination = new FactorLevelCombination();
-            Items.ForEach(i => newFactorLevelCombination.Add(i));
+            Levels.ForEach(i => newFactorLevelCombination.Add(i));
             return newFactorLevelCombination;
         }
 
@@ -54,17 +58,29 @@ namespace AmigaPowerAnalysis.Core {
         /// <param name="other"></param>
         /// <returns></returns>
         public bool Contains(FactorLevelCombination other) {
-            return other.Items.All(i => Items.Contains(i));
+            return other.Levels.All(i => Levels.Contains(i));
         }
 
+        /// <summary>
+        /// Compares this factor level combination to the other level. Returns true if
+        /// both are the same. Otherwise false.
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
         public bool Equals(FactorLevelCombination other) {
             if (other == null) {
                 return false;
             }
-            var equal = this.Items.All(i => other.Items.Contains(i)) && other.Items.All(i => Items.Contains(i));
+            var equal = this.Levels.All(i => other.Levels.Contains(i)) && other.Levels.All(i => Levels.Contains(i));
             return equal;
         }
 
+        /// <summary>
+        /// Compares this factor level combination to the other level. Returns true if
+        /// both are the same. Otherwise false.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public override bool Equals(object obj) {
             var emp = obj as FactorLevelCombination;
             if (emp != null) {
@@ -74,9 +90,13 @@ namespace AmigaPowerAnalysis.Core {
             }
         }
 
+        /// <summary>
+        /// Returns the hash code of this factor level combination.
+        /// </summary>
+        /// <returns></returns>
         public override int GetHashCode() {
             int hash = 17;
-            foreach (var item in Items) {
+            foreach (var item in Levels) {
                 hash = hash * 23 + item.GetHashCode();
             }
             return hash;

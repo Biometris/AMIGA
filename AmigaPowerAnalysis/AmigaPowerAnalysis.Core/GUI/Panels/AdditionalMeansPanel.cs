@@ -60,7 +60,7 @@ namespace AmigaPowerAnalysis.GUI {
                 dataTable.Columns.Add("Mean", typeof(double));
                 foreach (var factorLevelCombination in _currentEndpointFactorLevels) {
                     DataRow row = dataTable.NewRow();
-                    foreach (var factorLevel in factorLevelCombination.Items) {
+                    foreach (var factorLevel in factorLevelCombination.Levels) {
                         row[factorLevel.Parent.Name] = factorLevel.Label;
                     }
                     row["Mean"] = factorLevelCombination.Mean;

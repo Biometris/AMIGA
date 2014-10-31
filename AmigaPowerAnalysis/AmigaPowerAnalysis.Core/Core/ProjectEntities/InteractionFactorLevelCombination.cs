@@ -17,7 +17,7 @@ namespace AmigaPowerAnalysis.Core {
 
         public InteractionFactorLevelCombination(FactorLevelCombination factorLevelCombination)
             : this() {
-            factorLevelCombination.Items.ForEach(flc => Items.Add(flc));
+            factorLevelCombination.Levels.ForEach(flc => Levels.Add(flc));
         }
 
         /// <summary>
@@ -31,7 +31,16 @@ namespace AmigaPowerAnalysis.Core {
         /// </summary>
         public FactorLevel Variety {
             get {
-                return this.Items.Single(fl => fl.Parent.IsVarietyFactor);
+                return Levels.Single(fl => fl.Parent.IsVarietyFactor);
+            }
+        }
+
+        /// <summary>
+        /// Returns the non-variety factor level combination of this factor level combination.
+        /// </summary>
+        public FactorLevelCombination NonVarietyFactorLevelCombination {
+            get {
+                return new FactorLevelCombination(Levels.Where(fl => !fl.Parent.IsVarietyFactor).ToList());
             }
         }
 
@@ -41,7 +50,7 @@ namespace AmigaPowerAnalysis.Core {
         [DataMember(Order = 1)]
         public bool IsComparisonLevel {
             get {
-                return _isComparisonLevel;
+                return !IsLevelAdditionalVariety && _isComparisonLevel;
             }
             set {
                 _isComparisonLevel = value;
@@ -78,13 +87,42 @@ namespace AmigaPowerAnalysis.Core {
         /// </summary>
         /// <param name="variety"></param>
         /// <returns></returns>
-        public ComparisonType GetComparisonType() {
-            if (IsComparisonLevel && Variety.Label == "GMO") {
-                return ComparisonType.IncludeGMO;
-            } else if (IsComparisonLevel && Variety.Label == "Comparator") {
-                return ComparisonType.IncludeComparator;
+        public ComparisonType ComparisonType {
+            get {
+                if (IsComparisonLevel && Variety.Label == "GMO") {
+                    return ComparisonType.IncludeGMO;
+                } else if (IsComparisonLevel && Variety.Label == "Comparator") {
+                    return ComparisonType.IncludeComparator;
+                }
+                return ComparisonType.Exclude;
             }
-            return ComparisonType.Exclude;
+        }
+
+        /// <summary>
+        /// True if this is a GMO level.
+        /// </summary>
+        public bool IsLevelGMO {
+            get {
+                return Variety.Label == "GMO";
+            }
+        }
+
+        /// <summary>
+        /// True if this is a comparator level.
+        /// </summary>
+        public bool IsLevelComparator {
+            get {
+                return Variety.Label == "Comparator";
+            }
+        }
+
+        /// <summary>
+        /// True if this an additional variety level.
+        /// </summary>
+        public bool IsLevelAdditionalVariety {
+            get {
+                return !IsLevelGMO && !IsLevelComparator;
+            }
         }
     }
 }
