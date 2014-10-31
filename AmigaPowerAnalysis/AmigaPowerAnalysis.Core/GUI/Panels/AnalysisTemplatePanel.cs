@@ -22,8 +22,8 @@ namespace AmigaPowerAnalysis.GUI {
         public event EventHandler TabVisibilitiesChanged;
 
         private Project _project;
+        private Comparison _currentComparison;
         private List<Comparison> _comparisons;
-        private AnalysisMethodType _currentAnalysisType = AnalysisMethodType.OverdispersedPoisson;
         private string _currentProjectFilePath;
 
         public AnalysisTemplatePanel(Project project) {
@@ -73,15 +73,17 @@ namespace AmigaPowerAnalysis.GUI {
             var comparisonsBindingSouce = new BindingSource(_comparisons, null);
             dataGridViewComparisons.AutoGenerateColumns = false;
             dataGridViewComparisons.DataSource = comparisonsBindingSouce;
-            dataGridViewComparisons.Columns[0].ReadOnly = true;
-            dataGridViewComparisons.Columns[1].ReadOnly = true;
         }
 
         private void updatePanelModelInfo() {
-
+            if (_currentComparison != null) {
+                var AnalysisRScriptGenerator = new AnalysisRScriptGenerator();
+                textBoxGeneratedAnalysisScript.Text = AnalysisRScriptGenerator.Generate(_currentComparison.OutputPowerAnalysis.InputPowerAnalysis);
+            }
         }
 
         private void dataGridViewComparisons_SelectionChanged(object sender, EventArgs e) {
+            _currentComparison = _project.GetComparisons().ElementAt(dataGridViewComparisons.CurrentRow.Index);
             updatePanelModelInfo();
         }
 

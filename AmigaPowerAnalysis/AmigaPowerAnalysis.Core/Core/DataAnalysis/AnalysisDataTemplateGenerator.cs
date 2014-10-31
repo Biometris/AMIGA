@@ -16,43 +16,6 @@ namespace AmigaPowerAnalysis.Core.DataAnalysis {
             }
         }
 
-        public AnalysisDataTemplate CreateAnalysisDataTemplate(InputPowerAnalysis inputPowerAnalysis, int replicates) {
-            var records = inputPowerAnalysis.InputRecords
-                .SelectMany(r => Enumerable.Repeat(r, r.Frequency)
-                    .Select((rep, i) => new {
-                        MainPlot = rep.MainPlot,
-                        SubPlot = rep.SubPlot,
-                        FactorLevels = rep.FactorLevels,
-                        FrequencyReplicate = i + 1
-                    }))
-                .SelectMany(r => Enumerable.Repeat(r, replicates)
-                    .Select((rep, i) => new {
-                        MainPlot = rep.MainPlot,
-                        SubPlot = rep.SubPlot,
-                        FactorLevels = rep.FactorLevels,
-                        FrequencyReplicate = rep.FrequencyReplicate,
-                        Block = i + 1
-                    }))
-                .Select(r => new AnalysisDataTemplateRecord() {
-                    MainPlot = r.MainPlot,
-                    SubPlot = r.SubPlot,
-                    FactorLevels = r.FactorLevels,
-                    FrequencyReplicate = r.FrequencyReplicate,
-                    Block = r.Block
-                })
-                .OrderBy(r => r.Block)
-                .ThenBy(r => r.MainPlot)
-                .ThenBy(r => r.SubPlot)
-                .ToList();
-
-            var analysisDataTemplate = new AnalysisDataTemplate() {
-                Factors = inputPowerAnalysis.Factors.Select(f => f).ToList(),
-                AnalysisDataTemplateRecords = records,
-            };
-
-            return analysisDataTemplate;
-        }
-
         public AnalysisDataTemplate CreateAnalysisDataTemplate(Project project, int replicates) {
             var factorLevelCombinations = FactorLevelCombinationsCreator.GenerateInteractionCombinations(project.Factors);
             var records = factorLevelCombinations

@@ -79,7 +79,11 @@
     <Compile Include="Core\DataAnalysis\AnalysisDataTemplateRecord.cs" />
     <Compile Include="Core\DataAnalysis\AnalysisDataTemplateGenerator.cs" />
     <Compile Include="Core\DataAnalysis\AnalysisDataTemplate.cs" />
-    <Compile Include="Core\DataAnalysis\AnalysisScriptGenerator.cs" />
+    <Compile Include="Core\DataAnalysis\AnalysisModels\AnalysisModelFactory.cs" />
+    <Compile Include="Core\DataAnalysis\AnalysisModels\OverDispersedPoissonModel.cs" />
+    <Compile Include="Core\DataAnalysis\AnalysisModels\IAnalysisModel.cs" />
+    <Compile Include="Core\DataAnalysis\AnalysisModels\PoissonModel.cs" />
+    <Compile Include="Core\DataAnalysis\AnalysisRScriptGenerator.cs" />
     <Compile Include="Core\PowerAnalysis\InputPowerAnalysis.cs" />
     <Compile Include="Core\PowerAnalysis\OutputPowerAnalysisRecord.cs" />
     <Compile Include="Core\PowerAnalysis\PowerAnalysisOutputReader.cs" />

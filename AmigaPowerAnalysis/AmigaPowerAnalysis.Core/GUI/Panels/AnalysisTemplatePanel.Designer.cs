@@ -24,18 +24,18 @@
         /// </summary>
         private void InitializeComponent() {
             this.panelModelInfo = new System.Windows.Forms.Panel();
+            this.textBoxGeneratedAnalysisScript = new System.Windows.Forms.TextBox();
+            this.flowLayoutPanelReport = new System.Windows.Forms.FlowLayoutPanel();
             this.buttonGenerateDataTemplate = new System.Windows.Forms.Button();
             this.dataGridViewComparisons = new System.Windows.Forms.DataGridView();
             this.splitContainerComparisons = new System.Windows.Forms.SplitContainer();
-            this.flowLayoutPanelReport = new System.Windows.Forms.FlowLayoutPanel();
-            this.textBoxGeneratedAnalysisScript = new System.Windows.Forms.TextBox();
             this.panelModelInfo.SuspendLayout();
+            this.flowLayoutPanelReport.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewComparisons)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerComparisons)).BeginInit();
             this.splitContainerComparisons.Panel1.SuspendLayout();
             this.splitContainerComparisons.Panel2.SuspendLayout();
             this.splitContainerComparisons.SuspendLayout();
-            this.flowLayoutPanelReport.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelModelInfo
@@ -49,6 +49,27 @@
             this.panelModelInfo.Padding = new System.Windows.Forms.Padding(5);
             this.panelModelInfo.Size = new System.Drawing.Size(561, 477);
             this.panelModelInfo.TabIndex = 0;
+            // 
+            // textBoxGeneratedAnalysisScript
+            // 
+            this.textBoxGeneratedAnalysisScript.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.textBoxGeneratedAnalysisScript.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textBoxGeneratedAnalysisScript.Location = new System.Drawing.Point(5, 5);
+            this.textBoxGeneratedAnalysisScript.Multiline = true;
+            this.textBoxGeneratedAnalysisScript.Name = "textBoxGeneratedAnalysisScript";
+            this.textBoxGeneratedAnalysisScript.ReadOnly = true;
+            this.textBoxGeneratedAnalysisScript.Size = new System.Drawing.Size(549, 436);
+            this.textBoxGeneratedAnalysisScript.TabIndex = 19;
+            // 
+            // flowLayoutPanelReport
+            // 
+            this.flowLayoutPanelReport.Controls.Add(this.buttonGenerateDataTemplate);
+            this.flowLayoutPanelReport.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.flowLayoutPanelReport.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
+            this.flowLayoutPanelReport.Location = new System.Drawing.Point(5, 441);
+            this.flowLayoutPanelReport.Name = "flowLayoutPanelReport";
+            this.flowLayoutPanelReport.Size = new System.Drawing.Size(549, 29);
+            this.flowLayoutPanelReport.TabIndex = 18;
             // 
             // buttonGenerateDataTemplate
             // 
@@ -73,6 +94,7 @@
             this.dataGridViewComparisons.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewComparisons.MultiSelect = false;
             this.dataGridViewComparisons.Name = "dataGridViewComparisons";
+            this.dataGridViewComparisons.ReadOnly = true;
             this.dataGridViewComparisons.RowHeadersVisible = false;
             this.dataGridViewComparisons.RowHeadersWidth = 24;
             this.dataGridViewComparisons.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
@@ -101,27 +123,6 @@
             this.splitContainerComparisons.SplitterDistance = 283;
             this.splitContainerComparisons.TabIndex = 9;
             // 
-            // flowLayoutPanelReport
-            // 
-            this.flowLayoutPanelReport.Controls.Add(this.buttonGenerateDataTemplate);
-            this.flowLayoutPanelReport.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.flowLayoutPanelReport.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.flowLayoutPanelReport.Location = new System.Drawing.Point(5, 441);
-            this.flowLayoutPanelReport.Name = "flowLayoutPanelReport";
-            this.flowLayoutPanelReport.Size = new System.Drawing.Size(549, 29);
-            this.flowLayoutPanelReport.TabIndex = 18;
-            // 
-            // textBoxGeneratedAnalysisScript
-            // 
-            this.textBoxGeneratedAnalysisScript.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.textBoxGeneratedAnalysisScript.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBoxGeneratedAnalysisScript.Location = new System.Drawing.Point(5, 5);
-            this.textBoxGeneratedAnalysisScript.Multiline = true;
-            this.textBoxGeneratedAnalysisScript.Name = "textBoxGeneratedAnalysisScript";
-            this.textBoxGeneratedAnalysisScript.ReadOnly = true;
-            this.textBoxGeneratedAnalysisScript.Size = new System.Drawing.Size(549, 436);
-            this.textBoxGeneratedAnalysisScript.TabIndex = 19;
-            // 
             // AnalysisTemplatePanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -134,12 +135,12 @@
             this.Size = new System.Drawing.Size(874, 503);
             this.panelModelInfo.ResumeLayout(false);
             this.panelModelInfo.PerformLayout();
+            this.flowLayoutPanelReport.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewComparisons)).EndInit();
             this.splitContainerComparisons.Panel1.ResumeLayout(false);
             this.splitContainerComparisons.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerComparisons)).EndInit();
             this.splitContainerComparisons.ResumeLayout(false);
-            this.flowLayoutPanelReport.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
