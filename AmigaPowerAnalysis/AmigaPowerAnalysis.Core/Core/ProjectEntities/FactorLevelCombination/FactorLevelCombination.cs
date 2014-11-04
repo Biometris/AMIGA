@@ -9,19 +9,27 @@ namespace AmigaPowerAnalysis.Core {
     [DataContract]
     public class FactorLevelCombination : IEquatable<FactorLevelCombination> {
 
+        #region DataMembers
+
+        [DataMember]
+        private List<FactorLevel> _levels;
+
+        #endregion
+
         public FactorLevelCombination() {
-            Levels = new List<FactorLevel>();
+            _levels = new List<FactorLevel>();
         }
 
         public FactorLevelCombination(List<FactorLevel> levels) {
-            Levels = levels;
+            _levels = levels;
         }
 
         /// <summary>
         /// The factor levels that make up this factor level combination.
         /// </summary>
-        [DataMember]
-        public List<FactorLevel> Levels { get; set; }
+        public IEnumerable<FactorLevel> Levels {
+            get { return _levels; }
+        }
 
         /// <summary>
         /// The label of this factor level combination.
@@ -37,7 +45,7 @@ namespace AmigaPowerAnalysis.Core {
         /// </summary>
         /// <param name="factorLevel"></param>
         public void Add(FactorLevel factorLevel) {
-            Levels.Add(factorLevel);
+            _levels.Add(factorLevel);
         }
 
         /// <summary>
@@ -46,7 +54,9 @@ namespace AmigaPowerAnalysis.Core {
         /// <returns></returns>
         public FactorLevelCombination GetCopy() {
             var newFactorLevelCombination = new FactorLevelCombination();
-            Levels.ForEach(i => newFactorLevelCombination.Add(i));
+            foreach (var level in _levels) {
+                newFactorLevelCombination.Add(level);
+            }
             return newFactorLevelCombination;
         }
 
@@ -58,7 +68,17 @@ namespace AmigaPowerAnalysis.Core {
         /// <param name="other"></param>
         /// <returns></returns>
         public bool Contains(FactorLevelCombination other) {
-            return other.Levels.All(i => Levels.Contains(i));
+            return other.Levels.All(i => _levels.Contains(i));
+        }
+
+        /// <summary>
+        /// Returns true if this factor level combination contains the
+        /// given level.
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Contains(FactorLevel level) {
+            return _levels.Contains(level);
         }
 
         /// <summary>

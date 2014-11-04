@@ -21,24 +21,42 @@ namespace AmigaPowerAnalysis.GUI.Wrappers {
         }
 
         public void SetInteraction(FactorLevel varietyLevel, bool isComparisonLevel) {
-            FactorLevelCombinations.Single(flc => flc.Variety == varietyLevel).IsComparisonLevel = isComparisonLevel;
+            FactorLevelCombinations.Single(flc => flc.VarietyLevel == varietyLevel).IsComparisonLevel = isComparisonLevel;
         }
 
         public bool IsComparisonLevelGMO {
             get {
-                return FactorLevelCombinations.Single(flc => flc.Variety.Label == "GMO").IsComparisonLevel;
+                return FactorLevelCombinations.Single(flc => flc.VarietyLevel.VarietyLevelType == VarietyLevelType.GMO).IsComparisonLevel;
             }
             set {
-                FactorLevelCombinations.Single(flc => flc.Variety.Label == "GMO").IsComparisonLevel = value;
+                FactorLevelCombinations.Single(flc => flc.VarietyLevel.VarietyLevelType == VarietyLevelType.GMO).IsComparisonLevel = value;
             }
         }
 
         public bool IsComparisonLevelComparator {
             get {
-                return FactorLevelCombinations.Single(flc => flc.Variety.Label == "Comparator").IsComparisonLevel;
+                return FactorLevelCombinations.Single(flc => flc.VarietyLevel.VarietyLevelType == VarietyLevelType.Comparator).IsComparisonLevel;
             }
             set {
-                FactorLevelCombinations.Single(flc => flc.Variety.Label == "Comparator").IsComparisonLevel = value;
+                FactorLevelCombinations.Single(flc => flc.VarietyLevel.VarietyLevelType == VarietyLevelType.Comparator).IsComparisonLevel = value;
+            }
+        }
+
+        public double MeanGMO {
+            get {
+                return FactorLevelCombinations.Single(flc => flc.VarietyLevel.VarietyLevelType == VarietyLevelType.GMO).Mean;
+            }
+            set {
+                FactorLevelCombinations.Single(flc => flc.VarietyLevel.VarietyLevelType == VarietyLevelType.GMO).Mean = value;
+            }
+        }
+
+        public double MeanComparator {
+            get {
+                return FactorLevelCombinations.Single(flc => flc.VarietyLevel.VarietyLevelType == VarietyLevelType.Comparator).Mean;
+            }
+            set {
+                FactorLevelCombinations.Single(flc => flc.VarietyLevel.VarietyLevelType == VarietyLevelType.Comparator).Mean = value;
             }
         }
     }

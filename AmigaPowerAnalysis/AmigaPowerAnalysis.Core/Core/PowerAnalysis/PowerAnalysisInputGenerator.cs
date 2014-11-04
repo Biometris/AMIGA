@@ -1,21 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace AmigaPowerAnalysis.Core.PowerAnalysis {
     public sealed class PowerAnalysisInputGenerator {
-
-        /// <summary>
-        /// Writes the power analysis settings for an endpoint to a csv file.
-        /// </summary>
-        /// <param name="inputPowerAnalysis">The power analysis input.</param>
-        /// <param name="filename">The name of the file to which the settings are written.</param>
-        public void PowerAnalysisInputToCsv(InputPowerAnalysis inputPowerAnalysis, string filename) {
-            using (var file = new System.IO.StreamWriter(filename)) {
-                file.WriteLine(inputPowerAnalysis.Print());
-                file.Close();
-            }
-        }
 
         /// <summary>
         /// Creates a power analysis input object for the given comparison.
@@ -26,9 +15,13 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
         /// <param name="idComparison"></param>
         /// <returns></returns>
         public InputPowerAnalysis CreateInputPowerAnalysis(Comparison comparison, DesignSettings designSettings, PowerCalculationSettings powerCalculationSettings, int idComparison) {
+            var comparisonLevels = CreateComparisonFactorLevels(comparison);
+            var modifierLevels = CreateModifierFactorLevels(comparison);
             var inputPowerAnalysis = new InputPowerAnalysis() {
                 ComparisonId = idComparison,
                 Factors = comparison.Endpoint.InteractionFactors.Concat(comparison.Endpoint.NonInteractionFactors).Select(f => f.Name).ToList(),
+                DummyComparisonLevels = comparisonLevels.Select(m => m.Label).ToList(),
+                DummyModifierLevels = modifierLevels.Select(m => m.Label).ToList(),
                 Endpoint = comparison.Endpoint.Name,
                 LocLower = comparison.Endpoint.LocLower,
                 LocUpper = comparison.Endpoint.LocUpper,
@@ -48,54 +41,91 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                 NumberOfSimulatedDataSets = powerCalculationSettings.NumberOfSimulatedDataSets,
             };
 
-            inputPowerAnalysis.InputRecords = getComparisonInputPowerAnalysisRecords(comparison);
+            inputPowerAnalysis.InputRecords = getComparisonInputPowerAnalysisRecords(comparisonLevels, modifierLevels, comparison.Endpoint.UseModifier);
 
             return inputPowerAnalysis;
         }
 
-        private List<InputPowerAnalysisRecord> getComparisonInputPowerAnalysisRecords(Comparison comparison) {
-            var modifiers = comparison.Endpoint.Modifiers;
-            var interactionFactorLevelCombinations = comparison.VarietyInteractions;
-            var factors = new List<Factor>();
-            factors.AddRange(comparison.Endpoint.InteractionFactors);
-            factors.AddRange(comparison.Endpoint.NonInteractionFactors);
-            var allFactorLevelCombinations = FactorLevelCombinationsCreator.GenerateInteractionCombinations(factors);
-            Func<string, ComparisonType> defaultComparison = s => {
-                if (s == "GMO") {
-                    return ComparisonType.IncludeGMO;
-                } else if (s == "Comparator") {
-                    return ComparisonType.IncludeComparator;
-                }
-                return ComparisonType.Exclude;
-            };
-            var records = allFactorLevelCombinations
-                .Select((r, i) => new {
-                    MainPlot = i + 1,
-                    SubPlot = 1,
-                    FactorLevels = r.Levels.Select(fl => fl.Label).ToList(),
-                    InteractionFactorLevelCombination = interactionFactorLevelCombinations.SingleOrDefault(flc => r.Contains(flc)),
-                    NonInteractionFactorLevelCombination = modifiers.SingleOrDefault(flc => r.Contains(flc)),
-                    Frequency = r.Levels.Select(fl => fl.Frequency).Aggregate((n1, n2) => n1 * n2),
+        private List<InputPowerAnalysisRecord> getComparisonInputPowerAnalysisRecords(List<ComparisonDummyFactorLevel> comparisonLevels, List<ModifierDummyFactorLevel> modifierLevels, bool useModifier) {
+            var records = comparisonLevels
+                .SelectMany(r => r.FactorLevelCombinations, (r, cl) => new {
+                    ComparisonDummyFactorLevel = r,
+                    InteractionFactorLevelCombination = cl
                 })
-                .Select(r => new {
-                    MainPlot = r.MainPlot,
-                    SubPlot = r.SubPlot,
-                    FactorLevels = r.FactorLevels,
-                    Modifier = (comparison.Endpoint.UseModifier && r.NonInteractionFactorLevelCombination != null) ? r.NonInteractionFactorLevelCombination.ModifierFactor : 1,
-                    Frequency = r.Frequency,
-                    Mean = (r.InteractionFactorLevelCombination != null) ? r.InteractionFactorLevelCombination.Mean : comparison.Endpoint.MuComparator,
-                    Comparison = r.InteractionFactorLevelCombination.ComparisonType,
+                .SelectMany(r => modifierLevels, (r, ml) => new {
+                    ComparisonDummyFactorLevel = r.ComparisonDummyFactorLevel,
+                    ModifierDummyFactorLevel = ml,
+                    ComparisonLevel = r.InteractionFactorLevelCombination,
+                    ModifierLevel = ml.FactorLevelCombination,
+                })
+                .Select((r, index) => new {
+                    MainPlot = index + 1,
+                    SubPlot = 1,
+                    ComparisonDummyFactorLevel = r.ComparisonDummyFactorLevel,
+                    ModifierDummyFactorLevel = r.ModifierDummyFactorLevel,
+                    Comparison = r.ComparisonLevel.ComparisonType,
+                    FactorLevels = r.ComparisonLevel.Levels.Select(l => l).Concat(r.ModifierLevel.Levels.Select(l => l)),
+                    Modifier = useModifier ? r.ModifierLevel.ModifierFactor : 1,
+                    Mean = r.ComparisonLevel.Mean,
                 })
                 .Select(r => new InputPowerAnalysisRecord() {
                     MainPlot = r.MainPlot,
                     SubPlot = r.SubPlot,
-                    FactorLevels = r.FactorLevels,
-                    Frequency = r.Frequency,
-                    Mean = r.Modifier * r.Mean,
+                    ComparisonDummyFactorLevel = r.ComparisonDummyFactorLevel.Label,
+                    ModifierDummyFactorLevel = r.ModifierDummyFactorLevel.Label,
                     Comparison = r.Comparison,
+                    FactorLevels = r.FactorLevels.Select(l => l.Label).ToList(),
+                    Frequency = r.FactorLevels.Select(fl => fl.Frequency).Aggregate((n1, n2) => n1 * n2),
+                    Mean = r.Modifier * r.Mean,
                 })
                 .ToList();
             return records;
+        }
+
+        public List<ComparisonDummyFactorLevel> CreateComparisonFactorLevels(Comparison comparison) {
+            var comparisonLevelGMO = new ComparisonDummyFactorLevel() {
+                    Label = "GMO",
+                    ComparisonType = ComparisonType.IncludeGMO,
+                    FactorLevelCombinations = comparison.Endpoint.Interactions
+                        .Where(i => i.ComparisonType == ComparisonType.IncludeGMO)
+                        .ToList(),
+                };
+            var nonComparisonLevels = comparison.Endpoint.Interactions
+                .Where(vi => vi.ComparisonType == ComparisonType.Exclude)
+                .Select((vi, index) => new ComparisonDummyFactorLevel() {
+                    Label = string.Format("Dummy{0}", index),
+                    ComparisonType = ComparisonType.Exclude,
+                    FactorLevelCombinations = new List<InteractionFactorLevelCombination>() { vi }
+                });
+            var comparisonLevelComparator = new ComparisonDummyFactorLevel() {
+                Label = "Comparator",
+                ComparisonType = ComparisonType.IncludeComparator,
+                FactorLevelCombinations = comparison.Endpoint.Interactions
+                    .Where(i => i.ComparisonType == ComparisonType.IncludeComparator)
+                    .ToList(),
+            };
+            var comparisonLevels = new List<ComparisonDummyFactorLevel>();
+            comparisonLevels.Add(comparisonLevelGMO);
+            comparisonLevels.AddRange(nonComparisonLevels);
+            comparisonLevels.Add(comparisonLevelComparator);
+            return comparisonLevels;
+        }
+
+        public List<ModifierDummyFactorLevel> CreateModifierFactorLevels(Comparison comparison) {
+            var levels = new List<ModifierDummyFactorLevel>();
+            if (comparison.Endpoint.Modifiers.Count == 0) {
+                levels.Add(new ModifierDummyFactorLevel() {
+                    Label = "Mod",
+                    FactorLevelCombination = new ModifierFactorLevelCombination(),
+                });
+            } else {
+                levels.AddRange(
+                    comparison.Endpoint.Modifiers.Select((m, index) => new ModifierDummyFactorLevel() {
+                        Label = string.Format("Mod{0}", index),
+                        FactorLevelCombination = m
+                    }));
+            }
+            return levels;
         }
     }
 }

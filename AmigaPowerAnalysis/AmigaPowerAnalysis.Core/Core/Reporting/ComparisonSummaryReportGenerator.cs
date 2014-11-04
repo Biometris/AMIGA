@@ -19,7 +19,7 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             html += generateComparisonsChartHtml(primaryComparisons, tempPath);
             html += "<h1>Results per primary comparison</h1>";
             foreach (var comparison in primaryComparisons) {
-                html += string.Format("<h1>Results comparison {0} - {1}</h1>", comparison.Name, comparison.OutputPowerAnalysis.InputPowerAnalysis.Endpoint);
+                html += string.Format("<h1>Results comparison {0}</h1>", comparison.OutputPowerAnalysis.InputPowerAnalysis.Endpoint);
                 html += generateComparisonSettingsHtml(comparison.OutputPowerAnalysis.InputPowerAnalysis);
                 html += generateComparisonInputDataHtml(comparison.OutputPowerAnalysis.InputPowerAnalysis);
                 html += generateComparisonChartsHtml(comparison, tempPath);
@@ -49,7 +49,7 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             stringBuilder.AppendLine("<table>");
             stringBuilder.AppendLine("<tr><th>Comparison</th><th>Primary</th></tr>");
             foreach (var comparison in comparisons) {
-                stringBuilder.AppendLine(string.Format("<tr><td>{0}</td><td>{1}</td></tr>", comparison.Name, comparison.IsPrimary ? "Yes" : "No"));
+                stringBuilder.AppendLine(string.Format("<tr><td>{0}</td><td>{1}</td></tr>", comparison.Endpoint.Name, comparison.IsPrimary ? "Yes" : "No"));
             }
             stringBuilder.AppendLine("</table>");
             return stringBuilder.ToString();

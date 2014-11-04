@@ -26,7 +26,7 @@ namespace AmigaPowerAnalysis.GUI {
         public string Description { get; private set; }
 
         public bool IsVisible() {
-            return _project != null && _project.Factors.Count > 1;
+            return _project != null && _project.NonVarietyFactors.Count() > 0;
         }
 
         public void Activate() {
@@ -38,7 +38,7 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void updateVisibilities() {
-            if (_project.Factors.Count <= 1) {
+            if (_project.NonVarietyFactors.Count() == 0) {
                 checkBoxUseDefaultInteractions.Visible = false;
                 checkBoxUseInteractions.Visible = false;
                 dataGridViewFactors.Visible = false;
@@ -47,12 +47,6 @@ namespace AmigaPowerAnalysis.GUI {
                 checkBoxUseDefaultInteractions.Visible = _project.DesignSettings.UseInteractions && _project.Endpoints.Count > 1;
                 dataGridViewFactors.Visible = _project.DesignSettings.UseInteractions;
                 dataGridViewInteractionFactorLevelCombinations.Visible = _project.DesignSettings.UseInteractions;
-                if (_project.Factors.Count > 1 && dataGridViewFactors.Visible) {
-                    var currencyManager = (CurrencyManager)BindingContext[dataGridViewFactors.DataSource];
-                    currencyManager.SuspendBinding();
-                    dataGridViewFactors.Rows[0].Visible = false;
-                    currencyManager.ResumeBinding();
-                }
 
                 if (_project.DesignSettings.UseDefaultInteractions) {
                     dataGridViewFactors.Enabled = true;
@@ -106,7 +100,7 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void updateDataGridViewFactors() {
-            var factorsBindingSouce = new BindingSource(_project.Factors, null);
+            var factorsBindingSouce = new BindingSource(_project.NonVarietyFactors, null);
             dataGridViewFactors.AutoGenerateColumns = false;
             dataGridViewFactors.DataSource = factorsBindingSouce;
         }
@@ -127,6 +121,7 @@ namespace AmigaPowerAnalysis.GUI {
             _defaultInteractionLevels = _project.DefaultInteractionFactorLevelCombinations
                 .GroupBy(ifl => ifl.NonVarietyFactorLevelCombination)
                 .Select(g => new InteractionsWrapper(g.ToList()))
+                .Where(i => i.Levels.Count() > 0)
                 .ToList();
 
             foreach (var factorLevelCombination in _defaultInteractionLevels) {
@@ -155,7 +150,7 @@ namespace AmigaPowerAnalysis.GUI {
         private void dataGridViewFactors_CellValueChanged(object sender, DataGridViewCellEventArgs e) {
             var editedCell = this.dataGridViewFactors.Rows[e.RowIndex].Cells[e.ColumnIndex];
             var newValue = editedCell.Value;
-            var factor = _project.Factors.ElementAt(editedCell.RowIndex);
+            var factor = _project.NonVarietyFactors.ElementAt(editedCell.RowIndex) as Factor;
             _project.SetFactorType(factor, factor.IsInteractionWithVariety);
             updateDataGridViewInteractionFactorLevelCombinations();
             fireTabVisibilitiesChanged();

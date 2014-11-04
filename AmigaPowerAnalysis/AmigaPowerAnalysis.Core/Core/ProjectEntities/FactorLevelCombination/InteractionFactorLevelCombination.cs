@@ -1,14 +1,29 @@
 ﻿using System.Linq;
 using System.Runtime.Serialization;
-using AmigaPowerAnalysis.Core.PowerAnalysis;
 
 namespace AmigaPowerAnalysis.Core {
+
+    public enum ComparisonType {
+        Exclude = 0,
+        IncludeGMO = 1,
+        IncludeComparator = -1,
+    }
 
     [DataContract]
     public sealed class InteractionFactorLevelCombination : FactorLevelCombination {
 
+        #region DataMembers
+
+        [DataMember]
         private bool _isComparisonLevel;
+
+        [DataMember]
         private double _mean;
+
+        [DataMember(Order = 0)]
+        private Endpoint _endpoint;
+
+        #endregion
 
         public InteractionFactorLevelCombination() : base() {
             _mean = double.NaN;
@@ -17,21 +32,25 @@ namespace AmigaPowerAnalysis.Core {
 
         public InteractionFactorLevelCombination(FactorLevelCombination factorLevelCombination)
             : this() {
-            factorLevelCombination.Levels.ForEach(flc => Levels.Add(flc));
+            foreach (var level in factorLevelCombination.Levels) {
+                Add(level);
+            }
         }
 
         /// <summary>
         /// The comparison for which this factor level combination settings apply.
         /// </summary>
-        [DataMember(Order = 0)]
-        public Endpoint Endpoint { get; set; }
+        public Endpoint Endpoint {
+            get { return _endpoint; }
+            set { _endpoint = value; }
+        }
 
         /// <summary>
         /// Returns the variety of this interaction factor level.
         /// </summary>
-        public FactorLevel Variety {
+        public VarietyFactorLevel VarietyLevel {
             get {
-                return Levels.Single(fl => fl.Parent.IsVarietyFactor);
+                return Levels.Single(fl => fl.Parent.IsVarietyFactor) as VarietyFactorLevel;
             }
         }
 
@@ -47,10 +66,9 @@ namespace AmigaPowerAnalysis.Core {
         /// <summary>
         /// Specifies whether this comparison interaction level is a GMO interaction level.
         /// </summary>
-        [DataMember(Order = 1)]
         public bool IsComparisonLevel {
             get {
-                return !IsLevelAdditionalVariety && _isComparisonLevel;
+                return VarietyLevel.VarietyLevelType != VarietyLevelType.AdditionalVariety && _isComparisonLevel;
             }
             set {
                 _isComparisonLevel = value;
@@ -63,7 +81,6 @@ namespace AmigaPowerAnalysis.Core {
         /// <summary>
         /// The mean of the GMO for this level.
         /// </summary>
-        [DataMember(Order = 2)]
         public double Mean {
             get {
                 if (!double.IsNaN(_mean)) {
@@ -89,39 +106,12 @@ namespace AmigaPowerAnalysis.Core {
         /// <returns></returns>
         public ComparisonType ComparisonType {
             get {
-                if (IsComparisonLevel && Variety.Label == "GMO") {
+                if (IsComparisonLevel && VarietyLevel.VarietyLevelType == VarietyLevelType.GMO) {
                     return ComparisonType.IncludeGMO;
-                } else if (IsComparisonLevel && Variety.Label == "Comparator") {
+                } else if (IsComparisonLevel && VarietyLevel.VarietyLevelType == VarietyLevelType.Comparator) {
                     return ComparisonType.IncludeComparator;
                 }
                 return ComparisonType.Exclude;
-            }
-        }
-
-        /// <summary>
-        /// True if this is a GMO level.
-        /// </summary>
-        public bool IsLevelGMO {
-            get {
-                return Variety.Label == "GMO";
-            }
-        }
-
-        /// <summary>
-        /// True if this is a comparator level.
-        /// </summary>
-        public bool IsLevelComparator {
-            get {
-                return Variety.Label == "Comparator";
-            }
-        }
-
-        /// <summary>
-        /// True if this an additional variety level.
-        /// </summary>
-        public bool IsLevelAdditionalVariety {
-            get {
-                return !IsLevelGMO && !IsLevelComparator;
             }
         }
     }

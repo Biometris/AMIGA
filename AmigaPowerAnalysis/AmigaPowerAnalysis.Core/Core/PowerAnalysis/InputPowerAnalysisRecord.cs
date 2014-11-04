@@ -2,12 +2,6 @@
 
 namespace AmigaPowerAnalysis.Core.PowerAnalysis {
 
-    public enum ComparisonType {
-        Exclude = 0,
-        IncludeGMO = 1,
-        IncludeComparator = -1,
-    }
-
     public sealed class InputPowerAnalysisRecord {
 
         /// <summary>
@@ -24,6 +18,16 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
         /// The levels of the factors.
         /// </summary>
         public List<string> FactorLevels { get; set; }
+
+        /// <summary>
+        /// The dummy comparison level of this record.
+        /// </summary>
+        public string ComparisonDummyFactorLevel { get; set; }
+
+        /// <summary>
+        /// The dummy modifier level of this record.
+        /// </summary>
+        public string ModifierDummyFactorLevel { get; set; }
 
         /// <summary>
         /// The cumulated frequency of the factor levels.

@@ -31,7 +31,6 @@ namespace AmigaPowerAnalysis.Core {
                     var msg = ex.Message;
                 }
             }
-
             if (MyEndpointTypes == null) {
                 MyEndpointTypes = DefaultEndpointTypes();
             }

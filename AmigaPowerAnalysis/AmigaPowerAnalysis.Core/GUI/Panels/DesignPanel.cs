@@ -24,7 +24,7 @@ namespace AmigaPowerAnalysis.GUI {
 
         private Project _project;
 
-        private Factor _currentFactor;
+        private IFactor _currentFactor;
 
         public DesignPanel(Project project) {
             InitializeComponent();
@@ -58,7 +58,7 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void updateVisibilities() {
-            if (_project.Factors.Count <= 1) {
+            if (_project.NonVarietyFactors.Count() == 0) {
                 dataGridViewFactors.Visible = false;
                 radioButtonSplitPlot.Visible = false;
             } else {
@@ -96,7 +96,7 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void dataGridFactors_SelectionChanged(object sender, EventArgs e) {
-            if (dataGridViewFactors.CurrentRow != null && dataGridViewFactors.CurrentRow.Index < _project.Factors.Count) {
+            if (dataGridViewFactors.CurrentRow != null && dataGridViewFactors.CurrentRow.Index < _project.NonVarietyFactors.Count()) {
                 _currentFactor = _project.Factors.ElementAt(dataGridViewFactors.CurrentRow.Index);
             }
         }

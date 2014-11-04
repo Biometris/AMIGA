@@ -1,26 +1,34 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 
 namespace AmigaPowerAnalysis.Core {
 
     [DataContract]
     public sealed class ModifierFactorLevelCombination : FactorLevelCombination {
 
+        #region DataMembers
+
+        [DataMember]
+        private double _modifierFactor;
+
+        #endregion
+
         public ModifierFactorLevelCombination() : base() {
-            ModifierFactor = 1;
+            _modifierFactor = 1;
         }
 
         public ModifierFactorLevelCombination(FactorLevelCombination factorLevelCombination)
             : this() {
-            factorLevelCombination.Levels.ForEach(flc => Levels.Add(flc));
+            foreach (var level in factorLevelCombination.Levels) {
+                Add(level);
+            }
         }
 
         /// <summary>
         /// The modifier for this factor level combination.
         /// </summary>
-        [DataMember(Order = 0)]
-        public double ModifierFactor { get; set; }
-
+        public double ModifierFactor {
+            get { return _modifierFactor; }
+            set { _modifierFactor = value; }
+        }
     }
 }

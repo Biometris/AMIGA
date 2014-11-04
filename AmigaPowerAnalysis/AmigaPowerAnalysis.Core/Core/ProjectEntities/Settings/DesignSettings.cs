@@ -20,25 +20,25 @@ namespace AmigaPowerAnalysis.Core {
         /// <summary>
         /// Type of design 
         /// </summary>
-        [DataMember(Order = 0)]
+        [DataMember]
         public ExperimentalDesignType Type { get; set; }
 
         /// <summary>
         /// Number of plots in each block
         /// </summary>
-        [DataMember(Order = 0)]
+        [DataMember]
         public int NumberOfPlotsPerBlock { get; set; }
 
         /// <summary>
         /// The experimental design type used in this project.
         /// </summary>
-        [DataMember(Order = 0)]
+        [DataMember]
         public ExperimentalDesignType ExperimentalDesignType { get; set; }
 
         /// <summary>
         /// Specifies whether or not to use interactions.
         /// </summary>
-        [DataMember(Order = 0)]
+        [DataMember]
         public bool UseInteractions { get; set; }
 
         /// <summary>

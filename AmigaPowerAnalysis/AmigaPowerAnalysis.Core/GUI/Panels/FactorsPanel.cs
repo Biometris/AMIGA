@@ -12,7 +12,7 @@ namespace AmigaPowerAnalysis.GUI {
 
         private Project _project;
 
-        private Factor _currentFactor;
+        private IFactor _currentFactor;
 
         public FactorsPanel(Project project) {
             InitializeComponent();
@@ -26,9 +26,7 @@ namespace AmigaPowerAnalysis.GUI {
         public string Description { get; private set; }
 
         public void Activate() {
-            dataGridViewFactors.Rows[0].ReadOnly = true;
-            dataGridViewFactors.Rows[0].DefaultCellStyle.BackColor = Color.LightGray;
-            dataGridViewFactors.Rows[0].Cells["ExperimentUnitType"].ReadOnly = false;
+            updateDataGridFactors();
             updateDataGridFactorLevels();
         }
 
@@ -42,28 +40,12 @@ namespace AmigaPowerAnalysis.GUI {
             column.Name = "Name";
             column.HeaderText = "Factor name";
             dataGridViewFactors.Columns.Add(column);
-
-            var combo = new DataGridViewComboBoxColumn();
-            combo.DataSource = Enum.GetValues(typeof(ExperimentUnitType));
-            combo.Name = "ExperimentUnitType";
-            combo.DataPropertyName = "ExperimentUnitType";
-            combo.ValueType = typeof(ExperimentUnitType);
-            combo.HeaderText = "Plot level";
-            combo.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
-            combo.Visible = _project.DesignSettings.ExperimentalDesignType == ExperimentalDesignType.SplitPlots;
-            dataGridViewFactors.Columns.Add(combo);
-
-            updateDataGridFactors();
         }
 
         private void updateDataGridFactors() {
             var factorsBindingSouce = new BindingSource(_project.Factors, null);
             dataGridViewFactors.AutoGenerateColumns = false;
             dataGridViewFactors.DataSource = factorsBindingSouce;
-
-            dataGridViewFactors.Rows[0].ReadOnly = true;
-            dataGridViewFactors.Rows[0].DefaultCellStyle.BackColor = Color.LightGray;
-            dataGridViewFactors.Rows[0].Cells["ExperimentUnitType"].ReadOnly = false;
         }
 
         private void createDataGridFactorLevels() {
@@ -112,7 +94,6 @@ namespace AmigaPowerAnalysis.GUI {
             }
             var newFactor = new Factor(newFactorName, 2);
             _project.AddFactor(newFactor);
-            _project.UpdateEndpointFactors();
             updateDataGridFactors();
             fireTabVisibilitiesChanged();
         }
@@ -123,8 +104,7 @@ namespace AmigaPowerAnalysis.GUI {
                 if (currentRow == 0) {
                     showError("Invalid operation", "Cannot delete variety.");
                 } else {
-                    _project.RemoveFactor(_project.Factors[currentRow]);
-                    _project.UpdateEndpointFactors();
+                    _project.RemoveFactor(_project.Factors.ElementAt(currentRow));
                     updateDataGridFactors();
                     fireTabVisibilitiesChanged();
                 }
@@ -135,10 +115,11 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void addFactorLevelButton_Click(object sender, EventArgs e) {
             if (_currentFactor != null) {
-                _currentFactor.FactorLevels.Add(new FactorLevel() {
-                    Label =_currentFactor.GetUniqueFactorLabel(),
-                    Parent = _currentFactor,
-                });
+                if (_currentFactor is VarietyFactor) {
+                    _currentFactor.AddFactorLevel(new VarietyFactorLevel(_currentFactor.GetUniqueFactorLabel()));
+                } else {
+                    _currentFactor.AddFactorLevel(new FactorLevel(_currentFactor.GetUniqueFactorLabel()));
+                }
                 _project.UpdateEndpointFactorLevels();
                 updateDataGridFactorLevels();
             }
@@ -147,12 +128,12 @@ namespace AmigaPowerAnalysis.GUI {
         private void buttonRemoveFactorLevel_Click(object sender, EventArgs e) {
             if (dataGridViewFactorLevels.SelectedRows.Count == 1) {
                 var currentRow = dataGridViewFactorLevels.CurrentRow.Index;
-                if (_currentFactor.FactorLevels.Count <= 2) {
+                if (_currentFactor.FactorLevels.Count() <= 2) {
                     showError("Invalid operation", "A factor should have at least two levels.");
                 } else if (_currentFactor.IsVarietyFactor && currentRow < 2) {
                     showError("Invalid operation", "Cannot delete GMO or comparator level of the variety.");
                 } else {
-                    _currentFactor.FactorLevels.Remove(_currentFactor.FactorLevels[currentRow]);
+                    _currentFactor.RemoveFactorLevel(_currentFactor.FactorLevels.ElementAt(currentRow));
                     _project.UpdateEndpointFactorLevels();
                     updateDataGridFactorLevels();
                 }
@@ -162,9 +143,7 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void dataGridFactors_SelectionChanged(object sender, EventArgs e) {
-            dataGridViewFactorLevels.DataSource = null;
-            dataGridViewFactorLevels.Refresh();
-            if (dataGridViewFactors.CurrentRow.Index < _project.Factors.Count) {
+            if (dataGridViewFactors.CurrentRow.Index < _project.Factors.Count()) {
                 _currentFactor = _project.Factors.ElementAt(dataGridViewFactors.CurrentRow.Index);
             } else {
                 _currentFactor = null;
@@ -173,19 +152,21 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void dataGridFactors_CellValidating(object sender, DataGridViewCellValidatingEventArgs e) {
-            if (dataGridViewFactors.Columns[e.ColumnIndex].Name == "Name") {
-                var newValue = e.FormattedValue.ToString();
-                if (string.IsNullOrEmpty(newValue)) {
-                    dataGridViewFactors.Rows[e.RowIndex].ErrorText = "Factor name cannot not be empty.";
-                    e.Cancel = true;
-                    showError("Invalid data", dataGridViewFactors.Rows[e.RowIndex].ErrorText);
-                } else {
-                    var newFactorNames = _project.Factors.Select(f => f.Name).ToList();
-                    newFactorNames[e.RowIndex] = newValue;
-                    if (newFactorNames.Distinct().Count() < newFactorNames.Count) {
-                        dataGridViewFactors.Rows[e.RowIndex].ErrorText = "Duplicate factor names are not allowed.";
+            if (_currentFactor != null) {
+                if (dataGridViewFactors.Columns[e.ColumnIndex].Name == "Name") {
+                    var newValue = e.FormattedValue.ToString();
+                    if (string.IsNullOrEmpty(newValue)) {
+                        dataGridViewFactors.Rows[e.RowIndex].ErrorText = "Factor name cannot not be empty.";
                         e.Cancel = true;
                         showError("Invalid data", dataGridViewFactors.Rows[e.RowIndex].ErrorText);
+                    } else {
+                        var newFactorNames = _project.Factors.Select(f => f.Name).ToList();
+                        newFactorNames[e.RowIndex] = newValue;
+                        if (newFactorNames.Distinct().Count() < newFactorNames.Count) {
+                            dataGridViewFactors.Rows[e.RowIndex].ErrorText = "Duplicate factor names are not allowed.";
+                            e.Cancel = true;
+                            showError("Invalid data", dataGridViewFactors.Rows[e.RowIndex].ErrorText);
+                        }
                     }
                 }
             }

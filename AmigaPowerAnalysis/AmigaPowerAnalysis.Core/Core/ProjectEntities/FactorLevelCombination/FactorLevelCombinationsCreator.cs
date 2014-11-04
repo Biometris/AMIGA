@@ -10,14 +10,14 @@ namespace AmigaPowerAnalysis.Core {
         /// </summary>
         /// <param name="factors">The list of factors for which the combinations need to be created.</param>
         /// <returns>A list of factor level combinations.</returns>
-        public static List<FactorLevelCombination> GenerateInteractionCombinations(IEnumerable<Factor> factors) {
+        public static List<FactorLevelCombination> GenerateInteractionCombinations(IEnumerable<IFactor> factors) {
             if (factors.Count() >= 1) {
                 return generateAllCombinations(factors.ToList());
             }
             return new List<FactorLevelCombination>();
         }
 
-        private static List<FactorLevelCombination> generateAllCombinations(List<Factor> factors) {
+        private static List<FactorLevelCombination> generateAllCombinations(List<IFactor> factors) {
             var factorLevelCombinations = new List<FactorLevelCombination>();
             if (factors.Count == 1) {
                 var factor = factors.First();

@@ -70,5 +70,17 @@ namespace AmigaPowerAnalysis.Properties {
                 this["GenstatPath"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string RPath {
+            get {
+                return ((string)(this["RPath"]));
+            }
+            set {
+                this["RPath"] = value;
+            }
+        }
     }
 }

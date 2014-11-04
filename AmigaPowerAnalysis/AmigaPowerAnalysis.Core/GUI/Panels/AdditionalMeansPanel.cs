@@ -28,7 +28,7 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         public bool IsVisible() {
-            return _project != null && (_project.Endpoints.Any(ep => ep.Interactions.Any(epi => !epi.IsComparisonLevel)) || _project.VarietyFactor.FactorLevels.Count > 2);
+            return _project != null && (_project.Endpoints.Any(ep => ep.Interactions.Any(epi => !epi.IsComparisonLevel)) || _project.VarietyFactor.FactorLevels.Count() > 2);
         }
 
         private void createDataGridEndpoints() {

@@ -31,7 +31,7 @@ namespace AmigaPowerAnalysis.Tests {
             var project = new Project();
             project.EndpointTypes = EndpointTypeProvider.DefaultEndpointTypes();
             project.AddEndpoint(new Endpoint("Beatle", project.EndpointTypes.First()));
-            project.Factors.Add(new Factor("Spraying", 3));
+            project.AddFactor(new Factor("Spraying", 3));
             project.UpdateEndpointFactors();
 
             var comparison = project.GetComparisons().First();
@@ -48,8 +48,8 @@ namespace AmigaPowerAnalysis.Tests {
             var project = new Project();
             project.EndpointTypes = EndpointTypeProvider.DefaultEndpointTypes();
             project.AddEndpoint(new Endpoint("Beatle", project.EndpointTypes.First()));
-            project.Factors.Add(new Factor("Spraying", 3));
-            project.Factors.Add(new Factor("Raking", 2));
+            project.AddFactor(new Factor("Spraying", 3));
+            project.AddFactor(new Factor("Raking", 2));
             project.UpdateEndpointFactors();
 
             var comparison = project.GetComparisons().First();
@@ -117,6 +117,7 @@ namespace AmigaPowerAnalysis.Tests {
             Assert.AreEqual(72, records.Count);
 
             var expectedFactorHeaders = new List<string> {
+                project.VarietyFactor.Name,
                 factorInteraction1.Name,
                 factorModifier1.Name,
                 factorInteraction2.Name,

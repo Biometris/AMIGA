@@ -27,16 +27,31 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
         /// <summary>
         /// The factors.
         /// </summary>
+        [DataMember]
         public List<string> Factors { get; set; }
+
+        /// <summary>
+        /// The comparison dummy factor levels.
+        /// </summary>
+        [DataMember]
+        public List<string> DummyComparisonLevels { get; set; }
+
+        /// <summary>
+        /// The comparison dummy non-comparison/modifier levels.
+        /// </summary>
+        [DataMember]
+        public List<string> DummyModifierLevels { get; set; }
 
         /// <summary>
         /// The number of factors that have interaction with variety.
         /// </summary>
+        [DataMember]
         public int NumberOfInteractions { get; set; }
 
         /// <summary>
         /// The number of factors that are considered to be modifiers.
         /// </summary>
+        [DataMember]
         public int NumberOfModifiers { get; set; }
 
         /// <summary>
@@ -165,11 +180,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             }
         }
 
-        /// <summary>
-        /// Writes the power analysis input to a string.
-        /// </summary>
-        public string Print() {
-            var separator = ",";
+        public string PrintSettings() {
             var stringBuilder = new StringBuilder();
 
             stringBuilder.AppendLine(string.Format("{0}\r\n {1} :", "ComparisonId", ComparisonId));
@@ -194,6 +205,18 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             stringBuilder.AppendLine(string.Format("{0}\r\n {1} :", "IsOverdispersedPoisson", IsOverdispersedPoisson));
             stringBuilder.AppendLine(string.Format("{0}\r\n {1} :", "IsNegativeBinomial", IsNegativeBinomial));
 
+            return stringBuilder.ToString();
+        }
+
+        /// <summary>
+        /// Writes the power analysis input to a string.
+        /// </summary>
+        public string Print() {
+            var stringBuilder = new StringBuilder();
+
+            stringBuilder.Append(PrintSettings());
+
+            var separator = ",";
             var headers = new List<string>();
             headers.Add("MainPlot");
             headers.Add("SubPlot");

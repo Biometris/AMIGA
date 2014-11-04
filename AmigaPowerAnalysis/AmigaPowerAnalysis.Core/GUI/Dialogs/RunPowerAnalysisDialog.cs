@@ -67,40 +67,16 @@ namespace AmigaPowerAnalysis.GUI {
             }
 
             var inputGenerator = new PowerAnalysisInputGenerator();
-            var outputReader = new PowerAnalysisOutputReader();
+            var powerAnalysisExecuter = new GenstatPowerAnalysisExecuter(filesPath);
 
             var numberOfComparisons = comparisons.Count();
             var progressStep = 100D / numberOfComparisons;
 
             for (int i = 0; i < comparisons.Count(); ++i) {
                 try {
-                    var comparisonInputFilename = Path.Combine(filesPath, string.Format("{0}-{1}.csv", projectName, i));
-                    var comparisonOutputFilename = Path.Combine(filesPath, string.Format("{0}-{1}-Output.csv", projectName, i));
-                    var comparisonLogFilename = Path.Combine(filesPath, string.Format("{0}-{1}.log", projectName, i));
-
-                    // Create input file for power analysis
-                    _powerAnalysisBackgroundWorker.ReportProgress((int)(i * progressStep), string.Format("compiling analysis input for comparison {0} of {1}...", i + 1, comparisons.Count()));
+                    _powerAnalysisBackgroundWorker.ReportProgress((int)(i * progressStep), string.Format("Running power analysis for comparison {0} of {1}...", i + 1, comparisons.Count()));
                     var inputPowerAnalysis = inputGenerator.CreateInputPowerAnalysis(comparisons.ElementAt(i), _project.DesignSettings, _project.PowerCalculationSettings, i);
-                    inputGenerator.PowerAnalysisInputToCsv(inputPowerAnalysis, comparisonInputFilename);
-
-                    // Run power analysis
-                    _powerAnalysisBackgroundWorker.ReportProgress((int)((i+1) * progressStep), string.Format("running analysis for comparison {0} of {1}...", i + 1, comparisons.Count()));
-                    var startInfo = new ProcessStartInfo();
-                    startInfo.CreateNoWindow = true;
-                    startInfo.UseShellExecute = false;
-                    startInfo.FileName = genstatPath;
-                    startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                    startInfo.Arguments = string.Format("in=\"{0}\" in2=\"{1}\" in3=\"{2}\" out=\"{3}\" out2=\"{4}\"", scriptFilename, lylesScriptFilename, comparisonInputFilename, comparisonLogFilename, comparisonOutputFilename);
-                    using (Process exeProcess = Process.Start(startInfo)) {
-                        exeProcess.WaitForExit();
-                    }
-
-                    // Read output file of power analysis
-                    _powerAnalysisBackgroundWorker.ReportProgress((int)(i * progressStep), string.Format("reading analysis output for comparison {0} of {1}...", i + 1, comparisons.Count()));
-                    var comparison = comparisons.ElementAt(i);
-                    comparison.OutputPowerAnalysis = outputReader.ReadOutputPowerAnalysis(comparisonOutputFilename);
-                    comparison.OutputPowerAnalysis.InputPowerAnalysis = inputPowerAnalysis;
-
+                    comparisons.ElementAt(i).OutputPowerAnalysis = powerAnalysisExecuter.RunAnalysis(inputPowerAnalysis);
                 } catch (Exception ex) {
                     showError("Power analysis error", string.Format("An error occurred while executing the power analysis simulation. Message: {0}", ex.Message));
                     return;

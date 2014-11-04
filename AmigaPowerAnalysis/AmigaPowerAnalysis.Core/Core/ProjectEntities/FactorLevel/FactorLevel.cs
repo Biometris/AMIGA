@@ -3,31 +3,57 @@ using System.Runtime.Serialization;
 
 namespace AmigaPowerAnalysis.Core {
 
-    [DataContractAttribute]
-    public sealed class FactorLevel : IEquatable<FactorLevel> {
+    [DataContract]
+    [KnownType(typeof(VarietyFactorLevel))]
+    public class FactorLevel : IEquatable<FactorLevel> {
+
+        #region DataMembers
+
+        [DataMember]
+        private IFactor _parent;
+
+        [DataMember]
+        private string _label;
+
+        [DataMember]
+        private int _frequency;
+
+        #endregion
 
         public FactorLevel() {
             Label = string.Empty;
             Frequency = 1;
         }
 
+        public FactorLevel(string label, int frequency = 1) {
+            Label = label;
+            Frequency = frequency;
+        }
+
         /// <summary>
         /// The factor to which this level belongs.
         /// </summary>
-        [DataMember]
-        public Factor Parent { get; set; }
+        public IFactor Parent {
+            get { return _parent; }
+            set { _parent = value; }
+        }
 
         /// <summary>
         /// The label of this factor level.
         /// </summary>
-        [DataMember]
-        public string Label { get; set; }
+        public string Label {
+            get { return _label; }
+            set { _label = value; }
+        }
 
         /// <summary>
         /// The frequency.
         /// </summary>
         [DataMember]
-        public int Frequency { get; set; }
+        public int Frequency  {
+            get { return _frequency; }
+            set { _frequency = value; }
+        }
 
         public bool Equals(FactorLevel other) {
             if (other == null) {

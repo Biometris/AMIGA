@@ -23,7 +23,7 @@ namespace AmigaPowerAnalysis.Tests {
             var records = template.AnalysisDataTemplateRecords;
 
             // 2 variety levels
-            Assert.AreEqual(2, records.Count);
+            Assert.AreEqual(4, records.Count);
         }
 
         [TestMethod]
@@ -34,7 +34,7 @@ namespace AmigaPowerAnalysis.Tests {
 
             var spraying = new Factor("Spraying", 3);
             spraying.FactorLevels.First().Frequency = 2;
-            project.Factors.Add(spraying);
+            project.AddFactor(spraying);
 
             var replicates = 3;
 
@@ -50,6 +50,40 @@ namespace AmigaPowerAnalysis.Tests {
             // 3 replicates
             // 2 * 4 * 3 = 24 records
             Assert.AreEqual(24, records.Count);
+        }
+
+        [TestMethod]
+        public void TestExtraVariety() {
+            var project = new Project();
+            project.EndpointTypes = EndpointTypeProvider.DefaultEndpointTypes();
+            project.AddEndpoint(new Endpoint("Beatle", project.EndpointTypes.First()));
+            project.VarietyFactor.AddFactorLevel(new FactorLevel("Add"));
+
+            var factorF = new Factor("F") {
+                IsInteractionWithVariety = true,
+            };
+            var f1 = new FactorLevel("F1");
+            var f2 = new FactorLevel("F2");
+            var f3 = new FactorLevel("F3");
+            factorF.AddFactorLevel(f1);
+            factorF.AddFactorLevel(f2);
+            factorF.AddFactorLevel(f3);
+            project.AddFactor(factorF);
+
+            var factorG = new Factor("G") {
+                IsInteractionWithVariety = false,
+            };
+            var g1 = new FactorLevel("G1");
+            var g2 = new FactorLevel("G2");
+            factorG.AddFactorLevel(g1);
+            factorG.AddFactorLevel(g2);
+            project.AddFactor(factorG);
+
+            project.UpdateEndpointFactors();
+
+            project.DefaultInteractionFactorLevelCombinations.Single(flc => flc.VarietyLevel.VarietyLevelType == VarietyLevelType.GMO && flc.Contains(f1)).IsComparisonLevel = true;
+            project.DefaultInteractionFactorLevelCombinations.Single(flc => flc.VarietyLevel.VarietyLevelType == VarietyLevelType.GMO && flc.Contains(f2)).IsComparisonLevel = false;
+            project.DefaultInteractionFactorLevelCombinations.Single(flc => flc.VarietyLevel.VarietyLevelType == VarietyLevelType.GMO && flc.Contains(f3)).IsComparisonLevel = false;
         }
     }
 }

@@ -10,84 +10,134 @@ namespace AmigaPowerAnalysis.Core {
     [DataContractAttribute]
     public sealed class Project {
 
+        #region DataMembers
+
+        [DataMember]
+        private List<EndpointType> _endpointTypes;
+
+        [DataMember]
+        private List<Endpoint> _endpoints;
+
+        [DataMember]
+        private VarietyFactor _varietyFactor;
+
+        [DataMember]
+        private List<Factor> _factors;
+
+        [DataMember]
+        private List<InteractionFactorLevelCombination> _defaultInteractionFactorLevelCombinations;
+
+        [DataMember]
+        private DesignSettings _designSettings;
+
+        [DataMember]
+        private PowerCalculationSettings _powerCalculationSettings;
+
+        [DataMember]
+        private bool _useFactorModifiers;
+
+        [DataMember]
+        private bool _useBlockModifier;
+
+        [DataMember]
+        private double _cVForBlocks;
+
+        [DataMember]
+        private bool _useMainPlotModifier;
+
+        [DataMember]
+        private double _cVForMainPlots;
+
+        #endregion
+
         public Project() {
-            EndpointTypes = new List<EndpointType>();
-            Endpoints = new List<Endpoint>();
-            Factors = new List<Factor>();
-            DefaultInteractionFactorLevelCombinations = new List<InteractionFactorLevelCombination>();
-            Factors.Add(Factor.CreateVarietyFactor());
-            DesignSettings = new DesignSettings();
-            PowerCalculationSettings = new PowerCalculationSettings();
-            UseFactorModifiers = false;
-            UseBlockModifier = false;
-            UseMainPlotModifier = false;
+            _endpointTypes = new List<EndpointType>();
+            _endpoints = new List<Endpoint>();
+            _varietyFactor = VarietyFactor.CreateVarietyFactor();
+            _factors = new List<Factor>();
+            _defaultInteractionFactorLevelCombinations = new List<InteractionFactorLevelCombination>();
+            _designSettings = new DesignSettings();
+            _powerCalculationSettings = new PowerCalculationSettings();
+            _useFactorModifiers = false;
+            _useBlockModifier = false;
+            _useMainPlotModifier = false;
         }
 
         /// <summary>
         /// The endpoint types available for the endpoints of this project.
         /// </summary>
-        [DataMember]
-        public List<EndpointType> EndpointTypes { get; set; }
+        public List<EndpointType> EndpointTypes {
+            get { return _endpointTypes; }
+            set { _endpointTypes = value; }
+        }
 
         /// <summary>
         /// The endpoints of interest in this project.
         /// </summary>
-        [DataMember]
-        public List<Endpoint> Endpoints { get; set; }
+        public List<Endpoint> Endpoints {
+            get { return _endpoints; }
+        }
 
         /// <summary>
         /// The list of factors used in the experiment of this project.
         /// </summary>
-        [DataMember]
-        public List<Factor> Factors { get; set; }
-
-        /// <summary>
-        /// The list of factors used in the experiment of this project.
-        /// </summary>
-        [DataMember]
-        public List<InteractionFactorLevelCombination> DefaultInteractionFactorLevelCombinations { get; set; }
+        public List<InteractionFactorLevelCombination> DefaultInteractionFactorLevelCombinations {
+            get { return _defaultInteractionFactorLevelCombinations; }
+        }
 
         /// <summary>
         /// The experimental design of the project.
         /// </summary>
-        [DataMember]
-        public DesignSettings DesignSettings { get; set; }
+        public DesignSettings DesignSettings {
+            get { return _designSettings; }
+        }
 
         /// <summary>
         /// The settings for the power analysis.
         /// </summary>
-        [DataMember]
-        public PowerCalculationSettings PowerCalculationSettings { get; set; }
+        public PowerCalculationSettings PowerCalculationSettings {
+            get { return _powerCalculationSettings; }
+        }
 
         /// <summary>
         /// Specifies whether design factors can be modifiers.
         /// </summary>
-        [DataMember]
-        public bool UseFactorModifiers { get; set; }
+        public bool UseFactorModifiers {
+            get { return _useFactorModifiers; }
+            set { _useFactorModifiers = value; }
+        }
 
         /// <summary>
         /// Specifies whether to use a modifier for the blocks.
         /// </summary>
-        [DataMember]
-        public bool UseBlockModifier { get; set; }
+        public bool UseBlockModifier {
+            get { return _useBlockModifier; }
+            set { _useBlockModifier = value; }
+        }
 
         /// <summary>
         /// Gets and sets the CV for the blocks.
         /// </summary>
-        [DataMember]
-        public double CVForBlocks { get; set; }
+        public double CVForBlocks {
+            get { return _cVForBlocks; }
+            set { _cVForBlocks = value; }
+        }
 
         /// <summary>
         /// Specifies whether to use a modifier for the main plots.
         /// </summary>
-        [DataMember]
-        public bool UseMainPlotModifier { get; set; }
+        public bool UseMainPlotModifier {
+            get { return _useMainPlotModifier; }
+            set { _useMainPlotModifier = value; }
+        }
 
         /// <summary>
         /// Gets and sets the CV for the main plots.
         /// </summary>
-        [DataMember]
-        public double CVForMainPlots { get; set; }
+        public double CVForMainPlots {
+            get { return _cVForMainPlots; }
+            set { _cVForMainPlots = value; }
+        }
 
         /// <summary>
         /// Adds an endpoint to the list of endpoints.
@@ -111,7 +161,7 @@ namespace AmigaPowerAnalysis.Core {
         /// </summary>
         /// <param name="endpoint"></param>
         public void AddFactor(Factor factor) {
-            Factors.Add(factor);
+            _factors.Add(factor);
             UpdateEndpointFactors();
         }
 
@@ -119,20 +169,46 @@ namespace AmigaPowerAnalysis.Core {
         /// Removes a factor from the list of factors.
         /// </summary>
         /// <param name="endpoint"></param>
-        public void RemoveFactor(Factor factor) {
-            Factors.Remove(factor);
+        public void RemoveFactor(IFactor factor) {
+            _factors.RemoveAll(f => f == factor);
             UpdateEndpointFactors();
         }
 
         /// <summary>
         /// Variety factor which includes GMO and Comparator.
         /// </summary>
-        public Factor VarietyFactor {
+        public VarietyFactor VarietyFactor {
             get {
-                return Factors.SingleOrDefault(f => f.IsVarietyFactor);
+                return _varietyFactor;
             }
         }
 
+        /// <summary>
+        /// Returns the other (non-variety) factors in this project.
+        /// </summary>
+        public IEnumerable<Factor> NonVarietyFactors {
+            get {
+                return _factors;
+            }
+        }
+
+        /// <summary>
+        /// Returns all factors (variety and non variety) of this project.
+        /// </summary>
+        public IEnumerable<IFactor> Factors {
+            get {
+                var factors = new List<IFactor>();
+                factors.Add(_varietyFactor);
+                factors.AddRange(_factors);
+                return factors;
+            }
+        }
+
+        /// <summary>
+        /// Sets whether this factor has an interaction with variety.
+        /// </summary>
+        /// <param name="factor"></param>
+        /// <param name="isInteractionWithVariety"></param>
         public void SetFactorType(Factor factor, bool isInteractionWithVariety) {
             if (DesignSettings.UseDefaultInteractions) {
                 foreach (var endpoint in Endpoints) {
@@ -146,20 +222,18 @@ namespace AmigaPowerAnalysis.Core {
         /// Updates the factors of the endpoints.
         /// </summary>
         public void UpdateEndpointFactors() {
-            foreach (var factor in Factors) {
-                foreach (var endpoint in Endpoints) {
-                    bool changed = false;
-                    if (!endpoint.Factors.Any(ef => ef.Factor == factor)) {
-                        endpoint.Factors.Add(new EndpointFactorSettings(factor));
-                        changed = true;
+            foreach (var endpoint in Endpoints) {
+                endpoint.VarietyFactor = VarietyFactor;
+            }
+            foreach (var endpoint in Endpoints) {
+                foreach (var factor in NonVarietyFactors) {
+                    if (!endpoint.NonVarietyFactors.Any(ef => ef == factor)) {
+                        endpoint.AddFactor(factor);
                     }
-                    if (endpoint.Factors.Any(ef => !Factors.Contains(ef.Factor))) {
-                        endpoint.Factors.RemoveAll(ef => !Factors.Contains(ef.Factor));
-                        changed = true;
-                    }
-                    if (changed) {
-                        endpoint.UpdateNonInteractionFactorLevelCombinations();
-                    }
+                }
+                var unmatchedFactors = endpoint.NonVarietyFactors.Where(ef => !NonVarietyFactors.Contains(ef)).ToList();
+                foreach (var factor in unmatchedFactors) {
+                    endpoint.RemoveFactor(factor);
                 }
             }
             UpdateEndpointFactorLevels();
@@ -177,13 +251,14 @@ namespace AmigaPowerAnalysis.Core {
                     DefaultInteractionFactorLevelCombinations.Add(new InteractionFactorLevelCombination(newCombination));
                 }
             }
-            foreach (var endpoint in Endpoints) {
-                if (DesignSettings.UseDefaultInteractions) {
-                    endpoint.UpdateInteractionFactorLevelCombinations(DefaultInteractionFactorLevelCombinations);
-                } else {
-                    endpoint.UpdateInteractionFactorLevelCombinations();
+            if (!DesignSettings.UseDefaultInteractions) {
+                foreach (var endpoint in Endpoints) {
+                    endpoint.UpdateFactorLevelCombinations(null);
                 }
-                endpoint.UpdateNonInteractionFactorLevelCombinations();
+            } else {
+                foreach (var endpoint in Endpoints) {
+                    endpoint.UpdateFactorLevelCombinations(DefaultInteractionFactorLevelCombinations);
+                }
             }
         }
 
@@ -194,12 +269,11 @@ namespace AmigaPowerAnalysis.Core {
         public void SetUseInteractions(bool useInteractions) {
             DesignSettings.UseInteractions = useInteractions;
             if (!useInteractions) {
-                Factors.ForEach(f => f.IsInteractionWithVariety = false);
+                foreach (var factor in NonVarietyFactors) {
+                    factor.IsInteractionWithVariety = false;
+                }
                 foreach (var endpoint in Endpoints) {
-                    for (int i = 1; i < Factors.Count; ++i) {
-                        var factor = Factors.ElementAt(i);
-                        endpoint.SetFactorType(factor, false);
-                    }
+                    _factors.ForEach(f => endpoint.SetFactorType(f, false));
                 }
                 DesignSettings.UseDefaultInteractions = true;
             }
@@ -213,10 +287,7 @@ namespace AmigaPowerAnalysis.Core {
             DesignSettings.UseDefaultInteractions = useDefaultInteractions;
             if (DesignSettings.UseDefaultInteractions) {
                 foreach (var endpoint in Endpoints) {
-                    for (int i = 1; i < Factors.Count; ++i) {
-                        var factor = Factors.ElementAt(i);
-                        endpoint.SetFactorType(factor, factor.IsInteractionWithVariety);
-                    }
+                    _factors.ForEach(f => endpoint.SetFactorType(f, f.IsInteractionWithVariety));
                 }
             }
             UpdateEndpointFactorLevels();
@@ -237,7 +308,7 @@ namespace AmigaPowerAnalysis.Core {
         /// The comparisons of this project.
         /// </summary>
         public IEnumerable<Comparison> GetComparisons() {
-            return Endpoints.SelectMany(ep => ep.Comparisons);
+            return Endpoints.Select(ep => ep.Comparison);
         }
     }
 }

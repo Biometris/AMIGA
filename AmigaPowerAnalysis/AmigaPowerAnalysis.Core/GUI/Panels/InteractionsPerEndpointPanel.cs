@@ -8,14 +8,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using AmigaPowerAnalysis.Core;
+using AmigaPowerAnalysis.GUI.Wrappers;
 
 namespace AmigaPowerAnalysis.GUI {
     public partial class InteractionsPerEndpointPanel : UserControl, ISelectionForm {
 
         private Project _project;
-
+        private List<InteractionsWrapper> _currentEndpointInteractionLevels;
         private Endpoint _currentEndpoint;
-        private List<InteractionFactorLevelCombination> _currentEndpointInteractionFactorLevels;
         private DataTable _endpointInteractionFactorsDataTable;
 
         public InteractionsPerEndpointPanel(Project project) {
@@ -46,8 +46,8 @@ namespace AmigaPowerAnalysis.GUI {
             _endpointInteractionFactorsDataTable.Columns.Clear();
             _endpointInteractionFactorsDataTable.Columns.Add("Endpoint");
             dataGridViewEndpointInteractionFactors.Columns[0].ReadOnly = true;
-            for (int i = 1; i < _project.Factors.Count; ++i) {
-                _endpointInteractionFactorsDataTable.Columns.Add(_project.Factors.ElementAt(i).Name, typeof(bool));
+            for (int i = 0; i < _project.NonVarietyFactors.Count(); ++i) {
+                _endpointInteractionFactorsDataTable.Columns.Add(_project.NonVarietyFactors.ElementAt(i).Name, typeof(bool));
             }
             for (int i = 0; i < _project.Endpoints.Count; ++i) {
                 DataRow row = _endpointInteractionFactorsDataTable.NewRow();
@@ -66,17 +66,29 @@ namespace AmigaPowerAnalysis.GUI {
             if (_currentEndpoint != null) {
                 dataGridViewFactorLevels.DataSource = null;
                 var dataTable = new DataTable();
-                var interactionFactors = _currentEndpoint.InteractionFactors.ToList();
+
+                // Create columns
+                var interactionFactors = _currentEndpoint.InteractionFactors.Where(f => !f.IsVarietyFactor).ToList();
                 foreach (var interactionFactor in interactionFactors) {
                     dataTable.Columns.Add(interactionFactor.Name, typeof(string));
                 }
-                dataTable.Columns.Add("Interaction", typeof(bool));
-                foreach (var factorLevelCombination in _currentEndpoint.Interactions) {
+                dataTable.Columns.Add("Comparison level GMO", typeof(bool));
+                dataTable.Columns.Add("Comparison level Comparator", typeof(bool));
+
+                // Create interaction wrappers
+                _currentEndpointInteractionLevels = _currentEndpoint.Interactions
+                    .GroupBy(ifl => ifl.NonVarietyFactorLevelCombination)
+                    .Select(g => new InteractionsWrapper(g.ToList()))
+                    .Where(i => i.Levels.Count() > 0)
+                    .ToList();
+
+                foreach (var factorLevelCombination in _currentEndpointInteractionLevels) {
                     DataRow row = dataTable.NewRow();
                     foreach (var factorLevel in factorLevelCombination.Levels) {
                         row[factorLevel.Parent.Name] = factorLevel.Label;
                     }
-                    row["Interaction"] = factorLevelCombination.IsComparisonLevel;
+                    row["Comparison level GMO"] = factorLevelCombination.IsComparisonLevelGMO;
+                    row["Comparison level Comparator"] = factorLevelCombination.IsComparisonLevelComparator;
                     dataTable.Rows.Add(row);
                 }
                 dataGridViewFactorLevels.Columns.Clear();
@@ -93,7 +105,6 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void dataGridViewEndpointInteractionFactors_SelectionChanged(object sender, EventArgs e) {
             _currentEndpoint = _project.Endpoints.ElementAt(dataGridViewEndpointInteractionFactors.CurrentRow.Index);
-            _currentEndpointInteractionFactorLevels = _currentEndpoint.Interactions;
             updateDataGridFactorLevels();
             fireTabVisibilitiesChanged();
         }
@@ -102,10 +113,10 @@ namespace AmigaPowerAnalysis.GUI {
             if (dataGridViewEndpointInteractionFactors.IsCurrentCellDirty) {
                 dataGridViewEndpointInteractionFactors.CommitEdit(DataGridViewDataErrorContexts.Commit);
             }
-            var cell = this.dataGridViewEndpointInteractionFactors.CurrentCell;
-            if (cell.ColumnIndex > 0 && cell.ColumnIndex - 1 < _project.Factors.Count) {
+            var cell = dataGridViewEndpointInteractionFactors.CurrentCell;
+            if (cell.ColumnIndex > 0 && cell.ColumnIndex - 1 < _project.NonVarietyFactors.Count()) {
                 var endpoint = _project.Endpoints.ElementAt(cell.RowIndex);
-                var factor = _project.Factors.ElementAt(cell.ColumnIndex);
+                var factor = _project.NonVarietyFactors.ElementAt(cell.ColumnIndex - 1);
                 var isChecked = (bool)_endpointInteractionFactorsDataTable.Rows[cell.RowIndex][cell.ColumnIndex];
                 endpoint.SetFactorType(factor, isChecked);
                 updateDataGridFactorLevels();
@@ -114,11 +125,14 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void dataGridViewFactorLevels_CellValueChanged(object sender, DataGridViewCellEventArgs e) {
-            if (e.RowIndex < _project.DefaultInteractionFactorLevelCombinations.Count) {
-                var factorLevelCombination = _currentEndpoint.Interactions[e.RowIndex];
-                if (e.ColumnIndex == dataGridViewFactorLevels.Columns["Interaction"].Index) {
+            if (_currentEndpointInteractionLevels != null && e.RowIndex < _currentEndpointInteractionLevels.Count) {
+                var factorLevelCombination = _currentEndpointInteractionLevels[e.RowIndex];
+                if (e.ColumnIndex == dataGridViewFactorLevels.Columns["Comparison level GMO"].Index) {
                     var isChecked = (bool)dataGridViewFactorLevels.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
-                    factorLevelCombination.IsComparisonLevel = (bool)dataGridViewFactorLevels.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
+                    factorLevelCombination.IsComparisonLevelGMO = (bool)dataGridViewFactorLevels.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
+                } else if (e.ColumnIndex == dataGridViewFactorLevels.Columns["Comparison level Comparator"].Index) {
+                    var isChecked = (bool)dataGridViewFactorLevels.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
+                    factorLevelCombination.IsComparisonLevelComparator = (bool)dataGridViewFactorLevels.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
                 }
                 _project.UpdateEndpointFactorLevels();
                 fireTabVisibilitiesChanged();
@@ -133,11 +147,11 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void showError(string title, string message) {
             MessageBox.Show(
-                    message,
-                    title,
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error,
-                    MessageBoxDefaultButton.Button1);
+                message,
+                title,
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error,
+                MessageBoxDefaultButton.Button1);
         }
 
         public event EventHandler TabVisibilitiesChanged;
