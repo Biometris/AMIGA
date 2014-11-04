@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
@@ -180,30 +181,37 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             }
         }
 
-        public string PrintSettings() {
-            var stringBuilder = new StringBuilder();
+        public string PrintSettings(Func<string, object, string> formatDelegate = null) {
 
-            stringBuilder.AppendLine(string.Format("{0}\r\n {1} :", "ComparisonId", ComparisonId));
-            stringBuilder.AppendLine(string.Format("{0}\r\n '{1}' :", "Endpoint", Endpoint));
-            stringBuilder.AppendLine(string.Format("{0}\r\n {1} :", "LocLower", LocLower));
-            stringBuilder.AppendLine(string.Format("{0}\r\n {1} :", "LocUpper", LocUpper));
-            stringBuilder.AppendLine(string.Format("{0}\r\n {1} :", "Distribution", DistributionType));
-            stringBuilder.AppendLine(string.Format("{0}\r\n {1} :", "PowerLawPower", PowerLawPower));
-            stringBuilder.AppendLine(string.Format("{0}\r\n {1} :", "CVComparator", CvComparator));
-            stringBuilder.AppendLine(string.Format("{0}\r\n {1} :", "CVBlocks", CvForBlocks));
-            stringBuilder.AppendLine(string.Format("{0}\r\n {1} :", "NumberOfInteractions", NumberOfInteractions));
-            stringBuilder.AppendLine(string.Format("{0}\r\n {1} :", "NumberOfModifiers", NumberOfModifiers));
-            stringBuilder.AppendLine(string.Format("{0}\r\n {1} :", "SignificanceLevel", SignificanceLevel));
-            stringBuilder.AppendLine(string.Format("{0}\r\n {1} :", "NumberOfRatios", NumberOfRatios));
-            stringBuilder.AppendLine(string.Format("{0}\r\n {1} :", "NumberOfReplications", string.Join(" ", NumberOfReplications.Select(r => r.ToString()).ToList())));
-            stringBuilder.AppendLine(string.Format("{0}\r\n {1} :", "ExperimentalDesignType", ExperimentalDesignType));
-            stringBuilder.AppendLine(string.Format("{0}\r\n {1} :", "PowerCalculationMethod", PowerCalculationMethodType));
-            stringBuilder.AppendLine(string.Format("{0}\r\n {1} :", "RandomNumberSeed", RandomNumberSeed));
-            stringBuilder.AppendLine(string.Format("{0}\r\n {1} :", "NumberOfSimulatedDataSets", NumberOfSimulatedDataSets));
-            stringBuilder.AppendLine(string.Format("{0}\r\n {1} :", "IsLogNormal", IsLogNormal));
-            stringBuilder.AppendLine(string.Format("{0}\r\n {1} :", "IsSquareRoot", IsSquareRoot));
-            stringBuilder.AppendLine(string.Format("{0}\r\n {1} :", "IsOverdispersedPoisson", IsOverdispersedPoisson));
-            stringBuilder.AppendLine(string.Format("{0}\r\n {1} :", "IsNegativeBinomial", IsNegativeBinomial));
+            Func<string, object, string> format;
+            if (formatDelegate == null) {
+                format = (parameter, setting) => { return string.Format("{0}\r\n {1} :", parameter, setting); };
+            } else {
+                format = formatDelegate;
+            }
+
+            var stringBuilder = new StringBuilder();
+            stringBuilder.AppendLine(format("ComparisonId", ComparisonId));
+            stringBuilder.AppendLine(format("Endpoint", Endpoint));
+            stringBuilder.AppendLine(format("LocLower", LocLower));
+            stringBuilder.AppendLine(format("LocUpper", LocUpper));
+            stringBuilder.AppendLine(format("Distribution", DistributionType));
+            stringBuilder.AppendLine(format("PowerLawPower", PowerLawPower));
+            stringBuilder.AppendLine(format("CVComparator", CvComparator));
+            stringBuilder.AppendLine(format("CVBlocks", CvForBlocks));
+            stringBuilder.AppendLine(format("NumberOfInteractions", NumberOfInteractions));
+            stringBuilder.AppendLine(format("NumberOfModifiers", NumberOfModifiers));
+            stringBuilder.AppendLine(format("SignificanceLevel", SignificanceLevel));
+            stringBuilder.AppendLine(format("NumberOfRatios", NumberOfRatios));
+            stringBuilder.AppendLine(format("NumberOfReplications", string.Join(" ", NumberOfReplications.Select(r => r.ToString()).ToList())));
+            stringBuilder.AppendLine(format("ExperimentalDesignType", ExperimentalDesignType));
+            stringBuilder.AppendLine(format("PowerCalculationMethod", PowerCalculationMethodType));
+            stringBuilder.AppendLine(format("RandomNumberSeed", RandomNumberSeed));
+            stringBuilder.AppendLine(format("NumberOfSimulatedDataSets", NumberOfSimulatedDataSets));
+            stringBuilder.AppendLine(format("IsLogNormal", IsLogNormal));
+            stringBuilder.AppendLine(format("IsSquareRoot", IsSquareRoot));
+            stringBuilder.AppendLine(format("IsOverdispersedPoisson", IsOverdispersedPoisson));
+            stringBuilder.AppendLine(format("IsNegativeBinomial", IsNegativeBinomial));
 
             return stringBuilder.ToString();
         }

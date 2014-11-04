@@ -18,11 +18,23 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
 
         public OutputPowerAnalysis RunAnalysis(InputPowerAnalysis inputPowerAnalysis) {
             var comparisonInputFilename = Path.Combine(_tempPath, string.Format("{0}-Input.csv", inputPowerAnalysis.ComparisonId));
+            var comparisonSettingsFilename = Path.Combine(_tempPath, string.Format("{0}-Settings.csv", inputPowerAnalysis.ComparisonId));
             var comparisonOutputFilename = Path.Combine(_tempPath, string.Format("{0}-Output.csv", inputPowerAnalysis.ComparisonId));
             var comparisonLogFilename = Path.Combine(_tempPath, string.Format("{0}-Log.log", inputPowerAnalysis.ComparisonId));
 
             var inputGenerator = new PowerAnalysisInputGenerator();
             createAnalysisInputFile(inputPowerAnalysis, comparisonInputFilename);
+            createAnalysisSettingsFile(inputPowerAnalysis, comparisonSettingsFilename);
+
+            //var startInfo = new ProcessStartInfo();
+            //startInfo.CreateNoWindow = true;
+            //startInfo.UseShellExecute = false;
+            //startInfo.FileName = PathR;
+            //startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            //startInfo.Arguments = string.Format("in=\"{0}\" in2=\"{1}\" in3=\"{2}\" out=\"{3}\" out2=\"{4}\"", scriptFilename, lylesScriptFilename, comparisonInputFilename, comparisonLogFilename, comparisonOutputFilename);
+            //using (Process exeProcess = Process.Start(startInfo)) {
+            //    exeProcess.WaitForExit();
+            //}
 
             return new OutputPowerAnalysis() {
                 InputPowerAnalysis = inputPowerAnalysis,
@@ -43,6 +55,14 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
         private static void createAnalysisInputFile(InputPowerAnalysis inputPowerAnalysis, string filename) {
             using (var file = new System.IO.StreamWriter(filename)) {
                 file.WriteLine(createAnalysisMatrix(inputPowerAnalysis));
+                file.Close();
+            }
+        }
+
+        private static void createAnalysisSettingsFile(InputPowerAnalysis inputPowerAnalysis, string filename) {
+            using (var file = new System.IO.StreamWriter(filename)) {
+                Func<string, object, string> formatDelegate = (parameter, setting) => { return string.Format("{0}, {1}", parameter, setting); };
+                file.WriteLine(inputPowerAnalysis.PrintSettings(formatDelegate));
                 file.Close();
             }
         }
@@ -78,24 +98,26 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             var stringBuilder = new StringBuilder();
             var separator = ",";
             var headers = new List<string>();
-            headers.Add("Comparison");
-            headers.Add("ComparisonDummyLevel");
-            headers.Add("ModifierDummyLevel");
-            foreach (var factor in inputPowerAnalysis.DummyComparisonLevels) {
+            //headers.Add("ComparisonDummyLevel");
+            //headers.Add("ModifierDummyLevel");
+            headers.Add("Constant");
+            foreach (var factor in inputPowerAnalysis.DummyComparisonLevels.Take(inputPowerAnalysis.DummyComparisonLevels.Count - 1)) {
                 headers.Add(string.Format("'{0}'", factor));
             }
-            foreach (var factor in inputPowerAnalysis.DummyModifierLevels) {
+            foreach (var factor in inputPowerAnalysis.DummyModifierLevels.Take(inputPowerAnalysis.DummyModifierLevels.Count - 1)) {
                 headers.Add(string.Format("'{0}'", factor));
             }
             headers.Add("Mean");
             stringBuilder.AppendLine(string.Join(separator, headers));
             foreach (var record in inputPowerAnalysis.InputRecords) {
                 var line = new List<string>();
-                line.Add(record.Comparison.ToString());
-                line.Add(record.ComparisonDummyFactorLevel);
-                line.Add(record.ModifierDummyFactorLevel);
-                line.Add(string.Join(separator, inputPowerAnalysis.DummyComparisonLevels.Select(l => l == record.ComparisonDummyFactorLevel ? "1" : "0")));
-                line.Add(string.Join(separator, inputPowerAnalysis.DummyModifierLevels.Select(l => l == record.ModifierDummyFactorLevel ? "1" : "0")));
+                //line.Add(record.ComparisonDummyFactorLevel);
+                //line.Add(record.ModifierDummyFactorLevel);
+                line.Add("1");
+                line.AddRange(inputPowerAnalysis.DummyComparisonLevels.Select(l => l == record.ComparisonDummyFactorLevel ? "1" : "0"));
+                line.RemoveAt(line.Count - 1);
+                line.AddRange(inputPowerAnalysis.DummyModifierLevels.Select(l => l == record.ModifierDummyFactorLevel ? "1" : "0"));
+                line.RemoveAt(line.Count - 1);
                 line.Add(record.Mean.ToString());
                 stringBuilder.AppendLine(string.Join(separator, line));
             }
