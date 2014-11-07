@@ -1,49 +1,57 @@
 # Import functions; before changing the working directory
-source("zBinomial.rin")
-source("zPoisson.rin")
-require(MASS)             # For negative binomial regression 
+require(MASS)               # For negative binomial regression 
+source = c("zBinomial.rin", "zPoisson.rin")
 
 # Retrieve parameters from call to R 
-args = commandArgs(TRUE)
-if (length(args) <= 1) {
-  directory    = getwd()
+# Call from CRiSP does not contain a --file option. Call from C# and Rscript does
+args = commandArgs(FALSE)
+CallFromC = Reduce("|", substr(args, 1, 7)=="--file=")
+
+if (CallFromC) {
+  # Load additional R scripts which should be in the same directory
+  rscriptFile = substr(args[substr(args, 1, 7)=="--file="], 8, 10000)
+  rscriptDir = paste(dirname(normalizePath(rscriptFile)), "/", sep="")
+  posargs = c(1:length(args))[substr(args, 1, 6)=="--args"]
+  settingsfile = args[posargs+1]
+  datafile     = args[posargs+2]
+  outputfile   = args[posargs+3]
+} else {
+  rscriptDir   = ""
   settingsfile = "1-Settings.csv"
   datafile     = "1-Input.csv"
   outputfile   = "1-Output.csv"
-} else {
-  directory    = args[1]
-  settingsfile = args[2]
-  datafile     = args[3]
-  outputfile   = args[4]
 }
-setwd(directory)
+
+# Load additional R scripts which should be in the same directory
+for (i in 1:length(source)) {
+  source(paste(rscriptDir, source[[i]], sep=""))
+}
 
 # Settings
-settings = read.csv(settingsfile, header=FALSE, as.is=TRUE, strip.white=TRUE)
-tel = 1
-ComparisonId              = as.numeric(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-NumberOfComparisons       = as.numeric(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-Endpoint                  = as.character( as.vector(settings[[2]][tel]))             ; tel = tel + 1
-LocLower                  = as.numeric(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-LocUpper                  = as.numeric(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-Distribution              = as.character( as.vector(settings[[2]][tel]))             ; tel = tel + 1
-PowerLawPower             = as.numeric(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-OverallMean               = as.numeric(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-CVComparator              = as.numeric(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-CVBlocks                  = as.numeric(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-NumberOfInteractions      = as.numeric(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-NumberOfModifiers         = as.numeric(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-SignificanceLevel         = as.numeric(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-NumberOfRatios            = as.numeric(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-NumberOfReplications      = as.numeric(unlist(strsplit(settings[[2]][tel], " ")))    ; tel = tel + 1
-ExperimentalDesignType    = as.character( as.vector(settings[[2]][tel]))             ; tel = tel + 1
-PowerCalculationMethod    = as.character( as.vector(settings[[2]][tel]))             ; tel = tel + 1
-RandomNumberSeed          = as.numeric(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-NumberOfSimulatedDataSets = as.numeric(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-IsLogNormal               = as.logical(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-IsSquareRoot              = as.logical(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-IsOverdispersedPoisson    = as.logical(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-IsNegativeBinomial        = as.logical(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
+set = read.csv(settingsfile, header=FALSE, as.is=TRUE, strip.white=TRUE)
+ComparisonId              = as.numeric(   as.vector(set[[2]][set[1]=="ComparisonId"]))
+NumberOfComparisons       = as.numeric(   as.vector(set[[2]][set[1]=="NumberOfComparisons"]))
+Endpoint                  = as.character( as.vector(set[[2]][set[1]=="Endpoint"]))
+LocLower                  = as.numeric(   as.vector(set[[2]][set[1]=="LocLower"]))
+LocUpper                  = as.numeric(   as.vector(set[[2]][set[1]=="LocUpper"]))
+Distribution              = as.character( as.vector(set[[2]][set[1]=="Distribution"]))
+PowerLawPower             = as.numeric(   as.vector(set[[2]][set[1]=="PowerLawPower"]))
+OverallMean               = as.numeric(   as.vector(set[[2]][set[1]=="OverallMean"]))
+CVComparator              = as.numeric(   as.vector(set[[2]][set[1]=="CVComparator"]))
+CVBlocks                  = as.numeric(   as.vector(set[[2]][set[1]=="CVBlocks"]))
+NumberOfInteractions      = as.numeric(   as.vector(set[[2]][set[1]=="NumberOfInteractions"]))
+NumberOfModifiers         = as.numeric(   as.vector(set[[2]][set[1]=="NumberOfModifiers"]))
+SignificanceLevel         = as.numeric(   as.vector(set[[2]][set[1]=="SignificanceLevel"]))
+NumberOfRatios            = as.numeric(   as.vector(set[[2]][set[1]=="NumberOfRatios"]))
+ExperimentalDesignType    = as.character( as.vector(set[[2]][set[1]=="ExperimentalDesignType"]))
+PowerCalculationMethod    = as.character( as.vector(set[[2]][set[1]=="PowerCalculationMethod"]))
+RandomNumberSeed          = as.numeric(   as.vector(set[[2]][set[1]=="RandomNumberSeed"]))
+NumberOfSimulatedDataSets = as.numeric(   as.vector(set[[2]][set[1]=="NumberOfSimulatedDataSets"]))
+IsLogNormal               = as.logical(   as.vector(set[[2]][set[1]=="IsLogNormal"]))
+IsSquareRoot              = as.logical(   as.vector(set[[2]][set[1]=="IsSquareRoot"]))
+IsOverdispersedPoisson    = as.logical(   as.vector(set[[2]][set[1]=="IsOverdispersedPoisson"]))
+IsNegativeBinomial        = as.logical(   as.vector(set[[2]][set[1]=="IsNegativeBinomial"]))
+NumberOfReplications      = as.numeric(unlist(strsplit(set[[2]][set[1]=="NumberOfReplications"], " ")))
 
 # Additional settings
 nGCI = 10000          # Number of draws for Generalized Confidence Interval
@@ -55,7 +63,7 @@ analysis = c("LogNormal", "SquareRoot", "OverdispersedPoisson", "NegativeBinomia
 dispersion = ropoissonDispersion(OverallMean, CVComparator, PowerLawPower, Distribution)
 dispersion 
 
-# Define effects; always include 0 (or 1 on the original scale) 
+# Define effects; always include effect=0 (or 1 on the original scale) 
 logLocLower = log(LocLower)
 logLocUpper = log(LocUpper)
 effect = c(0)
