@@ -19,6 +19,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             var modifierLevels = CreateModifierFactorLevels(comparison);
             var inputPowerAnalysis = new InputPowerAnalysis() {
                 ComparisonId = idComparison,
+                NumberOfComparisons = 10,
                 Factors = comparison.Endpoint.InteractionFactors.Concat(comparison.Endpoint.NonInteractionFactors).Select(f => f.Name).ToList(),
                 DummyComparisonLevels = comparisonLevels.Select(m => m.Label).ToList(),
                 DummyModifierLevels = modifierLevels.Select(m => m.Label).ToList(),
@@ -27,6 +28,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                 LocUpper = comparison.Endpoint.LocUpper,
                 DistributionType = comparison.Endpoint.DistributionType,
                 PowerLawPower = comparison.Endpoint.PowerLawPower,
+                OverallMean = comparison.Endpoint.MuComparator,
                 SelectedAnalysisMethodTypes = powerCalculationSettings.SelectedAnalysisMethodTypes,
                 CvComparator = comparison.Endpoint.CvComparator,
                 CvForBlocks = comparison.Endpoint.CvForBlocks,

@@ -67,7 +67,8 @@ namespace AmigaPowerAnalysis.GUI {
             }
 
             var inputGenerator = new PowerAnalysisInputGenerator();
-            var powerAnalysisExecuter = new GenstatPowerAnalysisExecuter(filesPath);
+            //var powerAnalysisExecuter = new GenstatPowerAnalysisExecuter(filesPath);
+            var powerAnalysisExecuter = new RPowerAnalysisExecuter(filesPath);
 
             var numberOfComparisons = comparisons.Count();
             var progressStep = 100D / numberOfComparisons;

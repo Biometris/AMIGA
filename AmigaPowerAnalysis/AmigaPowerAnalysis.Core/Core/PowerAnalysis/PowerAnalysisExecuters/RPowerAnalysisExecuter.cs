@@ -13,10 +13,14 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
         private string _tempPath;
 
         public RPowerAnalysisExecuter(string tempPath) {
-            _tempPath = tempPath;
+            _tempPath = tempPath.Substring(0, tempPath.Length);
         }
 
         public OutputPowerAnalysis RunAnalysis(InputPowerAnalysis inputPowerAnalysis) {
+            var applicationDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            var scriptsDirectory = string.Format("{0}\\Resources", applicationDirectory);
+            var scriptFilename = Path.Combine(scriptsDirectory, "ToolSimulation.rin");
+
             var comparisonInputFilename = Path.Combine(_tempPath, string.Format("{0}-Input.csv", inputPowerAnalysis.ComparisonId));
             var comparisonSettingsFilename = Path.Combine(_tempPath, string.Format("{0}-Settings.csv", inputPowerAnalysis.ComparisonId));
             var comparisonOutputFilename = Path.Combine(_tempPath, string.Format("{0}-Output.csv", inputPowerAnalysis.ComparisonId));
@@ -26,19 +30,34 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             createAnalysisInputFile(inputPowerAnalysis, comparisonInputFilename);
             createAnalysisSettingsFile(inputPowerAnalysis, comparisonSettingsFilename);
 
-            //var startInfo = new ProcessStartInfo();
-            //startInfo.CreateNoWindow = true;
-            //startInfo.UseShellExecute = false;
-            //startInfo.FileName = PathR;
-            //startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            //startInfo.Arguments = string.Format("in=\"{0}\" in2=\"{1}\" in3=\"{2}\" out=\"{3}\" out2=\"{4}\"", scriptFilename, lylesScriptFilename, comparisonInputFilename, comparisonLogFilename, comparisonOutputFilename);
-            //using (Process exeProcess = Process.Start(startInfo)) {
-            //    exeProcess.WaitForExit();
-            //}
+            var rCmd = @"C:\Program Files\R\R-3.1.1\bin\x64\RScript.exe";
+            var rOptions = "--no-save --no-restore --verbose";
+            var arguments = string.Format("\"{0}\" \"{1}\" \"{2}\" \"{3}\" \"{4}\" \"{5}\"", scriptFilename, scriptsDirectory, comparisonSettingsFilename, comparisonInputFilename, comparisonOutputFilename, comparisonLogFilename);
+            var args = string.Format("{0} {1}", rOptions, arguments);
 
+            int exitCode;
+            string result, error;
+            var startInfo = new ProcessStartInfo(rCmd, args);
+            startInfo.RedirectStandardInput = false;
+            startInfo.RedirectStandardOutput = true;
+            startInfo.RedirectStandardError = true;
+            startInfo.UseShellExecute = false;
+            startInfo.CreateNoWindow = true;
+            startInfo.WindowStyle = ProcessWindowStyle.Normal;
+            startInfo.WorkingDirectory = _tempPath;
+            using (var proc = new Process()) {
+                proc.StartInfo = startInfo;
+                proc.Start();
+                result = proc.StandardOutput.ReadToEnd();
+                error = proc.StandardError.ReadToEnd();
+                exitCode = proc.ExitCode;
+            }
+            if (exitCode != 0) {
+                throw new Exception(error);
+            }
             return new OutputPowerAnalysis() {
                 InputPowerAnalysis = inputPowerAnalysis,
-                //OutputRecords = readAnalysisOutputRecords(comparisonOutputFilename),
+                OutputRecords = readAnalysisOutputRecords(comparisonOutputFilename),
             };
         }
 

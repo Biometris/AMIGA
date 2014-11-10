@@ -5,5 +5,11 @@
     <Setting Name="TestPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">D:\Projects\Amiga\Source\AmigaPowerAnalysis\TestData\Test</Value>
     </Setting>
+    <Setting Name="RPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\Program Files\R\R-3.1.1\bin\RScript.exe</Value>
+    </Setting>
+    <Setting Name="GenstatPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>

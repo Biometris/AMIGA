@@ -20,6 +20,12 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
         public int ComparisonId { get; set; }
 
         /// <summary>
+        /// The total number of comparisons in the analysis.
+        /// </summary>
+        [DataMember]
+        public int NumberOfComparisons { get; set; }
+
+        /// <summary>
         /// The endpoint of interest.
         /// </summary>
         [DataMember]
@@ -122,6 +128,12 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
         public double PowerLawPower { get; set; }
 
         /// <summary>
+        /// The overall mean of the distribution.
+        /// </summary>
+        [DataMember]
+        public double OverallMean { get; set; }
+
+        /// <summary>
         /// The CV of the comparator.
         /// </summary>
         [DataMember]
@@ -192,11 +204,13 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
 
             var stringBuilder = new StringBuilder();
             stringBuilder.AppendLine(format("ComparisonId", ComparisonId));
+            stringBuilder.AppendLine(format("NumberOfComparisons", NumberOfComparisons));
             stringBuilder.AppendLine(format("Endpoint", Endpoint));
             stringBuilder.AppendLine(format("LocLower", LocLower));
             stringBuilder.AppendLine(format("LocUpper", LocUpper));
             stringBuilder.AppendLine(format("Distribution", DistributionType));
             stringBuilder.AppendLine(format("PowerLawPower", PowerLawPower));
+            stringBuilder.AppendLine(format("OverallMean", OverallMean));
             stringBuilder.AppendLine(format("CVComparator", CvComparator));
             stringBuilder.AppendLine(format("CVBlocks", CvForBlocks));
             stringBuilder.AppendLine(format("NumberOfInteractions", NumberOfInteractions));

@@ -69,6 +69,9 @@ namespace AmigaPowerAnalysis.Tests.Core {
             var project = createDummyProject();
             project.VarietyFactor.AddFactorLevel(new VarietyFactorLevel("Add"));
             project.UpdateEndpointFactorLevels();
+            project.PowerCalculationSettings.NumberOfReplications = new List<int> { 2, 4, 8};
+            project.PowerCalculationSettings.NumberOfSimulatedDataSets = 10;
+            project.PowerCalculationSettings.NumberOfRatios = 1;
 
             var comparison = project.GetComparisons().First();
             var inputGenerator = new PowerAnalysisInputGenerator();

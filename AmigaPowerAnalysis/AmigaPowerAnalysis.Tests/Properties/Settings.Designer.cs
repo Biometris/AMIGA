@@ -34,5 +34,29 @@ namespace AmigaPowerAnalysis.Tests.Properties {
                 this["TestPath"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Program Files\\R\\R-3.1.1\\bin\\RScript.exe")]
+        public string RPath {
+            get {
+                return ((string)(this["RPath"]));
+            }
+            set {
+                this["RPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string GenstatPath {
+            get {
+                return ((string)(this["GenstatPath"]));
+            }
+            set {
+                this["GenstatPath"] = value;
+            }
+        }
     }
 }
