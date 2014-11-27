@@ -30,7 +30,8 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             createAnalysisInputFile(inputPowerAnalysis, comparisonInputFilename);
             createAnalysisSettingsFile(inputPowerAnalysis, comparisonSettingsFilename);
 
-            var rCmd = @"C:\Program Files\R\R-3.1.1\bin\x64\RScript.exe";
+            //var rCmd = @"C:\Program Files\R\R-3.1.1\bin\x64\RScript.exe";
+            var rCmd = PathR;
             var rOptions = "--no-save --no-restore --verbose";
             var arguments = string.Format("\"{0}\" \"{1}\" \"{2}\" \"{3}\" \"{4}\" \"{5}\"", scriptFilename, scriptsDirectory, comparisonSettingsFilename, comparisonInputFilename, comparisonOutputFilename, comparisonLogFilename);
             var args = string.Format("{0} {1}", rOptions, arguments);
