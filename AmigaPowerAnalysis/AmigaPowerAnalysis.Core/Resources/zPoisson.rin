@@ -84,11 +84,14 @@ ropoissonDispersion = function(mean, CV, power,
   if (CV <= 0) {
     stop("Coefficient of Variation must be positive.", call. = FALSE)
   }
-  if ((power < 1) | (power > 2)) {
-    stop("The power parameter must be interval [1,2].", call. = FALSE)
-  }
 
   type = match.arg(distribution)
+  if (type == "PowerLaw") {
+    if ((power < 1) | (power > 2)) {
+	  stop("The power parameter must be interval [1,2].", call. = FALSE)
+	}
+  }
+
   if (type == "Poisson") {
     dispersion = NaN
   } else if (type == "OverdispersedPoisson") {
