@@ -37,11 +37,12 @@ namespace AmigaPowerAnalysis.Tests.Core {
             factorG.AddFactorLevel(g2);
 
             var factorH = new Factor("H");
-            var h1 = new FactorLevel("H1");
-            var h2 = new FactorLevel("H2");
-            var h3 = new FactorLevel("H3");
+            var h1 = new FactorLevel("H1", 1);
+            var h2 = new FactorLevel("H2", 2);
+            var h3 = new FactorLevel("H3", 3);
             factorH.AddFactorLevel(h1);
             factorH.AddFactorLevel(h2);
+            factorH.AddFactorLevel(h3);
 
             project.AddFactor(factorF);
             project.AddFactor(factorG);

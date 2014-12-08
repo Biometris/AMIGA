@@ -136,7 +136,9 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                 line.RemoveAt(line.Count - 1);
                 line.AddRange(record.ModifierLevels);
                 line.Add(record.Mean.ToString());
-                stringBuilder.AppendLine(string.Join(separator, line));
+                for (int i = 0; i < record.Frequency; ++i) {
+                    stringBuilder.AppendLine(string.Join(separator, line));
+                }
             }
             return stringBuilder.ToString();
         }
@@ -166,7 +168,9 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                 line.AddRange(inputPowerAnalysis.DummyModifierLevels.Select(l => l == record.ModifierDummyFactorLevel ? "1" : "0"));
                 line.RemoveAt(line.Count - 1);
                 line.Add(record.Mean.ToString());
-                stringBuilder.AppendLine(string.Join(separator, line));
+                for (int i = 0; i < record.Frequency; ++i) {
+                    stringBuilder.AppendLine(string.Join(separator, line));
+                }
             }
             return stringBuilder.ToString();
         }
