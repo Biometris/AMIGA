@@ -23,9 +23,9 @@ namespace AmigaPowerAnalysis.Tests.Core {
             var factorF = new Factor("F") {
                 IsInteractionWithVariety = true
             };
-            var f1 = new FactorLevel("F1");
-            var f2 = new FactorLevel("F2");
-            var f3 = new FactorLevel("F3");
+            var f1 = new FactorLevel("F 1");
+            var f2 = new FactorLevel("F 2");
+            var f3 = new FactorLevel("F 3");
             factorF.AddFactorLevel(f1);
             factorF.AddFactorLevel(f2);
             factorF.AddFactorLevel(f3);
@@ -37,9 +37,9 @@ namespace AmigaPowerAnalysis.Tests.Core {
             factorG.AddFactorLevel(g2);
 
             var factorH = new Factor("H");
-            var h1 = new FactorLevel("H1", 1);
-            var h2 = new FactorLevel("H2", 2);
-            var h3 = new FactorLevel("H3", 3);
+            var h1 = new FactorLevel("H 1", 1);
+            var h2 = new FactorLevel("H 2", 2);
+            var h3 = new FactorLevel("H 3", 3);
             factorH.AddFactorLevel(h1);
             factorH.AddFactorLevel(h2);
             factorH.AddFactorLevel(h3);
