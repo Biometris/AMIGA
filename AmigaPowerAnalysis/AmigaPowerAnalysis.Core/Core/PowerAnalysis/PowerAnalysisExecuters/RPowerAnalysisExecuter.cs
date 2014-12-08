@@ -121,7 +121,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                 headers.Add(escape(factor));
             }
             for (int i = 0; i < inputPowerAnalysis.NumberOfNonInteractions; i++) {
-                headers.Add(string.Format("Mod {0}", i));
+                headers.Add(string.Format("Mod{0}", i));
             }
             headers.Add("Mean");
             stringBuilder.AppendLine(string.Join(separator, headers));
