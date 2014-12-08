@@ -17,6 +17,16 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
         /// <summary>
         /// The levels of the factors.
         /// </summary>
+        public List<string> ComparisonLevels { get; set; }
+
+        /// <summary>
+        /// The levels of the factors.
+        /// </summary>
+        public List<string> ModifierLevels { get; set; }
+
+        /// <summary>
+        /// The levels of the factors.
+        /// </summary>
         public List<string> FactorLevels { get; set; }
 
         /// <summary>

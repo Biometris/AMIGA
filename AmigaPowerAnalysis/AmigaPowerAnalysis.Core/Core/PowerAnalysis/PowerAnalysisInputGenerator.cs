@@ -15,8 +15,8 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
         /// <param name="idComparison"></param>
         /// <returns></returns>
         public InputPowerAnalysis CreateInputPowerAnalysis(Comparison comparison, DesignSettings designSettings, PowerCalculationSettings powerCalculationSettings, int idComparison) {
-            var comparisonLevels = CreateComparisonFactorLevels(comparison);
-            var modifierLevels = CreateModifierFactorLevels(comparison);
+            var comparisonLevels = CreateComparisonDummyFactorLevels(comparison);
+            var modifierLevels = CreateModifierDummyFactorLevels(comparison);
             var inputPowerAnalysis = new InputPowerAnalysis() {
                 ComparisonId = idComparison,
                 NumberOfComparisons = 10,
@@ -33,6 +33,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                 CvComparator = comparison.Endpoint.CvComparator,
                 CvForBlocks = comparison.Endpoint.CvForBlocks,
                 NumberOfInteractions = comparison.Endpoint.InteractionFactors.Count(),
+                NumberOfNonInteractions = comparison.Endpoint.NonInteractionFactors.Count(),
                 NumberOfModifiers = (comparison.Endpoint.UseModifier ? comparison.Endpoint.NonInteractionFactors.Count() : 0),
                 SignificanceLevel = powerCalculationSettings.SignificanceLevel,
                 NumberOfRatios = powerCalculationSettings.NumberOfRatios,
@@ -66,6 +67,8 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                     ComparisonDummyFactorLevel = r.ComparisonDummyFactorLevel,
                     ModifierDummyFactorLevel = r.ModifierDummyFactorLevel,
                     Comparison = r.ComparisonLevel.ComparisonType,
+                    ComparisonLevel = r.ComparisonLevel,
+                    ModifierLevel = r.ModifierLevel,
                     FactorLevels = r.ComparisonLevel.Levels.Select(l => l).Concat(r.ModifierLevel.Levels.Select(l => l)),
                     Modifier = useModifier ? r.ModifierLevel.ModifierFactor : 1,
                     Mean = r.ComparisonLevel.Mean,
@@ -76,6 +79,8 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                     ComparisonDummyFactorLevel = r.ComparisonDummyFactorLevel.Label,
                     ModifierDummyFactorLevel = r.ModifierDummyFactorLevel.Label,
                     Comparison = r.Comparison,
+                    ComparisonLevels = r.ComparisonLevel.Levels.Select(l => l.Label).ToList(),
+                    ModifierLevels = r.ModifierLevel.Levels.Select(l => l.Label).ToList(),
                     FactorLevels = r.FactorLevels.Select(l => l.Label).ToList(),
                     Frequency = r.FactorLevels.Select(fl => fl.Frequency).Aggregate((n1, n2) => n1 * n2),
                     Mean = r.Modifier * r.Mean,
@@ -84,7 +89,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             return records;
         }
 
-        public List<ComparisonDummyFactorLevel> CreateComparisonFactorLevels(Comparison comparison) {
+        public List<ComparisonDummyFactorLevel> CreateComparisonDummyFactorLevels(Comparison comparison) {
             var comparisonLevelGMO = new ComparisonDummyFactorLevel() {
                     Label = "GMO",
                     ComparisonType = ComparisonType.IncludeGMO,
@@ -113,7 +118,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             return comparisonLevels;
         }
 
-        public List<ModifierDummyFactorLevel> CreateModifierFactorLevels(Comparison comparison) {
+        public List<ModifierDummyFactorLevel> CreateModifierDummyFactorLevels(Comparison comparison) {
             var levels = new List<ModifierDummyFactorLevel>();
             if (comparison.Endpoint.Modifiers.Count == 0) {
                 levels.Add(new ModifierDummyFactorLevel() {

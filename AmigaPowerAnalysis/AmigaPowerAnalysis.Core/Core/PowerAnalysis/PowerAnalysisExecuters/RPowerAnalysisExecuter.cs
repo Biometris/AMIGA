@@ -74,7 +74,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
 
         private static void createAnalysisInputFile(InputPowerAnalysis inputPowerAnalysis, string filename) {
             using (var file = new System.IO.StreamWriter(filename)) {
-                file.WriteLine(createAnalysisMatrix(inputPowerAnalysis));
+                file.WriteLine(createPartialAnalysisDesignMatrix(inputPowerAnalysis));
                 file.Close();
             }
         }
@@ -114,7 +114,34 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             return stringBuilder.ToString();
         }
 
-        private static string createAnalysisMatrix(InputPowerAnalysis inputPowerAnalysis) {
+        private static string createPartialAnalysisDesignMatrix(InputPowerAnalysis inputPowerAnalysis) {
+            var stringBuilder = new StringBuilder();
+            var separator = ",";
+            var headers = new List<string>();
+            headers.Add("Constant");
+            foreach (var factor in inputPowerAnalysis.DummyComparisonLevels.Take(inputPowerAnalysis.DummyComparisonLevels.Count - 1)) {
+                headers.Add(string.Format("'{0}'", factor));
+            }
+            for (int i = 0; i < inputPowerAnalysis.NumberOfNonInteractions; i++) {
+                headers.Add(string.Format("'Mod {0}'", i));
+            }
+            headers.Add("Mean");
+            stringBuilder.AppendLine(string.Join(separator, headers));
+            foreach (var record in inputPowerAnalysis.InputRecords) {
+                var line = new List<string>();
+                //line.Add(record.ComparisonDummyFactorLevel);
+                //line.Add(record.ModifierDummyFactorLevel);
+                line.Add("1");
+                line.AddRange(inputPowerAnalysis.DummyComparisonLevels.Select(l => l == record.ComparisonDummyFactorLevel ? "1" : "0"));
+                line.RemoveAt(line.Count - 1);
+                line.AddRange(record.ModifierLevels);
+                line.Add(record.Mean.ToString());
+                stringBuilder.AppendLine(string.Join(separator, line));
+            }
+            return stringBuilder.ToString();
+        }
+
+        private static string createAnalysisDesignMatrix(InputPowerAnalysis inputPowerAnalysis) {
             var stringBuilder = new StringBuilder();
             var separator = ",";
             var headers = new List<string>();

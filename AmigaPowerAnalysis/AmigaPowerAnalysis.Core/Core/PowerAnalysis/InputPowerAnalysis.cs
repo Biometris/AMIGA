@@ -56,6 +56,12 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
         public int NumberOfInteractions { get; set; }
 
         /// <summary>
+        /// The number of factors that do not have interaction with variety.
+        /// </summary>
+        [DataMember]
+        public int NumberOfNonInteractions { get; set; }
+
+        /// <summary>
         /// The number of factors that are considered to be modifiers.
         /// </summary>
         [DataMember]

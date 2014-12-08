@@ -36,8 +36,16 @@ namespace AmigaPowerAnalysis.Tests.Core {
             factorG.AddFactorLevel(g1);
             factorG.AddFactorLevel(g2);
 
+            var factorH = new Factor("H");
+            var h1 = new FactorLevel("H1");
+            var h2 = new FactorLevel("H2");
+            var h3 = new FactorLevel("H3");
+            factorH.AddFactorLevel(h1);
+            factorH.AddFactorLevel(h2);
+
             project.AddFactor(factorF);
             project.AddFactor(factorG);
+            project.AddFactor(factorH);
 
             project.SetUseInteractions(true);
             project.DefaultInteractionFactorLevelCombinations.Single(flc => flc.VarietyLevel.VarietyLevelType == VarietyLevelType.GMO && flc.Levels.Contains(f1)).IsComparisonLevel = true;
@@ -67,8 +75,10 @@ namespace AmigaPowerAnalysis.Tests.Core {
         [TestMethod]
         public void RPowerAnalysisExecuter_TestRunAnalysis2() {
             var project = createDummyProject();
+
             project.VarietyFactor.AddFactorLevel(new VarietyFactorLevel("Add"));
             project.UpdateEndpointFactorLevels();
+
             project.PowerCalculationSettings.NumberOfReplications = new List<int> { 2, 4, 8};
             project.PowerCalculationSettings.NumberOfSimulatedDataSets = 10;
             project.PowerCalculationSettings.NumberOfRatios = 1;
