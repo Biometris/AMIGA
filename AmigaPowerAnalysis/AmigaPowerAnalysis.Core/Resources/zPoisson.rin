@@ -88,8 +88,8 @@ ropoissonDispersion = function(mean, CV, power,
   type = match.arg(distribution)
   if (type == "PowerLaw") {
     if ((power < 1) | (power > 2)) {
-	  stop("The power parameter must be interval [1,2].", call. = FALSE)
-	}
+	    stop("The power parameter must be interval [1,2].", call. = FALSE)
+  	}
   }
 
   if (type == "Poisson") {
