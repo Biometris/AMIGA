@@ -391,9 +391,10 @@ print(resultEquiLR)
 print(resultEquiWD)
 
 # Combine results into a single dataframe
-df=cbind(repEffect, repEffect, repBlock, resultDiff, resultEquiLR, resultEquiWD)
+levEffect = 1 + 0*repEffect
+df=cbind(repEffect, repEffect, levEffect, repBlock, resultDiff, resultEquiLR, resultEquiWD)
 df[,2] = log(df[,2])
-dfnames = c("Ratio",  "LogRatio",	"NumberReplicates", 
+dfnames = c("Ratio",  "LogRatio", "LevelOfConcern", "NumberReplicates", 
     paste("PowerDifference", analysis, sep=""), 
     paste("PowerEquivalenceLR", analysis, sep=""), 
     paste("PowerEquivalenceWD", analysis, sep=""))
