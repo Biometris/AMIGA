@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using AmigaPowerAnalysis.Core;
 using AmigaPowerAnalysis.Core.Distributions;
+using AmigaPowerAnalysis.Helpers.ClassExtensionMethods;
 
 // TODO Obligatory to first enter a name for a new endpoint
 // TODO Binomial totals greyed out for non fractions
@@ -126,6 +127,9 @@ namespace AmigaPowerAnalysis.GUI {
                     dataGridViewEndpoints.Rows[i].Cells["PowerLawPower"].ReadOnly = true;
                     dataGridViewEndpoints.Rows[i].Cells["PowerLawPower"].Style.BackColor = Color.LightGray;
                 }
+                var measurementType = _project.Endpoints[i].Measurement;
+                var datagridCellComboBox = (DataGridViewComboBoxCell)dataGridViewEndpoints.Rows[i].Cells["DistributionType"];
+                datagridCellComboBox.DataSource = DistributionFactory.AvailableDistributionTypes(measurementType).GetFlags().ToArray();
             }
         }
 

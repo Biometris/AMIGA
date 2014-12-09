@@ -33,7 +33,6 @@ namespace AmigaPowerAnalysis.Helpers.ClassExtensionMethods {
             // (there are ways around this, but they involve some
             // frustrating code).
             int flagsValue = (int)(object)flags;
-
             foreach (int flag in Enum.GetValues(typeof(TEnum))) {
                 if ((flagsValue & flag) == flag) {
                     // Once again: an unfortunate boxing/unboxing

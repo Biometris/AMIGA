@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Runtime.Serialization;
 using AmigaPowerAnalysis.Core.Distributions;
+using AmigaPowerAnalysis.Helpers.ClassExtensionMethods;
 
 namespace AmigaPowerAnalysis.Core {
 
@@ -157,8 +158,18 @@ namespace AmigaPowerAnalysis.Core {
         /// The distribution type of this endpoint.
         /// </summary>
         public DistributionType DistributionType {
-            get { return _distributionType; }
-            set { _distributionType = value; }
+            get {
+                var availableDistributionTypes = DistributionFactory.AvailableDistributionTypes(_measurement);
+                if (_distributionType == 0 || (availableDistributionTypes & _distributionType) != _distributionType) {
+                    _distributionType = availableDistributionTypes.GetFlags().First();
+                }
+                return _distributionType;
+            }
+            set {
+                if (DistributionFactory.AvailableDistributionTypes(_measurement) == value) {
+                    _distributionType = value;
+                }
+            }
         }
 
         /// <summary>
@@ -182,7 +193,13 @@ namespace AmigaPowerAnalysis.Core {
         /// </summary>
         public MeasurementType Measurement {
             get { return _measurement; }
-            set { _measurement = value; }
+            set {
+                _measurement = value;
+                var availableDistributionTypes = DistributionFactory.AvailableDistributionTypes(_measurement);
+                if (_distributionType == 0 || (availableDistributionTypes & _distributionType) != _distributionType) {
+                    _distributionType = availableDistributionTypes.GetFlags().First();
+                }
+            }
         }
 
         /// <summary>
