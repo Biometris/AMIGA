@@ -138,7 +138,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
 
         private double modifyMean(double mean, double modifier, MeasurementType measurementType) {
             if (measurementType == MeasurementType.Fraction) {
-                return UtilityFunctions.Logit(UtilityFunctions.InvLogit(mean) + modifier);
+                return UtilityFunctions.InvLogit(UtilityFunctions.Logit(mean) + modifier);
             }
             return mean * modifier;
         }
