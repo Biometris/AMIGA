@@ -269,6 +269,7 @@
     <Compile Include="Helpers\Log\ILogger.cs" />
     <Compile Include="Helpers\Log\SimpleLogger.cs" />
     <Compile Include="Helpers\ClassExtensionMethods\StringExtensionMethods.cs" />
+    <Compile Include="Helpers\Statistics\UtilityFunctions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Core\Project.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -406,4 +406,3 @@ df = df[ order(df[,2], df[,3]), ]
 
 write.table(df, file=outputfile, quote=FALSE, sep=",", row.names=FALSE, col.names=TRUE, na="*")
 q()
-

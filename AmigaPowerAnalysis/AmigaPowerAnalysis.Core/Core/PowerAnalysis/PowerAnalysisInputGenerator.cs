@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using AmigaPowerAnalysis.Helpers.Statistics;
 
 namespace AmigaPowerAnalysis.Core.PowerAnalysis {
     public sealed class PowerAnalysisInputGenerator {
@@ -44,12 +45,12 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                 NumberOfSimulatedDataSets = powerCalculationSettings.NumberOfSimulatedDataSets,
             };
 
-            inputPowerAnalysis.InputRecords = getComparisonInputPowerAnalysisRecords(comparisonLevels, modifierLevels, comparison.Endpoint.UseModifier);
+            inputPowerAnalysis.InputRecords = getComparisonInputPowerAnalysisRecords(comparisonLevels, modifierLevels, comparison.Endpoint.UseModifier, comparison.Endpoint.Measurement);
 
             return inputPowerAnalysis;
         }
 
-        private List<InputPowerAnalysisRecord> getComparisonInputPowerAnalysisRecords(List<ComparisonDummyFactorLevel> comparisonLevels, List<ModifierDummyFactorLevel> modifierLevels, bool useModifier) {
+        private List<InputPowerAnalysisRecord> getComparisonInputPowerAnalysisRecords(List<ComparisonDummyFactorLevel> comparisonLevels, List<ModifierDummyFactorLevel> modifierLevels, bool useModifier, MeasurementType measurementType) {
             var records = comparisonLevels
                 .SelectMany(r => r.FactorLevelCombinations, (r, cl) => new {
                     ComparisonDummyFactorLevel = r,
@@ -83,7 +84,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                     ModifierLevels = r.ModifierLevel.Levels.Select(l => l.Label).ToList(),
                     FactorLevels = r.FactorLevels.Select(l => l.Label).ToList(),
                     Frequency = r.FactorLevels.Select(fl => fl.Frequency).Aggregate((n1, n2) => n1 * n2),
-                    Mean = r.Modifier * r.Mean,
+                    Mean = modifyMean(r.Mean, r.Modifier, measurementType),
                 })
                 .ToList();
             return records;
@@ -133,6 +134,13 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                     }));
             }
             return levels;
+        }
+
+        private double modifyMean(double mean, double modifier, MeasurementType measurementType) {
+            if (measurementType == MeasurementType.Fraction) {
+                return UtilityFunctions.Logit(UtilityFunctions.InvLogit(mean) + modifier);
+            }
+            return mean * modifier;
         }
     }
 }
