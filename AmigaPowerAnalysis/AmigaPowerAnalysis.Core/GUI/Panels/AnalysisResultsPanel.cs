@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows.Forms;
 using AmigaPowerAnalysis.Core;
 using AmigaPowerAnalysis.Core.Charting;
+using AmigaPowerAnalysis.Core.DataAnalysis.AnalysisModels;
 using AmigaPowerAnalysis.Core.PowerAnalysis;
 using AmigaPowerAnalysis.Core.Reporting;
 using AmigaPowerAnalysis.Helpers.ClassExtensionMethods;

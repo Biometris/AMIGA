@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
+using AmigaPowerAnalysis.Core.DataAnalysis.AnalysisModels;
 using AmigaPowerAnalysis.Helpers.Statistics.Distributions;
+using AmigaPowerAnalysis.Helpers.ClassExtensionMethods;
 
 namespace AmigaPowerAnalysis.Core.PowerAnalysis {
 
@@ -36,31 +38,6 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
         /// </summary>
         [DataMember]
         public MeasurementType MeasurementType { get; set; }
-
-        /// <summary>
-        /// Computes the concern scaled difference for the given ratio.
-        /// </summary>
-        /// <param name="ratio"></param>
-        /// <returns></returns>
-        public double GetConcernScaledDifference(double ratio) {
-            switch (MeasurementType) {
-                case MeasurementType.Count:
-                case MeasurementType.Fraction:
-                case MeasurementType.Nonnegative:
-                case MeasurementType.Continuous:
-                default: {
-                        double csd = 0;
-                        if (ratio < 1) {
-                            csd = Math.Log(ratio) / Math.Log(LocLower);
-                        } else if (ratio >= 1) {
-                            csd = Math.Log(ratio) / Math.Log(LocUpper);
-                        } else {
-                            csd = 0;
-                        }
-                        return Math.Round(csd, 2);
-                    }
-            }
-        }
 
         /// <summary>
         /// The factors.
@@ -189,46 +166,35 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
         public AnalysisMethodType SelectedAnalysisMethodTypes { get; set; }
 
         /// <summary>
+        /// Computes the concern scaled difference for the given ratio.
+        /// </summary>
+        /// <param name="ratio"></param>
+        /// <returns></returns>
+        public double GetConcernScaledDifference(double ratio) {
+            switch (MeasurementType) {
+                case MeasurementType.Count:
+                case MeasurementType.Fraction:
+                case MeasurementType.Nonnegative:
+                case MeasurementType.Continuous:
+                default: {
+                        double csd = 0;
+                        if (ratio < 1) {
+                            csd = Math.Log(ratio) / Math.Log(LocLower);
+                        } else if (ratio >= 1) {
+                            csd = Math.Log(ratio) / Math.Log(LocUpper);
+                        } else {
+                            csd = 0;
+                        }
+                        return Math.Round(csd, 2);
+                    }
+            }
+        }
+
+        /// <summary>
         /// A list of input records belonging for a power analysis.
         /// </summary>
         [DataMember]
         public List<InputPowerAnalysisRecord> InputRecords { get; set; }
-
-        /// <summary>
-        /// Use log normal analysis method.
-        /// </summary>
-        public bool IsLogNormal {
-            get {
-                return SelectedAnalysisMethodTypes.HasFlag(AnalysisMethodType.LogNormal);
-            }
-        }
-
-        /// <summary>
-        /// Use square root analysis method.
-        /// </summary>
-        public bool IsSquareRoot {
-            get {
-                return SelectedAnalysisMethodTypes.HasFlag(AnalysisMethodType.SquareRoot);
-            }
-        }
-
-        /// <summary>
-        /// Use overdisperser Poisson analysis method.
-        /// </summary>
-        public bool IsOverdispersedPoisson {
-            get {
-                return SelectedAnalysisMethodTypes.HasFlag(AnalysisMethodType.OverdispersedPoisson);
-            }
-        }
-
-        /// <summary>
-        /// Use negative binomial analysis method.
-        /// </summary>
-        public bool IsNegativeBinomial {
-            get {
-                return SelectedAnalysisMethodTypes.HasFlag(AnalysisMethodType.NegativeBinomial);
-            }
-        }
 
         public string PrintSettings(Func<string, object, string> formatDelegate = null) {
 
@@ -240,6 +206,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             }
 
             var stringBuilder = new StringBuilder();
+
             stringBuilder.AppendLine(format("ComparisonId", ComparisonId));
             stringBuilder.AppendLine(format("NumberOfComparisons", NumberOfComparisons));
             stringBuilder.AppendLine(format("Endpoint", Endpoint));
@@ -259,10 +226,11 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             stringBuilder.AppendLine(format("PowerCalculationMethod", PowerCalculationMethodType));
             stringBuilder.AppendLine(format("RandomNumberSeed", RandomNumberSeed));
             stringBuilder.AppendLine(format("NumberOfSimulatedDataSets", NumberOfSimulatedDataSets));
-            stringBuilder.AppendLine(format("IsLogNormal", IsLogNormal));
-            stringBuilder.AppendLine(format("IsSquareRoot", IsSquareRoot));
-            stringBuilder.AppendLine(format("IsOverdispersedPoisson", IsOverdispersedPoisson));
-            stringBuilder.AppendLine(format("IsNegativeBinomial", IsNegativeBinomial));
+
+            var analysisMethodTypes = Enum.GetValues(typeof(AnalysisMethodType)).Cast<AnalysisMethodType>();
+            foreach (var analysisMethodType in analysisMethodTypes) {
+                stringBuilder.AppendLine(format(analysisMethodType.ToString(), SelectedAnalysisMethodTypes.HasFlag(analysisMethodType)));
+            }
 
             return stringBuilder.ToString();
         }

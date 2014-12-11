@@ -5,7 +5,7 @@ namespace AmigaPowerAnalysis.Core {
     [DataContract]
     public sealed class EndpointFactorSettings {
 
-        #region DataMember
+        #region DataMembers
 
         [DataMember]
         private Factor _factor;

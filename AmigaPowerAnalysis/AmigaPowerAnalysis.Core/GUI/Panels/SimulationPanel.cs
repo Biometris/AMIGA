@@ -31,7 +31,7 @@ namespace AmigaPowerAnalysis.GUI {
             checkBoxMethodForAnalysesOP.Checked = _project.PowerCalculationSettings.IsOverdispersedPoisson;
             checkBoxMethodForAnalysesNB.Checked = _project.PowerCalculationSettings.IsNegativeBinomial;
             textBoxSignificanceLevel.Text = _project.PowerCalculationSettings.SignificanceLevel.ToString();
-            textBoxNumberOfRatios.Text = _project.PowerCalculationSettings.NumberOfRatios.ToString();
+            textBoxNumberOfEvaluationPoints.Text = _project.PowerCalculationSettings.NumberOfRatios.ToString();
             textBoxNumberOfReplications.Text = string.Join(", ", _project.PowerCalculationSettings.NumberOfReplications.Select(r => r.ToString()).ToList());
             comboBoxMethodForPowerCalculation.DataSource = Enum.GetValues(typeof(PowerCalculationMethod));
             comboBoxMethodForPowerCalculation.SelectedIndex = (int)_project.PowerCalculationSettings.PowerCalculationMethod;

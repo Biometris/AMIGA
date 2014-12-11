@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
+using AmigaPowerAnalysis.Core.DataAnalysis.AnalysisModels;
 
 namespace AmigaPowerAnalysis.Core {
 
@@ -15,18 +16,6 @@ namespace AmigaPowerAnalysis.Core {
         Difference,
         [Display(Name = "Equivalence test")]
         Equivalence,
-    }
-
-    [Flags]
-    public enum AnalysisMethodType : int {
-        [Display(Name="Log-Normal")]
-        LogNormal = 1,
-        [Display(Name="Square root")]
-        SquareRoot = 2,
-        [Display(Name="Overdispersed Poisson")]
-        OverdispersedPoisson = 4,
-        [Display(Name="Negative binomial")]
-        NegativeBinomial = 8,
     }
 
     public sealed class PowerCalculationSettings {
