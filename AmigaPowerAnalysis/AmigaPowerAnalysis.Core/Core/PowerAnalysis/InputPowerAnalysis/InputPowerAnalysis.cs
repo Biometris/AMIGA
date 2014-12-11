@@ -197,7 +197,6 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
         public List<InputPowerAnalysisRecord> InputRecords { get; set; }
 
         public string PrintSettings(Func<string, object, string> formatDelegate = null) {
-
             Func<string, object, string> format;
             if (formatDelegate == null) {
                 format = (parameter, setting) => { return string.Format("{0}\r\n {1} :", parameter, setting); };
@@ -220,7 +219,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             stringBuilder.AppendLine(format("NumberOfInteractions", NumberOfInteractions));
             stringBuilder.AppendLine(format("NumberOfModifiers", NumberOfModifiers));
             stringBuilder.AppendLine(format("SignificanceLevel", SignificanceLevel));
-            stringBuilder.AppendLine(format("NumberOfRatios", NumberOfRatios));
+            stringBuilder.AppendLine(format("NumberOfEvaluationPoints", NumberOfRatios));
             stringBuilder.AppendLine(format("NumberOfReplications", string.Join(" ", NumberOfReplications.Select(r => r.ToString()).ToList())));
             stringBuilder.AppendLine(format("ExperimentalDesignType", ExperimentalDesignType));
             stringBuilder.AppendLine(format("PowerCalculationMethod", PowerCalculationMethodType));
