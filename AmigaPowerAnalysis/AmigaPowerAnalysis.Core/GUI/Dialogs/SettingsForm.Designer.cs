@@ -24,43 +24,46 @@
         /// </summary>
         private void InitializeComponent() {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingsForm));
-            this.labelGenstatDirective = new System.Windows.Forms.Label();
-            this.textBoxGenstatPath = new System.Windows.Forms.TextBox();
-            this.buttonBrowseGenstatExecutable = new System.Windows.Forms.Button();
+            this.labelPathGenstat = new System.Windows.Forms.Label();
+            this.textBoxPathGenstat = new System.Windows.Forms.TextBox();
+            this.buttonBrowseExecutableGenstat = new System.Windows.Forms.Button();
             this.buttonOk = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
+            this.buttonBrowseExecutableR = new System.Windows.Forms.Button();
+            this.textBoxPathR = new System.Windows.Forms.TextBox();
+            this.labelPathR = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // labelGenstatDirective
+            // labelPathGenstat
             // 
-            this.labelGenstatDirective.AutoSize = true;
-            this.labelGenstatDirective.Location = new System.Drawing.Point(12, 36);
-            this.labelGenstatDirective.Name = "labelGenstatDirective";
-            this.labelGenstatDirective.Size = new System.Drawing.Size(129, 13);
-            this.labelGenstatDirective.TabIndex = 0;
-            this.labelGenstatDirective.Text = "Path GenStat executable:";
+            this.labelPathGenstat.AutoSize = true;
+            this.labelPathGenstat.Location = new System.Drawing.Point(12, 36);
+            this.labelPathGenstat.Name = "labelPathGenstat";
+            this.labelPathGenstat.Size = new System.Drawing.Size(129, 13);
+            this.labelPathGenstat.TabIndex = 0;
+            this.labelPathGenstat.Text = "Path GenStat executable:";
             // 
-            // textBoxGenstatPath
+            // textBoxPathGenstat
             // 
-            this.textBoxGenstatPath.Enabled = false;
-            this.textBoxGenstatPath.Location = new System.Drawing.Point(147, 33);
-            this.textBoxGenstatPath.Name = "textBoxGenstatPath";
-            this.textBoxGenstatPath.Size = new System.Drawing.Size(399, 20);
-            this.textBoxGenstatPath.TabIndex = 1;
+            this.textBoxPathGenstat.Enabled = false;
+            this.textBoxPathGenstat.Location = new System.Drawing.Point(147, 33);
+            this.textBoxPathGenstat.Name = "textBoxPathGenstat";
+            this.textBoxPathGenstat.Size = new System.Drawing.Size(399, 20);
+            this.textBoxPathGenstat.TabIndex = 1;
             // 
-            // buttonBrowseGenstatExecutable
+            // buttonBrowseExecutableGenstat
             // 
-            this.buttonBrowseGenstatExecutable.Location = new System.Drawing.Point(552, 29);
-            this.buttonBrowseGenstatExecutable.Name = "buttonBrowseGenstatExecutable";
-            this.buttonBrowseGenstatExecutable.Size = new System.Drawing.Size(75, 28);
-            this.buttonBrowseGenstatExecutable.TabIndex = 2;
-            this.buttonBrowseGenstatExecutable.Text = "...";
-            this.buttonBrowseGenstatExecutable.UseVisualStyleBackColor = true;
-            this.buttonBrowseGenstatExecutable.Click += new System.EventHandler(this.buttonBrowseGenstatExecutable_Click);
+            this.buttonBrowseExecutableGenstat.Location = new System.Drawing.Point(552, 29);
+            this.buttonBrowseExecutableGenstat.Name = "buttonBrowseExecutableGenstat";
+            this.buttonBrowseExecutableGenstat.Size = new System.Drawing.Size(75, 28);
+            this.buttonBrowseExecutableGenstat.TabIndex = 2;
+            this.buttonBrowseExecutableGenstat.Text = "...";
+            this.buttonBrowseExecutableGenstat.UseVisualStyleBackColor = true;
+            this.buttonBrowseExecutableGenstat.Click += new System.EventHandler(this.buttonBrowseGenstatExecutable_Click);
             // 
             // buttonOk
             // 
-            this.buttonOk.Location = new System.Drawing.Point(552, 73);
+            this.buttonOk.Location = new System.Drawing.Point(552, 97);
             this.buttonOk.Name = "buttonOk";
             this.buttonOk.Size = new System.Drawing.Size(75, 28);
             this.buttonOk.TabIndex = 3;
@@ -70,7 +73,7 @@
             // 
             // buttonCancel
             // 
-            this.buttonCancel.Location = new System.Drawing.Point(471, 73);
+            this.buttonCancel.Location = new System.Drawing.Point(471, 97);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 28);
             this.buttonCancel.TabIndex = 4;
@@ -78,17 +81,47 @@
             this.buttonCancel.UseVisualStyleBackColor = true;
             this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
             // 
+            // buttonBrowseExecutableR
+            // 
+            this.buttonBrowseExecutableR.Location = new System.Drawing.Point(552, 63);
+            this.buttonBrowseExecutableR.Name = "buttonBrowseExecutableR";
+            this.buttonBrowseExecutableR.Size = new System.Drawing.Size(75, 28);
+            this.buttonBrowseExecutableR.TabIndex = 7;
+            this.buttonBrowseExecutableR.Text = "...";
+            this.buttonBrowseExecutableR.UseVisualStyleBackColor = true;
+            this.buttonBrowseExecutableR.Click += new System.EventHandler(this.buttonBrowseExecutableR_Click);
+            // 
+            // textBoxPathR
+            // 
+            this.textBoxPathR.Enabled = false;
+            this.textBoxPathR.Location = new System.Drawing.Point(147, 67);
+            this.textBoxPathR.Name = "textBoxPathR";
+            this.textBoxPathR.Size = new System.Drawing.Size(399, 20);
+            this.textBoxPathR.TabIndex = 6;
+            // 
+            // labelPathR
+            // 
+            this.labelPathR.AutoSize = true;
+            this.labelPathR.Location = new System.Drawing.Point(12, 70);
+            this.labelPathR.Name = "labelPathR";
+            this.labelPathR.Size = new System.Drawing.Size(122, 13);
+            this.labelPathR.TabIndex = 5;
+            this.labelPathR.Text = "Path RScript executable";
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.ClientSize = new System.Drawing.Size(639, 108);
+            this.ClientSize = new System.Drawing.Size(639, 139);
+            this.Controls.Add(this.buttonBrowseExecutableR);
+            this.Controls.Add(this.textBoxPathR);
+            this.Controls.Add(this.labelPathR);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.buttonOk);
-            this.Controls.Add(this.buttonBrowseGenstatExecutable);
-            this.Controls.Add(this.textBoxGenstatPath);
-            this.Controls.Add(this.labelGenstatDirective);
+            this.Controls.Add(this.buttonBrowseExecutableGenstat);
+            this.Controls.Add(this.textBoxPathGenstat);
+            this.Controls.Add(this.labelPathGenstat);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "SettingsForm";
@@ -100,10 +133,13 @@
 
         #endregion
 
-        private System.Windows.Forms.Label labelGenstatDirective;
-        private System.Windows.Forms.TextBox textBoxGenstatPath;
-        private System.Windows.Forms.Button buttonBrowseGenstatExecutable;
+        private System.Windows.Forms.Label labelPathGenstat;
+        private System.Windows.Forms.TextBox textBoxPathGenstat;
+        private System.Windows.Forms.Button buttonBrowseExecutableGenstat;
         private System.Windows.Forms.Button buttonOk;
         private System.Windows.Forms.Button buttonCancel;
+        private System.Windows.Forms.Button buttonBrowseExecutableR;
+        private System.Windows.Forms.TextBox textBoxPathR;
+        private System.Windows.Forms.Label labelPathR;
     }
 }

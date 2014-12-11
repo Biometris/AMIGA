@@ -14,11 +14,14 @@ namespace AmigaPowerAnalysis.GUI {
     public partial class SettingsForm : Form {
 
         private string _genstatPath;
+        private string _pathR;
 
         public SettingsForm() {
             InitializeComponent();
             _genstatPath = Properties.Settings.Default.GenstatPath;
-            textBoxGenstatPath.Text = _genstatPath;
+            _pathR = Properties.Settings.Default.RPath;
+            textBoxPathGenstat.Text = _genstatPath;
+            textBoxPathR.Text = _pathR;
         }
 
         private void buttonBrowseGenstatExecutable_Click(object sender, EventArgs e) {
@@ -37,9 +40,33 @@ namespace AmigaPowerAnalysis.GUI {
                 var newGenstatPath = openFileDialog.FileName;
                 if (File.Exists(newGenstatPath)) {
                     _genstatPath = newGenstatPath;
-                    textBoxGenstatPath.Text = _genstatPath;
+                    textBoxPathGenstat.Text = _genstatPath;
                 } else {
                     showError("Invalid path", "The provided path is not valid.");
+                }
+            }
+        }
+
+        private void buttonBrowseExecutableR_Click(object sender, EventArgs e) {
+            var openFileDialog = new OpenFileDialog();
+            var currentPathR = Properties.Settings.Default.RPath;
+            if (string.IsNullOrEmpty(currentPathR)) {
+                var defaultPathR = @"C:\Program Files\R";
+                openFileDialog.InitialDirectory = Directory.Exists(defaultPathR) ? defaultPathR : Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            } else {
+                openFileDialog.InitialDirectory = Path.GetDirectoryName(currentPathR);
+            }
+            openFileDialog.Filter = "exe files (*.exe)| *.exe";
+            openFileDialog.RestoreDirectory = true;
+            if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                var newPathR = openFileDialog.FileName;
+                if (!newPathR.EndsWith("Rscript.exe", StringComparison.InvariantCultureIgnoreCase)) {
+                    showError("Invalid path", "Please specify the full path to the RScript executable.");
+                } else if (!File.Exists(newPathR)) {
+                    showError("Invalid path", "The provided path is not valid.");
+                } else {
+                    _pathR = newPathR;
+                    textBoxPathR.Text = _pathR;
                 }
             }
         }
@@ -56,6 +83,7 @@ namespace AmigaPowerAnalysis.GUI {
         private void buttonOk_Click(object sender, EventArgs e) {
             if (File.Exists(_genstatPath)) {
                 Properties.Settings.Default.GenstatPath = _genstatPath;
+                Properties.Settings.Default.RPath = _pathR;
                 Properties.Settings.Default.Save();
             }
             Close();
