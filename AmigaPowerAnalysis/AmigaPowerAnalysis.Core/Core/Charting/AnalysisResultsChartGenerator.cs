@@ -31,8 +31,8 @@ namespace AmigaPowerAnalysis.Core.Charting {
                 Title = "Power",
                 MajorGridlineStyle = LineStyle.Solid,
                 MinorGridlineStyle = LineStyle.Dot,
-                Minimum = 0,
-                Maximum = 1,
+                Minimum = -0.01,
+                Maximum = 1.1,
             };
             plotModel.Axes.Add(verticalAxis);
 
