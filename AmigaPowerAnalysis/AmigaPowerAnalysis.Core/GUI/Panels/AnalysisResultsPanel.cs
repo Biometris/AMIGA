@@ -100,7 +100,6 @@ namespace AmigaPowerAnalysis.GUI {
             dataGridViewComparisons.AutoGenerateColumns = false;
             dataGridViewComparisons.DataSource = comparisonsBindingSouce;
             dataGridViewComparisons.Columns[0].ReadOnly = true;
-            dataGridViewComparisons.Columns[1].ReadOnly = true;
         }
 
         private void updateAnalysisOutputPanel() {
@@ -165,7 +164,8 @@ namespace AmigaPowerAnalysis.GUI {
             var primaryComparisons = _comparisons.Where(c => c.OutputPowerAnalysis != null && c.IsPrimary).ToList();
             if (primaryComparisons.Count > 0) {
                 var tempPath = Path.GetTempPath();
-                var htmlReportForm = new HtmlReportForm(ComparisonSummaryReportGenerator.GenerateAnalysisReport(_comparisons, _currentProjectFilePath), Path.GetFileNameWithoutExtension(_currentProjectFilePath), _currentProjectFilePath);
+                var title = Path.GetFileNameWithoutExtension(_currentProjectFilePath) + "_Overall";
+                var htmlReportForm = new HtmlReportForm(ComparisonSummaryReportGenerator.GenerateAnalysisReport(_comparisons, _currentProjectFilePath), title, _currentProjectFilePath);
                 htmlReportForm.ShowDialog();
             }
         }

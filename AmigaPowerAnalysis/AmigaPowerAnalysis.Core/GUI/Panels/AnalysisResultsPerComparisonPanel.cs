@@ -117,7 +117,8 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void buttonShowSettings_Click(object sender, EventArgs e) {
-            var htmlReportForm = new HtmlReportForm(ComparisonSummaryReportGenerator.GenerateComparisonSettingsReport(_currentComparison, _currentProjectFilesPath), Path.GetFileNameWithoutExtension(_currentProjectFilesPath), _currentProjectFilesPath);
+            var title = Path.GetFileNameWithoutExtension(_currentProjectFilesPath) + "_" + _currentComparison.Endpoint.Name + "_Settings";
+            var htmlReportForm = new HtmlReportForm(ComparisonSummaryReportGenerator.GenerateComparisonSettingsReport(_currentComparison, _currentProjectFilesPath), title, _currentProjectFilesPath);
             htmlReportForm.ShowDialog();
         }
 
@@ -125,7 +126,8 @@ namespace AmigaPowerAnalysis.GUI {
             if (_currentComparison != null && _currentComparison.OutputPowerAnalysis != null) {
                 //var tempPath = Path.GetTempPath();
                 //tempPath = @"D:\Projects\Amiga\Source\TestData\ssss";
-                var htmlReportForm = new HtmlReportForm(ComparisonSummaryReportGenerator.GenerateComparisonReport(_currentComparison, _currentProjectFilesPath), Path.GetFileNameWithoutExtension(_currentProjectFilesPath), _currentProjectFilesPath);
+                var title = Path.GetFileNameWithoutExtension(_currentProjectFilesPath) + "_" + _currentComparison.Endpoint.Name;
+                var htmlReportForm = new HtmlReportForm(ComparisonSummaryReportGenerator.GenerateComparisonReport(_currentComparison, _currentProjectFilesPath), title, _currentProjectFilesPath);
                 htmlReportForm.ShowDialog();
             }
         }

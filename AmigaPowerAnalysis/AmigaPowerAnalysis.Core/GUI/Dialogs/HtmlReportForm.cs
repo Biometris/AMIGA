@@ -15,13 +15,13 @@ using AmigaPowerAnalysis.Helpers.ClassExtensionMethods;
 namespace AmigaPowerAnalysis.GUI {
     public partial class HtmlReportForm : Form {
 
-        private string _projectName;
+        private string _title;
         private string _projectPath;
         private string _tempDir;
 
-        public HtmlReportForm(string htmlContent, string projectName, string projectPath) {
+        public HtmlReportForm(string htmlContent, string title, string projectPath) {
             InitializeComponent();
-            _projectName = projectName;
+            _title = title.Replace(" ", "_");
             _projectPath = projectPath;
             _tempDir = Path.GetTempPath();
 
@@ -48,7 +48,7 @@ namespace AmigaPowerAnalysis.GUI {
             saveFileDialog.DefaultExt = ".pdf";
             saveFileDialog.Filter = "PDF|*.pdf";
             saveFileDialog.AddExtension = true;
-            saveFileDialog.FileName = _projectName.ReplaceInvalidChars("_");
+            saveFileDialog.FileName = _title.ReplaceInvalidChars("_");
             saveFileDialog.InitialDirectory = _projectPath;
             if (saveFileDialog.FileName.Length == 0) {
                 saveFileDialog.FileName = "unknown";
