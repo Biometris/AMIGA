@@ -160,13 +160,13 @@ namespace AmigaPowerAnalysis.Core {
         public DistributionType DistributionType {
             get {
                 var availableDistributionTypes = DistributionFactory.AvailableDistributionTypes(_measurement);
-                if (_distributionType == 0 || (availableDistributionTypes & _distributionType) != _distributionType) {
+                if (_distributionType == 0 || !availableDistributionTypes.Has(_distributionType)) {
                     _distributionType = (DistributionType)availableDistributionTypes.GetFlags().First();
                 }
                 return _distributionType;
             }
             set {
-                if (DistributionFactory.AvailableDistributionTypes(_measurement) == value) {
+                if (DistributionFactory.AvailableDistributionTypes(_measurement).Has(value)) {
                     _distributionType = value;
                 }
             }

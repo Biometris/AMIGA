@@ -129,7 +129,7 @@ namespace AmigaPowerAnalysis.GUI {
                 }
                 var measurementType = _project.Endpoints[i].Measurement;
                 var datagridCellComboBox = (DataGridViewComboBoxCell)dataGridViewEndpoints.Rows[i].Cells["DistributionType"];
-                datagridCellComboBox.DataSource = DistributionFactory.AvailableDistributionTypes(measurementType).GetFlags().ToArray();
+                datagridCellComboBox.DataSource = DistributionFactory.AvailableDistributionTypes(measurementType).GetFlags().Cast<DistributionType>().ToArray();
             }
         }
 
