@@ -10,7 +10,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
         [Display(Name = "Log(ratio)")]
         public double LogRatio { get; set; }
 
-        [Display(Name = "Level of concern")]
+        [Display(Name = "Concern scaled difference")]
         public double LevelOfConcern { get; set; }
 
         [Display(Name = "Replicates")]

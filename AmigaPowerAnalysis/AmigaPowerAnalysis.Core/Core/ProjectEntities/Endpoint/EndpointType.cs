@@ -1,5 +1,5 @@
 ﻿using System.Runtime.Serialization;
-using AmigaPowerAnalysis.Core.Distributions;
+using AmigaPowerAnalysis.Helpers.Statistics.Distributions;
 
 namespace AmigaPowerAnalysis.Core {
 
@@ -7,6 +7,7 @@ namespace AmigaPowerAnalysis.Core {
         Count,
         Fraction,
         Nonnegative,
+        Continuous
     };
 
     [DataContract]

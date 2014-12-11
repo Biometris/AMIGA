@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using AmigaPowerAnalysis.Core;
-using AmigaPowerAnalysis.Core.Distributions;
+using AmigaPowerAnalysis.Helpers.Statistics.Distributions;
 
 // TODO Binomial totals greyed out for non fractions
 // TODO Binomial totals must be positive

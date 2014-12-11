@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AmigaPowerAnalysis.Core.Distributions;
+using AmigaPowerAnalysis.Helpers.Statistics.Distributions;
 
 namespace AmigaPowerAnalysis.Core.DataAnalysis.AnalysisModels {
 

@@ -58,7 +58,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             }
             return new OutputPowerAnalysis() {
                 InputPowerAnalysis = inputPowerAnalysis,
-                OutputRecords = readAnalysisOutputRecords(comparisonOutputFilename),
+                OutputRecords = readAnalysisOutputRecords(comparisonOutputFilename, inputPowerAnalysis),
             };
         }
 
@@ -167,7 +167,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             return stringBuilder.ToString();
         }
 
-        private static List<OutputPowerAnalysisRecord> readAnalysisOutputRecords(string filename) {
+        private static List<OutputPowerAnalysisRecord> readAnalysisOutputRecords(string filename, InputPowerAnalysis inputPowerAnalysis) {
             var records = new List<OutputPowerAnalysisRecord>();
             var lines = System.IO.File.ReadAllLines(filename);
             for (int i = 1; i < lines.Count(); ++i) {
@@ -178,7 +178,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                 var record = new OutputPowerAnalysisRecord() {
                     Ratio = values[0],
                     LogRatio = values[1],
-                    LevelOfConcern = values[2],
+                    LevelOfConcern = inputPowerAnalysis.GetConcernScaledDifference(values[0]),
                     NumberOfReplicates = (int)values[3],
                     PowerDifferenceLogNormal = values[4],
                     PowerDifferenceSquareRoot = values[5],

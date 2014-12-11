@@ -111,8 +111,6 @@ namespace AmigaPowerAnalysis.GUI {
                         .Select(g => new OutputPowerAnalysisRecord() {
                             LevelOfConcern = g.Key.LevelOfConcern,
                             NumberOfReplicates = g.Key.NumberOfReplicates,
-                            Ratio = double.NaN,
-                            LogRatio = double.NaN,
                             PowerDifferenceLogNormal = g.Min(r => r.PowerDifferenceLogNormal),
                             PowerDifferenceSquareRoot = g.Min(r => r.PowerDifferenceSquareRoot),
                             PowerDifferenceOverdispersedPoisson = g.Min(r => r.PowerDifferenceOverdispersedPoisson),

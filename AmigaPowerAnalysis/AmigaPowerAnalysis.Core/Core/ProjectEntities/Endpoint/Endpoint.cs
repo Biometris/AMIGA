@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
-using AmigaPowerAnalysis.Core.Distributions;
 using AmigaPowerAnalysis.Helpers.ClassExtensionMethods;
+using AmigaPowerAnalysis.Helpers.Statistics.Distributions;
 
 namespace AmigaPowerAnalysis.Core {
 

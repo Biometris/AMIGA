@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Windows.Forms;
-using AmigaPowerAnalysis.Core.Distributions;
+using AmigaPowerAnalysis.Helpers.Statistics.Distributions;
 
 namespace AmigaPowerAnalysis.Core {
     public static class EndpointTypeProvider {

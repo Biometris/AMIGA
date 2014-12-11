@@ -1,5 +1,6 @@
 ﻿using System;
-namespace AmigaPowerAnalysis.Core.Distributions {
+using AmigaPowerAnalysis.Core;
+namespace AmigaPowerAnalysis.Helpers.Statistics.Distributions {
 
     [Flags]
     public enum DistributionType {
@@ -14,10 +15,10 @@ namespace AmigaPowerAnalysis.Core.Distributions {
         BetaBinomial = 64,
         BinomialLogitNormal = 128,
         // Non-negative
-        Normal = 256,
-        LogNormal = 512,
+        LogNormal = 256,
+        // Continuous
+        Normal = 512,
     };
-
 
     static class DistributionFactory {
 
@@ -31,8 +32,9 @@ namespace AmigaPowerAnalysis.Core.Distributions {
             | DistributionType.BetaBinomial
             | DistributionType.BinomialLogitNormal;
 
-        public static readonly DistributionType NonNegativeDistributions = DistributionType.Normal
-            | DistributionType.LogNormal;
+        public static readonly DistributionType NonNegativeDistributions = DistributionType.LogNormal;
+
+        public static readonly DistributionType ContinuousDistributions = DistributionType.Normal;
 
         public static DistributionType AvailableDistributionTypes(MeasurementType measurementType) {
             switch (measurementType) {
@@ -42,6 +44,8 @@ namespace AmigaPowerAnalysis.Core.Distributions {
                     return FractionDistributions;
                 case MeasurementType.Nonnegative:
                     return NonNegativeDistributions;
+                case MeasurementType.Continuous:
+                    return ContinuousDistributions;
                 default:
                     // Should be unreachable
                     return CountDistributions;
