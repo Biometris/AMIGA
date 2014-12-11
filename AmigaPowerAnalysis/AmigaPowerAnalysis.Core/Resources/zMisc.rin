@@ -1,0 +1,19 @@
+evaluationGrid = function(LocLower, LocUpper, NumberOfEvaluations) {
+  csd = c(0)
+  effect = c(0)
+  if (!is.na(LocLower)) {
+    csdTmp = -1 + rep(0:NumberOfEvaluations)/(NumberOfEvaluations+1)
+    effectTmp = -LocLower*csdTmp
+    csd = c(csdTmp, csd)
+    effect = c(effectTmp, effect)
+  } 
+  if (!is.na(LocUpper)) {
+    csdTmp = 1 - rep(NumberOfEvaluations:0)/(NumberOfEvaluations+1)
+    effectTmp = LocUpper*csdTmp
+    csd = c(csd, csdTmp)
+    effect = c(effect, effectTmp)
+  } 
+  return(list(csd=csd, effect=effect))
+}
+
+
