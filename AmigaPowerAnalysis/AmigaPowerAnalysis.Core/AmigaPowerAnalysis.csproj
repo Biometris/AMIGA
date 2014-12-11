@@ -376,6 +376,9 @@
     <None Include="Resources\zBinomial.rin">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Resources\zMisc.rin">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Resources\zPoisson.rin">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

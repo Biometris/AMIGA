@@ -1,7 +1,7 @@
 # Load required packages and define additional source files with R functions
 require(MASS)             # For negative binomial regression 
 require(lsmeans)          # For forming predictions          
-source = c("zBinomial.rin", "zPoisson.rin")
+source = c("zBinomial.rin", "zPoisson.rin", "zMisc.rin")
 
 # Retrieve parameters from call to R 
 args = commandArgs(TRUE)
@@ -42,7 +42,7 @@ CVBlocks                  = as.numeric(   as.vector(settings[[2]][tel]))        
 NumberOfInteractions      = as.numeric(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
 NumberOfModifiers         = as.numeric(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
 SignificanceLevel         = as.numeric(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-NumberOfRatios            = as.numeric(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
+NumberOfEvaluationpoints  = as.numeric(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
 NumberOfReplications      = as.numeric(unlist(strsplit(settings[[2]][tel], " ")))    ; tel = tel + 1
 ExperimentalDesignType    = as.character( as.vector(settings[[2]][tel]))             ; tel = tel + 1
 PowerCalculationMethod    = as.character( as.vector(settings[[2]][tel]))             ; tel = tel + 1
@@ -52,11 +52,17 @@ IsLogNormal               = as.logical(   as.vector(settings[[2]][tel]))        
 IsSquareRoot              = as.logical(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
 IsOverdispersedPoisson    = as.logical(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
 IsNegativeBinomial        = as.logical(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-IsSquareRoot
+IsEmpiricalLogit          = as.logical(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
+IsOverdispersedBinomial   = as.logical(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
+IsBetabinomial            = as.logical(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
+IsLogPlusM                = as.logical(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
+IsGamma                   = as.logical(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
+IsNormal                  = as.logical(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
 
 # Additional settings
 nGCI = 100          # Number of draws for Generalized Confidence Interval   
-smallGCI = 0.0001     # Bound on back-transformed values for the LOG-transform
+smallGCI = 0.0001   # Bound on back-transformed values for the LOG-transform
+
 
 # Define which analysis to perform
 analysis = c("LogNormal", "SquareRoot", "OverdispersedPoisson", "NegativeBinomial")
@@ -68,16 +74,10 @@ dispersion
 # Define effects; always include 0 (or 1 on the original scale) 
 logLocLower = log(LocLower)
 logLocUpper = log(LocUpper)
-effect = c(0)
-if (!is.nan(LocLower)) {
-  effectTmp = logLocLower + (0 - logLocLower)*rep(0:NumberOfRatios)/NumberOfRatios
-  effect = c(effectTmp[1:NumberOfRatios], effect)
-}
-if (!is.nan(LocUpper)) {
-  effectTmp = 0 + (logLocUpper - 0)*rep(0:NumberOfRatios)/NumberOfRatios
-  effect = c(effect, effectTmp[1:NumberOfRatios + 1])
-}
-effect = exp(effect)
+evaluationGrid = evaluationGrid(logLocLower, logLocUpper, NumberOfEvaluationpoints)
+names(evaluationGrid)
+CSD = evaluationGrid$csd
+effect = exp(evaluationGrid$effect)
 effect
 
 # Read Design matrix created by C#
@@ -391,10 +391,9 @@ print(resultEquiLR)
 print(resultEquiWD)
 
 # Combine results into a single dataframe
-levEffect = 1 + 0*repEffect
-df=cbind(repEffect, repEffect, levEffect, repBlock, resultDiff, resultEquiLR, resultEquiWD)
+df=cbind(repEffect, repEffect, CSD, repBlock, resultDiff, resultEquiLR, resultEquiWD)
 df[,2] = log(df[,2])
-dfnames = c("Ratio",  "LogRatio", "LevelOfConcern", "NumberReplicates", 
+dfnames = c("Ratio",  "LogRatio", "CSD", "NumberReplicates", 
     paste("PowerDifference", analysis, sep=""), 
     paste("PowerEquivalenceLR", analysis, sep=""), 
     paste("PowerEquivalenceWD", analysis, sep=""))
@@ -402,7 +401,6 @@ colnames(df) = dfnames
 
 # Sort according to Ratio and NumberReplicates
 df = df[ order(df[,2], df[,3]), ]
-
-
 write.table(df, file=outputfile, quote=FALSE, sep=",", row.names=FALSE, col.names=TRUE, na="*")
 q()
+
