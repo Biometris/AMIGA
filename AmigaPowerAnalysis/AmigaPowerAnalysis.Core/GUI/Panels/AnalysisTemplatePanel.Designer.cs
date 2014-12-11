@@ -86,7 +86,7 @@
             this.buttonGenerateDataTemplate.Name = "buttonGenerateDataTemplate";
             this.buttonGenerateDataTemplate.Size = new System.Drawing.Size(143, 23);
             this.buttonGenerateDataTemplate.TabIndex = 0;
-            this.buttonGenerateDataTemplate.Text = "Generate data template";
+            this.buttonGenerateDataTemplate.Text = "Export data template";
             this.buttonGenerateDataTemplate.UseVisualStyleBackColor = true;
             this.buttonGenerateDataTemplate.Click += new System.EventHandler(this.buttonGenerateDataTemplate_Click);
             // 
@@ -133,9 +133,9 @@
             // 
             // textBoxNumberOfReplicates
             // 
-            this.textBoxNumberOfReplicates.Location = new System.Drawing.Point(346, 3);
+            this.textBoxNumberOfReplicates.Location = new System.Drawing.Point(404, 3);
             this.textBoxNumberOfReplicates.Name = "textBoxNumberOfReplicates";
-            this.textBoxNumberOfReplicates.Size = new System.Drawing.Size(100, 20);
+            this.textBoxNumberOfReplicates.Size = new System.Drawing.Size(42, 20);
             this.textBoxNumberOfReplicates.TabIndex = 11;
             this.textBoxNumberOfReplicates.Text = "2";
             this.textBoxNumberOfReplicates.TextChanged += new System.EventHandler(this.textBoxNumberOfReplicates_TextChanged);
@@ -143,12 +143,12 @@
             // labelNumberOfReplicates
             // 
             this.labelNumberOfReplicates.AutoSize = true;
-            this.labelNumberOfReplicates.Location = new System.Drawing.Point(236, 8);
+            this.labelNumberOfReplicates.Location = new System.Drawing.Point(291, 8);
             this.labelNumberOfReplicates.Margin = new System.Windows.Forms.Padding(3, 8, 3, 0);
             this.labelNumberOfReplicates.Name = "labelNumberOfReplicates";
-            this.labelNumberOfReplicates.Size = new System.Drawing.Size(104, 13);
+            this.labelNumberOfReplicates.Size = new System.Drawing.Size(107, 13);
             this.labelNumberOfReplicates.TabIndex = 10;
-            this.labelNumberOfReplicates.Text = "Number of replicates";
+            this.labelNumberOfReplicates.Text = "Number of replicates:";
             // 
             // comboBoxAnalysisMethodType
             // 
