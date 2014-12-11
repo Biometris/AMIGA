@@ -29,6 +29,10 @@
             this.buttonGenerateDataTemplate = new System.Windows.Forms.Button();
             this.dataGridViewComparisons = new System.Windows.Forms.DataGridView();
             this.splitContainerComparisons = new System.Windows.Forms.SplitContainer();
+            this.textBoxNumberOfReplicates = new System.Windows.Forms.TextBox();
+            this.labelNumberOfReplicates = new System.Windows.Forms.Label();
+            this.comboBoxAnalysisMethodType = new System.Windows.Forms.ComboBox();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.panelModelInfo.SuspendLayout();
             this.flowLayoutPanelReport.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewComparisons)).BeginInit();
@@ -36,18 +40,20 @@
             this.splitContainerComparisons.Panel1.SuspendLayout();
             this.splitContainerComparisons.Panel2.SuspendLayout();
             this.splitContainerComparisons.SuspendLayout();
+            this.flowLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelModelInfo
             // 
             this.panelModelInfo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panelModelInfo.Controls.Add(this.flowLayoutPanel1);
             this.panelModelInfo.Controls.Add(this.textBoxGeneratedAnalysisScript);
             this.panelModelInfo.Controls.Add(this.flowLayoutPanelReport);
             this.panelModelInfo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelModelInfo.Location = new System.Drawing.Point(0, 0);
             this.panelModelInfo.Name = "panelModelInfo";
             this.panelModelInfo.Padding = new System.Windows.Forms.Padding(5);
-            this.panelModelInfo.Size = new System.Drawing.Size(561, 477);
+            this.panelModelInfo.Size = new System.Drawing.Size(610, 477);
             this.panelModelInfo.TabIndex = 0;
             // 
             // textBoxGeneratedAnalysisScript
@@ -58,23 +64,25 @@
             this.textBoxGeneratedAnalysisScript.Multiline = true;
             this.textBoxGeneratedAnalysisScript.Name = "textBoxGeneratedAnalysisScript";
             this.textBoxGeneratedAnalysisScript.ReadOnly = true;
-            this.textBoxGeneratedAnalysisScript.Size = new System.Drawing.Size(549, 436);
+            this.textBoxGeneratedAnalysisScript.Size = new System.Drawing.Size(598, 436);
             this.textBoxGeneratedAnalysisScript.TabIndex = 19;
             // 
             // flowLayoutPanelReport
             // 
             this.flowLayoutPanelReport.Controls.Add(this.buttonGenerateDataTemplate);
+            this.flowLayoutPanelReport.Controls.Add(this.textBoxNumberOfReplicates);
+            this.flowLayoutPanelReport.Controls.Add(this.labelNumberOfReplicates);
             this.flowLayoutPanelReport.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.flowLayoutPanelReport.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
             this.flowLayoutPanelReport.Location = new System.Drawing.Point(5, 441);
             this.flowLayoutPanelReport.Name = "flowLayoutPanelReport";
-            this.flowLayoutPanelReport.Size = new System.Drawing.Size(549, 29);
+            this.flowLayoutPanelReport.Size = new System.Drawing.Size(598, 29);
             this.flowLayoutPanelReport.TabIndex = 18;
             // 
             // buttonGenerateDataTemplate
             // 
             this.buttonGenerateDataTemplate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonGenerateDataTemplate.Location = new System.Drawing.Point(403, 3);
+            this.buttonGenerateDataTemplate.Location = new System.Drawing.Point(452, 3);
             this.buttonGenerateDataTemplate.Name = "buttonGenerateDataTemplate";
             this.buttonGenerateDataTemplate.Size = new System.Drawing.Size(143, 23);
             this.buttonGenerateDataTemplate.TabIndex = 0;
@@ -119,9 +127,48 @@
             // splitContainerComparisons.Panel2
             // 
             this.splitContainerComparisons.Panel2.Controls.Add(this.panelModelInfo);
-            this.splitContainerComparisons.Size = new System.Drawing.Size(848, 477);
+            this.splitContainerComparisons.Size = new System.Drawing.Size(897, 477);
             this.splitContainerComparisons.SplitterDistance = 283;
             this.splitContainerComparisons.TabIndex = 9;
+            // 
+            // textBoxNumberOfReplicates
+            // 
+            this.textBoxNumberOfReplicates.Location = new System.Drawing.Point(346, 3);
+            this.textBoxNumberOfReplicates.Name = "textBoxNumberOfReplicates";
+            this.textBoxNumberOfReplicates.Size = new System.Drawing.Size(100, 20);
+            this.textBoxNumberOfReplicates.TabIndex = 11;
+            this.textBoxNumberOfReplicates.Text = "2";
+            this.textBoxNumberOfReplicates.TextChanged += new System.EventHandler(this.textBoxNumberOfReplicates_TextChanged);
+            // 
+            // labelNumberOfReplicates
+            // 
+            this.labelNumberOfReplicates.AutoSize = true;
+            this.labelNumberOfReplicates.Location = new System.Drawing.Point(236, 8);
+            this.labelNumberOfReplicates.Margin = new System.Windows.Forms.Padding(3, 8, 3, 0);
+            this.labelNumberOfReplicates.Name = "labelNumberOfReplicates";
+            this.labelNumberOfReplicates.Size = new System.Drawing.Size(104, 13);
+            this.labelNumberOfReplicates.TabIndex = 10;
+            this.labelNumberOfReplicates.Text = "Number of replicates";
+            // 
+            // comboBoxAnalysisMethodType
+            // 
+            this.comboBoxAnalysisMethodType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxAnalysisMethodType.FormattingEnabled = true;
+            this.comboBoxAnalysisMethodType.Location = new System.Drawing.Point(413, 3);
+            this.comboBoxAnalysisMethodType.Name = "comboBoxAnalysisMethodType";
+            this.comboBoxAnalysisMethodType.Size = new System.Drawing.Size(182, 21);
+            this.comboBoxAnalysisMethodType.TabIndex = 12;
+            this.comboBoxAnalysisMethodType.SelectedIndexChanged += new System.EventHandler(this.comboBoxAnalysisMethodType_SelectedIndexChanged);
+            // 
+            // flowLayoutPanel1
+            // 
+            this.flowLayoutPanel1.Controls.Add(this.comboBoxAnalysisMethodType);
+            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(5, 412);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(598, 29);
+            this.flowLayoutPanel1.TabIndex = 20;
             // 
             // AnalysisTemplatePanel
             // 
@@ -132,15 +179,17 @@
             this.Margin = new System.Windows.Forms.Padding(0);
             this.Name = "AnalysisTemplatePanel";
             this.Padding = new System.Windows.Forms.Padding(10);
-            this.Size = new System.Drawing.Size(874, 503);
+            this.Size = new System.Drawing.Size(923, 503);
             this.panelModelInfo.ResumeLayout(false);
             this.panelModelInfo.PerformLayout();
             this.flowLayoutPanelReport.ResumeLayout(false);
+            this.flowLayoutPanelReport.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewComparisons)).EndInit();
             this.splitContainerComparisons.Panel1.ResumeLayout(false);
             this.splitContainerComparisons.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerComparisons)).EndInit();
             this.splitContainerComparisons.ResumeLayout(false);
+            this.flowLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -153,6 +202,10 @@
         private System.Windows.Forms.Button buttonGenerateDataTemplate;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanelReport;
         private System.Windows.Forms.TextBox textBoxGeneratedAnalysisScript;
+        private System.Windows.Forms.TextBox textBoxNumberOfReplicates;
+        private System.Windows.Forms.Label labelNumberOfReplicates;
+        private System.Windows.Forms.ComboBox comboBoxAnalysisMethodType;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
 
     }
 }

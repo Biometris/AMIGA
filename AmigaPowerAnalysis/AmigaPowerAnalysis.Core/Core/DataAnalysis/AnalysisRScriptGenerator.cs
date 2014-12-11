@@ -24,10 +24,10 @@ namespace AmigaPowerAnalysis.Core.DataAnalysis {
         /// </summary>
         /// <param name="endpoint"></param>
         /// <returns></returns>
-        public string Generate(InputPowerAnalysis inputPowerAnalysis) {
+        public string Generate(InputPowerAnalysis inputPowerAnalysis, AnalysisMethodType analysisMethodType) {
             var modelString = string.Empty;
             var stringBuilder = new StringBuilder();
-            var analysisModel = AnalysisModelFactory.CreateAnalysisModel(inputPowerAnalysis.DistributionType);
+            var analysisModel = AnalysisModelFactory.CreateAnalysisModel(analysisMethodType);
             stringBuilder.AppendLine(analysisModel.RModelString());
             return stringBuilder.ToString();
         }

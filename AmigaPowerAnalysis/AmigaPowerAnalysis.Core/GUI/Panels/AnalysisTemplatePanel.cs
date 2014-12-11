@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using AmigaPowerAnalysis.Core;
 using AmigaPowerAnalysis.Core.Charting;
 using AmigaPowerAnalysis.Core.DataAnalysis;
+using AmigaPowerAnalysis.Core.DataAnalysis.AnalysisModels;
 using AmigaPowerAnalysis.Core.Reporting;
 using AmigaPowerAnalysis.Helpers.ClassExtensionMethods;
 using OxyPlot.WindowsForms;
@@ -25,12 +26,18 @@ namespace AmigaPowerAnalysis.GUI {
         private Comparison _currentComparison;
         private List<Comparison> _comparisons;
         private string _currentProjectFilePath;
+        private int _numberOfReplicates;
+        private AnalysisMethodType _currentAnalysisMethodType;
 
         public AnalysisTemplatePanel(Project project) {
             InitializeComponent();
             Name = "Analysis template";
             Description = "Creates analysis data template plus analysis scripts";
             _project = project;
+            _numberOfReplicates = 3;
+            var analysisMethodType = Enum.GetValues(typeof(AnalysisMethodType));
+            this.comboBoxAnalysisMethodType.DataSource = analysisMethodType;
+            this.comboBoxAnalysisMethodType.SelectedIndex = 0;
         }
 
         public string Description { get; private set; }
@@ -46,7 +53,9 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void updateVisibilities() {
-            var primaryComparisons = _comparisons.Where(c => c.OutputPowerAnalysis != null && c.IsPrimary).ToList();
+            if (_currentComparison != null) {
+
+            }
         }
 
         public bool IsVisible() {
@@ -78,13 +87,29 @@ namespace AmigaPowerAnalysis.GUI {
         private void updatePanelModelInfo() {
             if (_currentComparison != null) {
                 var AnalysisRScriptGenerator = new AnalysisRScriptGenerator();
-                textBoxGeneratedAnalysisScript.Text = AnalysisRScriptGenerator.Generate(_currentComparison.OutputPowerAnalysis.InputPowerAnalysis);
+                textBoxGeneratedAnalysisScript.Text = AnalysisRScriptGenerator.Generate(_currentComparison.OutputPowerAnalysis.InputPowerAnalysis, _currentAnalysisMethodType);
             }
         }
 
         private void dataGridViewComparisons_SelectionChanged(object sender, EventArgs e) {
             _currentComparison = _project.GetComparisons().ElementAt(dataGridViewComparisons.CurrentRow.Index);
+            var selectedAnalysisMethodTypes = _currentComparison.OutputPowerAnalysis.InputPowerAnalysis.SelectedAnalysisMethodTypes.GetFlags<AnalysisMethodType>().ToArray();
+            this.comboBoxAnalysisMethodType.DataSource = selectedAnalysisMethodTypes;
+            if (selectedAnalysisMethodTypes.Count() > 0) {
+                this.comboBoxAnalysisMethodType.SelectedIndex = 0;
+            }
             updatePanelModelInfo();
+        }
+
+        private void comboBoxAnalysisMethodType_SelectedIndexChanged(object sender, EventArgs e) {
+            AnalysisMethodType analysisType;
+            Enum.TryParse<AnalysisMethodType>(comboBoxAnalysisMethodType.SelectedValue.ToString(), out analysisType);
+            _currentAnalysisMethodType = analysisType;
+            updatePanelModelInfo();
+        }
+
+        private void textBoxNumberOfReplicates_TextChanged(object sender, EventArgs e) {
+            bool result = Int32.TryParse(this.textBoxNumberOfReplicates.Text, out _numberOfReplicates);
         }
 
         private void buttonGenerateDataTemplate_Click(object sender, EventArgs e) {
@@ -97,7 +122,7 @@ namespace AmigaPowerAnalysis.GUI {
             if (saveFileDialog.ShowDialog() == DialogResult.OK) {
                 try {
                     var generator = new AnalysisDataTemplateGenerator();
-                    var template = generator.CreateAnalysisDataTemplate(_project, 3);
+                    var template = generator.CreateAnalysisDataTemplate(_project, _numberOfReplicates);
                     generator.AnalysisDataTemplateToCsv(template, saveFileDialog.FileName);
                     System.Diagnostics.Process.Start(saveFileDialog.FileName);
                 } catch (Exception ex) {

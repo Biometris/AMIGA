@@ -26,25 +26,25 @@
             this.splitContainerComparisons = new System.Windows.Forms.SplitContainer();
             this.dataGridViewComparisons = new System.Windows.Forms.DataGridView();
             this.panelResultPlots = new System.Windows.Forms.Panel();
-            this.flowLayoutPanelComparisonInfo = new System.Windows.Forms.FlowLayoutPanel();
-            this.labelBlockSize = new System.Windows.Forms.Label();
-            this.labelPlotsPerBlock = new System.Windows.Forms.Label();
-            this.buttonShowReport = new System.Windows.Forms.Button();
-            this.comboBoxAnalysisType = new System.Windows.Forms.ComboBox();
             this.plotView = new OxyPlot.WindowsForms.PlotView();
+            this.flowLayoutPanelReport = new System.Windows.Forms.FlowLayoutPanel();
+            this.buttonShowReport = new System.Windows.Forms.Button();
             this.plotTypePanel = new System.Windows.Forms.FlowLayoutPanel();
             this.comboBoxTestType = new System.Windows.Forms.ComboBox();
             this.comboBoxAnalysisPlotTypes = new System.Windows.Forms.ComboBox();
-            this.flowLayoutPanelReport = new System.Windows.Forms.FlowLayoutPanel();
+            this.flowLayoutPanelComparisonInfo = new System.Windows.Forms.FlowLayoutPanel();
+            this.labelBlockSize = new System.Windows.Forms.Label();
+            this.labelPlotsPerBlock = new System.Windows.Forms.Label();
+            this.comboBoxAnalysisType = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerComparisons)).BeginInit();
             this.splitContainerComparisons.Panel1.SuspendLayout();
             this.splitContainerComparisons.Panel2.SuspendLayout();
             this.splitContainerComparisons.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewComparisons)).BeginInit();
             this.panelResultPlots.SuspendLayout();
-            this.flowLayoutPanelComparisonInfo.SuspendLayout();
-            this.plotTypePanel.SuspendLayout();
             this.flowLayoutPanelReport.SuspendLayout();
+            this.plotTypePanel.SuspendLayout();
+            this.flowLayoutPanelComparisonInfo.SuspendLayout();
             this.SuspendLayout();
             // 
             // splitContainerComparisons
@@ -103,56 +103,6 @@
             this.panelResultPlots.Size = new System.Drawing.Size(561, 477);
             this.panelResultPlots.TabIndex = 0;
             // 
-            // flowLayoutPanelComparisonInfo
-            // 
-            this.flowLayoutPanelComparisonInfo.Controls.Add(this.labelBlockSize);
-            this.flowLayoutPanelComparisonInfo.Controls.Add(this.labelPlotsPerBlock);
-            this.flowLayoutPanelComparisonInfo.Dock = System.Windows.Forms.DockStyle.Top;
-            this.flowLayoutPanelComparisonInfo.Location = new System.Drawing.Point(5, 5);
-            this.flowLayoutPanelComparisonInfo.Name = "flowLayoutPanelComparisonInfo";
-            this.flowLayoutPanelComparisonInfo.Size = new System.Drawing.Size(549, 18);
-            this.flowLayoutPanelComparisonInfo.TabIndex = 13;
-            // 
-            // labelBlockSize
-            // 
-            this.labelBlockSize.AutoSize = true;
-            this.labelBlockSize.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelBlockSize.Location = new System.Drawing.Point(3, 0);
-            this.labelBlockSize.Name = "labelBlockSize";
-            this.labelBlockSize.Size = new System.Drawing.Size(69, 13);
-            this.labelBlockSize.TabIndex = 11;
-            this.labelBlockSize.Text = "Block size:";
-            // 
-            // labelPlotsPerBlock
-            // 
-            this.labelPlotsPerBlock.AutoSize = true;
-            this.labelPlotsPerBlock.Location = new System.Drawing.Point(78, 0);
-            this.labelPlotsPerBlock.Name = "labelPlotsPerBlock";
-            this.labelPlotsPerBlock.Size = new System.Drawing.Size(88, 13);
-            this.labelPlotsPerBlock.TabIndex = 10;
-            this.labelPlotsPerBlock.Text = "... plots per block";
-            // 
-            // buttonShowReport
-            // 
-            this.buttonShowReport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonShowReport.Location = new System.Drawing.Point(471, 3);
-            this.buttonShowReport.Name = "buttonShowReport";
-            this.buttonShowReport.Size = new System.Drawing.Size(75, 23);
-            this.buttonShowReport.TabIndex = 7;
-            this.buttonShowReport.Text = "Report";
-            this.buttonShowReport.UseVisualStyleBackColor = true;
-            this.buttonShowReport.Click += new System.EventHandler(this.buttonShowReport_Click);
-            // 
-            // comboBoxAnalysisType
-            // 
-            this.comboBoxAnalysisType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxAnalysisType.FormattingEnabled = true;
-            this.comboBoxAnalysisType.Location = new System.Drawing.Point(3, 3);
-            this.comboBoxAnalysisType.Name = "comboBoxAnalysisType";
-            this.comboBoxAnalysisType.Size = new System.Drawing.Size(182, 21);
-            this.comboBoxAnalysisType.TabIndex = 6;
-            this.comboBoxAnalysisType.SelectedIndexChanged += new System.EventHandler(this.comboBoxAnalysisType_SelectedIndexChanged);
-            // 
             // plotView
             // 
             this.plotView.BackColor = System.Drawing.SystemColors.Window;
@@ -165,6 +115,27 @@
             this.plotView.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
             this.plotView.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
             this.plotView.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
+            // 
+            // flowLayoutPanelReport
+            // 
+            this.flowLayoutPanelReport.Controls.Add(this.buttonShowReport);
+            this.flowLayoutPanelReport.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.flowLayoutPanelReport.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
+            this.flowLayoutPanelReport.Location = new System.Drawing.Point(5, 441);
+            this.flowLayoutPanelReport.Name = "flowLayoutPanelReport";
+            this.flowLayoutPanelReport.Size = new System.Drawing.Size(549, 29);
+            this.flowLayoutPanelReport.TabIndex = 18;
+            // 
+            // buttonShowReport
+            // 
+            this.buttonShowReport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonShowReport.Location = new System.Drawing.Point(471, 3);
+            this.buttonShowReport.Name = "buttonShowReport";
+            this.buttonShowReport.Size = new System.Drawing.Size(75, 23);
+            this.buttonShowReport.TabIndex = 7;
+            this.buttonShowReport.Text = "Report";
+            this.buttonShowReport.UseVisualStyleBackColor = true;
+            this.buttonShowReport.Click += new System.EventHandler(this.buttonShowReport_Click);
             // 
             // plotTypePanel
             // 
@@ -197,15 +168,44 @@
             this.comboBoxAnalysisPlotTypes.TabIndex = 8;
             this.comboBoxAnalysisPlotTypes.SelectedIndexChanged += new System.EventHandler(this.comboBoxAnalysisPlotTypes_SelectedIndexChanged);
             // 
-            // flowLayoutPanelReport
+            // flowLayoutPanelComparisonInfo
             // 
-            this.flowLayoutPanelReport.Controls.Add(this.buttonShowReport);
-            this.flowLayoutPanelReport.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.flowLayoutPanelReport.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.flowLayoutPanelReport.Location = new System.Drawing.Point(5, 441);
-            this.flowLayoutPanelReport.Name = "flowLayoutPanelReport";
-            this.flowLayoutPanelReport.Size = new System.Drawing.Size(549, 29);
-            this.flowLayoutPanelReport.TabIndex = 18;
+            this.flowLayoutPanelComparisonInfo.Controls.Add(this.labelBlockSize);
+            this.flowLayoutPanelComparisonInfo.Controls.Add(this.labelPlotsPerBlock);
+            this.flowLayoutPanelComparisonInfo.Dock = System.Windows.Forms.DockStyle.Top;
+            this.flowLayoutPanelComparisonInfo.Location = new System.Drawing.Point(5, 5);
+            this.flowLayoutPanelComparisonInfo.Name = "flowLayoutPanelComparisonInfo";
+            this.flowLayoutPanelComparisonInfo.Size = new System.Drawing.Size(549, 18);
+            this.flowLayoutPanelComparisonInfo.TabIndex = 13;
+            // 
+            // labelBlockSize
+            // 
+            this.labelBlockSize.AutoSize = true;
+            this.labelBlockSize.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelBlockSize.Location = new System.Drawing.Point(3, 0);
+            this.labelBlockSize.Name = "labelBlockSize";
+            this.labelBlockSize.Size = new System.Drawing.Size(69, 13);
+            this.labelBlockSize.TabIndex = 11;
+            this.labelBlockSize.Text = "Block size:";
+            // 
+            // labelPlotsPerBlock
+            // 
+            this.labelPlotsPerBlock.AutoSize = true;
+            this.labelPlotsPerBlock.Location = new System.Drawing.Point(78, 0);
+            this.labelPlotsPerBlock.Name = "labelPlotsPerBlock";
+            this.labelPlotsPerBlock.Size = new System.Drawing.Size(88, 13);
+            this.labelPlotsPerBlock.TabIndex = 10;
+            this.labelPlotsPerBlock.Text = "... plots per block";
+            // 
+            // comboBoxAnalysisType
+            // 
+            this.comboBoxAnalysisType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxAnalysisType.FormattingEnabled = true;
+            this.comboBoxAnalysisType.Location = new System.Drawing.Point(3, 3);
+            this.comboBoxAnalysisType.Name = "comboBoxAnalysisType";
+            this.comboBoxAnalysisType.Size = new System.Drawing.Size(182, 21);
+            this.comboBoxAnalysisType.TabIndex = 6;
+            this.comboBoxAnalysisType.SelectedIndexChanged += new System.EventHandler(this.comboBoxAnalysisType_SelectedIndexChanged);
             // 
             // AnalysisResultsPanel
             // 
@@ -223,10 +223,10 @@
             this.splitContainerComparisons.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewComparisons)).EndInit();
             this.panelResultPlots.ResumeLayout(false);
+            this.flowLayoutPanelReport.ResumeLayout(false);
+            this.plotTypePanel.ResumeLayout(false);
             this.flowLayoutPanelComparisonInfo.ResumeLayout(false);
             this.flowLayoutPanelComparisonInfo.PerformLayout();
-            this.plotTypePanel.ResumeLayout(false);
-            this.flowLayoutPanelReport.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -237,7 +237,6 @@
         private System.Windows.Forms.DataGridView dataGridViewComparisons;
         private System.Windows.Forms.Panel panelResultPlots;
         private OxyPlot.WindowsForms.PlotView plotView;
-        private System.Windows.Forms.ComboBox comboBoxAnalysisType;
         private System.Windows.Forms.Button buttonShowReport;
         private System.Windows.Forms.Label labelBlockSize;
         private System.Windows.Forms.Label labelPlotsPerBlock;
@@ -246,5 +245,6 @@
         private System.Windows.Forms.ComboBox comboBoxTestType;
         private System.Windows.Forms.ComboBox comboBoxAnalysisPlotTypes;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanelReport;
+        private System.Windows.Forms.ComboBox comboBoxAnalysisType;
     }
 }

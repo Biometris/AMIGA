@@ -248,7 +248,7 @@ for (i in 1:nreplications) {
           pvalLow = pf((deviance(glmH0low) - deviance(glmH1))/estDispersion, 1, df1, lower.tail=FALSE)
           pvalUpp = pf((deviance(glmH0upp) - deviance(glmH1))/estDispersion, 1, df1, lower.tail=FALSE)
           pvalEquiLR[k, "OverdispersedPoisson"] = max(pvalLow, pvalUpp)
-        } 
+        }
       }
       #print("OverdispersedPoisson completed")
       # ----------------------------------------------------------------------------------------------

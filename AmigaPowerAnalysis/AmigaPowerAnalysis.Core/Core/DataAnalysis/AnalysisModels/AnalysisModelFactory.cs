@@ -1,41 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AmigaPowerAnalysis.Helpers.Statistics.Distributions;
-
-namespace AmigaPowerAnalysis.Core.DataAnalysis.AnalysisModels {
+﻿namespace AmigaPowerAnalysis.Core.DataAnalysis.AnalysisModels {
 
     static class AnalysisModelFactory {
 
         /// <summary>
         /// Decides which class to instantiate.
         /// </summary>
-        public static IAnalysisModel CreateAnalysisModel(DistributionType distributionType) {
-            switch (distributionType) {
-                case DistributionType.Poisson:
-                    return new PoissonModel();
-                case DistributionType.OverdispersedPoisson:
+        public static IAnalysisModel CreateAnalysisModel(AnalysisMethodType analysisMethodType) {
+            switch (analysisMethodType) {
+                case AnalysisMethodType.LogNormal:
+                case AnalysisMethodType.SquareRoot:
+                case AnalysisMethodType.OverdispersedPoisson:
                     return new OverDispersedPoissonModel();
-                case DistributionType.NegativeBinomial:
-                    throw new NotImplementedException();
-                case DistributionType.PoissonLogNormal:
-                    throw new NotImplementedException();
-                case DistributionType.PowerLaw:
-                    throw new NotImplementedException();
-                case DistributionType.Binomial:
-                    throw new NotImplementedException();
-                case DistributionType.BetaBinomial:
-                    throw new NotImplementedException();
-                case DistributionType.BinomialLogitNormal:
-                    throw new NotImplementedException();
-                case DistributionType.Normal:
-                    throw new NotImplementedException();
-                case DistributionType.LogNormal:
-                    throw new NotImplementedException();
+                case AnalysisMethodType.NegativeBinomial:
+                case AnalysisMethodType.EmpiricalLogit:
+                case AnalysisMethodType.OverdispersedBinomial:
+                case AnalysisMethodType.Betabinomial:
+                case AnalysisMethodType.LogPlusM:
+                case AnalysisMethodType.Gamma:
+                case AnalysisMethodType.Normal:
                 default:
-                    throw new NotImplementedException();
+                    return new NormalModel();
             }
         }
     }
