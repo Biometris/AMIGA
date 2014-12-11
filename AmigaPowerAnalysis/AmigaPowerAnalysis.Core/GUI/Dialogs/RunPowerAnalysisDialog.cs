@@ -76,7 +76,7 @@ namespace AmigaPowerAnalysis.GUI {
             for (int i = 0; i < comparisons.Count(); ++i) {
                 try {
                     _powerAnalysisBackgroundWorker.ReportProgress((int)(i * progressStep), string.Format("Running power analysis for comparison {0} of {1}...", i + 1, comparisons.Count()));
-                    var inputPowerAnalysis = inputGenerator.CreateInputPowerAnalysis(comparisons.ElementAt(i), _project.DesignSettings, _project.PowerCalculationSettings, i);
+                    var inputPowerAnalysis = inputGenerator.CreateInputPowerAnalysis(comparisons.ElementAt(i), _project.DesignSettings, _project.PowerCalculationSettings, i, numberOfComparisons);
                     comparisons.ElementAt(i).OutputPowerAnalysis = powerAnalysisExecuter.RunAnalysis(inputPowerAnalysis);
                 } catch (Exception ex) {
                     showError("Power analysis error", string.Format("An error occurred while executing the power analysis simulation. Message: {0}", ex.Message));

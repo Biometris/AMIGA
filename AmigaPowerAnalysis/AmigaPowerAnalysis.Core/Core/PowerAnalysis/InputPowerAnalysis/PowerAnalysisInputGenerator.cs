@@ -15,12 +15,12 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
         /// <param name="powerCalculationSettings"></param>
         /// <param name="idComparison"></param>
         /// <returns></returns>
-        public InputPowerAnalysis CreateInputPowerAnalysis(Comparison comparison, DesignSettings designSettings, PowerCalculationSettings powerCalculationSettings, int idComparison) {
+        public InputPowerAnalysis CreateInputPowerAnalysis(Comparison comparison, DesignSettings designSettings, PowerCalculationSettings powerCalculationSettings, int idComparison, int totalNumberOfComparisons) {
             var comparisonLevels = CreateComparisonDummyFactorLevels(comparison);
             var modifierLevels = CreateModifierDummyFactorLevels(comparison);
             var inputPowerAnalysis = new InputPowerAnalysis() {
                 ComparisonId = idComparison,
-                NumberOfComparisons = 10,
+                NumberOfComparisons = totalNumberOfComparisons,
                 Factors = comparison.Endpoint.InteractionFactors.Concat(comparison.Endpoint.NonInteractionFactors).Select(f => f.Name).ToList(),
                 DummyComparisonLevels = comparisonLevels.Select(m => m.Label).ToList(),
                 DummyModifierLevels = modifierLevels.Select(m => m.Label).ToList(),

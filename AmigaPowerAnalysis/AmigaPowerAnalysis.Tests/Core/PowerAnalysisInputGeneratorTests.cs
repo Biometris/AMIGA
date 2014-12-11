@@ -19,7 +19,7 @@ namespace AmigaPowerAnalysis.Tests {
 
             var comparison = project.GetComparisons().First();
             var inputGenerator = new PowerAnalysisInputGenerator();
-            var inputPowerAnalysis = inputGenerator.CreateInputPowerAnalysis(comparison, project.DesignSettings, project.PowerCalculationSettings, 1);
+            var inputPowerAnalysis = inputGenerator.CreateInputPowerAnalysis(comparison, project.DesignSettings, project.PowerCalculationSettings, 1, 1);
             var records = inputPowerAnalysis.InputRecords;
 
             // 2 variety levels
@@ -36,7 +36,7 @@ namespace AmigaPowerAnalysis.Tests {
 
             var comparison = project.GetComparisons().First();
             var inputGenerator = new PowerAnalysisInputGenerator();
-            var inputPowerAnalysis = inputGenerator.CreateInputPowerAnalysis(comparison, project.DesignSettings, project.PowerCalculationSettings, 1);
+            var inputPowerAnalysis = inputGenerator.CreateInputPowerAnalysis(comparison, project.DesignSettings, project.PowerCalculationSettings, 1, 1);
             var records = inputPowerAnalysis.InputRecords;
 
             // 2 variety levels * 3 levels spraying = 6 records
@@ -54,7 +54,7 @@ namespace AmigaPowerAnalysis.Tests {
 
             var comparison = project.GetComparisons().First();
             var inputGenerator = new PowerAnalysisInputGenerator();
-            var inputPowerAnalysis = inputGenerator.CreateInputPowerAnalysis(comparison, project.DesignSettings, project.PowerCalculationSettings, 1);
+            var inputPowerAnalysis = inputGenerator.CreateInputPowerAnalysis(comparison, project.DesignSettings, project.PowerCalculationSettings, 1, 1);
             var records = inputPowerAnalysis.InputRecords;
 
             // 2 variety levels * 3 levels spraying * 2 levels raking = 12 records
@@ -78,7 +78,7 @@ namespace AmigaPowerAnalysis.Tests {
 
             var comparison = project.GetComparisons().First();
             var inputGenerator = new PowerAnalysisInputGenerator();
-            var inputPowerAnalysis = inputGenerator.CreateInputPowerAnalysis(comparison, project.DesignSettings, project.PowerCalculationSettings, 1);
+            var inputPowerAnalysis = inputGenerator.CreateInputPowerAnalysis(comparison, project.DesignSettings, project.PowerCalculationSettings, 1, 1);
             var records = inputPowerAnalysis.InputRecords;
 
             // 2 variety levels * 3 levels spraying * 2 levels raking = 12 records
@@ -110,7 +110,7 @@ namespace AmigaPowerAnalysis.Tests {
 
             var comparison = project.GetComparisons().First();
             var inputGenerator = new PowerAnalysisInputGenerator();
-            var inputPowerAnalysis = inputGenerator.CreateInputPowerAnalysis(comparison, project.DesignSettings, project.PowerCalculationSettings, 1);
+            var inputPowerAnalysis = inputGenerator.CreateInputPowerAnalysis(comparison, project.DesignSettings, project.PowerCalculationSettings, 1, 1);
             var records = inputPowerAnalysis.InputRecords;
 
             // 2 variety levels * 3 * 3 interaction factor levels * 2 * 2 modifier levels = 48 records

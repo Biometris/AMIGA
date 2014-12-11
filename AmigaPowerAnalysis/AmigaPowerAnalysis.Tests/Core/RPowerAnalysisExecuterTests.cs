@@ -65,7 +65,7 @@ namespace AmigaPowerAnalysis.Tests.Core {
 
             var comparison = project.GetComparisons().First();
             var inputGenerator = new PowerAnalysisInputGenerator();
-            var inputPowerAnalysis = inputGenerator.CreateInputPowerAnalysis(comparison, project.DesignSettings, project.PowerCalculationSettings, 1);
+            var inputPowerAnalysis = inputGenerator.CreateInputPowerAnalysis(comparison, project.DesignSettings, project.PowerCalculationSettings, 1, 1);
 
             var testPath = Properties.Settings.Default.TestPath;
             var executer = new RPowerAnalysisExecuter(testPath);
@@ -86,7 +86,7 @@ namespace AmigaPowerAnalysis.Tests.Core {
 
             var comparison = project.GetComparisons().First();
             var inputGenerator = new PowerAnalysisInputGenerator();
-            var inputPowerAnalysis = inputGenerator.CreateInputPowerAnalysis(comparison, project.DesignSettings, project.PowerCalculationSettings, 1);
+            var inputPowerAnalysis = inputGenerator.CreateInputPowerAnalysis(comparison, project.DesignSettings, project.PowerCalculationSettings, 1, 1);
 
             var testPath = Properties.Settings.Default.TestPath;
             var executer = new RPowerAnalysisExecuter(testPath);
