@@ -43,14 +43,14 @@
             this.groupBoxMethodsForAnalysisOfCounts = new System.Windows.Forms.GroupBox();
             this.buttonRunPowerAnalysis = new System.Windows.Forms.Button();
             this.groupBoxMethodsForAnalysisOfFractions = new System.Windows.Forms.GroupBox();
-            this.checkBoxMethodForAnalysesELT = new System.Windows.Forms.CheckBox();
-            this.checkBoxMethodForAnalysesBLL = new System.Windows.Forms.CheckBox();
-            this.checkBoxMethodForAnalysesLOD = new System.Windows.Forms.CheckBox();
+            this.checkBoxMethodForAnalysesEL = new System.Windows.Forms.CheckBox();
+            this.checkBoxMethodForAnalysesBBN = new System.Windows.Forms.CheckBox();
+            this.checkBoxMethodForAnalysesOBN = new System.Windows.Forms.CheckBox();
             this.groupBoxMethodsForAnalysisOfNonNegative = new System.Windows.Forms.GroupBox();
-            this.checkBoxMethodForAnalysesLEPM = new System.Windows.Forms.CheckBox();
-            this.checkBoxMethodForAnalysesGLL = new System.Windows.Forms.CheckBox();
+            this.checkBoxMethodForAnalysesLPM = new System.Windows.Forms.CheckBox();
+            this.checkBoxMethodForAnalysesG = new System.Windows.Forms.CheckBox();
             this.groupBoxMethodsForAnalysisOfContinuous = new System.Windows.Forms.GroupBox();
-            this.checkBoxMethodForAnalysesNM = new System.Windows.Forms.CheckBox();
+            this.checkBoxMethodForAnalysesN = new System.Windows.Forms.CheckBox();
             this.groupBoxOptions.SuspendLayout();
             this.groupBoxMethodsForAnalysisOfCounts.SuspendLayout();
             this.groupBoxMethodsForAnalysisOfFractions.SuspendLayout();
@@ -271,9 +271,9 @@
             // groupBoxMethodsForAnalysisOfFractions
             // 
             this.groupBoxMethodsForAnalysisOfFractions.AutoSize = true;
-            this.groupBoxMethodsForAnalysisOfFractions.Controls.Add(this.checkBoxMethodForAnalysesELT);
-            this.groupBoxMethodsForAnalysisOfFractions.Controls.Add(this.checkBoxMethodForAnalysesBLL);
-            this.groupBoxMethodsForAnalysisOfFractions.Controls.Add(this.checkBoxMethodForAnalysesLOD);
+            this.groupBoxMethodsForAnalysisOfFractions.Controls.Add(this.checkBoxMethodForAnalysesEL);
+            this.groupBoxMethodsForAnalysisOfFractions.Controls.Add(this.checkBoxMethodForAnalysesBBN);
+            this.groupBoxMethodsForAnalysisOfFractions.Controls.Add(this.checkBoxMethodForAnalysesOBN);
             this.groupBoxMethodsForAnalysisOfFractions.Location = new System.Drawing.Point(250, 261);
             this.groupBoxMethodsForAnalysisOfFractions.Margin = new System.Windows.Forms.Padding(0, 5, 0, 0);
             this.groupBoxMethodsForAnalysisOfFractions.Name = "groupBoxMethodsForAnalysisOfFractions";
@@ -282,45 +282,48 @@
             this.groupBoxMethodsForAnalysisOfFractions.TabStop = false;
             this.groupBoxMethodsForAnalysisOfFractions.Text = "Methods for Analysis of fractions";
             // 
-            // checkBoxMethodForAnalysesELT
+            // checkBoxMethodForAnalysesEL
             // 
-            this.checkBoxMethodForAnalysesELT.AutoSize = true;
-            this.checkBoxMethodForAnalysesELT.Checked = true;
-            this.checkBoxMethodForAnalysesELT.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxMethodForAnalysesELT.Location = new System.Drawing.Point(20, 24);
-            this.checkBoxMethodForAnalysesELT.Name = "checkBoxMethodForAnalysesELT";
-            this.checkBoxMethodForAnalysesELT.Size = new System.Drawing.Size(159, 17);
-            this.checkBoxMethodForAnalysesELT.TabIndex = 11;
-            this.checkBoxMethodForAnalysesELT.Text = "Empirical logit transformation";
-            this.checkBoxMethodForAnalysesELT.UseVisualStyleBackColor = true;
+            this.checkBoxMethodForAnalysesEL.AutoSize = true;
+            this.checkBoxMethodForAnalysesEL.Checked = true;
+            this.checkBoxMethodForAnalysesEL.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxMethodForAnalysesEL.Location = new System.Drawing.Point(20, 24);
+            this.checkBoxMethodForAnalysesEL.Name = "checkBoxMethodForAnalysesEL";
+            this.checkBoxMethodForAnalysesEL.Size = new System.Drawing.Size(159, 17);
+            this.checkBoxMethodForAnalysesEL.TabIndex = 11;
+            this.checkBoxMethodForAnalysesEL.Text = "Empirical logit transformation";
+            this.checkBoxMethodForAnalysesEL.UseVisualStyleBackColor = true;
+            this.checkBoxMethodForAnalysesEL.CheckedChanged += new System.EventHandler(this.checkBoxMethodForAnalysesEL_CheckedChanged);
             // 
-            // checkBoxMethodForAnalysesBLL
+            // checkBoxMethodForAnalysesBBN
             // 
-            this.checkBoxMethodForAnalysesBLL.AutoSize = true;
-            this.checkBoxMethodForAnalysesBLL.Checked = true;
-            this.checkBoxMethodForAnalysesBLL.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxMethodForAnalysesBLL.Location = new System.Drawing.Point(20, 80);
-            this.checkBoxMethodForAnalysesBLL.Name = "checkBoxMethodForAnalysesBLL";
-            this.checkBoxMethodForAnalysesBLL.Size = new System.Drawing.Size(149, 17);
-            this.checkBoxMethodForAnalysesBLL.TabIndex = 13;
-            this.checkBoxMethodForAnalysesBLL.Text = "Betabinomial with logit link";
-            this.checkBoxMethodForAnalysesBLL.UseVisualStyleBackColor = true;
+            this.checkBoxMethodForAnalysesBBN.AutoSize = true;
+            this.checkBoxMethodForAnalysesBBN.Checked = true;
+            this.checkBoxMethodForAnalysesBBN.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxMethodForAnalysesBBN.Location = new System.Drawing.Point(20, 80);
+            this.checkBoxMethodForAnalysesBBN.Name = "checkBoxMethodForAnalysesBBN";
+            this.checkBoxMethodForAnalysesBBN.Size = new System.Drawing.Size(149, 17);
+            this.checkBoxMethodForAnalysesBBN.TabIndex = 13;
+            this.checkBoxMethodForAnalysesBBN.Text = "Betabinomial with logit link";
+            this.checkBoxMethodForAnalysesBBN.UseVisualStyleBackColor = true;
+            this.checkBoxMethodForAnalysesBBN.CheckedChanged += new System.EventHandler(this.checkBoxMethodForAnalysesBBN_CheckedChanged);
             // 
-            // checkBoxMethodForAnalysesLOD
+            // checkBoxMethodForAnalysesOBN
             // 
-            this.checkBoxMethodForAnalysesLOD.AutoSize = true;
-            this.checkBoxMethodForAnalysesLOD.Location = new System.Drawing.Point(20, 52);
-            this.checkBoxMethodForAnalysesLOD.Name = "checkBoxMethodForAnalysesLOD";
-            this.checkBoxMethodForAnalysesLOD.Size = new System.Drawing.Size(142, 17);
-            this.checkBoxMethodForAnalysesLOD.TabIndex = 12;
-            this.checkBoxMethodForAnalysesLOD.Text = "Logit with overdispersion";
-            this.checkBoxMethodForAnalysesLOD.UseVisualStyleBackColor = true;
+            this.checkBoxMethodForAnalysesOBN.AutoSize = true;
+            this.checkBoxMethodForAnalysesOBN.Location = new System.Drawing.Point(20, 52);
+            this.checkBoxMethodForAnalysesOBN.Name = "checkBoxMethodForAnalysesOBN";
+            this.checkBoxMethodForAnalysesOBN.Size = new System.Drawing.Size(142, 17);
+            this.checkBoxMethodForAnalysesOBN.TabIndex = 12;
+            this.checkBoxMethodForAnalysesOBN.Text = "Logit with overdispersion";
+            this.checkBoxMethodForAnalysesOBN.UseVisualStyleBackColor = true;
+            this.checkBoxMethodForAnalysesOBN.CheckedChanged += new System.EventHandler(this.checkBoxMethodForAnalysesOBN_CheckedChanged);
             // 
             // groupBoxMethodsForAnalysisOfNonNegative
             // 
             this.groupBoxMethodsForAnalysisOfNonNegative.AutoSize = true;
-            this.groupBoxMethodsForAnalysisOfNonNegative.Controls.Add(this.checkBoxMethodForAnalysesLEPM);
-            this.groupBoxMethodsForAnalysisOfNonNegative.Controls.Add(this.checkBoxMethodForAnalysesGLL);
+            this.groupBoxMethodsForAnalysisOfNonNegative.Controls.Add(this.checkBoxMethodForAnalysesLPM);
+            this.groupBoxMethodsForAnalysisOfNonNegative.Controls.Add(this.checkBoxMethodForAnalysesG);
             this.groupBoxMethodsForAnalysisOfNonNegative.Location = new System.Drawing.Point(476, 261);
             this.groupBoxMethodsForAnalysisOfNonNegative.Margin = new System.Windows.Forms.Padding(0, 5, 0, 0);
             this.groupBoxMethodsForAnalysisOfNonNegative.Name = "groupBoxMethodsForAnalysisOfNonNegative";
@@ -329,32 +332,34 @@
             this.groupBoxMethodsForAnalysisOfNonNegative.TabStop = false;
             this.groupBoxMethodsForAnalysisOfNonNegative.Text = "Methods for Analysis of non-negative";
             // 
-            // checkBoxMethodForAnalysesLEPM
+            // checkBoxMethodForAnalysesLPM
             // 
-            this.checkBoxMethodForAnalysesLEPM.AutoSize = true;
-            this.checkBoxMethodForAnalysesLEPM.Checked = true;
-            this.checkBoxMethodForAnalysesLEPM.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxMethodForAnalysesLEPM.Location = new System.Drawing.Point(20, 24);
-            this.checkBoxMethodForAnalysesLEPM.Name = "checkBoxMethodForAnalysesLEPM";
-            this.checkBoxMethodForAnalysesLEPM.Size = new System.Drawing.Size(138, 17);
-            this.checkBoxMethodForAnalysesLEPM.TabIndex = 11;
-            this.checkBoxMethodForAnalysesLEPM.Text = "Log(x+m) transformation";
-            this.checkBoxMethodForAnalysesLEPM.UseVisualStyleBackColor = true;
+            this.checkBoxMethodForAnalysesLPM.AutoSize = true;
+            this.checkBoxMethodForAnalysesLPM.Checked = true;
+            this.checkBoxMethodForAnalysesLPM.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxMethodForAnalysesLPM.Location = new System.Drawing.Point(20, 24);
+            this.checkBoxMethodForAnalysesLPM.Name = "checkBoxMethodForAnalysesLPM";
+            this.checkBoxMethodForAnalysesLPM.Size = new System.Drawing.Size(138, 17);
+            this.checkBoxMethodForAnalysesLPM.TabIndex = 11;
+            this.checkBoxMethodForAnalysesLPM.Text = "Log(x+m) transformation";
+            this.checkBoxMethodForAnalysesLPM.UseVisualStyleBackColor = true;
+            this.checkBoxMethodForAnalysesLPM.CheckedChanged += new System.EventHandler(this.checkBoxMethodForAnalysesLPM_CheckedChanged);
             // 
-            // checkBoxMethodForAnalysesGLL
+            // checkBoxMethodForAnalysesG
             // 
-            this.checkBoxMethodForAnalysesGLL.AutoSize = true;
-            this.checkBoxMethodForAnalysesGLL.Location = new System.Drawing.Point(20, 52);
-            this.checkBoxMethodForAnalysesGLL.Name = "checkBoxMethodForAnalysesGLL";
-            this.checkBoxMethodForAnalysesGLL.Size = new System.Drawing.Size(120, 17);
-            this.checkBoxMethodForAnalysesGLL.TabIndex = 12;
-            this.checkBoxMethodForAnalysesGLL.Text = "Gamma with log link";
-            this.checkBoxMethodForAnalysesGLL.UseVisualStyleBackColor = true;
+            this.checkBoxMethodForAnalysesG.AutoSize = true;
+            this.checkBoxMethodForAnalysesG.Location = new System.Drawing.Point(20, 52);
+            this.checkBoxMethodForAnalysesG.Name = "checkBoxMethodForAnalysesG";
+            this.checkBoxMethodForAnalysesG.Size = new System.Drawing.Size(120, 17);
+            this.checkBoxMethodForAnalysesG.TabIndex = 12;
+            this.checkBoxMethodForAnalysesG.Text = "Gamma with log link";
+            this.checkBoxMethodForAnalysesG.UseVisualStyleBackColor = true;
+            this.checkBoxMethodForAnalysesG.CheckedChanged += new System.EventHandler(this.checkBoxMethodForAnalysesG_CheckedChanged);
             // 
             // groupBoxMethodsForAnalysisOfContinuous
             // 
             this.groupBoxMethodsForAnalysisOfContinuous.AutoSize = true;
-            this.groupBoxMethodsForAnalysisOfContinuous.Controls.Add(this.checkBoxMethodForAnalysesNM);
+            this.groupBoxMethodsForAnalysisOfContinuous.Controls.Add(this.checkBoxMethodForAnalysesN);
             this.groupBoxMethodsForAnalysisOfContinuous.Location = new System.Drawing.Point(700, 261);
             this.groupBoxMethodsForAnalysisOfContinuous.Margin = new System.Windows.Forms.Padding(0, 5, 0, 0);
             this.groupBoxMethodsForAnalysisOfContinuous.Name = "groupBoxMethodsForAnalysisOfContinuous";
@@ -363,17 +368,18 @@
             this.groupBoxMethodsForAnalysisOfContinuous.TabStop = false;
             this.groupBoxMethodsForAnalysisOfContinuous.Text = "Methods for Analysis of continuous";
             // 
-            // checkBoxMethodForAnalysesNM
+            // checkBoxMethodForAnalysesN
             // 
-            this.checkBoxMethodForAnalysesNM.AutoSize = true;
-            this.checkBoxMethodForAnalysesNM.Checked = true;
-            this.checkBoxMethodForAnalysesNM.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxMethodForAnalysesNM.Location = new System.Drawing.Point(20, 24);
-            this.checkBoxMethodForAnalysesNM.Name = "checkBoxMethodForAnalysesNM";
-            this.checkBoxMethodForAnalysesNM.Size = new System.Drawing.Size(90, 17);
-            this.checkBoxMethodForAnalysesNM.TabIndex = 11;
-            this.checkBoxMethodForAnalysesNM.Text = "Normal model";
-            this.checkBoxMethodForAnalysesNM.UseVisualStyleBackColor = true;
+            this.checkBoxMethodForAnalysesN.AutoSize = true;
+            this.checkBoxMethodForAnalysesN.Checked = true;
+            this.checkBoxMethodForAnalysesN.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxMethodForAnalysesN.Location = new System.Drawing.Point(20, 24);
+            this.checkBoxMethodForAnalysesN.Name = "checkBoxMethodForAnalysesN";
+            this.checkBoxMethodForAnalysesN.Size = new System.Drawing.Size(90, 17);
+            this.checkBoxMethodForAnalysesN.TabIndex = 11;
+            this.checkBoxMethodForAnalysesN.Text = "Normal model";
+            this.checkBoxMethodForAnalysesN.UseVisualStyleBackColor = true;
+            this.checkBoxMethodForAnalysesN.CheckedChanged += new System.EventHandler(this.checkBoxMethodForAnalysesN_CheckedChanged);
             // 
             // SimulationPanel
             // 
@@ -420,21 +426,21 @@
         private System.Windows.Forms.TextBox textBoxNumberOfReplications;
         private System.Windows.Forms.Label labelNumberOfReplications;
         private System.Windows.Forms.TextBox textBoxNumberOfEvaluationPoints;
+        private System.Windows.Forms.GroupBox groupBoxMethodsForAnalysisOfCounts;
+        private System.Windows.Forms.GroupBox groupBoxMethodsForAnalysisOfNonNegative;
+        private System.Windows.Forms.GroupBox groupBoxMethodsForAnalysisOfContinuous;
+        private System.Windows.Forms.GroupBox groupBoxMethodsForAnalysisOfFractions;
         private System.Windows.Forms.CheckBox checkBoxMethodForAnalysesNB;
         private System.Windows.Forms.CheckBox checkBoxMethodForAnalysesOP;
         private System.Windows.Forms.CheckBox checkBoxMethodForAnalysesSQ;
-        private System.Windows.Forms.GroupBox groupBoxMethodsForAnalysisOfCounts;
+        private System.Windows.Forms.CheckBox checkBoxMethodForAnalysesEL;
+        private System.Windows.Forms.CheckBox checkBoxMethodForAnalysesBBN;
+        private System.Windows.Forms.CheckBox checkBoxMethodForAnalysesOBN;
+        private System.Windows.Forms.CheckBox checkBoxMethodForAnalysesLPM;
+        private System.Windows.Forms.CheckBox checkBoxMethodForAnalysesG;
+        private System.Windows.Forms.CheckBox checkBoxMethodForAnalysesN;
         private System.Windows.Forms.TextBox textBoxSeedForRandomNumbers;
         private System.Windows.Forms.Label labelSeedForRandomNumbers;
         private System.Windows.Forms.Button buttonRunPowerAnalysis;
-        private System.Windows.Forms.GroupBox groupBoxMethodsForAnalysisOfFractions;
-        private System.Windows.Forms.CheckBox checkBoxMethodForAnalysesELT;
-        private System.Windows.Forms.CheckBox checkBoxMethodForAnalysesBLL;
-        private System.Windows.Forms.CheckBox checkBoxMethodForAnalysesLOD;
-        private System.Windows.Forms.GroupBox groupBoxMethodsForAnalysisOfNonNegative;
-        private System.Windows.Forms.CheckBox checkBoxMethodForAnalysesLEPM;
-        private System.Windows.Forms.CheckBox checkBoxMethodForAnalysesGLL;
-        private System.Windows.Forms.GroupBox groupBoxMethodsForAnalysisOfContinuous;
-        private System.Windows.Forms.CheckBox checkBoxMethodForAnalysesNM;
     }
 }

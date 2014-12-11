@@ -93,7 +93,7 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void dataGridViewComparisons_SelectionChanged(object sender, EventArgs e) {
             _currentComparison = _project.GetComparisons().ElementAt(dataGridViewComparisons.CurrentRow.Index);
-            var selectedAnalysisMethodTypes = _currentComparison.OutputPowerAnalysis.InputPowerAnalysis.SelectedAnalysisMethodTypes.GetFlags<AnalysisMethodType>().ToArray();
+            var selectedAnalysisMethodTypes = _currentComparison.OutputPowerAnalysis.InputPowerAnalysis.SelectedAnalysisMethodTypes.GetFlags().ToArray();
             this.comboBoxAnalysisMethodType.DataSource = selectedAnalysisMethodTypes;
             if (selectedAnalysisMethodTypes.Count() > 0) {
                 this.comboBoxAnalysisMethodType.SelectedIndex = 0;

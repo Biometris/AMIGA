@@ -102,7 +102,8 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             var stringBuilder = new StringBuilder();
             var fileBaseId = comparison.OutputPowerAnalysis.InputPowerAnalysis.ComparisonId + "_" + comparison.OutputPowerAnalysis.InputPowerAnalysis.Endpoint;
             string imageFilename;
-            foreach (var analysisMethodType in comparison.OutputPowerAnalysis.InputPowerAnalysis.SelectedAnalysisMethodTypes.GetFlags<AnalysisMethodType>()) {
+            var selectedAnalysisMethods = comparison.OutputPowerAnalysis.InputPowerAnalysis.SelectedAnalysisMethodTypes.GetFlags().Cast<AnalysisMethodType>().ToList();
+            foreach (var analysisMethodType in selectedAnalysisMethods) {
 
                 stringBuilder.Append("<h2>" + analysisMethodType.GetDisplayName() + "</h2>");
                 stringBuilder.Append("<table>");
@@ -163,7 +164,7 @@ namespace AmigaPowerAnalysis.Core.Reporting {
 
             var fileBaseId = "Aggregate_";
             string imageFilename;
-            foreach (var analysisMethodType in comparisons.First().OutputPowerAnalysis.InputPowerAnalysis.SelectedAnalysisMethodTypes.GetFlags<AnalysisMethodType>()) {
+            foreach (var analysisMethodType in comparisons.First().OutputPowerAnalysis.InputPowerAnalysis.SelectedAnalysisMethodTypes.GetFlags().Cast<AnalysisMethodType>()) {
 
                 stringBuilder.Append("<h2>" + analysisMethodType.GetDisplayName() + "</h2>");
                 stringBuilder.Append("<table>");

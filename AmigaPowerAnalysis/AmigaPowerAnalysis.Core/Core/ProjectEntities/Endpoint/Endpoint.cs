@@ -161,7 +161,7 @@ namespace AmigaPowerAnalysis.Core {
             get {
                 var availableDistributionTypes = DistributionFactory.AvailableDistributionTypes(_measurement);
                 if (_distributionType == 0 || (availableDistributionTypes & _distributionType) != _distributionType) {
-                    _distributionType = availableDistributionTypes.GetFlags().First();
+                    _distributionType = (DistributionType)availableDistributionTypes.GetFlags().First();
                 }
                 return _distributionType;
             }
@@ -197,7 +197,7 @@ namespace AmigaPowerAnalysis.Core {
                 _measurement = value;
                 var availableDistributionTypes = DistributionFactory.AvailableDistributionTypes(_measurement);
                 if (_distributionType == 0 || (availableDistributionTypes & _distributionType) != _distributionType) {
-                    _distributionType = availableDistributionTypes.GetFlags().First();
+                    _distributionType = (DistributionType)availableDistributionTypes.GetFlags().First();
                 }
             }
         }

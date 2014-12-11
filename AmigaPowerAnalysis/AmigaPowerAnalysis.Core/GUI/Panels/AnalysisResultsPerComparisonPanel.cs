@@ -46,7 +46,7 @@ namespace AmigaPowerAnalysis.GUI {
             updateDataGridComparisons();
             if (_project.GetComparisons().Any(c => c.OutputPowerAnalysis != null)) {
                 splitContainerComparisons.Visible = true;
-                var selectedAnalysisMethodTypes = _comparisons.First().OutputPowerAnalysis.InputPowerAnalysis.SelectedAnalysisMethodTypes.GetFlags<AnalysisMethodType>().ToArray();
+                var selectedAnalysisMethodTypes = _comparisons.First().OutputPowerAnalysis.InputPowerAnalysis.SelectedAnalysisMethodTypes.GetFlags().ToArray();
                 this.comboBoxAnalysisType.Visible = selectedAnalysisMethodTypes.Count() > 1;
                 this.comboBoxAnalysisType.DataSource = selectedAnalysisMethodTypes;
                 if (selectedAnalysisMethodTypes.Count() > 0) {

@@ -50,7 +50,7 @@ namespace AmigaPowerAnalysis.GUI {
         public void Activate() {
             updateDataGridComparisons();
             updateVisibilities();
-            var selectedAnalysisMethodTypes = _comparisons.First().OutputPowerAnalysis.InputPowerAnalysis.SelectedAnalysisMethodTypes.GetFlags<AnalysisMethodType>().ToArray();
+            var selectedAnalysisMethodTypes = _comparisons.First().OutputPowerAnalysis.InputPowerAnalysis.SelectedAnalysisMethodTypes.GetFlags().ToArray();
             this.comboBoxAnalysisType.DataSource = selectedAnalysisMethodTypes;
             if (selectedAnalysisMethodTypes.Count() > 0) {
                 this.comboBoxAnalysisType.SelectedIndex = 0;

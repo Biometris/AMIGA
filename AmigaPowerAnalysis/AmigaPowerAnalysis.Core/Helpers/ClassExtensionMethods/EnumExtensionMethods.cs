@@ -15,7 +15,7 @@ namespace AmigaPowerAnalysis.Helpers.ClassExtensionMethods {
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        public static IEnumerable<System.Enum> GetFlags(this System.Enum type) {
+        public static IEnumerable<Enum> GetFlags(this Enum type) {
             foreach (System.Enum value in System.Enum.GetValues(type.GetType())) {
                 if (type.HasFlag(value) && Convert.ToInt64(value) != 0) {
                     yield return value;
@@ -23,22 +23,53 @@ namespace AmigaPowerAnalysis.Helpers.ClassExtensionMethods {
             }
         }
 
-        // This is not exactly perfect, as it allows you to call GetFlags on any
-        // struct type, which will throw an exception at runtime if the type isn't
-        // an enum.
-        public static IEnumerable<TEnum> GetFlags<TEnum>(this TEnum flags)
-            where TEnum : struct {
-            // Unfortunately this boxing/unboxing is the easiest way
-            // to do this due to C#'s lack of a where T : enum constraint
-            // (there are ways around this, but they involve some
-            // frustrating code).
-            int flagsValue = (int)(object)flags;
-            foreach (int flag in Enum.GetValues(typeof(TEnum))) {
-                if ((flagsValue & flag) == flag) {
-                    // Once again: an unfortunate boxing/unboxing
-                    // due to the lack of a where T : enum constraint.
-                    yield return (TEnum)(object)flag;
-                }
+        /// <summary>
+        /// Sets a flag for the enum type.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="value"></param>
+        /// <param name="flag"></param>
+        /// <param name="set"></param>
+        /// <returns></returns>
+        public static T SetFlag<T>(this Enum value, T flag, bool set) {
+            Type underlyingType = Enum.GetUnderlyingType(value.GetType());
+            dynamic valueAsInt = Convert.ChangeType(value, underlyingType);
+            dynamic flagAsInt = Convert.ChangeType(flag, underlyingType);
+            if (set) {
+                valueAsInt |= flagAsInt;
+            } else {
+                valueAsInt &= ~flagAsInt;
+            }
+            return (T)valueAsInt;
+        }
+
+        /// <summary>
+        /// Checks if the value contains the provided type.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="type"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static bool Has<T>(this System.Enum type, T value) {
+            try {
+                return (((int)(object)type & (int)(object)value) == (int)(object)value);
+            } catch {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Checks if the value is only the provided type.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="type"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static bool Is<T>(this System.Enum type, T value) {
+            try {
+                return (int)(object)type == (int)(object)value;
+            } catch {
+                return false;
             }
         }
 
@@ -89,7 +120,7 @@ namespace AmigaPowerAnalysis.Helpers.ClassExtensionMethods {
         /// <param name="value"></param>
         /// <returns></returns>
         public static DescriptionAttribute GetDescriptionAttribute(this Enum value) {
-            FieldInfo fi = value.GetType().GetField(value.ToString());
+            var fi = value.GetType().GetField(value.ToString());
             var attributes = (DescriptionAttribute[])fi.GetCustomAttributes(typeof(DescriptionAttribute), false);
             if (attributes.Length > 0) {
                 return attributes[0];
