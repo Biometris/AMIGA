@@ -166,31 +166,6 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
         public AnalysisMethodType SelectedAnalysisMethodTypes { get; set; }
 
         /// <summary>
-        /// Computes the concern scaled difference for the given ratio.
-        /// </summary>
-        /// <param name="ratio"></param>
-        /// <returns></returns>
-        public double GetConcernScaledDifference(double ratio) {
-            switch (MeasurementType) {
-                case MeasurementType.Count:
-                case MeasurementType.Fraction:
-                case MeasurementType.Nonnegative:
-                case MeasurementType.Continuous:
-                default: {
-                        double csd = 0;
-                        if (ratio < 1) {
-                            csd = Math.Log(ratio) / Math.Log(LocLower);
-                        } else if (ratio >= 1) {
-                            csd = Math.Log(ratio) / Math.Log(LocUpper);
-                        } else {
-                            csd = 0;
-                        }
-                        return Math.Round(csd, 2);
-                    }
-            }
-        }
-
-        /// <summary>
         /// A list of input records belonging for a power analysis.
         /// </summary>
         [DataMember]

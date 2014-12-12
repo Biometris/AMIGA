@@ -73,7 +73,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                 var record = new OutputPowerAnalysisRecord() {
                     Ratio = values[0],
                     LogRatio = values[1],
-                    LevelOfConcern = values[2],
+                    ConcernStandardizedDifference = values[2],
                     NumberOfReplicates = (int)values[3],
                     PowerDifferenceLogNormal = values[4],
                     PowerDifferenceSquareRoot = values[5],

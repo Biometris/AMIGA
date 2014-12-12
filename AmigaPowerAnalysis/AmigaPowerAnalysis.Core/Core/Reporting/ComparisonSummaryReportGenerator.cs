@@ -142,9 +142,9 @@ namespace AmigaPowerAnalysis.Core.Reporting {
 
         private static string generateComparisonsChartHtml(IEnumerable<Comparison> comparisons, string tempPath) {
             var records = comparisons.SelectMany(c => c.OutputPowerAnalysis.OutputRecords)
-                .GroupBy(r => new { r.LevelOfConcern, r.NumberOfReplicates })
+                .GroupBy(r => new { ConcernStandardizedDifference = r.ConcernStandardizedDifference, r.NumberOfReplicates })
                 .Select(g => new OutputPowerAnalysisRecord() {
-                    LevelOfConcern = g.Key.LevelOfConcern,
+                    ConcernStandardizedDifference = g.Key.ConcernStandardizedDifference,
                     NumberOfReplicates = g.Key.NumberOfReplicates,
                     Ratio = double.NaN,
                     LogRatio = double.NaN,
@@ -171,24 +171,24 @@ namespace AmigaPowerAnalysis.Core.Reporting {
                 stringBuilder.Append("<tr>");
 
                 imageFilename = Path.Combine(tempPath, fileBaseId + analysisMethodType.ToString() + "_Replicates_Difference.png");
-                var plotDifferenceReplicates = AnalysisResultsChartGenerator.CreatePlotViewReplicatesLevelOfConcern(records, TestType.Difference, analysisMethodType);
+                var plotDifferenceReplicates = AnalysisResultsChartGenerator.CreatePlotViewReplicatesConcernStandardizedDifference(records, TestType.Difference, analysisMethodType);
                 PngExporter.Export(plotDifferenceReplicates, imageFilename, 400, 300);
                 stringBuilder.Append("<td><img src=\"" + imageFilename + "\" /></td>");
 
                 imageFilename = Path.Combine(tempPath, fileBaseId + analysisMethodType.ToString() + "_LevelOfConcern_Difference.png");
-                var plotDifferenceLogRatio = AnalysisResultsChartGenerator.CreatePlotViewLevelOfConcernReplicates(records, TestType.Difference, analysisMethodType);
+                var plotDifferenceLogRatio = AnalysisResultsChartGenerator.CreatePlotViewConcernStandardizedDifferenceReplicates(records, TestType.Difference, analysisMethodType);
                 PngExporter.Export(plotDifferenceLogRatio, imageFilename, 400, 300);
                 stringBuilder.Append("<td><img src=\"" + imageFilename + "\" /></td>");
 
                 stringBuilder.Append("</tr><tr>");
 
                 imageFilename = Path.Combine(tempPath, fileBaseId + analysisMethodType.ToString() + "_Replicates_Equivalence.png");
-                var plotEquivalenceReplicates = AnalysisResultsChartGenerator.CreatePlotViewReplicatesLevelOfConcern(records, TestType.Equivalence, analysisMethodType);
+                var plotEquivalenceReplicates = AnalysisResultsChartGenerator.CreatePlotViewReplicatesConcernStandardizedDifference(records, TestType.Equivalence, analysisMethodType);
                 PngExporter.Export(plotEquivalenceReplicates, imageFilename, 400, 300);
                 stringBuilder.Append("<td><img src=\"" + imageFilename + "\" /></td>");
 
                 imageFilename = Path.Combine(tempPath, fileBaseId + analysisMethodType.ToString() + "_LevelOfConcern_Equivalence.png");
-                var plotEquivalenceLogRatio = AnalysisResultsChartGenerator.CreatePlotViewLevelOfConcernReplicates(records, TestType.Equivalence, analysisMethodType);
+                var plotEquivalenceLogRatio = AnalysisResultsChartGenerator.CreatePlotViewConcernStandardizedDifferenceReplicates(records, TestType.Equivalence, analysisMethodType);
                 PngExporter.Export(plotEquivalenceLogRatio, imageFilename, 400, 300);
                 stringBuilder.Append("<td><img src=\"" + imageFilename + "\" /></td>");
 

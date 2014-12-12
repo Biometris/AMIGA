@@ -13,7 +13,7 @@ namespace AmigaPowerAnalysis.Core.Charting {
     public enum AnalysisPlotType {
         Replicates,
         Ratio,
-        LevelOfConcern,
+        ConcernStandardizedDifference,
     }
 
     public static class AnalysisResultsChartGenerator {
@@ -180,7 +180,7 @@ namespace AmigaPowerAnalysis.Core.Charting {
             return model;
         }
 
-        public static PlotModel CreatePlotViewReplicatesLevelOfConcern(List<OutputPowerAnalysisRecord> powerAnalysisOutputRecords, TestType testType, AnalysisMethodType analysisMethodType) {
+        public static PlotModel CreatePlotViewReplicatesConcernStandardizedDifference(List<OutputPowerAnalysisRecord> powerAnalysisOutputRecords, TestType testType, AnalysisMethodType analysisMethodType) {
             var model = CreatePlotModel(testType, analysisMethodType, AnalysisPlotType.Replicates);
 
             var horizontalAxis = new LogarithmicAxis() {
@@ -193,50 +193,50 @@ namespace AmigaPowerAnalysis.Core.Charting {
             model.Axes.Add(horizontalAxis);
 
             if (powerAnalysisOutputRecords != null) {
-                var levelOfConcernGroups = powerAnalysisOutputRecords.GroupBy(r => r.LevelOfConcern).Where(g => !double.IsNaN(g.Key));
-                for (int i = 0; i < levelOfConcernGroups.Count(); ++i) {
-                    var levelOfConcernGroup = levelOfConcernGroups.ElementAt(i);
+                var csdGroups = powerAnalysisOutputRecords.GroupBy(r => r.ConcernStandardizedDifference).Where(g => !double.IsNaN(g.Key));
+                for (int i = 0; i < csdGroups.Count(); ++i) {
+                    var csdGroup = csdGroups.ElementAt(i);
                     var series = new LineSeries() {
                         MarkerType = (MarkerType)(i % 7 + 1),
                     };
-                    series.Title = string.Format("CSD {0:0.##}", levelOfConcernGroup.Key);
+                    series.Title = string.Format("CSD {0:0.##}", csdGroup.Key);
                     if (testType == TestType.Difference && analysisMethodType == AnalysisMethodType.LogNormal) {
-                        series.Points.AddRange(levelOfConcernGroup.Select(g => new DataPoint() {
+                        series.Points.AddRange(csdGroup.Select(g => new DataPoint() {
                             X = g.NumberOfReplicates,
                             Y = g.PowerDifferenceLogNormal,
                         }));
                     } else if (testType == TestType.Difference && analysisMethodType == AnalysisMethodType.NegativeBinomial) {
-                        series.Points.AddRange(levelOfConcernGroup.Select(g => new DataPoint() {
+                        series.Points.AddRange(csdGroup.Select(g => new DataPoint() {
                             X = g.NumberOfReplicates,
                             Y = g.PowerDifferenceNegativeBinomial,
                         }));
                     } else if (testType == TestType.Difference && analysisMethodType == AnalysisMethodType.OverdispersedPoisson) {
-                        series.Points.AddRange(levelOfConcernGroup.Select(g => new DataPoint() {
+                        series.Points.AddRange(csdGroup.Select(g => new DataPoint() {
                             X = g.NumberOfReplicates,
                             Y = g.PowerDifferenceOverdispersedPoisson,
                         }));
                     } else if (testType == TestType.Difference && analysisMethodType == AnalysisMethodType.SquareRoot) {
-                        series.Points.AddRange(levelOfConcernGroup.Select(g => new DataPoint() {
+                        series.Points.AddRange(csdGroup.Select(g => new DataPoint() {
                             X = g.NumberOfReplicates,
                             Y = g.PowerDifferenceSquareRoot,
                         }));
                     } else if (testType == TestType.Equivalence && analysisMethodType == AnalysisMethodType.LogNormal) {
-                        series.Points.AddRange(levelOfConcernGroup.Select(g => new DataPoint() {
+                        series.Points.AddRange(csdGroup.Select(g => new DataPoint() {
                             X = g.NumberOfReplicates,
                             Y = g.PowerEquivalenceLogNormal,
                         }));
                     } else if (testType == TestType.Equivalence && analysisMethodType == AnalysisMethodType.NegativeBinomial) {
-                        series.Points.AddRange(levelOfConcernGroup.Select(g => new DataPoint() {
+                        series.Points.AddRange(csdGroup.Select(g => new DataPoint() {
                             X = g.NumberOfReplicates,
                             Y = g.PowerEquivalenceNegativeBinomial,
                         }));
                     } else if (testType == TestType.Equivalence && analysisMethodType == AnalysisMethodType.OverdispersedPoisson) {
-                        series.Points.AddRange(levelOfConcernGroup.Select(g => new DataPoint() {
+                        series.Points.AddRange(csdGroup.Select(g => new DataPoint() {
                             X = g.NumberOfReplicates,
                             Y = g.PowerEquivalenceOverdispersedPoisson,
                         }));
                     } else if (testType == TestType.Equivalence && analysisMethodType == AnalysisMethodType.SquareRoot) {
-                        series.Points.AddRange(levelOfConcernGroup.Select(g => new DataPoint() {
+                        series.Points.AddRange(csdGroup.Select(g => new DataPoint() {
                             X = g.NumberOfReplicates,
                             Y = g.PowerEquivalenceSquareRoot,
                         }));
@@ -247,8 +247,8 @@ namespace AmigaPowerAnalysis.Core.Charting {
             return model;
         }
 
-        public static PlotModel CreatePlotViewLevelOfConcernReplicates(List<OutputPowerAnalysisRecord> powerAnalysisOutputRecords, TestType testType, AnalysisMethodType analysisMethodType) {
-            var model = CreatePlotModel(testType, analysisMethodType, AnalysisPlotType.LevelOfConcern);
+        public static PlotModel CreatePlotViewConcernStandardizedDifferenceReplicates(List<OutputPowerAnalysisRecord> powerAnalysisOutputRecords, TestType testType, AnalysisMethodType analysisMethodType) {
+            var model = CreatePlotModel(testType, analysisMethodType, AnalysisPlotType.ConcernStandardizedDifference);
 
             var horizontalAxis = new LinearAxis() {
                 Title = "Concern Standardized Difference",
@@ -268,42 +268,42 @@ namespace AmigaPowerAnalysis.Core.Charting {
                     series.Title = string.Format("Repl {0:0.##}", replicateGroup.Key);
                     if (testType == TestType.Difference && analysisMethodType == AnalysisMethodType.LogNormal) {
                         series.Points.AddRange(replicateGroup.Select(g => new DataPoint() {
-                            X = g.LevelOfConcern,
+                            X = g.ConcernStandardizedDifference,
                             Y = g.PowerDifferenceLogNormal,
                         }));
                     } else if (testType == TestType.Difference && analysisMethodType == AnalysisMethodType.NegativeBinomial) {
                         series.Points.AddRange(replicateGroup.Select(g => new DataPoint() {
-                            X = g.LevelOfConcern,
+                            X = g.ConcernStandardizedDifference,
                             Y = g.PowerDifferenceNegativeBinomial,
                         }));
                     } else if (testType == TestType.Difference && analysisMethodType == AnalysisMethodType.OverdispersedPoisson) {
                         series.Points.AddRange(replicateGroup.Select(g => new DataPoint() {
-                            X = g.LevelOfConcern,
+                            X = g.ConcernStandardizedDifference,
                             Y = g.PowerDifferenceOverdispersedPoisson,
                         }));
                     } else if (testType == TestType.Difference && analysisMethodType == AnalysisMethodType.SquareRoot) {
                         series.Points.AddRange(replicateGroup.Select(g => new DataPoint() {
-                            X = g.LevelOfConcern,
+                            X = g.ConcernStandardizedDifference,
                             Y = g.PowerDifferenceSquareRoot,
                         }));
                     } else if (testType == TestType.Equivalence && analysisMethodType == AnalysisMethodType.LogNormal) {
                         series.Points.AddRange(replicateGroup.Select(g => new DataPoint() {
-                            X = g.LevelOfConcern,
+                            X = g.ConcernStandardizedDifference,
                             Y = g.PowerEquivalenceLogNormal,
                         }));
                     } else if (testType == TestType.Equivalence && analysisMethodType == AnalysisMethodType.NegativeBinomial) {
                         series.Points.AddRange(replicateGroup.Select(g => new DataPoint() {
-                            X = g.LevelOfConcern,
+                            X = g.ConcernStandardizedDifference,
                             Y = g.PowerEquivalenceNegativeBinomial,
                         }));
                     } else if (testType == TestType.Equivalence && analysisMethodType == AnalysisMethodType.OverdispersedPoisson) {
                         series.Points.AddRange(replicateGroup.Select(g => new DataPoint() {
-                            X = g.LevelOfConcern,
+                            X = g.ConcernStandardizedDifference,
                             Y = g.PowerEquivalenceOverdispersedPoisson,
                         }));
                     } else if (testType == TestType.Equivalence && analysisMethodType == AnalysisMethodType.SquareRoot) {
                         series.Points.AddRange(replicateGroup.Select(g => new DataPoint() {
-                            X = g.LevelOfConcern,
+                            X = g.ConcernStandardizedDifference,
                             Y = g.PowerEquivalenceSquareRoot,
                         }));
                     }

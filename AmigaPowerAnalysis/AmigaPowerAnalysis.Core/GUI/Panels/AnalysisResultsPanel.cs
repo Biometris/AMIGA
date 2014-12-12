@@ -35,7 +35,7 @@ namespace AmigaPowerAnalysis.GUI {
             var testTypes = Enum.GetValues(typeof(TestType));
             this.comboBoxTestType.DataSource = testTypes;
             this.comboBoxTestType.SelectedIndex = 0;
-            var plotTypes = new List<AnalysisPlotType>() { AnalysisPlotType.Replicates, AnalysisPlotType.LevelOfConcern };
+            var plotTypes = new List<AnalysisPlotType>() { AnalysisPlotType.Replicates, AnalysisPlotType.ConcernStandardizedDifference };
             this.comboBoxAnalysisPlotTypes.DataSource = plotTypes;
             this.comboBoxAnalysisPlotTypes.SelectedIndex = 0;
         }
@@ -107,9 +107,9 @@ namespace AmigaPowerAnalysis.GUI {
                 var primaryComparisons = _comparisons.Where(c => c.OutputPowerAnalysis != null && c.IsPrimary).ToList();
                 if (primaryComparisons.Count > 0) {
                     var records = primaryComparisons.SelectMany(c => c.OutputPowerAnalysis.OutputRecords)
-                        .GroupBy(r => new { r.LevelOfConcern, r.NumberOfReplicates })
+                        .GroupBy(r => new { LevelOfConcern = r.ConcernStandardizedDifference, r.NumberOfReplicates })
                         .Select(g => new OutputPowerAnalysisRecord() {
-                            LevelOfConcern = g.Key.LevelOfConcern,
+                            ConcernStandardizedDifference = g.Key.LevelOfConcern,
                             NumberOfReplicates = g.Key.NumberOfReplicates,
                             PowerDifferenceLogNormal = g.Min(r => r.PowerDifferenceLogNormal),
                             PowerDifferenceSquareRoot = g.Min(r => r.PowerDifferenceSquareRoot),
@@ -124,9 +124,9 @@ namespace AmigaPowerAnalysis.GUI {
                     var plotType = (AnalysisPlotType)comboBoxAnalysisPlotTypes.SelectedValue;
                     var testType = (TestType)comboBoxTestType.SelectedValue;
                     if (plotType == AnalysisPlotType.Replicates) {
-                        plotView.Model = AnalysisResultsChartGenerator.CreatePlotViewReplicatesLevelOfConcern(records, testType, _currentAnalysisType);
-                    } else if (plotType == AnalysisPlotType.LevelOfConcern) {
-                        plotView.Model = AnalysisResultsChartGenerator.CreatePlotViewLevelOfConcernReplicates(records, testType, _currentAnalysisType);
+                        plotView.Model = AnalysisResultsChartGenerator.CreatePlotViewReplicatesConcernStandardizedDifference(records, testType, _currentAnalysisType);
+                    } else if (plotType == AnalysisPlotType.ConcernStandardizedDifference) {
+                        plotView.Model = AnalysisResultsChartGenerator.CreatePlotViewConcernStandardizedDifferenceReplicates(records, testType, _currentAnalysisType);
                     }
                     var plotsPerBlockCounts = primaryComparisons.Select(pc => pc.OutputPowerAnalysis.InputPowerAnalysis.InputRecords.Sum(ir => ir.Frequency));
                     var minPlotsPerBlockCount = plotsPerBlockCounts.Min();
