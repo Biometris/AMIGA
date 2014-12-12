@@ -17,3 +17,50 @@ evaluationGrid = function(LocLower, LocUpper, NumberOfEvaluations) {
 }
 
 
+readSettings = function(settingsfile) {
+  settings = read.csv(settingsfile, header=FALSE, as.is=TRUE, strip.white=TRUE)
+  nsettings = nrow(settings)
+  list = as.list(setNames(nm=settings$V1))
+  for (i in 1:nsettings) {
+    if (settings$V1[i] != "Endpoint") {
+      element = unlist(strsplit(settings$V2[i], " "))
+    } else {
+      element = settings$V2[i]
+    }
+    isNumeric = suppressWarnings(!is.na(as.numeric(element[1])))
+    if (isNumeric) {
+      element = as.numeric(element)
+    } else  {
+      element = as.character(element)
+    }
+    list[[i]] = element
+  }
+  return(list)
+}
+
+LinkFunction = function(data, measurementType = c("Count", "Fraction", "Nonnegative", "Continuous")) {
+  chkArg = match.arg(measurementType)
+  if (measurementType == "Count") {
+    return(log(data))
+  } else if (measurementType == "Fraction") {
+    return(log(data/(1-data)))
+  } else if (measurementType == "Nonnegative") {
+    return(log(data))
+  } else if (measurementType == "Continuous") {
+    return(data)
+  }
+}
+
+InverseLinkFunction = function(data, measurementType = c("Count", "Fraction", "Nonnegative", "Continuous")) {
+  chkArg = match.arg(measurementType)
+  if (measurementType == "Count") {
+    return(exp(data))
+  } else if (measurementType == "Fraction") {
+    return(1/(1+exp(-data)))
+  } else if (measurementType == "Nonnegative") {
+    return(exp(data))
+  } else if (measurementType == "Continuous") {
+    return(data)
+  }
+}
+

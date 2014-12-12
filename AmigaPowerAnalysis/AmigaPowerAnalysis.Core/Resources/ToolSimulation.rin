@@ -6,12 +6,16 @@ source = c("zBinomial.rin", "zPoisson.rin", "zMisc.rin")
 # Retrieve parameters from call to R 
 args = commandArgs(TRUE)
 if (length(args) <= 1) {
+  testDir = "Technical Documentation"
+  testDir = "AllDistributions"
+  testDir = "Simple"
+  testNumber = 0
+
+  headDir = "D:/Diverse Opdrachten/AMIGA Power analysis/TestData"
+  settingsfile = file.path(headDir, testDir, paste(testNumber, "-Settings.csv", sep=""))
+  datafile     = file.path(headDir, testDir, paste(testNumber, "-Input.csv", sep=""))
+  outputfile   = file.path(headDir, testDir, paste(testNumber, "-Output.csv", sep=""))
   scriptsDirectory    = getwd()
-  testdirectory = "../TestData/Technical Documentation/"
-  testdirectory = "../TestData/Simple/"
-  settingsfile = file.path(testdirectory, "0-Settings.csv")
-  datafile     = file.path(testdirectory, "0-Input.csv")
-  outputfile   = file.path(testdirectory, "0-Output.csv")
 } else {
   scriptsDirectory = args[1]
   settingsfile = args[2]
@@ -26,195 +30,282 @@ for (i in 1:length(source)) {
   source(file.path(scriptsDirectory, source[[i]]))
 }
 
-# Settings
-settings = read.csv(settingsfile, header=FALSE, as.is=TRUE, strip.white=TRUE)
-tel = 1
-ComparisonId              = as.numeric(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-NumberOfComparisons       = as.numeric(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-Endpoint                  = as.character( as.vector(settings[[2]][tel]))             ; tel = tel + 1
-LocLower                  = as.numeric(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-LocUpper                  = as.numeric(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-Distribution              = as.character( as.vector(settings[[2]][tel]))             ; tel = tel + 1
-PowerLawPower             = as.numeric(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-OverallMean               = as.numeric(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-CVComparator              = as.numeric(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-CVBlocks                  = as.numeric(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-NumberOfInteractions      = as.numeric(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-NumberOfModifiers         = as.numeric(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-SignificanceLevel         = as.numeric(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-NumberOfEvaluationpoints  = as.numeric(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-NumberOfReplications      = as.numeric(unlist(strsplit(settings[[2]][tel], " ")))    ; tel = tel + 1
-ExperimentalDesignType    = as.character( as.vector(settings[[2]][tel]))             ; tel = tel + 1
-PowerCalculationMethod    = as.character( as.vector(settings[[2]][tel]))             ; tel = tel + 1
-RandomNumberSeed          = as.numeric(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-NumberOfSimulatedDataSets = as.numeric(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-IsLogNormal               = as.logical(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-IsSquareRoot              = as.logical(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-IsOverdispersedPoisson    = as.logical(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-IsNegativeBinomial        = as.logical(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-IsEmpiricalLogit          = as.logical(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-IsOverdispersedBinomial   = as.logical(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-IsBetabinomial            = as.logical(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-IsLogPlusM                = as.logical(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-IsGamma                   = as.logical(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-IsNormal                  = as.logical(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
+# Read Settings; note that names of logical settings are appended in front with Is
+settings = readSettings(settingsfile)
+if ((settings$ExperimentalDesignType != "RandomizedCompleteBlocks") & (settings$ExperimentalDesignType != "CompletelyRandomized")) {
+  stop("ExperimentalDesignType '", settings$ExperimentalDesignType, "' not yet implemented.", call. = FALSE)
+}
+
+# Initialize random generator
+set.seed(settings$RandomNumberSeed)
 
 # Additional settings
-nGCI = 100          # Number of draws for Generalized Confidence Interval   
-smallGCI = 0.0001   # Bound on back-transformed values for the LOG-transform
+settings = c(settings, nGCI=100)          # Number of draws for Generalized Confidence Interval   
+settings = c(settings, smallGCI=0.0001)   # Bound on back-transformed values for the LOG-transform
+settings = c(settings, NumberOfEffects=3)
+if (!is.na(settings$LocLower)) {settings$NumberOfEffects = settings$NumberOfEffects + settings$NumberOfEvaluationPoints }
+if (!is.na(settings$LocUpper)) {settings$NumberOfEffects = settings$NumberOfEffects + settings$NumberOfEvaluationPoints }
+settings = c(settings, TransformLocLower = NA, TransformLocUpper = NA)
 
-
-# Define which analysis to perform
-analysis = c("LogNormal", "SquareRoot", "OverdispersedPoisson", "NegativeBinomial")
-
-# Define dispersion parameter
-dispersion = ropoissonDispersion(OverallMean, CVComparator, PowerLawPower, Distribution)
-dispersion 
-
-# Define effects; always include 0 (or 1 on the original scale) 
-logLocLower = log(LocLower)
-logLocUpper = log(LocUpper)
-evaluationGrid = evaluationGrid(logLocLower, logLocUpper, NumberOfEvaluationpoints)
-names(evaluationGrid)
-CSD = evaluationGrid$csd
-effect = exp(evaluationGrid$effect)
-effect
-
-# Read Design matrix created by C#
-# This contains the following columns: Constant, GMO, Dummies, Modifiers, Mean
+# Read Design matrix created by C# with columns Constant, GMO, Dummy, Mod, Mean
 data = read.csv(datafile, header=TRUE)
-ncol = ncol(data)
-nrow = nrow(data)
 colnames = colnames(data)
-coleffect = 2
 
-# Check whether there are modifiers; type of columns can be checked with sapply(data, class)
+# Redefine Mod columns to factors; Note that type of columns can be checked with sapply(data, class)
 modifiers = grep("Mod", colnames)
 nmodifiers = length(modifiers)
 if (length(modifiers)>0) {
   for (i in 1:nmodifiers) {
-    print(i)
     data[[modifiers[[i]]]] = as.factor(data[[modifiers[[i]]]])
   } 
 }
 
-# Rename means column and add several additional columns 
-colnames(data)[ncol] = "mean"
-data["effect"]    = NaN
-data["response"]  = NaN
-data["block"]     = 1
-data["lowOffset"] = NaN
-data["uppOffset"] = NaN
-sapply(data, class)
-data
-
 # Create dataframe for prediction; only use GMO columns and Dummy columns
 # This implies that the mean is taken over blocks and also over modifiers (if any)
 predictors = grep("GMO", gsub("Dummy", "GMO", colnames))
-predictors
 preddata = head(data[predictors], 2)
 preddata[,] = 0
 preddata[1] = c(0,1)
-preddata
 
-# Create formulas for H0 and H1; Note that col=2 is used to test the comparison
-nameH1 = colnames[c(3:ncol) - 1]
-if (ExperimentalDesignType == "RandomizedCompleteBlocks") { # Add blocking effect
-  nameH1 = c(nameH1, "block")
+# Create formulas for H0 and H1; Note that GMO is used to test the comparison
+nterms = grep("Mean", colnames(data)) - 1
+nameH1 = colnames[c(2:nterms)]
+if (settings$ExperimentalDesignType == "RandomizedCompleteBlocks") { # Add blocking effect
+  nameH1 = c(nameH1, "Block")
 }
-nameH0 = nameH1[nameH1 != "GMO"]
-nameH1
-nameH0
-if ((ExperimentalDesignType == "RandomizedCompleteBlocks") || (ExperimentalDesignType == "CompletelyRandomized")) {
-  formulaH1 = as.formula(paste("response ~ ", paste(nameH1, collapse="+")))
+settings = c(settings, formulaH1     = as.formula(paste("Response ~ ", paste(nameH1, collapse="+"))))
+settings = c(settings, formulaH0     = update(settings$formulaH1, ~ . - GMO))
+settings = c(settings, formulaH0_low = update(settings$formulaH0, ~ . + offset(LowOffset)))
+settings = c(settings, formulaH0_upp = update(settings$formulaH0, ~ . + offset(UppOffset)))
+
+# Add several additional columns to the dataframe
+data["TransformedMean"] = LinkFunction(data["Mean"], settings$MeasurementType)
+data["Effect"]    = NaN
+data["Response"]  = NaN
+data["Block"]     = as.factor(1)
+data["LowOffset"] = NaN
+data["UppOffset"] = NaN
+
+# Define structures to save results
+nanalysis = length(settings$AnalysisMethods)
+nrow = settings$NumberOfSimulatedDataSets
+pvalues = list(
+    Diff   = matrix(nrow=nrow, ncol=nanalysis, dimnames=list(NULL, settings$AnalysisMethods)),
+    Equi = matrix(nrow=nrow, ncol=nanalysis, dimnames=list(NULL, settings$AnalysisMethods)),
+    EquiWD = matrix(nrow=nrow, ncol=nanalysis, dimnames=list(NULL, settings$AnalysisMethods)))
+
+nrow = length(settings$NumberOfReplications) * settings$NumberOfEffects
+nrow
+results = list(
+    Effect = matrix(nrow=nrow, ncol=4, dimnames=list(NULL, c("Effect", "TransformedEffect", "CSD", "NumberOfReplications"))),
+    Diff   = matrix(nrow=nrow, ncol=nanalysis, dimnames=list(NULL, paste("Diff",   settings$AnalysisMethods, sep=""))), 
+    Equi   = matrix(nrow=nrow, ncol=nanalysis, dimnames=list(NULL, paste("Equi",   settings$AnalysisMethods, sep=""))), 
+    EquiWD = matrix(nrow=nrow, ncol=nanalysis, dimnames=list(NULL, paste("EquiWD", settings$AnalysisMethods, sep=""))))
+
+# Fill results$Effect
+if (settings$MeasurementType != "Continuous") {
+  settings$TransformLocLower = log(settings$LocLower)
+  settings$TransformLocUpper = log(settings$LocUpper)
 } else {
-  stop("ExperimentalDesignType '", ExperimentalDesignType, "' not implemented.", call. = FALSE)
+  settings$TransformLocLower = settings$LocLower - OverallMean
+  settings$TransformLocUpper = settings$LocUpper + OverallMean
 }
+evaluationGrid = evaluationGrid(settings$TransformLocLower, settings$TransformLocUpper, settings$NumberOfEvaluationPoints)
+effect = evaluationGrid$effect
+neffect = length(effect)
+nreplication = length(settings$NumberOfReplications)
 
-if (length(nameH0)> 0) {
-    print("pos")
-    formulaH0     = as.formula(paste("response ~ ", paste(nameH0, collapse="+")))
-    formulaH0_low = as.formula(paste("response ~ ", paste(nameH0, collapse="+"), " + offset(lowOffset)"))
-    formulaH0_upp = as.formula(paste("response ~ ", paste(nameH0, collapse="+"), " + offset(uppOffset)"))
-  } else {
-    formulaH0     = as.formula("response ~ 1")
-    formulaH0_low = as.formula("response ~ 1 + offset(lowOffset)")
-    formulaH0_upp = as.formula("response ~ 1 + offset(uppOffset)")
+results$Effect[,"TransformedEffect"]    = rep(effect, nreplication ) 
+results$Effect[,"CSD"]                  = rep(evaluationGrid$csd, nreplication ) 
+results$Effect[,"NumberOfReplications"] = rep(settings$NumberOfReplications, each=neffect)
+if (settings$MeasurementType != "Continuous") {
+  results$Effect[,"Effect"] = exp(results$Effect[,"TransformedEffect"])
+} else {
+  results$Effect[,"Effect"] = results$Effect[,"TransformedEffect"]
 }
+results$Effect
+
+#########################################################################################################
+# Relevant structures at this point are
+#   settings: includes models to fit
+#   data:     data passed by C# and appended with additional columns
+#   preddata: to form predictions
+#   pvalues:  to store intermediate results
+#   results:  to save results    
+#########################################################################################################
+
 
 # Add blocking effect to model 
-if (ExperimentalDesignType == "RandomizedCompleteBlocks") {
-  sigBlock = sqrt(log((CVBlocks/100)*(CVBlocks/100) + 1))
+if (settings$ExperimentalDesignType == "RandomizedCompleteBlocks") {
+  sigBlock = sqrt(log((settings$CVBlocks/100)*(settings$CVBlocks/100) + 1))
 } else {
   sigBlock = 0
 }
 
-# Various
-set.seed(RandomNumberSeed)
-
-# Loop over number of NumberOfReplications
-nreplications = length(NumberOfReplications)
-neffect       = length(effect)
-nanalysis     = length(analysis)
-
-repBlock = rep(NumberOfReplications, each=neffect)
-repEffect = rep(effect, nreplications)
-rownames = paste("Block=", repBlock, " Effect=", repEffect, sep="")
-pvalDiff   = matrix(nrow=NumberOfSimulatedDataSets, ncol=nanalysis, dimnames=list(NULL, analysis))
-pvalEquiLR = matrix(nrow=NumberOfSimulatedDataSets, ncol=nanalysis, dimnames=list(NULL, analysis))
-pvalEquiWD = matrix(nrow=NumberOfSimulatedDataSets, ncol=nanalysis, dimnames=list(NULL, analysis))
-
-resultDiff   = matrix(nrow=nreplications*neffect, ncol=nanalysis, dimnames=list(NULL, analysis))
-resultEquiLR = matrix(nrow=nreplications*neffect, ncol=nanalysis, dimnames=list(NULL, analysis))
-resultEquiWD = matrix(nrow=nreplications*neffect, ncol=nanalysis, dimnames=list(NULL, analysis))
+# Define dispersion parameter
+dispersion = ropoissonDispersion(settings$OverallMean, settings$CVComparator, settings$PowerLawPower, settings$Distribution)
+dispersion 
 
 tel = 0
-ntimes = nreplications*neffect*NumberOfSimulatedDataSets
-title = paste(Endpoint, "  (Endpoint ", ComparisonId+1, " of ", NumberOfComparisons, ")", sep="")
+nloop = neffect*nreplication
+ntimes = nloop*settings$NumberOfSimulatedDataSets
+title = paste(settings$Endpoint, "  (Endpoint ", settings$ComparisonId+1, " of ", settings$NumberOfComparisons, ")", sep="")
 progressbar <- winProgressBar(title=title, label="Number of replications", min=0, max=ntimes, width=400)
 iprogressbar = 0
+if (settings$NumberOfSimulatedDataSets < 10) {
+  progressbarUpdate = 1
+} else if (settings$NumberOfSimulatedDataSets < 50) {
+  progressbarUpdate = 5
+} else if (settings$NumberOfSimulatedDataSets < 100) {
+  progressbarUpdate = 10
+} else {
+  progressbarUpdate = 10
+}
 
-for (i in 1:nreplications) {
-  # cat("i=", i, "\n")
-  # Expand dataset 
-  iReps = NumberOfReplications[i] 
+for (i in 1:nreplication) {
+  # Expand dataset and modify Block factor  
+  iReps = settings$NumberOfReplications[i] 
+  labeli = formatC(i, width=ceiling(log10(nreplication+0.5)), flag="0")
+  labeli = sprintf("Number of replications: %s  (%s of %s)", iReps, labeli, nreplication)
+
   blocksi = iReps + 0*data[[1]]
   data.expanded = data[rep(row.names(data), blocksi), ]
-  data.expanded[["block"]] = rep(1:iReps, nrow)  # block is still a factor
-  labeli = formatC(i, width=ceiling(log10(nreplications+0.5)), flag="0")
-  labeli = sprintf("Number of replications: %s  (%s of %s)", iReps, labeli, nreplications)
+  data.expanded[["Block"]] = as.factor(rep(1:iReps, nrow(data)))
 
-  # Prepare for apply effect
-  applyeffect = data.expanded[coleffect]==1
-  data.expanded[["effect"]] = data.expanded[["mean"]]
+  # Prepare for apply effect on the transformed scale
+  applyeffect = (data.expanded["GMO"] == 1)
+  data.expanded["Effect"] = data.expanded["TransformedMean"]
 
-  # Apply blocking Effect; use Blom scores
-  if (ExperimentalDesignType == "RandomizedCompleteBlocks") {
-    blockeff = exp(sigBlock*qnorm((1:iReps-0.375)/(iReps+0.25)))
-    data.expanded[["effect"]] = data.expanded[["effect"]] * blockeff[data.expanded[["block"]]]
+  # Apply blocking Effect on the transformed scale; use Blom scores
+  if (settings$ExperimentalDesignType == "RandomizedCompleteBlocks") {
+    blockeff = sigBlock*qnorm( ((1:iReps)-0.375)/(iReps+0.25) )
+    data.expanded["Effect"] = data.expanded["Effect"] + blockeff[data.expanded[["Block"]]]
   }
-  data.expanded["lowOffset"] = data.expanded[coleffect] * logLocLower
-  data.expanded["uppOffset"] = data.expanded[coleffect] * logLocUpper
-  nmean = length(data.expanded[["effect"]])
+  data.expanded["LowOffset"] = data.expanded["GMO"] * settings$TransformLocLower
+  data.expanded["UppOffset"] = data.expanded["GMO"] * settings$TransformLocUpper
+  nmean = length(data.expanded[["Effect"]])
+  saveEffect = data.expanded[["Effect"]]
 
   for (j in 1:neffect) {
     labelj = formatC(j, width=ceiling(log10(neffect+0.5)), flag="0")
     labelj = sprintf("Effect %s (%s)", labelj, neffect)
-    data.expanded[["effect"]][applyeffect] = effect[j]*data.expanded["mean"][applyeffect]
-    # print(data.expanded)
+
+    # Apply effect on the transformed scale and back-transform
+    data.expanded[["Effect"]] = saveEffect
+    data.expanded["Effect"][applyeffect] = effect[j] + data.expanded["Effect"][applyeffect]
+    data.expanded["Effect"] = InverseLinkFunction(data.expanded["Effect"], settings$MeasurementType)
+
     # Do looping over simulations 
-    for (k in 1:NumberOfSimulatedDataSets) {
+    for (k in 1:settings$NumberOfSimulatedDataSets) {
       # cat("    k=", k, "\n")
-      simulated = ropoisson(nmean, data.expanded[["effect"]], dispersion, PowerLawPower, Distribution)
+      simulated = ropoisson(nmean, data.expanded[["Effect"]], dispersion, settings$PowerLawPower, settings$Distribution)
+      # ----------------------------------------------------------------------------------------------
+      # LogNormal ------------------------------------------------------------------------------------
+      # ----------------------------------------------------------------------------------------------
+      if (!is.na(match("LogNormal", settings$AnalysisMethods))) {
+        # cat("      settings$IsLogNormal", "\n")
+        data.expanded["Response"] = log(simulated + 1)
+        lmH1 = lm(settings$formulaH1, data=data.expanded)
+        if (FALSE | (iprogressbar==0)) {
+          cat("\nLogNormal\n=========\n")
+          print(summary(lmH1))
+        }
+        pval = 2*pt(abs(lmH1$coef[2])/sqrt(vcov(lmH1)[2,2]), lmH1$df.residual, lower.tail=FALSE)
+        pvalues$Diff[k, "LogNormal"] = pval
+        resDF = df.residual(lmH1)
+        resMS = deviance(lmH1)/resDF
+        if (TRUE) {
+          lsmeans = lsmeans(lmH1, "GMO", at=preddata)
+          meanCMP = summary(lsmeans)$lsmean[1]
+          meanGMO = summary(lsmeans)$lsmean[2]
+          repCMP = resMS / (summary(lsmeans)$SE[1]^2)
+          repGMO = resMS / (summary(lsmeans)$SE[2]^2)
+          # Generalized confidence interval
+          chi  = resDF * resMS / rchisq(settings$nGCI, resDF)
+          rCMP = rnorm(settings$nGCI, meanCMP, sqrt(chi/repCMP))
+          rGMO = rnorm(settings$nGCI, meanGMO, sqrt(chi/repGMO))
+          rCMP = exp(rCMP + chi/2) - 1
+          rGMO = exp(rGMO + chi/2) - 1
+          rCMP[rCMP < settings$smallGCI] = settings$smallGCI
+          rGMO[rGMO < settings$smallGCI] = settings$smallGCI
+          ratio = rGMO/rCMP
+          # print(data.frame(rchi, chi, rCMP, rGMO, ratio))
+          # For very small drwas from the Chi-settings$Distribution rCMP and rGMO can be out of bounds
+          quantiles = quantile(ratio, c(settings$SignificanceLevel/2, 1-settings$SignificanceLevel/2), na.rm=TRUE)
+          if (iprogressbar==0) {
+            cat("\n")
+            cat("  meanCMP  : ", meanCMP, "\n")
+            cat("  meanGMO  : ", meanGMO, "\n")
+            cat("  repGMO   : ", repGMO,  "\n")
+            cat("  repCMP   : ", repCMP,  "\n")
+            cat("quantiles  : ", quantiles,  "\n")
+            cat("\n")
+          }
+          if ((quantiles[1]>settings$LocLower) & (quantiles[2]<settings$LocUpper)) {
+            pvalues$Equi[k, "LogNormal"] = 0
+          } else {
+            pvalues$Equi[k, "LogNormal"] = 1
+          }
+          pvalues$EquiWD[k, "LogNormal"] = NA
+        }
+      }
+
+      # ----------------------------------------------------------------------------------------------
+      # SquareRoot -----------------------------------------------------------------------------------
+      # ----------------------------------------------------------------------------------------------
+      if (!is.na(match("SquareRoot", settings$AnalysisMethods))) {
+        data.expanded["Response"] = sqrt(simulated)
+        lmH1 = lm(settings$formulaH1, data=data.expanded)
+        if (FALSE | (iprogressbar==0)) {
+          cat("\nSquareRoot\n==========\n")
+          print(summary(lmH1))
+        }
+        pval = 2*pt(abs(lmH1$coef[2])/sqrt(vcov(lmH1)[2,2]), lmH1$df.residual, lower.tail=FALSE)
+        pvalues$Diff[k, "SquareRoot"] = pval
+        resDF = df.residual(lmH1)
+        resMS = deviance(lmH1)/resDF
+        if (TRUE) {
+          lsmeans = lsmeans(lmH1, "GMO", at=preddata)
+          meanCMP = summary(lsmeans)$lsmean[1]
+          meanGMO = summary(lsmeans)$lsmean[2]
+          repCMP = resMS / (summary(lsmeans)$SE[1]^2)
+          repGMO = resMS / (summary(lsmeans)$SE[2]^2)
+
+          # Generalized confidence interval
+          chi  = resDF * resMS / rchisq(settings$nGCI, resDF)
+          rCMP = rnorm(settings$nGCI, meanCMP, sqrt(chi/repCMP))
+          rGMO = rnorm(settings$nGCI, meanGMO, sqrt(chi/repGMO))
+          rCMP = rCMP*rCMP + chi
+          rGMO = rGMO*rGMO + chi
+          ratio = rGMO/rCMP
+          quantiles = quantile(ratio, c(settings$SignificanceLevel/2, 1-settings$SignificanceLevel/2), na.rm=TRUE)
+          if (iprogressbar==0) {
+            cat("\n")
+            cat("  meanCMP  : ", meanCMP, "\n")
+            cat("  meanGMO  : ", meanGMO, "\n")
+            cat("  repGMO   : ", repGMO,  "\n")
+            cat("  repCMP   : ", repCMP,  "\n")
+            cat("quantiles  : ", quantiles,  "\n")
+            cat("\n")
+          }
+          if ((quantiles[1]>settings$LocLower) & (quantiles[2]<settings$LocUpper)) {
+            pvalues$Equi[k, "SquareRoot"] = 0
+          } else {
+            pvalues$Equi[k, "SquareRoot"] = 1
+          }
+          pvalues$EquiWD[k, "SquareRoot"] = NA
+        }
+      }
+
       # ----------------------------------------------------------------------------------------------
       # OverdispersedPoisson -------------------------------------------------------------------------
       # ----------------------------------------------------------------------------------------------
-      if (IsOverdispersedPoisson) {
-        # cat("      IsOverdispersedPoisson", "\n")
-        data.expanded[["response"]] = simulated
-        glmH0 = glm(formulaH0, family="quasipoisson", data=data.expanded, mustart=data.expanded[["effect"]])
-        glmH1 = glm(formulaH1, family="quasipoisson", data=data.expanded, mustart=data.expanded[["effect"]])
-        if (iprogressbar==0) {
+      if (!is.na(match("OverdispersedPoisson", settings$AnalysisMethods))) {
+        # cat("      settings$IsOverdispersedPoisson", "\n")
+        data.expanded["Response"] = simulated
+        glmH0 = glm(settings$formulaH0, family="quasipoisson", data=data.expanded, mustart=data.expanded[["Effect"]])
+        glmH1 = glm(settings$formulaH1, family="quasipoisson", data=data.expanded, mustart=data.expanded[["Effect"]])
+        if (FALSE | (iprogressbar==0)) {
           cat("\nOverdispersedPoisson\n====================\n")
           print(summary(glmH1))
         }
@@ -223,184 +314,90 @@ for (i in 1:nreplications) {
         df1 = df.residual(glmH1)
         estDispersion = sum(residuals(glmH1,type="pearson")^2)/df1
         pval = pf((deviance(glmH0) - deviance(glmH1))/estDispersion, 1, df1, lower.tail=FALSE)
-        pvalDiff[k, "OverdispersedPoisson"] = pval
+        pvalues$Diff[k, "OverdispersedPoisson"] = pval
         if (k == 1) {
-          qt = abs(qt(SignificanceLevel/2, df1, lower.tail=TRUE))
+          qt = abs(qt(settings$SignificanceLevel/2, df1, lower.tail=TRUE))
         }
         # Equivalence test 
         estiEffect = glmH1$coef[2]
-        if ((estiEffect < logLocLower) | (estiEffect > logLocUpper)) {
-          pvalEquiWD[k, "OverdispersedPoisson"] = 1
-          pvalEquiLR[k, "OverdispersedPoisson"] = 1
+        if ((estiEffect < settings$TransformLocLower) | (estiEffect > settings$TransformLocUpper)) {
+          pvalues$EquiWD[k, "OverdispersedPoisson"] = 1
+          pvalues$Equi[k, "OverdispersedPoisson"] = 1
         } else {
           # Wald equivalence test
           seEffect = sqrt(vcov(glmH1)[2,2])
           lower = estiEffect - qt * seEffect
           upper = estiEffect + qt * seEffect
-          if ((lower>logLocLower) && (upper<logLocUpper)) {
-            pvalEquiWD[k, "OverdispersedPoisson"] = 0
+          if ((lower > settings$TransformLocLower) & (upper < settings$TransformLocUpper)) {
+            pvalues$EquiWD[k, "OverdispersedPoisson"] = 0
           } else {
-            pvalEquiWD[k, "OverdispersedPoisson"] = 1
+            pvalues$EquiWD[k, "OverdispersedPoisson"] = 1
           }
+          #stop("STOP")
           # LR equivalence test
-          glmH0low = glm(formulaH0_low, family="quasipoisson", data=data.expanded, mustart=fitted.values(glmH0))
-          glmH0upp = glm(formulaH0_upp, family="quasipoisson", data=data.expanded, mustart=fitted.values(glmH0))
+          glmH0low = glm(settings$formulaH0_low, family="quasipoisson", data=data.expanded, mustart=fitted.values(glmH0))
+          glmH0upp = glm(settings$formulaH0_upp, family="quasipoisson", data=data.expanded, mustart=fitted.values(glmH0))
           pvalLow = pf((deviance(glmH0low) - deviance(glmH1))/estDispersion, 1, df1, lower.tail=FALSE)
           pvalUpp = pf((deviance(glmH0upp) - deviance(glmH1))/estDispersion, 1, df1, lower.tail=FALSE)
-          pvalEquiLR[k, "OverdispersedPoisson"] = max(pvalLow, pvalUpp)
-        }
-      }
-      #print("OverdispersedPoisson completed")
-      # ----------------------------------------------------------------------------------------------
-      # LogNormal ------------------------------------------------------------------------------------
-      # ----------------------------------------------------------------------------------------------
-      if (IsLogNormal) {
-        # cat("      IsLogNormal", "\n")
-        data.expanded[["response"]] = log(simulated + 1)
-        lmH1 = lm(formulaH1, data=data.expanded)
-        if (iprogressbar==0) {
-          cat("\nLogNormal\n=========\n")
-          print(summary(lmH1))
-        }
-        pval = 2*pt(abs(lmH1$coef[2])/sqrt(vcov(lmH1)[2,2]), lmH1$df.residual, lower.tail=FALSE)
-        pvalDiff[k, "LogNormal"] = pval
-        resDF = df.residual(lmH1)
-        resMS = deviance(lmH1)/resDF
-        if (TRUE) {
-          lsmeans = lsmeans(lmH1, "GMO", at=preddata)
-          meanCMP = summary(lsmeans)$lsmean[1]
-          meanGMO = summary(lsmeans)$lsmean[2]
-          repCMP = resMS / (summary(lsmeans)$SE[1]^2)
-          repGMO = resMS / (summary(lsmeans)$SE[2]^2)
-          if (iprogressbar==0) {
-            cat("\n")
-            cat("  meanCMP = ", meanCMP, "\n")
-            cat("  meanGMO = ", meanGMO, "\n")
-            cat("  repGMO  = ", repGMO,  "\n")
-            cat("  repCMP  = ", repCMP,  "\n")
-            cat("\n")
-          }
-          # Generalized confidence interval
-          chi = resDF * resMS / rchisq(nGCI, resDF)
-          rCMP  = rnorm(nGCI, meanCMP, sqrt(chi/repCMP))
-          rGMO  = rnorm(nGCI, meanGMO, sqrt(chi/repGMO))
-          rCMP = exp(rCMP + chi/2) - 1
-          rGMO = exp(rGMO + chi/2) - 1
-          rCMP[rCMP<smallGCI] = smallGCI
-          rGMO[rGMO<smallGCI] = smallGCI
-          ratio = rGMO/rCMP
-          # print(data.frame(rchi, chi, rCMP, rGMO, ratio))
-          # For very small drwas from the Chi-distribution rCMP and rGMO can be out of bounds
-          quantiles = quantile(ratio, c(SignificanceLevel/2, 1-SignificanceLevel/2), na.rm=TRUE)
-          if ((quantiles[1]>LocLower) & (quantiles[2]<LocUpper)) {
-            pvalEquiLR[k, "LogNormal"] = 0
-          } else {
-            pvalEquiLR[k, "LogNormal"] = 1
-          }
-          pvalEquiWD[k, "OverdispersedPoisson"] = NA
+          pvalues$Equi[k, "OverdispersedPoisson"] = max(pvalLow, pvalUpp)
         }
       }
 
-      # ----------------------------------------------------------------------------------------------
-      # SquareRoot -----------------------------------------------------------------------------------
-      # ----------------------------------------------------------------------------------------------
-      if (IsSquareRoot) {
-        data.expanded[["response"]] = sqrt(simulated)
-        lmH1 = lm(formulaH1, data=data.expanded)
-        if (iprogressbar==0) {
-          cat("\nSquareRoot\n==========\n")
-          print(summary(lmH1))
-        }
-        pval = 2*pt(abs(lmH1$coef[2])/sqrt(vcov(lmH1)[2,2]), lmH1$df.residual, lower.tail=FALSE)
-        pvalDiff[k, "SquareRoot"] = pval
-        resDF = df.residual(lmH1)
-        resMS = deviance(lmH1)/resDF
-        if (TRUE) {
-          lsmeans = lsmeans(lmH1, "GMO", at=preddata)
-          meanCMP = summary(lsmeans)$lsmean[1]
-          meanGMO = summary(lsmeans)$lsmean[2]
-          repCMP = resMS / (summary(lsmeans)$SE[1]^2)
-          repGMO = resMS / (summary(lsmeans)$SE[2]^2)
-          if (iprogressbar==0) {
-            cat("\n")
-            cat("  meanCMP = ", meanCMP, "\n")
-            cat("  meanGMO = ", meanGMO, "\n")
-            cat("  repGMO  = ", repGMO,  "\n")
-            cat("  repCMP  = ", repCMP,  "\n")
-            cat("\n")
-          }
-
-          # Generalized confidence interval
-          chi = resDF * resMS / rchisq(nGCI, resDF)
-          rCMP  = rnorm(nGCI, meanCMP, sqrt(chi/repCMP))
-          rGMO  = rnorm(nGCI, meanGMO, sqrt(chi/repGMO))
-          rCMP = rCMP + chi
-          rGMO = rGMO + chi
-          ratio = rGMO/rCMP
-          quantiles = quantile(ratio, c(SignificanceLevel/2, 1-SignificanceLevel/2), na.rm=TRUE)
-          if ((quantiles[1]>LocLower) & (quantiles[2]<LocUpper)) {
-            pvalEquiLR[k, "SquareRoot"] = 0
-          } else {
-            pvalEquiLR[k, "SquareRoot"] = 1
-          }
-          pvalEquiWD[k, "SquareRoot"] = NA
-        }
-      }
       # ----------------------------------------------------------------------------------------------
       # NegativeBinomial -----------------------------------------------------------------------------
       # ----------------------------------------------------------------------------------------------
-      if (IsNegativeBinomial) {
-        # cat("      IsNegativeBinomial", "\n")
-        data.expanded[["response"]] = simulated
-        glmH0 = glm.nb(formulaH0, data=data.expanded, link=log)
-        glmH1 = glm.nb(formulaH1, data=data.expanded, link=log, mustart=fitted.values(glmH0))
-        if (iprogressbar==0) {
+      if (!is.na(match("NegativeBinomial", settings$AnalysisMethods))) {
+        # cat("      settings$IsNegativeBinomial", "\n")
+        data.expanded["Response"] = simulated
+        glmH0 = glm.nb(settings$formulaH0, data=data.expanded, link=log)
+        glmH1 = glm.nb(settings$formulaH1, data=data.expanded, link=log, mustart=fitted.values(glmH0))
+        if (FALSE | (iprogressbar==0)) {
           cat("\nNegativeBinomial\n================\n")
           print(summary(glmH1))
         }
         pval = pchisq(-2*(logLik(glmH0) - logLik(glmH1)), 1, lower.tail=FALSE)
-        pvalDiff[k, "NegativeBinomial"] = pval
+        pvalues$Diff[k, "NegativeBinomial"] = pval
 
         estiEffect = glmH1$coef[2]
         if ((estiEffect < logLocLower) | (estiEffect > logLocUpper)) {
           pval = 1
         } else {
-          glmH0low = glm.nb(formulaH0_low, data=data.expanded, link=log, mustart=fitted.values(glmH0))
-          glmH0upp = glm.nb(formulaH0_upp, data=data.expanded, link=log, mustart=fitted.values(glmH0))
+          glmH0low = glm.nb(settings$formulaH0_low, data=data.expanded, link=log, mustart=fitted.values(glmH0))
+          glmH0upp = glm.nb(settings$formulaH0_upp, data=data.expanded, link=log, mustart=fitted.values(glmH0))
           pvalLow = pchisq(deviance(glmH0low) - deviance(glmH1), 1, lower.tail=FALSE)
           pvalUpp = pchisq(deviance(glmH0upp) - deviance(glmH1), 1, lower.tail=FALSE)
           pval = max(pvalLow, pvalUpp)
         } 
-        pvalEquiLR[k, "NegativeBinomial"] = pval
+        pvalues$Equi[k, "NegativeBinomial"] = pval
       }
       iprogressbar = iprogressbar + 1
-      labelk = formatC(k, width=ceiling(log10(NumberOfSimulatedDataSets+0.5)), flag="0")
-      labelk = sprintf("Simulation %s (%s)", labelk, NumberOfSimulatedDataSets)
-      label = sprintf("%s;     %s;     %s", labeli, labelj, labelk)
-      setWinProgressBar(progressbar, iprogressbar, label=label)
+      if ((iprogressbar %% progressbarUpdate) == 0) {
+        labelk = formatC(k, width=ceiling(log10(settings$NumberOfSimulatedDataSets+0.5)), flag="0")
+        labelk = sprintf("Simulation %s (%s)", labelk, settings$NumberOfSimulatedDataSets)
+        label = sprintf("%s;     %s;     %s", labeli, labelj, labelk)
+        setWinProgressBar(progressbar, iprogressbar, label=label)
+      }
     }
     tel = tel + 1
-    resultDiff[tel,] = colSums(pvalDiff < SignificanceLevel)/NumberOfSimulatedDataSets
-    resultEquiLR[tel,] = colSums(pvalEquiLR < SignificanceLevel)/NumberOfSimulatedDataSets
-    resultEquiWD[tel,] = colSums(pvalEquiWD < SignificanceLevel)/NumberOfSimulatedDataSets
+    results$Diff[tel,]   = colSums(pvalues$Diff   < settings$SignificanceLevel)/settings$NumberOfSimulatedDataSets
+    results$Equi[tel,] = colSums(pvalues$Equi < settings$SignificanceLevel)/settings$NumberOfSimulatedDataSets
+    results$EquiWD[tel,] = colSums(pvalues$EquiWD < settings$SignificanceLevel)/settings$NumberOfSimulatedDataSets
   }
 }
+close(progressbar)
 warnings()
-print(resultDiff)
-print(resultEquiLR)
-print(resultEquiWD)
+print(results$Effects)
+print(results$Diff)
+print(results$Equi)
+print(results$EquiWD)
 
 # Combine results into a single dataframe
-df=cbind(repEffect, repEffect, CSD, repBlock, resultDiff, resultEquiLR, resultEquiWD)
-df[,2] = log(df[,2])
-dfnames = c("Ratio",  "LogRatio", "CSD", "NumberReplicates", 
-    paste("PowerDifference", analysis, sep=""), 
-    paste("PowerEquivalenceLR", analysis, sep=""), 
-    paste("PowerEquivalenceWD", analysis, sep=""))
-colnames(df) = dfnames
+df=cbind(results$Effect, results$Diff, results$Equi, results$EquiWD)
 
 # Sort according to Ratio and NumberReplicates
-df = df[ order(df[,2], df[,3]), ]
+#df = df[ order(df[,2], df[,2]), ]
+df
 write.table(df, file=outputfile, quote=FALSE, sep=",", row.names=FALSE, col.names=TRUE, na="*")
 q()
+
 
