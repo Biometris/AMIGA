@@ -89,7 +89,7 @@ namespace AmigaPowerAnalysis.GUI {
             var checkbox = new DataGridViewCheckBoxColumn();
             checkbox.DataPropertyName = "IsInteractionWithVariety";
             checkbox.Name = "IsInteractionWithVariety";
-            checkbox.HeaderText = "Interaction";
+            checkbox.HeaderText = "Include in comparison";
             dataGridViewFactors.Columns.Add(checkbox);
 
             updateDataGridViewFactors();
