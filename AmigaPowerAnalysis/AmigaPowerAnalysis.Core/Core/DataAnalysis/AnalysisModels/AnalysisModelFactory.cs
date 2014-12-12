@@ -2,6 +2,23 @@
 
     static class AnalysisModelFactory {
 
+
+        public static readonly AnalysisMethodType CountAnalysisMethods = AnalysisMethodType.LogNormal
+            | AnalysisMethodType.SquareRoot
+            | AnalysisMethodType.OverdispersedPoisson;
+
+
+        public static readonly AnalysisMethodType FractionAnalysisMethods = AnalysisMethodType.NegativeBinomial
+            | AnalysisMethodType.EmpiricalLogit
+            | AnalysisMethodType.OverdispersedBinomial
+            | AnalysisMethodType.Betabinomial;
+
+
+        public static readonly AnalysisMethodType NonNegativeAnalysisMethods = AnalysisMethodType.LogPlusM
+            | AnalysisMethodType.Gamma;
+
+        public static readonly AnalysisMethodType ConsinuousAnalysisMethods = AnalysisMethodType.Normal;
+
         /// <summary>
         /// Decides which class to instantiate.
         /// </summary>
@@ -21,6 +38,25 @@
                 default:
                     return new NormalModel();
             }
+        }
+
+        /// <summary>
+        /// Decides which class to instantiate.
+        /// </summary>
+        public static AnalysisMethodType AnalysisMethodsForMeasurementType(MeasurementType measurementType) {
+            switch (measurementType) {
+                case MeasurementType.Count:
+                    return CountAnalysisMethods;
+                case MeasurementType.Fraction:
+                    return FractionAnalysisMethods;
+                case MeasurementType.Nonnegative:
+                    return NonNegativeAnalysisMethods;
+                case MeasurementType.Continuous:
+                    return ConsinuousAnalysisMethods;
+                default:
+                    return ConsinuousAnalysisMethods;
+            }
+
         }
     }
 }
