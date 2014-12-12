@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="TestPath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">D:\Diverse Opdrachten\AMIGA Power analysis\TestData\Test</Value>
+      <Value Profile="(Default)">..\..\..\TestData\Test</Value>
     </Setting>
     <Setting Name="RPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">C:\Program Files\R\R-3.1.1\bin\RScript.exe</Value>

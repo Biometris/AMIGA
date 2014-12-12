@@ -71,5 +71,18 @@ namespace AmigaPowerAnalysis.Core {
         /// </summary>
         [DataMember]
         public AnalysisMethodType SelectedAnalysisMethodTypes { get; set; }
+
+        /// <summary>
+        /// Includes/exclused analysis types for simulation.
+        /// </summary>
+        /// <param name="analysisMethodType"></param>
+        /// <param name="selected"></param>
+        public void SetAnalysisMethodType(AnalysisMethodType analysisMethodType, bool selected) {
+            if (selected) {
+                SelectedAnalysisMethodTypes |= analysisMethodType;
+            } else {
+                SelectedAnalysisMethodTypes &= ~analysisMethodType;
+            }
+        }
     }
 }

@@ -108,52 +108,44 @@ namespace AmigaPowerAnalysis.GUI {
             textBox.Text = _project.PowerCalculationSettings.Seed.ToString();
         }
 
-        private void setAnalysisMethodType(AnalysisMethodType analysisMethodType, bool selected) {
-            if (selected) {
-                _project.PowerCalculationSettings.SelectedAnalysisMethodTypes |= analysisMethodType;
-            } else {
-                _project.PowerCalculationSettings.SelectedAnalysisMethodTypes &= ~analysisMethodType;
-            }
-        }
-
         private void checkBoxMethodForAnalysesLN_CheckedChanged(object sender, EventArgs e) {
-            setAnalysisMethodType(AnalysisMethodType.LogNormal, checkBoxMethodForAnalysesLN.Checked);
+            _project.PowerCalculationSettings.SetAnalysisMethodType(AnalysisMethodType.LogNormal, checkBoxMethodForAnalysesLN.Checked);
         }
 
         private void checkBoxMethodForAnalysesSQ_CheckedChanged(object sender, EventArgs e) {
-            setAnalysisMethodType(AnalysisMethodType.SquareRoot, checkBoxMethodForAnalysesSQ.Checked);
+            _project.PowerCalculationSettings.SetAnalysisMethodType(AnalysisMethodType.SquareRoot, checkBoxMethodForAnalysesSQ.Checked);
         }
 
         private void checkBoxMethodForAnalysesOP_CheckedChanged(object sender, EventArgs e) {
-            setAnalysisMethodType(AnalysisMethodType.OverdispersedPoisson, checkBoxMethodForAnalysesOP.Checked);
+            _project.PowerCalculationSettings.SetAnalysisMethodType(AnalysisMethodType.OverdispersedPoisson, checkBoxMethodForAnalysesOP.Checked);
         }
 
         private void checkBoxMethodForAnalysesNB_CheckedChanged(object sender, EventArgs e) {
-            setAnalysisMethodType(AnalysisMethodType.NegativeBinomial, checkBoxMethodForAnalysesNB.Checked);
+            _project.PowerCalculationSettings.SetAnalysisMethodType(AnalysisMethodType.NegativeBinomial, checkBoxMethodForAnalysesNB.Checked);
         }
 
         private void checkBoxMethodForAnalysesEL_CheckedChanged(object sender, EventArgs e) {
-            setAnalysisMethodType(AnalysisMethodType.EmpiricalLogit, checkBoxMethodForAnalysesEL.Checked);
+            _project.PowerCalculationSettings.SetAnalysisMethodType(AnalysisMethodType.EmpiricalLogit, checkBoxMethodForAnalysesEL.Checked);
         }
 
         private void checkBoxMethodForAnalysesOBN_CheckedChanged(object sender, EventArgs e) {
-            setAnalysisMethodType(AnalysisMethodType.OverdispersedBinomial, checkBoxMethodForAnalysesOBN.Checked);
+            _project.PowerCalculationSettings.SetAnalysisMethodType(AnalysisMethodType.OverdispersedBinomial, checkBoxMethodForAnalysesOBN.Checked);
         }
 
         private void checkBoxMethodForAnalysesBBN_CheckedChanged(object sender, EventArgs e) {
-            setAnalysisMethodType(AnalysisMethodType.Betabinomial, checkBoxMethodForAnalysesBBN.Checked);
+            _project.PowerCalculationSettings.SetAnalysisMethodType(AnalysisMethodType.Betabinomial, checkBoxMethodForAnalysesBBN.Checked);
         }
 
         private void checkBoxMethodForAnalysesLPM_CheckedChanged(object sender, EventArgs e) {
-            setAnalysisMethodType(AnalysisMethodType.LogPlusM, checkBoxMethodForAnalysesLPM.Checked);
+            _project.PowerCalculationSettings.SetAnalysisMethodType(AnalysisMethodType.LogPlusM, checkBoxMethodForAnalysesLPM.Checked);
         }
 
         private void checkBoxMethodForAnalysesG_CheckedChanged(object sender, EventArgs e) {
-            setAnalysisMethodType(AnalysisMethodType.Gamma, checkBoxMethodForAnalysesG.Checked);
+            _project.PowerCalculationSettings.SetAnalysisMethodType(AnalysisMethodType.Gamma, checkBoxMethodForAnalysesG.Checked);
         }
 
         private void checkBoxMethodForAnalysesN_CheckedChanged(object sender, EventArgs e) {
-            setAnalysisMethodType(AnalysisMethodType.Normal, checkBoxMethodForAnalysesN.Checked);
+            _project.PowerCalculationSettings.SetAnalysisMethodType(AnalysisMethodType.Normal, checkBoxMethodForAnalysesN.Checked);
         }
 
         private void comboBoxMethodForPowerCalculation_SelectionChangeCommitted(object sender, EventArgs e) {

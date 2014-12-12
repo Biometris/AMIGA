@@ -202,10 +202,12 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             stringBuilder.AppendLine(format("RandomNumberSeed", RandomNumberSeed));
             stringBuilder.AppendLine(format("NumberOfSimulatedDataSets", NumberOfSimulatedDataSets));
 
-            var analysisMethodTypes = Enum.GetValues(typeof(AnalysisMethodType)).Cast<AnalysisMethodType>();
-            foreach (var analysisMethodType in analysisMethodTypes) {
-                stringBuilder.AppendLine(format("Is" + analysisMethodType.ToString(), SelectedAnalysisMethodTypes.HasFlag(analysisMethodType)));
-            }
+            stringBuilder.AppendLine(format("AnalysisMethods", string.Join(" ", SelectedAnalysisMethodTypes.GetFlags().Cast<AnalysisMethodType>().Select(am => am.ToString()).ToList())));
+
+            //var analysisMethodTypes = Enum.GetValues(typeof(AnalysisMethodType)).Cast<AnalysisMethodType>();
+            //foreach (var analysisMethodType in analysisMethodTypes) {
+            //    stringBuilder.AppendLine(format("Is" + analysisMethodType.ToString(), SelectedAnalysisMethodTypes.HasFlag(analysisMethodType)));
+            //}
 
             return stringBuilder.ToString();
         }
