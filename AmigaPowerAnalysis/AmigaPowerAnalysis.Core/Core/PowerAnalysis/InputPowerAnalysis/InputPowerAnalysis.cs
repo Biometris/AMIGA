@@ -186,6 +186,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             stringBuilder.AppendLine(format("Endpoint", Endpoint));
             stringBuilder.AppendLine(format("LocLower", LocLower));
             stringBuilder.AppendLine(format("LocUpper", LocUpper));
+            stringBuilder.AppendLine(format("MeasurementType", MeasurementType));
             stringBuilder.AppendLine(format("Distribution", DistributionType));
             stringBuilder.AppendLine(format("PowerLawPower", PowerLawPower));
             stringBuilder.AppendLine(format("OverallMean", OverallMean));
@@ -203,7 +204,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
 
             var analysisMethodTypes = Enum.GetValues(typeof(AnalysisMethodType)).Cast<AnalysisMethodType>();
             foreach (var analysisMethodType in analysisMethodTypes) {
-                stringBuilder.AppendLine(format(analysisMethodType.ToString(), SelectedAnalysisMethodTypes.HasFlag(analysisMethodType)));
+                stringBuilder.AppendLine(format("Is" + analysisMethodType.ToString(), SelectedAnalysisMethodTypes.HasFlag(analysisMethodType)));
             }
 
             return stringBuilder.ToString();
