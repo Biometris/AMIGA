@@ -48,6 +48,7 @@
             this.dataGridViewEndpoints.TabIndex = 2;
             this.dataGridViewEndpoints.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.dataGridViewEndpoints_CellValidating);
             this.dataGridViewEndpoints.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dataGridViewEndpoints_DataError);
+            this.dataGridViewEndpoints.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dataGridViewEndpoints_KeyDown);
             // 
             // addEndpointButton
             // 

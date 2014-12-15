@@ -152,5 +152,14 @@ namespace AmigaPowerAnalysis.GUI {
                     MessageBoxIcon.Error,
                     MessageBoxDefaultButton.Button1);
         }
+
+        private void dataGridViewEndpoints_KeyDown(object sender, KeyEventArgs e) {
+            if (e.KeyData == Keys.Delete || e.KeyData == Keys.Back) {
+                if (dataGridViewEndpoints.CurrentCell.OwningColumn == dataGridViewEndpoints.Columns["LocLower"]
+                    || dataGridViewEndpoints.CurrentCell.OwningColumn == dataGridViewEndpoints.Columns["LocUpper"]) {
+                    dataGridViewEndpoints.CurrentCell.Value = double.NaN;
+                }
+            }
+        }
     }
 }
