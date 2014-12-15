@@ -56,6 +56,7 @@ namespace AmigaPowerAnalysis.GUI {
                 this.comboBoxAnalysisType.SelectedIndex = 0;
             }
             updateAnalysisOutputPanel();
+            dataGridViewComparisons.CurrentCell = null;
         }
 
         private void updateVisibilities() {
@@ -141,10 +142,6 @@ namespace AmigaPowerAnalysis.GUI {
             }
         }
 
-        private void dataGridViewComparisons_SelectionChanged(object sender, EventArgs e) {
-            updateAnalysisOutputPanel();
-        }
-
         private void comboBoxAnalysisType_SelectedIndexChanged(object sender, EventArgs e) {
             AnalysisMethodType analysisType;
             Enum.TryParse<AnalysisMethodType>(comboBoxAnalysisType.SelectedValue.ToString(), out analysisType);
@@ -171,14 +168,20 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void dataGridViewComparisons_CellValueChanged(object sender, DataGridViewCellEventArgs e) {
-            updateAnalysisOutputPanel();
-            updateVisibilities();
+            if (dataGridViewComparisons.CurrentCell != null) {
+                updateAnalysisOutputPanel();
+                updateVisibilities();
+            }
         }
 
         private void dataGridViewComparisons_CurrentCellDirtyStateChanged(object sender, EventArgs e) {
             if (dataGridViewComparisons.IsCurrentCellDirty) {
                 dataGridViewComparisons.CommitEdit(DataGridViewDataErrorContexts.Commit);
             }
+        }
+
+        private void dataGridViewComparisons_Leave(object sender, EventArgs e) {
+            dataGridViewComparisons.CurrentCell = null;
         }
     }
 }

@@ -30,12 +30,12 @@
             this.flowLayoutPanelReport = new System.Windows.Forms.FlowLayoutPanel();
             this.buttonShowReport = new System.Windows.Forms.Button();
             this.plotTypePanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.comboBoxAnalysisType = new System.Windows.Forms.ComboBox();
             this.comboBoxTestType = new System.Windows.Forms.ComboBox();
             this.comboBoxAnalysisPlotTypes = new System.Windows.Forms.ComboBox();
             this.flowLayoutPanelComparisonInfo = new System.Windows.Forms.FlowLayoutPanel();
             this.labelBlockSize = new System.Windows.Forms.Label();
             this.labelPlotsPerBlock = new System.Windows.Forms.Label();
-            this.comboBoxAnalysisType = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerComparisons)).BeginInit();
             this.splitContainerComparisons.Panel1.SuspendLayout();
             this.splitContainerComparisons.Panel2.SuspendLayout();
@@ -87,7 +87,7 @@
             this.dataGridViewComparisons.TabIndex = 3;
             this.dataGridViewComparisons.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewComparisons_CellValueChanged);
             this.dataGridViewComparisons.CurrentCellDirtyStateChanged += new System.EventHandler(this.dataGridViewComparisons_CurrentCellDirtyStateChanged);
-            this.dataGridViewComparisons.SelectionChanged += new System.EventHandler(this.dataGridViewComparisons_SelectionChanged);
+            this.dataGridViewComparisons.Leave += new System.EventHandler(this.dataGridViewComparisons_Leave);
             // 
             // panelResultPlots
             // 
@@ -148,6 +148,16 @@
             this.plotTypePanel.Size = new System.Drawing.Size(549, 29);
             this.plotTypePanel.TabIndex = 17;
             // 
+            // comboBoxAnalysisType
+            // 
+            this.comboBoxAnalysisType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxAnalysisType.FormattingEnabled = true;
+            this.comboBoxAnalysisType.Location = new System.Drawing.Point(3, 3);
+            this.comboBoxAnalysisType.Name = "comboBoxAnalysisType";
+            this.comboBoxAnalysisType.Size = new System.Drawing.Size(182, 21);
+            this.comboBoxAnalysisType.TabIndex = 6;
+            this.comboBoxAnalysisType.SelectedIndexChanged += new System.EventHandler(this.comboBoxAnalysisType_SelectedIndexChanged);
+            // 
             // comboBoxTestType
             // 
             this.comboBoxTestType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -196,16 +206,6 @@
             this.labelPlotsPerBlock.Size = new System.Drawing.Size(88, 13);
             this.labelPlotsPerBlock.TabIndex = 10;
             this.labelPlotsPerBlock.Text = "... plots per block";
-            // 
-            // comboBoxAnalysisType
-            // 
-            this.comboBoxAnalysisType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxAnalysisType.FormattingEnabled = true;
-            this.comboBoxAnalysisType.Location = new System.Drawing.Point(3, 3);
-            this.comboBoxAnalysisType.Name = "comboBoxAnalysisType";
-            this.comboBoxAnalysisType.Size = new System.Drawing.Size(182, 21);
-            this.comboBoxAnalysisType.TabIndex = 6;
-            this.comboBoxAnalysisType.SelectedIndexChanged += new System.EventHandler(this.comboBoxAnalysisType_SelectedIndexChanged);
             // 
             // AnalysisResultsPanel
             // 
