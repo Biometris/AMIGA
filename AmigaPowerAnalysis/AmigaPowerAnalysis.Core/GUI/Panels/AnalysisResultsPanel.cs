@@ -107,10 +107,10 @@ namespace AmigaPowerAnalysis.GUI {
                 var primaryComparisons = _comparisons.Where(c => c.OutputPowerAnalysis != null && c.IsPrimary).ToList();
                 if (primaryComparisons.Count > 0) {
                     var records = primaryComparisons.SelectMany(c => c.OutputPowerAnalysis.OutputRecords)
-                        .GroupBy(r => new { LevelOfConcern = r.ConcernStandardizedDifference, r.NumberOfReplicates })
+                        .GroupBy(r => new { LevelOfConcern = r.ConcernStandardizedDifference, NumberOfReplicates = r.NumberOfReplications })
                         .Select(g => new OutputPowerAnalysisRecord() {
                             ConcernStandardizedDifference = g.Key.LevelOfConcern,
-                            NumberOfReplicates = g.Key.NumberOfReplicates,
+                            NumberOfReplications = g.Key.NumberOfReplicates,
                             PowerDifferenceLogNormal = g.Min(r => r.PowerDifferenceLogNormal),
                             PowerDifferenceSquareRoot = g.Min(r => r.PowerDifferenceSquareRoot),
                             PowerDifferenceOverdispersedPoisson = g.Min(r => r.PowerDifferenceOverdispersedPoisson),

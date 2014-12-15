@@ -84,6 +84,7 @@
     <Compile Include="Core\DataAnalysis\AnalysisModels\OverDispersedPoissonModel.cs" />
     <Compile Include="Core\DataAnalysis\AnalysisModels\IAnalysisModel.cs" />
     <Compile Include="Core\DataAnalysis\AnalysisRScriptGenerator.cs" />
+    <Compile Include="Core\PowerAnalysis\OutputPowerAnalysis\OutputPowerAnalysisFileReader.cs" />
     <Compile Include="Core\ProjectEntities\FactorLevel\ComparisonDummyFactorLevel.cs" />
     <Compile Include="Core\PowerAnalysis\PowerAnalysisExecuters\RPowerAnalysisExecuter.cs" />
     <Compile Include="Core\PowerAnalysis\PowerAnalysisExecuters\GenstatPowerAnalysisExecuter.cs" />
@@ -100,6 +101,13 @@
     <Compile Include="Core\ProjectEntities\Endpoint\Comparison.cs" />
     <Compile Include="Core\ProjectEntities\FactorLevelCombination\ModifierFactorLevelCombination.cs" />
     <Compile Include="Core\ProjectEntities\Settings\DesignSettings.cs" />
+    <Compile Include="Helpers\DataFileReader\ColumnDefinition.cs" />
+    <Compile Include="Helpers\DataFileReader\ColumnMapping.cs" />
+    <Compile Include="Helpers\DataFileReader\CsvFileReader.cs" />
+    <Compile Include="Helpers\DataFileReader\DynamicProperty.cs" />
+    <Compile Include="Helpers\DataFileReader\DynamicPropertyValue.cs" />
+    <Compile Include="Helpers\DataFileReader\TableDefinition.cs" />
+    <Compile Include="Helpers\DataFileReader\TableDefinitionCollection.cs" />
     <Compile Include="Helpers\Statistics\Distributions\PoissonLogNormalDistribution.cs" />
     <Compile Include="Helpers\Statistics\Distributions\PowerLawDistribution.cs" />
     <Compile Include="Helpers\Statistics\Distributions\BetaBinomialDistribution.cs" />
@@ -364,27 +372,30 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="Resources\AmigaPowerAnalysis.gen">
+    <None Include="Resources\GenstatScripts\AmigaPowerAnalysis.gen">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Resources\Lyles.pro">
+    <None Include="Resources\GenstatScripts\Lyles.pro">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Resources\ToolSimulation.rin">
+    <None Include="Resources\RScripts\ToolSimulation.rin">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Resources\zBinomial.rin">
+    <None Include="Resources\RScripts\ToolSimulation.rin" />
+    <None Include="Resources\RScripts\zBinomial.rin">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Resources\zMisc.rin">
+    <None Include="Resources\RScripts\zMisc.rin">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Resources\zPoisson.rin">
+    <None Include="Resources\RScripts\zMisc.rin" />
+    <None Include="Resources\RScripts\zPoisson.rin">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\FieldTrial.jpg" />
+    <EmbeddedResource Include="Resources\RScripts\ROutputTableDefinition.xml" />
     <Content Include="Resources\WkHtmlToPdf\libeay32.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -400,7 +411,6 @@
     <Content Include="Resources\WkHtmlToPdf\wkhtmltopdf.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="Resources\PrintStyleSheet.bmp" />
     <EmbeddedResource Include="Resources\print.css" />
     <EmbeddedResource Include="Resources\amiga_icon.ico" />
     <Content Include="Resources\amiga_logo.png" />

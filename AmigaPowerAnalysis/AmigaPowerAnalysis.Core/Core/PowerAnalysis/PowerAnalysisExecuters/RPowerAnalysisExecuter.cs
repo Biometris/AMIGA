@@ -13,12 +13,12 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
         private string _tempPath;
 
         public RPowerAnalysisExecuter(string tempPath) {
-            _tempPath = tempPath.Substring(0, tempPath.Length);
+            _tempPath = Path.GetFullPath(tempPath.Substring(0, tempPath.Length));
         }
 
         public OutputPowerAnalysis RunAnalysis(InputPowerAnalysis inputPowerAnalysis) {
             var applicationDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            var scriptsDirectory = string.Format("{0}\\Resources", applicationDirectory);
+            var scriptsDirectory = string.Format(@"{0}\Resources\RScripts", applicationDirectory);
             var scriptFilename = Path.Combine(scriptsDirectory, "ToolSimulation.rin");
 
             var comparisonInputFilename = Path.Combine(_tempPath, string.Format("{0}-Input.csv", inputPowerAnalysis.ComparisonId));
@@ -56,9 +56,10 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             if (exitCode != 0) {
                 throw new Exception(error);
             }
+            var outputFileReader = new OutputPowerAnalysisFileReader();
             return new OutputPowerAnalysis() {
                 InputPowerAnalysis = inputPowerAnalysis,
-                OutputRecords = readAnalysisOutputRecords(comparisonOutputFilename),
+                OutputRecords = outputFileReader.ReadOutputPowerAnalysis(comparisonOutputFilename),
             };
         }
 
@@ -176,10 +177,10 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                     .Select(str => double.TryParse(str.Trim(), out parsedVal) ? parsedVal : double.NaN)
                     .ToArray();
                 var record = new OutputPowerAnalysisRecord() {
-                    Ratio = values[0],
-                    LogRatio = values[1],
+                    Effect = values[0],
+                    TransformedEffect = values[1],
                     ConcernStandardizedDifference = values[2],
-                    NumberOfReplicates = (int)values[3],
+                    NumberOfReplications = (int)values[3],
                     PowerDifferenceLogNormal = values[4],
                     PowerDifferenceSquareRoot = values[5],
                     PowerDifferenceOverdispersedPoisson = values[6],

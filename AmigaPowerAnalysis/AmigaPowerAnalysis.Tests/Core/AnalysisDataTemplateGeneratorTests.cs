@@ -1,8 +1,6 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using AmigaPowerAnalysis.Core;
 using AmigaPowerAnalysis.Core.DataAnalysis;
-using AmigaPowerAnalysis.Core.PowerAnalysis;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace AmigaPowerAnalysis.Tests {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using AmigaPowerAnalysis.Core.DataAnalysis.AnalysisModels;
 using AmigaPowerAnalysis.Helpers.Statistics;
 
 namespace AmigaPowerAnalysis.Core.PowerAnalysis {
@@ -18,6 +19,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
         public InputPowerAnalysis CreateInputPowerAnalysis(Comparison comparison, DesignSettings designSettings, PowerCalculationSettings powerCalculationSettings, int idComparison, int totalNumberOfComparisons) {
             var comparisonLevels = CreateComparisonDummyFactorLevels(comparison);
             var modifierLevels = CreateModifierDummyFactorLevels(comparison);
+            var selectedAnalysisMethods = powerCalculationSettings.SelectedAnalysisMethodTypes & AnalysisModelFactory.AnalysisMethodsForMeasurementType(comparison.Endpoint.Measurement);
             var inputPowerAnalysis = new InputPowerAnalysis() {
                 ComparisonId = idComparison,
                 NumberOfComparisons = totalNumberOfComparisons,
@@ -30,7 +32,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                 DistributionType = comparison.Endpoint.DistributionType,
                 PowerLawPower = comparison.Endpoint.PowerLawPower,
                 OverallMean = comparison.Endpoint.MuComparator,
-                SelectedAnalysisMethodTypes = powerCalculationSettings.SelectedAnalysisMethodTypes,
+                SelectedAnalysisMethodTypes = selectedAnalysisMethods,
                 CvComparator = comparison.Endpoint.CvComparator,
                 CvForBlocks = comparison.Endpoint.CvForBlocks,
                 NumberOfInteractions = comparison.Endpoint.InteractionFactors.Count(),

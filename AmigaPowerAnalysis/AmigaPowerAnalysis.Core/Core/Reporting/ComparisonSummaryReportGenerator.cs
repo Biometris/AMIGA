@@ -142,12 +142,12 @@ namespace AmigaPowerAnalysis.Core.Reporting {
 
         private static string generateComparisonsChartHtml(IEnumerable<Comparison> comparisons, string tempPath) {
             var records = comparisons.SelectMany(c => c.OutputPowerAnalysis.OutputRecords)
-                .GroupBy(r => new { ConcernStandardizedDifference = r.ConcernStandardizedDifference, r.NumberOfReplicates })
+                .GroupBy(r => new { ConcernStandardizedDifference = r.ConcernStandardizedDifference, NumberOfReplicates = r.NumberOfReplications })
                 .Select(g => new OutputPowerAnalysisRecord() {
                     ConcernStandardizedDifference = g.Key.ConcernStandardizedDifference,
-                    NumberOfReplicates = g.Key.NumberOfReplicates,
-                    Ratio = double.NaN,
-                    LogRatio = double.NaN,
+                    NumberOfReplications = g.Key.NumberOfReplicates,
+                    Effect = double.NaN,
+                    TransformedEffect = double.NaN,
                     PowerDifferenceLogNormal = g.Min(r => r.PowerDifferenceLogNormal),
                     PowerDifferenceSquareRoot = g.Min(r => r.PowerDifferenceSquareRoot),
                     PowerDifferenceOverdispersedPoisson = g.Min(r => r.PowerDifferenceOverdispersedPoisson),

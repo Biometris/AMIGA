@@ -46,12 +46,6 @@ namespace AmigaPowerAnalysis.GUI {
             updateDataGridComparisons();
             if (_project.GetComparisons().Any(c => c.OutputPowerAnalysis != null)) {
                 splitContainerComparisons.Visible = true;
-                var selectedAnalysisMethodTypes = _comparisons.First().OutputPowerAnalysis.InputPowerAnalysis.SelectedAnalysisMethodTypes.GetFlags().ToArray();
-                this.comboBoxAnalysisType.Visible = selectedAnalysisMethodTypes.Count() > 1;
-                this.comboBoxAnalysisType.DataSource = selectedAnalysisMethodTypes;
-                if (selectedAnalysisMethodTypes.Count() > 0) {
-                    this.comboBoxAnalysisType.SelectedIndex = 0;
-                }
             } else {
                 splitContainerComparisons.Visible = false;
             }
@@ -66,7 +60,6 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void updateDataGridComparisons() {
             dataGridViewComparisons.Columns.Clear();
-
             var _availableEndpoints = _project.Endpoints.Select(h => new { Name = h.Name, Endpoint = h }).ToList();
 
             var combo = new DataGridViewComboBoxColumn();
@@ -103,6 +96,12 @@ namespace AmigaPowerAnalysis.GUI {
             _currentComparison = _project.GetComparisons().ElementAt(dataGridViewComparisons.CurrentRow.Index);
             if (_currentComparison != null) {
                 this.comboBoxAnalysisType.Visible = true;
+                var selectedAnalysisMethodTypes = _currentComparison.OutputPowerAnalysis.InputPowerAnalysis.SelectedAnalysisMethodTypes.GetFlags().ToArray();
+                this.comboBoxAnalysisType.Visible = selectedAnalysisMethodTypes.Count() > 1;
+                this.comboBoxAnalysisType.DataSource = selectedAnalysisMethodTypes;
+                if (selectedAnalysisMethodTypes.Count() > 0) {
+                    this.comboBoxAnalysisType.SelectedIndex = 0;
+                }
             } else {
                 this.comboBoxAnalysisType.Visible = false;
             }
@@ -110,9 +109,9 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void comboBoxAnalysisType_SelectedIndexChanged(object sender, EventArgs e) {
-            AnalysisMethodType analysisType;
-            Enum.TryParse<AnalysisMethodType>(comboBoxAnalysisType.SelectedValue.ToString(), out analysisType);
-            _currentAnalysisType = analysisType;
+            AnalysisMethodType analysisMethodType;
+            Enum.TryParse<AnalysisMethodType>(comboBoxAnalysisType.SelectedValue.ToString(), out analysisMethodType);
+            _currentAnalysisType = analysisMethodType;
             updateAnalysisOutputPanel();
         }
 

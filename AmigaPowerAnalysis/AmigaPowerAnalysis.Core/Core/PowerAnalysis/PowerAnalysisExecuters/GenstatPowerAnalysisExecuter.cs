@@ -39,9 +39,10 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                 exeProcess.WaitForExit();
             }
 
+            var outputFileReader = new OutputPowerAnalysisFileReader();
             return new OutputPowerAnalysis() {
                 InputPowerAnalysis = inputPowerAnalysis,
-                OutputRecords = readAnalysisOutputRecords(comparisonOutputFilename),
+                OutputRecords = outputFileReader.ReadOutputPowerAnalysis(comparisonOutputFilename),
             };
         }
 
@@ -71,10 +72,10 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                     .Select(str => double.TryParse(str.Trim(), out parsedVal) ? parsedVal : double.NaN)
                     .ToArray();
                 var record = new OutputPowerAnalysisRecord() {
-                    Ratio = values[0],
-                    LogRatio = values[1],
+                    Effect = values[0],
+                    TransformedEffect = values[1],
                     ConcernStandardizedDifference = values[2],
-                    NumberOfReplicates = (int)values[3],
+                    NumberOfReplications = (int)values[3],
                     PowerDifferenceLogNormal = values[4],
                     PowerDifferenceSquareRoot = values[5],
                     PowerDifferenceOverdispersedPoisson = values[6],
