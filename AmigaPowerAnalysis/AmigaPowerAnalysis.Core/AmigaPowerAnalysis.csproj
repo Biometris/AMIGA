@@ -381,14 +381,12 @@
     <None Include="Resources\RScripts\ToolSimulation.rin">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Resources\RScripts\ToolSimulation.rin" />
     <None Include="Resources\RScripts\zBinomial.rin">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Resources\RScripts\zMisc.rin">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Resources\RScripts\zMisc.rin" />
     <None Include="Resources\RScripts\zPoisson.rin">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
