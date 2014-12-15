@@ -6,7 +6,7 @@
       <Value Profile="(Default)">..\..\..\TestData\Test</Value>
     </Setting>
     <Setting Name="RPath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">C:\Program Files\R\R-3.1.1\bin\RScript.exe</Value>
+      <Value Profile="(Default)">C:\Program Files\R\R-3.1.2\bin\RScript.exe</Value>
     </Setting>
     <Setting Name="GenstatPath" Type="System.String" Scope="User">
       <Value Profile="(Default)" />

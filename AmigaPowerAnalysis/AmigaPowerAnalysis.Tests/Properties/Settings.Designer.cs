@@ -37,7 +37,7 @@ namespace AmigaPowerAnalysis.Tests.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Program Files\\R\\R-3.1.1\\bin\\RScript.exe")]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Program Files\\R\\R-3.1.2\\bin\\RScript.exe")]
         public string RPath {
             get {
                 return ((string)(this["RPath"]));
