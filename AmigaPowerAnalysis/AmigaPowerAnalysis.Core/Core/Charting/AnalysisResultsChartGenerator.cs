@@ -74,8 +74,8 @@ namespace AmigaPowerAnalysis.Core.Charting {
 
         public static PlotModel CreatePlotViewLogRatioReplicates(List<OutputPowerAnalysisRecord> powerAnalysisOutputRecords, TestType testType, AnalysisMethodType analysisMethodType) {
             var model = CreatePlotModel(testType, analysisMethodType, AnalysisPlotType.Ratio);
-            var horizontalAxis = new LinearAxis() {
-                Title = "Log(ratio)",
+            var horizontalAxis = new LogarithmicAxis() {
+                Title = "Ratio",
                 MajorGridlineStyle = LineStyle.Solid,
                 MinorGridlineStyle = LineStyle.Dot,
                 Position = AxisPosition.Bottom,
@@ -90,7 +90,7 @@ namespace AmigaPowerAnalysis.Core.Charting {
                     };
                     series.Title = string.Format("Repl {0:0.##}", replicateGroup.Key);
                     series.Points.AddRange(replicateGroup.Select(g => new DataPoint() {
-                        X = g.TransformedEffect,
+                        X = g.Effect,
                         Y = g.Power(testType, analysisMethodType),
                     }));
                     model.Series.Add(series);
