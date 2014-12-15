@@ -153,6 +153,5 @@ namespace AmigaPowerAnalysis.Core.Charting {
             }
             return model;
         }
-
     }
 }

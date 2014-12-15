@@ -76,9 +76,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Charting\AnalysisResultsChartGenerator.cs" />
-    <Compile Include="Core\DataAnalysis\AnalysisDataTemplateRecord.cs" />
-    <Compile Include="Core\DataAnalysis\AnalysisDataTemplateGenerator.cs" />
-    <Compile Include="Core\DataAnalysis\AnalysisDataTemplate.cs" />
+    <Compile Include="Core\DataAnalysis\AnalysisDataTemplate\AnalysisDataTemplateRecord.cs" />
+    <Compile Include="Core\DataAnalysis\AnalysisDataTemplate\AnalysisDataTemplateGenerator.cs" />
+    <Compile Include="Core\DataAnalysis\AnalysisDataTemplate\AnalysisDataTemplate.cs" />
     <Compile Include="Core\DataAnalysis\AnalysisModels\AnalysisModelFactory.cs" />
     <Compile Include="Core\DataAnalysis\AnalysisModels\NormalModel.cs" />
     <Compile Include="Core\DataAnalysis\AnalysisModels\OverDispersedPoissonModel.cs" />
