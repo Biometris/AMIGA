@@ -84,7 +84,7 @@ namespace AmigaPowerAnalysis.GUI {
             if (File.Exists(_genstatPath)) {
                 Properties.Settings.Default.GenstatPath = _genstatPath;
             }
-            if (!File.Exists(_pathR)) {
+            if (File.Exists(_pathR)) {
                 Properties.Settings.Default.RPath = _pathR;
             }
             Properties.Settings.Default.Save();
