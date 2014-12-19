@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.Linq;
 using AmigaPowerAnalysis.Core.DataAnalysis.AnalysisModels;
 using AmigaPowerAnalysis.Helpers.Statistics;
+using AmigaPowerAnalysis.Helpers.Statistics.Measurements;
 
 namespace AmigaPowerAnalysis.Core.PowerAnalysis {
     public sealed class PowerAnalysisInputGenerator {
@@ -86,7 +85,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                     ModifierLevels = r.ModifierLevel.Levels.Select(l => l.Label).ToList(),
                     FactorLevels = r.FactorLevels.Select(l => l.Label).ToList(),
                     Frequency = r.FactorLevels.Select(fl => fl.Frequency).Aggregate((n1, n2) => n1 * n2),
-                    Mean = modifyMean(r.Mean, r.Modifier, measurementType),
+                    Mean = MeasurementFactory.Modify(r.Modifier, r.Mean, measurementType),
                 })
                 .ToList();
             return records;
@@ -136,13 +135,6 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                     }));
             }
             return levels;
-        }
-
-        private double modifyMean(double mean, double modifier, MeasurementType measurementType) {
-            if (measurementType == MeasurementType.Fraction) {
-                return UtilityFunctions.InvLogit(UtilityFunctions.Logit(mean) + modifier);
-            }
-            return mean * modifier;
         }
     }
 }

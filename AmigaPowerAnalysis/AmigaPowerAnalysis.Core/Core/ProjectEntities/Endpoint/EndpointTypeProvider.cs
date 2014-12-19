@@ -4,6 +4,7 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Windows.Forms;
 using AmigaPowerAnalysis.Helpers.Statistics.Distributions;
+using AmigaPowerAnalysis.Helpers.Statistics.Measurements;
 
 namespace AmigaPowerAnalysis.Core {
     public static class EndpointTypeProvider {

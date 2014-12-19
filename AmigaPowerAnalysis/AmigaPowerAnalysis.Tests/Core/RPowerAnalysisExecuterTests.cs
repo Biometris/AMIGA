@@ -2,6 +2,7 @@
 using System.Linq;
 using AmigaPowerAnalysis.Core;
 using AmigaPowerAnalysis.Core.PowerAnalysis;
+using AmigaPowerAnalysis.Helpers.Statistics.Measurements;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace AmigaPowerAnalysis.Tests.Core {
@@ -12,6 +13,7 @@ namespace AmigaPowerAnalysis.Tests.Core {
             var project = new Project();
             var endpointType = EndpointTypeProvider.DefaultEndpointTypes().First();
             var endpoint = new Endpoint("Endpoint", endpointType);
+            endpoint.Measurement = MeasurementType.Fraction;
             project.AddEndpoint(endpoint);
 
             var variety = VarietyFactor.CreateVarietyFactor();

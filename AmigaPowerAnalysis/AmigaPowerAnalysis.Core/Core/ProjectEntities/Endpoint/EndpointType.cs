@@ -1,14 +1,8 @@
 ﻿using System.Runtime.Serialization;
 using AmigaPowerAnalysis.Helpers.Statistics.Distributions;
+using AmigaPowerAnalysis.Helpers.Statistics.Measurements;
 
 namespace AmigaPowerAnalysis.Core {
-
-    public enum MeasurementType {
-        Count,
-        Fraction,
-        Nonnegative,
-        Continuous
-    };
 
     [DataContract]
     public sealed class EndpointType {

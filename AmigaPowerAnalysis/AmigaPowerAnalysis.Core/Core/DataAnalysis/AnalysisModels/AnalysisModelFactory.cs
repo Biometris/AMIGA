@@ -1,18 +1,17 @@
-﻿namespace AmigaPowerAnalysis.Core.DataAnalysis.AnalysisModels {
+﻿using AmigaPowerAnalysis.Helpers.Statistics.Measurements;
+
+namespace AmigaPowerAnalysis.Core.DataAnalysis.AnalysisModels {
 
     static class AnalysisModelFactory {
-
 
         public static readonly AnalysisMethodType CountAnalysisMethods = AnalysisMethodType.LogNormal
             | AnalysisMethodType.SquareRoot
             | AnalysisMethodType.OverdispersedPoisson;
 
-
         public static readonly AnalysisMethodType FractionAnalysisMethods = AnalysisMethodType.NegativeBinomial
             | AnalysisMethodType.EmpiricalLogit
             | AnalysisMethodType.OverdispersedBinomial
             | AnalysisMethodType.Betabinomial;
-
 
         public static readonly AnalysisMethodType NonNegativeAnalysisMethods = AnalysisMethodType.LogPlusM
             | AnalysisMethodType.Gamma;

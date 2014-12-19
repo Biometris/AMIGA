@@ -1,5 +1,6 @@
 ﻿using System;
-using AmigaPowerAnalysis.Core;
+using AmigaPowerAnalysis.Helpers.Statistics.Measurements;
+
 namespace AmigaPowerAnalysis.Helpers.Statistics.Distributions {
 
     [Flags]

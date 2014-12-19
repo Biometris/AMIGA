@@ -4,8 +4,9 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using AmigaPowerAnalysis.Core.DataAnalysis.AnalysisModels;
-using AmigaPowerAnalysis.Helpers.Statistics.Distributions;
 using AmigaPowerAnalysis.Helpers.ClassExtensionMethods;
+using AmigaPowerAnalysis.Helpers.Statistics.Distributions;
+using AmigaPowerAnalysis.Helpers.Statistics.Measurements;
 
 namespace AmigaPowerAnalysis.Core.PowerAnalysis {
 
