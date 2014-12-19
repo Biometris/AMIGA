@@ -85,7 +85,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                     ModifierLevels = r.ModifierLevel.Levels.Select(l => l.Label).ToList(),
                     FactorLevels = r.FactorLevels.Select(l => l.Label).ToList(),
                     Frequency = r.FactorLevels.Select(fl => fl.Frequency).Aggregate((n1, n2) => n1 * n2),
-                    Mean = MeasurementFactory.Modify(r.Modifier, r.Mean, measurementType),
+                    Mean = MeasurementFactory.Modify(r.Mean, r.Modifier, measurementType),
                 })
                 .ToList();
             return records;
