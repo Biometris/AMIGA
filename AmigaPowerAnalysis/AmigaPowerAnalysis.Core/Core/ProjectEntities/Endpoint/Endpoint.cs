@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using AmigaPowerAnalysis.Helpers.ClassExtensionMethods;
@@ -136,7 +137,10 @@ namespace AmigaPowerAnalysis.Core {
         /// </summary>
         public double MuComparator {
             get { return _muComparator; }
-            set { _muComparator = value; }
+            set {
+                _muComparator = value;
+                validateMeasurementParameters();
+            }
         }
 
         /// <summary>
@@ -196,10 +200,8 @@ namespace AmigaPowerAnalysis.Core {
             get { return _measurement; }
             set {
                 _measurement = value;
-                var availableDistributionTypes = DistributionFactory.AvailableDistributionTypes(_measurement);
-                if (_distributionType == 0 || (availableDistributionTypes & _distributionType) != _distributionType) {
-                    _distributionType = (DistributionType)availableDistributionTypes.GetFlags().First();
-                }
+                validateDistribution();
+                validateMeasurementParameters();
             }
         }
 
@@ -208,7 +210,10 @@ namespace AmigaPowerAnalysis.Core {
         /// </summary>
         public double LocLower {
             get { return _locLower; }
-            set { _locLower = value; }
+            set {
+                 _locLower = value;
+                validateMeasurementParameters();
+            }
         }
 
         /// <summary>
@@ -216,7 +221,10 @@ namespace AmigaPowerAnalysis.Core {
         /// </summary>
         public double LocUpper {
             get { return _locUpper; }
-            set { _locUpper = value; }
+            set {
+                _locUpper = value;
+                validateMeasurementParameters();
+            }
         }
 
         /// <summary>
@@ -362,6 +370,70 @@ namespace AmigaPowerAnalysis.Core {
                 if (!Modifiers.Any(c => c.Label == newCombination.Label)) {
                     Modifiers.Add(new ModifierFactorLevelCombination(newCombination));
                 }
+            }
+        }
+
+        private void validateMeasurementParameters() {
+            if (_locLower > _locUpper) {
+                var tmp = _locUpper;
+                _locUpper = _locLower;
+                _locLower = tmp;
+            }
+            switch (_measurement) {
+                case MeasurementType.Count:
+                    if (_muComparator <= 0) {
+                        _muComparator = 0.01;
+                    }
+                    if (_locLower <= 0) {
+                        _locLower = 0.01;
+                    }
+                    if (_locUpper <= _locLower) {
+                        _locUpper = _locLower + 0.01;
+                    }
+                    break;
+                case MeasurementType.Fraction:
+                    if (_muComparator <= 0) {
+                        _muComparator = 0.01;
+                    }
+                    if (_muComparator >= 1) {
+                        _muComparator = 0.99;
+                    }
+                    if (_locLower <= 0) {
+                        _locLower = 0.01;
+                    }
+                    if (_locLower >= 1) {
+                        _locLower = 0.99;
+                    }
+                    if (_locUpper <= 0) {
+                        _locUpper = 0.011;
+                    }
+                    if (_locUpper >= 1) {
+                        _locUpper = 0.999;
+                    }
+                    break;
+                case MeasurementType.Nonnegative:
+                    if (_muComparator <= 0) {
+                        _muComparator = 0.01;
+                    }
+                    if (_locLower <= 0) {
+                        _locLower = 0.01;
+                    }
+                    if (_locUpper <= _locLower) {
+                        _locUpper = _locLower + 0.01;
+                    }
+                    break;
+                case MeasurementType.Continuous:
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void validateDistribution() {
+            // Update distribution type
+            var availableDistributionTypes = DistributionFactory.AvailableDistributionTypes(_measurement);
+            if (_distributionType == 0 || (availableDistributionTypes & _distributionType) != _distributionType) {
+                _distributionType = (DistributionType)availableDistributionTypes.GetFlags().First();
             }
         }
     }
