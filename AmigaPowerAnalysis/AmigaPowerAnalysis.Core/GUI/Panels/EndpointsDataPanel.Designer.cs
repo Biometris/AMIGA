@@ -39,9 +39,7 @@
             this.dataGridViewEndpoints.BackgroundColor = System.Drawing.Color.White;
             this.dataGridViewEndpoints.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewEndpoints.Location = new System.Drawing.Point(13, 13);
-            this.dataGridViewEndpoints.MultiSelect = false;
             this.dataGridViewEndpoints.Name = "dataGridViewEndpoints";
-            this.dataGridViewEndpoints.RowHeadersVisible = false;
             this.dataGridViewEndpoints.RowHeadersWidth = 24;
             this.dataGridViewEndpoints.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dataGridViewEndpoints.Size = new System.Drawing.Size(848, 477);
