@@ -154,7 +154,7 @@
             this.labelNumberOfReplications.Name = "labelNumberOfReplications";
             this.labelNumberOfReplications.Size = new System.Drawing.Size(338, 13);
             this.labelNumberOfReplications.TabIndex = 4;
-            this.labelNumberOfReplications.Text = "Number of Replications for which to calculate the power (list of values)";
+            this.labelNumberOfReplications.Text = "Number of Replications for which to calculate the power (comma-separated list of values)";
             // 
             // textBoxNumberOfEvaluationPoints
             // 
