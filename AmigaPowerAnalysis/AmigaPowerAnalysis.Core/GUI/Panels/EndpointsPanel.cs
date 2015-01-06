@@ -27,6 +27,7 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         public void Activate() {
+            updateDataGridViewEndpoints();
         }
 
         public bool IsVisible() {
