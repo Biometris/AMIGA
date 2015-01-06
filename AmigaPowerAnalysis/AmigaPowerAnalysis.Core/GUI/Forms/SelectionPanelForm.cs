@@ -16,6 +16,7 @@ namespace AmigaPowerAnalysis.GUI {
             selectionPanelContainer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelSelectionForm.Controls.Add(selectionPanelContainer);
             this.Name = selectionForm.Name;
+            this.Text = selectionForm.Name;
         }
 
         private void buttonClose_Click(object sender, EventArgs e) {

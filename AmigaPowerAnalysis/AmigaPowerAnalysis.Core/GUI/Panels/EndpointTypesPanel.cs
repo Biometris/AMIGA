@@ -25,7 +25,7 @@ namespace AmigaPowerAnalysis.GUI {
         public EndpointTypesPanel(Project project) {
             InitializeComponent();
             _endpointTypes = EndpointTypeProvider.MyEndpointTypes;
-            Name = "Endpoint Groups";
+            Name = "Endpoint groups";
             Description = "This form allows you to modify your default endpoint groups.";
             _project = project;
             createDataGridDefaultEndpointGroups();

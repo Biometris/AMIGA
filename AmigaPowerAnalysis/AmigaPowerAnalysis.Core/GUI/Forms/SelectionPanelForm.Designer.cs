@@ -63,7 +63,6 @@
             this.MinimizeBox = false;
             this.Name = "SelectionPanelForm";
             this.ShowInTaskbar = false;
-            this.Text = "SelectionPaneForm";
             this.TopMost = true;
             this.ResumeLayout(false);
             this.PerformLayout();
