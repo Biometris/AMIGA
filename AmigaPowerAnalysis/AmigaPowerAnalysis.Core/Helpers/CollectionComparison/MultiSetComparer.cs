@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AmigaPowerAnalysis.Helpers.CollectionComparison {
     public class MultiSetComparer<T> : IEqualityComparer<IEnumerable<T>> {

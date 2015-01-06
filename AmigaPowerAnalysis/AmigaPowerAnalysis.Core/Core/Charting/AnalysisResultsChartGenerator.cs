@@ -64,7 +64,7 @@ namespace AmigaPowerAnalysis.Core.Charting {
                     series.Title = string.Format("Ratio {0:0.##}", ratioGroup.Key);
                     series.Points.AddRange(ratioGroup.Select(g => new DataPoint() {
                         X = g.NumberOfReplications,
-                        Y = g.Power(testType, analysisMethodType),
+                        Y = g.GetPower(testType, analysisMethodType),
                     }));
                     model.Series.Add(series);
                 }
@@ -91,7 +91,7 @@ namespace AmigaPowerAnalysis.Core.Charting {
                     series.Title = string.Format("Repl {0:0.##}", replicateGroup.Key);
                     series.Points.AddRange(replicateGroup.Select(g => new DataPoint() {
                         X = g.Effect,
-                        Y = g.Power(testType, analysisMethodType),
+                        Y = g.GetPower(testType, analysisMethodType),
                     }));
                     model.Series.Add(series);
                 }
@@ -119,7 +119,7 @@ namespace AmigaPowerAnalysis.Core.Charting {
                     series.Title = string.Format("CSD {0:0.##}", csdGroup.Key);
                     series.Points.AddRange(csdGroup.Select(g => new DataPoint() {
                         X = g.NumberOfReplications,
-                        Y = g.Power(testType, analysisMethodType),
+                        Y = g.GetPower(testType, analysisMethodType),
                     }));
                     model.Series.Add(series);
                 }
@@ -146,7 +146,7 @@ namespace AmigaPowerAnalysis.Core.Charting {
                     series.Title = string.Format("Repl {0:0.##}", replicateGroup.Key);
                     series.Points.AddRange(replicateGroup.Select(g => new DataPoint() {
                         X = g.ConcernStandardizedDifference,
-                        Y = g.Power(testType, analysisMethodType),
+                        Y = g.GetPower(testType, analysisMethodType),
                     }));
                     model.Series.Add(series);
                 }

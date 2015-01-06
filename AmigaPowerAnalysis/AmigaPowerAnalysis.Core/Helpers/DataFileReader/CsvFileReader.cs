@@ -8,8 +8,19 @@ using System.Linq;
 namespace AmigaPowerAnalysis.Helpers.Statistics.DataFileReader {
     public sealed class CsvFileReader {
 
+        /// <summary>
+        /// The delimiter of the csv.
+        /// </summary>
         public char Delimiter { get; set; }
+
+        /// <summary>
+        /// The index of the header row.
+        /// </summary>
         public int HeaderRowIndex { get; set; }
+
+        /// <summary>
+        /// The index of the first data row.
+        /// </summary>
         public int FirstDataRowIndex { get; set; }
 
         public CsvFileReader() {
@@ -18,6 +29,14 @@ namespace AmigaPowerAnalysis.Helpers.Statistics.DataFileReader {
             FirstDataRowIndex = 1;
         }
 
+        /// <summary>
+        /// Reads the csv file into list of records of type T using the property
+        /// mapping defined by the given table definition.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="filename"></param>
+        /// <param name="tableDefinition"></param>
+        /// <returns></returns>
         public List<T> ReadDataSet<T>(string filename, TableDefinition tableDefinition)
             where T : new() {
             try {
@@ -118,12 +137,12 @@ namespace AmigaPowerAnalysis.Helpers.Statistics.DataFileReader {
                                 break;
                             }
                         }
-                        var value = ParseValue(rawValue, elementType);
+                        var value = parseValue(rawValue, elementType);
                         var property = t.GetType().GetProperty(columnDefinition.ColumnID);
                         var list = (IList)property.GetValue(t, null);
                         list.Add(value);
                     } else {
-                        var value = ParseValue(rawValue, targetType);
+                        var value = parseValue(rawValue, targetType);
                         t.GetType().GetProperty(columnDefinition.ColumnID).SetValue(t, value, null);
                     }
                 }
@@ -131,7 +150,7 @@ namespace AmigaPowerAnalysis.Helpers.Statistics.DataFileReader {
             return t;
         }
 
-        private static object ParseValue(string rawValue, Type conversionType) {
+        private static object parseValue(string rawValue, Type conversionType) {
             if (conversionType == null) {
                 throw new ArgumentNullException("Conversion type cannot be null");
             }

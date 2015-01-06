@@ -1,8 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Collections;
-using System.Linq;
 using AmigaPowerAnalysis.Core.DataAnalysis.AnalysisModels;
-using System.Collections.Generic;
 
 namespace AmigaPowerAnalysis.Core.PowerAnalysis {
 
@@ -44,7 +41,13 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
         [Display(Name = "Equiv. neg. binom.")]
         public double PowerEquivalenceNegativeBinomial { get; set; }
 
-        public double Power(TestType testType, AnalysisMethodType analysisMethod) {
+        /// <summary>
+        /// Returns the power for the provided test type and analysis method.
+        /// </summary>
+        /// <param name="testType"></param>
+        /// <param name="analysisMethod"></param>
+        /// <returns></returns>
+        public double GetPower(TestType testType, AnalysisMethodType analysisMethod) {
             switch (testType) {
                 case TestType.Difference: {
                         switch (analysisMethod) {
