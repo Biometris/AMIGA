@@ -51,11 +51,13 @@
             this.checkBoxMethodForAnalysesG = new System.Windows.Forms.CheckBox();
             this.groupBoxMethodsForAnalysisOfContinuous = new System.Windows.Forms.GroupBox();
             this.checkBoxMethodForAnalysesN = new System.Windows.Forms.CheckBox();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.groupBoxOptions.SuspendLayout();
             this.groupBoxMethodsForAnalysisOfCounts.SuspendLayout();
             this.groupBoxMethodsForAnalysisOfFractions.SuspendLayout();
             this.groupBoxMethodsForAnalysisOfNonNegative.SuspendLayout();
             this.groupBoxMethodsForAnalysisOfContinuous.SuspendLayout();
+            this.flowLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBoxOptions
@@ -78,7 +80,7 @@
             this.groupBoxOptions.Location = new System.Drawing.Point(15, 56);
             this.groupBoxOptions.Margin = new System.Windows.Forms.Padding(0);
             this.groupBoxOptions.Name = "groupBoxOptions";
-            this.groupBoxOptions.Size = new System.Drawing.Size(937, 200);
+            this.groupBoxOptions.Size = new System.Drawing.Size(943, 200);
             this.groupBoxOptions.TabIndex = 9;
             this.groupBoxOptions.TabStop = false;
             this.groupBoxOptions.Text = "Options";
@@ -248,10 +250,10 @@
             this.groupBoxMethodsForAnalysisOfCounts.Controls.Add(this.checkBoxMethodForAnalysesLN);
             this.groupBoxMethodsForAnalysisOfCounts.Controls.Add(this.checkBoxMethodForAnalysesOP);
             this.groupBoxMethodsForAnalysisOfCounts.Controls.Add(this.checkBoxMethodForAnalysesSQ);
-            this.groupBoxMethodsForAnalysisOfCounts.Location = new System.Drawing.Point(15, 261);
-            this.groupBoxMethodsForAnalysisOfCounts.Margin = new System.Windows.Forms.Padding(0, 5, 0, 0);
+            this.groupBoxMethodsForAnalysisOfCounts.Location = new System.Drawing.Point(5, 5);
+            this.groupBoxMethodsForAnalysisOfCounts.Margin = new System.Windows.Forms.Padding(5);
             this.groupBoxMethodsForAnalysisOfCounts.Name = "groupBoxMethodsForAnalysisOfCounts";
-            this.groupBoxMethodsForAnalysisOfCounts.Size = new System.Drawing.Size(226, 152);
+            this.groupBoxMethodsForAnalysisOfCounts.Size = new System.Drawing.Size(226, 144);
             this.groupBoxMethodsForAnalysisOfCounts.TabIndex = 10;
             this.groupBoxMethodsForAnalysisOfCounts.TabStop = false;
             this.groupBoxMethodsForAnalysisOfCounts.Text = "Methods for Analysis of counts";
@@ -270,14 +272,13 @@
             // 
             // groupBoxMethodsForAnalysisOfFractions
             // 
-            this.groupBoxMethodsForAnalysisOfFractions.AutoSize = true;
             this.groupBoxMethodsForAnalysisOfFractions.Controls.Add(this.checkBoxMethodForAnalysesEL);
             this.groupBoxMethodsForAnalysisOfFractions.Controls.Add(this.checkBoxMethodForAnalysesBBN);
             this.groupBoxMethodsForAnalysisOfFractions.Controls.Add(this.checkBoxMethodForAnalysesOBN);
-            this.groupBoxMethodsForAnalysisOfFractions.Location = new System.Drawing.Point(250, 261);
-            this.groupBoxMethodsForAnalysisOfFractions.Margin = new System.Windows.Forms.Padding(0, 5, 0, 0);
+            this.groupBoxMethodsForAnalysisOfFractions.Location = new System.Drawing.Point(241, 5);
+            this.groupBoxMethodsForAnalysisOfFractions.Margin = new System.Windows.Forms.Padding(5);
             this.groupBoxMethodsForAnalysisOfFractions.Name = "groupBoxMethodsForAnalysisOfFractions";
-            this.groupBoxMethodsForAnalysisOfFractions.Size = new System.Drawing.Size(216, 152);
+            this.groupBoxMethodsForAnalysisOfFractions.Size = new System.Drawing.Size(193, 144);
             this.groupBoxMethodsForAnalysisOfFractions.TabIndex = 15;
             this.groupBoxMethodsForAnalysisOfFractions.TabStop = false;
             this.groupBoxMethodsForAnalysisOfFractions.Text = "Methods for Analysis of fractions";
@@ -321,13 +322,12 @@
             // 
             // groupBoxMethodsForAnalysisOfNonNegative
             // 
-            this.groupBoxMethodsForAnalysisOfNonNegative.AutoSize = true;
             this.groupBoxMethodsForAnalysisOfNonNegative.Controls.Add(this.checkBoxMethodForAnalysesLPM);
             this.groupBoxMethodsForAnalysisOfNonNegative.Controls.Add(this.checkBoxMethodForAnalysesG);
-            this.groupBoxMethodsForAnalysisOfNonNegative.Location = new System.Drawing.Point(476, 261);
-            this.groupBoxMethodsForAnalysisOfNonNegative.Margin = new System.Windows.Forms.Padding(0, 5, 0, 0);
+            this.groupBoxMethodsForAnalysisOfNonNegative.Location = new System.Drawing.Point(444, 5);
+            this.groupBoxMethodsForAnalysisOfNonNegative.Margin = new System.Windows.Forms.Padding(5);
             this.groupBoxMethodsForAnalysisOfNonNegative.Name = "groupBoxMethodsForAnalysisOfNonNegative";
-            this.groupBoxMethodsForAnalysisOfNonNegative.Size = new System.Drawing.Size(214, 152);
+            this.groupBoxMethodsForAnalysisOfNonNegative.Size = new System.Drawing.Size(211, 144);
             this.groupBoxMethodsForAnalysisOfNonNegative.TabIndex = 16;
             this.groupBoxMethodsForAnalysisOfNonNegative.TabStop = false;
             this.groupBoxMethodsForAnalysisOfNonNegative.Text = "Methods for Analysis of non-negative";
@@ -358,12 +358,11 @@
             // 
             // groupBoxMethodsForAnalysisOfContinuous
             // 
-            this.groupBoxMethodsForAnalysisOfContinuous.AutoSize = true;
             this.groupBoxMethodsForAnalysisOfContinuous.Controls.Add(this.checkBoxMethodForAnalysesN);
-            this.groupBoxMethodsForAnalysisOfContinuous.Location = new System.Drawing.Point(700, 261);
-            this.groupBoxMethodsForAnalysisOfContinuous.Margin = new System.Windows.Forms.Padding(0, 5, 0, 0);
+            this.groupBoxMethodsForAnalysisOfContinuous.Location = new System.Drawing.Point(665, 5);
+            this.groupBoxMethodsForAnalysisOfContinuous.Margin = new System.Windows.Forms.Padding(5);
             this.groupBoxMethodsForAnalysisOfContinuous.Name = "groupBoxMethodsForAnalysisOfContinuous";
-            this.groupBoxMethodsForAnalysisOfContinuous.Size = new System.Drawing.Size(214, 152);
+            this.groupBoxMethodsForAnalysisOfContinuous.Size = new System.Drawing.Size(195, 144);
             this.groupBoxMethodsForAnalysisOfContinuous.TabIndex = 17;
             this.groupBoxMethodsForAnalysisOfContinuous.TabStop = false;
             this.groupBoxMethodsForAnalysisOfContinuous.Text = "Methods for Analysis of continuous";
@@ -381,22 +380,33 @@
             this.checkBoxMethodForAnalysesN.UseVisualStyleBackColor = true;
             this.checkBoxMethodForAnalysesN.CheckedChanged += new System.EventHandler(this.checkBoxMethodForAnalysesN_CheckedChanged);
             // 
+            // flowLayoutPanel1
+            // 
+            this.flowLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.flowLayoutPanel1.AutoSize = true;
+            this.flowLayoutPanel1.Controls.Add(this.groupBoxMethodsForAnalysisOfCounts);
+            this.flowLayoutPanel1.Controls.Add(this.groupBoxMethodsForAnalysisOfFractions);
+            this.flowLayoutPanel1.Controls.Add(this.groupBoxMethodsForAnalysisOfNonNegative);
+            this.flowLayoutPanel1.Controls.Add(this.groupBoxMethodsForAnalysisOfContinuous);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(13, 261);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(938, 154);
+            this.flowLayoutPanel1.TabIndex = 18;
+            // 
             // SimulationPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.Controls.Add(this.groupBoxMethodsForAnalysisOfContinuous);
-            this.Controls.Add(this.groupBoxMethodsForAnalysisOfNonNegative);
-            this.Controls.Add(this.groupBoxMethodsForAnalysisOfFractions);
+            this.Controls.Add(this.flowLayoutPanel1);
             this.Controls.Add(this.buttonRunPowerAnalysis);
             this.Controls.Add(this.groupBoxOptions);
-            this.Controls.Add(this.groupBoxMethodsForAnalysisOfCounts);
             this.MinimumSize = new System.Drawing.Size(500, 400);
             this.Name = "SimulationPanel";
             this.Padding = new System.Windows.Forms.Padding(10);
-            this.Size = new System.Drawing.Size(958, 423);
+            this.Size = new System.Drawing.Size(961, 428);
             this.groupBoxOptions.ResumeLayout(false);
             this.groupBoxOptions.PerformLayout();
             this.groupBoxMethodsForAnalysisOfCounts.ResumeLayout(false);
@@ -407,6 +417,8 @@
             this.groupBoxMethodsForAnalysisOfNonNegative.PerformLayout();
             this.groupBoxMethodsForAnalysisOfContinuous.ResumeLayout(false);
             this.groupBoxMethodsForAnalysisOfContinuous.PerformLayout();
+            this.flowLayoutPanel1.ResumeLayout(false);
+            this.flowLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -442,5 +454,6 @@
         private System.Windows.Forms.TextBox textBoxSeedForRandomNumbers;
         private System.Windows.Forms.Label labelSeedForRandomNumbers;
         private System.Windows.Forms.Button buttonRunPowerAnalysis;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
     }
 }
