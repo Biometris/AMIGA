@@ -157,6 +157,24 @@ namespace AmigaPowerAnalysis.Core {
         }
 
         /// <summary>
+        /// Removes an endpoint from the list of endpoints.
+        /// </summary>
+        /// <param name="endpoint"></param>
+        public int MoveEndpoint(int index, int shift) {
+            if (index < 0 || index >= Endpoints.Count) {
+                return index;
+            }
+            var newIndex = index + shift;
+            if (newIndex < 0 || newIndex >= Endpoints.Count) {
+                return index;
+            }
+            var tmp = Endpoints[newIndex];
+            Endpoints[newIndex] = Endpoints[index];
+            Endpoints[index] = tmp;
+            return newIndex;
+        }
+
+        /// <summary>
         /// Adds a factor to the list of factors.
         /// </summary>
         /// <param name="endpoint"></param>

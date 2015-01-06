@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using AmigaPowerAnalysis.Core;
@@ -154,6 +155,46 @@ namespace AmigaPowerAnalysis.GUI {
                     || dataGridViewEndpoints.CurrentCell.OwningColumn == dataGridViewEndpoints.Columns["LocUpper"]) {
                     dataGridViewEndpoints.CurrentCell.Value = double.NaN;
                 }
+            }
+        }
+
+        private void buttonMoveDown_Click(object sender, EventArgs e) {
+            var selectedRows = getSelectedRowIndexes();
+            if (selectedRows.Count == 1) {
+                var currentIndex = selectedRows[0];
+                var newIndex = _project.MoveEndpoint(currentIndex, 1);
+                updateDataGridViewEndpoints();
+                dataGridViewEndpoints.ClearSelection();
+                dataGridViewEndpoints.Rows[newIndex].Selected = true;
+            } else {
+                showError("Invalid selection", "Please select one entire row in order to move an endpoint.");
+            }
+        }
+
+        private void buttonMoveUp_Click(object sender, EventArgs e) {
+            var selectedRows = getSelectedRowIndexes();
+            if (selectedRows.Count == 1) {
+                var currentIndex = selectedRows[0];
+                var newIndex = _project.MoveEndpoint(currentIndex, -1);
+                updateDataGridViewEndpoints();
+                dataGridViewEndpoints.ClearSelection();
+                dataGridViewEndpoints.Rows[newIndex].Selected = true;
+            } else {
+                showError("Invalid selection", "Please select one entire row in order to move an endpoint.");
+            }
+        }
+
+        private List<int> getSelectedRowIndexes() {
+            if (dataGridViewEndpoints.SelectedRows.Count > 0) {
+                return dataGridViewEndpoints.SelectedRows.Cast<DataGridViewRow>()
+                    .Select(row => row.Index)
+                    .Distinct()
+                    .ToList();
+            } else {
+                return dataGridViewEndpoints.SelectedCells.Cast<DataGridViewCell>()
+                    .Select(cell => cell.RowIndex)
+                    .Distinct()
+                    .ToList();
             }
         }
     }
