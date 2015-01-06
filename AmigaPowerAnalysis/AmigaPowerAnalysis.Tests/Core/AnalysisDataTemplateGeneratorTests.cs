@@ -34,10 +34,9 @@ namespace AmigaPowerAnalysis.Tests {
             spraying.FactorLevels.First().Frequency = 2;
             project.AddFactor(spraying);
 
-            var replicates = 3;
-
             project.UpdateEndpointFactors();
 
+            var replicates = 3;
             var comparison = project.GetComparisons().First();
             var generator = new AnalysisDataTemplateGenerator();
             var template = generator.CreateAnalysisDataTemplate(project, replicates);
