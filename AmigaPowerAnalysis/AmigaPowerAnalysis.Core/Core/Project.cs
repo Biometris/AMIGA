@@ -310,5 +310,15 @@ namespace AmigaPowerAnalysis.Core {
         public IEnumerable<Comparison> GetComparisons() {
             return Endpoints.Select(ep => ep.Comparison);
         }
+
+        /// <summary>
+        /// Clears the project outputs.
+        /// </summary>
+        public void ClearProjectOutput() {
+            var comparisons = GetComparisons();
+            foreach (var comparison in comparisons) {
+                comparison.OutputPowerAnalysis = null;
+            }
+        }
     }
 }

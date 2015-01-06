@@ -5,10 +5,12 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using AmigaPowerAnalysis.Helpers.ClassExtensionMethods;
 
 namespace AmigaPowerAnalysis.Core.PowerAnalysis {
-    public sealed class RPowerAnalysisExecuter : IPowerAnalysisExecuter {
+    public sealed class RPowerAnalysisExecuter : PowerAnalysisExecuterBase {
 
         private string _tempPath;
 
@@ -16,7 +18,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             _tempPath = Path.GetFullPath(tempPath.Substring(0, tempPath.Length));
         }
 
-        public OutputPowerAnalysis RunAnalysis(InputPowerAnalysis inputPowerAnalysis) {
+        public override async Task<OutputPowerAnalysis> RunAsync(InputPowerAnalysis inputPowerAnalysis, CancellationToken cancellationToken = default(CancellationToken)) {
             var applicationDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             var scriptsDirectory = string.Format(@"{0}\Resources\RScripts", applicationDirectory);
             var scriptFilename = Path.Combine(scriptsDirectory, "ToolSimulation.rin");
@@ -30,32 +32,43 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             createAnalysisInputFile(inputPowerAnalysis, comparisonInputFilename);
             createAnalysisSettingsFile(inputPowerAnalysis, comparisonSettingsFilename);
 
-            //var rCmd = @"C:\Program Files\R\R-3.1.1\bin\x64\RScript.exe";
             var rCmd = PathR;
             var rOptions = "--no-save --no-restore --verbose";
             var arguments = string.Format("\"{0}\" \"{1}\" \"{2}\" \"{3}\" \"{4}\" \"{5}\"", scriptFilename, scriptsDirectory, comparisonSettingsFilename, comparisonInputFilename, comparisonOutputFilename, comparisonLogFilename);
             var args = string.Format("{0} {1}", rOptions, arguments);
 
+            var startInfo = new ProcessStartInfo(rCmd, args) {
+                RedirectStandardInput = false,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                WindowStyle = ProcessWindowStyle.Normal,
+                WorkingDirectory = _tempPath,
+            };
+
             int exitCode;
             string result, error;
-            var startInfo = new ProcessStartInfo(rCmd, args);
-            startInfo.RedirectStandardInput = false;
-            startInfo.RedirectStandardOutput = true;
-            startInfo.RedirectStandardError = true;
-            startInfo.UseShellExecute = false;
-            startInfo.CreateNoWindow = true;
-            startInfo.WindowStyle = ProcessWindowStyle.Normal;
-            startInfo.WorkingDirectory = _tempPath;
-            using (var proc = new Process()) {
-                proc.StartInfo = startInfo;
-                proc.Start();
-                result = proc.StandardOutput.ReadToEnd();
-                error = proc.StandardError.ReadToEnd();
-                exitCode = proc.ExitCode;
+            try {
+                using (var process = new Process()) {
+                    process.StartInfo = startInfo;
+                    process.Start();
+                    await process.WaitForExitAsync(cancellationToken);
+                    result = process.StandardOutput.ReadToEnd();
+                    error = process.StandardError.ReadToEnd();
+                    exitCode = process.ExitCode;
+                }
+            } finally {
+                var procs = Process.GetProcessesByName("Rscript");
+                foreach (var process in procs) {
+                    process.Kill();
+                }
             }
+
             if (exitCode != 0) {
                 throw new Exception(error);
             }
+
             var outputFileReader = new OutputPowerAnalysisFileReader();
             return new OutputPowerAnalysis() {
                 InputPowerAnalysis = inputPowerAnalysis,

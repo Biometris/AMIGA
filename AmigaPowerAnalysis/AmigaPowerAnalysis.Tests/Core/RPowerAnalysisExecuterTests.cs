@@ -70,7 +70,7 @@ namespace AmigaPowerAnalysis.Tests.Core {
             var testPath = Properties.Settings.Default.TestPath;
             var executer = new RPowerAnalysisExecuter(testPath);
 
-            var output = executer.RunAnalysis(inputPowerAnalysis);
+            var output = executer.Run(inputPowerAnalysis);
         }
 
         [TestMethod]
@@ -91,7 +91,7 @@ namespace AmigaPowerAnalysis.Tests.Core {
             var testPath = Properties.Settings.Default.TestPath;
             var executer = new RPowerAnalysisExecuter(testPath);
 
-            var output = executer.RunAnalysis(inputPowerAnalysis);
+            var output = executer.Run(inputPowerAnalysis);
         }
     }
 }

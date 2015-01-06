@@ -5,10 +5,12 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using AmigaPowerAnalysis.Helpers.ClassExtensionMethods;
 
 namespace AmigaPowerAnalysis.Core.PowerAnalysis {
-    public sealed class GenstatPowerAnalysisExecuter : IPowerAnalysisExecuter {
+    public sealed class GenstatPowerAnalysisExecuter : PowerAnalysisExecuterBase {
 
         private string _tempPath;
 
@@ -16,7 +18,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             _tempPath = tempPath;
         }
 
-        public OutputPowerAnalysis RunAnalysis(InputPowerAnalysis inputPowerAnalysis) {
+        public override async Task<OutputPowerAnalysis> RunAsync(InputPowerAnalysis inputPowerAnalysis, CancellationToken cancellationToken) {
             var comparisonInputFilename = Path.Combine(_tempPath, string.Format("{0}-Input.csv", inputPowerAnalysis.ComparisonId));
             var comparisonOutputFilename = Path.Combine(_tempPath, string.Format("{0}-Output.csv", inputPowerAnalysis.ComparisonId));
             var comparisonLogFilename = Path.Combine(_tempPath, string.Format("{0}-Log.log", inputPowerAnalysis.ComparisonId));
@@ -36,7 +38,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             startInfo.WindowStyle = ProcessWindowStyle.Hidden;
             startInfo.Arguments = string.Format("in=\"{0}\" in2=\"{1}\" in3=\"{2}\" out=\"{3}\" out2=\"{4}\"", scriptFilename, lylesScriptFilename, comparisonInputFilename, comparisonLogFilename, comparisonOutputFilename);
             using (Process exeProcess = Process.Start(startInfo)) {
-                exeProcess.WaitForExit();
+                exeProcess.WaitForExitAsync();
             }
 
             var outputFileReader = new OutputPowerAnalysisFileReader();

@@ -25,11 +25,12 @@
         private void InitializeComponent() {
             this.progressBarCurrentProgress = new System.Windows.Forms.ProgressBar();
             this.labelCurrentActivity = new System.Windows.Forms.Label();
+            this.buttonCancel = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // progressBarCurrentProgress
             // 
-            this.progressBarCurrentProgress.Location = new System.Drawing.Point(23, 54);
+            this.progressBarCurrentProgress.Location = new System.Drawing.Point(23, 45);
             this.progressBarCurrentProgress.Name = "progressBarCurrentProgress";
             this.progressBarCurrentProgress.Size = new System.Drawing.Size(342, 25);
             this.progressBarCurrentProgress.TabIndex = 0;
@@ -39,21 +40,32 @@
             this.labelCurrentActivity.AutoSize = true;
             this.labelCurrentActivity.Location = new System.Drawing.Point(20, 19);
             this.labelCurrentActivity.Name = "labelCurrentActivity";
-            this.labelCurrentActivity.Size = new System.Drawing.Size(97, 13);
+            this.labelCurrentActivity.Size = new System.Drawing.Size(119, 13);
             this.labelCurrentActivity.TabIndex = 1;
-            this.labelCurrentActivity.Text = "labelCurrentActivity";
+            this.labelCurrentActivity.Text = "Running power analysis";
             // 
-            // RunSimulationDialog
+            // buttonCancel
+            // 
+            this.buttonCancel.Location = new System.Drawing.Point(290, 85);
+            this.buttonCancel.Name = "buttonCancel";
+            this.buttonCancel.Size = new System.Drawing.Size(75, 23);
+            this.buttonCancel.TabIndex = 2;
+            this.buttonCancel.Text = "Canel";
+            this.buttonCancel.UseVisualStyleBackColor = true;
+            this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
+            // 
+            // RunPowerAnalysisDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(386, 91);
+            this.ClientSize = new System.Drawing.Size(386, 118);
+            this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.labelCurrentActivity);
             this.Controls.Add(this.progressBarCurrentProgress);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "RunSimulationDialog";
+            this.Name = "RunPowerAnalysisDialog";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
@@ -69,5 +81,6 @@
 
         private System.Windows.Forms.ProgressBar progressBarCurrentProgress;
         private System.Windows.Forms.Label labelCurrentActivity;
+        private System.Windows.Forms.Button buttonCancel;
     }
 }

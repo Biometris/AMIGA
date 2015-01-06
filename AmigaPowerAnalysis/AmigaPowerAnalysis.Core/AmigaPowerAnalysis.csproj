@@ -101,6 +101,7 @@
     <Compile Include="Core\ProjectEntities\Endpoint\Comparison.cs" />
     <Compile Include="Core\ProjectEntities\FactorLevelCombination\ModifierFactorLevelCombination.cs" />
     <Compile Include="Core\ProjectEntities\Settings\DesignSettings.cs" />
+    <Compile Include="Helpers\ClassExtensionMethods\ProcessExtensionMethods.cs" />
     <Compile Include="Helpers\DataFileReader\ColumnDefinition.cs" />
     <Compile Include="Helpers\DataFileReader\ColumnMapping.cs" />
     <Compile Include="Helpers\DataFileReader\CsvFileReader.cs" />

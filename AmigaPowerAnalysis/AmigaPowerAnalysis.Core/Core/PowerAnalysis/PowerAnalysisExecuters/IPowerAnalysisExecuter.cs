@@ -2,10 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace AmigaPowerAnalysis.Core.PowerAnalysis {
-    public interface IPowerAnalysisExecuter {
-        OutputPowerAnalysis RunAnalysis(InputPowerAnalysis inputPowerAnalysis);
+    public abstract class PowerAnalysisExecuterBase {
+
+        public OutputPowerAnalysis Run(InputPowerAnalysis inputPowerAnalysis) {
+            var task = RunAsync(inputPowerAnalysis);
+            return (OutputPowerAnalysis)task.Result;
+        }
+
+        public abstract Task<OutputPowerAnalysis> RunAsync(InputPowerAnalysis inputPowerAnalysis, CancellationToken cancellationToken = default(CancellationToken));
     }
 }
