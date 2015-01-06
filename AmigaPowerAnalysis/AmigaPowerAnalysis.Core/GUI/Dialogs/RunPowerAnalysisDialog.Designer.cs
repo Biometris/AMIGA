@@ -70,7 +70,6 @@
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Running Power Analysis";
-            this.TopMost = true;
             this.Load += new System.EventHandler(this.RunSimulationDialog_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
