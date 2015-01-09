@@ -47,11 +47,9 @@
             this.dataGridViewFactorModifiers.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewFactorModifiers.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewFactorModifiers.Location = new System.Drawing.Point(0, 0);
-            this.dataGridViewFactorModifiers.MultiSelect = false;
             this.dataGridViewFactorModifiers.Name = "dataGridViewFactorModifiers";
             this.dataGridViewFactorModifiers.RowHeadersWidth = 24;
             this.dataGridViewFactorModifiers.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            this.dataGridViewFactorModifiers.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridViewFactorModifiers.Size = new System.Drawing.Size(518, 383);
             this.dataGridViewFactorModifiers.TabIndex = 0;
             this.dataGridViewFactorModifiers.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewFactorModifiers_CellValueChanged);

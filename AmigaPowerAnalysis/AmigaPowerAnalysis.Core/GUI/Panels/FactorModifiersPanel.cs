@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using AmigaPowerAnalysis.Core;
+using AmigaPowerAnalysis.Helpers.Statistics.Measurements;
 
 namespace AmigaPowerAnalysis.GUI {
     public partial class FactorModifiersPanel : UserControl, ISelectionForm {
@@ -13,7 +11,7 @@ namespace AmigaPowerAnalysis.GUI {
         private Project _project;
 
         private Endpoint _currentEndpoint;
-        private List<ModifierFactorLevelCombination> _currentFactorModifiers;
+        //private List<ModifierFactorLevelCombination> _currentFactorModifiers;
 
         public FactorModifiersPanel(Project project) {
             InitializeComponent();
@@ -59,19 +57,23 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void updateDataGridFactorModifiers() {
             dataGridViewFactorModifiers.DataSource = null;
-            if (_currentFactorModifiers != null) {
+            if (_currentEndpoint != null) {
                 var dataTable = new DataTable();
                 var modifierFactors = _currentEndpoint.NonInteractionFactors.ToList();
                 foreach (var modifierFactor in modifierFactors) {
                     dataTable.Columns.Add(modifierFactor.Name, typeof(string));
                 }
-                dataTable.Columns.Add("Modifier factor", typeof(double));
-                foreach (var factorLevelCombination in _currentFactorModifiers) {
+                dataTable.Columns.Add("Modifier", typeof(double));
+                dataTable.Columns.Add("Frequency", typeof(double));
+                dataTable.Columns.Add("Modified mean", typeof(double));
+                foreach (var factorLevelCombination in _currentEndpoint.Modifiers) {
                     DataRow row = dataTable.NewRow();
                     foreach (var factorLevel in factorLevelCombination.Levels) {
                         row[factorLevel.Parent.Name] = factorLevel.Label;
                     }
-                    row["Modifier factor"] = factorLevelCombination.ModifierFactor;
+                    row["Modifier"] = Math.Round(factorLevelCombination.ModifierFactor, 2);
+                    row["Frequency"] = Math.Round(factorLevelCombination.Frequency, 2);
+                    row["Modified mean"] = Math.Round(MeasurementFactory.Modify(_currentEndpoint.MuComparator, factorLevelCombination.ModifierFactor, _currentEndpoint.Measurement), 2);
                     dataTable.Rows.Add(row);
                 }
                 dataGridViewFactorModifiers.Columns.Clear();
@@ -80,13 +82,17 @@ namespace AmigaPowerAnalysis.GUI {
                     dataGridViewFactorModifiers.Columns[i].ReadOnly = true;
                 }
             }
+            foreach (DataGridViewColumn column in dataGridViewFactorModifiers.Columns) {
+                column.SortMode = DataGridViewColumnSortMode.NotSortable;
+            }
+            dataGridViewFactorModifiers.Columns["Frequency"].ReadOnly = true;
+            dataGridViewFactorModifiers.Columns["Modified mean"].ReadOnly = true;
             dataGridViewFactorModifiers.Refresh();
         }
 
         private void dataGridViewEndpoints_SelectionChanged(object sender, EventArgs e) {
             _currentEndpoint = _project.Endpoints.ElementAt(dataGridViewEndpoints.CurrentRow.Index);
             var factorFactorLevelTuples = _currentEndpoint.InteractionFactors.SelectMany(f => f.FactorLevels, (ifc, fl) => new Tuple<IFactor, FactorLevel>(ifc, fl)).ToList();
-            _currentFactorModifiers = _currentEndpoint.Modifiers;
             updateDataGridFactorModifiers();
         }
 
@@ -97,10 +103,10 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void dataGridViewFactorModifiers_CellValueChanged(object sender, DataGridViewCellEventArgs e) {
             var editedCell = dataGridViewFactorModifiers.Rows[e.RowIndex].Cells[e.ColumnIndex];
-            var newValue = editedCell.Value;
-            if (_currentFactorModifiers != null) {
-                if (editedCell.ColumnIndex == dataGridViewFactorModifiers.Columns["Modifier factor"].Index) {
-                    _currentFactorModifiers[e.RowIndex].ModifierFactor = (double)newValue;
+            if (_currentEndpoint != null) {
+                if (editedCell.ColumnIndex == dataGridViewFactorModifiers.Columns["Modifier"].Index) {
+                    _currentEndpoint.SetModifier(e.RowIndex, (double)editedCell.Value);
+                    updateDataGridFactorModifiers();
                 }
             }
         }

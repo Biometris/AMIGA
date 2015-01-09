@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
+using AmigaPowerAnalysis.Helpers.Statistics;
 
 namespace AmigaPowerAnalysis.Core {
 
@@ -36,6 +37,15 @@ namespace AmigaPowerAnalysis.Core {
         public string Label {
             get {
                 return string.Join(" - ", Levels.Select(fl => string.Format("{0} ({1})", fl.Parent.Name, fl.Label)));
+            }
+        }
+
+        /// <summary>
+        /// Returns the aggregated frequency of this factor level combination.
+        /// </summary>
+        public double Frequency {
+            get {
+                return Levels.Select(l => l.Frequency).Product();
             }
         }
 

@@ -109,6 +109,7 @@
     <Compile Include="Helpers\DataFileReader\DynamicPropertyValue.cs" />
     <Compile Include="Helpers\DataFileReader\TableDefinition.cs" />
     <Compile Include="Helpers\DataFileReader\TableDefinitionCollection.cs" />
+    <Compile Include="Helpers\Statistics\CollectionStatistics.cs" />
     <Compile Include="Helpers\Statistics\Distributions\PoissonLogNormalDistribution.cs" />
     <Compile Include="Helpers\Statistics\Distributions\PowerLawDistribution.cs" />
     <Compile Include="Helpers\Statistics\Distributions\BetaBinomialDistribution.cs" />

@@ -61,5 +61,20 @@ namespace AmigaPowerAnalysis.Helpers.Statistics {
                 return arg;
             }
         }
+
+        /// <summary>
+        /// Returns true if this value is approximately equal to the other value given the tolerance
+        /// epsilon.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="other"></param>
+        /// <param name="epsilon"></param>
+        /// <returns></returns>
+        public static bool ApproximatelyEquals(this double value, double other, double epsilon = 0.00001) {
+            if (Math.Abs(value - other) <= epsilon) {
+                return true;
+            }
+            return false;
+        }
     }
 }

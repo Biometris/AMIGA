@@ -140,6 +140,7 @@ namespace AmigaPowerAnalysis.Core {
             set {
                 _muComparator = value;
                 validateMeasurementParameters();
+                fixModifiers(true);
             }
         }
 
@@ -199,9 +200,11 @@ namespace AmigaPowerAnalysis.Core {
         public MeasurementType Measurement {
             get { return _measurement; }
             set {
-                _measurement = value;
-                validateDistribution();
-                validateMeasurementParameters();
+                if (_measurement != value) {
+                    _measurement = value;
+                    validateDistribution();
+                    validateMeasurementParameters();
+                }
             }
         }
 
@@ -338,6 +341,41 @@ namespace AmigaPowerAnalysis.Core {
             updateComparisonLevels(defaultInteractions);
         }
 
+        public void SetModifier(int index, double value = double.NaN) {
+            if (Modifiers.Count > 0) {
+                var weights = Modifiers.Select(m => m.Frequency).ToList();
+                var newModifiers = Modifiers.Select(m => m.ModifierFactor).ToList();
+                newModifiers[index] = double.IsNaN(value) ? newModifiers[index] : value;
+                newModifiers[index] = Math.Round(MeasurementFactory.ComputeFixCurrentModifier(newModifiers, weights, MuComparator, index, Measurement), 4);
+                int i = Modifiers.Count;
+                while (i > 0) {
+                    i--;
+                    if (i != index) {
+                        newModifiers[i] = Math.Round(MeasurementFactory.ComputeFixModifier(newModifiers, weights, MuComparator, i, Measurement), 4);
+                    }
+                }
+                if (MeasurementFactory.IsModifiersValid(newModifiers, weights, MuComparator, Measurement)) {
+                    for (i = 0; i < Modifiers.Count; ++i) {
+                        this.Modifiers[i].ModifierFactor = newModifiers[i];
+                    }
+                }
+            }
+        }
+
+        private void fixModifiers(bool tryFix) {
+            if (tryFix) {
+                SetModifier(0, double.NaN);
+            } else {
+                var modifiers = Modifiers.Select(m => m.ModifierFactor);
+                var weights = Modifiers.Select(m => m.Frequency);
+                if (!MeasurementFactory.IsModifiersValid(modifiers, weights, MuComparator, Measurement)) {
+                    for (int i = 0; i < Modifiers.Count; ++i) {
+                        this.Modifiers[i].ModifierFactor = 1;
+                    }
+                }
+            }
+        }
+
         private void updateComparisonLevels(List<InteractionFactorLevelCombination> defaultInteractions = null) {
             List<InteractionFactorLevelCombination> newInteractions;
             if (defaultInteractions != null) {
@@ -371,6 +409,7 @@ namespace AmigaPowerAnalysis.Core {
                     Modifiers.Add(new ModifierFactorLevelCombination(newCombination));
                 }
             }
+            fixModifiers(true);
         }
 
         private void validateMeasurementParameters() {
@@ -427,6 +466,7 @@ namespace AmigaPowerAnalysis.Core {
                 default:
                     break;
             }
+            fixModifiers(true);
         }
 
         private void validateDistribution() {

@@ -28,7 +28,11 @@ namespace AmigaPowerAnalysis.Core {
         /// </summary>
         public double ModifierFactor {
             get { return _modifierFactor; }
-            set { _modifierFactor = value; }
+            set {
+                if (!double.IsNaN(value)) {
+                    _modifierFactor = value;
+                }
+            }
         }
     }
 }
