@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
-using AmigaPowerAnalysis.Helpers.Statistics.DataFileReader;
+using Biometris.DataFileReader;
 
 namespace AmigaPowerAnalysis.Core.PowerAnalysis {
     public sealed class OutputPowerAnalysisFileReader {

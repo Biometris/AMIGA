@@ -4,8 +4,8 @@ using System.Linq;
 using System.Windows.Forms;
 using AmigaPowerAnalysis.Core;
 using AmigaPowerAnalysis.Core.DataAnalysis.AnalysisModels;
-using AmigaPowerAnalysis.Helpers.ClassExtensionMethods;
-using AmigaPowerAnalysis.Helpers.Statistics.Measurements;
+using Biometris.ExtensionMethods;
+using Biometris.Statistics.Measurements;
 
 // TODO Obligatory to first enter a name for a new endpoint
 // TODO Binomial totals greyed out for non fractions

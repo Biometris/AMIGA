@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using AmigaPowerAnalysis.Core;
-using AmigaPowerAnalysis.Helpers.Statistics.Distributions;
-using AmigaPowerAnalysis.Helpers.Statistics.Measurements;
+using Biometris.Statistics.Distributions;
+using Biometris.Statistics.Measurements;
 
 // TODO Binomial totals greyed out for non fractions
 // TODO Binomial totals must be positive

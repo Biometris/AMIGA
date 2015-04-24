@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
-using AmigaPowerAnalysis.Helpers.ClassExtensionMethods;
-using AmigaPowerAnalysis.Helpers.Statistics.Distributions;
-using AmigaPowerAnalysis.Helpers.Statistics.Measurements;
+using Biometris.ExtensionMethods;
+using Biometris.Statistics.Distributions;
+using Biometris.Statistics.Measurements;
 
 namespace AmigaPowerAnalysis.Core {
 

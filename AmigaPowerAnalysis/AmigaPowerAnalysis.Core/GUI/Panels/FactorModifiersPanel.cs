@@ -3,7 +3,7 @@ using System.Data;
 using System.Linq;
 using System.Windows.Forms;
 using AmigaPowerAnalysis.Core;
-using AmigaPowerAnalysis.Helpers.Statistics.Measurements;
+using Biometris.Statistics.Measurements;
 
 namespace AmigaPowerAnalysis.GUI {
     public partial class FactorModifiersPanel : UserControl, ISelectionForm {

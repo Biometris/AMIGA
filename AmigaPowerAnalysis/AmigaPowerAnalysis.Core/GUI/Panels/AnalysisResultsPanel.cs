@@ -8,8 +8,7 @@ using AmigaPowerAnalysis.Core.Charting;
 using AmigaPowerAnalysis.Core.DataAnalysis.AnalysisModels;
 using AmigaPowerAnalysis.Core.PowerAnalysis;
 using AmigaPowerAnalysis.Core.Reporting;
-using AmigaPowerAnalysis.Helpers.ClassExtensionMethods;
-using OxyPlot.WindowsForms;
+using Biometris.ExtensionMethods;
 
 // TODO Obligatory to first enter a name for a new endpoint
 // TODO Binomial totals greyed out for non fractions

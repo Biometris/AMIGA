@@ -2,7 +2,7 @@
 using System.Linq;
 using AmigaPowerAnalysis.Core;
 using AmigaPowerAnalysis.Core.PowerAnalysis;
-using AmigaPowerAnalysis.Helpers.Statistics.Measurements;
+using Biometris.Statistics.Measurements;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace AmigaPowerAnalysis.Tests.Core {

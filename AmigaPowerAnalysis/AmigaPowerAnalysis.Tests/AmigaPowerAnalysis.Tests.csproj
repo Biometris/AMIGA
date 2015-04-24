@@ -74,11 +74,18 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Include="Resources\OutputPowerAnalysisFileReader_Test1.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AmigaPowerAnalysis.Core\AmigaPowerAnalysis.csproj">
       <Project>{358cb528-dda2-4c8b-83a8-66fe10d97fa0}</Project>
       <Name>AmigaPowerAnalysis</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Biometris\Biometris.csproj">
+      <Project>{302f9992-0d6c-4a52-bd1a-9bd0fbdf6a56}</Project>
+      <Name>Biometris</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

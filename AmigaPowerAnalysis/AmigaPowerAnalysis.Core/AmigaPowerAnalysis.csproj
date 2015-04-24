@@ -84,6 +84,7 @@
     <Compile Include="Core\DataAnalysis\AnalysisModels\OverDispersedPoissonModel.cs" />
     <Compile Include="Core\DataAnalysis\AnalysisModels\IAnalysisModel.cs" />
     <Compile Include="Core\DataAnalysis\AnalysisScriptGenerators\AnalysisRScriptGenerator.cs" />
+    <Compile Include="Core\DataReaders\EndpointDataReader.cs" />
     <Compile Include="Core\PowerAnalysis\OutputPowerAnalysis\OutputPowerAnalysisFileReader.cs" />
     <Compile Include="Core\ProjectEntities\Factor\ComparisonDummyFactorLevel.cs" />
     <Compile Include="Core\PowerAnalysis\PowerAnalysisExecuters\RPowerAnalysisExecuter.cs" />
@@ -101,24 +102,6 @@
     <Compile Include="Core\ProjectEntities\Endpoint\Comparison.cs" />
     <Compile Include="Core\ProjectEntities\Factor\ModifierFactorLevelCombination.cs" />
     <Compile Include="Core\ProjectEntities\Settings\DesignSettings.cs" />
-    <Compile Include="Helpers\ClassExtensionMethods\ProcessExtensionMethods.cs" />
-    <Compile Include="Helpers\DataFileReader\ColumnDefinition.cs" />
-    <Compile Include="Helpers\DataFileReader\ColumnMapping.cs" />
-    <Compile Include="Helpers\DataFileReader\CsvFileReader.cs" />
-    <Compile Include="Helpers\DataFileReader\DynamicProperty.cs" />
-    <Compile Include="Helpers\DataFileReader\DynamicPropertyValue.cs" />
-    <Compile Include="Helpers\DataFileReader\TableDefinition.cs" />
-    <Compile Include="Helpers\DataFileReader\TableDefinitionCollection.cs" />
-    <Compile Include="Helpers\Statistics\CollectionStatistics.cs" />
-    <Compile Include="Helpers\Statistics\Distributions\PoissonLogNormalDistribution.cs" />
-    <Compile Include="Helpers\Statistics\Distributions\PowerLawDistribution.cs" />
-    <Compile Include="Helpers\Statistics\Distributions\BetaBinomialDistribution.cs" />
-    <Compile Include="Helpers\Statistics\Distributions\BinomialDistribution.cs" />
-    <Compile Include="Helpers\Statistics\Distributions\NegativeBinomialDistribution.cs" />
-    <Compile Include="Helpers\Statistics\Distributions\OverdispersedPoissonDistribution.cs" />
-    <Compile Include="Helpers\Statistics\Distributions\DistributionFactory.cs" />
-    <Compile Include="Helpers\Statistics\Distributions\IDistribution.cs" />
-    <Compile Include="Helpers\Statistics\Distributions\PoissonDistribution.cs" />
     <Compile Include="Core\ProjectEntities\Endpoint\Endpoint.cs" />
     <Compile Include="Core\ProjectEntities\Factor\InteractionFactorLevelCombination.cs" />
     <Compile Include="Core\ProjectEntities\Endpoint\EndpointFactor.cs" />
@@ -271,17 +254,6 @@
       <DependentUpon>SelectionPanelForm.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\Wrappers\InteractionsWrapper.cs" />
-    <Compile Include="Helpers\ClassExtensionMethods\EnumExtensionMethods.cs" />
-    <Compile Include="Helpers\ClassExtensionMethods\MemberInfoExtensionMethods.cs" />
-    <Compile Include="Helpers\CollectionComparison\MultiSetComparer.cs" />
-    <Compile Include="Helpers\CsvWriter.cs" />
-    <Compile Include="Helpers\ClassExtensionMethods\ListExtensionMethods.cs" />
-    <Compile Include="Helpers\Log\ILogger.cs" />
-    <Compile Include="Helpers\Log\SimpleLogger.cs" />
-    <Compile Include="Helpers\ClassExtensionMethods\StringExtensionMethods.cs" />
-    <Compile Include="Helpers\Statistics\Measurements\MeasurementFactory.cs" />
-    <Compile Include="Helpers\Statistics\Measurements\Measurements.cs" />
-    <Compile Include="Helpers\Statistics\UtilityFunctions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Core\Project.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -398,6 +370,9 @@
   <ItemGroup>
     <Content Include="Resources\FieldTrial.jpg" />
     <EmbeddedResource Include="Resources\RScripts\ROutputTableDefinition.xml" />
+    <Content Include="Resources\TableDefinitions.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Resources\WkHtmlToPdf\libeay32.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -416,6 +391,12 @@
     <EmbeddedResource Include="Resources\print.css" />
     <EmbeddedResource Include="Resources\amiga_icon.ico" />
     <Content Include="Resources\amiga_logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Biometris\Biometris.csproj">
+      <Project>{302f9992-0d6c-4a52-bd1a-9bd0fbdf6a56}</Project>
+      <Name>Biometris</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

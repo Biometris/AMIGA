@@ -1,4 +1,4 @@
-﻿using AmigaPowerAnalysis.Helpers.Statistics.Measurements;
+﻿using Biometris.Statistics.Measurements;
 
 namespace AmigaPowerAnalysis.Core.DataAnalysis.AnalysisModels {
 

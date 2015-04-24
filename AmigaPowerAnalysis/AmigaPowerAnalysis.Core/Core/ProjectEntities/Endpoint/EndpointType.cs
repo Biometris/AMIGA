@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
-using AmigaPowerAnalysis.Helpers.Statistics.Distributions;
-using AmigaPowerAnalysis.Helpers.Statistics.Measurements;
+using Biometris.Statistics.Distributions;
+using Biometris.Statistics.Measurements;
 
 namespace AmigaPowerAnalysis.Core {
 

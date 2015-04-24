@@ -4,10 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using Biometris.ExtensionMethods;
 using AmigaPowerAnalysis.Core.Charting;
 using AmigaPowerAnalysis.Core.DataAnalysis.AnalysisModels;
 using AmigaPowerAnalysis.Core.PowerAnalysis;
-using AmigaPowerAnalysis.Helpers.ClassExtensionMethods;
 using OxyPlot.WindowsForms;
 
 namespace AmigaPowerAnalysis.Core.Reporting {

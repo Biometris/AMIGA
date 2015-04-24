@@ -2,7 +2,7 @@
 using System.Linq;
 using AmigaPowerAnalysis.Core.DataAnalysis.AnalysisModels;
 using AmigaPowerAnalysis.Core.PowerAnalysis;
-using AmigaPowerAnalysis.Helpers.ClassExtensionMethods;
+using Biometris.ExtensionMethods;
 using OxyPlot;
 using OxyPlot.Annotations;
 using OxyPlot.Axes;

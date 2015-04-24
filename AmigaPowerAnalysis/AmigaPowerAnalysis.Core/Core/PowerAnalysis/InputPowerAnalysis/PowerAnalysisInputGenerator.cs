@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using AmigaPowerAnalysis.Core.DataAnalysis.AnalysisModels;
-using AmigaPowerAnalysis.Helpers.Statistics;
-using AmigaPowerAnalysis.Helpers.Statistics.Measurements;
+using Biometris.Statistics;
+using Biometris.Statistics.Measurements;
 
 namespace AmigaPowerAnalysis.Core.PowerAnalysis {
     public sealed class PowerAnalysisInputGenerator {

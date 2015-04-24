@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Biometris.ExtensionMethods;
 using AmigaPowerAnalysis.Core;
 using AmigaPowerAnalysis.Core.Charting;
 using AmigaPowerAnalysis.Core.DataAnalysis;
 using AmigaPowerAnalysis.Core.DataAnalysis.AnalysisModels;
 using AmigaPowerAnalysis.Core.Reporting;
-using AmigaPowerAnalysis.Helpers.ClassExtensionMethods;
 using OxyPlot.WindowsForms;
 
 // TODO Obligatory to first enter a name for a new endpoint

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using AmigaPowerAnalysis.Helpers.ClassExtensionMethods;
+using Biometris.ExtensionMethods;
 
 namespace AmigaPowerAnalysis.Core.PowerAnalysis {
     public sealed class GenstatPowerAnalysisExecuter : PowerAnalysisExecuterBase {

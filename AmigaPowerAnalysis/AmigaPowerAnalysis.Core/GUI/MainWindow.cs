@@ -7,8 +7,8 @@ using System.Runtime.Serialization;
 using System.Windows.Forms;
 using AmigaPowerAnalysis.Core;
 using AmigaPowerAnalysis.Core.PowerAnalysis;
-using AmigaPowerAnalysis.Helpers;
-using AmigaPowerAnalysis.Helpers.Log;
+using Biometris;
+using Biometris.Logger;
 using AmigaPowerAnalysis.Properties;
 
 namespace AmigaPowerAnalysis.GUI {
@@ -57,7 +57,7 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void initialize() {
             _selectionForms = new List<ISelectionForm>();
-            _logger = new SimpleLogger();
+            _logger = new FileLogger();
             this.closeProject();
         }
 

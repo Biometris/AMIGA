@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Windows.Forms;
-using AmigaPowerAnalysis.Helpers.Statistics.Distributions;
-using AmigaPowerAnalysis.Helpers.Statistics.Measurements;
+using Biometris.Statistics.Distributions;
+using Biometris.Statistics.Measurements;
 
 namespace AmigaPowerAnalysis.Core {
     public static class EndpointTypeProvider {

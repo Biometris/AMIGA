@@ -40,6 +40,7 @@
       <HintPath>..\packages\R.NET.Community.1.5.22\lib\net40\RDotNet.NativeLibrary.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
     <Reference Include="System.Windows.Forms" />
@@ -51,16 +52,45 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationUtilities\ApplicationUtils.cs" />
+    <Compile Include="Collections\MultiSetComparer.cs" />
+    <Compile Include="Persistence\CsvWriter.cs" />
+    <Compile Include="ExtensionMethods\EnumExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\IEnumerableExtensions.cs" />
+    <Compile Include="ExtensionMethods\MemberInfoExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\StringExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\ProcessExtensionMethods.cs" />
+    <Compile Include="DataFileReading\DataDefinition\ColumnDefinition.cs" />
+    <Compile Include="DataFileReading\ColumnMapping.cs" />
+    <Compile Include="DataFileReading\IDataFileReader.cs" />
+    <Compile Include="DataFileReading\CsvFileReader.cs" />
+    <Compile Include="DataFileReading\DynamicProperty.cs" />
+    <Compile Include="DataFileReading\DynamicPropertyValue.cs" />
+    <Compile Include="DataFileReading\DataDefinition\TableDefinition.cs" />
+    <Compile Include="DataFileReading\DataDefinition\TableDefinitionCollection.cs" />
     <Compile Include="Logger\FileLogger.cs" />
     <Compile Include="Logger\ILogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="R\REngines\IRCommandExecuter.cs" />
     <Compile Include="R\REngines\RDotNet\LoggingRDotNetEngine.cs" />
     <Compile Include="R\REngines\RDotNet\RDotNetEngine.cs" />
+    <Compile Include="Statistics\CollectionStatistics.cs" />
+    <Compile Include="Statistics\Distributions\BetaBinomialDistribution.cs" />
+    <Compile Include="Statistics\Distributions\BinomialDistribution.cs" />
+    <Compile Include="Statistics\Distributions\DistributionFactory.cs" />
+    <Compile Include="Statistics\Distributions\IDistribution.cs" />
+    <Compile Include="Statistics\Distributions\NegativeBinomialDistribution.cs" />
+    <Compile Include="Statistics\Distributions\OverdispersedPoissonDistribution.cs" />
+    <Compile Include="Statistics\Distributions\PoissonDistribution.cs" />
+    <Compile Include="Statistics\Distributions\PoissonLogNormalDistribution.cs" />
+    <Compile Include="Statistics\Distributions\PowerLawDistribution.cs" />
+    <Compile Include="Statistics\Measurements\MeasurementFactory.cs" />
+    <Compile Include="Statistics\Measurements\Measurements.cs" />
+    <Compile Include="Statistics\UtilityFunctions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
