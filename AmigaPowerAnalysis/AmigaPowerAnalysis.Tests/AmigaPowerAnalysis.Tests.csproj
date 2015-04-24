@@ -55,6 +55,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Core\AnalysisDataTemplateGeneratorTests.cs" />
+    <Compile Include="Core\EndpointDataFileReaderTests.cs" />
     <Compile Include="Core\PowerAnalysisInputGeneratorTests.cs" />
     <Compile Include="Core\FactorTests.cs" />
     <Compile Include="Core\FactoLevelCombinationTests.cs" />
@@ -73,6 +74,9 @@
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Resources\EndpointDataFileReader_Tests1.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Resources\OutputPowerAnalysisFileReader_Test1.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

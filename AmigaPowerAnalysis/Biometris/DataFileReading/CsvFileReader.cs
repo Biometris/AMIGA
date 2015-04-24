@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using Biometris.ExtensionMethods;
 
 namespace Biometris.DataFileReader {
@@ -46,7 +47,7 @@ namespace Biometris.DataFileReader {
                                     .ToList();
                             } else if (lineCount >= FirstDataRow) {
                                 if (columnMappings == null) {
-                                    columnMappings = readHeaderLine(tableDefinition, primaryHeaderNames, secondaryHeaderNames);
+                                    columnMappings = getColumnMappings<T>(tableDefinition, primaryHeaderNames, secondaryHeaderNames);
                                 }
                                 try {
                                     var t = readDataLine<T>(columnMappings, line);
@@ -71,7 +72,7 @@ namespace Biometris.DataFileReader {
             }
         }
 
-        private List<ColumnMapping> readHeaderLine(TableDefinition tableDefinition, List<string> primaryHeaderNames, List<string> secondaryHeaderNames) {
+        private List<ColumnMapping> getColumnMappings<T>(TableDefinition tableDefinition, List<string> primaryHeaderNames, List<string> secondaryHeaderNames) {
             var columnMappings = new List<ColumnMapping>();
             var headerNames = primaryHeaderNames.Merge(secondaryHeaderNames, (p, s) => {
                 var name = (!string.IsNullOrEmpty(p) && p != "IndependentVariable") ? p : s;
@@ -82,22 +83,23 @@ namespace Biometris.DataFileReader {
             for (int i = 0; i < headerNames.Count; i++) {
                 var columnDefinition = tableDefinition.GetColumnDefinitionByIndex(i);
                 if (columnDefinition == null) {
-                    columnDefinition = tableDefinition.GetColumnDefinitionByName(headerNames.ElementAt(i));
+                    columnDefinition = tableDefinition.GetColumnDefinitionByName(headerNames[i]);
                 }
-                if (columnDefinition == null && headerNames.Where(h => h == headerNames.ElementAt(i)).Count() == 1) {
+                if (columnDefinition == null && !string.IsNullOrEmpty(headerNames[i])) {
                     columnDefinition = dynamicColumnDefinition;
                 }
-                DynamicProperty dynamicPropertyDescription = null;
-                if (columnDefinition != null && columnDefinition.IsDynamic) {
-                    dynamicPropertyDescription = new DynamicProperty() {
-                        Name = (!string.IsNullOrEmpty(headerNames.ElementAt(i))) ? headerNames.ElementAt(i) : string.Format("Variable_{0}", i)
-                    };
+                PropertyInfo target = null;
+                if (columnDefinition != null) {
+                    target = typeof(T).GetProperty(columnDefinition.ColumnID);
+                    if (target == null) {
+                        throw new Exception(string.Format("Cannot find mapping target for column {0}", columnDefinition.ColumnID));
+                    }
                 }
                 columnMappings.Add(new ColumnMapping() {
-                    ColumnDefinition = columnDefinition,
-                    SourceColumnHeaderName = headerNames.ElementAt(i),
                     SourceColumnIndex = i,
-                    DynamicProperty = dynamicPropertyDescription,
+                    SourceColumnHeaderName = headerNames.ElementAt(i),
+                    ColumnDefinition = columnDefinition,
+                    TargetProperty = target,
                 });
             }
             return columnMappings;
@@ -108,38 +110,35 @@ namespace Biometris.DataFileReader {
             var records = line.Split(Delimiter).ToList();
             for (int i = 0; i < records.Count; i++) {
                 var columnMapping = columnMappings.ElementAt(i);
-                var columnDefinition = columnMapping.ColumnDefinition;
-                if (columnDefinition != null) {
-                    var targetType = typeof(T).GetProperty(columnDefinition.ColumnID).PropertyType;
+                if (columnMapping.TargetProperty != null) {
                     var rawValue = records[i].Replace("\"", "");
-                    if (columnDefinition.IsDynamic) {
-                        var propertyDescription = columnMapping.DynamicProperty;
-                        var dynamicPropertyType = t.GetType().GetProperty(columnDefinition.ColumnID);
-                        if (targetType == typeof(List<DynamicPropertyValue>)) {
+                    if (columnMapping.IsDynamic) {
+                        var dynamicPropertyType = columnMapping.TargetProperty;
+                        if (columnMapping.TargetType == typeof(List<DynamicPropertyValue>)) {
                             DynamicPropertyValue value;
                             value = new DynamicPropertyValue() {
-                                Name = columnMapping.DynamicProperty.Name,
+                                Name = columnMapping.SourceColumnHeaderName,
                                 RawValue = rawValue,
                             };
-                            var property = t.GetType().GetProperty(columnDefinition.ColumnID);
+                            var property = columnMapping.TargetProperty;
                             var list = (IList)property.GetValue(t, null);
                             list.Add(value);
                         }
-                    } else if (columnDefinition.IsMultiColumn) {
+                    } else if (columnMapping.IsMultiColumn) {
                         Type elementType = null;
-                        foreach (Type typeInterface in targetType.GetInterfaces()) {
+                        foreach (Type typeInterface in columnMapping.TargetType.GetInterfaces()) {
                             if (typeInterface.IsGenericType && typeInterface.GetGenericTypeDefinition().Equals(typeof(IEnumerable<>))) {
                                 elementType = typeInterface.GetGenericArguments()[0];
                                 break;
                             }
                         }
                         var value = rawValue.ConvertToType(elementType);
-                        var property = t.GetType().GetProperty(columnDefinition.ColumnID);
+                        var property = columnMapping.TargetProperty;
                         var list = (IList)property.GetValue(t, null);
                         list.Add(value);
                     } else {
-                        var value = rawValue.ConvertToType(targetType);
-                        t.GetType().GetProperty(columnDefinition.ColumnID).SetValue(t, value, null);
+                        var value = rawValue.ConvertToType(columnMapping.TargetType);
+                        columnMapping.TargetProperty.SetValue(t, value, null);
                     }
                 }
             }

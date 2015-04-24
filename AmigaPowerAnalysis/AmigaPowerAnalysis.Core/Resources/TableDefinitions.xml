@@ -7,18 +7,22 @@
       <string>Endpoints</string>
     </Aliases>
     <ColumnDefinitions>
-      <ColumnDefinition IsRequired="true" FixedPosition="0">
-        <ColumnID>EndpointID</ColumnID>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>Endpoint</ColumnID>
         <Aliases>
-          <string>EndpointID</string>
           <string>Endpoint</string>
+          <string>EndpointID</string>
+          <string>Name</string>
+          <string>ID</string>
         </Aliases>
       </ColumnDefinition>
-      <ColumnDefinition IsRequired="true" FixedPosition="1">
-        <ColumnID>EndpointGroup</ColumnID>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>Group</ColumnID>
         <Aliases>
           <string>EndpointGroup</string>
+          <string>EndpointType</string>
           <string>Group</string>
+          <string>Type</string>
         </Aliases>
       </ColumnDefinition>
       <ColumnDefinition IsRequired="true">
@@ -67,6 +71,12 @@
         <ColumnID>CV</ColumnID>
         <Aliases>
           <string>CV</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>RepeatedMeasurements</ColumnID>
+        <Aliases>
+          <string>RepeatedMeasurements</string>
         </Aliases>
       </ColumnDefinition>
       <ColumnDefinition IsRequired="true">

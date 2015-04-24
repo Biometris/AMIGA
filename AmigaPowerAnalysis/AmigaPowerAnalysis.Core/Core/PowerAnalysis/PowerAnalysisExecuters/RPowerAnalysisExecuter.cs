@@ -72,7 +72,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             var outputFileReader = new OutputPowerAnalysisFileReader();
             return new OutputPowerAnalysis() {
                 InputPowerAnalysis = inputPowerAnalysis,
-                OutputRecords = outputFileReader.ReadOutputPowerAnalysis(comparisonOutputFilename),
+                OutputRecords = outputFileReader.Read(comparisonOutputFilename),
             };
         }
 

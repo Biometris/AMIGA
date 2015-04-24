@@ -1,18 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+using AmigaPowerAnalysis.Core.Data;
 using Biometris.DataFileReader;
 
 namespace AmigaPowerAnalysis.Core.DataReaders {
-    public sealed class EndpointDataReader {
+    public sealed class EndpointDataFileReader {
         private TableDefinition _tableDefinition;
 
-        public List<Endpoint> ReadEndpoints(string filename) {
+        public List<EndpointDTO> Read(string filename) {
             var reader = new CsvFileReader();
-            var endpoints = reader.ReadDataSet<Endpoint>(filename, endpointsTableDefinition);
+            var endpoints = reader.ReadDataSet<EndpointDTO>(filename, endpointsTableDefinition);
             return endpoints;
         }
 

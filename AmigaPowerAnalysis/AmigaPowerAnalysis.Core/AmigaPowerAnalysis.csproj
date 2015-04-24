@@ -84,7 +84,9 @@
     <Compile Include="Core\DataAnalysis\AnalysisModels\OverDispersedPoissonModel.cs" />
     <Compile Include="Core\DataAnalysis\AnalysisModels\IAnalysisModel.cs" />
     <Compile Include="Core\DataAnalysis\AnalysisScriptGenerators\AnalysisRScriptGenerator.cs" />
-    <Compile Include="Core\DataReaders\EndpointDataReader.cs" />
+    <Compile Include="Core\DataReaders\EndpointDataFileReader.cs" />
+    <Compile Include="Core\Data\EndpointGroupDTO.cs" />
+    <Compile Include="Core\Data\EndpointDTO.cs" />
     <Compile Include="Core\PowerAnalysis\OutputPowerAnalysis\OutputPowerAnalysisFileReader.cs" />
     <Compile Include="Core\ProjectEntities\Factor\ComparisonDummyFactorLevel.cs" />
     <Compile Include="Core\PowerAnalysis\PowerAnalysisExecuters\RPowerAnalysisExecuter.cs" />
@@ -370,9 +372,9 @@
   <ItemGroup>
     <Content Include="Resources\FieldTrial.jpg" />
     <EmbeddedResource Include="Resources\RScripts\ROutputTableDefinition.xml" />
-    <Content Include="Resources\TableDefinitions.xml">
+    <EmbeddedResource Include="Resources\TableDefinitions.xml">
       <SubType>Designer</SubType>
-    </Content>
+    </EmbeddedResource>
     <Content Include="Resources\WkHtmlToPdf\libeay32.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

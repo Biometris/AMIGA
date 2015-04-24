@@ -1,4 +1,7 @@
-﻿namespace Biometris.DataFileReader {
+﻿using System;
+using System.Reflection;
+
+namespace Biometris.DataFileReader {
     public sealed class ColumnMapping {
 
         /// <summary>
@@ -12,21 +15,39 @@
         public string SourceColumnHeaderName { get; set; }
 
         /// <summary>
+        /// The target property.
+        /// </summary>
+        public PropertyInfo TargetProperty { get; set; }
+
+        /// <summary>
         /// The mapped column definition.
         /// </summary>
         public ColumnDefinition ColumnDefinition { get; set; }
 
         /// <summary>
-        /// If this column mapping maps a dynamic property, then this field contains the dynamic property.
+        /// The target type of the mapped property.
         /// </summary>
-        public DynamicProperty DynamicProperty { get; set; }
+        public Type TargetType {
+            get {
+                return TargetProperty.PropertyType;
+            }
+        }
+
+        /// <summary>
+        /// Returns whether this column mapping maps a dynamic column.
+        /// </summary>
+        public bool IsMultiColumn {
+            get {
+                return ColumnDefinition.IsMultiColumn;
+            }
+        }
 
         /// <summary>
         /// Returns whether this column mapping maps a dynamic column.
         /// </summary>
         public bool IsDynamic {
             get {
-                return DynamicProperty != null;
+                return ColumnDefinition.IsDynamic;
             }
         }
     }

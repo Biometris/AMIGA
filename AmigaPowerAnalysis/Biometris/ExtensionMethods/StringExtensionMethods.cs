@@ -29,7 +29,7 @@ namespace Biometris.ExtensionMethods {
         /// characters or that are empty are ignored and not returned in the output sequence.
         /// </remarks>
         public static IEnumerable<int> ParseRange(this string s, int minValue, int maxValue) {
-            const string pattern = @"(?:^|(?<=[,;]))                      # match must begin with start of string or delim, where delim is , or ;
+            const string pattern = @"(?:^|(?<=[,;]))                  # match must begin with start of string or delim, where delim is , or ;
                                  \s*(                                 # leading whitespace
                                  (?<from>\d*)\s*(?:-|:)\s*(?<to>\d+)  # capture 'from <sep> to' or '<sep> to', where <sep> is - or :
                                  |  		                          # or

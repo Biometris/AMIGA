@@ -11,7 +11,7 @@ namespace AmigaPowerAnalysis.Tests.Core {
         public void OutputPowerAnalysisFileReader_Test1() {
             var testFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Resources\OutputPowerAnalysisFileReader_Test1.csv");
             var outputFileReader = new OutputPowerAnalysisFileReader();
-            var records = outputFileReader.ReadOutputPowerAnalysis(testFile);
+            var records = outputFileReader.Read(testFile);
         }
     }
 }
