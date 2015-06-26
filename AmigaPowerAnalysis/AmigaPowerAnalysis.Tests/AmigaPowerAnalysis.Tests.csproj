@@ -55,6 +55,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Core\AnalysisDataTemplateGeneratorTests.cs" />
+    <Compile Include="Core\Charting\DistributionChartCreators\DistributionChartCreatorTests.cs" />
     <Compile Include="Core\EndpointDataFileReaderTests.cs" />
     <Compile Include="Core\PowerAnalysisInputGeneratorTests.cs" />
     <Compile Include="Core\FactorTests.cs" />

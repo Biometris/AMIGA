@@ -1,5 +1,18 @@
-﻿namespace Biometris.Statistics.Distributions {
+﻿using Biometris.Statistics.Measurements;
+namespace Biometris.Statistics.Distributions {
+
     public interface IDistribution {
-        double GetSigmaSquared(double mu, double CV);
+
+        double Pdf(double x);
+
+        double Cv();
+
+        double Mean();
+
+        double Variance();
+
+        MeasurementType SupportType();
+
+        double SupportMax();
     }
 }
