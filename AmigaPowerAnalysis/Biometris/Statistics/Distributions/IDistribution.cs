@@ -5,6 +5,10 @@ namespace Biometris.Statistics.Distributions {
 
         double Pdf(double x);
 
+        double Cdf(double x);
+
+        double InvCdf(double x);
+
         double Cv();
 
         double Mean();

@@ -20,6 +20,14 @@ namespace Biometris.Statistics.Distributions {
             return 1 / (Sigma * Math.Sqrt(2 * Math.PI)) * Math.Exp(-Math.Pow(x - Mu, 2) / 2 * Math.Pow(Sigma, 2));
         }
 
+        public double Cdf(double x) {
+            return MathNet.Numerics.Distributions.Normal.CDF(Mu, Sigma, x);
+        }
+
+        public double InvCdf(double p) {
+            return MathNet.Numerics.Distributions.Normal.InvCDF(Mu, Sigma, p);
+        }
+
         public double Cv() {
             return Sigma / Mu;
         }
@@ -34,6 +42,10 @@ namespace Biometris.Statistics.Distributions {
 
         public MeasurementType SupportType() {
             return MeasurementType.Continuous;
+        }
+
+        public double SupportMax() {
+            return double.PositiveInfinity;
         }
     }
 }

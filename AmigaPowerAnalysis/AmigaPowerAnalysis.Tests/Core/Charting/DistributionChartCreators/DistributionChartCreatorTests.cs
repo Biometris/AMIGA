@@ -11,7 +11,7 @@ namespace AmigaPowerAnalysis.Tests.Core {
         [TestMethod]
         public void DistributionChartCreator_TestNormalDistribution1() {
             var distribution = new NormalDistribution();
-            var chartCreator = new DistributionChartCreator(distribution, -3, 3, .001);
+            var chartCreator = new DistributionChartCreator(distribution);
             chartCreator.SaveToFile("NormalDistribution");
         }
 
@@ -23,16 +23,37 @@ namespace AmigaPowerAnalysis.Tests.Core {
         }
 
         [TestMethod]
+        public void DistributionChartCreator_TestLogNormalDistribution1() {
+            var distribution = new LogNormalDistribution();
+            var chartCreator = new DistributionChartCreator(distribution);
+            chartCreator.SaveToFile("LogNormalDistribution");
+        }
+
+        [TestMethod]
+        public void DistributionChartCreator_TestLogNormalDistribution2() {
+            var distribution = new LogNormalDistribution(0, 0.5);
+            var chartCreator = new DistributionChartCreator(distribution);
+            chartCreator.SaveToFile("LogNormalDistribution (0,0p5)");
+        }
+
+        [TestMethod]
+        public void DistributionChartCreator_TestLogNormalDistribution3() {
+            var distribution = new LogNormalDistribution(1, 0.25);
+            var chartCreator = new DistributionChartCreator(distribution);
+            chartCreator.SaveToFile("LogNormalDistribution (1,0p25)");
+        }
+
+        [TestMethod]
         public void DistributionChartCreator_TestPoissonDistribution1() {
             var distribution = new PoissonDistribution();
-            var chartCreator = new DistributionChartCreator(distribution, 0, 20, 1);
+            var chartCreator = new DistributionChartCreator(distribution);
             chartCreator.SaveToFile("PoissonDistribution");
         }
 
         [TestMethod]
         public void DistributionChartCreator_TestPoissonDistribution2() {
             var distribution = new PoissonDistribution(4);
-            var chartCreator = new DistributionChartCreator(distribution, 0, 20, 1);
+            var chartCreator = new DistributionChartCreator(distribution);
             chartCreator.SaveToFile("PoissonDistribution (4)");
         }
 
@@ -41,6 +62,55 @@ namespace AmigaPowerAnalysis.Tests.Core {
             var distribution = new PoissonDistribution(10);
             var chartCreator = new DistributionChartCreator(distribution);
             chartCreator.SaveToFile("PoissonDistribution (10)");
+        }
+
+        [TestMethod]
+        public void DistributionChartCreator_TestNegativeBinomialDistribution1() {
+            var distribution = new NegativeBinomialDistribution();
+            var chartCreator = new DistributionChartCreator(distribution);
+            chartCreator.SaveToFile("NegativeBinomialDistribution");
+        }
+
+        [TestMethod]
+        public void DistributionChartCreator_TestNegativeBinomialDistribution2() {
+            var distribution = new NegativeBinomialDistribution(0.25, 20);
+            var chartCreator = new DistributionChartCreator(distribution);
+            chartCreator.SaveToFile("NegativeBinomialDistribution (0p25,20)");
+        }
+
+        [TestMethod]
+        public void DistributionChartCreator_TestNegativeBinomialDistribution3() {
+            var distribution = new NegativeBinomialDistribution(0.5, 20);
+            var chartCreator = new DistributionChartCreator(distribution);
+            chartCreator.SaveToFile("NegativeBinomialDistribution (0p5,20)");
+        }
+
+        [TestMethod]
+        public void DistributionChartCreator_TestNegativeBinomialDistribution4() {
+            var distribution = new NegativeBinomialDistribution(0.75, 20);
+            var chartCreator = new DistributionChartCreator(distribution);
+            chartCreator.SaveToFile("NegativeBinomialDistribution (0p75,20)");
+        }
+
+        [TestMethod]
+        public void DistributionChartCreator_TestBinomialDistribution1() {
+            var distribution = new BinomialDistribution();
+            var chartCreator = new DistributionChartCreator(distribution);
+            chartCreator.SaveToFile("BinomialDistribution");
+        }
+
+        [TestMethod]
+        public void DistributionChartCreator_TestBinomialDistribution2() {
+            var distribution = new BinomialDistribution(0.5, 10);
+            var chartCreator = new DistributionChartCreator(distribution);
+            chartCreator.SaveToFile("BinomialDistribution (0p5,10)");
+        }
+
+        [TestMethod]
+        public void DistributionChartCreator_TestBinomialDistribution3() {
+            var distribution = new BinomialDistribution(0.7, 10);
+            var chartCreator = new DistributionChartCreator(distribution);
+            chartCreator.SaveToFile("BinomialDistribution (0p7,10)");
         }
 
         [TestMethod]

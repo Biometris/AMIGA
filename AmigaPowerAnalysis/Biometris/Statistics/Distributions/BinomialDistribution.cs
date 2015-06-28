@@ -1,5 +1,7 @@
 ﻿using System;
 using Biometris.Statistics.Measurements;
+using Biometris.Numerics.Optimization;
+
 namespace Biometris.Statistics.Distributions {
     public sealed class BinomialDistribution : IDistribution {
 
@@ -11,8 +13,21 @@ namespace Biometris.Statistics.Distributions {
             N = 1;
         }
 
+        public BinomialDistribution(double p, int n) {
+            P = p;
+            N = n;
+        }
+
         public double Pdf(double x) {
-            return UtilityFunctions.BinomialCoefficient(N, (int)x) * Math.Pow(P, x) * Math.Pow(1 - P, N - x);
+            return Combinatorics.BinomialCoefficient(N, (int)x) * Math.Pow(P, x) * Math.Pow(1 - P, N - x);
+        }
+
+        public double Cdf(double x) {
+            return MathNet.Numerics.Distributions.Binomial.CDF(P, N, x);
+        }
+
+        public double InvCdf(double p) {
+            return OneDimensionalOptimization.IntervalHalvingIntegers(x => Cdf(x) >= p ? x : 2 * N + (N - x), 0, N, 100);
         }
 
         public double Cv() {

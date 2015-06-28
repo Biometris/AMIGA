@@ -67,37 +67,44 @@ namespace AmigaPowerAnalysis.Core.Charting.DistributionChartCreators {
         }
 
         private double computeLowerBound() {
-            switch (_distribution.SupportType()) {
-                case MeasurementType.Count:
-                case MeasurementType.Fraction:
-                case MeasurementType.Nonnegative:
-                    return 0;
-                case MeasurementType.Continuous:
-                default:
-                    return _distribution.Mean() - Math.Sqrt(_distribution.Variance());
+            try {
+                return _distribution.InvCdf(.01);
+            } catch (Exception ex) {
+                switch (_distribution.SupportType()) {
+                    case MeasurementType.Count:
+                    case MeasurementType.Fraction:
+                    case MeasurementType.Nonnegative:
+                        return 0;
+                    case MeasurementType.Continuous:
+                    default:
+                        return _distribution.Mean() - Math.Sqrt(_distribution.Variance());
+                }
             }
         }
 
         private double computeUpperBound() {
-            switch (_distribution.SupportType()) {
-                case MeasurementType.Count:
-                    return Math.Ceiling(_distribution.Mean() + Math.Sqrt(_distribution.Variance()));
-                case MeasurementType.Fraction:
-                    return Math.Min(1, _distribution.Mean() + Math.Sqrt(_distribution.Variance()));
-                case MeasurementType.Nonnegative:
-                    return _distribution.Mean() + Math.Sqrt(_distribution.Variance());
-                case MeasurementType.Continuous:
-                    return _distribution.Mean() + Math.Sqrt(_distribution.Variance());
-                default:
-                    return 0;
+            try {
+                return _distribution.InvCdf(.99);
+            } catch (Exception ex) {
+                switch (_distribution.SupportType()) {
+                    case MeasurementType.Count:
+                        return Math.Ceiling(_distribution.Mean() + Math.Sqrt(_distribution.Variance()));
+                    case MeasurementType.Fraction:
+                        return Math.Min(_distribution.SupportMax(), _distribution.Mean() + Math.Sqrt(_distribution.Variance()));
+                    case MeasurementType.Nonnegative:
+                    case MeasurementType.Continuous:
+                        return _distribution.Mean() + Math.Sqrt(Math.Sqrt(_distribution.Variance()));
+                    default:
+                        return 0;
+                }
             }
         }
 
         private double computeStep(double lower, double upper) {
             switch (_distribution.SupportType()) {
                 case MeasurementType.Count:
-                    return 1;
                 case MeasurementType.Fraction:
+                    return 1;
                 case MeasurementType.Nonnegative:
                 case MeasurementType.Continuous:
                 default:

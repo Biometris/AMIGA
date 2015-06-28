@@ -1,5 +1,6 @@
 ﻿using System;
 using Biometris.Statistics.Measurements;
+using Biometris.Numerics.Optimization;
 namespace Biometris.Statistics.Distributions {
     public sealed class PoissonDistribution : IDistribution {
 
@@ -15,7 +16,21 @@ namespace Biometris.Statistics.Distributions {
 
         public double Pdf(double x) {
             int k = (int)x;
-            return (Math.Pow(Lambda, k) * Math.Exp(-Lambda)) / UtilityFunctions.Factorial(k);
+            return (Math.Pow(Lambda, k) * Math.Exp(-Lambda)) / Combinatorics.Factorial(k);
+        }
+
+        public double Cdf(double x) {
+            return MathNet.Numerics.Distributions.Poisson.CDF(Lambda, x);
+        }
+
+        public double InvCdf(double p) {
+            var xmax = (int)Math.Ceiling(Lambda + 1 / 3 - 0.02 / Lambda);
+            var fx = Cdf(xmax);
+            while (fx < p) {
+                xmax = xmax * 2;
+                fx = Cdf(xmax);
+            }
+            return OneDimensionalOptimization.IntervalHalvingIntegers(x => Cdf(x) >= p ? x : 2 * xmax + (xmax - x), 0, xmax, 100);
         }
 
         public double Cv() {

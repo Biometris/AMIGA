@@ -57,6 +57,7 @@
   <ItemGroup>
     <Compile Include="ApplicationUtilities\ApplicationUtils.cs" />
     <Compile Include="Collections\MultiSetComparer.cs" />
+    <Compile Include="Numerics\Optimization\OneDimensionalOptimization.cs" />
     <Compile Include="Persistence\CsvWriter.cs" />
     <Compile Include="ExtensionMethods\EnumExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\IEnumerableExtensions.cs" />
@@ -78,6 +79,7 @@
     <Compile Include="R\REngines\RDotNet\LoggingRDotNetEngine.cs" />
     <Compile Include="R\REngines\RDotNet\RDotNetEngine.cs" />
     <Compile Include="Statistics\CollectionStatistics.cs" />
+    <Compile Include="Statistics\Distributions\LogNormalDistribution.cs" />
     <Compile Include="Statistics\Distributions\NormalDistribution.cs" />
     <Compile Include="Statistics\GriddingFunctions.cs" />
     <Compile Include="Statistics\Distributions\BetaBinomialDistribution.cs" />
@@ -91,6 +93,7 @@
     <Compile Include="Statistics\Distributions\PowerLawDistribution.cs" />
     <Compile Include="Statistics\Measurements\MeasurementFactory.cs" />
     <Compile Include="Statistics\Measurements\Measurements.cs" />
+    <Compile Include="Statistics\Combinatorics.cs" />
     <Compile Include="Statistics\UtilityFunctions.cs" />
   </ItemGroup>
   <ItemGroup>

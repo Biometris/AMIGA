@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 
 namespace Biometris.Statistics {
     public static class UtilityFunctions {
@@ -42,6 +43,33 @@ namespace Biometris.Statistics {
             return 1D / (1D + ExpBound(-arg));
         }
 
+        /// <summary>
+        /// The error function.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <returns></returns>
+        public static double Erf(double x) {
+            // constants
+            double a1 = 0.254829592;
+            double a2 = -0.284496736;
+            double a3 = 1.421413741;
+            double a4 = -1.453152027;
+            double a5 = 1.061405429;
+            double p = 0.3275911;
+
+            // Save the sign of x
+            int sign = 1;
+            if (x < 0) {
+                sign = -1;
+            }
+            x = Math.Abs(x);
+
+            double t = 1.0 / (1.0 + p * x);
+            double y = 1.0 - (((((a5 * t + a4) * t) + a3) * t + a2) * t + a1) * t * Math.Exp(-x * x);
+
+            return sign * y;
+        }
+
         /// <summary> Bounds argument between lower and upper limits.
         /// </summary>
         /// <param name="arg">Argument.</param>
@@ -71,34 +99,6 @@ namespace Biometris.Statistics {
                 return true;
             }
             return false;
-        }
-
-        /// <summary>
-        /// Computes the binomial coefficient, or n choose k.
-        /// </summary>
-        /// <param name="n"></param>
-        /// <param name="k"></param>
-        /// <returns></returns>
-        public static double BinomialCoefficient(int n, int k) {
-            var result = 1D;
-            for (int i = 1; i <= k; i++) {
-                result *= n - (k - i);
-                result /= i;
-            }
-            return result;
-        }
-
-        /// <summary>
-        /// Computes the factorial.
-        /// </summary>
-        /// <param name="factor"></param>
-        /// <returns></returns>
-        public static long Factorial(int factor) {
-            long factorial = 1;
-            for (int i = 1; i <= factor; i++) {
-                factorial *= i;
-            }
-            return factorial;
         }
     }
 }

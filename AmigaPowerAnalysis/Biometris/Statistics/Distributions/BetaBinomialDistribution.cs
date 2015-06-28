@@ -22,7 +22,17 @@ namespace Biometris.Statistics.Distributions {
         }
 
         public double Pdf(double x) {
-            return UtilityFunctions.BinomialCoefficient(N, (int)x) * SpecialFunctions.Beta(x + Alpha, N - x + Beta) / SpecialFunctions.Beta(Alpha, Beta);
+            var k = (int)x;
+            return Combinatorics.BinomialCoefficient(N, k) * SpecialFunctions.Beta(k + Alpha, N - k + Beta) / SpecialFunctions.Beta(Alpha, Beta);
+        }
+
+        public double Cdf(double x) {
+            var k = (int)x;
+            throw new NotImplementedException();
+        }
+
+        public double InvCdf(double x) {
+            throw new NotImplementedException();
         }
 
         public double Cv() {

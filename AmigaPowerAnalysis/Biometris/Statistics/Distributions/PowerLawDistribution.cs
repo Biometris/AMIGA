@@ -10,6 +10,14 @@ namespace Biometris.Statistics.Distributions {
             throw new NotImplementedException();
         }
 
+        public double Cdf(double x) {
+            throw new NotImplementedException();
+        }
+
+        public double InvCdf(double x) {
+            throw new NotImplementedException();
+        }
+
         public double Cv() {
             throw new NotImplementedException();
         }
