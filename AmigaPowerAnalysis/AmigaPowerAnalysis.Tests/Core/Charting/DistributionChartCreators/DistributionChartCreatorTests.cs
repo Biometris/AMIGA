@@ -65,6 +65,41 @@ namespace AmigaPowerAnalysis.Tests.Core {
         }
 
         [TestMethod]
+        public void DistributionChartCreator_TestOverdispersedPoissonDistribution1() {
+            var distribution = new OverdispersedPoissonDistribution();
+            var chartCreator = new DistributionChartCreator(distribution);
+            chartCreator.SaveToFile("OverdispersedPoissonDistribution");
+        }
+
+        [TestMethod]
+        public void DistributionChartCreator_TestOverdispersedPoissonDistribution2() {
+            var distribution = new OverdispersedPoissonDistribution(1, 1/3D);
+            var chartCreator = new DistributionChartCreator(distribution);
+            chartCreator.SaveToFile("OverdispersedPoissonDistribution (1, 0p33)");
+        }
+
+        [TestMethod]
+        public void DistributionChartCreator_TestOverdispersedPoissonDistribution3() {
+            var distribution = new OverdispersedPoissonDistribution(1, 1 / 5D);
+            var chartCreator = new DistributionChartCreator(distribution);
+            chartCreator.SaveToFile("OverdispersedPoissonDistribution (1, 0p2)");
+        }
+
+        [TestMethod]
+        public void DistributionChartCreator_TestOverdispersedPoissonDistribution4() {
+            var distribution = new OverdispersedPoissonDistribution(4, 1 / 5D);
+            var chartCreator = new DistributionChartCreator(distribution);
+            chartCreator.SaveToFile("OverdispersedPoissonDistribution (4, 0p2)");
+        }
+
+        [TestMethod]
+        public void DistributionChartCreator_TestOverdispersedPoissonDistribution5() {
+            var distribution = new OverdispersedPoissonDistribution(10, 1 / 5D);
+            var chartCreator = new DistributionChartCreator(distribution);
+            chartCreator.SaveToFile("OverdispersedPoissonDistribution (10, 0p2)");
+        }
+
+        [TestMethod]
         public void DistributionChartCreator_TestNegativeBinomialDistribution1() {
             var distribution = new NegativeBinomialDistribution();
             var chartCreator = new DistributionChartCreator(distribution);
