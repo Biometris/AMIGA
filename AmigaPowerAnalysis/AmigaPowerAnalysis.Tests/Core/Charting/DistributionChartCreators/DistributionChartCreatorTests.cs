@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using AmigaPowerAnalysis.Core;
 using AmigaPowerAnalysis.Core.Charting.DistributionChartCreators;
 using Biometris.Statistics.Distributions;
@@ -20,6 +21,18 @@ namespace AmigaPowerAnalysis.Tests.Core {
             var distribution = new NormalDistribution(5, 3);
             var chartCreator = new DistributionChartCreator(distribution);
             chartCreator.SaveToFile("NormalDistribution (5,3)");
+        }
+
+        [TestMethod]
+        public void DistributionChartCreator_TestNormalDistribution3() {
+            var distribution = new NormalDistribution(5, 3);
+            var chartCreator = new DistributionChartCreator(new List<IDistribution>() {
+                 new NormalDistribution(1, 1),
+                 new NormalDistribution(2, 2),
+                 new NormalDistribution(3, 3),
+                 new NormalDistribution(4, 2),
+            });
+            chartCreator.SaveToFile("NormalDistributions");
         }
 
         [TestMethod]

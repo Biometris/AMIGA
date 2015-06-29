@@ -47,5 +47,9 @@ namespace Biometris.Statistics.Distributions {
         public double SupportMax() {
             return double.PositiveInfinity;
         }
+
+        public string Description() {
+            return string.Format("Log-Normal (Mu = {0}, Sigma = {1})", Mu, Sigma);
+        }
     }
 }

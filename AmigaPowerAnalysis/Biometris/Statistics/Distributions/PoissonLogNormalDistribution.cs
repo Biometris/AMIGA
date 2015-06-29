@@ -3,6 +3,10 @@ using Biometris.Statistics.Measurements;
 namespace Biometris.Statistics.Distributions {
     public sealed class PoissonLogNormalDistribution : IDistribution {
 
+        public double Lambda { get; set; }
+
+        public double Sigma { get; set; }
+
         public PoissonLogNormalDistribution() {
         }
 
@@ -36,6 +40,10 @@ namespace Biometris.Statistics.Distributions {
 
         public double SupportMax() {
             return double.PositiveInfinity;
+        }
+
+        public string Description() {
+            return string.Format("Poisson Log-Normal (Lambda = {0}, Sigma = {1})", Lambda, Sigma);
         }
     }
 }

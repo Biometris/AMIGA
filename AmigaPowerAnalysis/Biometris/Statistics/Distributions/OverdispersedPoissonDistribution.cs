@@ -71,5 +71,9 @@ namespace Biometris.Statistics.Distributions {
         public double SupportMax() {
             return double.PositiveInfinity;
         }
+
+        public string Description() {
+            return string.Format("Overdispersed Poisson (Lambda = {0}, Phi = {1})", Lambda, Phi);
+        }
     }
 }

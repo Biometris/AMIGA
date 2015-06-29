@@ -60,5 +60,9 @@ namespace Biometris.Statistics.Distributions {
         public double SupportMax() {
             return double.PositiveInfinity;
         }
+
+        public string Description() {
+            return string.Format("Binomial (P = {0}, R = {1})", P, R);
+        }
     }
 }

@@ -18,5 +18,7 @@ namespace Biometris.Statistics.Distributions {
         MeasurementType SupportType();
 
         double SupportMax();
+
+        string Description();
     }
 }

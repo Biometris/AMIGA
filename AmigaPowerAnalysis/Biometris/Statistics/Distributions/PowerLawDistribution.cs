@@ -37,5 +37,9 @@ namespace Biometris.Statistics.Distributions {
         public double SupportMax() {
             return double.PositiveInfinity;
         }
+
+        public string Description() {
+            return string.Format("Power Law");
+        }
     }
 }

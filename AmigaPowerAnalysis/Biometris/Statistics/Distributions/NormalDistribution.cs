@@ -17,7 +17,7 @@ namespace Biometris.Statistics.Distributions {
         }
 
         public double Pdf(double x) {
-            return 1 / (Sigma * Math.Sqrt(2 * Math.PI)) * Math.Exp(-Math.Pow(x - Mu, 2) / 2 * Math.Pow(Sigma, 2));
+            return 1 / (Sigma * Math.Sqrt(2 * Math.PI)) * Math.Exp(-Math.Pow(x - Mu, 2) / (2 * Math.Pow(Sigma, 2)));
         }
 
         public double Cdf(double x) {
@@ -46,6 +46,10 @@ namespace Biometris.Statistics.Distributions {
 
         public double SupportMax() {
             return double.PositiveInfinity;
+        }
+
+        public string Description() {
+            return string.Format("Normal (Mu = {0}, Sigma = {1})", Mu, Sigma);
         }
     }
 }

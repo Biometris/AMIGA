@@ -54,5 +54,9 @@ namespace Biometris.Statistics.Distributions {
         public double SupportMax() {
             return N;
         }
+
+        public string Description() {
+            return string.Format("Beta-Binomial (Alpa = {0}, Beta = {1}, N = {2})", Alpha, Beta, N);
+        }
     }
 }
