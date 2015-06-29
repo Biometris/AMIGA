@@ -18,14 +18,6 @@ namespace AmigaPowerAnalysis.Tests.Core {
 
         [TestMethod]
         public void DistributionChartCreator_TestNormalDistribution2() {
-            var distribution = new NormalDistribution(5, 3);
-            var chartCreator = new DistributionChartCreator(distribution);
-            chartCreator.SaveToFile("NormalDistribution (5,3)");
-        }
-
-        [TestMethod]
-        public void DistributionChartCreator_TestNormalDistribution3() {
-            var distribution = new NormalDistribution(5, 3);
             var chartCreator = new DistributionChartCreator(new List<IDistribution>() {
                  new NormalDistribution(1, 1),
                  new NormalDistribution(2, 2),
@@ -44,16 +36,13 @@ namespace AmigaPowerAnalysis.Tests.Core {
 
         [TestMethod]
         public void DistributionChartCreator_TestLogNormalDistribution2() {
-            var distribution = new LogNormalDistribution(0, 0.5);
-            var chartCreator = new DistributionChartCreator(distribution);
-            chartCreator.SaveToFile("LogNormalDistribution (0,0p5)");
-        }
-
-        [TestMethod]
-        public void DistributionChartCreator_TestLogNormalDistribution3() {
-            var distribution = new LogNormalDistribution(1, 0.25);
-            var chartCreator = new DistributionChartCreator(distribution);
-            chartCreator.SaveToFile("LogNormalDistribution (1,0p25)");
+            var chartCreator = new DistributionChartCreator(new List<IDistribution>() {
+                 new LogNormalDistribution(0, 0.25),
+                 new LogNormalDistribution(0, 0.5),
+                 new LogNormalDistribution(1, 0.25),
+                 new LogNormalDistribution(1, 0.5),
+            });
+            chartCreator.SaveToFile("LogNormalDistributions");
         }
 
         [TestMethod]
