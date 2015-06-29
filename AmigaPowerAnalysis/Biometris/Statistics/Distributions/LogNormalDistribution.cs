@@ -17,11 +17,11 @@ namespace Biometris.Statistics.Distributions {
         }
 
         public double Pdf(double x) {
-            return MathNet.Numerics.Distributions.LogNormal.PDF(Mu, Sigma, x);
+            return (1 / (x * Sigma * Math.Sqrt(2 * Math.PI))) * Math.Exp(-Math.Pow(Math.Log(x) - Mu, 2) / (2 * Math.Pow(Sigma, 2)));
         }
 
         public double Cdf(double x) {
-            return MathNet.Numerics.Distributions.LogNormal.CDF(Mu, Sigma, x);
+            return .5 + .5 * UtilityFunctions.Erf((Math.Log(x) - Mu) / (Math.Sqrt(2) * Math.PI));
         }
 
         public double InvCdf(double p) {
@@ -33,11 +33,11 @@ namespace Biometris.Statistics.Distributions {
         }
 
         public double Mean() {
-            return Mu;
+            return Math.Exp(Mu + Math.Pow(Sigma, 2)/2);
         }
 
         public double Variance() {
-            return Math.Exp(Math.Pow(Sigma, 2) - 1) * Math.Exp(2 * Mu + Math.Pow(Sigma, 2));
+            return (Math.Exp(Math.Pow(Sigma, 2)) - 1) * Math.Exp(2 * Mu + Math.Pow(Sigma,2));
         }
 
         public MeasurementType SupportType() {

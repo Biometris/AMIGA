@@ -62,7 +62,7 @@ namespace Biometris.Statistics.Distributions {
         }
 
         public string Description() {
-            return string.Format("Binomial (P = {0}, R = {1})", P, R);
+            return string.Format("Negative Binomial (P = {0}, R = {1})", P, R);
         }
     }
 }

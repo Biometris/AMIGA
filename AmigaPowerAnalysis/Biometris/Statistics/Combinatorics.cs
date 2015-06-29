@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 
 namespace Biometris.Statistics {
     public static class Combinatorics {
@@ -23,12 +24,13 @@ namespace Biometris.Statistics {
         /// </summary>
         /// <param name="factor"></param>
         /// <returns></returns>
-        public static long Factorial(int factor) {
-            long factorial = 1;
-            for (int i = 1; i <= factor; i++) {
-                factorial *= i;
+        public static BigInteger Factorial(int x) {
+            BigInteger res = 1;
+            while (x > 1) {
+                res *= x;
+                x--;
             }
-            return factorial;
+            return res;
         }
     }
 }

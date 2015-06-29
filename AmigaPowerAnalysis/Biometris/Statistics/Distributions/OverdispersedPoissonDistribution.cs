@@ -28,7 +28,7 @@ namespace Biometris.Statistics.Distributions {
 
         public double Pdf(double x) {
             var k = (int)x;
-            var r = (MathNet.Numerics.SpecialFunctions.Gamma(k + Phi * Lambda) / (Combinatorics.Factorial(k) * MathNet.Numerics.SpecialFunctions.Gamma(Phi * Lambda)))
+            var r = (MathNet.Numerics.SpecialFunctions.Gamma(k + Phi * Lambda) / ((double)Combinatorics.Factorial(k) * MathNet.Numerics.SpecialFunctions.Gamma(Phi * Lambda)))
                 * (Math.Pow(Phi, Phi * Lambda) / Math.Pow(1 + Phi, k + Phi * Lambda));
             return r;
         }

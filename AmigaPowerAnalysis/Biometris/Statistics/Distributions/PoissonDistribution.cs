@@ -1,6 +1,7 @@
 ﻿using System;
 using Biometris.Statistics.Measurements;
 using Biometris.Numerics.Optimization;
+using System.Numerics;
 namespace Biometris.Statistics.Distributions {
     public sealed class PoissonDistribution : IDistribution {
 
@@ -16,7 +17,9 @@ namespace Biometris.Statistics.Distributions {
 
         public double Pdf(double x) {
             int k = (int)x;
-            return (Math.Pow(Lambda, k) * Math.Exp(-Lambda)) / Combinatorics.Factorial(k);
+            var r1 = MathNet.Numerics.Distributions.Poisson.PMF(Lambda, k);
+            var r2 = (Math.Pow(Lambda, k) * Math.Exp(-Lambda)) / (double)Combinatorics.Factorial(k);
+            return r1;
         }
 
         public double Cdf(double x) {
