@@ -12,6 +12,9 @@ namespace AmigaPowerAnalysis.Core {
         public static List<EndpointType> MyEndpointTypes;
 
         public static List<EndpointType> NewProjectDefaultEndpointTypes() {
+            if (MyEndpointTypes == null) {
+                LoadMyEndpointTypes();
+            }
             var endpointTypes = new List<EndpointType>();
             foreach (var endpointType in MyEndpointTypes) {
                 endpointTypes.Add(endpointType.Clone());

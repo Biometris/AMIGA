@@ -9,10 +9,10 @@ namespace AmigaPowerAnalysis.Core.Data {
         public double LocLower { get; set; }
         public double LocUpper { get; set; }
         public DistributionType DistributionType { get; set; }
-        public double BinomialTotal { get; set; }
-        public double PowerLawPower { get; set; }
         public double Mean { get; set; }
         public double CV { get; set; }
+        public int BinomialTotal { get; set; }
+        public double PowerLawPower { get; set; }
         public bool RepeatedMeasurements { get; set; }
         public bool ExcessZeroes { get; set; }
     }

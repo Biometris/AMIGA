@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using AmigaPowerAnalysis.Core.Data;
+using System.Collections.Generic;
+using System.IO;
 using System.Runtime.Serialization;
 
 namespace AmigaPowerAnalysis.Core {
@@ -40,6 +42,21 @@ namespace AmigaPowerAnalysis.Core {
                 fileStream.Close();
                 return project;
             }
+        }
+
+        /// <summary>
+        /// Tries to load a project file from the given file name.
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <returns></returns>
+        public static Project ProjectFromDTO(IEnumerable<EndpointDTO> endpoints) {
+            var project = new Project();
+            project.EndpointTypes = EndpointTypeProvider.NewProjectDefaultEndpointTypes();
+            foreach (var dto in endpoints) {
+                project.AddEndpoint(dto.ToEndpoint(project.EndpointTypes));
+            }
+            project.UpdateEndpointFactors();
+            return project;
         }
     }
 }
