@@ -50,6 +50,10 @@ namespace Biometris.Statistics.Distributions {
             return N;
         }
 
+        public double Draw() {
+            throw new NotImplementedException();
+        }
+
         public string Description() {
             return string.Format("Binomial (P = {0}, N = {1})", P, N);
         }

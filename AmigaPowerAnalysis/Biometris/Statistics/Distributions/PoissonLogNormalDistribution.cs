@@ -42,6 +42,10 @@ namespace Biometris.Statistics.Distributions {
             return double.PositiveInfinity;
         }
 
+        public double Draw() {
+            throw new NotImplementedException();
+        }
+
         public string Description() {
             return string.Format("Poisson Log-Normal (Lambda = {0}, Sigma = {1})", Lambda, Sigma);
         }

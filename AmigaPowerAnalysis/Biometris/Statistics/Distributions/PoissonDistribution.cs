@@ -56,6 +56,11 @@ namespace Biometris.Statistics.Distributions {
             return double.PositiveInfinity;
         }
 
+        public double Draw() {
+            var sample = MathNet.Numerics.Distributions.Poisson.Sample(Lambda);
+            return sample;
+        }
+
         public string Description() {
             return string.Format("Poisson (Lambda = {0})", Lambda);
         }

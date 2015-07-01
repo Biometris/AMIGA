@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Biometris.Statistics;
+﻿using Biometris.Statistics;
 using Biometris.Statistics.Distributions;
 using Biometris.Statistics.Measurements;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
 using OxyPlot.WindowsForms;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace AmigaPowerAnalysis.Core.Charting.DistributionChartCreators {
     public sealed class DistributionChartCreator : IChartCreator {
@@ -43,17 +41,11 @@ namespace AmigaPowerAnalysis.Core.Charting.DistributionChartCreators {
         }
 
         public PlotModel Create() {
+            //return IntervalBarSeries();
             var plotModel = new PlotModel() {
                 TitleFontSize = 11,
                 DefaultFontSize = 11,
             };
-
-            var verticalAxis = new LinearAxis() {
-                MajorGridlineStyle = LineStyle.Solid,
-                MinorGridlineStyle = LineStyle.Dot,
-                Minimum = 0,
-            };
-            plotModel.Axes.Add(verticalAxis);
 
             var horizontalAxis = new LinearAxis() {
                 Position = AxisPosition.Bottom,
@@ -62,15 +54,27 @@ namespace AmigaPowerAnalysis.Core.Charting.DistributionChartCreators {
             };
             plotModel.Axes.Add(horizontalAxis);
 
+            var verticalAxis = new LinearAxis() {
+                MajorGridlineStyle = LineStyle.Solid,
+                MinorGridlineStyle = LineStyle.Dot,
+                Minimum = 0,
+            };
+            plotModel.Axes.Add(verticalAxis);
+
             foreach (var distribution in _distributions) {
-                var series = createDistributionSeries(distribution, LowerBound, UpperBound, Step);
+                var numberOfSamples = 100000;
+                if (true) {
+                    var histogram = createDistributionHistogramSeries(distribution, LowerBound, UpperBound, Step, numberOfSamples);
+                    plotModel.Series.Add(histogram);
+                } 
+                var series = createDistributionSeries(distribution, LowerBound, UpperBound, Step, numberOfSamples);
                 plotModel.Series.Add(series);
             }
 
             return plotModel;
         }
 
-        private static Series createDistributionSeries(IDistribution distribution, double lowerBound, double upperBound, double step) {
+        private static Series createDistributionSeries(IDistribution distribution, double lowerBound, double upperBound, double step, int scale) {
             var lb = double.IsNaN(lowerBound) ? computeLowerBound(distribution) : lowerBound;
             var ub = double.IsNaN(upperBound) ? computeUpperBound(distribution) : upperBound;
             var s = double.IsNaN(step) ? computeStep(distribution, lb, ub) : step;
@@ -78,7 +82,23 @@ namespace AmigaPowerAnalysis.Core.Charting.DistributionChartCreators {
             var series = new LineSeries() {
                 Title = distribution.Description()
             };
-            series.Points.AddRange(x.Select(v => new DataPoint(v, distribution.Pdf(v))));
+            series.Points.AddRange(x.Select(v => new DataPoint(v, scale * distribution.Pdf(v))));
+            return series;
+        }
+
+        private static Series createDistributionHistogramSeries(IDistribution distribution, double lowerBound, double upperBound, double step, int numberOfSamples) {
+            var samples = new List<double>(numberOfSamples);
+            for (int i = 0; i < numberOfSamples; ++i) {
+                samples.Add(distribution.Draw());
+            }
+            var lb = double.IsNaN(lowerBound) ? computeLowerBound(distribution) : lowerBound;
+            var ub = double.IsNaN(upperBound) ? computeUpperBound(distribution) : upperBound;
+            var s = double.IsNaN(step) ? computeStep(distribution, lb, ub) : step;
+            var bins = HistogramBinUtilities.MakeHistogramBins(samples, (int)((ub-lb)/s), lb, ub);
+            //var series = new ColumnSeries { ItemsSource = bins, ValueField = "Frequency" };
+            var series = new HistogramSeries() {
+                Items = bins
+            };
             return series;
         }
 

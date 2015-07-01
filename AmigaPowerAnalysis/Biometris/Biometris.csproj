@@ -57,6 +57,7 @@
   <ItemGroup>
     <Compile Include="ApplicationUtilities\ApplicationUtils.cs" />
     <Compile Include="Collections\MultiSetComparer.cs" />
+    <Compile Include="Numerics\BMath.cs" />
     <Compile Include="Numerics\Optimization\OneDimensionalOptimization.cs" />
     <Compile Include="Persistence\CsvWriter.cs" />
     <Compile Include="ExtensionMethods\EnumExtensionMethods.cs" />
@@ -91,6 +92,11 @@
     <Compile Include="Statistics\Distributions\PoissonDistribution.cs" />
     <Compile Include="Statistics\Distributions\PoissonLogNormalDistribution.cs" />
     <Compile Include="Statistics\Distributions\PowerLawDistribution.cs" />
+    <Compile Include="Statistics\Histograms\CategorizedHistogramBin.cs" />
+    <Compile Include="Statistics\Histograms\CategoryContribution.cs" />
+    <Compile Include="Statistics\Histograms\HistogramBin.cs" />
+    <Compile Include="Statistics\Histograms\HistogramBinUtilities.cs" />
+    <Compile Include="Statistics\Histograms\OutlierHandlingMethod.cs" />
     <Compile Include="Statistics\Measurements\MeasurementFactory.cs" />
     <Compile Include="Statistics\Measurements\Measurements.cs" />
     <Compile Include="Statistics\Combinatorics.cs" />

@@ -72,6 +72,14 @@ namespace Biometris.Statistics.Distributions {
             return double.PositiveInfinity;
         }
 
+        public double Draw() {
+            var s = Dispersion() - 1;
+            var a = Mean() / s;
+            var lambdaHat = MathNet.Numerics.Distributions.Gamma.Sample(a, s);
+            var sample = MathNet.Numerics.Distributions.Poisson.Sample(lambdaHat);
+            return sample;
+        }
+
         public string Description() {
             return string.Format("Overdispersed Poisson (Lambda = {0}, Phi = {1})", Lambda, Phi);
         }

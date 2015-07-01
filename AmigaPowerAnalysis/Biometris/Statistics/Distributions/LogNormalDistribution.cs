@@ -48,6 +48,10 @@ namespace Biometris.Statistics.Distributions {
             return double.PositiveInfinity;
         }
 
+        public double Draw() {
+            return MathNet.Numerics.Distributions.LogNormal.Sample(Mu, Sigma);
+        }
+
         public string Description() {
             return string.Format("Log-Normal (Mu = {0}, Sigma = {1})", Mu, Sigma);
         }
