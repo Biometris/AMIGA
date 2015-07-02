@@ -7,19 +7,19 @@ using AmigaPowerAnalysis.Core;
 
 namespace AmigaPowerAnalysis.Tests.Core {
     [TestClass]
-    public class EndpointDataFileReaderTests {
+    public class DTODataFileReaderTests {
 
         [TestMethod]
         public void EndpointDataFileReader_Tests1() {
             var testFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Resources\EndpointDataFileReader_Tests1.csv");
-            var outputFileReader = new EndpointDataFileReader();
+            var outputFileReader = new DTODataFileReader();
             var records = outputFileReader.Read(testFile);
         }
 
         [TestMethod]
         public void EndpointDataFileReader_Tests2() {
             var testFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Resources\EndpointDataFileReader_Tests1.csv");
-            var outputFileReader = new EndpointDataFileReader();
+            var outputFileReader = new DTODataFileReader();
             var endpoints = outputFileReader.Read(testFile);
             var project = ProjectManager.ProjectFromDTO(endpoints);
         }

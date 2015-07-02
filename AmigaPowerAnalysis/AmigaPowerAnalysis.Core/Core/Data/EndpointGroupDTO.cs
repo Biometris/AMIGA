@@ -8,7 +8,7 @@ namespace AmigaPowerAnalysis.Core.Data {
         public double LocLower { get; set; }
         public double LocUpper { get; set; }
         public DistributionType DistributionType { get; set; }
-        public double BinomialTotal { get; set; }
+        public int BinomialTotal { get; set; }
         public double PowerLawPower { get; set; }
         public double MuComparator { get; set; }
         public double CvComparator { get; set; }

@@ -87,7 +87,7 @@
     <Compile Include="Core\DataAnalysis\AnalysisModels\OverDispersedPoissonModel.cs" />
     <Compile Include="Core\DataAnalysis\AnalysisModels\IAnalysisModel.cs" />
     <Compile Include="Core\DataAnalysis\AnalysisScriptGenerators\AnalysisRScriptGenerator.cs" />
-    <Compile Include="Core\DataReaders\EndpointDataFileReader.cs" />
+    <Compile Include="Core\DataReaders\DTODataFileReader.cs" />
     <Compile Include="Core\Data\DTOMapper.cs" />
     <Compile Include="Core\Data\EndpointGroupDTO.cs" />
     <Compile Include="Core\Data\EndpointDTO.cs" />

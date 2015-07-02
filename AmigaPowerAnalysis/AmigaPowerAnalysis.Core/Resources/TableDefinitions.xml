@@ -1,6 +1,79 @@
 ﻿<?xml version="1.0"?>
 <ArrayOfTableDefinition>
   <TableDefinition>
+    <TableID>EndpointGroups</TableID>
+    <Aliases>
+      <string>EndpointGroup</string>
+      <string>EndpointGroups</string>
+    </Aliases>
+    <ColumnDefinitions>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>Group</ColumnID>
+        <Aliases>
+          <string>EndpointGroup</string>
+          <string>EndpointType</string>
+          <string>GroupID</string>
+          <string>Group</string>
+          <string>Type</string>
+          <string>ID</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>MeasurementType</ColumnID>
+        <Aliases>
+          <string>MeasurementType</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>LocLower</ColumnID>
+        <Aliases>
+          <string>LocLower</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>LocUpper</ColumnID>
+        <Aliases>
+          <string>LocUpper</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>DistributionType</ColumnID>
+        <Aliases>
+          <string>DistributionType</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>BinomialTotal</ColumnID>
+        <Aliases>
+          <string>BinomialTotal</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>PowerLawPower</ColumnID>
+        <Aliases>
+          <string>PPowerLaw</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>MuComparator</ColumnID>
+        <Aliases>
+          <string>Mean</string>
+          <string>Mu</string>
+          <string>MeanComparator</string>
+          <string>MuComparator</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>CvComparator</ColumnID>
+        <Aliases>
+          <string>CV</string>
+          <string>CvComparator</string>
+        </Aliases>
+      </ColumnDefinition>
+    </ColumnDefinitions>
+  </TableDefinition>
+
+  <TableDefinition>
     <TableID>Endpoints</TableID>
     <Aliases>
       <string>Endpoint</string>

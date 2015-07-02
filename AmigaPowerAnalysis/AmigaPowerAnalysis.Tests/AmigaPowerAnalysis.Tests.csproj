@@ -56,7 +56,8 @@
   <ItemGroup>
     <Compile Include="Core\AnalysisDataTemplateGeneratorTests.cs" />
     <Compile Include="Core\Charting\DistributionChartCreators\DistributionChartCreatorTests.cs" />
-    <Compile Include="Core\EndpointDataFileReaderTests.cs" />
+    <Compile Include="Core\Data\EndpointGroupDTOTests.cs" />
+    <Compile Include="Core\Data\DTODataFileReaderTests.cs" />
     <Compile Include="Core\PowerAnalysisInputGeneratorTests.cs" />
     <Compile Include="Core\FactorTests.cs" />
     <Compile Include="Core\FactoLevelCombinationTests.cs" />
@@ -79,6 +80,8 @@
     <None Include="Resources\EndpointDataFileReader_Tests1.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Resources\EndpointGroups1.csv" />
+    <None Include="Resources\Endpoints1.csv" />
     <None Include="Resources\OutputPowerAnalysisFileReader_Test1.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -93,6 +96,7 @@
       <Name>Biometris</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

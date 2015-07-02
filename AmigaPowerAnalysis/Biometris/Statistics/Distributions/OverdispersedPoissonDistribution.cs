@@ -4,17 +4,17 @@ using Biometris.Statistics.Measurements;
 namespace Biometris.Statistics.Distributions {
     public sealed class OverdispersedPoissonDistribution : IDistribution {
 
-        public double Lambda { get; set; }
+        public double Mu { get; set; }
 
         public double Phi { get; set; }
 
         public OverdispersedPoissonDistribution() {
-            Lambda = 1;
-            Phi = 2;
+            Mu = 1;
+            Phi = 2D;
         }
 
-        public OverdispersedPoissonDistribution(double lambda, double phi) {
-            Lambda = lambda;
+        public OverdispersedPoissonDistribution(double mu, double phi) {
+            Mu = mu;
             Phi = phi;
         }
 
@@ -28,18 +28,20 @@ namespace Biometris.Statistics.Distributions {
 
         public double Pdf(double x) {
             var k = (int)x;
-            var r = (MathNet.Numerics.SpecialFunctions.Gamma(k + Phi * Lambda) / ((double)Combinatorics.Factorial(k) * MathNet.Numerics.SpecialFunctions.Gamma(Phi * Lambda)))
-                * (Math.Pow(Phi, Phi * Lambda) / Math.Pow(1 + Phi, k + Phi * Lambda));
+            var bla1 = MathNet.Numerics.SpecialFunctions.Gamma(k + Phi * Mu);
+            var bla2 = MathNet.Numerics.SpecialFunctions.Gamma(Phi * Mu);
+            var r = (MathNet.Numerics.SpecialFunctions.Gamma(k + Phi * Mu) / ((double)Combinatorics.Factorial(k) * MathNet.Numerics.SpecialFunctions.Gamma(Phi * Mu)))
+                * (Math.Pow(Phi, Phi * Mu) / Math.Pow(1 + Phi, k + Phi * Mu));
             return r;
         }
 
         public double Cdf(double x) {
             var k = (int)x;
-            return MathNet.Numerics.SpecialFunctions.BetaIncomplete(Lambda * Phi, k + 1, 1D / (1 / Phi - 1));
+            return MathNet.Numerics.SpecialFunctions.BetaIncomplete(Mu * Phi, k + 1, 1D / (1 / Phi - 1));
         }
 
         public double InvCdf(double p) {
-            var xmax = (int)Math.Ceiling(Lambda + 1 / 3 - 0.02 / Lambda);
+            var xmax = (int)Math.Ceiling(Mu + 1 / 3 - 0.02 / Mu);
             var fx = Cdf(xmax);
             while (fx < p) {
                 xmax = xmax * 2;
@@ -53,7 +55,7 @@ namespace Biometris.Statistics.Distributions {
         }
 
         public double Mean() {
-            return Lambda;
+            return Mu;
         }
 
         public double Sigma() {
@@ -61,7 +63,7 @@ namespace Biometris.Statistics.Distributions {
         }
 
         public double Variance() {
-            return Omega() * Lambda;
+            return Omega() * Mu;
         }
 
         public MeasurementType SupportType() {
@@ -81,7 +83,7 @@ namespace Biometris.Statistics.Distributions {
         }
 
         public string Description() {
-            return string.Format("Overdispersed Poisson (Lambda = {0}, Phi = {1})", Lambda, Phi);
+            return string.Format("Overdispersed Poisson (Lambda = {0}, Phi = {1})", Mu, Phi);
         }
     }
 }
