@@ -65,7 +65,7 @@ namespace Biometris.Statistics {
         }
 
         /// <summary>
-        /// Returns round levels
+        /// Returns round levels.
         /// </summary>
         /// <param name="minimum"></param>
         /// <param name="maximum"></param>
@@ -89,6 +89,49 @@ namespace Biometris.Statistics {
                 temp.Add(Math.Pow(10, logMin + axisInterval * i));
             }
             return temp.Distinct().ToList();
+        }
+
+        /// <summary>
+        /// Returns a nice looking interval value for the specified min and max with
+        /// a maximal number of steps. Here, nice looking, means an interval value of
+        /// 1*10^x , 2*10^x , or 5*10^x , with x being an integer value.
+        /// </summary>
+        /// <param name="min"></param>
+        /// <param name="max"></param>
+        /// <param name="maxSteps"></param>
+        /// <returns></returns>
+        public static double GetSmartInterval(double min, double max, int maxSteps) {
+            if (min > max) {
+                var tmp = min;
+                min = max;
+                max = tmp;
+            }
+
+            var totalInterval = max - min;
+
+            var ticks = new int[] { 1, 2, 5 };
+            var tickIndex = ticks.Count() - 1;
+            var powerIndex = BMath.Ceiling(Math.Log10(max - min));
+
+            var interval = ticks[tickIndex] * Math.Pow(10, powerIndex);
+
+            while ((totalInterval / interval) < maxSteps) {
+                if (tickIndex == 0) {
+                    tickIndex = ticks.Count();
+                    powerIndex--;
+                }
+                tickIndex--;
+                interval = ticks[tickIndex] * Math.Pow(10, powerIndex);
+            }
+
+            tickIndex++;
+            if (tickIndex == ticks.Count()) {
+                powerIndex++;
+                tickIndex = 0;
+            }
+            interval = ticks[tickIndex] * Math.Pow(10, powerIndex);
+
+            return interval;
         }
     }
 }

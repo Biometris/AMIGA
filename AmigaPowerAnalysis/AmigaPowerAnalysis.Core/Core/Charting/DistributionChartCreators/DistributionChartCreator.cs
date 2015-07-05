@@ -11,6 +11,13 @@ using System.IO;
 using System.Linq;
 
 namespace AmigaPowerAnalysis.Core.Charting.DistributionChartCreators {
+
+    public enum DistributionChartPreferenceType {
+        Histogram,
+        DistributionFunction,
+        Both
+    };
+
     public sealed class DistributionChartCreator : IChartCreator {
 
         private List<IDistribution> _distributions;
@@ -18,12 +25,14 @@ namespace AmigaPowerAnalysis.Core.Charting.DistributionChartCreators {
         public double LowerBound { get; set; }
         public double UpperBound { get; set; }
         public double Step { get; set; }
+        public DistributionChartPreferenceType DistributionChartPreferenceType { get; set; }
 
         public DistributionChartCreator() {
             _distributions = new List<IDistribution>();
             LowerBound = double.NaN;
             UpperBound = double.NaN;
             Step = double.NaN;
+            DistributionChartPreferenceType = DistributionChartPreferenceType.DistributionFunction;
         }
 
         public DistributionChartCreator(IDistribution distribution) : this() {
@@ -63,18 +72,20 @@ namespace AmigaPowerAnalysis.Core.Charting.DistributionChartCreators {
 
             foreach (var distribution in _distributions) {
                 var numberOfSamples = 100000;
-                if (true) {
-                    var histogram = createDistributionHistogramSeries(distribution, LowerBound, UpperBound, Step, numberOfSamples);
+                if (DistributionChartPreferenceType == DistributionChartPreferenceType.Histogram || DistributionChartPreferenceType == DistributionChartPreferenceType.Both) {
+                    var histogram = createHistogramSeries(distribution, LowerBound, UpperBound, Step, numberOfSamples);
                     plotModel.Series.Add(histogram);
-                } 
-                var series = createDistributionSeries(distribution, LowerBound, UpperBound, Step, numberOfSamples);
-                plotModel.Series.Add(series);
+                }
+                if (DistributionChartPreferenceType == DistributionChartPreferenceType.DistributionFunction || DistributionChartPreferenceType == DistributionChartPreferenceType.Both) {
+                    var series = createDistributionSeries(distribution, LowerBound, UpperBound, Step);
+                    plotModel.Series.Add(series);
+                }
             }
 
             return plotModel;
         }
 
-        private static Series createDistributionSeries(IDistribution distribution, double lowerBound, double upperBound, double step, int scale) {
+        private static Series createDistributionSeries(IDistribution distribution, double lowerBound, double upperBound, double step) {
             var lb = double.IsNaN(lowerBound) ? computeLowerBound(distribution) : lowerBound;
             var ub = double.IsNaN(upperBound) ? computeUpperBound(distribution) : upperBound;
             var s = double.IsNaN(step) ? computeStep(distribution, lb, ub) : step;
@@ -82,20 +93,20 @@ namespace AmigaPowerAnalysis.Core.Charting.DistributionChartCreators {
             var series = new LineSeries() {
                 Title = distribution.Description()
             };
-            series.Points.AddRange(x.Select(v => new DataPoint(v, scale * distribution.Pdf(v))));
+            series.Points.AddRange(x.Select(v => new DataPoint(v, distribution.Pdf(v))));
             return series;
         }
 
-        private static Series createDistributionHistogramSeries(IDistribution distribution, double lowerBound, double upperBound, double step, int numberOfSamples) {
+        private static Series createHistogramSeries(IDistribution distribution, double lowerBound, double upperBound, double step, int numberOfSamples) {
             var samples = new List<double>(numberOfSamples);
             for (int i = 0; i < numberOfSamples; ++i) {
                 samples.Add(distribution.Draw());
             }
             var lb = double.IsNaN(lowerBound) ? computeLowerBound(distribution) : lowerBound;
             var ub = double.IsNaN(upperBound) ? computeUpperBound(distribution) : upperBound;
-            var s = double.IsNaN(step) ? computeStep(distribution, lb, ub) : step;
+            var s = double.IsNaN(step) ? GriddingFunctions.GetSmartInterval(lb, ub, 30) : step;
             var bins = HistogramBinUtilities.MakeHistogramBins(samples, (int)((ub-lb)/s), lb, ub);
-            //var series = new ColumnSeries { ItemsSource = bins, ValueField = "Frequency" };
+            bins.ForEach(b => b.Frequency = ((b.Frequency / b.Width) / numberOfSamples));
             var series = new HistogramSeries() {
                 Items = bins
             };

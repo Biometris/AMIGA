@@ -16,6 +16,11 @@
         public double XMaxValue { get; set; }
 
         /// <summary>
+        /// The frequency count of the bin.
+        /// </summary>
+        public double Frequency { get; set; }
+
+        /// <summary>
         /// The bin's centrer point.
         /// </summary>
         public double XMidPointValue {
@@ -23,11 +28,6 @@
                 return (XMaxValue + XMinValue) / 2;
             }
         }
-
-        /// <summary>
-        /// The frequency count of the bin.
-        /// </summary>
-        public int Frequency { get; set; }
 
         /// <summary>
         /// The interval length or width of the bin.

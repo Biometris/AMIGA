@@ -12,12 +12,32 @@ namespace AmigaPowerAnalysis.Tests.Core {
         [TestMethod]
         public void DistributionChartCreator_TestNormalDistribution1() {
             var distribution = new NormalDistribution();
-            var chartCreator = new DistributionChartCreator(distribution);
-            chartCreator.SaveToFile("NormalDistribution");
+            var chartCreator = new DistributionChartCreator(distribution) {
+                DistributionChartPreferenceType = DistributionChartPreferenceType.DistributionFunction
+            };
+            chartCreator.SaveToFile("NormalDistribution_PDF");
         }
 
         [TestMethod]
         public void DistributionChartCreator_TestNormalDistribution2() {
+            var distribution = new NormalDistribution();
+            var chartCreator = new DistributionChartCreator(distribution) {
+                DistributionChartPreferenceType = DistributionChartPreferenceType.Histogram
+            };
+            chartCreator.SaveToFile("NormalDistribution_Hist");
+        }
+
+        [TestMethod]
+        public void DistributionChartCreator_TestNormalDistribution3() {
+            var distribution = new NormalDistribution();
+            var chartCreator = new DistributionChartCreator(distribution) {
+                DistributionChartPreferenceType = DistributionChartPreferenceType.Both
+            };
+            chartCreator.SaveToFile("NormalDistribution");
+        }
+
+        [TestMethod]
+        public void DistributionChartCreator_TestNormalDistribution4() {
             var chartCreator = new DistributionChartCreator(new List<IDistribution>() {
                  new NormalDistribution(1, 1),
                  new NormalDistribution(2, 2),
@@ -31,11 +51,31 @@ namespace AmigaPowerAnalysis.Tests.Core {
         public void DistributionChartCreator_TestLogNormalDistribution1() {
             var distribution = new LogNormalDistribution();
             var chartCreator = new DistributionChartCreator(distribution);
+            chartCreator.SaveToFile("LogNormalDistribution_PDF");
+        }
+
+
+        [TestMethod]
+        public void DistributionChartCreator_TestLogNormalDistribution2() {
+            var distribution = new LogNormalDistribution();
+            var chartCreator = new DistributionChartCreator(distribution) {
+                DistributionChartPreferenceType = DistributionChartPreferenceType.Histogram
+            };
+            chartCreator.SaveToFile("LogNormalDistribution_Hist");
+        }
+
+
+        [TestMethod]
+        public void DistributionChartCreator_TestLogNormalDistribution3() {
+            var distribution = new LogNormalDistribution();
+            var chartCreator = new DistributionChartCreator(distribution) {
+                DistributionChartPreferenceType = DistributionChartPreferenceType.Both
+            };
             chartCreator.SaveToFile("LogNormalDistribution");
         }
 
         [TestMethod]
-        public void DistributionChartCreator_TestLogNormalDistribution2() {
+        public void DistributionChartCreator_TestLogNormalDistribution4() {
             var chartCreator = new DistributionChartCreator(new List<IDistribution>() {
                  new LogNormalDistribution(0, 0.25),
                  new LogNormalDistribution(0, 0.5),

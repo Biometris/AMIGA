@@ -62,7 +62,7 @@ namespace Biometris.Statistics {
         /// </summary>
         /// <param name="bins"></param>
         /// <returns></returns>
-        public static int GetTotalFrequency(this IEnumerable<HistogramBin> bins) {
+        public static double GetTotalFrequency(this IEnumerable<HistogramBin> bins) {
             return bins.Sum(b => b.Frequency);
         }
 
