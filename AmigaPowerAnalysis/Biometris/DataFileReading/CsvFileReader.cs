@@ -45,7 +45,7 @@ namespace Biometris.DataFileReader {
                                     .Replace(" ", "")
                                     .Split(Delimiter)
                                     .ToList();
-                            } else if (lineCount >= FirstDataRow) {
+                            } else if (lineCount >= FirstDataRow && !string.IsNullOrEmpty(line)) {
                                 if (columnMappings == null) {
                                     columnMappings = getColumnMappings<T>(tableDefinition, primaryHeaderNames, secondaryHeaderNames);
                                 }

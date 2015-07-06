@@ -10,10 +10,10 @@ namespace AmigaPowerAnalysis.Core {
         #region DataMembers
 
         [DataMember]
-        private List<FactorLevel> _factorLevels;
+        private string _name;
 
         [DataMember]
-        private string _name;
+        private List<FactorLevel> _factorLevels;
 
         [DataMember]
         private bool _isInteractionWithVariety;

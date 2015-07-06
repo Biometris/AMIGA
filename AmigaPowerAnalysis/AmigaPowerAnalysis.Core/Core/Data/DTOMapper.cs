@@ -5,7 +5,7 @@ using System.Linq;
 namespace AmigaPowerAnalysis.Core.Data {
     public static class DTOMapper {
 
-        public static EndpointType ToEndpoint(this EndpointGroupDTO dto) {
+        public static EndpointType ToEndpointGroup(this EndpointGroupDTO dto) {
             return new EndpointType() {
                 Name = dto.Group,
                 Measurement = dto.MeasurementType,
@@ -17,6 +17,20 @@ namespace AmigaPowerAnalysis.Core.Data {
                 MuComparator = dto.MuComparator,
                 CvComparator = dto.CvComparator,
             };
+        }
+
+        public static IFactor ToFactor(this FactorDTO dto) {
+            if (dto.IsVarietyFactor) {
+                return new VarietyFactor() {
+                    ExperimentUnitType = dto.ExperimentUnitType,
+                };
+            } else {
+                return new Factor() {
+                    Name = dto.Name,
+                    ExperimentUnitType = dto.ExperimentUnitType,
+                    IsInteractionWithVariety = dto.IsInteractionWithVariety,
+                };
+            }
         }
 
         public static Endpoint ToEndpoint(this EndpointDTO dto, IEnumerable<EndpointType> groups) {
@@ -54,5 +68,37 @@ namespace AmigaPowerAnalysis.Core.Data {
             };
         }
 
+        public static EndpointDTO ToDTO(this Endpoint endpoint) {
+            return new EndpointDTO() {
+                Endpoint = endpoint.Name,
+                Group = endpoint.EndpointType.Name,
+                MeasurementType = endpoint.Measurement,
+                LocLower = endpoint.LocLower,
+                LocUpper = endpoint.LocUpper,
+                DistributionType = endpoint.DistributionType,
+                Mean = endpoint.MuComparator,
+                CV = endpoint.CvComparator,
+                BinomialTotal = endpoint.BinomialTotal,
+                PowerLawPower = endpoint.PowerLawPower,
+                RepeatedMeasurements = endpoint.RepeatedMeasures,
+                ExcessZeroes = endpoint.ExcessZeroes,
+            };
+        }
+
+        public static FactorDTO ToDTO(this IFactor factor) {
+            if (factor is VarietyFactor) {
+                return new FactorDTO() {
+                    IsVarietyFactor = true,
+                    ExperimentUnitType = factor.ExperimentUnitType,
+                };
+            } else {
+                return new FactorDTO() {
+                    Name = factor.Name,
+                    IsInteractionWithVariety = factor.IsInteractionWithVariety,
+                    IsVarietyFactor = false,
+                    ExperimentUnitType = factor.ExperimentUnitType,
+                };
+            }
+        }
     }
 }

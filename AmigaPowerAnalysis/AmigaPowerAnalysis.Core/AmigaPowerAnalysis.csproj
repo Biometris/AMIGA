@@ -89,6 +89,7 @@
     <Compile Include="Core\DataAnalysis\AnalysisScriptGenerators\AnalysisRScriptGenerator.cs" />
     <Compile Include="Core\DataReaders\DTODataFileReader.cs" />
     <Compile Include="Core\Data\DTOMapper.cs" />
+    <Compile Include="Core\Data\FactorDTO.cs" />
     <Compile Include="Core\Data\EndpointGroupDTO.cs" />
     <Compile Include="Core\Data\EndpointDTO.cs" />
     <Compile Include="Core\PowerAnalysis\OutputPowerAnalysis\OutputPowerAnalysisFileReader.cs" />

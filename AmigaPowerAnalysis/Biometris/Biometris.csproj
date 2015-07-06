@@ -57,6 +57,7 @@
   <ItemGroup>
     <Compile Include="ApplicationUtilities\ApplicationUtils.cs" />
     <Compile Include="Collections\MultiSetComparer.cs" />
+    <Compile Include="ExtensionMethods\ObjectComparisonExtensions.cs" />
     <Compile Include="Numerics\BMath.cs" />
     <Compile Include="Numerics\Optimization\OneDimensionalOptimization.cs" />
     <Compile Include="Persistence\CsvWriter.cs" />
