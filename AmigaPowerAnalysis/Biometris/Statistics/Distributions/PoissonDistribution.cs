@@ -18,7 +18,7 @@ namespace Biometris.Statistics.Distributions {
         public double Pdf(double x) {
             int k = (int)x;
             var r1 = MathNet.Numerics.Distributions.Poisson.PMF(Lambda, k);
-            var r2 = (Math.Pow(Lambda, k) * Math.Exp(-Lambda)) / (double)Combinatorics.Factorial(k);
+            //var r2 = (Math.Pow(Lambda, k) * Math.Exp(-Lambda)) / (double)Combinatorics.Factorial(k);
             return r1;
         }
 
