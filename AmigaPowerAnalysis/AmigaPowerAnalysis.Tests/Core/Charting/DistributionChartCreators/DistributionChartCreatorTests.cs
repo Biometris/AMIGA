@@ -168,7 +168,7 @@ namespace AmigaPowerAnalysis.Tests.Core {
 
         [TestMethod]
         public void DistributionChartCreator_TestPoissonLogNormalDistribution2() {
-            var distribution = new PoissonLogNormalDistribution(10, 0.5);
+            var distribution = new PoissonLogNormalDistribution(10, 1);
             var chartCreator = new DistributionChartCreator(distribution) {
                 DistributionChartPreferenceType = DistributionChartPreferenceType.Histogram
             };

@@ -102,10 +102,12 @@ namespace AmigaPowerAnalysis.Core.Charting.DistributionChartCreators {
             for (int i = 0; i < numberOfSamples; ++i) {
                 samples.Add(distribution.Draw());
             }
+            var percentiles = CollectionStatistics.Percentiles(samples, new double[] { 2.5, 97.5 });
+            samples = samples.Where(r => r > percentiles[0]).ToList();
+            samples = samples.Where(r => r < percentiles[1]).ToList();
             var lb = samples.Min();
             var ub = samples.Max();
             var s = double.IsNaN(step) ? GriddingFunctions.GetSmartInterval(lb, ub, 60, computeStep(distribution, lb, ub)) : step;
-            s = 1;
             var bins = HistogramBinUtilities.MakeHistogramBins(samples, (int)((ub-lb)/s), lb, ub);
             bins.ForEach(b => b.Frequency = ((b.Frequency / b.Width) / numberOfSamples));
             var series = new HistogramSeries() {

@@ -25,7 +25,7 @@ namespace Biometris.Statistics.Distributions {
 
         public double Sigma {
             get {
-                return Math.Pow(Math.Log(Omega + 1), 2);
+                return Math.Sqrt(Math.Log(Omega + 1));
             }
         }
 
