@@ -96,26 +96,25 @@ namespace Biometris.Statistics {
         /// a maximal number of steps. Here, nice looking, means an interval value of
         /// 1*10^x , 2*10^x , or 5*10^x , with x being an integer value.
         /// </summary>
-        /// <param name="min"></param>
-        /// <param name="max"></param>
+        /// <param name="lowerBound"></param>
+        /// <param name="upperBound"></param>
         /// <param name="maxSteps"></param>
         /// <returns></returns>
-        public static double GetSmartInterval(double min, double max, int maxSteps) {
-            if (min > max) {
-                var tmp = min;
-                min = max;
-                max = tmp;
+        public static double GetSmartInterval(double lowerBound, double upperBound, int maxSteps, double minimalInterval = -1) {
+            if (lowerBound > upperBound) {
+                var tmp = lowerBound;
+                lowerBound = upperBound;
+                upperBound = tmp;
             }
 
-            var totalInterval = max - min;
+            var range = upperBound - lowerBound;
 
             var ticks = new int[] { 1, 2, 5 };
             var tickIndex = ticks.Count() - 1;
-            var powerIndex = BMath.Ceiling(Math.Log10(max - min));
-
+            var powerIndex = BMath.Ceiling(Math.Log10(upperBound - lowerBound));
             var interval = ticks[tickIndex] * Math.Pow(10, powerIndex);
 
-            while ((totalInterval / interval) < maxSteps) {
+            while ((range / interval) < maxSteps) {
                 if (tickIndex == 0) {
                     tickIndex = ticks.Count();
                     powerIndex--;
@@ -130,6 +129,8 @@ namespace Biometris.Statistics {
                 tickIndex = 0;
             }
             interval = ticks[tickIndex] * Math.Pow(10, powerIndex);
+
+            interval = Math.Max(interval, minimalInterval);
 
             return interval;
         }

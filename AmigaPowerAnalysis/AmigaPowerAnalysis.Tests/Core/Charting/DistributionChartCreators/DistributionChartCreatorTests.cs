@@ -54,7 +54,6 @@ namespace AmigaPowerAnalysis.Tests.Core {
             chartCreator.SaveToFile("LogNormalDistribution_PDF");
         }
 
-
         [TestMethod]
         public void DistributionChartCreator_TestLogNormalDistribution2() {
             var distribution = new LogNormalDistribution();
@@ -63,7 +62,6 @@ namespace AmigaPowerAnalysis.Tests.Core {
             };
             chartCreator.SaveToFile("LogNormalDistribution_Hist");
         }
-
 
         [TestMethod]
         public void DistributionChartCreator_TestLogNormalDistribution3() {
@@ -89,11 +87,29 @@ namespace AmigaPowerAnalysis.Tests.Core {
         public void DistributionChartCreator_TestPoissonDistribution1() {
             var distribution = new PoissonDistribution();
             var chartCreator = new DistributionChartCreator(distribution);
-            chartCreator.SaveToFile("PoissonDistribution");
+            chartCreator.SaveToFile("PoissonDistribution_PDF");
         }
 
         [TestMethod]
         public void DistributionChartCreator_TestPoissonDistribution2() {
+            var distribution = new PoissonDistribution();
+            var chartCreator = new DistributionChartCreator(distribution) {
+                DistributionChartPreferenceType = DistributionChartPreferenceType.Histogram
+            };
+            chartCreator.SaveToFile("PoissonDistribution_Hist");
+        }
+
+        [TestMethod]
+        public void DistributionChartCreator_TestPoissonDistribution3() {
+            var distribution = new PoissonDistribution();
+            var chartCreator = new DistributionChartCreator(distribution) {
+                DistributionChartPreferenceType = DistributionChartPreferenceType.Both
+            };
+            chartCreator.SaveToFile("PoissonDistribution");
+        }
+
+        [TestMethod]
+        public void DistributionChartCreator_TestPoissonDistribution4() {
             var chartCreator = new DistributionChartCreator(new List<IDistribution>() {
                 new PoissonDistribution(1),
                 new PoissonDistribution(4),
@@ -106,20 +122,38 @@ namespace AmigaPowerAnalysis.Tests.Core {
 
         [TestMethod]
         public void DistributionChartCreator_TestOverdispersedPoissonDistribution1() {
-            var distribution = new OverdispersedPoissonDistribution();
+            var distribution = new OverdispersedPoissonDistribution(10, 4);
             var chartCreator = new DistributionChartCreator(distribution);
-            chartCreator.SaveToFile("OverdispersedPoissonDistribution");
+            chartCreator.SaveToFile("OverdispersedPoissonDistribution_PDF");
         }
 
         [TestMethod]
         public void DistributionChartCreator_TestOverdispersedPoissonDistribution2() {
+            var distribution = new OverdispersedPoissonDistribution(10, 4);
+            var chartCreator = new DistributionChartCreator(distribution) {
+                DistributionChartPreferenceType = DistributionChartPreferenceType.Histogram
+            };
+            chartCreator.SaveToFile("OverdispersedPoissonDistribution_Hist");
+        }
+
+        [TestMethod]
+        public void DistributionChartCreator_TestOverdispersedPoissonDistribution3() {
+            var distribution = new OverdispersedPoissonDistribution(10, 4);
+            var chartCreator = new DistributionChartCreator(distribution) {
+                DistributionChartPreferenceType = DistributionChartPreferenceType.Both
+            };
+            chartCreator.SaveToFile("OverdispersedPoissonDistribution");
+        }
+
+        [TestMethod]
+        public void DistributionChartCreator_TestOverdispersedPoissonDistribution4() {
             var chartCreator = new DistributionChartCreator(new List<IDistribution>() {
-                new OverdispersedPoissonDistribution(1, .2),
-                new OverdispersedPoissonDistribution(1, .4),
-                new OverdispersedPoissonDistribution(4, .2),
-                new OverdispersedPoissonDistribution(4, .4),
-                new OverdispersedPoissonDistribution(10, .2),
-                new OverdispersedPoissonDistribution(10, .4),
+                new OverdispersedPoissonDistribution(1, 2),
+                new OverdispersedPoissonDistribution(4, 2),
+                new OverdispersedPoissonDistribution(10, 2),
+                new OverdispersedPoissonDistribution(1, 4),
+                new OverdispersedPoissonDistribution(4, 4),
+                new OverdispersedPoissonDistribution(10, 4),
             });
             chartCreator.SaveToFile("OverdispersedPoissonDistributions");
         }

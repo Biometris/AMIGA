@@ -102,9 +102,9 @@ namespace AmigaPowerAnalysis.Core.Charting.DistributionChartCreators {
             for (int i = 0; i < numberOfSamples; ++i) {
                 samples.Add(distribution.Draw());
             }
-            var lb = double.IsNaN(lowerBound) ? computeLowerBound(distribution) : lowerBound;
-            var ub = double.IsNaN(upperBound) ? computeUpperBound(distribution) : upperBound;
-            var s = double.IsNaN(step) ? GriddingFunctions.GetSmartInterval(lb, ub, 30) : step;
+            var lb = samples.Min();
+            var ub = samples.Max();
+            var s = double.IsNaN(step) ? GriddingFunctions.GetSmartInterval(lb, ub, 40, computeStep(distribution, lb, ub)) : step;
             var bins = HistogramBinUtilities.MakeHistogramBins(samples, (int)((ub-lb)/s), lb, ub);
             bins.ForEach(b => b.Frequency = ((b.Frequency / b.Width) / numberOfSamples));
             var series = new HistogramSeries() {
@@ -135,9 +135,9 @@ namespace AmigaPowerAnalysis.Core.Charting.DistributionChartCreators {
             } catch (Exception ex) {
                 switch (distribution.SupportType()) {
                     case MeasurementType.Count:
-                        return Math.Ceiling(distribution.Mean() + Math.Sqrt(distribution.Variance()));
+                        return Math.Ceiling(distribution.Mean() + 3 * Math.Sqrt(distribution.Variance()));
                     case MeasurementType.Fraction:
-                        return Math.Min(distribution.SupportMax(), distribution.Mean() + Math.Sqrt(distribution.Variance()));
+                        return Math.Min(distribution.SupportMax(), distribution.Mean() + 3 * Math.Sqrt(distribution.Variance()));
                     case MeasurementType.Nonnegative:
                     case MeasurementType.Continuous:
                         return distribution.Mean() + Math.Sqrt(Math.Sqrt(distribution.Variance()));
