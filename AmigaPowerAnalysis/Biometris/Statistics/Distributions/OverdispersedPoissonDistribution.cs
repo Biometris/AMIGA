@@ -6,24 +6,22 @@ namespace Biometris.Statistics.Distributions {
 
         public double Mu { get; set; }
 
-        public double Phi { get; set; }
+        public double Omega { get; set; }
 
         public OverdispersedPoissonDistribution() {
             Mu = 1;
-            Phi = 2D;
+            Omega = 2D;
         }
 
-        public OverdispersedPoissonDistribution(double mu, double phi) {
+        public OverdispersedPoissonDistribution(double mu, double omega) {
             Mu = mu;
-            Phi = phi;
+            Omega = omega;
         }
 
-        public double Dispersion() {
-            return Math.Pow(Cv() / 100D, 2) * Mean();
-        }
-
-        public double Omega() {
-            return 1D / Phi - 1;
+        public double Phi {
+            get {
+                return 1 / (Omega - 1);
+            }
         }
 
         public double Pdf(double x) {
@@ -37,7 +35,7 @@ namespace Biometris.Statistics.Distributions {
 
         public double Cdf(double x) {
             var k = (int)x;
-            return MathNet.Numerics.SpecialFunctions.BetaIncomplete(Mu * Phi, k + 1, 1D / (1 / Phi - 1));
+            return MathNet.Numerics.SpecialFunctions.BetaIncomplete(Mu / (Omega - 1), k + 1, 1 / Omega);
         }
 
         public double InvCdf(double p) {
@@ -51,7 +49,7 @@ namespace Biometris.Statistics.Distributions {
         }
 
         public double Cv() {
-            throw new NotImplementedException();
+            return Mean() / Sigma();
         }
 
         public double Mean() {
@@ -63,7 +61,7 @@ namespace Biometris.Statistics.Distributions {
         }
 
         public double Variance() {
-            return Omega() * Mu;
+            return Omega * Mu;
         }
 
         public MeasurementType SupportType() {
@@ -75,15 +73,15 @@ namespace Biometris.Statistics.Distributions {
         }
 
         public double Draw() {
-            var s = Dispersion() - 1;
+            var s = Omega - 1;
             var a = Mean() / s;
-            var lambdaHat = MathNet.Numerics.Distributions.Gamma.Sample(a, s);
+            var lambdaHat = MathNet.Numerics.Distributions.Gamma.Sample(a, 1/s);
             var sample = MathNet.Numerics.Distributions.Poisson.Sample(lambdaHat);
             return sample;
         }
 
         public string Description() {
-            return string.Format("Overdispersed Poisson (Lambda = {0}, Phi = {1})", Mu, Phi);
+            return string.Format("Overdispersed Poisson (Lambda = {0}, Omega = {1})", Mu, Omega);
         }
     }
 }
