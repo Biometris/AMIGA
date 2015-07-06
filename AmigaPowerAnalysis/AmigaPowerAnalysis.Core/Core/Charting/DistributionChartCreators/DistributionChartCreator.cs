@@ -104,7 +104,8 @@ namespace AmigaPowerAnalysis.Core.Charting.DistributionChartCreators {
             }
             var lb = samples.Min();
             var ub = samples.Max();
-            var s = double.IsNaN(step) ? GriddingFunctions.GetSmartInterval(lb, ub, 40, computeStep(distribution, lb, ub)) : step;
+            var s = double.IsNaN(step) ? GriddingFunctions.GetSmartInterval(lb, ub, 60, computeStep(distribution, lb, ub)) : step;
+            s = 1;
             var bins = HistogramBinUtilities.MakeHistogramBins(samples, (int)((ub-lb)/s), lb, ub);
             bins.ForEach(b => b.Frequency = ((b.Frequency / b.Width) / numberOfSamples));
             var series = new HistogramSeries() {

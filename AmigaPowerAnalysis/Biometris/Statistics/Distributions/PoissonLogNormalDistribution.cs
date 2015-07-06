@@ -3,11 +3,30 @@ using Biometris.Statistics.Measurements;
 namespace Biometris.Statistics.Distributions {
     public sealed class PoissonLogNormalDistribution : IDistribution {
 
-        public double Lambda { get; set; }
+        public double Mu { get; set; }
 
-        public double Sigma { get; set; }
+        public double Omega { get; set; }
 
         public PoissonLogNormalDistribution() {
+            Mu = 1;
+            Omega = 1;
+        }
+
+        public PoissonLogNormalDistribution(double mu, double omega) {
+            Mu = mu;
+            Omega = omega;
+        }
+
+        public double Lambda {
+            get {
+                return Math.Log(Mu) - Math.Log(Omega + 1) / 2;
+            }
+        }
+
+        public double Sigma {
+            get {
+                return Math.Pow(Math.Log(Omega + 1), 2);
+            }
         }
 
         public double Pdf(double x) {
@@ -23,19 +42,19 @@ namespace Biometris.Statistics.Distributions {
         }
 
         public double Cv() {
-            throw new NotImplementedException();
+            return Mean() / Sigma;
         }
 
         public double Mean() {
-            throw new NotImplementedException();
+            return Math.Exp(Lambda + 0.5 * Math.Pow(Sigma, 2));
         }
 
         public double Variance() {
-            throw new NotImplementedException();
+            return Mu + Omega * Math.Pow(Mu, 2);
         }
 
         public MeasurementType SupportType() {
-            return MeasurementType.Continuous;
+            return MeasurementType.Count;
         }
 
         public double SupportMax() {
@@ -43,7 +62,9 @@ namespace Biometris.Statistics.Distributions {
         }
 
         public double Draw() {
-            throw new NotImplementedException();
+            var lambdaHat = MathNet.Numerics.Distributions.LogNormal.Sample(Lambda, Sigma);
+            var sample = MathNet.Numerics.Distributions.Poisson.Sample(lambdaHat);
+            return sample;
         }
 
         public string Description() {

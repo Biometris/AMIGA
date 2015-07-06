@@ -158,6 +158,45 @@ namespace AmigaPowerAnalysis.Tests.Core {
             chartCreator.SaveToFile("OverdispersedPoissonDistributions");
         }
 
+
+        [TestMethod]
+        public void DistributionChartCreator_TestPoissonLogNormalDistribution1() {
+            var distribution = new PoissonLogNormalDistribution(10, 1);
+            var chartCreator = new DistributionChartCreator(distribution);
+            chartCreator.SaveToFile("PoissonLogNormalDistribution_PDF");
+        }
+
+        [TestMethod]
+        public void DistributionChartCreator_TestPoissonLogNormalDistribution2() {
+            var distribution = new PoissonLogNormalDistribution(10, 0.5);
+            var chartCreator = new DistributionChartCreator(distribution) {
+                DistributionChartPreferenceType = DistributionChartPreferenceType.Histogram
+            };
+            chartCreator.SaveToFile("PoissonLogNormalDistribution_Hist");
+        }
+
+        [TestMethod]
+        public void DistributionChartCreator_TestPoissonLogNormalDistribution3() {
+            var distribution = new PoissonLogNormalDistribution(10, 1);
+            var chartCreator = new DistributionChartCreator(distribution) {
+                DistributionChartPreferenceType = DistributionChartPreferenceType.Both
+            };
+            chartCreator.SaveToFile("PoissonLogNormalDistribution");
+        }
+
+        [TestMethod]
+        public void DistributionChartCreator_TestPoissonLogNormalDistribution4() {
+            var chartCreator = new DistributionChartCreator(new List<IDistribution>() {
+                new PoissonLogNormalDistribution(1, 2),
+                new PoissonLogNormalDistribution(4, 2),
+                new PoissonLogNormalDistribution(10, 2),
+                new PoissonLogNormalDistribution(1, 4),
+                new PoissonLogNormalDistribution(4, 4),
+                new PoissonLogNormalDistribution(10, 4),
+            });
+            chartCreator.SaveToFile("PoissonLogNormalDistributions");
+        }
+
         [TestMethod]
         public void DistributionChartCreator_TestNegativeBinomialDistribution1() {
             var distribution = new NegativeBinomialDistribution();
