@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using AmigaPowerAnalysis.Core;
+using AmigaPowerAnalysis.Core.Charting.DistributionChartCreators;
 using Biometris.ExtensionMethods;
 using Biometris.Statistics.Distributions;
 using Biometris.Statistics.Measurements;
@@ -17,6 +18,8 @@ namespace AmigaPowerAnalysis.GUI {
     public partial class EndpointsDataPanel : UserControl, ISelectionForm {
 
         private Project _project;
+
+        private Endpoint _currentEndpoint;
 
         public EndpointsDataPanel(Project project) {
             InitializeComponent();
@@ -129,17 +132,26 @@ namespace AmigaPowerAnalysis.GUI {
             }
         }
 
+        private void updateEndpointDistributionChart() {
+            if (_currentEndpoint != null) {
+                var distribution = DistributionFactory.CreateDistribution(_currentEndpoint.DistributionType, _currentEndpoint.MuComparator, _currentEndpoint.CvComparator, _currentEndpoint.PowerLawPower);
+                var chartCreator = new DistributionChartCreator(distribution);
+                var plotModel = chartCreator.Create();
+                distributionChartPlotView.Model = chartCreator.Create();
+            }
+        }
+
         private void dataGridViewEndpoints_DataError(object sender, DataGridViewDataErrorEventArgs e) {
             showError("Invalid data", e.Exception.Message);
         }
 
         private void showError(string title, string message) {
             MessageBox.Show(
-                    message,
-                    title,
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error,
-                    MessageBoxDefaultButton.Button1);
+                message,
+                title,
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error,
+                MessageBoxDefaultButton.Button1);
         }
 
         private void dataGridViewEndpoints_CellValueChanged(object sender, DataGridViewCellEventArgs e) {
@@ -152,6 +164,18 @@ namespace AmigaPowerAnalysis.GUI {
                 }
             }
             updateEditableColumns();
+            updateEndpointDistributionChart();
+        }
+
+        private void dataGridViewEndpoints_SelectionChanged(object sender, EventArgs e) {
+            Endpoint newSelectedEndpoint = null;
+            if (dataGridViewEndpoints.CurrentRow.Index < _project.Endpoints.Count()) {
+                newSelectedEndpoint = _project.Endpoints.ElementAt(dataGridViewEndpoints.CurrentRow.Index);
+            }
+            if (newSelectedEndpoint != _currentEndpoint) {
+                _currentEndpoint = newSelectedEndpoint;
+                updateEndpointDistributionChart();
+            }
         }
     }
 }

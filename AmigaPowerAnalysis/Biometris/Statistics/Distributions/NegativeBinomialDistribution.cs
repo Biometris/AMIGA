@@ -25,7 +25,7 @@ namespace Biometris.Statistics.Distributions {
 
         public double Cdf(double x) {
             var k = (int)x;
-            var r1 = 1 - MathNet.Numerics.SpecialFunctions.BetaRegularized(k + 1, R, P);
+            //var r1 = 1 - MathNet.Numerics.SpecialFunctions.BetaRegularized(k + 1, R, P);
             var r2 = MathNet.Numerics.Distributions.NegativeBinomial.CDF(R, P, k);
             return r2;
         }

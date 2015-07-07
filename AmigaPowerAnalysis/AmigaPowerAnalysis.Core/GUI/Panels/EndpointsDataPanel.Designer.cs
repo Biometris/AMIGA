@@ -24,6 +24,7 @@
         /// </summary>
         private void InitializeComponent() {
             this.dataGridViewEndpoints = new System.Windows.Forms.DataGridView();
+            this.distributionChartPlotView = new OxyPlot.WindowsForms.PlotView();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewEndpoints)).BeginInit();
             this.SuspendLayout();
             // 
@@ -32,26 +33,39 @@
             this.dataGridViewEndpoints.AllowUserToAddRows = false;
             this.dataGridViewEndpoints.AllowUserToDeleteRows = false;
             this.dataGridViewEndpoints.AllowUserToResizeRows = false;
-            this.dataGridViewEndpoints.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridViewEndpoints.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewEndpoints.BackgroundColor = System.Drawing.Color.White;
             this.dataGridViewEndpoints.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewEndpoints.Location = new System.Drawing.Point(13, 13);
+            this.dataGridViewEndpoints.Dock = System.Windows.Forms.DockStyle.Top;
+            this.dataGridViewEndpoints.Location = new System.Drawing.Point(10, 10);
             this.dataGridViewEndpoints.Name = "dataGridViewEndpoints";
             this.dataGridViewEndpoints.RowHeadersWidth = 24;
             this.dataGridViewEndpoints.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            this.dataGridViewEndpoints.Size = new System.Drawing.Size(848, 477);
+            this.dataGridViewEndpoints.Size = new System.Drawing.Size(854, 256);
             this.dataGridViewEndpoints.TabIndex = 2;
             this.dataGridViewEndpoints.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewEndpoints_CellValueChanged);
             this.dataGridViewEndpoints.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dataGridViewEndpoints_DataError);
+            this.dataGridViewEndpoints.SelectionChanged += new System.EventHandler(this.dataGridViewEndpoints_SelectionChanged);
+            // 
+            // distributionChartPlotView
+            // 
+            this.distributionChartPlotView.BackColor = System.Drawing.SystemColors.Window;
+            this.distributionChartPlotView.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.distributionChartPlotView.Location = new System.Drawing.Point(10, 278);
+            this.distributionChartPlotView.Name = "distributionChartPlotView";
+            this.distributionChartPlotView.PanCursor = System.Windows.Forms.Cursors.Hand;
+            this.distributionChartPlotView.Size = new System.Drawing.Size(854, 215);
+            this.distributionChartPlotView.TabIndex = 3;
+            this.distributionChartPlotView.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
+            this.distributionChartPlotView.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
+            this.distributionChartPlotView.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
             // 
             // EndpointsDataPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
+            this.Controls.Add(this.distributionChartPlotView);
             this.Controls.Add(this.dataGridViewEndpoints);
             this.Name = "EndpointsDataPanel";
             this.Padding = new System.Windows.Forms.Padding(10);
@@ -64,5 +78,6 @@
         #endregion
 
         private System.Windows.Forms.DataGridView dataGridViewEndpoints;
+        private OxyPlot.WindowsForms.PlotView distributionChartPlotView;
     }
 }
