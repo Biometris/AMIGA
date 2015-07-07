@@ -78,9 +78,6 @@ namespace AmigaPowerAnalysis.Core.Charting.DistributionChartCreators {
                 }
                 if (DistributionChartPreferenceType == DistributionChartPreferenceType.DistributionFunction || DistributionChartPreferenceType == DistributionChartPreferenceType.Both) {
                     try {
-                        var series1 = createApproximateDistributionSeries(distribution, LowerBound, UpperBound, Step, numberOfSamples);
-                        plotModel.Series.Add(series1);
-
                         var series = createDistributionSeries(distribution, LowerBound, UpperBound, Step);
                         plotModel.Series.Add(series);
                     } catch {
