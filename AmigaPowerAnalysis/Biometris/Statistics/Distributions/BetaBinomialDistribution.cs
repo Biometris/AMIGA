@@ -4,7 +4,7 @@ using MathNet.Numerics;
 using MathNet.Numerics.Distributions;
 
 namespace Biometris.Statistics.Distributions {
-    public sealed class BetaBinomialDistribution : IDistribution {
+    public sealed class BetaBinomialDistribution : IDistribution, IDiscreteDistribution {
 
         public double Alpha { get; set; }
         public double Beta { get; set; }
@@ -22,8 +22,7 @@ namespace Biometris.Statistics.Distributions {
             N = n;
         }
 
-        public double Pdf(double x) {
-            var k = (int)x;
+        public double Pmf(int k) {
             return Combinatorics.BinomialCoefficient(N, k) * SpecialFunctions.Beta(k + Alpha, N - k + Beta) / SpecialFunctions.Beta(Alpha, Beta);
         }
 

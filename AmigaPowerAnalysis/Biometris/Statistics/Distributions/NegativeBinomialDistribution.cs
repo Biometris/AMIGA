@@ -2,7 +2,7 @@
 using Biometris.Statistics.Measurements;
 using Biometris.Numerics.Optimization;
 namespace Biometris.Statistics.Distributions {
-    public sealed class NegativeBinomialDistribution : IDistribution {
+    public sealed class NegativeBinomialDistribution : IDistribution, IDiscreteDistribution {
 
         public double P { get; set; }
         public int R { get; set; }
@@ -17,11 +17,10 @@ namespace Biometris.Statistics.Distributions {
             R = r;
         }
 
-        public double Pdf(double x) {
-            var k = (int)x;
-            var r = Combinatorics.BinomialCoefficient(R + k - 1, k) * Math.Pow(P, R) * Math.Pow(1 - P, k);
+        public double Pmf(int k) {
+            //var r = Combinatorics.BinomialCoefficient(R + k - 1, k) * Math.Pow(P, R) * Math.Pow(1 - P, k);
             var r2 = MathNet.Numerics.Distributions.NegativeBinomial.PMF(R, P, k);
-            return r;
+            return r2;
         }
 
         public double Cdf(double x) {

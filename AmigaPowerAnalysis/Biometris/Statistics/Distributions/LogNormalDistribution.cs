@@ -1,7 +1,7 @@
 ﻿using System;
 using Biometris.Statistics.Measurements;
 namespace Biometris.Statistics.Distributions {
-    public sealed class LogNormalDistribution : IDistribution {
+    public sealed class LogNormalDistribution : IDistribution, IContinuousDistribution {
 
         public double Mu { get; set; }
         public double Sigma { get; set; }

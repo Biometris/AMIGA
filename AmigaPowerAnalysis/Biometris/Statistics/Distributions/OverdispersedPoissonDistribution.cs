@@ -2,7 +2,7 @@
 using Biometris.Numerics.Optimization;
 using Biometris.Statistics.Measurements;
 namespace Biometris.Statistics.Distributions {
-    public sealed class OverdispersedPoissonDistribution : IDistribution {
+    public sealed class OverdispersedPoissonDistribution : IDistribution, IDiscreteDistribution {
 
         public double Mu { get; set; }
 
@@ -24,10 +24,9 @@ namespace Biometris.Statistics.Distributions {
             }
         }
 
-        public double Pdf(double x) {
-            var k = (int)x;
-            var bla1 = MathNet.Numerics.SpecialFunctions.Gamma(k + Phi * Mu);
-            var bla2 = MathNet.Numerics.SpecialFunctions.Gamma(Phi * Mu);
+        public double Pmf(int k) {
+            //var bla1 = MathNet.Numerics.SpecialFunctions.Gamma(k + Phi * Mu);
+            //var bla2 = MathNet.Numerics.SpecialFunctions.Gamma(Phi * Mu);
             var r = (MathNet.Numerics.SpecialFunctions.Gamma(k + Phi * Mu) / ((double)Combinatorics.Factorial(k) * MathNet.Numerics.SpecialFunctions.Gamma(Phi * Mu)))
                 * (Math.Pow(Phi, Phi * Mu) / Math.Pow(1 + Phi, k + Phi * Mu));
             return r;

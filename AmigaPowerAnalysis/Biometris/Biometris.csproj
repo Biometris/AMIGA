@@ -81,6 +81,8 @@
     <Compile Include="R\REngines\RDotNet\LoggingRDotNetEngine.cs" />
     <Compile Include="R\REngines\RDotNet\RDotNetEngine.cs" />
     <Compile Include="Statistics\CollectionStatistics.cs" />
+    <Compile Include="Statistics\Distributions\IContinuousDistribution.cs" />
+    <Compile Include="Statistics\Distributions\IDiscreteDistribution.cs" />
     <Compile Include="Statistics\Distributions\LogNormalDistribution.cs" />
     <Compile Include="Statistics\Distributions\NormalDistribution.cs" />
     <Compile Include="Statistics\GriddingFunctions.cs" />

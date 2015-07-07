@@ -3,11 +3,9 @@ namespace Biometris.Statistics.Distributions {
 
     public interface IDistribution {
 
-        double Pdf(double x);
-
         double Cdf(double x);
 
-        double InvCdf(double x);
+        double InvCdf(double p);
 
         double Cv();
 

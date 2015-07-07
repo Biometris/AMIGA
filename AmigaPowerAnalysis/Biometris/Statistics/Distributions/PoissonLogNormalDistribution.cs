@@ -1,7 +1,7 @@
 ﻿using System;
 using Biometris.Statistics.Measurements;
 namespace Biometris.Statistics.Distributions {
-    public sealed class PoissonLogNormalDistribution : IDistribution {
+    public sealed class PoissonLogNormalDistribution : IDistribution, IDiscreteDistribution {
 
         public double Mu { get; set; }
 
@@ -29,7 +29,7 @@ namespace Biometris.Statistics.Distributions {
             }
         }
 
-        public double Pdf(double x) {
+        public double Pmf(int k) {
             throw new NotImplementedException();
         }
 
@@ -68,7 +68,7 @@ namespace Biometris.Statistics.Distributions {
         }
 
         public string Description() {
-            return string.Format("Poisson Log-Normal (Lambda = {0}, Sigma = {1})", Lambda, Sigma);
+            return string.Format("Poisson Log-Normal (Mu = {0}, Omega = {1})", Mu, Omega);
         }
     }
 }

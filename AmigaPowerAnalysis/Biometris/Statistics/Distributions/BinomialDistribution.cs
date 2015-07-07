@@ -3,7 +3,7 @@ using Biometris.Statistics.Measurements;
 using Biometris.Numerics.Optimization;
 
 namespace Biometris.Statistics.Distributions {
-    public sealed class BinomialDistribution : IDistribution {
+    public sealed class BinomialDistribution : IDistribution, IDiscreteDistribution {
 
         public double P { get; set; }
         public int N { get; set; }
@@ -18,8 +18,8 @@ namespace Biometris.Statistics.Distributions {
             N = n;
         }
 
-        public double Pdf(double x) {
-            return Combinatorics.BinomialCoefficient(N, (int)x) * Math.Pow(P, x) * Math.Pow(1 - P, N - x);
+        public double Pmf(int k) {
+            return Combinatorics.BinomialCoefficient(N, k) * Math.Pow(P, k) * Math.Pow(1 - P, N - k);
         }
 
         public double Cdf(double x) {
@@ -51,7 +51,7 @@ namespace Biometris.Statistics.Distributions {
         }
 
         public double Draw() {
-            throw new NotImplementedException();
+            return MathNet.Numerics.Distributions.Binomial.Sample(P, N);
         }
 
         public string Description() {

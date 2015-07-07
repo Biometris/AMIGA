@@ -198,14 +198,33 @@ namespace AmigaPowerAnalysis.Tests.Core {
         }
 
         [TestMethod]
-        public void DistributionChartCreator_TestNegativeBinomialDistribution1() {
+        public void DistributionChartCreator_TestNegativeBinomialDistributionPmf() {
             var distribution = new NegativeBinomialDistribution();
             var chartCreator = new DistributionChartCreator(distribution);
+            chartCreator.SaveToFile("NegativeBinomialDistribution_PMF");
+        }
+
+        [TestMethod]
+        public void DistributionChartCreator_TestNegativeBinomialDistributionHistogram() {
+            var distribution = new NegativeBinomialDistribution();
+            var chartCreator = new DistributionChartCreator(distribution) {
+                DistributionChartPreferenceType = DistributionChartPreferenceType.Histogram
+            };
+            chartCreator.SaveToFile("NegativeBinomialDistribution_Hist");
+        }
+
+
+        [TestMethod]
+        public void DistributionChartCreator_TestNegativeBinomialDistribution() {
+            var distribution = new NegativeBinomialDistribution();
+            var chartCreator = new DistributionChartCreator(distribution) {
+                DistributionChartPreferenceType = DistributionChartPreferenceType.Both
+            };
             chartCreator.SaveToFile("NegativeBinomialDistribution");
         }
 
         [TestMethod]
-        public void DistributionChartCreator_TestNegativeBinomialDistribution2() {
+        public void DistributionChartCreator_TestNegativeBinomialDistributions() {
             var chartCreator = new DistributionChartCreator(new List<IDistribution>() {
                 new NegativeBinomialDistribution(0.25, 10),
                 new NegativeBinomialDistribution(0.5, 10),
@@ -216,7 +235,44 @@ namespace AmigaPowerAnalysis.Tests.Core {
             });
             chartCreator.SaveToFile("NegativeBinomialDistributions");
         }
-        
+
+        [TestMethod]
+        public void DistributionChartCreator_TestPowerLawDistributionPmf() {
+            var distribution = new PowerLawDistribution();
+            var chartCreator = new DistributionChartCreator(distribution);
+            chartCreator.SaveToFile("PowerLawDistribution_PMF");
+        }
+
+        [TestMethod]
+        public void DistributionChartCreator_TestPowerLawDistributionHistogram() {
+            var distribution = new PowerLawDistribution();
+            var chartCreator = new DistributionChartCreator(distribution) {
+                DistributionChartPreferenceType = DistributionChartPreferenceType.Histogram
+            };
+            chartCreator.SaveToFile("PowerLawDistribution_Hist");
+        }
+
+
+        [TestMethod]
+        public void DistributionChartCreator_TestPowerLawDistribution() {
+            var distribution = new PowerLawDistribution();
+            var chartCreator = new DistributionChartCreator(distribution) {
+                DistributionChartPreferenceType = DistributionChartPreferenceType.Both
+            };
+            chartCreator.SaveToFile("PowerLawDistribution");
+        }
+
+        [TestMethod]
+        public void DistributionChartCreator_TestPowerLawDistributions() {
+            var chartCreator = new DistributionChartCreator(new List<IDistribution>() {
+                new PowerLawDistribution(10, 1, 1.5),
+                new PowerLawDistribution(10, 1, 1.9),
+                new PowerLawDistribution(10, 2, 1.5),
+                new PowerLawDistribution(10, 2, 1.9),
+            });
+            chartCreator.SaveToFile("PowerLawDistributions");
+        }
+
         [TestMethod]
         public void DistributionChartCreator_TestBinomialDistribution1() {
             var distribution = new BinomialDistribution();

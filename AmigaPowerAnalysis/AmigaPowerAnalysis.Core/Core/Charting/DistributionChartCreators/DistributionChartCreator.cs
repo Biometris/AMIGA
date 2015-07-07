@@ -77,8 +77,16 @@ namespace AmigaPowerAnalysis.Core.Charting.DistributionChartCreators {
                     plotModel.Series.Add(histogram);
                 }
                 if (DistributionChartPreferenceType == DistributionChartPreferenceType.DistributionFunction || DistributionChartPreferenceType == DistributionChartPreferenceType.Both) {
-                    var series = createDistributionSeries(distribution, LowerBound, UpperBound, Step);
-                    plotModel.Series.Add(series);
+                    try {
+                        var series1 = createApproximateDistributionSeries(distribution, LowerBound, UpperBound, Step, numberOfSamples);
+                        plotModel.Series.Add(series1);
+
+                        var series = createDistributionSeries(distribution, LowerBound, UpperBound, Step);
+                        plotModel.Series.Add(series);
+                    } catch {
+                        var series = createApproximateDistributionSeries(distribution, LowerBound, UpperBound, Step, numberOfSamples);
+                        plotModel.Series.Add(series);
+                    }
                 }
             }
 
@@ -93,27 +101,51 @@ namespace AmigaPowerAnalysis.Core.Charting.DistributionChartCreators {
             var series = new LineSeries() {
                 Title = distribution.Description()
             };
-            series.Points.AddRange(x.Select(v => new DataPoint(v, distribution.Pdf(v))));
+            if (distribution is IDiscreteDistribution) {
+                var discreteDistribution = distribution as IDiscreteDistribution;
+                series.Points.AddRange(x.Select(v => new DataPoint(v, discreteDistribution.Pmf((int)v))));
+            } else {
+                var continuousDistribution = distribution as IContinuousDistribution;
+                series.Points.AddRange(x.Select(v => new DataPoint(v, continuousDistribution.Pdf(v))));
+            }
+            return series;
+        }
+
+        private static Series createApproximateDistributionSeries(IDistribution distribution, double lowerBound, double upperBound, double step, int numberOfSamples) {
+            var bins = createApproximateDensityHistogramBins(distribution, step, numberOfSamples);
+            var series = new LineSeries() {
+                Title = "Approximate density " + distribution.Description()
+            };
+            if (distribution is IDiscreteDistribution) {
+                series.Points.AddRange(bins.Select(v => new DataPoint(v.XMinValue, v.Frequency)));
+            } else {
+                series.Points.AddRange(bins.Select(v => new DataPoint(v.XMidPointValue, v.Frequency)));
+            }
             return series;
         }
 
         private static Series createHistogramSeries(IDistribution distribution, double lowerBound, double upperBound, double step, int numberOfSamples) {
-            var samples = new List<double>(numberOfSamples);
-            for (int i = 0; i < numberOfSamples; ++i) {
-                samples.Add(distribution.Draw());
-            }
-            var percentiles = CollectionStatistics.Percentiles(samples, new double[] { 2.5, 97.5 });
-            samples = samples.Where(r => r > percentiles[0]).ToList();
-            samples = samples.Where(r => r < percentiles[1]).ToList();
-            var lb = samples.Min();
-            var ub = samples.Max();
-            var s = double.IsNaN(step) ? GriddingFunctions.GetSmartInterval(lb, ub, 60, computeStep(distribution, lb, ub)) : step;
-            var bins = HistogramBinUtilities.MakeHistogramBins(samples, (int)((ub-lb)/s), lb, ub);
-            bins.ForEach(b => b.Frequency = ((b.Frequency / b.Width) / numberOfSamples));
+            var bins = createApproximateDensityHistogramBins(distribution, step, numberOfSamples);
             var series = new HistogramSeries() {
                 Items = bins
             };
             return series;
+        }
+
+        private static List<HistogramBin> createApproximateDensityHistogramBins(IDistribution distribution, double step, int numberOfSamples) {
+            var samples = new List<double>(numberOfSamples);
+            for (int i = 0; i < numberOfSamples; ++i) {
+                samples.Add(distribution.Draw());
+            }
+            //var percentiles = CollectionStatistics.Percentiles(samples, new double[] { 2.5, 97.5 });
+            //samples = samples.Where(r => r > percentiles[0]).ToList();
+            //samples = samples.Where(r => r < percentiles[1]).ToList();
+            var lb = samples.Min();
+            var ub = samples.Max();
+            var s = double.IsNaN(step) ? GriddingFunctions.GetSmartInterval(lb, ub, 60, computeStep(distribution, lb, ub)) : step;
+            var bins = HistogramBinUtilities.MakeHistogramBins(samples, (int)((ub - lb) / s), lb, ub);
+            bins.ForEach(b => b.Frequency = ((b.Frequency / b.Width) / numberOfSamples));
+            return bins;
         }
 
         private static double computeLowerBound(IDistribution distribution) {
