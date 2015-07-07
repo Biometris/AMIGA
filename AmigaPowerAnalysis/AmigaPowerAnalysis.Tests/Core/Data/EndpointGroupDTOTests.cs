@@ -21,7 +21,7 @@ namespace AmigaPowerAnalysis.Tests.Core {
             var dtoOriginal = original.ToDTO();
             CsvWriter.WriteToCsvFile(filename, ",", new List<EndpointDTO>() { dtoOriginal });
             var outputFileReader = new DTODataFileReader();
-            var record = outputFileReader.Read(filename).Single().ToEndpoint(new List<EndpointType>() { group });
+            var record = outputFileReader.ReadEndpoints(filename).Single().ToEndpoint(new List<EndpointType>() { group });
             Assert.IsTrue(ObjectComparisonExtensions.PublicInstancePropertiesEqual(original, record));
         }
 

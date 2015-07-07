@@ -38,7 +38,8 @@ namespace AmigaPowerAnalysis.Core {
         /// </summary>
         /// <param name="name">Name of factor</param>
         /// <param name="numberOfLevels">Number of levels of Factor</param>
-        public Factor(string name, int numberOfLevels) : this(name) {
+        public Factor(string name, int numberOfLevels, bool isInteractionWithVariety = false) : this(name) {
+            isInteractionWithVariety = isInteractionWithVariety;
             for (int i = 0; i < numberOfLevels; i++) {
                 AddFactorLevel(new FactorLevel(GetUniqueFactorLabel()));
             }

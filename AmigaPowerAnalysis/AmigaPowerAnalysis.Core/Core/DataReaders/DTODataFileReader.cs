@@ -14,10 +14,17 @@ namespace AmigaPowerAnalysis.Core.DataReaders {
             return records;
         }
 
-        public List<EndpointDTO> Read(string filename) {
+        public List<EndpointDTO> ReadEndpoints(string filename) {
             var reader = new CsvFileReader();
             var tableDefinition = tableDefinitions.GetTableDefinition("Endpoints");
             var records = reader.ReadDataSet<EndpointDTO>(filename, tableDefinition);
+            return records;
+        }
+
+        public List<FactorDTO> ReadFactors(string filename) {
+            var reader = new CsvFileReader();
+            var tableDefinition = tableDefinitions.GetTableDefinition("Factors");
+            var records = reader.ReadDataSet<FactorDTO>(filename, tableDefinition);
             return records;
         }
 

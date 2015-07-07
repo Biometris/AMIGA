@@ -13,14 +13,14 @@ namespace AmigaPowerAnalysis.Tests.Core {
         public void EndpointDataFileReader_Tests1() {
             var testFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Resources\EndpointDataFileReader_Tests1.csv");
             var outputFileReader = new DTODataFileReader();
-            var records = outputFileReader.Read(testFile);
+            var records = outputFileReader.ReadEndpoints(testFile);
         }
 
         [TestMethod]
         public void EndpointDataFileReader_Tests2() {
             var testFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Resources\EndpointDataFileReader_Tests1.csv");
             var outputFileReader = new DTODataFileReader();
-            var endpoints = outputFileReader.Read(testFile);
+            var endpoints = outputFileReader.ReadEndpoints(testFile);
             var project = ProjectManager.ProjectFromDTO(endpoints);
         }
     }

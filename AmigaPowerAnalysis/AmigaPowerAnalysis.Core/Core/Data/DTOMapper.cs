@@ -89,6 +89,7 @@ namespace AmigaPowerAnalysis.Core.Data {
             if (factor is VarietyFactor) {
                 return new FactorDTO() {
                     IsVarietyFactor = true,
+                    IsInteractionWithVariety = factor.IsInteractionWithVariety,
                     ExperimentUnitType = factor.ExperimentUnitType,
                 };
             } else {

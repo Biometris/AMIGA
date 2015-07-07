@@ -161,5 +161,43 @@
     </ColumnDefinitions>
   </TableDefinition>
 
+  <TableDefinition>
+    <TableID>Factors</TableID>
+    <Aliases>
+      <string>Factor</string>
+      <string>Factors</string>
+    </Aliases>
+    <ColumnDefinitions>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>Name</ColumnID>
+        <Aliases>
+          <string>Factor</string>
+          <string>FactorID</string>
+          <string>Name</string>
+          <string>ID</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>IsVarietyFactor</ColumnID>
+        <Aliases>
+          <string>IsVariety</string>
+          <string>IsVarietyFactor</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>IsInteractionWithVariety</ColumnID>
+        <Aliases>
+          <string>IsInteractionWithVariety</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>ExperimentUnitType</ColumnID>
+        <Aliases>
+          <string>ExperimentUnitType</string>
+        </Aliases>
+      </ColumnDefinition>
+    </ColumnDefinitions>
+  </TableDefinition>
+
 </ArrayOfTableDefinition>
 
