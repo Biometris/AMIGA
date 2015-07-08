@@ -54,19 +54,24 @@ namespace Biometris.Statistics.Distributions {
         }
 
         /// <summary>
-        /// Decides which class to instantiate.
+        /// Returns a distribution according to the specified type, mu, cv, and possibly power law power.
         /// </summary>
+        /// <param name="distributionType"></param>
+        /// <param name="mu"></param>
+        /// <param name="cv"></param>
+        /// <param name="powerLawPower"></param>
+        /// <returns></returns>
         public static IDistribution CreateDistribution(DistributionType distributionType, double mu, double cv, double powerLawPower) {
             var cvFraction = cv / 100;
             switch (distributionType) {
                 case DistributionType.Poisson:
                     return new PoissonDistribution(mu);
                 case DistributionType.OverdispersedPoisson:
-                    return new OverdispersedPoissonDistribution(mu, Math.Pow(cvFraction, 2));
+                    return OverdispersedPoissonDistribution.FromMuCv(mu, cvFraction);
                 case DistributionType.NegativeBinomial:
                     return new NegativeBinomialDistribution((cvFraction - 1) / cvFraction, (int)mu);
                 case DistributionType.PoissonLogNormal:
-                    return new PoissonLogNormalDistribution(mu, Math.Pow(cvFraction, 2) - 1  / mu);
+                    return PoissonLogNormalDistribution.FromMuCv(mu, cvFraction);
                 case DistributionType.PowerLaw:
                     return new PowerLawDistribution(mu, Math.Pow(cvFraction, 2) * Math.Pow(mu, 2 - powerLawPower), powerLawPower);
                 case DistributionType.Binomial:

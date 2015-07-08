@@ -35,7 +35,7 @@ namespace Biometris.Statistics.Distributions {
             throw new NotImplementedException();
         }
 
-        public double Cv() {
+        public double CV() {
             return Math.Sqrt(Variance()) / Mean();
         }
 

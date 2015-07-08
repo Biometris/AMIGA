@@ -28,7 +28,7 @@ namespace Biometris.Statistics.Distributions {
             return MathNet.Numerics.Distributions.LogNormal.InvCDF(Mu, Sigma, p);
         }
 
-        public double Cv() {
+        public double CV() {
             return Sigma / Mu;
         }
 

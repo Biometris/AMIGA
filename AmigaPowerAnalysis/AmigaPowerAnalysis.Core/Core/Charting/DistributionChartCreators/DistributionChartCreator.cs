@@ -66,12 +66,13 @@ namespace AmigaPowerAnalysis.Core.Charting.DistributionChartCreators {
             var verticalAxis = new LinearAxis() {
                 MajorGridlineStyle = LineStyle.Solid,
                 MinorGridlineStyle = LineStyle.Dot,
+                AbsoluteMinimum = 0,
                 Minimum = 0,
             };
             plotModel.Axes.Add(verticalAxis);
 
             foreach (var distribution in _distributions) {
-                var numberOfSamples = 100000;
+                var numberOfSamples = 50000;
                 if (DistributionChartPreferenceType == DistributionChartPreferenceType.Histogram || DistributionChartPreferenceType == DistributionChartPreferenceType.Both) {
                     var histogram = createHistogramSeries(distribution, LowerBound, UpperBound, Step, numberOfSamples);
                     plotModel.Series.Add(histogram);

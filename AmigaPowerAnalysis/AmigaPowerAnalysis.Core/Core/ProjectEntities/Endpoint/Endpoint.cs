@@ -140,6 +140,7 @@ namespace AmigaPowerAnalysis.Core {
             set {
                 _muComparator = value;
                 validateMeasurementParameters();
+                validateDistribution();
                 fixModifiers(true);
             }
         }
@@ -149,7 +150,10 @@ namespace AmigaPowerAnalysis.Core {
         /// </summary>
         public double CvComparator {
             get { return _cvComparator; }
-            set { _cvComparator = value; }
+            set {
+                _cvComparator = value;
+                validateDistribution();
+            }
         }
 
         /// <summary>
@@ -474,6 +478,34 @@ namespace AmigaPowerAnalysis.Core {
             var availableDistributionTypes = DistributionFactory.AvailableDistributionTypes(_measurement);
             if (_distributionType == 0 || (availableDistributionTypes & _distributionType) != _distributionType) {
                 _distributionType = (DistributionType)availableDistributionTypes.GetFlags().First();
+            }
+            switch (_distributionType) {
+                case DistributionType.Poisson:
+                    break;
+                case DistributionType.OverdispersedPoisson:
+                    var cv = CvComparator / 100;
+                    if (cv <= Math.Sqrt(1 / MuComparator)) {
+                        _cvComparator = Math.Ceiling((Math.Sqrt(1 / MuComparator) + 1e-2) * 100);
+                    }
+                    break;
+                case DistributionType.NegativeBinomial:
+                    break;
+                case DistributionType.PoissonLogNormal:
+                    break;
+                case DistributionType.PowerLaw:
+                    break;
+                case DistributionType.Binomial:
+                    break;
+                case DistributionType.BetaBinomial:
+                    break;
+                case DistributionType.BinomialLogitNormal:
+                    break;
+                case DistributionType.LogNormal:
+                    break;
+                case DistributionType.Normal:
+                    break;
+                default:
+                    break;
             }
         }
     }

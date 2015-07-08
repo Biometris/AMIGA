@@ -45,20 +45,29 @@ namespace Biometris.Statistics {
         }
 
         /// <summary>
+        /// Calculates the variance of the list of values.
+        /// </summary>
+        /// <param name="values"></param>
+        /// <returns></returns>
+        public static double Variance(this IEnumerable<double> values) {
+            double ret = 0;
+            if (values.Count() > 0) {
+                var avg = values.Average();
+                var sum = values.Sum(d => Math.Pow(d - avg, 2));
+                ret = sum / (values.Count() - 1);
+            } else {
+                return double.NaN;
+            }
+            return ret;
+        }
+
+        /// <summary>
         /// Calculates the standard deviation of the list of values.
         /// </summary>
         /// <param name="values"></param>
         /// <returns></returns>
         public static double StdDev(this IEnumerable<double> values) {
-            double ret = 0;
-            if (values.Count() > 0) {
-                var avg = values.Average();
-                var sum = values.Sum(d => Math.Pow(d - avg, 2));
-                ret = Math.Sqrt((sum) / (values.Count() - 1));
-            } else {
-                return double.NaN;
-            }
-            return ret;
+            return Math.Sqrt(values.Variance());
         }
 
         /// <summary>
@@ -76,6 +85,15 @@ namespace Biometris.Statistics {
                 return double.NaN;
             }
             return ret;
+        }
+
+        /// <summary>
+        /// Calculates the standard deviation of the list of values.
+        /// </summary>
+        /// <param name="values"></param>
+        /// <returns></returns>
+        public static double CV(this IEnumerable<double> values) {
+            return values.StdDev() / values.Mean();
         }
 
         /// <summary>

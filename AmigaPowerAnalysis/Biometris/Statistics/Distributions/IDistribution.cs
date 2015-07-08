@@ -7,7 +7,7 @@ namespace Biometris.Statistics.Distributions {
 
         double InvCdf(double p);
 
-        double Cv();
+        double CV();
 
         double Mean();
 

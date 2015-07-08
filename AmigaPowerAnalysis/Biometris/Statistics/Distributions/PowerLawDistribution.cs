@@ -30,8 +30,8 @@ namespace Biometris.Statistics.Distributions {
             throw new NotImplementedException();
         }
 
-        public double Cv() {
-            throw new NotImplementedException();
+        public double CV() {
+            return Sigma() / Mean();
         }
 
         public double Mean() {
@@ -40,6 +40,10 @@ namespace Biometris.Statistics.Distributions {
 
         public double Variance() {
             return Omega * Math.Pow(Mu, Power);
+        }
+
+        public double Sigma() {
+            return Math.Sqrt(Variance());
         }
 
         public MeasurementType SupportType() {

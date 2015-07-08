@@ -4,9 +4,9 @@ using Biometris.Statistics.Measurements;
 namespace Biometris.Statistics.Distributions {
     public sealed class OverdispersedPoissonDistribution : IDistribution, IDiscreteDistribution {
 
-        public double Mu { get; set; }
+        private double _mu;
 
-        public double Omega { get; set; }
+        private double _omega;
 
         public OverdispersedPoissonDistribution() {
             Mu = 1;
@@ -18,17 +18,31 @@ namespace Biometris.Statistics.Distributions {
             Omega = omega;
         }
 
-        public double Phi {
+        public double Mu {
             get {
-                return 1 / (Omega - 1);
+                return _mu;
+            }
+            set {
+                _mu = value;
+            }
+        }
+
+        public double Omega {
+            get {
+                return _omega;
+            }
+            set {
+                if (value <= 1) {
+                    throw new ArgumentOutOfRangeException("The dispersion parameter must be larger than 1 for the OverdispersedPoisson distribution.");
+                }
+                _omega = value;
             }
         }
 
         public double Pmf(int k) {
-            //var bla1 = MathNet.Numerics.SpecialFunctions.Gamma(k + Phi * Mu);
-            //var bla2 = MathNet.Numerics.SpecialFunctions.Gamma(Phi * Mu);
-            var r = (MathNet.Numerics.SpecialFunctions.Gamma(k + Phi * Mu) / ((double)Combinatorics.Factorial(k) * MathNet.Numerics.SpecialFunctions.Gamma(Phi * Mu)))
-                * (Math.Pow(Phi, Phi * Mu) / Math.Pow(1 + Phi, k + Phi * Mu));
+            var phi = 1 / (Omega - 1);
+            var r = (MathNet.Numerics.SpecialFunctions.Gamma(k + phi * Mu) / ((double)Combinatorics.Factorial(k) * MathNet.Numerics.SpecialFunctions.Gamma(phi * Mu)))
+                * (Math.Pow(phi, phi * Mu) / Math.Pow(1 + phi, k + phi * Mu));
             return r;
         }
 
@@ -47,8 +61,8 @@ namespace Biometris.Statistics.Distributions {
             return OneDimensionalOptimization.IntervalHalvingIntegers(x => Cdf(x) >= p ? x : 2 * xmax + (xmax - x), 0, xmax, 100);
         }
 
-        public double Cv() {
-            return Mean() / Sigma();
+        public double CV() {
+            return Sigma() / Mean();
         }
 
         public double Mean() {
@@ -81,6 +95,10 @@ namespace Biometris.Statistics.Distributions {
 
         public string Description() {
             return string.Format("Overdispersed Poisson (Lambda = {0}, Omega = {1})", Mu, Omega);
+        }
+
+        public static OverdispersedPoissonDistribution FromMuCv(double mu, double cv) {
+            return new OverdispersedPoissonDistribution(mu, Math.Pow(cv, 2) * mu);
         }
     }
 }

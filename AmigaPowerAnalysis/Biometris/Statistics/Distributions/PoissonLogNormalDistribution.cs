@@ -41,8 +41,8 @@ namespace Biometris.Statistics.Distributions {
             throw new NotImplementedException();
         }
 
-        public double Cv() {
-            return Mean() / Sigma;
+        public double CV() {
+            return Sigma / Mean();
         }
 
         public double Mean() {
@@ -69,6 +69,10 @@ namespace Biometris.Statistics.Distributions {
 
         public string Description() {
             return string.Format("Poisson Log-Normal (Mu = {0}, Omega = {1})", Mu, Omega);
+        }
+
+        public static PoissonLogNormalDistribution FromMuCv(double mu, double cv) {
+            return new PoissonLogNormalDistribution(mu, Math.Pow(cv, 2) - 1 / mu);
         }
     }
 }

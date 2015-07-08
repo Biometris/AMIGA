@@ -30,7 +30,7 @@ namespace Biometris.Statistics.Distributions {
             return OneDimensionalOptimization.IntervalHalvingIntegers(x => Cdf(x) >= p ? x : 2 * N + (N - x), 0, N, 100);
         }
 
-        public double Cv() {
+        public double CV() {
             return Math.Sqrt(Variance()) / Mean();
         }
 

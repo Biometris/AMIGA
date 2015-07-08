@@ -13,6 +13,7 @@ using Biometris.Statistics.Measurements;
 // TODO Binomial totals must be positive
 // TODO LOC=NaN should be displayed as empty textbox; also empty textbox store as to NaN. Possibly better to use null
 // TODO LOC must be positive
+// Condition for overdispersed poisson: cv > sqrt(mu)
 
 namespace AmigaPowerAnalysis.GUI {
     public partial class EndpointsDataPanel : UserControl, ISelectionForm {
@@ -135,7 +136,9 @@ namespace AmigaPowerAnalysis.GUI {
         private void updateEndpointDistributionChart() {
             if (_currentEndpoint != null) {
                 var distribution = DistributionFactory.CreateDistribution(_currentEndpoint.DistributionType, _currentEndpoint.MuComparator, _currentEndpoint.CvComparator, _currentEndpoint.PowerLawPower);
-                var chartCreator = new DistributionChartCreator(distribution);
+                var chartCreator = new DistributionChartCreator(distribution) {
+                    DistributionChartPreferenceType = DistributionChartPreferenceType.Histogram
+                };
                 var plotModel = chartCreator.Create();
                 distributionChartPlotView.Model = chartCreator.Create();
             }
