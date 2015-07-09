@@ -8,7 +8,7 @@ namespace Biometris.Statistics.Distributions {
         public int R { get; set; }
 
         public NegativeBinomialDistribution() {
-            P = .2;
+            P = .5;
             R = 1;
         }
 
@@ -61,7 +61,11 @@ namespace Biometris.Statistics.Distributions {
         }
 
         public double Draw() {
-            return MathNet.Numerics.Distributions.NegativeBinomial.Sample(R, P);
+            var s1 = MathNet.Numerics.Distributions.Gamma.Sample(R, (1 - P) / P);
+            var s2 = MathNet.Numerics.Distributions.Poisson.Sample(s1);
+            //TODO: sample method of negative binomial of mathnet seems wrong
+            //return MathNet.Numerics.Distributions.NegativeBinomial.Sample(R, P);
+            return s2;
         }
 
         public string Description() {

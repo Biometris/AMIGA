@@ -11,10 +11,11 @@ namespace Biometris.Tests.Statistics.Distributions {
         [TestMethod]
         public void NegativeBinomialDistributionTest_Mean() {
             var distribution = new NegativeBinomialDistribution();
-            var samples = Enumerable.Range(1, 10000).Select(r => distribution.Draw()).ToList();
-            var mean = samples.Average();
+            var samples = Enumerable.Range(1, 100000).Select(r => distribution.Draw()).ToList();
+            var drawnMean = samples.Average();
             var stderr = samples.StdErr();
-            Assert.AreEqual(mean, distribution.Mean(), stderr);
+            var expectedMean = distribution.Mean();
+            Assert.AreEqual(drawnMean, expectedMean, stderr);
         }
 
         [TestMethod]
