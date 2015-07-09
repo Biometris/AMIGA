@@ -69,7 +69,7 @@ namespace Biometris.Statistics.Distributions {
                 case DistributionType.OverdispersedPoisson:
                     return OverdispersedPoissonDistribution.FromMuCv(mu, cvFraction);
                 case DistributionType.NegativeBinomial:
-                    return new NegativeBinomialDistribution((cvFraction - 1) / cvFraction, (int)mu);
+                    return NegativeBinomialDistribution.FromMuCv(mu, cvFraction);
                 case DistributionType.PoissonLogNormal:
                     return PoissonLogNormalDistribution.FromMuCv(mu, cvFraction);
                 case DistributionType.PowerLaw:

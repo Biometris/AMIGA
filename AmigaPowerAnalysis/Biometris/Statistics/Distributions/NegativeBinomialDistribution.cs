@@ -67,5 +67,9 @@ namespace Biometris.Statistics.Distributions {
         public string Description() {
             return string.Format("Negative Binomial (P = {0}, R = {1})", P, R);
         }
+
+        public static NegativeBinomialDistribution FromMuCv(double mu, double cv) {
+            return new NegativeBinomialDistribution((cv - 1) / cv, (int)mu);
+        }
     }
 }
