@@ -76,5 +76,9 @@ namespace Biometris.Statistics.Distributions {
         public string Description() {
             return string.Format("Power Law");
         }
+
+        public static PowerLawDistribution FromMuCv(double mu, double cv, double power) {
+            return new PowerLawDistribution(mu, Math.Pow(cv, 2) * Math.Pow(mu, 2 - power), power);
+        }
     }
 }

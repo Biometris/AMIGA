@@ -73,7 +73,7 @@ namespace Biometris.Statistics.Distributions {
                 case DistributionType.PoissonLogNormal:
                     return PoissonLogNormalDistribution.FromMuCv(mu, cvFraction);
                 case DistributionType.PowerLaw:
-                    return new PowerLawDistribution(mu, Math.Pow(cvFraction, 2) * Math.Pow(mu, 2 - powerLawPower), powerLawPower);
+                    return PowerLawDistribution.FromMuCv(mu, cvFraction, powerLawPower);
                 case DistributionType.Binomial:
                 case DistributionType.BetaBinomial:
                 case DistributionType.BinomialLogitNormal:

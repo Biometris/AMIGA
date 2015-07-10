@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AmigaPowerAnalysis.Core;
 using AmigaPowerAnalysis.Core.Charting.DistributionChartCreators;
@@ -216,7 +217,11 @@ namespace AmigaPowerAnalysis.Tests.Core {
 
         [TestMethod]
         public void DistributionChartCreator_TestNegativeBinomialDistribution() {
-            var distribution = new NegativeBinomialDistribution();
+            //var distribution = new NegativeBinomialDistribution();
+            var mu = 4D;
+            var omega = 2D;
+            var cv = Math.Sqrt(omega + 1 / mu);
+            var distribution = NegativeBinomialDistribution.FromMuCv(mu, cv);
             var chartCreator = new DistributionChartCreator(distribution) {
                 DistributionChartPreferenceType = DistributionChartPreferenceType.Both
             };

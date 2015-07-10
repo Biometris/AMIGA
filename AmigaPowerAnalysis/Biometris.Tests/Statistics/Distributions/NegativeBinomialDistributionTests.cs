@@ -21,16 +21,17 @@ namespace Biometris.Tests.Statistics.Distributions {
         [TestMethod]
         public void NegativeBinomialDistributionTest_Variance() {
             var distribution = new NegativeBinomialDistribution();
-            var samples = Enumerable.Range(1, 10000).Select(r => distribution.Draw()).ToList();
+            var samples = Enumerable.Range(1, 100000).Select(r => distribution.Draw()).ToList();
             var variance = samples.Variance();
             var stderr = samples.StdErr();
-            Assert.AreEqual(variance, distribution.Variance(), stderr);
+            var expected = distribution.Variance();
+            Assert.AreEqual(variance, expected, stderr);
         }
 
         [TestMethod]
         public void NegativeBinomialDistributionTest_CV() {
             var distribution = new NegativeBinomialDistribution();
-            var samples = Enumerable.Range(1, 10000).Select(r => distribution.Draw()).ToList();
+            var samples = Enumerable.Range(1, 100000).Select(r => distribution.Draw()).ToList();
             var cv = samples.CV();
             var stderr = samples.StdErr();
             var actual = distribution.CV();
@@ -39,11 +40,13 @@ namespace Biometris.Tests.Statistics.Distributions {
 
         [TestMethod]
         public void NegativeBinomialDistributionTest_FromMuCv() {
-            var mu = 10;
-            var cv = .15;
+            var mu = 10D;
+            var cv = 1D;
             var distribution = NegativeBinomialDistribution.FromMuCv(mu, cv);
-            var samples = Enumerable.Range(1, 10000).Select(r => distribution.Draw()).ToList();
+            var samples = Enumerable.Range(1, 100000).Select(r => distribution.Draw()).ToList();
+            var measuredMean = samples.Average();
             var measuredCv = samples.CV();
+            Assert.AreEqual(mu, measuredMean, 2 * samples.StdErr());
             Assert.AreEqual(cv, measuredCv, 1e-2);
         }
     }
