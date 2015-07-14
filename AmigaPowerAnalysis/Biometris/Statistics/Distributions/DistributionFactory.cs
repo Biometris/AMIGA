@@ -83,5 +83,35 @@ namespace Biometris.Statistics.Distributions {
                     return null;
             }
         }
+
+        /// <summary>
+        /// Returns a distribution according to the specified type, mu, dispersion, and possibly power law power.
+        /// </summary>
+        /// <param name="distributionType"></param>
+        /// <param name="mu"></param>
+        /// <param name="cv"></param>
+        /// <param name="powerLawPower"></param>
+        /// <returns></returns>
+        public static IDistribution CreateFromMeanDispersion(DistributionType distributionType, double mu, double dispersion, double powerLawPower) {
+            switch (distributionType) {
+                case DistributionType.Poisson:
+                    return new PoissonDistribution(mu);
+                case DistributionType.OverdispersedPoisson:
+                    return new OverdispersedPoissonDistribution(mu, dispersion);
+                case DistributionType.NegativeBinomial:
+                    return new NegativeBinomialDistribution(1 / dispersion, dispersion * mu);
+                case DistributionType.PoissonLogNormal:
+                    return new PoissonLogNormalDistribution(mu, dispersion);
+                case DistributionType.PowerLaw:
+                    return new PowerLawDistribution(mu, dispersion, powerLawPower);
+                case DistributionType.Binomial:
+                case DistributionType.BetaBinomial:
+                case DistributionType.BinomialLogitNormal:
+                case DistributionType.Normal:
+                case DistributionType.LogNormal:
+                default:
+                    return null;
+            }
+        }
     }
 }

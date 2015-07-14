@@ -55,5 +55,9 @@ namespace Biometris.Statistics.Distributions {
         public string Description() {
             return string.Format("Normal (Mu = {0}, Sigma = {1})", Mu, Sigma);
         }
+
+        public static double Draw(double mu, double sigma) {
+            return MathNet.Numerics.Distributions.Normal.Sample(mu, sigma);
+        }
     }
 }
