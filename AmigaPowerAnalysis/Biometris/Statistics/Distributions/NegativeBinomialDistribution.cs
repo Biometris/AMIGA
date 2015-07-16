@@ -87,7 +87,7 @@ namespace Biometris.Statistics.Distributions {
 
         public static NegativeBinomialDistribution FromMuCv(double mu, double cv) {
             if (cv < Math.Sqrt(1 / mu)) {
-                //throw new ArgumentOutOfRangeException("The specified CV is too small given this mean.");
+                throw new ArgumentOutOfRangeException("The specified CV is too small given this mean.");
             }
             var omega = Math.Pow(cv, 2) - 1 / mu;
             return new NegativeBinomialDistribution(1 / omega, omega * mu);

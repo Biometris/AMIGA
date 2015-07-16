@@ -105,6 +105,9 @@ namespace Biometris.Statistics.Distributions {
         }
 
         public static OverdispersedPoissonDistribution FromMuCv(double mu, double cv) {
+            if (cv < Math.Sqrt(1 / mu)) {
+                throw new ArgumentOutOfRangeException("The specified CV is too small given this mean.");
+            }
             return new OverdispersedPoissonDistribution(mu, Math.Pow(cv, 2) * mu);
         }
     }
