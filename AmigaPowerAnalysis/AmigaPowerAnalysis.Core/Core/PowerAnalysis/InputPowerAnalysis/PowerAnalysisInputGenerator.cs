@@ -107,7 +107,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                     FactorLevelCombinations = new List<InteractionFactorLevelCombination>() { vi }
                 });
             var comparisonLevelComparator = new ComparisonDummyFactorLevel() {
-                Label = "Comparator",
+                Label = "REF",
                 ComparisonType = ComparisonType.IncludeComparator,
                 FactorLevelCombinations = comparison.Endpoint.Interactions
                     .Where(i => i.ComparisonType == ComparisonType.IncludeComparator)

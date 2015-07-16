@@ -94,6 +94,7 @@ namespace AmigaPowerAnalysis.Core {
             var factor = new VarietyFactor();
             factor.AddFactorLevel(new VarietyFactorLevel("GMO"));
             factor.AddFactorLevel(new VarietyFactorLevel("Comparator"));
+            //factor.AddFactorLevel(new VarietyFactorLevel("REF"));
             return factor;
         }
     }

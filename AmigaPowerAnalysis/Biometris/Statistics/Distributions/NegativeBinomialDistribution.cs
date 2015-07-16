@@ -1,6 +1,7 @@
 ﻿using System;
 using Biometris.Statistics.Measurements;
 using Biometris.Numerics.Optimization;
+using System.Collections.Generic;
 namespace Biometris.Statistics.Distributions {
     public sealed class NegativeBinomialDistribution : IDistribution, IDiscreteDistribution {
 
@@ -71,6 +72,12 @@ namespace Biometris.Statistics.Distributions {
             //TODO: sample method of negative binomial of mathnet seems wrong
             //return MathNet.Numerics.Distributions.NegativeBinomial.Sample(R, P);
             return s2;
+        }
+
+        public IEnumerable<double> Draw(int samples) {
+            for (double i = 0; i < samples; ++i) {
+                yield return Draw();
+            }
         }
 
         public string Description() {

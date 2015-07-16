@@ -10,5 +10,6 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
         }
 
         public abstract Task<OutputPowerAnalysis> RunAsync(InputPowerAnalysis inputPowerAnalysis, CancellationToken cancellationToken = default(CancellationToken));
+
     }
 }

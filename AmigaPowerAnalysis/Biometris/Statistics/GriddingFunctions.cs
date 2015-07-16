@@ -28,7 +28,8 @@ namespace Biometris.Statistics {
         /// <param name="step"></param>
         /// <returns></returns>
         public static IEnumerable<double> Arange(double min, double max, double step) {
-            for (double i = min; i < max; i += step) {
+            var correctedMax = max - step / 10;
+            for (double i = min; i < correctedMax; i += step) {
                 yield return i;
             }
             yield return max;

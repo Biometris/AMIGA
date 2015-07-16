@@ -112,6 +112,8 @@ namespace AmigaPowerAnalysis.Core {
                     MuComparator = _endpointType.MuComparator;
                     CvComparator = _endpointType.CvComparator;
                     DistributionType = _endpointType.DistributionType;
+                    validateMeasurementParameters();
+                    validateDistribution();
                 }
             }
         }
@@ -488,8 +490,8 @@ namespace AmigaPowerAnalysis.Core {
                     }
                     break;
                 case DistributionType.NegativeBinomial:
-                    if (CvComparator < 100 * Math.Sqrt(1 / MuComparator)) {
-                        _cvComparator = Math.Ceiling(Math.Sqrt(1 / MuComparator) * 100);
+                    if (CvComparator <= 100 * Math.Sqrt(1 / MuComparator)) {
+                        _cvComparator = Math.Ceiling((Math.Sqrt(1 / MuComparator) + 1e-2) * 100);
                     }
                     break;
                 case DistributionType.PoissonLogNormal:

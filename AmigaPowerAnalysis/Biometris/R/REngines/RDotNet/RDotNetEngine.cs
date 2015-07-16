@@ -443,6 +443,7 @@ namespace Biometris.R.REngines {
         /// </summary>
         /// <param name="command"></param>
         protected virtual void LogCommand(string command) {
+            System.Diagnostics.Trace.WriteLine(command);
         }
     }
 }

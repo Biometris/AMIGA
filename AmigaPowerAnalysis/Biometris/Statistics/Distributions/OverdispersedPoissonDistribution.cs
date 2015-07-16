@@ -1,6 +1,7 @@
 ﻿using System;
 using Biometris.Numerics.Optimization;
 using Biometris.Statistics.Measurements;
+using System.Collections.Generic;
 namespace Biometris.Statistics.Distributions {
     public sealed class OverdispersedPoissonDistribution : IDistribution, IDiscreteDistribution {
 
@@ -91,6 +92,12 @@ namespace Biometris.Statistics.Distributions {
             var lambdaHat = MathNet.Numerics.Distributions.Gamma.Sample(a, 1/s);
             var sample = MathNet.Numerics.Distributions.Poisson.Sample(lambdaHat);
             return sample;
+        }
+
+        public IEnumerable<double> Draw(int samples) {
+            for (double i = 0; i < samples; ++i) {
+                yield return Draw();
+            }
         }
 
         public string Description() {

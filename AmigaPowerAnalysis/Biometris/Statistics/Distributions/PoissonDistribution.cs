@@ -2,6 +2,7 @@
 using Biometris.Statistics.Measurements;
 using Biometris.Numerics.Optimization;
 using System.Numerics;
+using System.Collections.Generic;
 namespace Biometris.Statistics.Distributions {
     public sealed class PoissonDistribution : IDistribution, IDiscreteDistribution {
 
@@ -58,6 +59,12 @@ namespace Biometris.Statistics.Distributions {
         public double Draw() {
             var sample = MathNet.Numerics.Distributions.Poisson.Sample(Lambda);
             return sample;
+        }
+
+        public IEnumerable<double> Draw(int samples) {
+            for (double i = 0; i < samples; ++i) {
+                yield return Draw();
+            }
         }
 
         public string Description() {

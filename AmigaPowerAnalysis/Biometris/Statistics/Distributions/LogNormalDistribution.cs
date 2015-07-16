@@ -1,5 +1,6 @@
 ﻿using System;
 using Biometris.Statistics.Measurements;
+using System.Collections.Generic;
 namespace Biometris.Statistics.Distributions {
     public sealed class LogNormalDistribution : IDistribution, IContinuousDistribution {
 
@@ -50,6 +51,12 @@ namespace Biometris.Statistics.Distributions {
 
         public double Draw() {
             return MathNet.Numerics.Distributions.LogNormal.Sample(Mu, Sigma);
+        }
+
+        public IEnumerable<double> Draw(int samples) {
+            for (double i = 0; i < samples; ++i) {
+                yield return Draw();
+            }
         }
 
         public string Description() {

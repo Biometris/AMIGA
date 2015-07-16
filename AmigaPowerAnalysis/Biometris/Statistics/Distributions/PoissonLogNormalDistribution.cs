@@ -1,5 +1,6 @@
 ﻿using System;
 using Biometris.Statistics.Measurements;
+using System.Collections.Generic;
 namespace Biometris.Statistics.Distributions {
     public sealed class PoissonLogNormalDistribution : IDistribution, IDiscreteDistribution {
 
@@ -65,6 +66,12 @@ namespace Biometris.Statistics.Distributions {
             var lambdaHat = MathNet.Numerics.Distributions.LogNormal.Sample(Lambda, Sigma);
             var sample = MathNet.Numerics.Distributions.Poisson.Sample(lambdaHat);
             return sample;
+        }
+
+        public IEnumerable<double> Draw(int samples) {
+            for (double i = 0; i < samples; ++i) {
+                yield return Draw();
+            }
         }
 
         public string Description() {

@@ -54,16 +54,17 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Core\AnalysisDataTemplateGeneratorTests.cs" />
+    <Compile Include="Core\PowerAnalysis\AnalysisDataTemplateGeneratorTests.cs" />
     <Compile Include="Core\Charting\DistributionChartCreators\DistributionChartCreatorTests.cs" />
     <Compile Include="Core\Data\EndpointGroupDTOTests.cs" />
     <Compile Include="Core\Data\DTODataFileReaderTests.cs" />
-    <Compile Include="Core\PowerAnalysisInputGeneratorTests.cs" />
-    <Compile Include="Core\FactorTests.cs" />
-    <Compile Include="Core\FactoLevelCombinationTests.cs" />
-    <Compile Include="Core\RPowerAnalysisExecuterTests.cs" />
-    <Compile Include="Core\SerializationTests.cs" />
-    <Compile Include="Core\OutputPowerAnalysisFileReaderTests.cs" />
+    <Compile Include="Core\PowerAnalysis\PowerAnalysisInputGeneratorTests.cs" />
+    <Compile Include="Core\PowerAnalysis\RDotNetPowerAnalysisExecuterTests.cs" />
+    <Compile Include="Core\ProjectEntities\FactorTests.cs" />
+    <Compile Include="Core\ProjectEntities\FactoLevelCombinationTests.cs" />
+    <Compile Include="Core\PowerAnalysis\RPowerAnalysisExecuterTests.cs" />
+    <Compile Include="Core\Persistence\SerializationTests.cs" />
+    <Compile Include="Core\PowerAnalysis\OutputPowerAnalysisFileReaderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -96,7 +97,9 @@
       <Name>Biometris</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Mocks\" />
+  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

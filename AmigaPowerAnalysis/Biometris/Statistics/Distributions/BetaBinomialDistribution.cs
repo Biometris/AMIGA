@@ -2,6 +2,7 @@
 using Biometris.Statistics.Measurements;
 using MathNet.Numerics;
 using MathNet.Numerics.Distributions;
+using System.Collections.Generic;
 
 namespace Biometris.Statistics.Distributions {
     public sealed class BetaBinomialDistribution : IDistribution, IDiscreteDistribution {
@@ -59,6 +60,12 @@ namespace Biometris.Statistics.Distributions {
             var s1 = MathNet.Numerics.Distributions.Beta.Sample(Alpha, Beta);
             var s2 = Binomial.Sample(s1, N);
             return s2;
+        }
+
+        public IEnumerable<double> Draw(int samples) {
+            for (double i = 0; i < samples; ++i) {
+                yield return Draw();
+            }
         }
 
         public string Description() {

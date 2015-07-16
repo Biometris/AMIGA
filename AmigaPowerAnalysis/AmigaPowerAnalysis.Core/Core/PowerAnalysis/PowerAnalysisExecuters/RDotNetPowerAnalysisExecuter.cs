@@ -12,17 +12,19 @@ using Biometris.Statistics.Measurements;
 using Biometris.Statistics.Distributions;
 using Biometris.Statistics;
 using AmigaPowerAnalysis.Core.DataAnalysis.AnalysisModels;
+using Biometris.R.REngines;
 
 namespace AmigaPowerAnalysis.Core.PowerAnalysis {
     public sealed class RDotNetPowerAnalysisExecuter : PowerAnalysisExecuterBase {
 
-        private sealed class SimulatedDataRecord {
+        private sealed class SimulationDataRecord {
             public int Block { get; set; }
-            public double TransformedMean { get; set; }
-            public double Effect { get; set; }
+            public string ComparisonDummyFactorLevel { get; set; }
+            public string ModifierDummyFactorLevel { get; set; }
+            public double MeanEffect { get; set; }
             public double LowerOffset { get; set; }
             public double UpperOffset { get; set; }
-
+            public List<double> SimulatedResponses { get; set; }
         }
 
         private sealed class EffectCSD {
@@ -47,9 +49,11 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
 
             var experimentalDesignType = inputPowerAnalysis.ExperimentalDesignType;
 
-            var distributionType = inputPowerAnalysis.DistributionType;
+            var measurementType = inputPowerAnalysis.MeasurementType;
 
+            var distributionType = inputPowerAnalysis.DistributionType;
             var dispersion = getDispersion(distributionType, inputPowerAnalysis.OverallMean, inputPowerAnalysis.CvComparator, inputPowerAnalysis.PowerLawPower);
+            var powerLawPower = inputPowerAnalysis.PowerLawPower;
 
             double transformedLocLower, transformedLocUpper;
             if (inputPowerAnalysis.MeasurementType != MeasurementType.Continuous) {
@@ -62,88 +66,134 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             
             var cvBlocks = inputPowerAnalysis.CvForBlocks;
 
-            var effects = csdEvaluationGrid(transformedLocLower, transformedLocUpper, 3 + inputPowerAnalysis.NumberOfRatios);
-
-            double sigBlock;
-            double blockEffect;
+            var effects = csdEvaluationGrid(transformedLocLower, transformedLocUpper, inputPowerAnalysis.NumberOfRatios);
 
             var replicationConfigurations = inputPowerAnalysis.NumberOfReplications;
             for (int i = 0; i < replicationConfigurations.Count; ++i) {
                 var replications = replicationConfigurations[i];
                 var blocks = replications;
-
-                var simulatedDataRecords = new List<SimulatedDataRecord>();
-                for (int j = 0; j < blocks; ++j) {
-
-                    if (experimentalDesignType == ExperimentalDesignType.RandomizedCompleteBlocks) {
-                        var blockEffectDistribution = new NormalDistribution(0.375, 0.25);
-                        sigBlock = Math.Sqrt(Math.Log((cvBlocks / 100) * (cvBlocks / 100) + 1));
-                        blockEffect = sigBlock * blockEffectDistribution.InvCdf((j - 0.375) / (blocks + 0.25));
-                    } else {
-                        sigBlock = 0;
-                        blockEffect = 0;
-                    }
-
-                    var records = inputPowerAnalysis.InputRecords.Select(r => new SimulatedDataRecord() {
-                        Effect = r.Mean + blockEffect,
-                        LowerOffset = r.Comparison == ComparisonType.IncludeGMO ? transformedLocLower : 0D,
-                        UpperOffset = r.Comparison == ComparisonType.IncludeGMO ? transformedLocUpper : 0D,
-                    });
-
-                    foreach (var effect in effects) {
-
-                        for (int k = 0; k < inputPowerAnalysis.NumberOfSimulatedDataSets; ++k) {
-                            var simulatedData = simulateData(inputPowerAnalysis.DistributionType, records, dispersion, inputPowerAnalysis.PowerLawPower);
-                        }
-
+                foreach (var treatmentEffect in effects) {
+                    var simulatedDataRecords = createSimulatedDataRecords(inputPowerAnalysis.InputRecords, experimentalDesignType, measurementType, distributionType, dispersion, powerLawPower, transformedLocLower, transformedLocUpper, cvBlocks, blocks, treatmentEffect, inputPowerAnalysis.NumberOfSimulatedDataSets);
+                    print(simulatedDataRecords);
+                    for (int k = 0; k < inputPowerAnalysis.NumberOfSimulatedDataSets; ++k) {
+                        var result = performTests(simulatedDataRecords, inputPowerAnalysis.SelectedAnalysisMethodTypes, experimentalDesignType == ExperimentalDesignType.RandomizedCompleteBlocks, k);
                     }
                 }
             }
             return null;
         }
 
-        private PowerAnalysisResult performTests(List<SimulatedDataRecord> data, AnalysisMethodType analysisMethodType, bool isBlockEffect) {
-            string formulaH0, formulaH1, formulaH0_low, formulaH0_upp;
-            if (isBlockEffect) {
-                formulaH0 = "Response ~ 1 + Block";
-                formulaH1 = "Response ~ GMO + Block";
-            } else {
-                formulaH0 = "Response ~ 1";
-                formulaH1 = "Response ~ GMO";
+        private List<SimulationDataRecord> createSimulatedDataRecords(List<InputPowerAnalysisRecord> designRecords, ExperimentalDesignType experimentalDesignType, MeasurementType measurementType, DistributionType distributionType, double dispersion, double powerLawPower, double transformedLocLower, double transformedLocUpper, double cvBlocks, int blocks, EffectCSD treatmentEffect, int numberOfSimulatedDataSets) {
+            var simulatedDataRecords = new List<SimulationDataRecord>(blocks * designRecords.Count);
+            for (int block = 0; block < blocks; ++block) {
+                double blockEffect;
+                if (experimentalDesignType == ExperimentalDesignType.RandomizedCompleteBlocks) {
+                    var blockEffectDistribution = new NormalDistribution(0.375, 0.25);
+                    var sigBlock = Math.Sqrt(Math.Log((cvBlocks / 100) * (cvBlocks / 100) + 1));
+                    blockEffect = sigBlock * blockEffectDistribution.InvCdf((block - 0.375) / (blocks + 0.25));
+                } else {
+                    blockEffect = 0;
+                }
+                var records = designRecords
+                    .Select(r => createSimulatedDataRecord(measurementType, distributionType, transformedLocLower, transformedLocUpper, blockEffect, treatmentEffect.Effect, block, r, dispersion, powerLawPower, numberOfSimulatedDataSets))
+                    .ToList();
+                simulatedDataRecords.AddRange(records);
             }
-            formulaH0_low = formulaH0 + " offset(LowerOffset)";
-            formulaH0_upp = formulaH0 + " offset(UpperOffset)";
+            return simulatedDataRecords;
+        }
 
-            executeRCommand("lmH1 = lm(settings$formulaH1, data=data.expanded)");
-            executeRCommand("pval = 2*pt(abs(lmH1$coef[2])/sqrt(vcov(lmH1)[2,2]), lmH1$df.residual, lower.tail=FALSE)");
-            executeRCommand("resDF = df.residual(lmH1)");
-            executeRCommand("resMS = deviance(lmH1)/resDF");
+        private SimulationDataRecord createSimulatedDataRecord(MeasurementType measurementType, DistributionType distributionType, double transformedLocLower, double transformedLocUpper, double blockEffect, double treatmentEffect, int block, InputPowerAnalysisRecord r, double dispersion, double powerLawPower, int numberOfSimulatedDataSets) {
+            var isComparisonLevel = r.Comparison == ComparisonType.IncludeGMO;
+            var transformedMean = link(r.Mean, measurementType);
+            var transformedEffect = (isComparisonLevel) ? transformedMean + blockEffect + treatmentEffect : transformedMean + blockEffect;
+            var meanEffect = inverseLink(transformedEffect, measurementType);
+            var distribution = DistributionFactory.CreateFromMeanDispersion(distributionType, meanEffect, dispersion, powerLawPower);
+            var simulatedResponses = distribution.Draw(numberOfSimulatedDataSets).ToList();
+            return new SimulationDataRecord() {
+                Block = block,
+                ComparisonDummyFactorLevel = r.ComparisonDummyFactorLevel,
+                ModifierDummyFactorLevel = r.ModifierDummyFactorLevel,
+                MeanEffect = meanEffect,
+                LowerOffset = isComparisonLevel ? transformedLocLower : 0D,
+                UpperOffset = isComparisonLevel ? transformedLocUpper : 0D,
+                SimulatedResponses = simulatedResponses,
+            };
+        }
 
-            executeRCommand("lsmeans = lsmeans(lmH1, \"GMO\", at=preddata)");
-            executeRCommand("meanCMP = summary(lsmeans)$lsmean[1]");
-            executeRCommand("meanGMO = summary(lsmeans)$lsmean[2]");
-            executeRCommand("repCMP = resMS / (summary(lsmeans)$SE[1]^2)");
-            executeRCommand("repGMO = resMS / (summary(lsmeans)$SE[2]^2)");
+        private static void print<T>(IEnumerable<T> col) {
+            var sb = new StringBuilder();
+            var propertyInfos = typeof(T).GetProperties();
+            foreach (var info in propertyInfos) {
+                sb.Append(info.Name + "\t");
+            }
+            sb.AppendLine();
+            foreach (var item in col) {
+                foreach (var info in propertyInfos) {
+                    var value = info.GetValue(item, null) ?? "(null)";
+                    sb.Append(value.ToString() + "\t");
+                }
+                sb.AppendLine();
+            }
+            System.Diagnostics.Debug.WriteLine(sb.ToString());
+        }
 
-            //Generalized confidence interval
-            executeRCommand("chi  = resDF * resMS / rchisq(settings$nGCI, resDF)");
-            executeRCommand("rCMP = rnorm(settings$nGCI, meanCMP, sqrt(chi/repCMP))");
-            executeRCommand("rGMO = rnorm(settings$nGCI, meanGMO, sqrt(chi/repGMO))");
-            executeRCommand("rCMP = exp(rCMP + chi/2) - 1");
-            executeRCommand("rGMO = exp(rGMO + chi/2) - 1");
-            executeRCommand("rCMP[rCMP < settings$smallGCI] = settings$smallGCI");
-            executeRCommand("rGMO[rGMO < settings$smallGCI] = settings$smallGCI");
-            executeRCommand("ratio = rGMO/rCMP");
+        private PowerAnalysisResult performTests(List<SimulationDataRecord> data, AnalysisMethodType analysisMethodType, bool isBlockEffect, int datasetIndex) {
+            try {
+                using (var rEngine = new RDotNetEngine()) {
+                    rEngine.LoadLibrary("lsmeans");
 
+                    rEngine.SetSymbol("Block", data.Select(r => r.Block).ToList());
+                    rEngine.EvaluateNoReturn(string.Format("{0} <- as.factor({0})", "Block"));
+                    rEngine.SetSymbol("Comparison", data.Select(r => r.ComparisonDummyFactorLevel).ToList());
+                    rEngine.EvaluateNoReturn(string.Format("{0} <- as.factor({0})", "Comparison"));
+                    rEngine.SetSymbol("Modifier", data.Select(r => r.ModifierDummyFactorLevel).ToList());
+                    rEngine.EvaluateNoReturn(string.Format("{0} <- as.factor({0})", "Modifier"));
+                    rEngine.SetSymbol("Response", data.Select(r => r.SimulatedResponses[datasetIndex]).ToList());
+                    rEngine.SetSymbol("LowerOffset", data.Select(r => r.LowerOffset).ToList());
+                    rEngine.SetSymbol("UpperOffset", data.Select(r => r.UpperOffset).ToList());
+                    rEngine.EvaluateNoReturn(string.Format("data <- data.frame(Block, Comparison, Modifier, Response)"));
+
+                    if (isBlockEffect) {
+                        rEngine.EvaluateNoReturn("formulaH0 <- as.formula(Response ~ 1 + Block)");
+                        rEngine.EvaluateNoReturn("formulaH1 <- as.formula(Response ~ Comparison + Block)");
+                    } else {
+                        rEngine.EvaluateNoReturn("formulaH0 <- as.formula(Response ~ 1)");
+                        rEngine.EvaluateNoReturn("formulaH1 <- as.formula(Response ~ Comparison)");
+                    }
+                    rEngine.EvaluateNoReturn("formulaH0_low <- update(formulaH0, ~ . + offset(LowerOffset))");
+                    rEngine.EvaluateNoReturn("formulaH0_upp <- update(formulaH0, ~ . + offset(UpperOffset))");
+
+                    rEngine.EvaluateNoReturn("lmH1 <- lm(formulaH1, data=data)");
+                    rEngine.EvaluateNoReturn("pval <- 2*pt(abs(lmH1$coef[2])/sqrt(vcov(lmH1)[2,2]), lmH1$df.residual, lower.tail=FALSE)");
+                    rEngine.EvaluateNoReturn("resDF <- df.residual(lmH1)");
+                    rEngine.EvaluateNoReturn("resMS <- deviance(lmH1)/resDF");
+
+                    rEngine.EvaluateNoReturn("lsmeans <- lsmeans(lmH1, \"Comparison\", at=list(Comparison=c(\"REF\", \"GMO\")))");
+                    rEngine.EvaluateNoReturn("meanCMP <- summary(lsmeans)$lsmean[1]");
+                    rEngine.EvaluateNoReturn("meanGMO <- summary(lsmeans)$lsmean[2]");
+                    rEngine.EvaluateNoReturn("repCMP <- resMS / (summary(lsmeans)$SE[1]^2)");
+                    rEngine.EvaluateNoReturn("repGMO <- resMS / (summary(lsmeans)$SE[2]^2)");
+
+                    //Generalized confidence interval
+                    var nGCI = 100;
+                    var smallGCI = 0.0001;
+                    rEngine.EvaluateNoReturn("chi  <- resDF * resMS / rchisq(nGCI, resDF)");
+                    rEngine.EvaluateNoReturn(string.Format("rCMP <- rnorm({0}, meanCMP, sqrt(chi/repCMP))", nGCI));
+                    rEngine.EvaluateNoReturn(string.Format("rGMO <- rnorm({0}, meanGMO, sqrt(chi/repGMO))", nGCI));
+                    rEngine.EvaluateNoReturn("rCMP <- exp(rCMP + chi/2) - 1");
+                    rEngine.EvaluateNoReturn("rGMO <- exp(rGMO + chi/2) - 1");
+                    rEngine.EvaluateNoReturn("rCMP[rCMP < smallGCI] <- smallGCI");
+                    rEngine.EvaluateNoReturn("rGMO[rGMO < smallGCI] <- smallGCI");
+                    rEngine.EvaluateNoReturn("ratio <- rGMO/rCMP");
+
+                }
+            } catch (Exception ex) {
+                Trace.WriteLine(ex.Message);
+            }
             return null;
         }
 
-        void executeRCommand(string cmd) {
-
-        }
-
-
-        double link(double data, MeasurementType measurementType) {
+        private double link(double data, MeasurementType measurementType) {
             if (measurementType == MeasurementType.Count) {
                 return (Math.Log(data));
             } else if (measurementType == MeasurementType.Fraction) {
@@ -155,7 +205,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             }
         }
 
-        double inverseLink(double data, MeasurementType measurementType) {
+        private double inverseLink(double data, MeasurementType measurementType) {
             if (measurementType == MeasurementType.Count) {
                 return (Math.Exp(data));
             } else if (measurementType == MeasurementType.Fraction) {
@@ -194,39 +244,28 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
 
         private List<EffectCSD> csdEvaluationGrid(double locLower, double locUpper, int numberOfEvaluations) {
             var csdGrid = new List<EffectCSD>();
-            var step = 1D / numberOfEvaluations;
+            var step = 1D / (numberOfEvaluations + 1);
             if (!double.IsNaN(locLower)) {
-                csdGrid.AddRange(GriddingFunctions.Arange(step, 1D, step)
-                    .Reverse()
+                csdGrid.AddRange(GriddingFunctions.Arange(-1D, 0D, numberOfEvaluations + 2)
                     .Select(r => new EffectCSD() {
-                        CSD = r,
-                        Effect = -locLower * r 
-                    }));
+                        CSD = -r,
+                        Effect = -r * locLower 
+                    })
+                    .Take(numberOfEvaluations + 1));
             }
             csdGrid.Add(new EffectCSD() {
                 CSD = 0,
                 Effect = 0,
             });
             if (!double.IsNaN(locUpper)) {
-                csdGrid.AddRange(GriddingFunctions.Arange(step, 1D, step)
+                csdGrid.AddRange(GriddingFunctions.Arange(0D, 1D, numberOfEvaluations + 2)
                     .Select(r => new EffectCSD() {
                         CSD = r,
-                        Effect = -locUpper * r
-                    }));
+                        Effect = r * locUpper
+                    })
+                    .Skip(1));
             }
             return csdGrid;
-        }
-
-        private List<SimulatedDataRecord> simulateData(DistributionType distributionType, IEnumerable<SimulatedDataRecord> dataPoints, double dispersion, double powerLawPower) {
-            var simulatedData = new List<SimulatedDataRecord>();
-            foreach (var datapoint in dataPoints) {
-                var distribution = DistributionFactory.CreateFromMeanDispersion(distributionType, datapoint.TransformedMean, dispersion, powerLawPower);
-                simulatedData.Add(new SimulatedDataRecord() {
-                    Block = datapoint.Block,
-                    Effect = distribution.Draw(),
-                });
-            }
-            return simulatedData;
         }
     }
 }

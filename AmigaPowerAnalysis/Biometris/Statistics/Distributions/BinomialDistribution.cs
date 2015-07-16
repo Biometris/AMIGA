@@ -1,6 +1,7 @@
 ﻿using System;
 using Biometris.Statistics.Measurements;
 using Biometris.Numerics.Optimization;
+using System.Collections.Generic;
 
 namespace Biometris.Statistics.Distributions {
     public sealed class BinomialDistribution : IDistribution, IDiscreteDistribution {
@@ -52,6 +53,12 @@ namespace Biometris.Statistics.Distributions {
 
         public double Draw() {
             return MathNet.Numerics.Distributions.Binomial.Sample(P, N);
+        }
+
+        public IEnumerable<double> Draw(int samples) {
+            for (double i = 0; i < samples; ++i) {
+                yield return Draw();
+            }
         }
 
         public string Description() {

@@ -32,7 +32,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             createAnalysisInputFile(inputPowerAnalysis, comparisonInputFilename);
             createAnalysisSettingsFile(inputPowerAnalysis, comparisonSettingsFilename);
 
-            var rCmd = PathR;
+            var rCmd = GetRPath();
             var rOptions = "--no-save --no-restore --verbose";
             var arguments = string.Format("\"{0}\" \"{1}\" \"{2}\" \"{3}\" \"{4}\" \"{5}\"", scriptFilename, scriptsDirectory, comparisonSettingsFilename, comparisonInputFilename, comparisonOutputFilename, comparisonLogFilename);
             var args = string.Format("{0} {1}", rOptions, arguments);
@@ -76,14 +76,12 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             };
         }
 
-        public string PathR {
-            get {
-                var rPath = Properties.Settings.Default.RPath;
-                if (string.IsNullOrEmpty(rPath) || !File.Exists(rPath)) {
-                    throw new Exception("The RScript executable RScript.exe cannot be found. Please go to options -> settings to specify this path.");
-                }
-                return rPath;
+        public static string GetRPath() {
+            var rPath = Properties.Settings.Default.RPath;
+            if (string.IsNullOrEmpty(rPath) || !File.Exists(rPath)) {
+                throw new Exception("The RScript executable RScript.exe cannot be found. Please go to options -> settings to specify this path.");
             }
+            return rPath;
         }
 
         private static void createAnalysisInputFile(InputPowerAnalysis inputPowerAnalysis, string filename) {

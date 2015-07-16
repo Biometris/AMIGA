@@ -1,5 +1,6 @@
 ﻿using System;
 using Biometris.Statistics.Measurements;
+using System.Collections.Generic;
 namespace Biometris.Statistics.Distributions {
     public sealed class PowerLawDistribution : IDistribution {
 
@@ -71,6 +72,12 @@ namespace Biometris.Statistics.Distributions {
             //a = mean/s
             //sample = rgamma(n, shape=a, scale=s)
             //sample = rpois(n, sample)
+        }
+
+        public IEnumerable<double> Draw(int samples) {
+            for (double i = 0; i < samples; ++i) {
+                yield return Draw();
+            }
         }
 
         public string Description() {
