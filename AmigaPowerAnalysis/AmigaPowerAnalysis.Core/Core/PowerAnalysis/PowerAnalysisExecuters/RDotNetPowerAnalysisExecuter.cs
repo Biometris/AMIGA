@@ -177,13 +177,13 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                     //Generalized confidence interval
                     var nGCI = 100;
                     var smallGCI = 0.0001;
-                    rEngine.EvaluateNoReturn("chi  <- resDF * resMS / rchisq(nGCI, resDF)");
+                    rEngine.EvaluateNoReturn("chi <- resDF * resMS / rchisq(nGCI, resDF)");
                     rEngine.EvaluateNoReturn(string.Format("rCMP <- rnorm({0}, meanCMP, sqrt(chi/repCMP))", nGCI));
                     rEngine.EvaluateNoReturn(string.Format("rGMO <- rnorm({0}, meanGMO, sqrt(chi/repGMO))", nGCI));
                     rEngine.EvaluateNoReturn("rCMP <- exp(rCMP + chi/2) - 1");
                     rEngine.EvaluateNoReturn("rGMO <- exp(rGMO + chi/2) - 1");
-                    rEngine.EvaluateNoReturn("rCMP[rCMP < smallGCI] <- smallGCI");
-                    rEngine.EvaluateNoReturn("rGMO[rGMO < smallGCI] <- smallGCI");
+                    rEngine.EvaluateNoReturn(string.Format("rCMP[rCMP < smallGCI] <- {0}", smallGCI));
+                    rEngine.EvaluateNoReturn(string.Format("rGMO[rGMO < smallGCI] <- {0}", smallGCI));
                     rEngine.EvaluateNoReturn("ratio <- rGMO/rCMP");
 
                 }
