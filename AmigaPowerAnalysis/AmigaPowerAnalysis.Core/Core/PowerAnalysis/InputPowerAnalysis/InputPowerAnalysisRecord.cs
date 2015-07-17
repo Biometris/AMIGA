@@ -5,6 +5,11 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
     public sealed class InputPowerAnalysisRecord {
 
         /// <summary>
+        /// The type of comparison.
+        /// </summary>
+        public ComparisonType Comparison { get; set; }
+
+        /// <summary>
         /// The main plot id.
         /// </summary>
         public int MainPlot { get; set; }
@@ -48,10 +53,5 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
         /// The mean.
         /// </summary>
         public double Mean { get; set; }
-
-        /// <summary>
-        /// The type of comparison.
-        /// </summary>
-        public ComparisonType Comparison { get; set; }
     }
 }

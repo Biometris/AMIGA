@@ -42,7 +42,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
 
         private sealed class PowerAnalysisResult {
             public double PowerDifferenceTest { get; set; }
-            public double PowerDifferenceEquivalenceTest { get; set; }
+            public double PowerEquivalenceTest { get; set; }
         }
 
         public override async Task<OutputPowerAnalysis> RunAsync(InputPowerAnalysis inputPowerAnalysis, CancellationToken cancellationToken = default(CancellationToken)) {
@@ -63,24 +63,50 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                 transformedLocLower = inputPowerAnalysis.LocLower - inputPowerAnalysis.OverallMean;
                 transformedLocUpper = inputPowerAnalysis.LocUpper + inputPowerAnalysis.OverallMean;
             }
-            
+            //var transformedMean = link(inputPowerAnalysis.OverallMean, measurementType);
+
             var cvBlocks = inputPowerAnalysis.CvForBlocks;
 
             var effects = csdEvaluationGrid(transformedLocLower, transformedLocUpper, inputPowerAnalysis.NumberOfRatios);
 
             var replicationConfigurations = inputPowerAnalysis.NumberOfReplications;
+
+            var outputResults = new List<OutputPowerAnalysisRecord>();
+
             for (int i = 0; i < replicationConfigurations.Count; ++i) {
                 var replications = replicationConfigurations[i];
                 var blocks = replications;
                 foreach (var treatmentEffect in effects) {
                     var simulatedDataRecords = createSimulatedDataRecords(inputPowerAnalysis.InputRecords, experimentalDesignType, measurementType, distributionType, dispersion, powerLawPower, transformedLocLower, transformedLocUpper, cvBlocks, blocks, treatmentEffect, inputPowerAnalysis.NumberOfSimulatedDataSets);
                     print(simulatedDataRecords);
+
+                    var results = new List<OutputPowerAnalysisRecord>(inputPowerAnalysis.NumberOfSimulatedDataSets);
                     for (int k = 0; k < inputPowerAnalysis.NumberOfSimulatedDataSets; ++k) {
-                        var result = performTests(simulatedDataRecords, inputPowerAnalysis.SelectedAnalysisMethodTypes, experimentalDesignType == ExperimentalDesignType.RandomizedCompleteBlocks, k);
+                        var result = performTests(simulatedDataRecords, inputPowerAnalysis.SelectedAnalysisMethodTypes, experimentalDesignType == ExperimentalDesignType.RandomizedCompleteBlocks, k, inputPowerAnalysis.LocLower, inputPowerAnalysis.LocUpper, inputPowerAnalysis.SignificanceLevel);
+                        results.Add(result);
                     }
+
+                    var output = new OutputPowerAnalysisRecord() {
+                        PowerDifferenceLogNormal = results.Select(r => r.PowerDifferenceLogNormal).Average(),
+                        PowerEquivalenceLogNormal = results.Select(r => r.PowerEquivalenceLogNormal).Average(),
+                        PowerDifferenceSquareRoot = results.Select(r => r.PowerDifferenceSquareRoot).Average(),
+                        PowerEquivalenceSquareRoot = results.Select(r => r.PowerEquivalenceSquareRoot).Average(),
+                        PowerDifferenceOverdispersedPoisson = results.Select(r => r.PowerDifferenceOverdispersedPoisson).Average(),
+                        PowerEquivalenceOverdispersedPoisson = results.Select(r => r.PowerEquivalenceOverdispersedPoisson).Average(),
+                        PowerDifferenceNegativeBinomial = results.Select(r => r.PowerDifferenceNegativeBinomial).Average(),
+                        PowerEquivalenceNegativeBinomial = results.Select(r => r.PowerEquivalenceNegativeBinomial).Average(),
+                        ConcernStandardizedDifference = treatmentEffect.CSD,
+                        Effect = (inputPowerAnalysis.MeasurementType != MeasurementType.Continuous) ? Math.Exp(treatmentEffect.Effect) : treatmentEffect.Effect,
+                        TransformedEffect = treatmentEffect.Effect,
+                        NumberOfReplications = replications,
+                    };
+                    outputResults.Add(output);
                 }
             }
-            return null;
+            return new OutputPowerAnalysis() {
+                InputPowerAnalysis = inputPowerAnalysis,
+                OutputRecords = outputResults,
+            };
         }
 
         private List<SimulationDataRecord> createSimulatedDataRecords(List<InputPowerAnalysisRecord> designRecords, ExperimentalDesignType experimentalDesignType, MeasurementType measurementType, DistributionType distributionType, double dispersion, double powerLawPower, double transformedLocLower, double transformedLocUpper, double cvBlocks, int blocks, EffectCSD treatmentEffect, int numberOfSimulatedDataSets) {
@@ -137,60 +163,92 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             System.Diagnostics.Debug.WriteLine(sb.ToString());
         }
 
-        private PowerAnalysisResult performTests(List<SimulationDataRecord> data, AnalysisMethodType analysisMethodType, bool isBlockEffect, int datasetIndex) {
+        private void createSimulatedDataFrame(RDotNetEngine rEngine, List<SimulationDataRecord> data, int datasetIndex) {
+            rEngine.SetSymbol("Block", data.Select(r => r.Block).ToList());
+            rEngine.EvaluateNoReturn(string.Format("{0} <- as.factor({0})", "Block"));
+            rEngine.SetSymbol("Comparison", data.Select(r => r.ComparisonDummyFactorLevel).ToList());
+            rEngine.EvaluateNoReturn(string.Format("{0} <- as.factor({0})", "Comparison"));
+            rEngine.SetSymbol("Modifier", data.Select(r => r.ModifierDummyFactorLevel).ToList());
+            rEngine.EvaluateNoReturn(string.Format("{0} <- as.factor({0})", "Modifier"));
+            rEngine.SetSymbol("Response", data.Select(r => r.SimulatedResponses[datasetIndex]).ToList());
+            rEngine.SetSymbol("ResponseTransformed", data.Select(r => r.SimulatedResponses[datasetIndex]).ToList());
+            rEngine.SetSymbol("LowerOffset", data.Select(r => r.LowerOffset).ToList());
+            rEngine.SetSymbol("UpperOffset", data.Select(r => r.UpperOffset).ToList());
+            rEngine.EvaluateNoReturn(string.Format("data <- data.frame(Block, Comparison, Modifier, Response)"));
+        }
+
+        private static void createModelFormula(bool isBlockEffect, RDotNetEngine rEngine) {
+            if (isBlockEffect) {
+                rEngine.EvaluateNoReturn("formulaH0 <- as.formula(ResponseTransformed ~ 1 + Block)");
+                rEngine.EvaluateNoReturn("formulaH1 <- as.formula(ResponseTransformed ~ Comparison + Block)");
+            } else {
+                rEngine.EvaluateNoReturn("formulaH0 <- as.formula(ResponseTransformed ~ 1)");
+                rEngine.EvaluateNoReturn("formulaH1 <- as.formula(ResponseTransformed ~ Comparison)");
+            }
+            rEngine.EvaluateNoReturn("formulaH0_low <- update(formulaH0, ~ . + offset(LowerOffset))");
+            rEngine.EvaluateNoReturn("formulaH0_upp <- update(formulaH0, ~ . + offset(UpperOffset))");
+        }
+
+        private OutputPowerAnalysisRecord performTests(List<SimulationDataRecord> data, AnalysisMethodType analysisMethodType, bool isBlockEffect, int datasetIndex, double locLower, double locUpper, double significanceLevel) {
             try {
                 using (var rEngine = new RDotNetEngine()) {
-                    rEngine.LoadLibrary("lsmeans");
 
-                    rEngine.SetSymbol("Block", data.Select(r => r.Block).ToList());
-                    rEngine.EvaluateNoReturn(string.Format("{0} <- as.factor({0})", "Block"));
-                    rEngine.SetSymbol("Comparison", data.Select(r => r.ComparisonDummyFactorLevel).ToList());
-                    rEngine.EvaluateNoReturn(string.Format("{0} <- as.factor({0})", "Comparison"));
-                    rEngine.SetSymbol("Modifier", data.Select(r => r.ModifierDummyFactorLevel).ToList());
-                    rEngine.EvaluateNoReturn(string.Format("{0} <- as.factor({0})", "Modifier"));
-                    rEngine.SetSymbol("Response", data.Select(r => r.SimulatedResponses[datasetIndex]).ToList());
-                    rEngine.SetSymbol("LowerOffset", data.Select(r => r.LowerOffset).ToList());
-                    rEngine.SetSymbol("UpperOffset", data.Select(r => r.UpperOffset).ToList());
-                    rEngine.EvaluateNoReturn(string.Format("data <- data.frame(Block, Comparison, Modifier, Response)"));
+                    createSimulatedDataFrame(rEngine, data, datasetIndex);
 
-                    if (isBlockEffect) {
-                        rEngine.EvaluateNoReturn("formulaH0 <- as.formula(Response ~ 1 + Block)");
-                        rEngine.EvaluateNoReturn("formulaH1 <- as.formula(Response ~ Comparison + Block)");
-                    } else {
-                        rEngine.EvaluateNoReturn("formulaH0 <- as.formula(Response ~ 1)");
-                        rEngine.EvaluateNoReturn("formulaH1 <- as.formula(Response ~ Comparison)");
-                    }
-                    rEngine.EvaluateNoReturn("formulaH0_low <- update(formulaH0, ~ . + offset(LowerOffset))");
-                    rEngine.EvaluateNoReturn("formulaH0_upp <- update(formulaH0, ~ . + offset(UpperOffset))");
+                    createModelFormula(isBlockEffect, rEngine);
 
-                    rEngine.EvaluateNoReturn("lmH1 <- lm(formulaH1, data=data)");
-                    rEngine.EvaluateNoReturn("pval <- 2*pt(abs(lmH1$coef[2])/sqrt(vcov(lmH1)[2,2]), lmH1$df.residual, lower.tail=FALSE)");
-                    rEngine.EvaluateNoReturn("resDF <- df.residual(lmH1)");
-                    rEngine.EvaluateNoReturn("resMS <- deviance(lmH1)/resDF");
+                    var resultLogNormal = performLogNormalTest(locLower, locUpper, significanceLevel, rEngine);
 
-                    rEngine.EvaluateNoReturn("lsmeans <- lsmeans(lmH1, \"Comparison\", at=list(Comparison=c(\"REF\", \"GMO\")))");
-                    rEngine.EvaluateNoReturn("meanCMP <- summary(lsmeans)$lsmean[1]");
-                    rEngine.EvaluateNoReturn("meanGMO <- summary(lsmeans)$lsmean[2]");
-                    rEngine.EvaluateNoReturn("repCMP <- resMS / (summary(lsmeans)$SE[1]^2)");
-                    rEngine.EvaluateNoReturn("repGMO <- resMS / (summary(lsmeans)$SE[2]^2)");
-
-                    //Generalized confidence interval
-                    var nGCI = 100;
-                    var smallGCI = 0.0001;
-                    rEngine.EvaluateNoReturn("chi <- resDF * resMS / rchisq(nGCI, resDF)");
-                    rEngine.EvaluateNoReturn(string.Format("rCMP <- rnorm({0}, meanCMP, sqrt(chi/repCMP))", nGCI));
-                    rEngine.EvaluateNoReturn(string.Format("rGMO <- rnorm({0}, meanGMO, sqrt(chi/repGMO))", nGCI));
-                    rEngine.EvaluateNoReturn("rCMP <- exp(rCMP + chi/2) - 1");
-                    rEngine.EvaluateNoReturn("rGMO <- exp(rGMO + chi/2) - 1");
-                    rEngine.EvaluateNoReturn(string.Format("rCMP[rCMP < smallGCI] <- {0}", smallGCI));
-                    rEngine.EvaluateNoReturn(string.Format("rGMO[rGMO < smallGCI] <- {0}", smallGCI));
-                    rEngine.EvaluateNoReturn("ratio <- rGMO/rCMP");
-
+                    return new OutputPowerAnalysisRecord() {
+                        PowerDifferenceLogNormal = resultLogNormal.PowerDifferenceTest,
+                        PowerEquivalenceLogNormal = resultLogNormal.PowerEquivalenceTest,
+                    };
                 }
             } catch (Exception ex) {
                 Trace.WriteLine(ex.Message);
+                return null;
             }
-            return null;
+        }
+
+        private static PowerAnalysisResult performLogNormalTest(double locLower, double locUpper, double significanceLevel, RDotNetEngine rEngine) {
+            rEngine.LoadLibrary("lsmeans");
+
+            rEngine.EvaluateNoReturn("data[\"ResponseTransformed\"] <- log(data[\"Response\"] + 1)");
+            rEngine.EvaluateNoReturn("lmH1 <- lm(formulaH1, data=data)");
+            rEngine.EvaluateNoReturn("pval <- 2*pt(abs(lmH1$coef[2])/sqrt(vcov(lmH1)[2,2]), lmH1$df.residual, lower.tail=FALSE)");
+
+            rEngine.EvaluateNoReturn("resDF <- df.residual(lmH1)");
+            rEngine.EvaluateNoReturn("resMS <- deviance(lmH1)/resDF");
+
+            rEngine.EvaluateNoReturn("lsmeans <- lsmeans(lmH1, \"Comparison\", at=list(Comparison=c(\"REF\", \"GMO\")))");
+            rEngine.EvaluateNoReturn("meanCMP <- summary(lsmeans)$lsmean[1]");
+            rEngine.EvaluateNoReturn("meanGMO <- summary(lsmeans)$lsmean[2]");
+            rEngine.EvaluateNoReturn("repCMP <- resMS / (summary(lsmeans)$SE[1]^2)");
+            rEngine.EvaluateNoReturn("repGMO <- resMS / (summary(lsmeans)$SE[2]^2)");
+
+            //Generalized confidence interval
+            rEngine.SetSymbol("nGCI", 100);
+            rEngine.SetSymbol("smallGCI", 0.0001);
+            rEngine.SetSymbol("significanceLevel", significanceLevel);
+            rEngine.EvaluateNoReturn("chi <- resDF * resMS / rchisq(nGCI, resDF)");
+            rEngine.EvaluateNoReturn("rCMP <- rnorm(nGCI, meanCMP, sqrt(chi/repCMP))");
+            rEngine.EvaluateNoReturn("rGMO <- rnorm(nGCI, meanGMO, sqrt(chi/repGMO))");
+            rEngine.EvaluateNoReturn("rCMP <- exp(rCMP + chi/2) - 1");
+            rEngine.EvaluateNoReturn("rGMO <- exp(rGMO + chi/2) - 1");
+            rEngine.EvaluateNoReturn("rCMP[rCMP < smallGCI] <- smallGCI");
+            rEngine.EvaluateNoReturn("rGMO[rGMO < smallGCI] <- smallGCI");
+            rEngine.EvaluateNoReturn("ratio <- rGMO/rCMP");
+            rEngine.EvaluateNoReturn("quantiles <- quantile(ratio, c(significanceLevel/2, 1-significanceLevel/2), na.rm=TRUE)");
+
+            var lowerQuantile = rEngine.EvaluateDouble("quantiles[1]");
+            var upperQuantile = rEngine.EvaluateDouble("quantiles[2]");
+            var pValueDifference = rEngine.EvaluateDouble("pval");
+            var pValueEquivalence = (lowerQuantile > locLower && upperQuantile < locUpper) ? 1D : 0D;
+
+            return new PowerAnalysisResult() {
+                PowerDifferenceTest = pValueDifference,
+                PowerEquivalenceTest = pValueEquivalence,
+            };
         }
 
         private double link(double data, MeasurementType measurementType) {
