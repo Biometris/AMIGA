@@ -90,8 +90,12 @@ namespace Biometris.Statistics.Distributions {
             var s = Omega - 1;
             var a = Mean() / s;
             var lambdaHat = MathNet.Numerics.Distributions.Gamma.Sample(a, 1/s);
-            var sample = MathNet.Numerics.Distributions.Poisson.Sample(lambdaHat);
-            return sample;
+            if (lambdaHat == 0) {
+                return 0D;
+            } else {
+                var sample = MathNet.Numerics.Distributions.Poisson.Sample(lambdaHat);
+                return sample;
+            }
         }
 
         public IEnumerable<double> Draw(int samples) {

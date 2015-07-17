@@ -71,30 +71,30 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
 
             var replicationConfigurations = inputPowerAnalysis.NumberOfReplications;
 
-            var outputResults = new List<OutputPowerAnalysisRecord>();
+            var outputResults = new List<OutputPowerAnalysisRecord>(replicationConfigurations.Count * effects.Count);
 
             for (int i = 0; i < replicationConfigurations.Count; ++i) {
                 var replications = replicationConfigurations[i];
                 var blocks = replications;
                 foreach (var treatmentEffect in effects) {
                     var simulatedDataRecords = createSimulatedDataRecords(inputPowerAnalysis.InputRecords, experimentalDesignType, measurementType, distributionType, dispersion, powerLawPower, transformedLocLower, transformedLocUpper, cvBlocks, blocks, treatmentEffect, inputPowerAnalysis.NumberOfSimulatedDataSets);
-                    print(simulatedDataRecords);
+                    //print(simulatedDataRecords);
 
-                    var results = new List<OutputPowerAnalysisRecord>(inputPowerAnalysis.NumberOfSimulatedDataSets);
+                    var testResults = new List<OutputPowerAnalysisRecord>(inputPowerAnalysis.NumberOfSimulatedDataSets);
                     for (int k = 0; k < inputPowerAnalysis.NumberOfSimulatedDataSets; ++k) {
                         var result = performTests(simulatedDataRecords, inputPowerAnalysis.SelectedAnalysisMethodTypes, experimentalDesignType == ExperimentalDesignType.RandomizedCompleteBlocks, k, inputPowerAnalysis.LocLower, inputPowerAnalysis.LocUpper, inputPowerAnalysis.SignificanceLevel);
-                        results.Add(result);
+                        testResults.Add(result);
                     }
 
                     var output = new OutputPowerAnalysisRecord() {
-                        PowerDifferenceLogNormal = results.Select(r => r.PowerDifferenceLogNormal).Average(),
-                        PowerEquivalenceLogNormal = results.Select(r => r.PowerEquivalenceLogNormal).Average(),
-                        PowerDifferenceSquareRoot = results.Select(r => r.PowerDifferenceSquareRoot).Average(),
-                        PowerEquivalenceSquareRoot = results.Select(r => r.PowerEquivalenceSquareRoot).Average(),
-                        PowerDifferenceOverdispersedPoisson = results.Select(r => r.PowerDifferenceOverdispersedPoisson).Average(),
-                        PowerEquivalenceOverdispersedPoisson = results.Select(r => r.PowerEquivalenceOverdispersedPoisson).Average(),
-                        PowerDifferenceNegativeBinomial = results.Select(r => r.PowerDifferenceNegativeBinomial).Average(),
-                        PowerEquivalenceNegativeBinomial = results.Select(r => r.PowerEquivalenceNegativeBinomial).Average(),
+                        PowerDifferenceLogNormal = testResults.Select(r => r.PowerDifferenceLogNormal).Average(),
+                        PowerEquivalenceLogNormal = testResults.Select(r => r.PowerEquivalenceLogNormal).Average(),
+                        PowerDifferenceSquareRoot = testResults.Select(r => r.PowerDifferenceSquareRoot).Average(),
+                        PowerEquivalenceSquareRoot = testResults.Select(r => r.PowerEquivalenceSquareRoot).Average(),
+                        PowerDifferenceOverdispersedPoisson = testResults.Select(r => r.PowerDifferenceOverdispersedPoisson).Average(),
+                        PowerEquivalenceOverdispersedPoisson = testResults.Select(r => r.PowerEquivalenceOverdispersedPoisson).Average(),
+                        PowerDifferenceNegativeBinomial = testResults.Select(r => r.PowerDifferenceNegativeBinomial).Average(),
+                        PowerEquivalenceNegativeBinomial = testResults.Select(r => r.PowerEquivalenceNegativeBinomial).Average(),
                         ConcernStandardizedDifference = treatmentEffect.CSD,
                         Effect = (inputPowerAnalysis.MeasurementType != MeasurementType.Continuous) ? Math.Exp(treatmentEffect.Effect) : treatmentEffect.Effect,
                         TransformedEffect = treatmentEffect.Effect,
@@ -116,7 +116,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                 if (experimentalDesignType == ExperimentalDesignType.RandomizedCompleteBlocks) {
                     var blockEffectDistribution = new NormalDistribution(0.375, 0.25);
                     var sigBlock = Math.Sqrt(Math.Log((cvBlocks / 100) * (cvBlocks / 100) + 1));
-                    blockEffect = sigBlock * blockEffectDistribution.InvCdf((block - 0.375) / (blocks + 0.25));
+                    blockEffect = sigBlock * blockEffectDistribution.InvCdf(((block + 1) - 0.375) / (blocks + 0.25));
                 } else {
                     blockEffect = 0;
                 }
