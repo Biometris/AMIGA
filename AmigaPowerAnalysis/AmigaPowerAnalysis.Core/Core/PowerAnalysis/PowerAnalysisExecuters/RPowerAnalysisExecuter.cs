@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Biometris.ExtensionMethods;
+using Biometris.R.REngines;
 
 namespace AmigaPowerAnalysis.Core.PowerAnalysis {
     public sealed class RPowerAnalysisExecuter : PowerAnalysisExecuterBase {
@@ -28,9 +29,25 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             var comparisonOutputFilename = Path.Combine(_tempPath, string.Format("{0}-Output.csv", inputPowerAnalysis.ComparisonId));
             var comparisonLogFilename = Path.Combine(_tempPath, string.Format("{0}-Log.log", inputPowerAnalysis.ComparisonId));
 
-            var inputGenerator = new PowerAnalysisInputGenerator();
             createAnalysisInputFile(inputPowerAnalysis, comparisonInputFilename);
             createAnalysisSettingsFile(inputPowerAnalysis, comparisonSettingsFilename);
+
+            //try {
+            //    using (var rEngine = new RDotNetEngine()) {
+            //        rEngine.LoadLibrary("MASS");
+            //        rEngine.LoadLibrary("lsmeans");
+
+            //        //rEngine.EvaluateNoReturn(@"source('F:\Projects\AmigaPowerAnalysis\TestData\Test\AMIGAPowerAnalysis.R')");
+            //        rEngine.EvaluateNoReturn(string.Format(@"source('{0}')", Path.Combine(scriptsDirectory, "AMIGAPowerAnalysis.R")).Replace("\\", "/"));
+            //        rEngine.EvaluateNoReturn(string.Format("inputData <- readDataFile('{0}')", comparisonInputFilename.Replace("\\", "/")));
+            //        rEngine.EvaluateNoReturn(string.Format("settings <- readSettings('{0}')", comparisonSettingsFilename.Replace("\\", "/")));
+            //        rEngine.EvaluateNoReturn("results <- runPowerAnalysis(inputData, settings)");
+            //        var outRNet = rEngine.CaptureOutput("print(results)");
+            //        Console.WriteLine(outRNet);
+            //    }
+            //} catch (Exception ex) {
+            //    var msg = ex.Message;
+            //}
 
             var rCmd = GetRPath();
             var rOptions = "--no-save --no-restore --verbose";

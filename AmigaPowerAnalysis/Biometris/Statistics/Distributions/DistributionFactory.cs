@@ -23,20 +23,37 @@ namespace Biometris.Statistics.Distributions {
 
     public static class DistributionFactory {
 
+        /// <summary>
+        /// The count distribution models.
+        /// </summary>
         public static readonly DistributionType CountDistributions = DistributionType.Poisson
             | DistributionType.OverdispersedPoisson
             | DistributionType.NegativeBinomial
             | DistributionType.PoissonLogNormal
             | DistributionType.PowerLaw;
 
+        /// <summary>
+        /// The fraction distribution models.
+        /// </summary>
         public static readonly DistributionType FractionDistributions = DistributionType.Binomial
             | DistributionType.BetaBinomial
             | DistributionType.BinomialLogitNormal;
 
+        /// <summary>
+        /// The non-negative distribution models.
+        /// </summary>
         public static readonly DistributionType NonNegativeDistributions = DistributionType.LogNormal;
 
+        /// <summary>
+        /// The continuous distribution models.
+        /// </summary>
         public static readonly DistributionType ContinuousDistributions = DistributionType.Normal;
 
+        /// <summary>
+        /// Returns the available distribution models for a given measurement type.
+        /// </summary>
+        /// <param name="measurementType"></param>
+        /// <returns></returns>
         public static DistributionType AvailableDistributionTypes(MeasurementType measurementType) {
             switch (measurementType) {
                 case MeasurementType.Count:
@@ -111,6 +128,39 @@ namespace Biometris.Statistics.Distributions {
                 case DistributionType.LogNormal:
                 default:
                     return null;
+            }
+        }
+
+        /// <summary>
+        /// Returns the distribution from a mean, cv, and optionally a power (for the power law).
+        /// </summary>
+        /// <param name="distributionType"></param>
+        /// <param name="mean"></param>
+        /// <param name="cv"></param>
+        /// <param name="power"></param>
+        /// <returns></returns>
+        public static double GetDispersion(DistributionType distributionType, double mean, double cv, double power) {
+            switch (distributionType) {
+                case DistributionType.Poisson:
+                    return double.NaN;
+                case DistributionType.OverdispersedPoisson:
+                    return Math.Pow(cv / 100, 2) * mean;
+                case DistributionType.NegativeBinomial:
+                    return Math.Pow(cv / 100, 2) - 1 / mean;
+                case DistributionType.PoissonLogNormal:
+                    return Math.Pow(cv / 100, 2) - 1 / mean;
+                case DistributionType.PowerLaw:
+                    return Math.Pow(cv / 100, 2) * Math.Pow(mean, 2 - power);
+                case DistributionType.Binomial:
+                case DistributionType.BetaBinomial:
+                case DistributionType.BinomialLogitNormal:
+                    // TODO: fractions
+                    return double.NaN;
+                case DistributionType.LogNormal:
+                case DistributionType.Normal:
+                default:
+                    // TODO: fractions
+                    return double.NaN;
             }
         }
     }

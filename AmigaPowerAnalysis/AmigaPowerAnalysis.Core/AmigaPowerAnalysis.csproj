@@ -92,6 +92,8 @@
     <Compile Include="Core\Charting\DistributionChartCreators\DistributionChartCreator.cs" />
     <Compile Include="Core\Charting\DistributionChartCreators\HistogramSeries.cs" />
     <Compile Include="Core\Charting\IChartCreator.cs" />
+    <Compile Include="Core\DataAnalysis\AnalysisDataSimulator\SimulationDataRecord.cs" />
+    <Compile Include="Core\DataAnalysis\AnalysisDataSimulator\AnalysisDataSimulator.cs" />
     <Compile Include="Core\DataAnalysis\AnalysisDataTemplate\AnalysisDataTemplateRecord.cs" />
     <Compile Include="Core\DataAnalysis\AnalysisDataTemplate\AnalysisDataTemplateGenerator.cs" />
     <Compile Include="Core\DataAnalysis\AnalysisDataTemplate\AnalysisDataTemplate.cs" />
@@ -373,6 +375,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Resources\GenstatScripts\Lyles.pro">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\RScripts\AMIGAPowerAnalysis.R">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Resources\RScripts\ToolSimulation.rin">

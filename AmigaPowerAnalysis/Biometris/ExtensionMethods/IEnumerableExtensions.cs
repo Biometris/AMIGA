@@ -1,10 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace Biometris.ExtensionMethods {
     public static class IEnumerableExtensions {
 
+        /// <summary>
+        /// Returns all n-element unique combinations of elements of the list.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="n"></param>
+        /// <returns></returns>
         public static IEnumerable<IEnumerable<T>> Combinations<T>(this IEnumerable<T> source, int n) {
             if (n == 0) {
                 yield return Enumerable.Empty<T>();
@@ -43,6 +51,28 @@ namespace Biometris.ExtensionMethods {
                     yield return iter2.Current;
                 }
             }
+        }
+
+        /// <summary>
+        /// Prints the elements of the list as a table.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="col"></param>
+        public static void Print<T>(this IEnumerable<T> col) {
+            var sb = new StringBuilder();
+            var propertyInfos = typeof(T).GetProperties();
+            foreach (var info in propertyInfos) {
+                sb.Append(info.Name + "\t");
+            }
+            sb.AppendLine();
+            foreach (var item in col) {
+                foreach (var info in propertyInfos) {
+                    var value = info.GetValue(item, null) ?? "(null)";
+                    sb.Append(value.ToString() + "\t");
+                }
+                sb.AppendLine();
+            }
+            System.Diagnostics.Debug.WriteLine(sb.ToString());
         }
     }
 }

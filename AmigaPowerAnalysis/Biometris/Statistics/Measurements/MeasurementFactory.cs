@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Biometris.Statistics.Measurements {
@@ -26,6 +27,30 @@ namespace Biometris.Statistics.Measurements {
                     return mean + modifier;
                 default:
                     return double.NaN;
+            }
+        }
+
+        public static double Link(double data, MeasurementType measurementType) {
+            if (measurementType == MeasurementType.Count) {
+                return (Math.Log(data));
+            } else if (measurementType == MeasurementType.Fraction) {
+                return (Math.Log(data / (1 - data)));
+            } else if (measurementType == MeasurementType.Nonnegative) {
+                return (Math.Log(data));
+            } else {
+                return (data);
+            }
+        }
+
+        public static double InverseLink(double data, MeasurementType measurementType) {
+            if (measurementType == MeasurementType.Count) {
+                return (Math.Exp(data));
+            } else if (measurementType == MeasurementType.Fraction) {
+                return (1 / (1 + Math.Exp(-data)));
+            } else if (measurementType == MeasurementType.Nonnegative) {
+                return (Math.Exp(data));
+            } else {
+                return data;
             }
         }
 

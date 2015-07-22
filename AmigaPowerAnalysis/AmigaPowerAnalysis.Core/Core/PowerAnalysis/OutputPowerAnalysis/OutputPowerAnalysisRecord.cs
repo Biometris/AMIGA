@@ -5,6 +5,17 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
 
     public sealed class OutputPowerAnalysisRecord {
 
+        public OutputPowerAnalysisRecord() {
+            PowerDifferenceLogNormal = double.NaN;
+            PowerDifferenceNegativeBinomial = double.NaN;
+            PowerDifferenceOverdispersedPoisson = double.NaN;
+            PowerDifferenceSquareRoot = double.NaN;
+            PowerEquivalenceLogNormal = double.NaN;
+            PowerEquivalenceNegativeBinomial = double.NaN;
+            PowerEquivalenceOverdispersedPoisson = double.NaN;
+            PowerEquivalenceSquareRoot = double.NaN;
+        }
+
         [Display(Name = "Ratio")]
         public double Effect { get; set; }
 
@@ -93,6 +104,69 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                     break;
             }
             return double.NaN;
+        }
+
+        /// <summary>
+        /// Sets the power of the given analysis method and test type.
+        /// </summary>
+        /// <param name="testType"></param>
+        /// <param name="analysisMethod"></param>
+        /// <returns></returns>
+        public void SetPower(TestType testType, AnalysisMethodType analysisMethod, double power) {
+            switch (testType) {
+                case TestType.Difference: {
+                        switch (analysisMethod) {
+                            case AnalysisMethodType.LogNormal:
+                                PowerDifferenceLogNormal = power;
+                                break;
+                            case AnalysisMethodType.SquareRoot:
+                                PowerDifferenceSquareRoot = power;
+                                break;
+                            case AnalysisMethodType.OverdispersedPoisson:
+                                PowerDifferenceOverdispersedPoisson = power;
+                                break;
+                            case AnalysisMethodType.NegativeBinomial:
+                                PowerDifferenceNegativeBinomial = power;
+                                break;
+                            case AnalysisMethodType.EmpiricalLogit:
+                            case AnalysisMethodType.OverdispersedBinomial:
+                            case AnalysisMethodType.Betabinomial:
+                            case AnalysisMethodType.LogPlusM:
+                            case AnalysisMethodType.Gamma:
+                            case AnalysisMethodType.Normal:
+                            default:
+                                break;
+                        }
+                    }
+                    break;
+                case TestType.Equivalence: {
+                        switch (analysisMethod) {
+                            case AnalysisMethodType.LogNormal:
+                                PowerEquivalenceLogNormal = power;
+                                break;
+                            case AnalysisMethodType.SquareRoot:
+                                PowerEquivalenceSquareRoot = power;
+                                break;
+                            case AnalysisMethodType.OverdispersedPoisson:
+                                PowerEquivalenceOverdispersedPoisson = power;
+                                break;
+                            case AnalysisMethodType.NegativeBinomial:
+                                PowerEquivalenceNegativeBinomial = power;
+                                break;
+                            case AnalysisMethodType.EmpiricalLogit:
+                            case AnalysisMethodType.OverdispersedBinomial:
+                            case AnalysisMethodType.Betabinomial:
+                            case AnalysisMethodType.LogPlusM:
+                            case AnalysisMethodType.Gamma:
+                            case AnalysisMethodType.Normal:
+                            default:
+                                break;
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }

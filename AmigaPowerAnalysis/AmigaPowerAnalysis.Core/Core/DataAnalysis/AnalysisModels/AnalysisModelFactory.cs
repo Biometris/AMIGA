@@ -55,7 +55,6 @@ namespace AmigaPowerAnalysis.Core.DataAnalysis.AnalysisModels {
                 default:
                     return ConsinuousAnalysisMethods;
             }
-
         }
     }
 }

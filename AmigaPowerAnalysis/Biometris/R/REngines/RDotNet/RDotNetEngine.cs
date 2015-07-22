@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using RDotNet;
+using System.IO;
 
 namespace Biometris.R.REngines {
     public class RDotNetEngine : IRCommandExecuter, IDisposable {

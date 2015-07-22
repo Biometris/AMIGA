@@ -59,8 +59,8 @@ namespace AmigaPowerAnalysis.GUI {
             }
 
             var inputGenerator = new PowerAnalysisInputGenerator();
-            //var powerAnalysisExecuter = new RPowerAnalysisExecuter(filesPath);
-            var powerAnalysisExecuter = new RDotNetPowerAnalysisExecuter();
+            var powerAnalysisExecuter = new RPowerAnalysisExecuter(filesPath);
+            //var powerAnalysisExecuter = new RDotNetPowerAnalysisExecuter();
 
             var numberOfComparisons = comparisons.Count();
             var progressStep = 100D / numberOfComparisons;
