@@ -3,6 +3,8 @@ using System.Threading;
 
 namespace Biometris.ProgressReporting {
 
+    public delegate void ProgressStateChangedEventHandler(object sender, EventArgs e);
+
     /// <summary>
     /// Interface for a progress state that can be used for progress reporting
     /// </summary>

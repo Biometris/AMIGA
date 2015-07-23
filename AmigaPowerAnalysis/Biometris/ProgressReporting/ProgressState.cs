@@ -2,8 +2,6 @@
 
 namespace Biometris.ProgressReporting {
 
-    public delegate void ProgressStateChangedEventHandler(object sender, EventArgs e);
-
     public sealed class ProgressState : IProgressState {
 
         private double _progress = 0;
