@@ -1,20 +1,17 @@
-﻿using AmigaPowerAnalysis.Core.DataAnalysis.AnalysisModels;
-using Biometris.ExtensionMethods;
-using Biometris.Logger;
-using Biometris.Persistence;
-using Biometris.R.REngines;
-using Biometris.Statistics;
-using Biometris.Statistics.Distributions;
-using Biometris.Statistics.Measurements;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
+using AmigaPowerAnalysis.Core.DataAnalysis.AnalysisModels;
+using Biometris.ExtensionMethods;
+using Biometris.Logger;
+using Biometris.Persistence;
 using Biometris.ProgressReporting;
+using Biometris.R.REngines;
+using Biometris.Statistics;
+using Biometris.Statistics.Measurements;
 
 namespace AmigaPowerAnalysis.Core.PowerAnalysis {
     public sealed class RDotNetPowerAnalysisExecuter : PowerAnalysisExecuterBase {
@@ -40,8 +37,8 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
 
             var comparisonInputFilename = Path.Combine(_tempPath, string.Format("{0}-Input.csv", inputPowerAnalysis.ComparisonId));
             var comparisonSettingsFilename = Path.Combine(_tempPath, string.Format("{0}-Settings.csv", inputPowerAnalysis.ComparisonId));
-            var comparisonOutputFilename = Path.Combine(_tempPath, string.Format("{0}-Output_RDN.csv", inputPowerAnalysis.ComparisonId));
-            var comparisonLogFilename = Path.Combine(_tempPath, string.Format("{0}-Log_RND.log", inputPowerAnalysis.ComparisonId));
+            var comparisonOutputFilename = Path.Combine(_tempPath, string.Format("{0}-Output.csv", inputPowerAnalysis.ComparisonId));
+            var comparisonLogFilename = Path.Combine(_tempPath, string.Format("{0}-Log.log", inputPowerAnalysis.ComparisonId));
 
             var inputGenerator = new PowerAnalysisInputGenerator();
             createAnalysisInputFile(inputPowerAnalysis, comparisonInputFilename);
@@ -69,10 +66,11 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
 
                         var blocks = inputPowerAnalysis.NumberOfReplications[i];
                         rEngine.SetSymbol("blocks", blocks);
-                        foreach (var effect in effects) {
+                        for (int j = 0; j < effects.Count; ++j) {
+                            var effect = effects[j];
 
                             // Update progress state
-                            progressState.Update(string.Format("Analysis of endpoint: {0}, replicates: {1}, effect: {2:N2}", inputPowerAnalysis.Endpoint, blocks, effect.Effect), 100 * ((double)counter / totalLoops));
+                            progressState.Update(string.Format("Endpoint {0}, replicate {1}/{2}, effect {3}/{4}", inputPowerAnalysis.Endpoint, i, inputPowerAnalysis.NumberOfReplications.Count, j, effects.Count), 100 * ((double)counter / totalLoops));
 
                             rEngine.SetSymbol("effect", effect.TransformedEfffect);
                             rEngine.EvaluateNoReturn("pValues <- monteCarloPowerAnalysis(inputData, settings, modelSettings, blocks, effect)");
@@ -108,8 +106,10 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                 }
             } catch (Exception ex) {
                 logger.Log(string.Format("# Error: {0}", ex.Message));
+                logger.WriteToFile();
                 throw ex;
             }
+            CsvWriter.WriteToCsvFile(comparisonOutputFilename, ",", outputResults);
             return new OutputPowerAnalysis() {
                 InputPowerAnalysis = inputPowerAnalysis,
                 OutputRecords = outputResults,

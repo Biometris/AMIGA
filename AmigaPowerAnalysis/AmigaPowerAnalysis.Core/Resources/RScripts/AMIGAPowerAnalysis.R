@@ -1,4 +1,4 @@
-LinkFunction <- function(data, measurementType = c("Count", "Fraction", "Nonnegative", "Continuous")) {
+linkFunction <- function(data, measurementType = c("Count", "Fraction", "Nonnegative", "Continuous")) {
   chkArg = match.arg(measurementType)
   if (measurementType == "Count") {
     return(log(data))
@@ -11,7 +11,7 @@ LinkFunction <- function(data, measurementType = c("Count", "Fraction", "Nonnega
   }
 }
 
-InverseLinkFunction <- function(data, measurementType = c("Count", "Fraction", "Nonnegative", "Continuous")) {
+inverseLinkFunction <- function(data, measurementType = c("Count", "Fraction", "Nonnegative", "Continuous")) {
   chkArg = match.arg(measurementType)
   if (measurementType == "Count") {
     return(exp(data))
@@ -25,7 +25,6 @@ InverseLinkFunction <- function(data, measurementType = c("Count", "Fraction", "
 }
 
 ropoisson <- function(n, mean, dispersion=NaN, power=NaN, distribution=c("Poisson", "OverdispersedPoisson", "NegativeBinomial", "PoissonLogNormal", "PowerLaw")) {
-  
   stopifnot(n == as.integer(n), n >= 1, mean >= 0)
   if ((length(mean) != 1) && (length(mean) != n)) {
     stop("The length of mean must equal 1 or the value of n.", call. = FALSE)
@@ -39,31 +38,31 @@ ropoisson <- function(n, mean, dispersion=NaN, power=NaN, distribution=c("Poisso
   }
   type = match.arg(distribution)
   if (type == "Poisson") {
-    sample = rpois(n, mean)
+    sample <- rpois(n, mean)
   } else if (type == "OverdispersedPoisson") {
     if (min(dispersion) <= 1) {
       stop("The dispersion parameter must be larger than 1 for the OverdispersedPoisson distribution.", call. = FALSE)
     }
-    s = dispersion - 1
-    a = mean/s
-    sample = rgamma(n, shape=a, scale=s)
-    sample = rpois(n, sample)
+    s <- dispersion - 1
+    a <- mean/s
+    sample <- rgamma(n, shape=a, scale=s)
+    sample <- rpois(n, sample)
   } else if (type == "NegativeBinomial") {
     if (min(dispersion) <= 0) {
       stop("The dispersion parameter must be larger than 0 for the NegativeBinomial distribution.", call. = FALSE)
     }
-    s = dispersion*mean
-    a = mean/s
-    sample = rgamma(n, shape=a, scale=s)
-    sample = rpois(n, sample)
+    s <- dispersion*mean
+    a <- mean/s
+    sample <- rgamma(n, shape=a, scale=s)
+    sample <- rpois(n, sample)
   } else if (type == "PoissonLogNormal") {
     if (min(dispersion) <= 0) {
       stop("The dispersion parameter must be larger than 0 for the PoissonLogNormal distribution.", call. = FALSE)
     }
-    lambda = log(mean) - log(dispersion+1)/2
-    sigma2 = log(dispersion+1)
-    sample = exp(rnorm(n, lambda, sqrt(sigma2)))
-    sample = rpois(n, sample)
+    lambda <- log(mean) - log(dispersion+1)/2
+    sigma2 <- log(dispersion+1)
+    sample <- exp(rnorm(n, lambda, sqrt(sigma2)))
+    sample <- rpois(n, sample)
   } else if (type == "PowerLaw") {
     if (min(dispersion) <= 0) {
       stop("The dispersion parameter must be larger than 0 for the PowerLaw distribution.", call. = FALSE)
@@ -76,10 +75,10 @@ ropoisson <- function(n, mean, dispersion=NaN, power=NaN, distribution=c("Poisso
       stop("For some parameters of the PowerLaw distribution the calculated dispersion parameter of the negative binomial distribution is not positive.", call. = FALSE)
     }
     # Use negative binomial
-    s = dispNegbin*mean
-    a = mean/s
-    sample = rgamma(n, shape=a, scale=s)
-    sample = rpois(n, sample)
+    s <- dispNegbin*mean
+    a <- mean/s
+    sample <- rgamma(n, shape=a, scale=s)
+    sample <- rpois(n, sample)
   }
   return(sample)
 }
@@ -87,15 +86,15 @@ ropoisson <- function(n, mean, dispersion=NaN, power=NaN, distribution=c("Poisso
 ropoissonVariance <- function(n, mean, dispersion=NaN, power=NaN, distribution=c("Poisson", "OverdispersedPoisson", "NegativeBinomial", "PoissonLogNormal", "PowerLaw")) {
   type = match.arg(distribution)
   if (type == "Poisson") {
-    variance = mean
+    variance <- mean
   } else if (type == "OverdispersedPoisson") {
-    variance = dispersion*mean
+    variance <- dispersion*mean
   } else if (type == "NegativeBinomial") {
-    variance = mean + dispersion*mean*mean
+    variance <- mean + dispersion*mean*mean
   } else if (type == "PoissonLogNormal") {
-    variance = mean + dispersion*mean*mean
+    variance <- mean + dispersion*mean*mean
   } else if (type == "PowerLaw") {
-    variance = dispersion*mean^power
+    variance <- dispersion*mean^power
   }
   return(variance)
 }
@@ -118,22 +117,21 @@ ropoissonDispersion <- function(mean, CV, power, distribution=c("Poisson", "Over
   if (type == "Poisson") {
     dispersion = NaN
   } else if (type == "OverdispersedPoisson") {
-    dispersion = (CV/100) * (CV/100) * mean
+    dispersion <- (CV/100) * (CV/100) * mean
   } else if (type == "NegativeBinomial") {
-    dispersion = (CV/100) * (CV/100) - 1/mean
+    dispersion <- (CV/100) * (CV/100) - 1/mean
   } else if (type == "PoissonLogNormal") {
-    dispersion = (CV/100) * (CV/100) - 1/mean
+    dispersion <- (CV/100) * (CV/100) - 1/mean
   } else if (type == "PowerLaw") {
-    dispersion = (CV/100) * (CV/100) * mean^(2-power)
+    dispersion <- (CV/100) * (CV/100) * mean^(2-power)
   }
   return(dispersion)
 }
 
 readDataFile <- function(dataFile) {
   # Read data
-  data = read.csv(dataFile)
-  colnames = colnames(data)
-  
+  data <- read.csv(dataFile)
+  colnames <- colnames(data)
   # Redefine Mod columns to factors
   modifiers = grep("Mod", colnames)
   if (length(modifiers) > 0) {
@@ -141,36 +139,34 @@ readDataFile <- function(dataFile) {
       data[[modifiers[[i]]]] = as.factor(data[[modifiers[[i]]]])
     } 
   }
-  
   return(data)
 }
 
 readSettings <- function(settingsFile) {
-  settings = read.csv(settingsFile, header=FALSE, as.is=TRUE, strip.white=TRUE)
-  nsettings = nrow(settings)
+  settings <- read.csv(settingsFile, header=FALSE, as.is=TRUE, strip.white=TRUE)
   list = as.list(setNames(nm=settings$V1))
-  for (i in 1:nsettings) {
+  for (i in 1:nrow(settings)) {
     if (settings$V1[i] != "Endpoint") {
-      element = unlist(strsplit(settings$V2[i], " "))
+      element <- unlist(strsplit(settings$V2[i], " "))
     } else {
-      element = settings$V2[i]
+      element <- settings$V2[i]
     }
     isNumeric = suppressWarnings(!is.na(as.numeric(element[1])))
     if (isNumeric) {
-      element = as.numeric(element)
+      element <- as.numeric(element)
     } else  {
-      element = as.character(element)
+      element <- as.character(element)
     }
-    list[[i]] = element
+    list[[i]] <- element
   }
   
   # Get transformed limits of concern
   if (list$MeasurementType != "Continuous") {
-    list$TransformLocLower = log(list$LocLower)
-    list$TransformLocUpper = log(list$LocUpper)
+    list$TransformLocLower <- log(list$LocLower)
+    list$TransformLocUpper <- log(list$LocUpper)
   } else {
-    list$TransformLocLower = list$LocLower - list$OverallMean
-    list$TransformLocUpper = list$LocUpper + list$OverallMean
+    list$TransformLocLower <- list$LocLower - list$OverallMean
+    list$TransformLocUpper <- list$LocUpper + list$OverallMean
   }
 
   return(list)
@@ -180,14 +176,14 @@ createModelSettings <- function(data, settings) {
   modelSettings <- list()
 
   colnames <- colnames(data)
-  
+
   # Create dataframe for prediction; only use GMO columns and Dummy columns
   # This implies that the mean is taken over blocks and also over modifiers (if any)
   predictors = grep("GMO", gsub("Dummy", "GMO", colnames))
   modelSettings$preddata <- head(data[predictors], 2)
   modelSettings$preddata[,] <- 0
   modelSettings$preddata[1] <- c(0,1)
-  
+
   # Model formulas for H0 and H1; Note that GMO is used to test the comparison
   nterms <- grep("Mean", colnames) - 1
   nameH1 <- colnames[c(2:nterms)]
@@ -203,23 +199,23 @@ createModelSettings <- function(data, settings) {
   modelSettings$SignificanceLevel = settings$SignificanceLevel
   modelSettings$nGCI = 100  # Number of draws for Generalized Confidence Interval
   modelSettings$smallGCI = 0.0001  # Bound on back-transformed values for the LOG-transform
-  
+
   return(modelSettings)
 }
 
 createSimulationSettings <- function(settings) {
   simulationSettings <- list()
-  
+
   # Define dispersion parameter
   simulationSettings$dispersion <- ropoissonDispersion(settings$OverallMean, settings$CVComparator, settings$PowerLawPower, settings$Distribution)  
-  
+
   # Add blocking effect to model 
   if (settings$ExperimentalDesignType == "RandomizedCompleteBlocks") {
     simulationSettings$sigBlock <- sqrt(log((settings$CVBlocks/100)^2 + 1))
   } else {
     simulationSettings$sigBlock <- 0
   }
-  
+
   return(simulationSettings)
 }
 
@@ -231,7 +227,7 @@ createSimulatedDataTemplate <- function(data, settings, simulationSettings, bloc
   setupSimulatedData[["Block"]] <- as.factor(rep(1:blocks, nrow(data)))
   
   # Add several additional columns to the dataframe
-  setupSimulatedData["TransformedMean"] <- LinkFunction(data["Mean"], settings$MeasurementType)
+  setupSimulatedData["TransformedMean"] <- linkFunction(data["Mean"], settings$MeasurementType)
   
   # Apply blocking Effect on the transformed scale; use Blom scores
   if (settings$ExperimentalDesignType == "RandomizedCompleteBlocks") {
@@ -248,7 +244,7 @@ createSimulatedDataTemplate <- function(data, settings, simulationSettings, bloc
 
 simulateData <- function(data, settings, simulationSettings, effect) {
   data["TransformedEffect"] <- data["TransformedMean"] + data["BlockEffect"] + (data["GMO"] == 1) * effect
-  data["Effect"] <- InverseLinkFunction(data["TransformedEffect"], settings$MeasurementType)
+  data["Effect"] <- inverseLinkFunction(data["TransformedEffect"], settings$MeasurementType)
   data["Response"] <- ropoisson(nrow(data), data[["Effect"]], simulationSettings$dispersion, settings$PowerLawPower, settings$Distribution)
   return(data)
 }
@@ -273,7 +269,7 @@ createEvaluationGrid <- function(LocLower, LocUpper, NumberOfEvaluations) {
 
 logNormalAnalysis <- function(data, settings, modelSettings) {
   require(lsmeans)
-  
+
   data["Response"] <- log(data["Response"] + 1)
   lmH1 <- lm(modelSettings$formulaH1, data=data)
   pval <- 2*pt(abs(lmH1$coef[2])/sqrt(vcov(lmH1)[2,2]), lmH1$df.residual, lower.tail=FALSE)
@@ -298,12 +294,12 @@ logNormalAnalysis <- function(data, settings, modelSettings) {
 
   # For very small draws from the Chi-Distribution rCMP and rGMO can be out of bounds
   quantiles <- quantile(ratio, c(modelSettings$SignificanceLevel/2, 1 - modelSettings$SignificanceLevel / 2), na.rm=TRUE)
-  
+
   pvalues <- list()
   pvalues$Diff <- as.numeric(pval)
   pvalues$Equi <- 1 - as.numeric((quantiles[1] > settings$LocLower) & (quantiles[2] < settings$LocUpper))
   pvalues$EquiWD <- NA
-  
+
   return(pvalues)
 }
 
@@ -414,11 +410,11 @@ monteCarloPowerAnalysis <- function(data, settings, modelSettings, blocks, effec
     Diff   = matrix(nrow=nrow, ncol=nanalysis, dimnames=list(NULL, settings$AnalysisMethods)),
     Equi = matrix(nrow=nrow, ncol=nanalysis, dimnames=list(NULL, settings$AnalysisMethods)),
     EquiWD = matrix(nrow=nrow, ncol=nanalysis, dimnames=list(NULL, settings$AnalysisMethods)))
-  
+
   # Setup simulation settings
   simulationSettings <- createSimulationSettings(settings)
   simulatedDataTemplate <- createSimulatedDataTemplate(data, settings, simulationSettings, blocks);
-  
+
   # Do looping over simulations 
   for (k in 1:settings$NumberOfSimulatedDataSets) {
     simulatedData <- simulateData(simulatedDataTemplate, settings, simulationSettings, effect)
@@ -478,7 +474,7 @@ runPowerAnalysis <- function(data, settings) {
 
   # Create model settings
   modelSettings <- createModelSettings(data, settings)
-  
+
   tel <- 0
   for (i in 1:nreplication) {
     for (j in 1:neffect) {
@@ -489,10 +485,9 @@ runPowerAnalysis <- function(data, settings) {
       results$EquiWD[tel,] <- colSums(pValues$EquiWD < settings$SignificanceLevel) / settings$NumberOfSimulatedDataSets      
     }
   }
-  
+
   # Combine results into a single dataframe
   df <- cbind(results$Effect, results$Diff, results$Equi, results$EquiWD)
-  
-  print(df)
+
   return(df)
 }

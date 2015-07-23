@@ -80,7 +80,7 @@ namespace Biometris.R.REngines {
                 } catch {
                     throw new Exception("Cannot find R on this computer");
                 }
-                evaluateCommand("options(width=10000)");
+                _rEngine.Evaluate("options(width=10000)");
             }
             evaluateCommand("rm(list = ls())");
         }
@@ -92,7 +92,7 @@ namespace Biometris.R.REngines {
             if (_rEngine != null) {
                 try {
                     var cmd = "rm(list = ls())";
-                    evaluateCommand(cmd);
+                    _rEngine.Evaluate(cmd);
                 } catch { }
             }
             _isRunning = false;

@@ -23,7 +23,7 @@ namespace AmigaPowerAnalysis.Core {
         public PowerCalculationSettings() {
             SelectedAnalysisMethodTypes = AnalysisMethodType.LogNormal;
             SignificanceLevel = 0.05;
-            NumberOfRatios = 5;
+            NumberOfRatios = 3;
             NumberOfReplications = new List<int> { 2, 4, 8, 16, 32 };
             PowerCalculationMethod = PowerCalculationMethod.Approximate;
             NumberOfSimulatedDataSets = 100;
