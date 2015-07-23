@@ -6,6 +6,7 @@ namespace Biometris.Logger {
     public sealed class FileLogger : ILogger {
 
         private string _logFile;
+
         private StringBuilder _stringBuilder;
 
         public FileLogger(string filename = null) {
