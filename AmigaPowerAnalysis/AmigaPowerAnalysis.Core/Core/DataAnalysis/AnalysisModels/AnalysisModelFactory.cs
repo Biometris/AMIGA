@@ -6,10 +6,10 @@ namespace AmigaPowerAnalysis.Core.DataAnalysis.AnalysisModels {
 
         public static readonly AnalysisMethodType CountAnalysisMethods = AnalysisMethodType.LogNormal
             | AnalysisMethodType.SquareRoot
-            | AnalysisMethodType.OverdispersedPoisson;
+            | AnalysisMethodType.OverdispersedPoisson
+            | AnalysisMethodType.NegativeBinomial;
 
-        public static readonly AnalysisMethodType FractionAnalysisMethods = AnalysisMethodType.NegativeBinomial
-            | AnalysisMethodType.EmpiricalLogit
+        public static readonly AnalysisMethodType FractionAnalysisMethods = AnalysisMethodType.EmpiricalLogit
             | AnalysisMethodType.OverdispersedBinomial
             | AnalysisMethodType.Betabinomial;
 
