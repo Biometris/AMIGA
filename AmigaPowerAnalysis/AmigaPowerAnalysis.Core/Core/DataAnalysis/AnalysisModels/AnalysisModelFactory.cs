@@ -4,19 +4,31 @@ namespace AmigaPowerAnalysis.Core.DataAnalysis.AnalysisModels {
 
     static class AnalysisModelFactory {
 
+        /// <summary>
+        /// Analysis method types for count measurement types.
+        /// </summary>
         public static readonly AnalysisMethodType CountAnalysisMethods = AnalysisMethodType.LogNormal
             | AnalysisMethodType.SquareRoot
             | AnalysisMethodType.OverdispersedPoisson
             | AnalysisMethodType.NegativeBinomial;
 
+        /// <summary>
+        /// Analysis method types for fraction measurement types.
+        /// </summary>
         public static readonly AnalysisMethodType FractionAnalysisMethods = AnalysisMethodType.EmpiricalLogit
             | AnalysisMethodType.OverdispersedBinomial
             | AnalysisMethodType.Betabinomial;
 
+        /// <summary>
+        /// Analysis method types for non-negative measurement types.
+        /// </summary>
         public static readonly AnalysisMethodType NonNegativeAnalysisMethods = AnalysisMethodType.LogPlusM
             | AnalysisMethodType.Gamma;
 
-        public static readonly AnalysisMethodType ConsinuousAnalysisMethods = AnalysisMethodType.Normal;
+        /// <summary>
+        /// Analysis method types for continuous measurement types.
+        /// </summary>
+        public static readonly AnalysisMethodType ContinuousAnalysisMethods = AnalysisMethodType.Normal;
 
         /// <summary>
         /// Decides which class to instantiate.
@@ -51,9 +63,9 @@ namespace AmigaPowerAnalysis.Core.DataAnalysis.AnalysisModels {
                 case MeasurementType.Nonnegative:
                     return NonNegativeAnalysisMethods;
                 case MeasurementType.Continuous:
-                    return ConsinuousAnalysisMethods;
+                    return ContinuousAnalysisMethods;
                 default:
-                    return ConsinuousAnalysisMethods;
+                    return ContinuousAnalysisMethods;
             }
         }
     }
