@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Biometris.ExtensionMethods;
+using Biometris.ProgressReporting;
 using Biometris.R.REngines;
 
 namespace AmigaPowerAnalysis.Core.PowerAnalysis {
@@ -19,7 +20,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             _tempPath = Path.GetFullPath(tempPath.Substring(0, tempPath.Length));
         }
 
-        public override async Task<OutputPowerAnalysis> RunAsync(InputPowerAnalysis inputPowerAnalysis, CancellationToken cancellationToken = default(CancellationToken)) {
+        public override OutputPowerAnalysis Run(InputPowerAnalysis inputPowerAnalysis, ProgressState progressState) {
             var applicationDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             var scriptsDirectory = string.Format(@"{0}\Resources\RScripts", applicationDirectory);
             var scriptFilename = Path.Combine(scriptsDirectory, "ToolSimulation.rin");
@@ -70,7 +71,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                 using (var process = new Process()) {
                     process.StartInfo = startInfo;
                     process.Start();
-                    await process.WaitForExitAsync(cancellationToken);
+                    process.WaitForExitAsync();
                     result = process.StandardOutput.ReadToEnd();
                     error = process.StandardError.ReadToEnd();
                     exitCode = process.ExitCode;

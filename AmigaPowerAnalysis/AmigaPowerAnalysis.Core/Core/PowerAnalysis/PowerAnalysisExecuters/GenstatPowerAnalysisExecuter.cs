@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Biometris.ExtensionMethods;
+using Biometris.ProgressReporting;
 
 namespace AmigaPowerAnalysis.Core.PowerAnalysis {
     public sealed class GenstatPowerAnalysisExecuter : PowerAnalysisExecuterBase {
@@ -17,7 +18,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             _tempPath = tempPath;
         }
 
-        public override async Task<OutputPowerAnalysis> RunAsync(InputPowerAnalysis inputPowerAnalysis, CancellationToken cancellationToken) {
+        public override OutputPowerAnalysis Run(InputPowerAnalysis inputPowerAnalysis, ProgressState progressState) {
             var comparisonInputFilename = Path.Combine(_tempPath, string.Format("{0}-Input.csv", inputPowerAnalysis.ComparisonId));
             var comparisonOutputFilename = Path.Combine(_tempPath, string.Format("{0}-Output.csv", inputPowerAnalysis.ComparisonId));
             var comparisonLogFilename = Path.Combine(_tempPath, string.Format("{0}-Log.log", inputPowerAnalysis.ComparisonId));

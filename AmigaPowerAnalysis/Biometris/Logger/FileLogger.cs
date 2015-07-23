@@ -18,7 +18,7 @@ namespace Biometris.Logger {
         }
 
         ~FileLogger() {
-            System.IO.File.WriteAllText(_logFile, _stringBuilder.ToString());
+            WriteToFile();
         }
 
         public void Log(string message) {
@@ -31,6 +31,10 @@ namespace Biometris.Logger {
 
         public void Reset() {
             _stringBuilder.Clear();
+        }
+
+        public void WriteToFile() {
+            System.IO.File.WriteAllText(_logFile, _stringBuilder.ToString());
         }
     }
 }

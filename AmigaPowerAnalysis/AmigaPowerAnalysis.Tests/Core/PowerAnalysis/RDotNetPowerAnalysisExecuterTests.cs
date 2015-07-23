@@ -9,6 +9,7 @@ using AmigaPowerAnalysis.Core.DataAnalysis;
 using System.IO;
 using Biometris.Persistence;
 using AmigaPowerAnalysis.Core.DataAnalysis.AnalysisModels;
+using Biometris.ProgressReporting;
 
 namespace AmigaPowerAnalysis.Tests.Core {
     [TestClass]
@@ -44,12 +45,13 @@ namespace AmigaPowerAnalysis.Tests.Core {
 
             var testPath = Properties.Settings.Default.TestPath;
 
-            var scriptExecuter = new RPowerAnalysisExecuter(testPath); 
-            var outputScript = scriptExecuter.Run(inputPowerAnalysis);
-            CsvWriter.WriteToCsvFile(Path.Combine(testPath, "OutputScript.csv"), ",", outputScript.OutputRecords);
+            //var scriptExecuter = new RPowerAnalysisExecuter(testPath); 
+            //var outputScript = scriptExecuter.Run(inputPowerAnalysis);
+            //CsvWriter.WriteToCsvFile(Path.Combine(testPath, "OutputScript.csv"), ",", outputScript.OutputRecords);
 
+            var progressReport = new ProgressReport();
             var rDotNetExecuter = new RDotNetPowerAnalysisExecuter(testPath);
-            var output = rDotNetExecuter.Run(inputPowerAnalysis);
+            var output = rDotNetExecuter.Run(inputPowerAnalysis, progressReport.NewProgressState(100));
             CsvWriter.WriteToCsvFile(Path.Combine(testPath, "OutputRDotNet.csv"), ",", output.OutputRecords);
 
             //var dataTemplateGenerator = new AnalysisDataTemplateGenerator();

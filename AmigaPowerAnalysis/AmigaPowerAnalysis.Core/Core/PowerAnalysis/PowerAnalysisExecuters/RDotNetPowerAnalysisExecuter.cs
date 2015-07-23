@@ -14,6 +14,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Biometris.ProgressReporting;
 
 namespace AmigaPowerAnalysis.Core.PowerAnalysis {
     public sealed class RDotNetPowerAnalysisExecuter : PowerAnalysisExecuterBase {
@@ -30,7 +31,9 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             _tempPath = Path.GetFullPath(tempPath.Substring(0, tempPath.Length));
         }
 
-        public override async Task<OutputPowerAnalysis> RunAsync(InputPowerAnalysis inputPowerAnalysis, CancellationToken cancellationToken = default(CancellationToken)) {
+        public override OutputPowerAnalysis Run(InputPowerAnalysis inputPowerAnalysis, ProgressState progressState) {
+            progressState.Update(string.Format("Analysis of endpoint: {0}, loading data...", inputPowerAnalysis.Endpoint), 0);
+
             var applicationDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             var scriptsDirectory = string.Format(@"{0}\Resources\RScripts", applicationDirectory);
             var scriptFilename = Path.Combine(scriptsDirectory, "AMIGAPowerAnalysis.R");
@@ -49,6 +52,8 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             var outputResults = new List<OutputPowerAnalysisRecord>();
             try {
                 using (var rEngine = new LoggingRDotNetEngine(logger)) {
+                    progressState.Update(string.Format("Analysis of endpoint: {0}, initializing R...", inputPowerAnalysis.Endpoint), 0);
+
                     rEngine.LoadLibrary("MASS");
                     rEngine.LoadLibrary("lsmeans");
                     rEngine.EvaluateNoReturn(string.Format("set.seed({0})", inputPowerAnalysis.RandomNumberSeed));
@@ -56,10 +61,19 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                     rEngine.EvaluateNoReturn(string.Format("inputData <- readDataFile('{0}')", comparisonInputFilename.Replace("\\", "/")));
                     rEngine.EvaluateNoReturn(string.Format("settings <- readSettings('{0}')", comparisonSettingsFilename.Replace("\\", "/")));
                     rEngine.EvaluateNoReturn("modelSettings <- createModelSettings(inputData, settings)");
+
+                    var totalLoops = inputPowerAnalysis.NumberOfReplications.Count * effects.Count;
+                    var counter = 0;
+
                     for (int i = 0; i < inputPowerAnalysis.NumberOfReplications.Count; ++i) {
+
                         var blocks = inputPowerAnalysis.NumberOfReplications[i];
                         rEngine.SetSymbol("blocks", blocks);
                         foreach (var effect in effects) {
+
+                            // Update progress state
+                            progressState.Update(string.Format("Analysis of endpoint: {0}, replicates: {1}, effect: {2:N2}", inputPowerAnalysis.Endpoint, blocks, effect.Effect), 100 * ((double)counter / totalLoops));
+
                             rEngine.SetSymbol("effect", effect.TransformedEfffect);
                             rEngine.EvaluateNoReturn("pValues <- monteCarloPowerAnalysis(inputData, settings, modelSettings, blocks, effect)");
                             var output = new OutputPowerAnalysisRecord() {
@@ -85,11 +99,16 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                                 output.PowerEquivalenceNegativeBinomial = rEngine.EvaluateDouble("sum(pValues$Equi[,\"NegativeBinomial\"] < settings$SignificanceLevel)") / inputPowerAnalysis.NumberOfSimulatedDataSets;
                             }
                             outputResults.Add(output);
+
+                            counter++;
                         }
                     }
+
+                    progressState.Update(string.Format("done", 100));
                 }
             } catch (Exception ex) {
                 logger.Log(string.Format("# Error: {0}", ex.Message));
+                throw ex;
             }
             return new OutputPowerAnalysis() {
                 InputPowerAnalysis = inputPowerAnalysis,

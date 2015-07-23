@@ -78,6 +78,12 @@
     <Compile Include="DataFileReading\DataDefinition\TableDefinitionCollection.cs" />
     <Compile Include="Logger\FileLogger.cs" />
     <Compile Include="Logger\ILogger.cs" />
+    <Compile Include="ProgressReporting\CompositeProgressState.cs" />
+    <Compile Include="ProgressReporting\SimpleProgressState.cs" />
+    <Compile Include="ProgressReporting\IProgressState.cs" />
+    <Compile Include="ProgressReporting\ProgressReport.cs" />
+    <Compile Include="ProgressReporting\ProgressReporter.cs" />
+    <Compile Include="ProgressReporting\ProgressState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="R\REngines\IRCommandExecuter.cs" />
     <Compile Include="R\REngines\RDotNet\LoggingRDotNetEngine.cs" />
