@@ -13,7 +13,7 @@ namespace AmigaPowerAnalysis.Tests.Core {
         [TestMethod]
         public void DistributionChartCreator_TestNormalDistribution1() {
             var distribution = new NormalDistribution();
-            var chartCreator = new DistributionChartCreator(distribution) {
+            var chartCreator = new MultiDistributionChartCreator(distribution) {
                 DistributionChartPreferenceType = DistributionChartPreferenceType.DistributionFunction
             };
             chartCreator.SaveToFile("NormalDistribution_PDF");
@@ -22,7 +22,7 @@ namespace AmigaPowerAnalysis.Tests.Core {
         [TestMethod]
         public void DistributionChartCreator_TestNormalDistribution2() {
             var distribution = new NormalDistribution();
-            var chartCreator = new DistributionChartCreator(distribution) {
+            var chartCreator = new MultiDistributionChartCreator(distribution) {
                 DistributionChartPreferenceType = DistributionChartPreferenceType.Histogram
             };
             chartCreator.SaveToFile("NormalDistribution_Hist");
@@ -31,7 +31,7 @@ namespace AmigaPowerAnalysis.Tests.Core {
         [TestMethod]
         public void DistributionChartCreator_TestNormalDistribution3() {
             var distribution = new NormalDistribution();
-            var chartCreator = new DistributionChartCreator(distribution) {
+            var chartCreator = new MultiDistributionChartCreator(distribution) {
                 DistributionChartPreferenceType = DistributionChartPreferenceType.Both
             };
             chartCreator.SaveToFile("NormalDistribution");
@@ -39,7 +39,7 @@ namespace AmigaPowerAnalysis.Tests.Core {
 
         [TestMethod]
         public void DistributionChartCreator_TestNormalDistribution4() {
-            var chartCreator = new DistributionChartCreator(new List<IDistribution>() {
+            var chartCreator = new MultiDistributionChartCreator(new List<IDistribution>() {
                  new NormalDistribution(1, 1),
                  new NormalDistribution(2, 2),
                  new NormalDistribution(3, 3),
@@ -51,14 +51,14 @@ namespace AmigaPowerAnalysis.Tests.Core {
         [TestMethod]
         public void DistributionChartCreator_TestLogNormalDistribution1() {
             var distribution = new LogNormalDistribution();
-            var chartCreator = new DistributionChartCreator(distribution);
+            var chartCreator = new MultiDistributionChartCreator(distribution);
             chartCreator.SaveToFile("LogNormalDistribution_PDF");
         }
 
         [TestMethod]
         public void DistributionChartCreator_TestLogNormalDistribution2() {
             var distribution = new LogNormalDistribution();
-            var chartCreator = new DistributionChartCreator(distribution) {
+            var chartCreator = new MultiDistributionChartCreator(distribution) {
                 DistributionChartPreferenceType = DistributionChartPreferenceType.Histogram
             };
             chartCreator.SaveToFile("LogNormalDistribution_Hist");
@@ -67,7 +67,7 @@ namespace AmigaPowerAnalysis.Tests.Core {
         [TestMethod]
         public void DistributionChartCreator_TestLogNormalDistribution3() {
             var distribution = new LogNormalDistribution();
-            var chartCreator = new DistributionChartCreator(distribution) {
+            var chartCreator = new MultiDistributionChartCreator(distribution) {
                 DistributionChartPreferenceType = DistributionChartPreferenceType.Both
             };
             chartCreator.SaveToFile("LogNormalDistribution");
@@ -75,7 +75,7 @@ namespace AmigaPowerAnalysis.Tests.Core {
 
         [TestMethod]
         public void DistributionChartCreator_TestLogNormalDistribution4() {
-            var chartCreator = new DistributionChartCreator(new List<IDistribution>() {
+            var chartCreator = new MultiDistributionChartCreator(new List<IDistribution>() {
                  new LogNormalDistribution(0, 0.25),
                  new LogNormalDistribution(0, 0.5),
                  new LogNormalDistribution(1, 0.25),
@@ -87,14 +87,14 @@ namespace AmigaPowerAnalysis.Tests.Core {
         [TestMethod]
         public void DistributionChartCreator_TestPoissonDistribution1() {
             var distribution = new PoissonDistribution();
-            var chartCreator = new DistributionChartCreator(distribution);
+            var chartCreator = new MultiDistributionChartCreator(distribution);
             chartCreator.SaveToFile("PoissonDistribution_PDF");
         }
 
         [TestMethod]
         public void DistributionChartCreator_TestPoissonDistribution2() {
             var distribution = new PoissonDistribution();
-            var chartCreator = new DistributionChartCreator(distribution) {
+            var chartCreator = new MultiDistributionChartCreator(distribution) {
                 DistributionChartPreferenceType = DistributionChartPreferenceType.Histogram
             };
             chartCreator.SaveToFile("PoissonDistribution_Hist");
@@ -103,7 +103,7 @@ namespace AmigaPowerAnalysis.Tests.Core {
         [TestMethod]
         public void DistributionChartCreator_TestPoissonDistribution3() {
             var distribution = new PoissonDistribution();
-            var chartCreator = new DistributionChartCreator(distribution) {
+            var chartCreator = new MultiDistributionChartCreator(distribution) {
                 DistributionChartPreferenceType = DistributionChartPreferenceType.Both
             };
             chartCreator.SaveToFile("PoissonDistribution");
@@ -111,7 +111,7 @@ namespace AmigaPowerAnalysis.Tests.Core {
 
         [TestMethod]
         public void DistributionChartCreator_TestPoissonDistribution4() {
-            var chartCreator = new DistributionChartCreator(new List<IDistribution>() {
+            var chartCreator = new MultiDistributionChartCreator(new List<IDistribution>() {
                 new PoissonDistribution(1),
                 new PoissonDistribution(4),
                 new PoissonDistribution(10),
@@ -124,14 +124,14 @@ namespace AmigaPowerAnalysis.Tests.Core {
         [TestMethod]
         public void DistributionChartCreator_TestOverdispersedPoissonDistribution1() {
             var distribution = new OverdispersedPoissonDistribution(10, 4);
-            var chartCreator = new DistributionChartCreator(distribution);
+            var chartCreator = new MultiDistributionChartCreator(distribution);
             chartCreator.SaveToFile("OverdispersedPoissonDistribution_PDF");
         }
 
         [TestMethod]
         public void DistributionChartCreator_TestOverdispersedPoissonDistribution2() {
             var distribution = new OverdispersedPoissonDistribution(10, 4);
-            var chartCreator = new DistributionChartCreator(distribution) {
+            var chartCreator = new MultiDistributionChartCreator(distribution) {
                 DistributionChartPreferenceType = DistributionChartPreferenceType.Histogram
             };
             chartCreator.SaveToFile("OverdispersedPoissonDistribution_Hist");
@@ -140,7 +140,7 @@ namespace AmigaPowerAnalysis.Tests.Core {
         [TestMethod]
         public void DistributionChartCreator_TestOverdispersedPoissonDistribution3() {
             var distribution = new OverdispersedPoissonDistribution(10, 4);
-            var chartCreator = new DistributionChartCreator(distribution) {
+            var chartCreator = new MultiDistributionChartCreator(distribution) {
                 DistributionChartPreferenceType = DistributionChartPreferenceType.Both
             };
             chartCreator.SaveToFile("OverdispersedPoissonDistribution");
@@ -148,7 +148,7 @@ namespace AmigaPowerAnalysis.Tests.Core {
 
         [TestMethod]
         public void DistributionChartCreator_TestOverdispersedPoissonDistribution4() {
-            var chartCreator = new DistributionChartCreator(new List<IDistribution>() {
+            var chartCreator = new MultiDistributionChartCreator(new List<IDistribution>() {
                 new OverdispersedPoissonDistribution(1, 2),
                 new OverdispersedPoissonDistribution(4, 2),
                 new OverdispersedPoissonDistribution(10, 2),
@@ -163,14 +163,14 @@ namespace AmigaPowerAnalysis.Tests.Core {
         [TestMethod]
         public void DistributionChartCreator_TestPoissonLogNormalDistribution1() {
             var distribution = new PoissonLogNormalDistribution(10, 1);
-            var chartCreator = new DistributionChartCreator(distribution);
+            var chartCreator = new MultiDistributionChartCreator(distribution);
             chartCreator.SaveToFile("PoissonLogNormalDistribution_PDF");
         }
 
         [TestMethod]
         public void DistributionChartCreator_TestPoissonLogNormalDistribution2() {
             var distribution = new PoissonLogNormalDistribution(10, 1);
-            var chartCreator = new DistributionChartCreator(distribution) {
+            var chartCreator = new MultiDistributionChartCreator(distribution) {
                 DistributionChartPreferenceType = DistributionChartPreferenceType.Histogram
             };
             chartCreator.SaveToFile("PoissonLogNormalDistribution_Hist");
@@ -179,7 +179,7 @@ namespace AmigaPowerAnalysis.Tests.Core {
         [TestMethod]
         public void DistributionChartCreator_TestPoissonLogNormalDistribution3() {
             var distribution = new PoissonLogNormalDistribution(10, 1);
-            var chartCreator = new DistributionChartCreator(distribution) {
+            var chartCreator = new MultiDistributionChartCreator(distribution) {
                 DistributionChartPreferenceType = DistributionChartPreferenceType.Both
             };
             chartCreator.SaveToFile("PoissonLogNormalDistribution");
@@ -187,7 +187,7 @@ namespace AmigaPowerAnalysis.Tests.Core {
 
         [TestMethod]
         public void DistributionChartCreator_TestPoissonLogNormalDistribution4() {
-            var chartCreator = new DistributionChartCreator(new List<IDistribution>() {
+            var chartCreator = new MultiDistributionChartCreator(new List<IDistribution>() {
                 new PoissonLogNormalDistribution(1, 2),
                 new PoissonLogNormalDistribution(4, 2),
                 new PoissonLogNormalDistribution(10, 2),
@@ -201,14 +201,14 @@ namespace AmigaPowerAnalysis.Tests.Core {
         [TestMethod]
         public void DistributionChartCreator_TestNegativeBinomialDistributionPmf() {
             var distribution = new NegativeBinomialDistribution();
-            var chartCreator = new DistributionChartCreator(distribution);
+            var chartCreator = new MultiDistributionChartCreator(distribution);
             chartCreator.SaveToFile("NegativeBinomialDistribution_PMF");
         }
 
         [TestMethod]
         public void DistributionChartCreator_TestNegativeBinomialDistributionHistogram() {
             var distribution = new NegativeBinomialDistribution();
-            var chartCreator = new DistributionChartCreator(distribution) {
+            var chartCreator = new MultiDistributionChartCreator(distribution) {
                 DistributionChartPreferenceType = DistributionChartPreferenceType.Histogram
             };
             chartCreator.SaveToFile("NegativeBinomialDistribution_Hist");
@@ -222,7 +222,7 @@ namespace AmigaPowerAnalysis.Tests.Core {
             var omega = 2D;
             var cv = Math.Sqrt(omega + 1 / mu);
             var distribution = NegativeBinomialDistribution.FromMuCv(mu, cv);
-            var chartCreator = new DistributionChartCreator(distribution) {
+            var chartCreator = new MultiDistributionChartCreator(distribution) {
                 DistributionChartPreferenceType = DistributionChartPreferenceType.Both
             };
             chartCreator.SaveToFile("NegativeBinomialDistribution");
@@ -230,7 +230,7 @@ namespace AmigaPowerAnalysis.Tests.Core {
 
         [TestMethod]
         public void DistributionChartCreator_TestNegativeBinomialDistributions() {
-            var chartCreator = new DistributionChartCreator(new List<IDistribution>() {
+            var chartCreator = new MultiDistributionChartCreator(new List<IDistribution>() {
                 new NegativeBinomialDistribution(0.25, 10),
                 new NegativeBinomialDistribution(0.5, 10),
                 new NegativeBinomialDistribution(0.75, 10),
@@ -244,14 +244,14 @@ namespace AmigaPowerAnalysis.Tests.Core {
         [TestMethod]
         public void DistributionChartCreator_TestPowerLawDistributionPmf() {
             var distribution = new PowerLawDistribution();
-            var chartCreator = new DistributionChartCreator(distribution);
+            var chartCreator = new MultiDistributionChartCreator(distribution);
             chartCreator.SaveToFile("PowerLawDistribution_PMF");
         }
 
         [TestMethod]
         public void DistributionChartCreator_TestPowerLawDistributionHistogram() {
             var distribution = new PowerLawDistribution();
-            var chartCreator = new DistributionChartCreator(distribution) {
+            var chartCreator = new MultiDistributionChartCreator(distribution) {
                 DistributionChartPreferenceType = DistributionChartPreferenceType.Histogram
             };
             chartCreator.SaveToFile("PowerLawDistribution_Hist");
@@ -261,7 +261,7 @@ namespace AmigaPowerAnalysis.Tests.Core {
         [TestMethod]
         public void DistributionChartCreator_TestPowerLawDistribution() {
             var distribution = new PowerLawDistribution();
-            var chartCreator = new DistributionChartCreator(distribution) {
+            var chartCreator = new MultiDistributionChartCreator(distribution) {
                 DistributionChartPreferenceType = DistributionChartPreferenceType.Both
             };
             chartCreator.SaveToFile("PowerLawDistribution");
@@ -269,7 +269,7 @@ namespace AmigaPowerAnalysis.Tests.Core {
 
         [TestMethod]
         public void DistributionChartCreator_TestPowerLawDistributions() {
-            var chartCreator = new DistributionChartCreator(new List<IDistribution>() {
+            var chartCreator = new MultiDistributionChartCreator(new List<IDistribution>() {
                 new PowerLawDistribution(10, 1, 1.5),
                 new PowerLawDistribution(10, 1, 1.9),
                 new PowerLawDistribution(10, 2, 1.5),
@@ -281,13 +281,13 @@ namespace AmigaPowerAnalysis.Tests.Core {
         [TestMethod]
         public void DistributionChartCreator_TestBinomialDistribution1() {
             var distribution = new BinomialDistribution();
-            var chartCreator = new DistributionChartCreator(distribution);
+            var chartCreator = new MultiDistributionChartCreator(distribution);
             chartCreator.SaveToFile("BinomialDistribution");
         }
 
         [TestMethod]
         public void DistributionChartCreator_TestBinomialDistribution2() {
-            var chartCreator = new DistributionChartCreator(new List<IDistribution>() {
+            var chartCreator = new MultiDistributionChartCreator(new List<IDistribution>() {
                 new BinomialDistribution(0.25, 10),
                 new BinomialDistribution(0.5, 10),
                 new BinomialDistribution(0.75, 10),
@@ -301,14 +301,14 @@ namespace AmigaPowerAnalysis.Tests.Core {
         [TestMethod]
         public void DistributionChartCreator_TestBetaBinomialDistribution1() {
             var distribution = new BetaBinomialDistribution();
-            var chartCreator = new DistributionChartCreator(distribution);
+            var chartCreator = new MultiDistributionChartCreator(distribution);
             chartCreator.SaveToFile("BetaBinomialDistribution");
         }
 
         [TestMethod]
         public void DistributionChartCreator_TestBetaBinomialDistribution2() {
             var distribution = new BetaBinomialDistribution(0.2, 0.25, 10);
-            var chartCreator = new DistributionChartCreator(new List<IDistribution>() {
+            var chartCreator = new MultiDistributionChartCreator(new List<IDistribution>() {
                 new BetaBinomialDistribution(0.2, 0.25, 10),
                 new BetaBinomialDistribution(2, 2, 10),
                 new BetaBinomialDistribution(600, 400, 10),

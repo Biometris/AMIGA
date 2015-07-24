@@ -91,6 +91,7 @@
     <Compile Include="Statistics\CollectionStatistics.cs" />
     <Compile Include="Statistics\Distributions\IContinuousDistribution.cs" />
     <Compile Include="Statistics\Distributions\IDiscreteDistribution.cs" />
+    <Compile Include="Statistics\Distributions\DistributionBase.cs" />
     <Compile Include="Statistics\Distributions\LogNormalDistribution.cs" />
     <Compile Include="Statistics\Distributions\NormalDistribution.cs" />
     <Compile Include="Statistics\GriddingFunctions.cs" />

@@ -3,7 +3,7 @@ using Biometris.Numerics.Optimization;
 using Biometris.Statistics.Measurements;
 using System.Collections.Generic;
 namespace Biometris.Statistics.Distributions {
-    public sealed class OverdispersedPoissonDistribution : IDistribution, IDiscreteDistribution {
+    public sealed class OverdispersedPoissonDistribution : DistributionBase, IDistribution, IDiscreteDistribution {
 
         private double _mu;
 
@@ -47,12 +47,12 @@ namespace Biometris.Statistics.Distributions {
             return r;
         }
 
-        public double Cdf(double x) {
+        public override double Cdf(double x) {
             var k = (int)x;
             return MathNet.Numerics.SpecialFunctions.BetaIncomplete(Mu / (Omega - 1), k + 1, 1 / Omega);
         }
 
-        public double InvCdf(double p) {
+        public override double InvCdf(double p) {
             var xmax = (int)Math.Ceiling(Mu + 1 / 3 - 0.02 / Mu);
             var fx = Cdf(xmax);
             while (fx < p) {
@@ -62,11 +62,11 @@ namespace Biometris.Statistics.Distributions {
             return OneDimensionalOptimization.IntervalHalvingIntegers(x => Cdf(x) >= p ? x : 2 * xmax + (xmax - x), 0, xmax, 100);
         }
 
-        public double CV() {
+        public override double CV() {
             return Sigma() / Mean();
         }
 
-        public double Mean() {
+        public override double Mean() {
             return Mu;
         }
 
@@ -74,19 +74,19 @@ namespace Biometris.Statistics.Distributions {
             return Math.Sqrt(Variance());
         }
 
-        public double Variance() {
+        public override double Variance() {
             return Omega * Mu;
         }
 
-        public MeasurementType SupportType() {
+        public override MeasurementType SupportType() {
             return MeasurementType.Count;
         }
 
-        public double SupportMax() {
+        public override double SupportMax() {
             return double.PositiveInfinity;
         }
 
-        public double Draw() {
+        public override double Draw() {
             var s = Omega - 1;
             var a = Mean() / s;
             var lambdaHat = MathNet.Numerics.Distributions.Gamma.Sample(a, 1/s);
@@ -98,13 +98,7 @@ namespace Biometris.Statistics.Distributions {
             }
         }
 
-        public IEnumerable<double> Draw(int samples) {
-            for (double i = 0; i < samples; ++i) {
-                yield return Draw();
-            }
-        }
-
-        public string Description() {
+        public override string Description() {
             return string.Format("Overdispersed Poisson (Lambda = {0}, Omega = {1})", Mu, Omega);
         }
 

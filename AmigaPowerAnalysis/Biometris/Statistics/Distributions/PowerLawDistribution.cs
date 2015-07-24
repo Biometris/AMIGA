@@ -2,7 +2,7 @@
 using Biometris.Statistics.Measurements;
 using System.Collections.Generic;
 namespace Biometris.Statistics.Distributions {
-    public sealed class PowerLawDistribution : IDistribution {
+    public sealed class PowerLawDistribution : DistributionBase, IDistribution, IDiscreteDistribution {
 
         public double Power { get; set; }
 
@@ -19,27 +19,27 @@ namespace Biometris.Statistics.Distributions {
             Omega = omega;
         }
 
-        public double Pdf(double x) {
+        public double Pmf(int x) {
             throw new NotImplementedException();
         }
 
-        public double Cdf(double x) {
+        public override double Cdf(double x) {
             throw new NotImplementedException();
         }
 
-        public double InvCdf(double x) {
+        public override double InvCdf(double x) {
             throw new NotImplementedException();
         }
 
-        public double CV() {
+        public override double CV() {
             return Sigma() / Mean();
         }
 
-        public double Mean() {
+        public override double Mean() {
             return Mu;
         }
 
-        public double Variance() {
+        public override double Variance() {
             return Omega * Math.Pow(Mu, Power);
         }
 
@@ -47,40 +47,25 @@ namespace Biometris.Statistics.Distributions {
             return Math.Sqrt(Variance());
         }
 
-        public MeasurementType SupportType() {
+        public override MeasurementType SupportType() {
             return MeasurementType.Count;
         }
 
-        public double SupportMax() {
+        public override double SupportMax() {
             return double.PositiveInfinity;
         }
 
-        public double Draw() {
-
-            var dispersionNegativeBinomial = Variance()/Math.Pow(Mu,2);
-
+        public override double Draw() {
+            var dispersionNegativeBinomial = Variance() / Math.Pow(Mu, 2);
             if (dispersionNegativeBinomial <= 0) {
                 throw new Exception("For some parameters of the PowerLaw distribution the calculated dispersion parameter of the negative binomial distribution is not positive.");
             }
-
-            var lambdaHat = MathNet.Numerics.Distributions.Gamma.Sample(1/dispersionNegativeBinomial, 1 / (dispersionNegativeBinomial * Mu));
+            var lambdaHat = MathNet.Numerics.Distributions.Gamma.Sample(1 / dispersionNegativeBinomial, 1 / (dispersionNegativeBinomial * Mu));
             var sample = MathNet.Numerics.Distributions.Poisson.Sample(lambdaHat);
             return sample;
-
-            //dispNegbin = (dispersion*mean^power - mean)/(mean*mean)
-            //s = dispNegbin*mean
-            //a = mean/s
-            //sample = rgamma(n, shape=a, scale=s)
-            //sample = rpois(n, sample)
         }
 
-        public IEnumerable<double> Draw(int samples) {
-            for (double i = 0; i < samples; ++i) {
-                yield return Draw();
-            }
-        }
-
-        public string Description() {
+        public override string Description() {
             return string.Format("Power Law");
         }
 

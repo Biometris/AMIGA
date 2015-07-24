@@ -4,15 +4,15 @@ namespace Biometris.Statistics.Distributions {
 
     public interface IDistribution {
 
-        double Cdf(double x);
-
-        double InvCdf(double p);
-
-        double CV();
-
         double Mean();
 
         double Variance();
+
+        double CV();
+
+        double Cdf(double x);
+
+        double InvCdf(double p);
 
         MeasurementType SupportType();
 
@@ -20,7 +20,7 @@ namespace Biometris.Statistics.Distributions {
 
         double Draw();
 
-        IEnumerable<double> Draw(int samples);
+        List<double> Draw(int samples);
 
         string Description();
     }

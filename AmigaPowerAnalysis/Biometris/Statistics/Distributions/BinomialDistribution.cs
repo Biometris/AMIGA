@@ -4,7 +4,7 @@ using Biometris.Numerics.Optimization;
 using System.Collections.Generic;
 
 namespace Biometris.Statistics.Distributions {
-    public sealed class BinomialDistribution : IDistribution, IDiscreteDistribution {
+    public sealed class BinomialDistribution : DistributionBase, IDistribution, IDiscreteDistribution {
 
         public double P { get; set; }
         public int N { get; set; }
@@ -23,45 +23,39 @@ namespace Biometris.Statistics.Distributions {
             return Combinatorics.BinomialCoefficient(N, k) * Math.Pow(P, k) * Math.Pow(1 - P, N - k);
         }
 
-        public double Cdf(double x) {
+        public override double Cdf(double x) {
             return MathNet.Numerics.Distributions.Binomial.CDF(P, N, x);
         }
 
-        public double InvCdf(double p) {
+        public override double InvCdf(double p) {
             return OneDimensionalOptimization.IntervalHalvingIntegers(x => Cdf(x) >= p ? x : 2 * N + (N - x), 0, N, 100);
         }
 
-        public double CV() {
+        public override double CV() {
             return Math.Sqrt(Variance()) / Mean();
         }
 
-        public double Mean() {
+        public override double Mean() {
             return N * P;
         }
 
-        public double Variance() {
+        public override double Variance() {
             return N * P * (1 - P);
         }
 
-        public MeasurementType SupportType() {
+        public override MeasurementType SupportType() {
             return MeasurementType.Fraction;
         }
 
-        public double SupportMax() {
+        public override double SupportMax() {
             return N;
         }
 
-        public double Draw() {
+        public override double Draw() {
             return MathNet.Numerics.Distributions.Binomial.Sample(P, N);
         }
 
-        public IEnumerable<double> Draw(int samples) {
-            for (double i = 0; i < samples; ++i) {
-                yield return Draw();
-            }
-        }
-
-        public string Description() {
+        public override string Description() {
             return string.Format("Binomial (P = {0}, N = {1})", P, N);
         }
     }

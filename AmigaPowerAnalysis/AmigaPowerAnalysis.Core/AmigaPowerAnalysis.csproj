@@ -89,7 +89,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Charting\AnalysisResultsChartGenerator.cs" />
-    <Compile Include="Core\Charting\DistributionChartCreators\DistributionChartCreator.cs" />
+    <Compile Include="Core\Charting\DistributionChartCreators\DistributionChartCreatorBase.cs" />
+    <Compile Include="Core\Charting\DistributionChartCreators\SingleDistributionModelChartCreator.cs" />
+    <Compile Include="Core\Charting\DistributionChartCreators\SingleDistributionChartCreator.cs" />
+    <Compile Include="Core\Charting\DistributionChartCreators\DistributionSeriesCreator.cs" />
+    <Compile Include="Core\Charting\DistributionChartCreators\MultiDistributionChartCreator.cs" />
     <Compile Include="Core\Charting\DistributionChartCreators\HistogramSeries.cs" />
     <Compile Include="Core\Charting\IChartCreator.cs" />
     <Compile Include="Core\DataAnalysis\AnalysisDataSimulator\SimulationDataRecord.cs" />

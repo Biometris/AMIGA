@@ -2,7 +2,7 @@
 using Biometris.Statistics.Measurements;
 using System.Collections.Generic;
 namespace Biometris.Statistics.Distributions {
-    public sealed class PoissonLogNormalDistribution : IDistribution, IDiscreteDistribution {
+    public sealed class PoissonLogNormalDistribution : DistributionBase, IDistribution, IDiscreteDistribution {
 
         public double Mu { get; set; }
 
@@ -34,47 +34,41 @@ namespace Biometris.Statistics.Distributions {
             throw new NotImplementedException();
         }
 
-        public double Cdf(double x) {
+        public override double Cdf(double x) {
             throw new NotImplementedException();
         }
 
-        public double InvCdf(double x) {
+        public override double InvCdf(double x) {
             throw new NotImplementedException();
         }
 
-        public double CV() {
+        public override double CV() {
             return Sigma / Mean();
         }
 
-        public double Mean() {
+        public override double Mean() {
             return Math.Exp(Lambda + 0.5 * Math.Pow(Sigma, 2));
         }
 
-        public double Variance() {
+        public override double Variance() {
             return Mu + Omega * Math.Pow(Mu, 2);
         }
 
-        public MeasurementType SupportType() {
+        public override MeasurementType SupportType() {
             return MeasurementType.Count;
         }
 
-        public double SupportMax() {
+        public override double SupportMax() {
             return double.PositiveInfinity;
         }
 
-        public double Draw() {
+        public override double Draw() {
             var lambdaHat = MathNet.Numerics.Distributions.LogNormal.Sample(Lambda, Sigma);
             var sample = MathNet.Numerics.Distributions.Poisson.Sample(lambdaHat);
             return sample;
         }
 
-        public IEnumerable<double> Draw(int samples) {
-            for (double i = 0; i < samples; ++i) {
-                yield return Draw();
-            }
-        }
-
-        public string Description() {
+        public override string Description() {
             return string.Format("Poisson Log-Normal (Mu = {0}, Omega = {1})", Mu, Omega);
         }
 

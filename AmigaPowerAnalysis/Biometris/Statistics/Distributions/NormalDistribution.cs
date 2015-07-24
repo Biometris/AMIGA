@@ -2,7 +2,7 @@
 using Biometris.Statistics.Measurements;
 using System.Collections.Generic;
 namespace Biometris.Statistics.Distributions {
-    public sealed class NormalDistribution : IDistribution, IContinuousDistribution {
+    public sealed class NormalDistribution : DistributionBase, IDistribution, IContinuousDistribution {
 
         public double Mu { get; set; }
         public double Sigma { get; set; }
@@ -21,45 +21,39 @@ namespace Biometris.Statistics.Distributions {
             return 1 / (Sigma * Math.Sqrt(2 * Math.PI)) * Math.Exp(-Math.Pow(x - Mu, 2) / (2 * Math.Pow(Sigma, 2)));
         }
 
-        public double Cdf(double x) {
+        public override double Cdf(double x) {
             return MathNet.Numerics.Distributions.Normal.CDF(Mu, Sigma, x);
         }
 
-        public double InvCdf(double p) {
+        public override double InvCdf(double p) {
             return MathNet.Numerics.Distributions.Normal.InvCDF(Mu, Sigma, p);
         }
 
-        public double CV() {
+        public override double CV() {
             return Sigma / Mu;
         }
 
-        public double Mean() {
+        public override double Mean() {
             return Mu;
         }
 
-        public double Variance() {
+        public override double Variance() {
             return Math.Pow(Sigma, 2);
         }
 
-        public MeasurementType SupportType() {
+        public override MeasurementType SupportType() {
             return MeasurementType.Continuous;
         }
 
-        public double SupportMax() {
+        public override double SupportMax() {
             return double.PositiveInfinity;
         }
 
-        public double Draw() {
+        public override double Draw() {
             return MathNet.Numerics.Distributions.Normal.Sample(Mu, Sigma);
         }
 
-        public IEnumerable<double> Draw(int samples) {
-            for (double i = 0; i < samples; ++i) {
-                yield return Draw();
-            }
-        }
-
-        public string Description() {
+        public override string Description() {
             return string.Format("Normal (Mu = {0}, Sigma = {1})", Mu, Sigma);
         }
 

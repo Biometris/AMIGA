@@ -81,7 +81,7 @@ namespace Biometris.Statistics {
             var weightsSum = weights.Sum();
             var weightsNormalized = weights.Select(c => c / weightsSum * weightsCount).ToList();
 
-            var bins = new List<HistogramBin>();
+            var bins = new List<HistogramBin>(numberOfBins);
             if (maxBound == minBound) {
                 maxBound = maxBound * 1.1;
                 minBound = minBound * .9;
@@ -95,7 +95,6 @@ namespace Biometris.Statistics {
 
             var binSize = (maxBound - minBound) / numberOfBins;
 
-            //re-implemented to cope with C# rounding errors, Waldo 15 jan 2014
             if (numberOfBins == 1) {
                 var bin = new HistogramBin() {
                     XMinValue = minBound,
@@ -145,15 +144,6 @@ namespace Biometris.Statistics {
                 lastBin.Frequency += BMath.Ceiling(source.Zip(weightsNormalized, (v, w) => (v > maxBound) ? w : 0).Sum());
             }
 
-            // This is an extra check to see whether the total frequency of the bins is not
-            // greater than the number of data records in the source (added because such
-            // events happened in the past) - Added on 26-07-2012
-            //This is not relevant for weighted binning
-            if (!weightsNormalized.Any(c => c != 1)) {
-                if (bins.GetTotalFrequency() > source.Count()) {
-                    throw new Exception("Fatal error in histogram generation");
-                }
-            }
             return bins;
         }
 
