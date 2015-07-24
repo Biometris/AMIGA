@@ -42,7 +42,7 @@ namespace Biometris.Tests.Statistics.Distributions {
         public void NegativeBinomialDistributionTest_FromMuCv() {
             var mu = 10D;
             var cv = 1D;
-            var distribution = NegativeBinomialDistribution.FromMuCv(mu, cv);
+            var distribution = NegativeBinomialDistribution.FromMeanCv(mu, cv);
             var samples = Enumerable.Range(1, 100000).Select(r => distribution.Draw()).ToList();
             var measuredMean = samples.Average();
             var measuredCv = samples.CV();

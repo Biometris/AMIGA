@@ -60,5 +60,9 @@ namespace Biometris.Statistics.Distributions {
         public static double Draw(double mu, double sigma) {
             return MathNet.Numerics.Distributions.Normal.Sample(mu, sigma);
         }
+
+        public static NormalDistribution FromMeanCv(double mu, double cv) {
+            return new NormalDistribution(mu, Math.Abs(cv * mu));
+        }
     }
 }

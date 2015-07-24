@@ -46,7 +46,7 @@ namespace Biometris.Tests.Statistics.Distributions {
             var mu = 10;
             var cv = .15;
             var power = 1.5;
-            var distribution = PowerLawDistribution.FromMuCv(mu, cv, power);
+            var distribution = PowerLawDistribution.FromMeanCv(mu, cv, power);
             var samples = Enumerable.Range(1, 10000).Select(r => distribution.Draw()).ToList();
             var measuredCv = samples.CV();
             Assert.AreEqual(cv, measuredCv, 1e-2);

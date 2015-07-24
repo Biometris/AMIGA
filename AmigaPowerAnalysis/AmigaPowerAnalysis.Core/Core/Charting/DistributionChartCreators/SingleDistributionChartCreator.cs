@@ -25,6 +25,10 @@ namespace AmigaPowerAnalysis.Core.Charting.DistributionChartCreators {
         public override PlotModel Create() {
             var plotModel = base.Create();
 
+            if (_distribution == null) {
+                return plotModel;
+            }
+
             var seriesCreator = new DistributionSeriesCreator(_distribution, LowerBound, UpperBound, Step);
             if (DistributionChartPreferenceType == DistributionChartPreferenceType.Histogram || DistributionChartPreferenceType == DistributionChartPreferenceType.Both) {
                 var histogram = seriesCreator.Create(DistributionSeriesType.Histogram);

@@ -8,7 +8,7 @@ using System.Linq;
 namespace AmigaPowerAnalysis.Core.DataAnalysis.AnalysisDataSimulator {
     public sealed class AnalysisDataSimulator {
 
-        public static List<SimulationDataRecord> Create(List<InputPowerAnalysisRecord> designRecords, ExperimentalDesignType experimentalDesignType, MeasurementType measurementType, DistributionType distributionType, double dispersion, double powerLawPower, double transformedLocLower, double transformedLocUpper, double cvBlocks, int blocks, double treatmentEffect, int numberOfSimulatedDataSets) {
+        public static List<SimulationDataRecord> Create(List<InputPowerAnalysisRecord> designRecords, ExperimentalDesignType experimentalDesignType, MeasurementType measurementType, DistributionType distributionType, double dispersion, double powerLawPower, double cvBlocks, int blocks, double treatmentEffect, int numberOfSimulatedDataSets) {
             var simulatedDataRecords = new List<SimulationDataRecord>(blocks * designRecords.Count);
             for (int block = 0; block < blocks; ++block) {
                 double blockEffect;
@@ -20,14 +20,14 @@ namespace AmigaPowerAnalysis.Core.DataAnalysis.AnalysisDataSimulator {
                     blockEffect = 0;
                 }
                 var records = designRecords
-                    .Select(r => createSimulatedDataRecord(measurementType, distributionType, transformedLocLower, transformedLocUpper, blockEffect, treatmentEffect, block, r, dispersion, powerLawPower, numberOfSimulatedDataSets))
+                    .Select(r => createSimulatedDataRecord(measurementType, distributionType, blockEffect, treatmentEffect, block, r, dispersion, powerLawPower, numberOfSimulatedDataSets))
                     .ToList();
                 simulatedDataRecords.AddRange(records);
             }
             return simulatedDataRecords;
         }
 
-        private static SimulationDataRecord createSimulatedDataRecord(MeasurementType measurementType, DistributionType distributionType, double transformedLocLower, double transformedLocUpper, double blockEffect, double treatmentEffect, int block, InputPowerAnalysisRecord r, double dispersion, double powerLawPower, int numberOfSimulatedDataSets) {
+        private static SimulationDataRecord createSimulatedDataRecord(MeasurementType measurementType, DistributionType distributionType, double blockEffect, double treatmentEffect, int block, InputPowerAnalysisRecord r, double dispersion, double powerLawPower, int numberOfSimulatedDataSets) {
             var isComparisonLevel = r.Comparison == ComparisonType.IncludeGMO;
             var transformedMean = MeasurementFactory.Link(r.Mean, measurementType);
             var transformedEffect = (isComparisonLevel) ? transformedMean + blockEffect + treatmentEffect : transformedMean + blockEffect;
@@ -39,8 +39,6 @@ namespace AmigaPowerAnalysis.Core.DataAnalysis.AnalysisDataSimulator {
                 ComparisonDummyFactorLevel = r.ComparisonDummyFactorLevel,
                 ModifierDummyFactorLevel = r.ModifierDummyFactorLevel,
                 MeanEffect = meanEffect,
-                LowerOffset = isComparisonLevel ? transformedLocLower : 0D,
-                UpperOffset = isComparisonLevel ? transformedLocUpper : 0D,
                 SimulatedResponses = simulatedResponses,
             };
         }

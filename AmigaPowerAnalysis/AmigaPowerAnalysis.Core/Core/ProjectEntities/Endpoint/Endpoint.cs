@@ -500,8 +500,8 @@ namespace AmigaPowerAnalysis.Core {
                     }
                     break;
                 case DistributionType.PowerLaw:
-                    if (CvComparator <= 100 * Math.Sqrt(1 / MuComparator)) {
-                        _cvComparator = Math.Ceiling((Math.Sqrt(1 / MuComparator) + 1e-2) * 100);
+                    if (CvComparator <= 100 / Math.Sqrt(MuComparator)) {
+                        _cvComparator = Math.Ceiling((1 / Math.Sqrt(MuComparator) + 1e-2) * 100);
                     }
                     break;
                 case DistributionType.Binomial:

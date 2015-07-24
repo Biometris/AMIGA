@@ -221,7 +221,7 @@ namespace AmigaPowerAnalysis.Tests.Core {
             var mu = 4D;
             var omega = 2D;
             var cv = Math.Sqrt(omega + 1 / mu);
-            var distribution = NegativeBinomialDistribution.FromMuCv(mu, cv);
+            var distribution = NegativeBinomialDistribution.FromMeanCv(mu, cv);
             var chartCreator = new MultiDistributionChartCreator(distribution) {
                 DistributionChartPreferenceType = DistributionChartPreferenceType.Both
             };

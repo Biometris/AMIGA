@@ -84,18 +84,23 @@ namespace Biometris.Statistics.Distributions {
                 case DistributionType.Poisson:
                     return new PoissonDistribution(mu);
                 case DistributionType.OverdispersedPoisson:
-                    return OverdispersedPoissonDistribution.FromMuCv(mu, cvFraction);
+                    return OverdispersedPoissonDistribution.FromMeanCv(mu, cvFraction);
                 case DistributionType.NegativeBinomial:
-                    return NegativeBinomialDistribution.FromMuCv(mu, cvFraction);
+                    return NegativeBinomialDistribution.FromMeanCv(mu, cvFraction);
                 case DistributionType.PoissonLogNormal:
-                    return PoissonLogNormalDistribution.FromMuCv(mu, cvFraction);
+                    return PoissonLogNormalDistribution.FromMeanCv(mu, cvFraction);
                 case DistributionType.PowerLaw:
-                    return PowerLawDistribution.FromMuCv(mu, cvFraction, powerLawPower);
+                    return PowerLawDistribution.FromMeanCv(mu, cvFraction, powerLawPower);
                 case DistributionType.Binomial:
+                    return null;
                 case DistributionType.BetaBinomial:
+                    return null;
                 case DistributionType.BinomialLogitNormal:
+                    return null;
                 case DistributionType.Normal:
+                    return NormalDistribution.FromMeanCv(mu, cvFraction);
                 case DistributionType.LogNormal:
+                    return LogNormalDistribution.FromMeanCv(mu, cvFraction);
                 default:
                     return null;
             }

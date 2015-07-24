@@ -30,7 +30,8 @@ namespace Biometris.Statistics.Distributions {
         }
 
         public override double CV() {
-            return Sigma / Mu;
+            return Math.Sqrt(Math.Exp(Math.Pow(Sigma, 2)) - 1);
+            //return Sigma / Mu;
         }
 
         public override double Mean() {
@@ -55,6 +56,15 @@ namespace Biometris.Statistics.Distributions {
 
         public override string Description() {
             return string.Format("Log-Normal (Mu = {0}, Sigma = {1})", Mu, Sigma);
+        }
+
+        public static LogNormalDistribution FromMeanCv(double mean, double cv) {
+            var sigma = Math.Sqrt(Math.Log(Math.Pow(cv, 2) + 1));
+            var mu = Math.Log(mean) - Math.Pow(sigma, 2) / 2;
+            var distribution = new LogNormalDistribution(mu, sigma);
+            var x = distribution.Mean();
+            var y = distribution.CV();
+            return distribution;
         }
     }
 }

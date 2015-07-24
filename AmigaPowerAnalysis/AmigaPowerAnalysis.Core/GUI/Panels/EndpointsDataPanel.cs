@@ -37,6 +37,7 @@ namespace AmigaPowerAnalysis.GUI {
             dataGridViewEndpoints.AutoGenerateColumns = false;
             dataGridViewEndpoints.DataSource = endpointsBindingSouce;
             updateEditableColumns();
+            updateEndpointDistributionChart();
         }
 
         public bool IsVisible() {

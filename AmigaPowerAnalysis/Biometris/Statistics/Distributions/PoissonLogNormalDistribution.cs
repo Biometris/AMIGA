@@ -72,7 +72,7 @@ namespace Biometris.Statistics.Distributions {
             return string.Format("Poisson Log-Normal (Mu = {0}, Omega = {1})", Mu, Omega);
         }
 
-        public static PoissonLogNormalDistribution FromMuCv(double mu, double cv) {
+        public static PoissonLogNormalDistribution FromMeanCv(double mu, double cv) {
             if (cv < Math.Sqrt(1 / mu)) {
                 throw new ArgumentOutOfRangeException("The specified CV is too small given this mean.");
             }

@@ -79,7 +79,7 @@ namespace Biometris.Statistics.Distributions {
             return string.Format("Negative Binomial (Mu = {0}, Omega = {1})", Mean(), omega);
         }
 
-        public static NegativeBinomialDistribution FromMuCv(double mu, double cv) {
+        public static NegativeBinomialDistribution FromMeanCv(double mu, double cv) {
             if (cv < Math.Sqrt(1 / mu)) {
                 throw new ArgumentOutOfRangeException("The specified CV is too small given this mean.");
             }

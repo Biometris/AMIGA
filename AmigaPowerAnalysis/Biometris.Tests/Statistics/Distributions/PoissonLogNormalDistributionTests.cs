@@ -45,7 +45,7 @@ namespace Biometris.Tests.Statistics.Distributions {
         public void PoissonLogNormalDistributionTest_FromMuCv() {
             var mu = 10;
             var cv = .15;
-            var distribution = PoissonLogNormalDistribution.FromMuCv(mu, cv);
+            var distribution = PoissonLogNormalDistribution.FromMeanCv(mu, cv);
             var samples = Enumerable.Range(1, 10000).Select(r => distribution.Draw()).ToList();
             var measuredCv = samples.CV();
             Assert.AreEqual(cv, measuredCv, 1e-2);

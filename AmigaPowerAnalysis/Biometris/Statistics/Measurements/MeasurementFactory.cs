@@ -30,6 +30,13 @@ namespace Biometris.Statistics.Measurements {
             }
         }
 
+        /// <summary>
+        /// Implementation of the link function; transforms the data value according to
+        /// the link function of the provided measurement type.
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="measurementType"></param>
+        /// <returns></returns>
         public static double Link(double data, MeasurementType measurementType) {
             if (measurementType == MeasurementType.Count) {
                 return (Math.Log(data));
@@ -42,6 +49,13 @@ namespace Biometris.Statistics.Measurements {
             }
         }
 
+        /// <summary>
+        /// Implementation of the inverse link function; back-transforms the data value
+        /// according to the inverse link function of the provided measurement type.
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="measurementType"></param>
+        /// <returns></returns>
         public static double InverseLink(double data, MeasurementType measurementType) {
             if (measurementType == MeasurementType.Count) {
                 return (Math.Exp(data));
@@ -52,6 +66,20 @@ namespace Biometris.Statistics.Measurements {
             } else {
                 return data;
             }
+        }
+
+        /// <summary>
+        /// Computes the limit of the provided mean specified by the limit of concern for the given
+        /// measurement type.
+        /// </summary>
+        /// <param name="mean"></param>
+        /// <param name="loc"></param>
+        /// <param name="measurementType"></param>
+        /// <returns></returns>
+        public static double ComputeLimit(double mean, double loc, MeasurementType measurementType) {
+            var transformedMean = Link(mean, measurementType);
+            var transformedLoc = (measurementType != MeasurementType.Continuous) ? Math.Log(loc) : loc;
+            return InverseLink(transformedMean + transformedLoc, measurementType);
         }
 
         public static double ComputeFixCurrentModifier(IEnumerable<double> modifiers, IEnumerable<double> weights, double mean, int index, MeasurementType measurementType) {

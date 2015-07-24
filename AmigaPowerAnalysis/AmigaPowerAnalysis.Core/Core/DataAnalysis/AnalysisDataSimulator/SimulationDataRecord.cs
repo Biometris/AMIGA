@@ -10,8 +10,6 @@ namespace AmigaPowerAnalysis.Core.DataAnalysis.AnalysisDataSimulator {
         public string ComparisonDummyFactorLevel { get; set; }
         public string ModifierDummyFactorLevel { get; set; }
         public double MeanEffect { get; set; }
-        public double LowerOffset { get; set; }
-        public double UpperOffset { get; set; }
         public List<double> SimulatedResponses { get; set; }
     }
 }
