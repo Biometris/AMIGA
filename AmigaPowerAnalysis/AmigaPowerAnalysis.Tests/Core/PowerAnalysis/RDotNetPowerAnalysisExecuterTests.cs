@@ -1,15 +1,14 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using AmigaPowerAnalysis.Core;
+using AmigaPowerAnalysis.Core.DataAnalysis.AnalysisModels;
 using AmigaPowerAnalysis.Core.PowerAnalysis;
+using Biometris.Persistence;
+using Biometris.ProgressReporting;
+using Biometris.Statistics.Distributions;
 using Biometris.Statistics.Measurements;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Biometris.Statistics.Distributions;
-using AmigaPowerAnalysis.Core.DataAnalysis;
-using System.IO;
-using Biometris.Persistence;
-using AmigaPowerAnalysis.Core.DataAnalysis.AnalysisModels;
-using Biometris.ProgressReporting;
 
 namespace AmigaPowerAnalysis.Tests.Core {
     [TestClass]

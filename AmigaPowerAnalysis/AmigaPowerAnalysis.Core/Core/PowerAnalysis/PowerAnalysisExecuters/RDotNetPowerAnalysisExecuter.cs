@@ -101,7 +101,6 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                             counter++;
                         }
                     }
-
                     progressState.Update(string.Format("done", 100));
                 }
             } catch (Exception ex) {
