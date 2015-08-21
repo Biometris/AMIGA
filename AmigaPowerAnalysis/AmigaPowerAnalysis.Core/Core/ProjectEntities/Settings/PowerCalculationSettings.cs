@@ -24,8 +24,9 @@ namespace AmigaPowerAnalysis.Core {
             SelectedAnalysisMethodTypes = AnalysisMethodType.LogNormal;
             SignificanceLevel = 0.05;
             NumberOfRatios = 3;
-            NumberOfReplications = new List<int> { 2, 4, 8, 16, 32 };
+            NumberOfReplications = new List<int> { 2, 4, 8, 16 };
             PowerCalculationMethod = PowerCalculationMethod.Approximate;
+            UseWaldTest = true;
             NumberOfSimulatedDataSets = 100;
             Seed = 12345;
         }
@@ -53,6 +54,12 @@ namespace AmigaPowerAnalysis.Core {
         /// </summary>
         [DataMember]
         public PowerCalculationMethod PowerCalculationMethod { get; set; }
+
+        /// <summary>
+        /// If true, Wald test is used where applicable, otherwise the log-likelihood ratio test is used.
+        /// </summary>
+        [DataMember]
+        public bool UseWaldTest { get; set; }
 
         /// <summary>
         /// Number of simulated datasets for Method=Simulate.

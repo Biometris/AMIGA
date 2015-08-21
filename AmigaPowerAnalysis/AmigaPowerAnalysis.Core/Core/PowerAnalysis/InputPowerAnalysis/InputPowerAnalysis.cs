@@ -107,6 +107,12 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
         public PowerCalculationMethod PowerCalculationMethodType { get; set; }
 
         /// <summary>
+        /// If true, Wald test is used where applicable, otherwise the log-likelihood ratio test is used.
+        /// </summary>
+        [DataMember]
+        public bool UseWaldTest { get; set; }
+
+        /// <summary>
         /// Seed for random number generator (non-negative value uses computer time).
         /// </summary>
         [DataMember]
@@ -200,6 +206,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             stringBuilder.AppendLine(format("NumberOfReplications", string.Join(" ", NumberOfReplications.Select(r => r.ToString()).ToList())));
             stringBuilder.AppendLine(format("ExperimentalDesignType", ExperimentalDesignType));
             stringBuilder.AppendLine(format("PowerCalculationMethod", PowerCalculationMethodType));
+            stringBuilder.AppendLine(format("UseWaldTest", UseWaldTest));
             stringBuilder.AppendLine(format("RandomNumberSeed", RandomNumberSeed));
             stringBuilder.AppendLine(format("NumberOfSimulatedDataSets", NumberOfSimulatedDataSets));
 
