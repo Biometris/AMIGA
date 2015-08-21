@@ -78,6 +78,9 @@ namespace AmigaPowerAnalysis.GUI {
                 comparisons.ElementAt(i).OutputPowerAnalysis = await powerAnalysisExecuter.RunAsync(inputPowerAnalysis, localProgress);
                 localProgress.Update(100);
             }
+            if (comparisons.Any(r => !r.OutputPowerAnalysis.Success)) {
+                showWarning("Warning", "Power Analysis completed with errors. Some results may be incomplete or non existent.");
+            }
         }
 
         private void buttonCancel_Click(object sender, EventArgs e) {
@@ -87,6 +90,15 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void showError(string title, string message) {
+            MessageBox.Show(
+                message,
+                title,
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error,
+                MessageBoxDefaultButton.Button1);
+        }
+
+        private void showWarning(string title, string message) {
             MessageBox.Show(
                 message,
                 title,

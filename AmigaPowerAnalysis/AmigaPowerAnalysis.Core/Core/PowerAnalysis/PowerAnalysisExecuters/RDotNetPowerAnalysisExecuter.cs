@@ -72,6 +72,8 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                                 progressState.Update(string.Format("Endpoint {0}, replicate {1}/{2}, effect {3}/{4}", inputPowerAnalysis.Endpoint, i, inputPowerAnalysis.NumberOfReplications.Count, j, effects.Count), 100 * ((double)counter / totalLoops));
                                 var output = runMonteCarloSimulation(effects[j], blocks, inputPowerAnalysis.SelectedAnalysisMethodTypes, inputPowerAnalysis.NumberOfSimulatedDataSets, rEngine);
                                 outputResults.Add(output);
+                            } catch (OperationCanceledException ex) {
+                                throw ex;
                             } catch (Exception ex) {
                                 var output = new OutputPowerAnalysisRecord() {
                                     ConcernStandardizedDifference = effect.CSD,
@@ -95,6 +97,8 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                     Success = errorList.Count == 0,
                     Messages = errorList,
                 };
+            } catch (OperationCanceledException ex) {
+                throw ex;
             } catch (Exception ex) {
                 logger.Log(string.Format("# Error: {0}", ex.Message));
                 logger.WriteToFile();
