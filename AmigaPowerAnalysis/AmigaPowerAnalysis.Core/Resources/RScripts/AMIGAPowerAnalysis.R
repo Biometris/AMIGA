@@ -270,7 +270,7 @@ createEvaluationGrid <- function(LocLower, LocUpper, NumberOfEvaluations) {
 normalAnalysis <- function(data, settings, modelSettings) {
   require(lsmeans)
 
-  data["Response"] <- data["Response"])
+  data["Response"] <- data["Response"]
   lmH1 <- lm(modelSettings$formulaH1, data=data)
   pval <- 2*pt(abs(lmH1$coef[2])/sqrt(vcov(lmH1)[2,2]), lmH1$df.residual, lower.tail=FALSE)
   resDF <- df.residual(lmH1)
