@@ -52,6 +52,8 @@
             this.groupBoxMethodsForAnalysisOfContinuous = new System.Windows.Forms.GroupBox();
             this.checkBoxMethodForAnalysesN = new System.Windows.Forms.CheckBox();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.labelUseWaldTest = new System.Windows.Forms.Label();
+            this.checkBoxUseWaldTest = new System.Windows.Forms.CheckBox();
             this.groupBoxOptions.SuspendLayout();
             this.groupBoxMethodsForAnalysisOfCounts.SuspendLayout();
             this.groupBoxMethodsForAnalysisOfFractions.SuspendLayout();
@@ -65,6 +67,8 @@
             this.groupBoxOptions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBoxOptions.AutoSize = true;
+            this.groupBoxOptions.Controls.Add(this.checkBoxUseWaldTest);
+            this.groupBoxOptions.Controls.Add(this.labelUseWaldTest);
             this.groupBoxOptions.Controls.Add(this.textBoxSeedForRandomNumbers);
             this.groupBoxOptions.Controls.Add(this.labelSeedForRandomNumbers);
             this.groupBoxOptions.Controls.Add(this.textBoxNumberSimulatedDatasets);
@@ -80,14 +84,14 @@
             this.groupBoxOptions.Location = new System.Drawing.Point(15, 56);
             this.groupBoxOptions.Margin = new System.Windows.Forms.Padding(0);
             this.groupBoxOptions.Name = "groupBoxOptions";
-            this.groupBoxOptions.Size = new System.Drawing.Size(943, 200);
+            this.groupBoxOptions.Size = new System.Drawing.Size(943, 229);
             this.groupBoxOptions.TabIndex = 9;
             this.groupBoxOptions.TabStop = false;
             this.groupBoxOptions.Text = "Options";
             // 
             // textBoxSeedForRandomNumbers
             // 
-            this.textBoxSeedForRandomNumbers.Location = new System.Drawing.Point(553, 161);
+            this.textBoxSeedForRandomNumbers.Location = new System.Drawing.Point(553, 190);
             this.textBoxSeedForRandomNumbers.Name = "textBoxSeedForRandomNumbers";
             this.textBoxSeedForRandomNumbers.Size = new System.Drawing.Size(100, 20);
             this.textBoxSeedForRandomNumbers.TabIndex = 11;
@@ -97,7 +101,7 @@
             // labelSeedForRandomNumbers
             // 
             this.labelSeedForRandomNumbers.AutoSize = true;
-            this.labelSeedForRandomNumbers.Location = new System.Drawing.Point(20, 164);
+            this.labelSeedForRandomNumbers.Location = new System.Drawing.Point(20, 192);
             this.labelSeedForRandomNumbers.Name = "labelSeedForRandomNumbers";
             this.labelSeedForRandomNumbers.Size = new System.Drawing.Size(365, 13);
             this.labelSeedForRandomNumbers.TabIndex = 10;
@@ -105,7 +109,7 @@
             // 
             // textBoxNumberSimulatedDatasets
             // 
-            this.textBoxNumberSimulatedDatasets.Location = new System.Drawing.Point(553, 133);
+            this.textBoxNumberSimulatedDatasets.Location = new System.Drawing.Point(553, 161);
             this.textBoxNumberSimulatedDatasets.Name = "textBoxNumberSimulatedDatasets";
             this.textBoxNumberSimulatedDatasets.Size = new System.Drawing.Size(100, 20);
             this.textBoxNumberSimulatedDatasets.TabIndex = 9;
@@ -115,7 +119,7 @@
             // labelNumberSimulatedDatasets
             // 
             this.labelNumberSimulatedDatasets.AutoSize = true;
-            this.labelNumberSimulatedDatasets.Location = new System.Drawing.Point(20, 136);
+            this.labelNumberSimulatedDatasets.Location = new System.Drawing.Point(20, 164);
             this.labelNumberSimulatedDatasets.Name = "labelNumberSimulatedDatasets";
             this.labelNumberSimulatedDatasets.Size = new System.Drawing.Size(246, 13);
             this.labelNumberSimulatedDatasets.TabIndex = 8;
@@ -125,7 +129,7 @@
             // 
             this.comboBoxMethodForPowerCalculation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxMethodForPowerCalculation.FormattingEnabled = true;
-            this.comboBoxMethodForPowerCalculation.Location = new System.Drawing.Point(553, 105);
+            this.comboBoxMethodForPowerCalculation.Location = new System.Drawing.Point(553, 108);
             this.comboBoxMethodForPowerCalculation.Name = "comboBoxMethodForPowerCalculation";
             this.comboBoxMethodForPowerCalculation.Size = new System.Drawing.Size(100, 21);
             this.comboBoxMethodForPowerCalculation.TabIndex = 7;
@@ -136,13 +140,13 @@
             this.labelMethodForPowerCalculation.AutoSize = true;
             this.labelMethodForPowerCalculation.Location = new System.Drawing.Point(20, 108);
             this.labelMethodForPowerCalculation.Name = "labelMethodForPowerCalculation";
-            this.labelMethodForPowerCalculation.Size = new System.Drawing.Size(350, 13);
+            this.labelMethodForPowerCalculation.Size = new System.Drawing.Size(332, 13);
             this.labelMethodForPowerCalculation.TabIndex = 6;
             this.labelMethodForPowerCalculation.Text = "Method for Power Calculation (currently only Simulate is implemented)";
             // 
             // textBoxNumberOfReplications
             // 
-            this.textBoxNumberOfReplications.Location = new System.Drawing.Point(553, 77);
+            this.textBoxNumberOfReplications.Location = new System.Drawing.Point(553, 79);
             this.textBoxNumberOfReplications.Name = "textBoxNumberOfReplications";
             this.textBoxNumberOfReplications.Size = new System.Drawing.Size(100, 20);
             this.textBoxNumberOfReplications.TabIndex = 5;
@@ -154,13 +158,14 @@
             this.labelNumberOfReplications.AutoSize = true;
             this.labelNumberOfReplications.Location = new System.Drawing.Point(20, 80);
             this.labelNumberOfReplications.Name = "labelNumberOfReplications";
-            this.labelNumberOfReplications.Size = new System.Drawing.Size(338, 13);
+            this.labelNumberOfReplications.Size = new System.Drawing.Size(425, 13);
             this.labelNumberOfReplications.TabIndex = 4;
-            this.labelNumberOfReplications.Text = "Number of Replications for which to calculate the power (comma-separated list of values)";
+            this.labelNumberOfReplications.Text = "Number of Replications for which to calculate the power (comma-separated list of " +
+    "values)";
             // 
             // textBoxNumberOfEvaluationPoints
             // 
-            this.textBoxNumberOfEvaluationPoints.Location = new System.Drawing.Point(553, 49);
+            this.textBoxNumberOfEvaluationPoints.Location = new System.Drawing.Point(553, 50);
             this.textBoxNumberOfEvaluationPoints.Name = "textBoxNumberOfEvaluationPoints";
             this.textBoxNumberOfEvaluationPoints.Size = new System.Drawing.Size(100, 20);
             this.textBoxNumberOfEvaluationPoints.TabIndex = 3;
@@ -389,10 +394,31 @@
             this.flowLayoutPanel1.Controls.Add(this.groupBoxMethodsForAnalysisOfFractions);
             this.flowLayoutPanel1.Controls.Add(this.groupBoxMethodsForAnalysisOfNonNegative);
             this.flowLayoutPanel1.Controls.Add(this.groupBoxMethodsForAnalysisOfContinuous);
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(13, 261);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(10, 288);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Size = new System.Drawing.Size(938, 154);
             this.flowLayoutPanel1.TabIndex = 18;
+            // 
+            // labelUseWaldTest
+            // 
+            this.labelUseWaldTest.AutoSize = true;
+            this.labelUseWaldTest.Location = new System.Drawing.Point(20, 136);
+            this.labelUseWaldTest.Name = "labelUseWaldTest";
+            this.labelUseWaldTest.Size = new System.Drawing.Size(74, 13);
+            this.labelUseWaldTest.TabIndex = 12;
+            this.labelUseWaldTest.Text = "Use Wald test";
+            // 
+            // checkBoxUseWaldTest
+            // 
+            this.checkBoxUseWaldTest.AutoSize = true;
+            this.checkBoxUseWaldTest.Checked = true;
+            this.checkBoxUseWaldTest.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxUseWaldTest.Location = new System.Drawing.Point(553, 138);
+            this.checkBoxUseWaldTest.Name = "checkBoxUseWaldTest";
+            this.checkBoxUseWaldTest.Size = new System.Drawing.Size(15, 14);
+            this.checkBoxUseWaldTest.TabIndex = 13;
+            this.checkBoxUseWaldTest.UseVisualStyleBackColor = true;
+            this.checkBoxUseWaldTest.CheckedChanged += new System.EventHandler(this.checkBoxUseWaldTest_CheckedChanged);
             // 
             // SimulationPanel
             // 
@@ -406,7 +432,7 @@
             this.MinimumSize = new System.Drawing.Size(500, 400);
             this.Name = "SimulationPanel";
             this.Padding = new System.Windows.Forms.Padding(10);
-            this.Size = new System.Drawing.Size(961, 428);
+            this.Size = new System.Drawing.Size(961, 455);
             this.groupBoxOptions.ResumeLayout(false);
             this.groupBoxOptions.PerformLayout();
             this.groupBoxMethodsForAnalysisOfCounts.ResumeLayout(false);
@@ -455,5 +481,7 @@
         private System.Windows.Forms.Label labelSeedForRandomNumbers;
         private System.Windows.Forms.Button buttonRunPowerAnalysis;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
+        private System.Windows.Forms.CheckBox checkBoxUseWaldTest;
+        private System.Windows.Forms.Label labelUseWaldTest;
     }
 }

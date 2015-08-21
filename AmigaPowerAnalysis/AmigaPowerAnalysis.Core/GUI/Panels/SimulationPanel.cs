@@ -7,12 +7,6 @@ using AmigaPowerAnalysis.Core.DataAnalysis.AnalysisModels;
 using Biometris.ExtensionMethods;
 using Biometris.Statistics.Measurements;
 
-// TODO Obligatory to first enter a name for a new endpoint
-// TODO Binomial totals greyed out for non fractions
-// TODO Binomial totals must be positive
-// TODO LOC=NaN should be displayed as empty textbox; also empty textbox store as to NaN. Possibly better to use null
-// TODO LOC must be positive
-
 namespace AmigaPowerAnalysis.GUI {
     public partial class SimulationPanel : UserControl, ISelectionForm {
 
@@ -45,6 +39,7 @@ namespace AmigaPowerAnalysis.GUI {
             textBoxNumberOfReplications.Text = string.Join(", ", _project.PowerCalculationSettings.NumberOfReplications.Select(r => r.ToString()).ToList());
             comboBoxMethodForPowerCalculation.DataSource = Enum.GetValues(typeof(PowerCalculationMethod));
             comboBoxMethodForPowerCalculation.SelectedIndex = (int)_project.PowerCalculationSettings.PowerCalculationMethod;
+            checkBoxUseWaldTest.Checked = _project.PowerCalculationSettings.UseWaldTest;
             textBoxNumberSimulatedDatasets.Text = _project.PowerCalculationSettings.NumberOfSimulatedDataSets.ToString();
             textBoxSeedForRandomNumbers.Text = _project.PowerCalculationSettings.Seed.ToString();
 
@@ -152,6 +147,10 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void checkBoxMethodForAnalysesN_CheckedChanged(object sender, EventArgs e) {
             _project.PowerCalculationSettings.SetAnalysisMethodType(AnalysisMethodType.Normal, checkBoxMethodForAnalysesN.Checked);
+        }
+
+        private void checkBoxUseWaldTest_CheckedChanged(object sender, EventArgs e) {
+            _project.PowerCalculationSettings.UseWaldTest = checkBoxUseWaldTest.Checked;
         }
 
         private void comboBoxMethodForPowerCalculation_SelectionChangeCommitted(object sender, EventArgs e) {
