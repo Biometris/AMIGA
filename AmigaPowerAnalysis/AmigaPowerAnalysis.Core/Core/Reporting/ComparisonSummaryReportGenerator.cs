@@ -21,6 +21,7 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             html += "<h1>Results per primary comparison</h1>";
             foreach (var comparison in primaryComparisons) {
                 html += string.Format("<h1>Results comparison {0}</h1>", comparison.OutputPowerAnalysis.InputPowerAnalysis.Endpoint);
+                html += generateComparisonMessagesHtml(comparison);
                 html += generateComparisonSettingsHtml(comparison.OutputPowerAnalysis.InputPowerAnalysis);
                 html += generateComparisonInputDataHtml(comparison.OutputPowerAnalysis.InputPowerAnalysis);
                 html += generateComparisonChartsHtml(comparison, tempPath);
@@ -31,6 +32,7 @@ namespace AmigaPowerAnalysis.Core.Reporting {
 
         public static string GenerateComparisonReport(Comparison comparison, string tempPath) {
             var html = string.Empty;
+            html += generateComparisonMessagesHtml(comparison);
             html += generateComparisonSettingsHtml(comparison.OutputPowerAnalysis.InputPowerAnalysis);
             html += generateComparisonInputDataHtml(comparison.OutputPowerAnalysis.InputPowerAnalysis);
             html += generateComparisonChartsHtml(comparison, tempPath);
@@ -95,6 +97,22 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             }
             stringBuilder.AppendLine("</table>");
 
+            return stringBuilder.ToString();
+        }
+
+        private static string generateComparisonMessagesHtml(Comparison comparison) {
+            var stringBuilder = new StringBuilder();
+            if (!comparison.OutputPowerAnalysis.Success) {
+                stringBuilder.Append("<h2>Errors in power analysis</h2>");
+                stringBuilder.AppendLine("<p>Power analysis failed; results may be incomplete or nonexistent. The following error(s) were encountered:</p>");
+                if (comparison.OutputPowerAnalysis.Messages != null && comparison.OutputPowerAnalysis.Messages.Count > 0) {
+                    stringBuilder.AppendLine("<ul>");
+                    foreach (var error in comparison.OutputPowerAnalysis.Messages) {
+                        stringBuilder.AppendLine("<li>" + error + "</li>");
+                    }
+                    stringBuilder.AppendLine("</ul>");
+                }
+            }
             return stringBuilder.ToString();
         }
 

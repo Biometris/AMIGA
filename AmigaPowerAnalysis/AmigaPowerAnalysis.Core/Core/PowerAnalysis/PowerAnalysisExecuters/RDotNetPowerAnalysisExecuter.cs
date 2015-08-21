@@ -48,6 +48,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             var effects = createCsdEvaluationGrid(inputPowerAnalysis.LocLower, inputPowerAnalysis.LocUpper, inputPowerAnalysis.OverallMean, inputPowerAnalysis.NumberOfRatios, inputPowerAnalysis.MeasurementType);
             var outputResults = new List<OutputPowerAnalysisRecord>();
             try {
+                var errorList = new List<string>();
                 using (var rEngine = new LoggingRDotNetEngine(logger)) {
                     progressState.Update(string.Format("Analysis of endpoint: {0}, initializing R...", inputPowerAnalysis.Endpoint), 0);
 
@@ -61,58 +62,77 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
 
                     var totalLoops = inputPowerAnalysis.NumberOfReplications.Count * effects.Count;
                     var counter = 0;
-
                     for (int i = 0; i < inputPowerAnalysis.NumberOfReplications.Count; ++i) {
-
                         var blocks = inputPowerAnalysis.NumberOfReplications[i];
                         rEngine.SetSymbol("blocks", blocks);
                         for (int j = 0; j < effects.Count; ++j) {
                             var effect = effects[j];
-
-                            // Update progress state
-                            progressState.Update(string.Format("Endpoint {0}, replicate {1}/{2}, effect {3}/{4}", inputPowerAnalysis.Endpoint, i, inputPowerAnalysis.NumberOfReplications.Count, j, effects.Count), 100 * ((double)counter / totalLoops));
-
-                            rEngine.SetSymbol("effect", effect.TransformedEfffect);
-                            rEngine.EvaluateNoReturn("pValues <- monteCarloPowerAnalysis(inputData, settings, modelSettings, blocks, effect)");
-                            var output = new OutputPowerAnalysisRecord() {
-                                ConcernStandardizedDifference = effect.CSD,
-                                Effect = effect.Effect,
-                                TransformedEffect = effect.TransformedEfffect,
-                                NumberOfReplications = blocks,
-                            };
-                            if (inputPowerAnalysis.SelectedAnalysisMethodTypes.Has(AnalysisMethodType.LogNormal)) {
-                                output.PowerDifferenceLogNormal = rEngine.EvaluateDouble("sum(pValues$Diff[,\"LogNormal\"] < settings$SignificanceLevel)") / inputPowerAnalysis.NumberOfSimulatedDataSets;
-                                output.PowerEquivalenceLogNormal = rEngine.EvaluateDouble("sum(pValues$Equi[,\"LogNormal\"] < settings$SignificanceLevel)") / inputPowerAnalysis.NumberOfSimulatedDataSets;
+                            try {
+                                // Update progress state
+                                progressState.Update(string.Format("Endpoint {0}, replicate {1}/{2}, effect {3}/{4}", inputPowerAnalysis.Endpoint, i, inputPowerAnalysis.NumberOfReplications.Count, j, effects.Count), 100 * ((double)counter / totalLoops));
+                                var output = runMonteCarloSimulation(effects[j], blocks, inputPowerAnalysis.SelectedAnalysisMethodTypes, inputPowerAnalysis.NumberOfSimulatedDataSets, rEngine);
+                                outputResults.Add(output);
+                            } catch (Exception ex) {
+                                var output = new OutputPowerAnalysisRecord() {
+                                    ConcernStandardizedDifference = effect.CSD,
+                                    Effect = effect.Effect,
+                                    TransformedEffect = effect.TransformedEfffect,
+                                    NumberOfReplications = blocks,
+                                };
+                                outputResults.Add(output);
+                                var msg = string.Format("Error in simulation of effect {0} and {1} replicates: {2}", blocks, effect.Effect, ex.Message);
+                                errorList.Add(msg);
                             }
-                            if (inputPowerAnalysis.SelectedAnalysisMethodTypes.Has(AnalysisMethodType.SquareRoot)) {
-                                output.PowerDifferenceSquareRoot = rEngine.EvaluateDouble("sum(pValues$Diff[,\"SquareRoot\"] < settings$SignificanceLevel)") / inputPowerAnalysis.NumberOfSimulatedDataSets;
-                                output.PowerEquivalenceSquareRoot = rEngine.EvaluateDouble("sum(pValues$Equi[,\"SquareRoot\"] < settings$SignificanceLevel)") / inputPowerAnalysis.NumberOfSimulatedDataSets;
-                            }
-                            if (inputPowerAnalysis.SelectedAnalysisMethodTypes.Has(AnalysisMethodType.OverdispersedPoisson)) {
-                                output.PowerDifferenceOverdispersedPoisson = rEngine.EvaluateDouble("sum(pValues$Diff[,\"OverdispersedPoisson\"] < settings$SignificanceLevel)") / inputPowerAnalysis.NumberOfSimulatedDataSets;
-                                output.PowerEquivalenceOverdispersedPoisson = rEngine.EvaluateDouble("sum(pValues$Equi[,\"OverdispersedPoisson\"] < settings$SignificanceLevel)") / inputPowerAnalysis.NumberOfSimulatedDataSets;
-                            }
-                            if (inputPowerAnalysis.SelectedAnalysisMethodTypes.Has(AnalysisMethodType.NegativeBinomial)) {
-                                output.PowerDifferenceNegativeBinomial = rEngine.EvaluateDouble("sum(pValues$Diff[,\"NegativeBinomial\"] < settings$SignificanceLevel)") / inputPowerAnalysis.NumberOfSimulatedDataSets;
-                                output.PowerEquivalenceNegativeBinomial = rEngine.EvaluateDouble("sum(pValues$Equi[,\"NegativeBinomial\"] < settings$SignificanceLevel)") / inputPowerAnalysis.NumberOfSimulatedDataSets;
-                            }
-                            outputResults.Add(output);
-
                             counter++;
                         }
                     }
                     progressState.Update(string.Format("done", 100));
                 }
+                CsvWriter.WriteToCsvFile(comparisonOutputFilename, ",", outputResults);
+                return new OutputPowerAnalysis() {
+                    InputPowerAnalysis = inputPowerAnalysis,
+                    OutputRecords = outputResults,
+                    Success = errorList.Count == 0,
+                    Messages = errorList,
+                };
             } catch (Exception ex) {
                 logger.Log(string.Format("# Error: {0}", ex.Message));
                 logger.WriteToFile();
-                throw ex;
+                return new OutputPowerAnalysis() {
+                    InputPowerAnalysis = inputPowerAnalysis,
+                    OutputRecords = outputResults,
+                    Success = false,
+                    Messages = new List<string>() { ex.Message }
+                };
             }
-            CsvWriter.WriteToCsvFile(comparisonOutputFilename, ",", outputResults);
-            return new OutputPowerAnalysis() {
-                InputPowerAnalysis = inputPowerAnalysis,
-                OutputRecords = outputResults,
+        }
+
+        private static OutputPowerAnalysisRecord runMonteCarloSimulation(EffectCSD effect, int blocks, AnalysisMethodType selectedAnalysisMethodTypes, int monteCarloSimulations, LoggingRDotNetEngine rEngine) {
+            rEngine.SetSymbol("effect", effect.TransformedEfffect);
+            rEngine.EvaluateNoReturn("pValues <- monteCarloPowerAnalysis(inputData, settings, modelSettings, blocks, effect)");
+            var output = new OutputPowerAnalysisRecord() {
+                ConcernStandardizedDifference = effect.CSD,
+                Effect = effect.Effect,
+                TransformedEffect = effect.TransformedEfffect,
+                NumberOfReplications = blocks,
             };
+            if (selectedAnalysisMethodTypes.Has(AnalysisMethodType.LogNormal)) {
+                output.PowerDifferenceLogNormal = rEngine.EvaluateDouble("sum(pValues$Diff[,\"LogNormal\"] < settings$SignificanceLevel)") / monteCarloSimulations;
+                output.PowerEquivalenceLogNormal = rEngine.EvaluateDouble("sum(pValues$Equi[,\"LogNormal\"] < settings$SignificanceLevel)") / monteCarloSimulations;
+            }
+            if (selectedAnalysisMethodTypes.Has(AnalysisMethodType.SquareRoot)) {
+                output.PowerDifferenceSquareRoot = rEngine.EvaluateDouble("sum(pValues$Diff[,\"SquareRoot\"] < settings$SignificanceLevel)") / monteCarloSimulations;
+                output.PowerEquivalenceSquareRoot = rEngine.EvaluateDouble("sum(pValues$Equi[,\"SquareRoot\"] < settings$SignificanceLevel)") / monteCarloSimulations;
+            }
+            if (selectedAnalysisMethodTypes.Has(AnalysisMethodType.OverdispersedPoisson)) {
+                output.PowerDifferenceOverdispersedPoisson = rEngine.EvaluateDouble("sum(pValues$Diff[,\"OverdispersedPoisson\"] < settings$SignificanceLevel)") / monteCarloSimulations;
+                output.PowerEquivalenceOverdispersedPoisson = rEngine.EvaluateDouble("sum(pValues$Equi[,\"OverdispersedPoisson\"] < settings$SignificanceLevel)") / monteCarloSimulations;
+            }
+            if (selectedAnalysisMethodTypes.Has(AnalysisMethodType.NegativeBinomial)) {
+                output.PowerDifferenceNegativeBinomial = rEngine.EvaluateDouble("sum(pValues$Diff[,\"NegativeBinomial\"] < settings$SignificanceLevel)") / monteCarloSimulations;
+                output.PowerEquivalenceNegativeBinomial = rEngine.EvaluateDouble("sum(pValues$Equi[,\"NegativeBinomial\"] < settings$SignificanceLevel)") / monteCarloSimulations;
+            }
+            return output;
         }
 
         private static void createAnalysisInputFile(InputPowerAnalysis inputPowerAnalysis, string filename) {

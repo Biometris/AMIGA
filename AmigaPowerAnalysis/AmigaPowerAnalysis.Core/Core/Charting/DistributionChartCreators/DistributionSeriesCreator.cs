@@ -106,7 +106,7 @@ namespace AmigaPowerAnalysis.Core.Charting.DistributionChartCreators {
         private static double computeLowerBound(IDistribution distribution) {
             try {
                 return distribution.InvCdf(.01);
-            } catch (Exception ex) {
+            } catch (Exception) {
                 switch (distribution.SupportType()) {
                     case MeasurementType.Count:
                     case MeasurementType.Fraction:
@@ -122,7 +122,7 @@ namespace AmigaPowerAnalysis.Core.Charting.DistributionChartCreators {
         private static double computeUpperBound(IDistribution distribution) {
             try {
                 return distribution.InvCdf(.99);
-            } catch (Exception ex) {
+            } catch (Exception) {
                 switch (distribution.SupportType()) {
                     case MeasurementType.Count:
                         return Math.Ceiling(distribution.Mean() + 3 * Math.Sqrt(distribution.Variance()));
