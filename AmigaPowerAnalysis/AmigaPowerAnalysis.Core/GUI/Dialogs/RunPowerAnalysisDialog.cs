@@ -70,6 +70,7 @@ namespace AmigaPowerAnalysis.GUI {
             var numberOfComparisons = comparisons.Count();
             var progressStep = 100D / numberOfComparisons;
 
+
             for (int i = 0; i < comparisons.Count(); ++i) {
                 var localProgress = progressReport.NewProgressState(100D / comparisons.Count());
                 localProgress.Update(string.Format("Running power analysis for comparison {0} of {1}...", i + 1, comparisons.Count()));
