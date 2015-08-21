@@ -32,7 +32,7 @@ ropoisson <- function(n, mean, dispersion=NaN, power=NaN, distribution=c("Poisso
   if ((length(dispersion) != 1) && (length(dispersion) != n)) {
     stop("The length of dispersion must equal 1 or the value of n.", call. = FALSE)
   }
-  mean[mean==0] = 1.0e-200
+  mean[mean==0] <- 1.0e-200
   if (min(mean) < 0) {
     stop("The mean must be positive.", call. = FALSE)
   }
@@ -265,6 +265,42 @@ createEvaluationGrid <- function(LocLower, LocUpper, NumberOfEvaluations) {
     effect <- c(effect, effectTmp)
   } 
   return(list(csd=csd, effect=effect))
+}
+
+normalAnalysis <- function(data, settings, modelSettings) {
+  require(lsmeans)
+
+  data["Response"] <- data["Response"])
+  lmH1 <- lm(modelSettings$formulaH1, data=data)
+  pval <- 2*pt(abs(lmH1$coef[2])/sqrt(vcov(lmH1)[2,2]), lmH1$df.residual, lower.tail=FALSE)
+  resDF <- df.residual(lmH1)
+  resMS <- deviance(lmH1)/resDF
+
+  lsmeans <- lsmeans(lmH1, "GMO", at=modelSettings$preddata)
+  meanCMP <- summary(lsmeans)$lsmean[1]
+  meanGMO <- summary(lsmeans)$lsmean[2]
+  repCMP <- resMS / (summary(lsmeans)$SE[1]^2)
+  repGMO <- resMS / (summary(lsmeans)$SE[2]^2)
+
+  # Generalized confidence interval
+  chi  <- resDF * resMS / rchisq(modelSettings$nGCI, resDF)
+  rCMP <- rnorm(modelSettings$nGCI, meanCMP, sqrt(chi/repCMP))
+  rGMO <- rnorm(modelSettings$nGCI, meanGMO, sqrt(chi/repGMO))
+  rCMP <- exp(rCMP + chi/2) - 1
+  rGMO <- exp(rGMO + chi/2) - 1
+  rCMP[rCMP < modelSettings$smallGCI] <- modelSettings$smallGCI
+  rGMO[rGMO < modelSettings$smallGCI] <- modelSettings$smallGCI
+  ratio <- rGMO/rCMP
+
+  # For very small draws from the Chi-Distribution rCMP and rGMO can be out of bounds
+  quantiles <- quantile(ratio, c(modelSettings$SignificanceLevel/2, 1 - modelSettings$SignificanceLevel / 2), na.rm=TRUE)
+
+  pvalues <- list()
+  pvalues$Diff <- as.numeric(pval)
+  pvalues$Equi <- 1 - as.numeric((quantiles[1] > settings$LocLower) & (quantiles[2] < settings$LocUpper))
+  pvalues$EquiWD <- NA
+
+  return(pvalues)
 }
 
 logNormalAnalysis <- function(data, settings, modelSettings) {
