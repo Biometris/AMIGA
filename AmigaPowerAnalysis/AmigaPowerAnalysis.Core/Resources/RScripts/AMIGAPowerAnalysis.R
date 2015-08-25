@@ -159,7 +159,6 @@ readSettings <- function(settingsFile) {
     }
     list[[i]] <- element
   }
-  
   # Get transformed limits of concern
   if (list$MeasurementType != "Continuous") {
     list$TransformLocLower <- log(list$LocLower)
@@ -168,7 +167,14 @@ readSettings <- function(settingsFile) {
     list$TransformLocLower <- list$LocLower - list$OverallMean
     list$TransformLocUpper <- list$LocUpper + list$OverallMean
   }
-
+  #  Redefine list$UseWaldTest as logical
+  if (list$UseWaldTest == "True") {
+    list$UseWaldTest = TRUE
+  } else {
+    list$UseWaldTest = FALSE
+  }
+  # Add directory to list
+  list$directory = paste0(dirname(settingsFile), "/")
   return(list)
 }
 
@@ -197,14 +203,17 @@ createModelSettings <- function(data, settings) {
 
   # Test settings
   modelSettings$SignificanceLevel = settings$SignificanceLevel
-  modelSettings$nGCI = 100  # Number of draws for Generalized Confidence Interval
-  modelSettings$smallGCI = 0.0001  # Bound on back-transformed values for the LOG-transform
+  modelSettings$nGCI = 100000     # Number of draws for Generalized Confidence Interval
+  modelSettings$smallGCI = 0.0001 # Bound on back-transformed values for the LOG-transform
 
   return(modelSettings)
 }
 
 createSimulationSettings <- function(settings) {
   simulationSettings <- list()
+
+  # set seed
+  set.seed(settings$RandomNumberSeed)
 
   # Define dispersion parameter
   simulationSettings$dispersion <- ropoissonDispersion(settings$OverallMean, settings$CVComparator, settings$PowerLawPower, settings$Distribution)  
@@ -215,7 +224,6 @@ createSimulationSettings <- function(settings) {
   } else {
     simulationSettings$sigBlock <- 0
   }
-
   return(simulationSettings)
 }
 
@@ -269,216 +277,282 @@ createEvaluationGrid <- function(LocLower, LocUpper, NumberOfEvaluations) {
 
 normalAnalysis <- function(data, settings, modelSettings) {
   require(lsmeans)
+  require(MASS)
+  pvalues <- list(Diff=NaN, Equi=NaN)
 
-  data["Response"] <- data["Response"]
-  lmH1 <- lm(modelSettings$formulaH1, data=data)
-  pval <- 2*pt(abs(lmH1$coef[2])/sqrt(vcov(lmH1)[2,2]), lmH1$df.residual, lower.tail=FALSE)
-  resDF <- df.residual(lmH1)
+  # Fit model
+  lmH1 <- lm(as.formula(modelSettings$formulaH1), data=data)
+  resDF <- lmH1$df.residual
   resMS <- deviance(lmH1)/resDF
+  estiEffect = lmH1$coef[2]
+  seEffect = sqrt(vcov(lmH1)[2,2])
+  pvalues$Diff <- as.numeric(2*pt(abs(estiEffect)/seEffect, resDF, lower.tail=FALSE))
 
+  pLowerEqui = as.numeric(pt((estiEffect-settings$LocLower)/seEffect, resDF, lower.tail=FALSE))
+  pUpperEqui = as.numeric(pt((estiEffect-settings$LocUpper)/seEffect, resDF, lower.tail=TRUE))
+  pvalues$Equi = max(pLowerEqui, pUpperEqui) # Both one-sided hypothesis must be rejected
+
+  return(pvalues)
+
+  # Due to the return above this code is not executed
+  # It shows that the CGI approach is equivalent to the usual approach in simple situations
+  # Obtain predicted means for CMP/GMO and corresponding VCOV
   lsmeans <- lsmeans(lmH1, "GMO", at=modelSettings$preddata)
   meanCMP <- summary(lsmeans)$lsmean[1]
   meanGMO <- summary(lsmeans)$lsmean[2]
-  repCMP <- resMS / (summary(lsmeans)$SE[1]^2)
-  repGMO <- resMS / (summary(lsmeans)$SE[2]^2)
+  vcovLS = vcov(lsmeans)
 
-  # Generalized confidence interval
+  # GCI; this takes account of a possible covariance between predictions
   chi  <- resDF * resMS / rchisq(modelSettings$nGCI, resDF)
-  rCMP <- rnorm(modelSettings$nGCI, meanCMP, sqrt(chi/repCMP))
-  rGMO <- rnorm(modelSettings$nGCI, meanGMO, sqrt(chi/repGMO))
-  rCMP <- exp(rCMP + chi/2) - 1
-  rGMO <- exp(rGMO + chi/2) - 1
-  rCMP[rCMP < modelSettings$smallGCI] <- modelSettings$smallGCI
-  rGMO[rGMO < modelSettings$smallGCI] <- modelSettings$smallGCI
-  ratio <- rGMO/rCMP
+  random = mvrnorm(modelSettings$nGCI, c(0,0), vcovLS)*sqrt(chi/resMS)
+  random[,1] = meanCMP + random[,1]
+  random[,2] = meanGMO + random[,2]
+  ratio <- random[,2] - random[,1]
 
-  # For very small draws from the Chi-Distribution rCMP and rGMO can be out of bounds
-  quantiles <- quantile(ratio, c(modelSettings$SignificanceLevel/2, 1 - modelSettings$SignificanceLevel / 2), na.rm=TRUE)
-
-  pvalues <- list()
-  pvalues$Diff <- as.numeric(pval)
-  pvalues$Equi <- 1 - as.numeric((quantiles[1] > settings$LocLower) & (quantiles[2] < settings$LocUpper))
-  pvalues$EquiWD <- NA
-
+  pLowerCGI = mean(ratio < settings$LocLower)
+  pUpperCGI = mean(ratio > settings$LocUpper)
+  print(paste0("FIT pLower: ", pLowerEqui))
+  print(paste0("FIT pUpper: ", pUpperEqui))
+  print(paste0("CGI pLower: ", pLowerCGI))
+  print(paste0("CGI pUpper: ", pUpperCGI))
+  
   return(pvalues)
 }
 
 logNormalAnalysis <- function(data, settings, modelSettings) {
+  # Wald and LR are identical as there is no LR equivalence test
   require(lsmeans)
+  require(MASS)
+  pvalues <- list(Diff=NaN, Equi=NaN)
 
+  # Fit model
   data["Response"] <- log(data["Response"] + 1)
-  lmH1 <- lm(modelSettings$formulaH1, data=data)
-  pval <- 2*pt(abs(lmH1$coef[2])/sqrt(vcov(lmH1)[2,2]), lmH1$df.residual, lower.tail=FALSE)
-  resDF <- df.residual(lmH1)
+  lmH1 <- lm(as.formula(modelSettings$formulaH1), data=data)
+  resDF <- lmH1$df.residual
   resMS <- deviance(lmH1)/resDF
+  estiEffect = lmH1$coef[2]
+  seEffect = sqrt(vcov(lmH1)[2,2])
+  pvalues$Diff <- as.numeric(2*pt(abs(estiEffect)/seEffect, resDF, lower.tail=FALSE))
 
-  lsmeans <- lsmeans(lmH1, "GMO", at=modelSettings$preddata)
-  meanCMP <- summary(lsmeans)$lsmean[1]
-  meanGMO <- summary(lsmeans)$lsmean[2]
-  repCMP <- resMS / (summary(lsmeans)$SE[1]^2)
-  repGMO <- resMS / (summary(lsmeans)$SE[2]^2)
+  if (modelSettings$nGCI > 0) {
+    # Obtain predicted means for CMP/GMO and corresponding VCOV
+    lsmeans <- lsmeans(lmH1, "GMO", at=modelSettings$preddata)
+    meanCMP <- summary(lsmeans)$lsmean[1]
+    meanGMO <- summary(lsmeans)$lsmean[2]
+    vcovLS = vcov(lsmeans)
+    # GCI; this takes account of a possible covariance between predictions
+    chi  <- resDF * resMS / rchisq(modelSettings$nGCI, resDF)
+    random = mvrnorm(modelSettings$nGCI, c(0,0), vcovLS)*sqrt(chi/resMS)
+    random[,1] = meanCMP + random[,1]
+    random[,2] = meanGMO + random[,2]
+    random <- exp(random + chi/2) - 1
+    random[random < modelSettings$smallGCI] <- modelSettings$smallGCI
+    ratio <- random[,2]/random[,1]
 
-  # Generalized confidence interval
-  chi  <- resDF * resMS / rchisq(modelSettings$nGCI, resDF)
-  rCMP <- rnorm(modelSettings$nGCI, meanCMP, sqrt(chi/repCMP))
-  rGMO <- rnorm(modelSettings$nGCI, meanGMO, sqrt(chi/repGMO))
-  rCMP <- exp(rCMP + chi/2) - 1
-  rGMO <- exp(rGMO + chi/2) - 1
-  rCMP[rCMP < modelSettings$smallGCI] <- modelSettings$smallGCI
-  rGMO[rGMO < modelSettings$smallGCI] <- modelSettings$smallGCI
-  ratio <- rGMO/rCMP
-
-  # For very small draws from the Chi-Distribution rCMP and rGMO can be out of bounds
-  quantiles <- quantile(ratio, c(modelSettings$SignificanceLevel/2, 1 - modelSettings$SignificanceLevel / 2), na.rm=TRUE)
-
-  pvalues <- list()
-  pvalues$Diff <- as.numeric(pval)
-  pvalues$Equi <- 1 - as.numeric((quantiles[1] > settings$LocLower) & (quantiles[2] < settings$LocUpper))
-  pvalues$EquiWD <- NA
+    pLowerCGI = mean(ratio < settings$LocLower)  # If this is smaller than alfa: reject H0: esti < LocLower
+    pUpperCGI = mean(ratio > settings$LocUpper)  # If this is smaller than alfa: reject H0: esti > LocUpper
+    pvalues$Equi = max(pLowerCGI, pUpperCGI)     # Both one-sided hypothesis must be rejected
+  }
 
   return(pvalues)
+
+  # Originl code for Generalized confidence interval
+  # seCMP = summary(lsmeans)$SE[1]
+  # seGMO = summary(lsmeans)$SE[2]
+  # repCMP <- resMS / (seCMP^2)
+  # repGMO <- resMS / (seGMO^2)
+  # chi  <- resDF * resMS / rchisq(modelSettings$nGCI, resDF)
+  # rCMP <- rnorm(modelSettings$nGCI, meanCMP, sqrt(chi/repCMP))
+  # rGMO <- rnorm(modelSettings$nGCI, meanGMO, sqrt(chi/repGMO))
+  # rCMP <- exp(rCMP + chi/2) - 1
+  # rGMO <- exp(rGMO + chi/2) - 1
+  # rCMP[rCMP < modelSettings$smallGCI] <- modelSettings$smallGCI
+  # rGMO[rGMO < modelSettings$smallGCI] <- modelSettings$smallGCI
+  # ratio <- rGMO/rCMP
+  # quantiles <- quantile(ratio, c(modelSettings$SignificanceLevel, 1 - modelSettings$SignificanceLevel), na.rm=TRUE)
+  # print(quantiles)
 }
 
 squareRootAnalysis <- function(data, settings, modelSettings) {
+  # Wald and LR are identical as there is no LR equivalence test
   require(lsmeans)
+  require(MASS)
+  pvalues <- list(Diff=NaN, Equi=NaN)
 
+  # Fit model
   data["Response"] <- sqrt(data["Response"])
-  lmH1 <- lm(modelSettings$formulaH1, data=data)
-  pval <- 2*pt(abs(lmH1$coef[2])/sqrt(vcov(lmH1)[2,2]), lmH1$df.residual, lower.tail=FALSE)
-  resDF <- df.residual(lmH1)
+  lmH1 <- lm(as.formula(modelSettings$formulaH1), data=data)
+  resDF <- lmH1$df.residual
   resMS <- deviance(lmH1)/resDF
+  estiEffect = lmH1$coef[2]
+  seEffect = sqrt(vcov(lmH1)[2,2])
+  pvalues$Diff <- as.numeric(2*pt(abs(estiEffect)/seEffect, resDF, lower.tail=FALSE))
 
-  lsmeans <- lsmeans(lmH1, "GMO", at=modelSettings$preddata)
-  meanCMP <- summary(lsmeans)$lsmean[1]
-  meanGMO <- summary(lsmeans)$lsmean[2]
-  repCMP <- resMS / (summary(lsmeans)$SE[1]^2)
-  repGMO <- resMS / (summary(lsmeans)$SE[2]^2)
-  
-  # Generalized confidence interval
-  chi  <- resDF * resMS / rchisq(modelSettings$nGCI, resDF)
-  rCMP <- rnorm(modelSettings$nGCI, meanCMP, sqrt(chi/repCMP))
-  rGMO <- rnorm(modelSettings$nGCI, meanGMO, sqrt(chi/repGMO))
-  rCMP <- rCMP*rCMP + chi
-  rGMO <- rGMO*rGMO + chi
-  ratio <- rGMO/rCMP
-  
-  # For very small draws from the Chi-Distribution rCMP and rGMO can be out of bounds
-  quantiles <- quantile(ratio, c(modelSettings$SignificanceLevel/2, 1-modelSettings$SignificanceLevel/2), na.rm=TRUE)
-  
-  pvalues <- list()
-  pvalues$Diff <- as.numeric(pval)
-  pvalues$Equi <- 1 - as.numeric((quantiles[1] > settings$LocLower) & (quantiles[2] < settings$LocUpper))
-  pvalues$EquiWD <- NA
-  
+  if (modelSettings$nGCI > 0) {
+    # Obtain predicted means for CMP/GMO and corresponding VCOV
+    lsmeans <- lsmeans(lmH1, "GMO", at=modelSettings$preddata)
+    meanCMP <- summary(lsmeans)$lsmean[1]
+    meanGMO <- summary(lsmeans)$lsmean[2]
+    vcovLS = vcov(lsmeans)
+    # GCI; this takes account of a possible covariance between predictions
+    chi  <- resDF * resMS / rchisq(modelSettings$nGCI, resDF)
+    random = mvrnorm(modelSettings$nGCI, c(0,0), vcovLS)*sqrt(chi/resMS)
+    random[,1] = meanCMP + random[,1]
+    random[,2] = meanGMO + random[,2]
+    random <- random*random + chi
+    ratio <- random[,2]/random[,1]
+
+    pLowerCGI = mean(ratio < settings$LocLower)  # If this is smaller than alfa: reject H0: esti < LocLower
+    pUpperCGI = mean(ratio > settings$LocUpper)  # If this is smaller than alfa: reject H0: esti > LocUpper
+    pvalues$Equi = max(pLowerCGI, pUpperCGI)     # Both one-sided hypothesis must be rejected
+  }
+
   return(pvalues)
 }
 
 overdispersedPoissonAnalysis <- function(data, settings, modelSettings) {
-  glmH0 <- glm(modelSettings$formulaH0, family="quasipoisson", data=data, mustart=data[["Response"]])
+
+  # Prepare results list and fit H1; default method is DMETHOD=pearson
+  pvalues <- list(Diff = c(NaN), Equi = c(NaN), Dispersion=c(NaN))
   glmH1 <- glm(modelSettings$formulaH1, family="quasipoisson", data=data, mustart=data[["Response"]])
-
-  # Prepare results list
-  pvalues <- list()
-  
-  # Difference test
-  df1 <- df.residual(glmH1)
-  estDispersion <- sum(residuals(glmH1,type="pearson")^2)/df1
-  pval <- pf((deviance(glmH0) - deviance(glmH1))/estDispersion, 1, df1, lower.tail=FALSE)
-  pvalues$Diff <- as.numeric(pval)
-  
-  #if (k == 1) {
-    qt <- abs(qt(modelSettings$SignificanceLevel/2, df1, lower.tail=TRUE))
-  #}
-
-  # Equivalence test 
+  resDF <- df.residual(glmH1)
+  estDispersion <- summary(glmH1)$dispersion
   estiEffect <- glmH1$coef[2]
-  if ((estiEffect < settings$TransformLocLower) | (estiEffect > settings$TransformLocUpper)) {
-    pvalues$Equi <- 1
-    pvalues$EquiWD <- 1
-  } else {
-    # LR equivalence test
-    glmH0low <- glm(modelSettings$formulaH0_low, family="quasipoisson", data=data, mustart=data[["Response"]])
-    glmH0upp <- glm(modelSettings$formulaH0_upp, family="quasipoisson", data=data, mustart=data[["Response"]])
-    pvalLow <- pf((deviance(glmH0low) - deviance(glmH1))/estDispersion, 1, df1, lower.tail=FALSE)
-    pvalUpp <- pf((deviance(glmH0upp) - deviance(glmH1))/estDispersion, 1, df1, lower.tail=FALSE)
-    pvalues$Equi <- max(pvalLow, pvalUpp)
+  seEffect <- sqrt(vcov(glmH1)[2,2])
+  # estDispersion <- sum(residuals(glmH1,type="pearson")^2)/resDF
+  pvalues$Dispersion = estDispersion
 
-    # Wald equivalence test
-    seEffect <- sqrt(vcov(glmH1)[2,2])
-    lower <- estiEffect - qt * seEffect
-    upper <- estiEffect + qt * seEffect
-    pvalues$EquiWD <- 1 - as.numeric((lower > settings$TransformLocLower) & (upper < settings$TransformLocUpper))
+  if (settings$UseWaldTest) {  
+    # Results based on Wald tests
+    pvalues$Diff <- as.numeric(2*pt(abs(estiEffect)/seEffect, resDF, lower.tail=FALSE))
+    pLowerEqui = as.numeric(pt((estiEffect-settings$TransformLocLower)/seEffect, resDF, lower.tail=FALSE))
+    pUpperEqui = as.numeric(pt((estiEffect-settings$TransformLocUpper)/seEffect, resDF, lower.tail=TRUE))
+    pvalues$Equi = max(pLowerEqui, pUpperEqui) # Both one-sided hypothesis must be rejected
+  } else {
+    # Results based on LR test; denominator based on Pearson statistic
+    glmH0 <- glm(modelSettings$formulaH0, family="quasipoisson", data=data, mustart=data[["Response"]])
+    pvalues$Diff <- pf((deviance(glmH0) - deviance(glmH1))/estDispersion, 1, resDF, lower.tail=FALSE)
+    # and LR equivalence test
+    if ((estiEffect < settings$TransformLocLower) | (estiEffect > settings$TransformLocUpper)) {
+      pvalues$Equi <- 1
+    } else {
+      # LR equivalence test
+      glmH0low <- glm(modelSettings$formulaH0_low, family="quasipoisson", data=data, mustart=data[["Response"]])
+      glmH0upp <- glm(modelSettings$formulaH0_upp, family="quasipoisson", data=data, mustart=data[["Response"]])
+      pvalLow <- pf((deviance(glmH0low) - deviance(glmH1))/estDispersion, 1, resDF, lower.tail=FALSE)
+      pvalUpp <- pf((deviance(glmH0upp) - deviance(glmH1))/estDispersion, 1, resDF, lower.tail=FALSE)
+      pvalues$Equi <- max(pvalLow, pvalUpp)/2
+    }
   }
-  
   return(pvalues)
+
 }
 
 negativeBinomialAnalysis <- function(data, settings, modelSettings) {
   require(MASS)
 
-  glmH0 <- glm.nb(modelSettings$formulaH0, data=data, link=log, mustart=data[["Response"]])
+  # Prepare results list and fit H1
+  pvalues <- list(Diff = c(NaN), Equi = c(NaN), Dispersion=c(NaN))
   glmH1 <- glm.nb(modelSettings$formulaH1, data=data, link=log, mustart=data[["Response"]])
-  pval <- pchisq(-2*(logLik(glmH0) - logLik(glmH1)), 1, lower.tail=FALSE)
-
-  pvalues <- list()  
-  pvalues$Diff <- as.numeric(pval)
-
+  resDF <- df.residual(glmH1)
+  pvalues$Dispersion = glmH1$theta
   estiEffect <- glmH1$coef[2]
-  if ((estiEffect < settings$TransformLocLower) | (estiEffect > settings$TransformLocUpper)) {
-    pvalues$Equi <- 1
+  seEffect <- sqrt(vcov(glmH1)[2,2])
+
+  if (settings$UseWaldTest) {  
+    # Results based on Wald tests
+    pvalues$Diff <- as.numeric(2*pt(abs(estiEffect)/seEffect, resDF, lower.tail=FALSE))
+    pLowerEqui = as.numeric(pt((estiEffect-settings$TransformLocLower)/seEffect, resDF, lower.tail=FALSE))
+    pUpperEqui = as.numeric(pt((estiEffect-settings$TransformLocUpper)/seEffect, resDF, lower.tail=TRUE))
+    pvalues$Equi = max(pLowerEqui, pUpperEqui) # Both one-sided hypothesis must be rejected
   } else {
-    glmH0low <- glm.nb(modelSettings$formulaH0_low, data=data, link=log, mustart=data[["Response"]])
-    glmH0upp <- glm.nb(modelSettings$formulaH0_upp, data=data, link=log, mustart=data[["Response"]])
-    pvalLow <- pchisq(deviance(glmH0low) - deviance(glmH1), 1, lower.tail=FALSE)
-    pvalUpp <- pchisq(deviance(glmH0upp) - deviance(glmH1), 1, lower.tail=FALSE)
-    pval <- max(pvalLow, pvalUpp)
-    pvalues$Equi <- as.numeric(pval)
+    # Results based on LR test
+    glmH0 <- glm.nb(modelSettings$formulaH0, data=data, link=log, mustart=data[["Response"]])
+    pvalues$Diff <- as.numeric(pchisq(-2*logLik(glmH0) + 2*logLik(glmH1), 1, lower.tail=FALSE))
+    # and LR equivalence test
+    if ((estiEffect < settings$TransformLocLower) | (estiEffect > settings$TransformLocUpper)) {
+      pvalues$Equi <- 1
+    } else {
+      # LR equivalence test
+      glmH0low <- glm.nb(modelSettings$formulaH0_low, data=data, link=log, mustart=data[["Response"]])
+      glmH0upp <- glm.nb(modelSettings$formulaH0_upp, data=data, link=log, mustart=data[["Response"]])
+      pvalLow <- pchisq(-2*(logLik(glmH0low) - logLik(glmH1)), 1, lower.tail=FALSE)
+      pvalUpp <- pchisq(-2*(logLik(glmH0upp) - logLik(glmH1)), 1, lower.tail=FALSE)
+      pvalues$Equi <- max(pvalLow, pvalUpp)/2
+    }
   }
-  pvalues$EquiWD <- NA
-  
   return(pvalues)
 }
 
-monteCarloPowerAnalysis <- function(data, settings, modelSettings, blocks, effect) {
+monteCarloPowerAnalysis <- function(data, settings, modelSettings, blocks, effect, DEBUG=FALSE) {
+  # Prepare for debugging, i.e. create directory to write files to
+  if (DEBUG) {
+    localDir = paste0(settings$directory, settings$ComparisonId, "/")
+    dir.create(localDir, showWarnings=FALSE)
+    unlink(paste0(localDir, "Data-*.csv"))
+    if (settings$UseWaldTest) {
+      unlink(paste0(localDir, "00-PvaluesWald.csv"))
+    } else {
+      unlink(paste0(localDir, "00-PvaluesLR.csv"))
+    }
+  }
+
   nanalysis = length(settings$AnalysisMethods)
   nrow = settings$NumberOfSimulatedDataSets
   pValues = list(
-    Diff   = matrix(nrow=nrow, ncol=nanalysis, dimnames=list(NULL, settings$AnalysisMethods)),
-    Equi = matrix(nrow=nrow, ncol=nanalysis, dimnames=list(NULL, settings$AnalysisMethods)),
-    EquiWD = matrix(nrow=nrow, ncol=nanalysis, dimnames=list(NULL, settings$AnalysisMethods)))
+    Diff  = matrix(nrow=nrow, ncol=nanalysis, dimnames=list(NULL, settings$AnalysisMethods)),
+    Equi  = matrix(nrow=nrow, ncol=nanalysis, dimnames=list(NULL, settings$AnalysisMethods)),
+    Extra = matrix(nrow=nrow, ncol=2, dimnames=list(NULL, c("OPdisp", "NBtheta")))
+  )
 
   # Setup simulation settings
   simulationSettings <- createSimulationSettings(settings)
-  simulatedDataTemplate <- createSimulatedDataTemplate(data, settings, simulationSettings, blocks);
+  simulatedDataTemplate <- createSimulatedDataTemplate(data, settings, simulationSettings, blocks)
 
   # Do looping over simulations 
+  ndigits = ceiling(log10(settings$NumberOfSimulatedDataSets) + 0.0001)
   for (k in 1:settings$NumberOfSimulatedDataSets) {
     simulatedData <- simulateData(simulatedDataTemplate, settings, simulationSettings, effect)
+    if (DEBUG) {
+      csvFile = paste0("0000000", k)
+      csvFile = substr(csvFile, nchar(csvFile)+1-ndigits, nchar(csvFile))
+      csvFile = paste0(localDir, "Data-", csvFile, ".csv")
+      write.csv(simulatedData, csvFile, row.names=FALSE)
+    }
     if (!is.na(match("LogNormal", settings$AnalysisMethods))) {
       result <- logNormalAnalysis(simulatedData, settings, modelSettings)
       pValues$Diff[k, "LogNormal"] <- result$Diff
       pValues$Equi[k, "LogNormal"] <- result$Equi
-      pValues$EquiWD[k, "LogNormal"] <- result$EquiWD
     }
     if (!is.na(match("SquareRoot", settings$AnalysisMethods))) {
       result <- squareRootAnalysis(simulatedData, settings, modelSettings)
       pValues$Diff[k, "SquareRoot"] <- result$Diff
       pValues$Equi[k, "SquareRoot"] <- result$Equi
-      pValues$EquiWD[k, "SquareRoot"] <- result$EquiWD
     }
     if (!is.na(match("OverdispersedPoisson", settings$AnalysisMethods))) {
       result <- overdispersedPoissonAnalysis(simulatedData, settings, modelSettings)
       pValues$Diff[k, "OverdispersedPoisson"] <- result$Diff
       pValues$Equi[k, "OverdispersedPoisson"] <- result$Equi
-      pValues$EquiWD[k, "OverdispersedPoisson"] <- result$EquiWD
+      pValues$Extra[k, "OPdisp"] <- result$Dispersion
     }
     if (!is.na(match("NegativeBinomial", settings$AnalysisMethods))) {
       result <- negativeBinomialAnalysis(simulatedData, settings, modelSettings)
       pValues$Diff[k, "NegativeBinomial"] <- result$Diff
       pValues$Equi[k, "NegativeBinomial"] <- result$Equi
-      pValues$EquiWD[k, "NegativeBinomial"] <- result$EquiWD
+      pValues$Extra[k, "NBtheta"] <- result$Dispersion
     }
   }
+
+  if (DEBUG) {
+    print(pValues)
+    if (settings$UseWaldTest) {
+      csvFile = paste0(localDir, "00-PvaluesWald.csv")
+    } else {
+      csvFile = paste0(localDir, "00-PvaluesLR.csv")
+    }
+    write.csv(pValues, csvFile, row.names=FALSE)
+  }
+
   return(pValues)
 }
 
@@ -497,7 +571,8 @@ runPowerAnalysis <- function(data, settings) {
     Effect = matrix(nrow=nrow, ncol=4, dimnames=list(NULL, c("Effect", "TransformedEffect", "CSD", "NumberOfReplications"))),
     Diff = matrix(nrow=nrow, ncol=nanalysis, dimnames=list(NULL, paste("Diff",   settings$AnalysisMethods, sep=""))), 
     Equi = matrix(nrow=nrow, ncol=nanalysis, dimnames=list(NULL, paste("Equi",   settings$AnalysisMethods, sep=""))), 
-    EquiWD = matrix(nrow=nrow, ncol=nanalysis, dimnames=list(NULL, paste("EquiWD", settings$AnalysisMethods, sep=""))))
+    EquiWD = matrix(nrow=nrow, ncol=nanalysis, dimnames=list(NULL, paste("EquiWD", settings$AnalysisMethods, sep="")))
+    )
   
   results$Effect[,"TransformedEffect"] <- rep(effect, nreplication)
   results$Effect[,"CSD"] <- rep(evaluationGrid$csd, nreplication) 
@@ -527,3 +602,4 @@ runPowerAnalysis <- function(data, settings) {
 
   return(df)
 }
+

@@ -54,9 +54,10 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
 
                     rEngine.LoadLibrary("MASS");
                     rEngine.LoadLibrary("lsmeans");
-                    rEngine.EvaluateNoReturn(string.Format("set.seed({0})", inputPowerAnalysis.RandomNumberSeed));
+                    rEngine.EvaluateNoReturn("#========== Reading script and data");
                     rEngine.EvaluateNoReturn(string.Format(@"source('{0}')", scriptFilename.Replace("\\", "/")));
                     rEngine.EvaluateNoReturn(string.Format("inputData <- readDataFile('{0}')", comparisonInputFilename.Replace("\\", "/")));
+                    rEngine.EvaluateNoReturn("#========== Creating settings");
                     rEngine.EvaluateNoReturn(string.Format("settings <- readSettings('{0}')", comparisonSettingsFilename.Replace("\\", "/")));
                     rEngine.EvaluateNoReturn("modelSettings <- createModelSettings(inputData, settings)");
 
@@ -64,6 +65,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                     var counter = 0;
                     for (int i = 0; i < inputPowerAnalysis.NumberOfReplications.Count; ++i) {
                         var blocks = inputPowerAnalysis.NumberOfReplications[i];
+                        rEngine.EvaluateNoReturn("#========== Creating settings");
                         rEngine.SetSymbol("blocks", blocks);
                         for (int j = 0; j < effects.Count; ++j) {
                             var effect = effects[j];
@@ -86,6 +88,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                                 errorList.Add(msg);
                             }
                             counter++;
+                            rEngine.EvaluateNoReturn("");
                         }
                     }
                     progressState.Update(string.Format("done", 100));
