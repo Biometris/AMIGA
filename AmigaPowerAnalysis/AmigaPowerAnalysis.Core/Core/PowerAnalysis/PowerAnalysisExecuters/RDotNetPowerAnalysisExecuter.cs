@@ -54,6 +54,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
 
                     rEngine.LoadLibrary("MASS");
                     rEngine.LoadLibrary("lsmeans");
+                    rEngine.LoadLibrary("stringr");
                     rEngine.EvaluateNoReturn("#========== Reading script and data");
                     rEngine.EvaluateNoReturn(string.Format(@"source('{0}')", scriptFilename.Replace("\\", "/")));
                     rEngine.EvaluateNoReturn(string.Format("inputData <- readDataFile('{0}')", comparisonInputFilename.Replace("\\", "/")));
@@ -65,14 +66,15 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                     var counter = 0;
                     for (int i = 0; i < inputPowerAnalysis.NumberOfReplications.Count; ++i) {
                         var blocks = inputPowerAnalysis.NumberOfReplications[i];
-                        rEngine.EvaluateNoReturn("#========== Creating settings");
+                        rEngine.EvaluateNoReturn("");
+                        rEngine.EvaluateNoReturn("#========== Number " + i.ToString() + "/" + inputPowerAnalysis.NumberOfReplications.Count.ToString() + " of replications");
                         rEngine.SetSymbol("blocks", blocks);
                         for (int j = 0; j < effects.Count; ++j) {
                             var effect = effects[j];
                             try {
                                 // Update progress state
                                 progressState.Update(string.Format("Endpoint {0}, replicate {1}/{2}, effect {3}/{4}", inputPowerAnalysis.Endpoint, i, inputPowerAnalysis.NumberOfReplications.Count, j, effects.Count), 100 * ((double)counter / totalLoops));
-                                var output = runMonteCarloSimulation(effects[j], blocks, inputPowerAnalysis.SelectedAnalysisMethodTypes, inputPowerAnalysis.NumberOfSimulatedDataSets, rEngine);
+                                var output = runMonteCarloSimulation(effect, blocks, j, i, inputPowerAnalysis.SelectedAnalysisMethodTypes, inputPowerAnalysis.NumberOfSimulatedDataSets, rEngine);
                                 outputResults.Add(output);
                             } catch (OperationCanceledException ex) {
                                 throw ex;
@@ -94,13 +96,15 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                     progressState.Update(string.Format("done", 100));
                 }
                 CsvWriter.WriteToCsvFile(comparisonOutputFilename, ",", outputResults);
+                logger.WriteToFile();
                 return new OutputPowerAnalysis() {
                     InputPowerAnalysis = inputPowerAnalysis,
                     OutputRecords = outputResults,
                     Success = errorList.Count == 0,
                     Messages = errorList,
                 };
-            } catch (OperationCanceledException ex) {
+            }
+            catch (OperationCanceledException ex) {
                 throw ex;
             } catch (Exception ex) {
                 logger.Log(string.Format("# Error: {0}", ex.Message));
@@ -114,9 +118,13 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             }
         }
 
-        private static OutputPowerAnalysisRecord runMonteCarloSimulation(EffectCSD effect, int blocks, AnalysisMethodType selectedAnalysisMethodTypes, int monteCarloSimulations, LoggingRDotNetEngine rEngine) {
+        private static OutputPowerAnalysisRecord runMonteCarloSimulation(EffectCSD effect, int blocks, int jeffect, int iblocks, AnalysisMethodType selectedAnalysisMethodTypes, int monteCarloSimulations, LoggingRDotNetEngine rEngine) {
+            string DEBUG;
+            DEBUG = "FALSE";
+            DEBUG = "TRUE";
             rEngine.SetSymbol("effect", effect.TransformedEfffect);
-            rEngine.EvaluateNoReturn("pValues <- monteCarloPowerAnalysis(inputData, settings, modelSettings, blocks, effect)");
+            string line = "pValues <- monteCarloPowerAnalysis(inputData, settings, modelSettings, blocks, effect, " + iblocks.ToString() + ", " + jeffect.ToString() + ", " + DEBUG + ")";
+            rEngine.EvaluateNoReturn("pValues <- monteCarloPowerAnalysis(inputData, settings, modelSettings, blocks, effect, " + iblocks.ToString() + ", " + jeffect.ToString() + ", " + DEBUG + ")");
             var output = new OutputPowerAnalysisRecord() {
                 ConcernStandardizedDifference = effect.CSD,
                 Effect = effect.Effect,

@@ -212,9 +212,6 @@ createModelSettings <- function(data, settings) {
 createSimulationSettings <- function(settings) {
   simulationSettings <- list()
 
-  # set seed
-  set.seed(settings$RandomNumberSeed)
-
   # Define dispersion parameter
   simulationSettings$dispersion <- ropoissonDispersion(settings$OverallMean, settings$CVComparator, settings$PowerLawPower, settings$Distribution)  
 
@@ -315,7 +312,6 @@ normalAnalysis <- function(data, settings, modelSettings) {
   print(paste0("FIT pUpper: ", pUpperEqui))
   print(paste0("CGI pLower: ", pLowerCGI))
   print(paste0("CGI pUpper: ", pUpperCGI))
-  
   return(pvalues)
 }
 
@@ -353,7 +349,6 @@ logNormalAnalysis <- function(data, settings, modelSettings) {
     pUpperCGI = mean(ratio > settings$LocUpper)  # If this is smaller than alfa: reject H0: esti > LocUpper
     pvalues$Equi = max(pLowerCGI, pUpperCGI)     # Both one-sided hypothesis must be rejected
   }
-
   return(pvalues)
 
   # Originl code for Generalized confidence interval
@@ -406,7 +401,6 @@ squareRootAnalysis <- function(data, settings, modelSettings) {
     pUpperCGI = mean(ratio > settings$LocUpper)  # If this is smaller than alfa: reject H0: esti > LocUpper
     pvalues$Equi = max(pLowerCGI, pUpperCGI)     # Both one-sided hypothesis must be rejected
   }
-
   return(pvalues)
 }
 
@@ -445,7 +439,6 @@ overdispersedPoissonAnalysis <- function(data, settings, modelSettings) {
     }
   }
   return(pvalues)
-
 }
 
 negativeBinomialAnalysis <- function(data, settings, modelSettings) {
@@ -484,10 +477,14 @@ negativeBinomialAnalysis <- function(data, settings, modelSettings) {
   return(pvalues)
 }
 
-monteCarloPowerAnalysis <- function(data, settings, modelSettings, blocks, effect, DEBUG=FALSE) {
+monteCarloPowerAnalysis <- function(data, settings, modelSettings, blocks, effect, iBlocks, jEffect, DEBUG=FALSE) {
   # Prepare for debugging, i.e. create directory to write files to
   if (DEBUG) {
-    localDir = paste0(settings$directory, settings$ComparisonId, "/")
+    localDir = paste0(settings$directory, "Set", str_pad(settings$ComparisonId, 2, side="left", "0"), "/")
+    dir.create(localDir, showWarnings=FALSE)
+    localDir = paste0(localDir, "Block", str_pad(iBlocks, 2, side="left", "0"), "/")
+    dir.create(localDir, showWarnings=FALSE)
+    localDir = paste0(localDir, "Effect", str_pad(jEffect, 2, side="left", "0"), "/")
     dir.create(localDir, showWarnings=FALSE)
     unlink(paste0(localDir, "Data-*.csv"))
     if (settings$UseWaldTest) {
@@ -512,13 +509,21 @@ monteCarloPowerAnalysis <- function(data, settings, modelSettings, blocks, effec
   # Do looping over simulations 
   ndigits = ceiling(log10(settings$NumberOfSimulatedDataSets) + 0.0001)
   for (k in 1:settings$NumberOfSimulatedDataSets) {
+    # set seed; this is to ensure that Wald and LR use the same simulated data
+    if (settings$RandomNumberSeed == .Machine$integer.max) {
+      settings$RandomNumberSeed = 1
+    } else {
+      settings$RandomNumberSeed = settings$RandomNumberSeed + 1
+    }
+    set.seed(settings$RandomNumberSeed)
+    # simulate data
     simulatedData <- simulateData(simulatedDataTemplate, settings, simulationSettings, effect)
     if (DEBUG) {
-      csvFile = paste0("0000000", k)
-      csvFile = substr(csvFile, nchar(csvFile)+1-ndigits, nchar(csvFile))
+      csvFile = str_pad(k, ndigits, side="left", "0")      
       csvFile = paste0(localDir, "Data-", csvFile, ".csv")
       write.csv(simulatedData, csvFile, row.names=FALSE)
     }
+    # Fit models
     if (!is.na(match("LogNormal", settings$AnalysisMethods))) {
       result <- logNormalAnalysis(simulatedData, settings, modelSettings)
       pValues$Diff[k, "LogNormal"] <- result$Diff
@@ -602,4 +607,3 @@ runPowerAnalysis <- function(data, settings) {
 
   return(df)
 }
-
