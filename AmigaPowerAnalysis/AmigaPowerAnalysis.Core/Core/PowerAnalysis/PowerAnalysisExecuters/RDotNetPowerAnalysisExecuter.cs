@@ -76,9 +76,11 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                                 progressState.Update(string.Format("Endpoint {0}, replicate {1}/{2}, effect {3}/{4}", inputPowerAnalysis.Endpoint, i, inputPowerAnalysis.NumberOfReplications.Count, j, effects.Count), 100 * ((double)counter / totalLoops));
                                 var output = runMonteCarloSimulation(effect, blocks, j, i, inputPowerAnalysis.SelectedAnalysisMethodTypes, inputPowerAnalysis.NumberOfSimulatedDataSets, rEngine);
                                 outputResults.Add(output);
-                            } catch (OperationCanceledException ex) {
+                            }
+                            catch (OperationCanceledException ex) {
                                 throw ex;
-                            } catch (Exception ex) {
+                            }
+                            catch (Exception ex) {
                                 var output = new OutputPowerAnalysisRecord() {
                                     ConcernStandardizedDifference = effect.CSD,
                                     Effect = effect.Effect,
@@ -106,7 +108,8 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             }
             catch (OperationCanceledException ex) {
                 throw ex;
-            } catch (Exception ex) {
+            }
+            catch (Exception ex) {
                 logger.Log(string.Format("# Error: {0}", ex.Message));
                 logger.WriteToFile();
                 return new OutputPowerAnalysis() {
@@ -118,13 +121,13 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             }
         }
 
-        private static OutputPowerAnalysisRecord runMonteCarloSimulation(EffectCSD effect, int blocks, int jeffect, int iblocks, AnalysisMethodType selectedAnalysisMethodTypes, int monteCarloSimulations, LoggingRDotNetEngine rEngine) {
-            string DEBUG;
-            DEBUG = "FALSE";
-            DEBUG = "TRUE";
+        private static OutputPowerAnalysisRecord runMonteCarloSimulation(EffectCSD effect, int blocks, int ieffect, int iblocks, AnalysisMethodType selectedAnalysisMethodTypes, int monteCarloSimulations, LoggingRDotNetEngine rEngine) {
+            // Define settings for Debugging the Rscript
+            string writeData = "TRUE";
+            string displayFit = "TRUE";
+            rEngine.EvaluateNoReturn("debugSettings = list(iRep=" + iblocks.ToString() + ", iEffect=" + ieffect.ToString() + ", iDataset=NaN, writeData=" + writeData + ", displayFit=" + displayFit + ")");
             rEngine.SetSymbol("effect", effect.TransformedEfffect);
-            string line = "pValues <- monteCarloPowerAnalysis(inputData, settings, modelSettings, blocks, effect, " + iblocks.ToString() + ", " + jeffect.ToString() + ", " + DEBUG + ")";
-            rEngine.EvaluateNoReturn("pValues <- monteCarloPowerAnalysis(inputData, settings, modelSettings, blocks, effect, " + iblocks.ToString() + ", " + jeffect.ToString() + ", " + DEBUG + ")");
+            rEngine.EvaluateNoReturn("pValues <- monteCarloPowerAnalysis(inputData, settings, modelSettings, blocks, effect, debugSettings)");
             var output = new OutputPowerAnalysisRecord() {
                 ConcernStandardizedDifference = effect.CSD,
                 Effect = effect.Effect,
@@ -201,7 +204,8 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             if (measurementType == MeasurementType.Continuous) {
                 transformedLocLower = locLower - overallMean;
                 transformedLocUpper = locUpper + overallMean;
-            } else {
+            }
+            else {
                 transformedLocLower = Math.Log(locLower);
                 transformedLocUpper = Math.Log(locUpper);
             }
@@ -212,7 +216,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                     .Reverse()
                     .Select(r => new EffectCSD() {
                         CSD = r,
-                        TransformedEfffect = r * transformedLocLower 
+                        TransformedEfffect = r * transformedLocLower
                     })
                     .Take(numberOfEvaluations + 1));
             }
@@ -231,7 +235,8 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
 
             if (measurementType == MeasurementType.Continuous) {
                 evaluationGrid.ForEach(r => r.Effect = r.TransformedEfffect);
-            } else {
+            }
+            else {
                 evaluationGrid.ForEach(r => r.Effect = Math.Exp(r.TransformedEfffect));
             }
             return evaluationGrid;

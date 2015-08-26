@@ -272,7 +272,7 @@ createEvaluationGrid <- function(LocLower, LocUpper, NumberOfEvaluations) {
   return(list(csd=csd, effect=effect))
 }
 
-normalAnalysis <- function(data, settings, modelSettings) {
+normalAnalysis <- function(data, settings, modelSettings, debugSettings) {
   require(lsmeans)
   require(MASS)
   pvalues <- list(Diff=NaN, Equi=NaN)
@@ -315,7 +315,7 @@ normalAnalysis <- function(data, settings, modelSettings) {
   return(pvalues)
 }
 
-logNormalAnalysis <- function(data, settings, modelSettings) {
+logNormalAnalysis <- function(data, settings, modelSettings, debugSettings) {
   # Wald and LR are identical as there is no LR equivalence test
   require(lsmeans)
   require(MASS)
@@ -368,7 +368,7 @@ logNormalAnalysis <- function(data, settings, modelSettings) {
   # print(quantiles)
 }
 
-squareRootAnalysis <- function(data, settings, modelSettings) {
+squareRootAnalysis <- function(data, settings, modelSettings, debugSettings) {
   # Wald and LR are identical as there is no LR equivalence test
   require(lsmeans)
   require(MASS)
@@ -404,7 +404,7 @@ squareRootAnalysis <- function(data, settings, modelSettings) {
   return(pvalues)
 }
 
-overdispersedPoissonAnalysis <- function(data, settings, modelSettings) {
+overdispersedPoissonAnalysis <- function(data, settings, modelSettings, debugSettings) {
 
   # Prepare results list and fit H1; default method is DMETHOD=pearson
   pvalues <- list(Diff = c(NaN), Equi = c(NaN), Dispersion=c(NaN))
@@ -415,6 +415,12 @@ overdispersedPoissonAnalysis <- function(data, settings, modelSettings) {
   seEffect <- sqrt(vcov(glmH1)[2,2])
   # estDispersion <- sum(residuals(glmH1,type="pearson")^2)/resDF
   pvalues$Dispersion = estDispersion
+  if (debugSettings$displayFit) {
+    writeLines(paste0("\nOP iRep ", debugSettings$iRep, " iEffect ", debugSettings$iEffect, " Dataset ", debugSettings$iDataset), debugSettings$displayFile)
+    writeLines(paste0("  dispersion: ", estDispersion), debugSettings$displayFile)
+    writeLines(paste0("  estiEffect: ", estiEffect), debugSettings$displayFile)
+    writeLines(paste0("  seEffect:   ", seEffect), debugSettings$displayFile)
+  }
 
   if (settings$UseWaldTest) {  
     # Results based on Wald tests
@@ -441,7 +447,7 @@ overdispersedPoissonAnalysis <- function(data, settings, modelSettings) {
   return(pvalues)
 }
 
-negativeBinomialAnalysis <- function(data, settings, modelSettings) {
+negativeBinomialAnalysis <- function(data, settings, modelSettings, debugSettings) {
   require(MASS)
 
   # Prepare results list and fit H1
@@ -451,6 +457,12 @@ negativeBinomialAnalysis <- function(data, settings, modelSettings) {
   pvalues$Dispersion = glmH1$theta
   estiEffect <- glmH1$coef[2]
   seEffect <- sqrt(vcov(glmH1)[2,2])
+  if (debugSettings$displayFit) {
+    writeLines(paste0("\nNB iRep ", debugSettings$iRep, " iEffect ", debugSettings$iEffect, " Dataset ", debugSettings$iDataset), debugSettings$displayFile)
+    writeLines(paste0("  dispersion: ", glmH1$theta), debugSettings$displayFile)
+    writeLines(paste0("  estiEffect: ", estiEffect), debugSettings$displayFile)
+    writeLines(paste0("  seEffect:   ", seEffect), debugSettings$displayFile)
+  }
 
   if (settings$UseWaldTest) {  
     # Results based on Wald tests
@@ -477,21 +489,28 @@ negativeBinomialAnalysis <- function(data, settings, modelSettings) {
   return(pvalues)
 }
 
-monteCarloPowerAnalysis <- function(data, settings, modelSettings, blocks, effect, iBlocks, jEffect, DEBUG=FALSE) {
+monteCarloPowerAnalysis <- function(data, settings, modelSettings, blocks, effect, debugSettings) {
+
+  # debugSettings$iRep            counting Reps loop (integer)
+  # debugSettings$iEffect         counting Effects loop (integer)
+  # debugSettings$iDataset        counting Datsets loop (integer)
+  # debugSettings$writeData       whether to write all data (TRUE or FALSE)
+  # debugSettings$displayFit      whether to display fit of models
+  # debugSettings$displayFile     File connection to display the fit of models
+
   # Prepare for debugging, i.e. create directory to write files to
-  if (DEBUG) {
-    localDir = paste0(settings$directory, "Set", str_pad(settings$ComparisonId, 2, side="left", "0"), "/")
+  if (debugSettings$writeData) {
+    localDir = paste0(settings$directory)
+    localDir = paste0(localDir, "Set", str_pad(settings$ComparisonId, 2, side="left", "0"), "/")
     dir.create(localDir, showWarnings=FALSE)
-    localDir = paste0(localDir, "Block", str_pad(iBlocks, 2, side="left", "0"), "/")
+    localDir = paste0(localDir, "Rep", str_pad(debugSettings$iRep, 2, side="left", "0"), "/")
     dir.create(localDir, showWarnings=FALSE)
-    localDir = paste0(localDir, "Effect", str_pad(jEffect, 2, side="left", "0"), "/")
+    localDir = paste0(localDir, "Effect", str_pad(debugSettings$iEffect, 2, side="left", "0"), "/")
     dir.create(localDir, showWarnings=FALSE)
-    unlink(paste0(localDir, "Data-*.csv"))
-    if (settings$UseWaldTest) {
-      unlink(paste0(localDir, "00-PvaluesWald.csv"))
-    } else {
-      unlink(paste0(localDir, "00-PvaluesLR.csv"))
-    }
+    unlink(paste0(localDir, "*.csv"))
+    debugSettings$displayFile = file(paste0(localDir, "00-DisplayFit.txt"), open="wt")
+  } else {
+    debugSettings$displayFit = FALSE
   }
 
   nanalysis = length(settings$AnalysisMethods)
@@ -509,6 +528,7 @@ monteCarloPowerAnalysis <- function(data, settings, modelSettings, blocks, effec
   # Do looping over simulations 
   ndigits = ceiling(log10(settings$NumberOfSimulatedDataSets) + 0.0001)
   for (k in 1:settings$NumberOfSimulatedDataSets) {
+    debugSettings$iDataset = k
     # set seed; this is to ensure that Wald and LR use the same simulated data
     if (settings$RandomNumberSeed == .Machine$integer.max) {
       settings$RandomNumberSeed = 1
@@ -518,37 +538,37 @@ monteCarloPowerAnalysis <- function(data, settings, modelSettings, blocks, effec
     set.seed(settings$RandomNumberSeed)
     # simulate data
     simulatedData <- simulateData(simulatedDataTemplate, settings, simulationSettings, effect)
-    if (DEBUG) {
+    if (debugSettings$writeData) {
       csvFile = str_pad(k, ndigits, side="left", "0")      
       csvFile = paste0(localDir, "Data-", csvFile, ".csv")
       write.csv(simulatedData, csvFile, row.names=FALSE)
     }
     # Fit models
     if (!is.na(match("LogNormal", settings$AnalysisMethods))) {
-      result <- logNormalAnalysis(simulatedData, settings, modelSettings)
+      result <- logNormalAnalysis(simulatedData, settings, modelSettings, debugSettings)
       pValues$Diff[k, "LogNormal"] <- result$Diff
       pValues$Equi[k, "LogNormal"] <- result$Equi
     }
     if (!is.na(match("SquareRoot", settings$AnalysisMethods))) {
-      result <- squareRootAnalysis(simulatedData, settings, modelSettings)
+      result <- squareRootAnalysis(simulatedData, settings, modelSettings, debugSettings)
       pValues$Diff[k, "SquareRoot"] <- result$Diff
       pValues$Equi[k, "SquareRoot"] <- result$Equi
     }
     if (!is.na(match("OverdispersedPoisson", settings$AnalysisMethods))) {
-      result <- overdispersedPoissonAnalysis(simulatedData, settings, modelSettings)
+      result <- overdispersedPoissonAnalysis(simulatedData, settings, modelSettings, debugSettings)
       pValues$Diff[k, "OverdispersedPoisson"] <- result$Diff
       pValues$Equi[k, "OverdispersedPoisson"] <- result$Equi
       pValues$Extra[k, "OPdisp"] <- result$Dispersion
     }
     if (!is.na(match("NegativeBinomial", settings$AnalysisMethods))) {
-      result <- negativeBinomialAnalysis(simulatedData, settings, modelSettings)
+      result <- negativeBinomialAnalysis(simulatedData, settings, modelSettings, debugSettings)
       pValues$Diff[k, "NegativeBinomial"] <- result$Diff
       pValues$Equi[k, "NegativeBinomial"] <- result$Equi
       pValues$Extra[k, "NBtheta"] <- result$Dispersion
     }
   }
 
-  if (DEBUG) {
+  if (debugSettings$writeData) {
     print(pValues)
     if (settings$UseWaldTest) {
       csvFile = paste0(localDir, "00-PvaluesWald.csv")
