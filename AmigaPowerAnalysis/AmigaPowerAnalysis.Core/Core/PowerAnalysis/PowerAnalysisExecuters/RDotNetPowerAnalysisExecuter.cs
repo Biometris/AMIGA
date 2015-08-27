@@ -16,6 +16,9 @@ using Biometris.Statistics.Measurements;
 namespace AmigaPowerAnalysis.Core.PowerAnalysis {
     public sealed class RDotNetPowerAnalysisExecuter : PowerAnalysisExecuterBase {
 
+        private static string _writeData = "TRUE";
+        private static string _displayFit = "TRUE";
+
         private sealed class EffectCSD {
             public double CSD { get; set; }
             public double Effect { get; set; }
@@ -62,6 +65,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                     rEngine.EvaluateNoReturn(string.Format("settings <- readSettings('{0}')", comparisonSettingsFilename.Replace("\\", "/")));
                     rEngine.EvaluateNoReturn("modelSettings <- createModelSettings(inputData, settings)");
 
+                  
                     var totalLoops = inputPowerAnalysis.NumberOfReplications.Count * effects.Count;
                     var counter = 0;
                     for (int i = 0; i < inputPowerAnalysis.NumberOfReplications.Count; ++i) {
@@ -74,7 +78,12 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                             try {
                                 // Update progress state
                                 progressState.Update(string.Format("Endpoint {0}, replicate {1}/{2}, effect {3}/{4}", inputPowerAnalysis.Endpoint, i, inputPowerAnalysis.NumberOfReplications.Count, j, effects.Count), 100 * ((double)counter / totalLoops));
-                                var output = runMonteCarloSimulation(effect, blocks, j, i, inputPowerAnalysis.SelectedAnalysisMethodTypes, inputPowerAnalysis.NumberOfSimulatedDataSets, rEngine);
+
+                                // Define settings for Debugging the Rscript
+                                rEngine.EvaluateNoReturn(string.Format("debugSettings = list(iRep={0}, iEffect={1}, iDataset=NaN, writeData={2}, displayFit={3})", i, j, _writeData, _displayFit));
+
+                                // Run Monte Carlo
+                                var output = runMonteCarloSimulation(effect, blocks, inputPowerAnalysis.SelectedAnalysisMethodTypes, inputPowerAnalysis.NumberOfSimulatedDataSets, rEngine);
                                 outputResults.Add(output);
                             }
                             catch (OperationCanceledException ex) {
@@ -121,11 +130,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             }
         }
 
-        private static OutputPowerAnalysisRecord runMonteCarloSimulation(EffectCSD effect, int blocks, int ieffect, int iblocks, AnalysisMethodType selectedAnalysisMethodTypes, int monteCarloSimulations, LoggingRDotNetEngine rEngine) {
-            // Define settings for Debugging the Rscript
-            string writeData = "TRUE";
-            string displayFit = "TRUE";
-            rEngine.EvaluateNoReturn("debugSettings = list(iRep=" + iblocks.ToString() + ", iEffect=" + ieffect.ToString() + ", iDataset=NaN, writeData=" + writeData + ", displayFit=" + displayFit + ")");
+        private static OutputPowerAnalysisRecord runMonteCarloSimulation(EffectCSD effect, int blocks, AnalysisMethodType selectedAnalysisMethodTypes, int monteCarloSimulations, LoggingRDotNetEngine rEngine) {
             rEngine.SetSymbol("effect", effect.TransformedEfffect);
             rEngine.EvaluateNoReturn("pValues <- monteCarloPowerAnalysis(inputData, settings, modelSettings, blocks, effect, debugSettings)");
             var output = new OutputPowerAnalysisRecord() {
