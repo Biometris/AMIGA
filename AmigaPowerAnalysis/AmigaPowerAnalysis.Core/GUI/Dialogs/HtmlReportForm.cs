@@ -28,13 +28,12 @@ namespace AmigaPowerAnalysis.GUI {
             webBrowserHtmlReport.IsWebBrowserContextMenuEnabled = false;
             //webBrowserHtmlReport.AllowWebBrowserDrop = false;
 
-            var _assembly = Assembly.GetExecutingAssembly();
-            var _textStreamReader = new StreamReader(_assembly.GetManifestResourceStream("AmigaPowerAnalysis.Resources.print.css"));
-            var html = string.Format("<html><head><style>{0}</style></head><body>{1}</body></html>", _textStreamReader.ReadToEnd(), htmlContent);
+            var assembly = Assembly.GetExecutingAssembly();
+            var textStreamReader = new StreamReader(assembly.GetManifestResourceStream("AmigaPowerAnalysis.Resources.print.css"));
+            var html = string.Format("<html><head><style>{0}</style></head><body>{1}</body></html>", textStreamReader.ReadToEnd(), htmlContent);
 
             doc.Write(html);
             doc.Title = "Report";
-
         }
 
         private void toolStripButtonExportPdf_Click(object sender, EventArgs e) {
