@@ -9,6 +9,7 @@ using AmigaPowerAnalysis.Core.Charting;
 using AmigaPowerAnalysis.Core.DataAnalysis.AnalysisModels;
 using AmigaPowerAnalysis.Core.PowerAnalysis;
 using OxyPlot.WindowsForms;
+using OxyPlot;
 
 namespace AmigaPowerAnalysis.Core.Reporting {
     public static class ComparisonSummaryReportGenerator {
@@ -17,15 +18,18 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             var html = "";
             var primaryComparisons = comparisons.Where(c => c.IsPrimary);
             html += generatePrimaryComparisonsSummary(comparisons);
-            html += generateComparisonsChartHtml(primaryComparisons, tempPath);
+            var analysisMethodTypes = comparisons.First().OutputPowerAnalysis.InputPowerAnalysis.SelectedAnalysisMethodTypes.GetFlags().Cast<AnalysisMethodType>();
+            var records = getSummaryRecords(primaryComparisons);
+            html += generateComparisonOutputHtml(records);
+            html += generateComparisonsChartHtml(records, analysisMethodTypes, tempPath);
             html += "<h1>Results per primary comparison</h1>";
             foreach (var comparison in primaryComparisons) {
                 html += string.Format("<h1>Results comparison {0}</h1>", comparison.OutputPowerAnalysis.InputPowerAnalysis.Endpoint);
                 html += generateComparisonMessagesHtml(comparison);
                 html += generateComparisonSettingsHtml(comparison.OutputPowerAnalysis.InputPowerAnalysis);
                 html += generateComparisonInputDataHtml(comparison.OutputPowerAnalysis.InputPowerAnalysis);
-                html += generateComparisonChartsHtml(comparison, tempPath);
                 html += generateComparisonOutputHtml(comparison.OutputPowerAnalysis.OutputRecords);
+                html += generateComparisonChartsHtml(comparison, tempPath);
             }
             return html;
         }
@@ -35,8 +39,8 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             html += generateComparisonMessagesHtml(comparison);
             html += generateComparisonSettingsHtml(comparison.OutputPowerAnalysis.InputPowerAnalysis);
             html += generateComparisonInputDataHtml(comparison.OutputPowerAnalysis.InputPowerAnalysis);
-            html += generateComparisonChartsHtml(comparison, tempPath);
             html += generateComparisonOutputHtml(comparison.OutputPowerAnalysis.OutputRecords);
+            html += generateComparisonChartsHtml(comparison, tempPath);
             return html;
         }
 
@@ -60,11 +64,48 @@ namespace AmigaPowerAnalysis.Core.Reporting {
 
         private static string generateComparisonSettingsHtml(InputPowerAnalysis inputPowerAnalysis) {
             var stringBuilder = new StringBuilder();
-            stringBuilder.AppendLine(string.Format("<h2>Simulation settings</h2>"));
+
+            Func<string, object, string> format = (parameter, setting) => { return string.Format("<tr><td>{0}</td><td>{1}</td></tr>", parameter, setting); };
+
+            stringBuilder.AppendLine(string.Format("<h2>Endpoint</h2>"));
             stringBuilder.AppendLine("<table>");
-            Func<string, object, string> formatDelegate = (parameter, setting) => { return string.Format("<tr><td>{0}</td><td>{1}</td></tr>", parameter, setting); };
-            stringBuilder.Append(inputPowerAnalysis.PrintSettings(formatDelegate));
+            stringBuilder.AppendLine(format("Endpoint", inputPowerAnalysis.Endpoint));
+            stringBuilder.AppendLine(format("MeasurementType", inputPowerAnalysis.MeasurementType));
+            stringBuilder.AppendLine(format("LocLower", inputPowerAnalysis.LocLower));
+            stringBuilder.AppendLine(format("LocUpper", inputPowerAnalysis.LocUpper));
             stringBuilder.AppendLine("</table>");
+
+            stringBuilder.AppendLine(string.Format("<h2>Distribution</h2>"));
+            stringBuilder.AppendLine("<table>");
+            stringBuilder.AppendLine(format("Distribution", inputPowerAnalysis.DistributionType));
+            stringBuilder.AppendLine(format("OverallMean", inputPowerAnalysis.OverallMean));
+            stringBuilder.AppendLine(format("CVComparator", inputPowerAnalysis.CvComparator));
+            stringBuilder.AppendLine(format("PowerLawPower", inputPowerAnalysis.PowerLawPower));
+            stringBuilder.AppendLine("</table>");
+
+            stringBuilder.AppendLine(string.Format("<h2>Design</h2>"));
+            stringBuilder.AppendLine("<table>");
+            stringBuilder.AppendLine(format("ExperimentalDesignType", inputPowerAnalysis.ExperimentalDesignType));
+            stringBuilder.AppendLine(format("NumberOfInteractions", inputPowerAnalysis.NumberOfInteractions));
+            stringBuilder.AppendLine(format("NumberOfModifiers", inputPowerAnalysis.NumberOfModifiers));
+            stringBuilder.AppendLine(format("CVBlocks", inputPowerAnalysis.CvForBlocks));
+            stringBuilder.AppendLine("</table>");
+
+            stringBuilder.AppendLine(string.Format("<h2>Power analysis settings</h2>"));
+            stringBuilder.AppendLine("<table>");
+            stringBuilder.AppendLine(format("SignificanceLevel", inputPowerAnalysis.SignificanceLevel));
+            stringBuilder.AppendLine(format("NumberOfEvaluationPoints", inputPowerAnalysis.NumberOfRatios));
+            stringBuilder.AppendLine(format("NumberOfReplications", string.Join(" ", inputPowerAnalysis.NumberOfReplications.Select(r => r.ToString()).ToList())));
+            var analysisMethods = AnalysisModelFactory.AnalysisMethodsForMeasurementType(inputPowerAnalysis.MeasurementType) & inputPowerAnalysis.SelectedAnalysisMethodTypes;
+            foreach (var analysisMethod in analysisMethods.GetFlags()) {
+                stringBuilder.AppendLine(format("AnalysisMethods", analysisMethod));
+            }
+            stringBuilder.AppendLine(format("UseWaldTest", inputPowerAnalysis.UseWaldTest));
+            stringBuilder.AppendLine(format("PowerCalculationMethod", inputPowerAnalysis.PowerCalculationMethodType));
+            stringBuilder.AppendLine(format("NumberOfSimulatedDataSets", inputPowerAnalysis.NumberOfSimulatedDataSets));
+            stringBuilder.AppendLine(format("RandomNumberSeed", inputPowerAnalysis.RandomNumberSeed));
+            stringBuilder.AppendLine("</table>");
+
             return stringBuilder.ToString();
         }
 
@@ -80,7 +121,7 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             headers.Add("Mean");
             headers.Add("Comparison");
 
-            stringBuilder.AppendLine(string.Format("<h2>Simulation data</h2>"));
+            stringBuilder.AppendLine(string.Format("<h2>Simulation data {0}</h2>", inputPowerAnalysis.Endpoint));
             stringBuilder.AppendLine("<table>");
             stringBuilder.AppendLine("<tr><th>" + string.Join("</th><th>", headers) + "</th></tr>");
             foreach (var record in inputPowerAnalysis.InputRecords) {
@@ -128,27 +169,23 @@ namespace AmigaPowerAnalysis.Core.Reporting {
 
                 stringBuilder.Append("<tr>");
 
-                imageFilename = Path.Combine(tempPath, fileBaseId + "_" + analysisMethodType.ToString() + "_Replicates_Difference.png");
+                imageFilename = fileBaseId + "_" + analysisMethodType.ToString() + "_Replicates_Difference.png";
                 var plotDifferenceReplicates = AnalysisResultsChartGenerator.CreatePlotViewReplicatesLogRatio(comparison.OutputPowerAnalysis.OutputRecords, TestType.Difference, analysisMethodType);
-                PngExporter.Export(plotDifferenceReplicates, imageFilename, 400, 300);
-                stringBuilder.Append("<td><img src=\"" + imageFilename + "\" /></td>");
+                includeChart(plotDifferenceReplicates, 400, 300, tempPath, imageFilename, stringBuilder);
 
-                imageFilename = Path.Combine(tempPath, fileBaseId + "_" + analysisMethodType.ToString() + "_Ratio_Difference.png");
+                imageFilename = fileBaseId + "_" + analysisMethodType.ToString() + "_Ratio_Difference.png";
                 var plotDifferenceLogRatio = AnalysisResultsChartGenerator.CreatePlotViewLogRatioReplicates(comparison.OutputPowerAnalysis.OutputRecords, TestType.Difference, analysisMethodType);
-                PngExporter.Export(plotDifferenceLogRatio, imageFilename, 400, 300);
-                stringBuilder.Append("<td><img src=\"" + imageFilename + "\" /></td>");
+                includeChart(plotDifferenceLogRatio, 400, 300, tempPath, imageFilename, stringBuilder);
 
                 stringBuilder.Append("</tr><tr>");
 
-                imageFilename = Path.Combine(tempPath, fileBaseId + "_" + analysisMethodType.ToString() + "_Replicates_Equivalence.png");
+                imageFilename = fileBaseId + "_" + analysisMethodType.ToString() + "_Replicates_Equivalence.png";
                 var plotEquivalenceReplicates = AnalysisResultsChartGenerator.CreatePlotViewReplicatesLogRatio(comparison.OutputPowerAnalysis.OutputRecords, TestType.Equivalence, analysisMethodType);
-                PngExporter.Export(plotEquivalenceReplicates, imageFilename, 400, 300);
-                stringBuilder.Append("<td><img src=\"" + imageFilename + "\" /></td>");
+                includeChart(plotEquivalenceReplicates, 400, 300, tempPath, imageFilename, stringBuilder);
 
-                imageFilename = Path.Combine(tempPath, fileBaseId + "_" + analysisMethodType.ToString() + "_Ratio_Equivalence.png");
+                imageFilename = fileBaseId + "_" + analysisMethodType.ToString() + "_Ratio_Equivalence.png";
                 var plotEquivalenceLogRatio = AnalysisResultsChartGenerator.CreatePlotViewLogRatioReplicates(comparison.OutputPowerAnalysis.OutputRecords, TestType.Equivalence, analysisMethodType);
-                PngExporter.Export(plotEquivalenceLogRatio, imageFilename, 400, 300);
-                stringBuilder.Append("<td><img src=\"" + imageFilename + "\" /></td>");
+                includeChart(plotEquivalenceReplicates, 400, 300, tempPath, imageFilename, stringBuilder);
 
                 stringBuilder.Append("</tr>");
 
@@ -158,7 +195,7 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             return stringBuilder.ToString();
         }
 
-        private static string generateComparisonsChartHtml(IEnumerable<Comparison> comparisons, string tempPath) {
+        private static List<OutputPowerAnalysisRecord> getSummaryRecords(IEnumerable<Comparison> comparisons) {
             var records = comparisons.SelectMany(c => c.OutputPowerAnalysis.OutputRecords)
                 .GroupBy(r => new { ConcernStandardizedDifference = r.ConcernStandardizedDifference, NumberOfReplicates = r.NumberOfReplications })
                 .Select(g => new OutputPowerAnalysisRecord() {
@@ -176,55 +213,51 @@ namespace AmigaPowerAnalysis.Core.Reporting {
                     PowerEquivalenceNegativeBinomial = g.Min(r => r.PowerEquivalenceNegativeBinomial),
                 })
                 .ToList();
+            return records;
+        }
 
+        private static string generateComparisonsChartHtml(List<OutputPowerAnalysisRecord> records, IEnumerable<AnalysisMethodType> analysisMethodTypes, string tempPath) {
             var stringBuilder = new StringBuilder();
             stringBuilder.AppendLine("<h2>Comparisons charts primary comparisons</h2>");
 
             var fileBaseId = "Aggregate_";
             string imageFilename;
-            foreach (var analysisMethodType in comparisons.First().OutputPowerAnalysis.InputPowerAnalysis.SelectedAnalysisMethodTypes.GetFlags().Cast<AnalysisMethodType>()) {
+            foreach (var analysisMethodType in analysisMethodTypes) {
 
                 stringBuilder.Append("<h2>" + analysisMethodType.GetDisplayName() + "</h2>");
                 stringBuilder.Append("<table>");
                 stringBuilder.Append("<tr>");
 
-                imageFilename = Path.Combine(tempPath, fileBaseId + analysisMethodType.ToString() + "_Replicates_Difference.png");
+                imageFilename = fileBaseId + analysisMethodType.ToString() + "_Replicates_Difference.png";
                 var plotDifferenceReplicates = AnalysisResultsChartGenerator.CreatePlotViewReplicatesConcernStandardizedDifference(records, TestType.Difference, analysisMethodType);
-                PngExporter.Export(plotDifferenceReplicates, imageFilename, 400, 300);
-                stringBuilder.Append("<td><img src=\"" + imageFilename + "\" /></td>");
+                includeChart(plotDifferenceReplicates, 400, 300, tempPath, imageFilename, stringBuilder);
 
-                imageFilename = Path.Combine(tempPath, fileBaseId + analysisMethodType.ToString() + "_LevelOfConcern_Difference.png");
+                imageFilename = fileBaseId + analysisMethodType.ToString() + "_LevelOfConcern_Difference.png";
                 var plotDifferenceLogRatio = AnalysisResultsChartGenerator.CreatePlotViewConcernStandardizedDifferenceReplicates(records, TestType.Difference, analysisMethodType);
-                PngExporter.Export(plotDifferenceLogRatio, imageFilename, 400, 300);
-                stringBuilder.Append("<td><img src=\"" + imageFilename + "\" /></td>");
+                includeChart(plotDifferenceLogRatio, 400, 300, tempPath, imageFilename, stringBuilder);
 
                 stringBuilder.Append("</tr><tr>");
 
-                imageFilename = Path.Combine(tempPath, fileBaseId + analysisMethodType.ToString() + "_Replicates_Equivalence.png");
+                imageFilename = fileBaseId + analysisMethodType.ToString() + "_Replicates_Equivalence.png";
                 var plotEquivalenceReplicates = AnalysisResultsChartGenerator.CreatePlotViewReplicatesConcernStandardizedDifference(records, TestType.Equivalence, analysisMethodType);
-                PngExporter.Export(plotEquivalenceReplicates, imageFilename, 400, 300);
-                stringBuilder.Append("<td><img src=\"" + imageFilename + "\" /></td>");
+                includeChart(plotEquivalenceReplicates, 400, 300, tempPath, imageFilename, stringBuilder);
 
-                imageFilename = Path.Combine(tempPath, fileBaseId + analysisMethodType.ToString() + "_LevelOfConcern_Equivalence.png");
+                imageFilename = fileBaseId + analysisMethodType.ToString() + "_LevelOfConcern_Equivalence.png";
                 var plotEquivalenceLogRatio = AnalysisResultsChartGenerator.CreatePlotViewConcernStandardizedDifferenceReplicates(records, TestType.Equivalence, analysisMethodType);
-                PngExporter.Export(plotEquivalenceLogRatio, imageFilename, 400, 300);
-                stringBuilder.Append("<td><img src=\"" + imageFilename + "\" /></td>");
+                includeChart(plotEquivalenceLogRatio, 400, 300, tempPath, imageFilename, stringBuilder);
 
                 stringBuilder.Append("</tr>");
                 stringBuilder.Append("</table>");
             }
-
-            stringBuilder.Append(generateComparisonOutputHtml(records));
 
             return stringBuilder.ToString();
         }
 
         private static string generateComparisonOutputHtml(IEnumerable<OutputPowerAnalysisRecord> records) {
             var stringBuilder = new StringBuilder();
-            stringBuilder.Append("<h2>Output data</h2>");
+            stringBuilder.Append("<h2>Output power analysis</h2>");
             stringBuilder.Append("<table>");
-            var elementType = typeof(OutputPowerAnalysisRecord);
-            PropertyInfo[] properties = elementType.GetProperties();
+            var properties = typeof(OutputPowerAnalysisRecord).GetProperties();
             stringBuilder.Append("<tr>");
             foreach (var propInfo in properties) {
                 var propertyInfo = propInfo.PropertyType;
@@ -246,6 +279,17 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             }
             stringBuilder.Append("</table>");
             return stringBuilder.ToString();
+        }
+
+        private static void includeChart(PlotModel plotModel, int width, int height, string filePath, string imageFileName, StringBuilder stringBuilder) {
+            var imagesFolder = "Charts";
+            string relativeImagePath = Path.Combine("Charts", imageFileName);
+            string fullImagePath = Path.Combine(filePath, relativeImagePath);
+            if (!Directory.Exists(Path.Combine(filePath, imagesFolder))) {
+                Directory.CreateDirectory(Path.Combine(filePath, imagesFolder));
+            }
+            PngExporter.Export(plotModel, fullImagePath, width, height);
+            stringBuilder.Append("<td><img src=\"" + relativeImagePath + "\" /></td>");
         }
     }
 }
