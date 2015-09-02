@@ -199,20 +199,28 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             stringBuilder.Append("</tr>");
             foreach (var item in records) {
                 stringBuilder.Append("<tr>");
-                stringBuilder.Append(string.Format("<td>{0:0.###}</td>", item.Effect));
-                stringBuilder.Append(string.Format("<td>{0:0.###}(ratio)</td>", item.TransformedEffect));
-                stringBuilder.Append(string.Format("<td>{0:0.###}</td>", item.ConcernStandardizedDifference));
+                stringBuilder.Append(printNumericTableRecord(item.Effect));
+                stringBuilder.Append(printNumericTableRecord(item.TransformedEffect));
+                stringBuilder.Append(printNumericTableRecord(item.ConcernStandardizedDifference));
                 stringBuilder.Append(string.Format("<td>{0}</td>", item.NumberOfReplications));
                 foreach (var analysisMethodType in selectedAnalysisMethods) {
                     var powerDifference = item.GetPower(TestType.Difference, analysisMethodType);
-                    stringBuilder.Append(string.Format("<td>{0:0.###}</td>", powerDifference));
+                    stringBuilder.Append(printNumericTableRecord(powerDifference));
                     var powerEquivalence = item.GetPower(TestType.Equivalence, analysisMethodType);
-                    stringBuilder.Append(string.Format("<td>{0:0.###}</td>", powerEquivalence));
+                    stringBuilder.Append(printNumericTableRecord(powerEquivalence));
                 }
                 stringBuilder.Append("</tr>");
             }
             stringBuilder.Append("</table>");
             return stringBuilder.ToString();
+        }
+
+        protected static string printNumericTableRecord(double value) {
+            if (double.IsNaN(value)) {
+                return "<td>-</td>";
+            } else {
+                return string.Format("<td>{0:0.###}</td>", value);
+            }
         }
 
         protected static string generateComparisonOutputHtml_old(IEnumerable<OutputPowerAnalysisRecord> records) {
