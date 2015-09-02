@@ -161,7 +161,8 @@ namespace AmigaPowerAnalysis.GUI {
             if (primaryComparisons.Count > 0) {
                 var tempPath = Path.GetTempPath();
                 var title = Path.GetFileNameWithoutExtension(_currentProjectFilePath) + "_CSD";
-                var htmlReportForm = new HtmlReportForm(ComparisonSummaryReportGenerator.GenerateAnalysisReport(_comparisons, _currentProjectFilePath), title, _currentProjectFilePath);
+                var multiComparisonReportGenerator = new MultiComparisonReportGenerator(_comparisons, _currentProjectFilePath);
+                var htmlReportForm = new HtmlReportForm(multiComparisonReportGenerator, title, _currentProjectFilePath);
                 htmlReportForm.ShowDialog();
             }
         }

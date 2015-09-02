@@ -52,6 +52,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\DynamicInterop.0.7.4\lib\net40\DynamicInterop.dll</HintPath>
     </Reference>
+    <Reference Include="OpenHtmlToPdf, Version=1.12.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OpenHtmlToPdf.1.12.0.0\lib\net45\OpenHtmlToPdf.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="OxyPlot">
       <HintPath>..\packages\OxyPlot.Core.2014.1.546\lib\portable-net4+sl4+wp71+win8\OxyPlot.dll</HintPath>
     </Reference>
@@ -140,7 +144,11 @@
     <Compile Include="Core\ProjectEntities\Factor\FactorLevelCombinationsCreator.cs" />
     <Compile Include="Core\PowerAnalysis\InputPowerAnalysis\InputPowerAnalysisRecord.cs" />
     <Compile Include="Core\ProjectEntities\Settings\PowerCalculationSettings.cs" />
-    <Compile Include="Core\Reporting\ComparisonSummaryReportGenerator.cs" />
+    <Compile Include="Core\Reporting\MultiComparisonReportGenerator.cs" />
+    <Compile Include="Core\Reporting\ComparisonReportGeneratorBase.cs" />
+    <Compile Include="Core\Reporting\ComparisonSettingsGenerator.cs" />
+    <Compile Include="Core\Reporting\SingleComparisonReportGenerator.cs" />
+    <Compile Include="Core\Reporting\ReportGeneratorBase.cs" />
     <Compile Include="GUI\Dialogs\AboutForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -403,21 +411,6 @@
     <EmbeddedResource Include="Resources\TableDefinitions.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <Content Include="Resources\WkHtmlToPdf\libeay32.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\WkHtmlToPdf\libgcc_s_dw2-1.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\WkHtmlToPdf\mingwm10.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\WkHtmlToPdf\ssleay32.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\WkHtmlToPdf\wkhtmltopdf.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <EmbeddedResource Include="Resources\print.css" />
     <EmbeddedResource Include="Resources\amiga_icon.ico" />
     <Content Include="Resources\amiga_logo.png" />

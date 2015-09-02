@@ -77,20 +77,30 @@ namespace Biometris.ExtensionMethods {
         /// <param name="value"></param>
         /// <returns></returns>
         public static string GetDisplayName(this Enum value) {
-            FieldInfo fi = value.GetType().GetField(value.ToString());
             var displayAttribute = value.GetDisplayAttribute();
-
             if (displayAttribute != null) {
                 return displayAttribute.GetName();
-
             } else {
                 var descriptionAttribute = value.GetDescriptionAttribute();
-
                 if (descriptionAttribute != null) {
                     return descriptionAttribute.Description;
                 } else {
                     return value.ToString();
                 }
+            }
+        }
+
+        /// <summary>
+        /// Gets "ShortName" property of the DisplayAttribute. If unspecified, the propertyname itself is returned.
+        /// </summary>
+        /// <param name="memberInfo"></param>
+        /// <returns></returns>
+        public static string GetShortName(this Enum value) {
+            var displayAttribute = value.GetDisplayAttribute();
+            if (displayAttribute != null && !string.IsNullOrEmpty(displayAttribute.GetShortName())) {
+                return displayAttribute.GetShortName();
+            } else {
+                return value.GetDisplayName();
             }
         }
 

@@ -9,6 +9,7 @@ using AmigaPowerAnalysis.Core.PowerAnalysis;
 using AmigaPowerAnalysis.Core.Reporting;
 using System.Reflection;
 using System.Diagnostics;
+using OpenHtmlToPdf;
 
 namespace AmigaPowerAnalysis.Tests.IntegrationTests {
     [TestClass]
@@ -29,35 +30,32 @@ namespace AmigaPowerAnalysis.Tests.IntegrationTests {
                 var rDotNetExecuter = new RDotNetPowerAnalysisExecuter(filesPath);
                 var output = rDotNetExecuter.Run(inputPowerAnalysis, progressReport.NewProgressState(100));
                 comparisons[i].OutputPowerAnalysis = output;
-                var htmlComparison = ComparisonSummaryReportGenerator.GenerateComparisonReport(comparisons[i], filesPath);
-                storeReport(htmlComparison, filesPath, string.Format("Comparison-{0}", i));
+                var filenamePdf = Path.Combine(filesPath, string.Format("Comparison-{0}.pdf", i));
+                var singleComparisonReportGenerator = new SingleComparisonReportGenerator(comparisons[i], filesPath);
+                singleComparisonReportGenerator.SaveAsPdf(filenamePdf);
             }
-            var htmlReport = ComparisonSummaryReportGenerator.GenerateAnalysisReport(comparisons, filesPath);
-            storeReport(htmlReport, filesPath, "Report");
-        }
-
-        private static void storeReport(string htmlContent, string filePath, string name) {
-            var assembly = Assembly.Load("AmigaPowerAnalysis");
-            var textStreamReader = new StreamReader(assembly.GetManifestResourceStream("AmigaPowerAnalysis.Resources.print.css"));
-            var html = string.Format("<html><head><style>{0}</style></head><body>{1}</body></html>", textStreamReader.ReadToEnd(), htmlContent);
-            var filenameHtml = Path.Combine(filePath, name) + ".html";
-            File.WriteAllText(filenameHtml, html);
-
-            var filenamePdf = Path.Combine(filePath, name) + ".pdf";
-            var p = new Process();
-            p.StartInfo.CreateNoWindow = true;
-            p.StartInfo.FileName = Path.Combine("Resources\\wkhtmltopdf\\wkhtmltopdf.exe");
-            p.StartInfo.Arguments = "\"" + filenameHtml + "\"  \"" + filenamePdf + "\"";
-            p.StartInfo.UseShellExecute = false;
-            p.Start();
-            p.WaitForExit();
+            var multiComparisonReportGenerator = new MultiComparisonReportGenerator(comparisons, filesPath);
+            multiComparisonReportGenerator.SaveAsPdf(Path.Combine(filesPath, "Report.pdf"));
         }
 
         [TestMethod]
-        public void RDotNetPowerAnalysisExecuter_TestRunAnalysis1() {
-            var projectId = "IntegrationTest1";
-            var project = MockProjectsCreator.MockProject1();
-            runProject(project, projectId);
+        public void FullProjectIntegrationTests_MockProject0() {
+            runProject(MockProjectsCreator.MockProject0(), "IntegrationTest0");
+        }
+
+        [TestMethod]
+        public void FullProjectIntegrationTests_MockProject1() {
+            runProject(MockProjectsCreator.MockProject1(), "IntegrationTest1");
+        }
+
+        [TestMethod]
+        public void FullProjectIntegrationTests_MockProject2() {
+            runProject(MockProjectsCreator.MockProject2(), "IntegrationTest2");
+        }
+
+        [TestMethod]
+        public void FullProjectIntegrationTests_MockProject3() {
+            runProject(MockProjectsCreator.MockProject3(), "IntegrationTest3");
         }
     }
 }

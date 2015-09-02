@@ -1,0 +1,118 @@
+﻿using AmigaPowerAnalysis.Core.Charting;
+using AmigaPowerAnalysis.Core.DataAnalysis.AnalysisModels;
+using AmigaPowerAnalysis.Core.PowerAnalysis;
+using Biometris.ExtensionMethods;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace AmigaPowerAnalysis.Core.Reporting {
+    public sealed class MultiComparisonReportGenerator : ComparisonReportGeneratorBase {
+
+        private IEnumerable<Comparison> _comparisons;
+        private string _filesPath;
+
+        public MultiComparisonReportGenerator(IEnumerable<Comparison> comparisons, string tempPath) {
+            _comparisons = comparisons;
+            _filesPath = tempPath;
+        }
+
+        public override string Generate(bool imagesAsPng) {
+            var html = "";
+            var primaryComparisons = _comparisons.Where(c => c.IsPrimary);
+            html += generatePrimaryComparisonsSummary(_comparisons);
+            var analysisMethodTypes = _comparisons.First().OutputPowerAnalysis.InputPowerAnalysis.SelectedAnalysisMethodTypes.GetFlags().Cast<AnalysisMethodType>().ToList();
+            var records = getSummaryRecords(primaryComparisons);
+            html += generateComparisonOutputHtml(records, analysisMethodTypes);
+            html += generateComparisonsChartHtml(records, analysisMethodTypes, _filesPath, imagesAsPng);
+            html += "<h1>Results per primary comparison</h1>";
+            foreach (var comparison in primaryComparisons) {
+                html += string.Format("<h1>Results comparison {0}</h1>", comparison.OutputPowerAnalysis.InputPowerAnalysis.Endpoint);
+                html += generateComparisonMessagesHtml(comparison);
+                html += generateComparisonSettingsHtml(comparison.OutputPowerAnalysis.InputPowerAnalysis);
+                //html += generateComparisonInputDataHtml(comparison.OutputPowerAnalysis.InputPowerAnalysis);
+                html += generateComparisonOutputHtml(comparison.OutputPowerAnalysis.OutputRecords, analysisMethodTypes);
+                html += generateComparisonChartsHtml(comparison, _filesPath, imagesAsPng);
+            }
+            return format(html);
+        }
+
+        private static string generatePrimaryComparisonsSummary(IEnumerable<Comparison> comparisons) {
+            var stringBuilder = new StringBuilder();
+            stringBuilder.AppendLine(string.Format("<h1>Summary primary comparisons</h1>"));
+            stringBuilder.AppendLine("<table>");
+            stringBuilder.AppendLine("<tr><th>Comparison</th><th>Primary</th></tr>");
+            foreach (var comparison in comparisons) {
+                stringBuilder.AppendLine(string.Format("<tr><td>{0}</td><td>{1}</td></tr>", comparison.Endpoint.Name, comparison.IsPrimary ? "Yes" : "No"));
+            }
+            stringBuilder.AppendLine("</table>");
+            return stringBuilder.ToString();
+        }
+
+        private static List<OutputPowerAnalysisRecord> getSummaryRecords(IEnumerable<Comparison> comparisons) {
+            var records = comparisons.SelectMany(c => c.OutputPowerAnalysis.OutputRecords)
+                .GroupBy(r => new { ConcernStandardizedDifference = r.ConcernStandardizedDifference, NumberOfReplicates = r.NumberOfReplications })
+                .Select(g => new OutputPowerAnalysisRecord() {
+                    ConcernStandardizedDifference = g.Key.ConcernStandardizedDifference,
+                    NumberOfReplications = g.Key.NumberOfReplicates,
+                    Effect = double.NaN,
+                    TransformedEffect = double.NaN,
+                    PowerDifferenceLogNormal = g.Min(r => r.PowerDifferenceLogNormal),
+                    PowerDifferenceSquareRoot = g.Min(r => r.PowerDifferenceSquareRoot),
+                    PowerDifferenceOverdispersedPoisson = g.Min(r => r.PowerDifferenceOverdispersedPoisson),
+                    PowerDifferenceNegativeBinomial = g.Min(r => r.PowerDifferenceNegativeBinomial),
+                    PowerEquivalenceLogNormal = g.Min(r => r.PowerEquivalenceLogNormal),
+                    PowerEquivalenceSquareRoot = g.Min(r => r.PowerEquivalenceSquareRoot),
+                    PowerEquivalenceOverdispersedPoisson = g.Min(r => r.PowerEquivalenceOverdispersedPoisson),
+                    PowerEquivalenceNegativeBinomial = g.Min(r => r.PowerEquivalenceNegativeBinomial),
+                })
+                .ToList();
+            return records;
+        }
+
+        protected static string generateComparisonsChartHtml(List<OutputPowerAnalysisRecord> records, IEnumerable<AnalysisMethodType> analysisMethodTypes, string tempPath, bool imagesAsPng) {
+            var stringBuilder = new StringBuilder();
+            stringBuilder.AppendLine("<h2>Comparisons charts primary comparisons</h2>");
+
+            var fileBaseId = "Aggregate_";
+            string imageFilename;
+            foreach (var analysisMethodType in analysisMethodTypes) {
+
+                stringBuilder.Append("<h2>" + analysisMethodType.GetDisplayName() + "</h2>");
+                stringBuilder.Append("<table>");
+                stringBuilder.Append("<tr>");
+
+                imageFilename = fileBaseId + analysisMethodType.ToString() + "_Replicates_Difference.png";
+                var plotDifferenceReplicates = AnalysisResultsChartGenerator.CreatePlotViewReplicatesConcernStandardizedDifference(records, TestType.Difference, analysisMethodType);
+                stringBuilder.Append("<td>");
+                includeChart(plotDifferenceReplicates, 400, 300, tempPath, imageFilename, stringBuilder, imagesAsPng);
+                stringBuilder.Append("</td>");
+
+                imageFilename = fileBaseId + analysisMethodType.ToString() + "_LevelOfConcern_Difference.png";
+                var plotDifferenceLogRatio = AnalysisResultsChartGenerator.CreatePlotViewConcernStandardizedDifferenceReplicates(records, TestType.Difference, analysisMethodType);
+                stringBuilder.Append("<td>");
+                includeChart(plotDifferenceLogRatio, 400, 300, tempPath, imageFilename, stringBuilder, imagesAsPng);
+                stringBuilder.Append("</td>");
+
+                stringBuilder.Append("</tr><tr>");
+
+                imageFilename = fileBaseId + analysisMethodType.ToString() + "_Replicates_Equivalence.png";
+                var plotEquivalenceReplicates = AnalysisResultsChartGenerator.CreatePlotViewReplicatesConcernStandardizedDifference(records, TestType.Equivalence, analysisMethodType);
+                stringBuilder.Append("<td>");
+                includeChart(plotEquivalenceReplicates, 400, 300, tempPath, imageFilename, stringBuilder, imagesAsPng);
+                stringBuilder.Append("</td>");
+
+                imageFilename = fileBaseId + analysisMethodType.ToString() + "_LevelOfConcern_Equivalence.png";
+                var plotEquivalenceLogRatio = AnalysisResultsChartGenerator.CreatePlotViewConcernStandardizedDifferenceReplicates(records, TestType.Equivalence, analysisMethodType);
+                stringBuilder.Append("<td>");
+                includeChart(plotEquivalenceLogRatio, 400, 300, tempPath, imageFilename, stringBuilder, imagesAsPng);
+                stringBuilder.Append("</td>");
+
+                stringBuilder.Append("</tr>");
+                stringBuilder.Append("</table>");
+            }
+
+            return stringBuilder.ToString();
+        }
+    }
+}

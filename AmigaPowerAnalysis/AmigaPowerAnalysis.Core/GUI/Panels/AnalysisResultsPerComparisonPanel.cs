@@ -117,16 +117,16 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void buttonShowSettings_Click(object sender, EventArgs e) {
             var title = Path.GetFileNameWithoutExtension(_currentProjectFilesPath) + "_" + _currentComparison.Endpoint.Name + "_Settings";
-            var htmlReportForm = new HtmlReportForm(ComparisonSummaryReportGenerator.GenerateComparisonSettingsReport(_currentComparison, _currentProjectFilesPath), title, _currentProjectFilesPath);
+            var reportGenerator = new ComparisonSettingsGenerator(_currentComparison, _currentProjectFilesPath);
+            var htmlReportForm = new HtmlReportForm(reportGenerator, title, _currentProjectFilesPath);
             htmlReportForm.ShowDialog();
         }
 
         private void buttonShowInputData_Click(object sender, EventArgs e) {
             if (_currentComparison != null && _currentComparison.OutputPowerAnalysis != null) {
-                //var tempPath = Path.GetTempPath();
-                //tempPath = @"D:\Projects\Amiga\Source\TestData\ssss";
                 var title = Path.GetFileNameWithoutExtension(_currentProjectFilesPath) + "_" + _currentComparison.Endpoint.Name;
-                var htmlReportForm = new HtmlReportForm(ComparisonSummaryReportGenerator.GenerateComparisonReport(_currentComparison, _currentProjectFilesPath), title, _currentProjectFilesPath);
+                var reportGenerator = new SingleComparisonReportGenerator(_currentComparison, _currentProjectFilesPath);
+                var htmlReportForm = new HtmlReportForm(reportGenerator, title, _currentProjectFilesPath);
                 htmlReportForm.ShowDialog();
             }
         }

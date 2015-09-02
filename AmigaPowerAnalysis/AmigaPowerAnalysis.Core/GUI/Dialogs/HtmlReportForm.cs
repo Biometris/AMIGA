@@ -5,17 +5,22 @@ using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 using Biometris.ExtensionMethods;
+using AmigaPowerAnalysis.Core.Reporting;
 
 namespace AmigaPowerAnalysis.GUI {
     public partial class HtmlReportForm : Form {
 
         private string _title;
+        private string _html;
         private string _projectPath;
         private string _tempDir;
+        private ReportGeneratorBase _reportGenerator;
 
-        public HtmlReportForm(string htmlContent, string title, string projectPath) {
+        public HtmlReportForm(ReportGeneratorBase reportGenerator, string reportTitle, string projectPath) {
             InitializeComponent();
-            _title = title.Replace(" ", "_");
+            _reportGenerator = reportGenerator;
+            _title = reportTitle.Replace(" ", "_");
+            _html = _reportGenerator.Generate(true);
             _projectPath = projectPath;
             _tempDir = Path.GetTempPath();
 
@@ -25,14 +30,10 @@ namespace AmigaPowerAnalysis.GUI {
                 webBrowserHtmlReport.Navigate("about:blank");
             }
             var doc = webBrowserHtmlReport.Document.OpenNew(true);
-            webBrowserHtmlReport.IsWebBrowserContextMenuEnabled = false;
+            //webBrowserHtmlReport.IsWebBrowserContextMenuEnabled = false;
             //webBrowserHtmlReport.AllowWebBrowserDrop = false;
 
-            var assembly = Assembly.GetExecutingAssembly();
-            var textStreamReader = new StreamReader(assembly.GetManifestResourceStream("AmigaPowerAnalysis.Resources.print.css"));
-            var html = string.Format("<html><head><style>{0}</style></head><body>{1}</body></html>", textStreamReader.ReadToEnd(), htmlContent);
-
-            doc.Write(html);
+            doc.Write(_html);
             doc.Title = "Report";
         }
 
@@ -46,22 +47,9 @@ namespace AmigaPowerAnalysis.GUI {
             if (saveFileDialog.FileName.Length == 0) {
                 saveFileDialog.FileName = "unknown";
             }
-
             if (saveFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
                 var filenamePdf = saveFileDialog.FileName;
-                var cwd = Path.GetDirectoryName(filenamePdf);
-                var filenameHtml = Path.Combine(_tempDir, "tmp_report_amiga_power_analysis.html");
-                File.WriteAllText(filenameHtml, webBrowserHtmlReport.Document.Body.Parent.OuterHtml, Encoding.GetEncoding(webBrowserHtmlReport.Document.Encoding));
-
-                var p = new Process();
-                p.StartInfo.CreateNoWindow = true;
-                p.StartInfo.FileName = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "Resources\\wkhtmltopdf\\wkhtmltopdf.exe");
-                p.StartInfo.Arguments = "\"" + filenameHtml + "\"  \"" + filenamePdf + "\"";
-                p.StartInfo.UseShellExecute = false;
-                p.Start();
-                p.WaitForExit();
-
-                File.Delete(filenameHtml);
+                _reportGenerator.SaveAsPdf(filenamePdf);
                 Process.Start(filenamePdf);
             }
         }

@@ -22,7 +22,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
         [Display(Name = "Log(ratio)")]
         public double TransformedEffect { get; set; }
 
-        [Display(Name = "Concern standardized difference")]
+        [Display(Name = "Concern standardized difference", ShortName = "CSD")]
         public double ConcernStandardizedDifference { get; set; }
 
         [Display(Name = "Replicates")]
