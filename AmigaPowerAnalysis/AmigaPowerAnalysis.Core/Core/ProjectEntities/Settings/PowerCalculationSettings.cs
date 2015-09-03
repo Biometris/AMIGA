@@ -62,6 +62,24 @@ namespace AmigaPowerAnalysis.Core {
         public bool UseWaldTest { get; set; }
 
         /// <summary>
+        /// If true, simulated data is stored.
+        /// </summary>
+        [DataMember]
+        public bool IsOutputSimulatedData { get; set; }
+
+        /// <summary>
+        /// The number of simulations for a generalized confidence interval.
+        /// </summary>
+        [DataMember]
+        public int NumberOfSimulationsGCI { get; set; }
+
+        /// <summary>
+        /// The number of simulations for the approximate power analysis (Lyles).
+        /// </summary>
+        [DataMember]
+        public int NumberOfSimulationsLylesMethod { get; set; }
+
+        /// <summary>
         /// Number of simulated datasets for Method=Simulate.
         /// </summary>
         [DataMember]

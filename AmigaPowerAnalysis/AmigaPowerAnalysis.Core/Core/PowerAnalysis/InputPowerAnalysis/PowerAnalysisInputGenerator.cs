@@ -43,6 +43,9 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                 ExperimentalDesignType = designSettings.ExperimentalDesignType,
                 PowerCalculationMethodType = powerCalculationSettings.PowerCalculationMethod,
                 UseWaldTest = powerCalculationSettings.UseWaldTest,
+                IsOutputSimulatedData = powerCalculationSettings.IsOutputSimulatedData,
+                NumberOfSimulationsGCI = powerCalculationSettings.NumberOfSimulationsGCI,
+                NumberOfSimulationsLylesMethod = powerCalculationSettings.NumberOfSimulationsLylesMethod,
                 RandomNumberSeed = powerCalculationSettings.Seed,
                 NumberOfSimulatedDataSets = powerCalculationSettings.NumberOfSimulatedDataSets,
             };

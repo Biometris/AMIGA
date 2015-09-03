@@ -113,6 +113,24 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
         public bool UseWaldTest { get; set; }
 
         /// <summary>
+        /// If true, simulated data is stored.
+        /// </summary>
+        [DataMember]
+        public bool IsOutputSimulatedData { get; set; }
+
+        /// <summary>
+        /// The number of simulations for a generalized confidence interval.
+        /// </summary>
+        [DataMember]
+        public int NumberOfSimulationsGCI { get; set; }
+
+        /// <summary>
+        /// The number of simulations for the approximate power analysis (Lyles).
+        /// </summary>
+        [DataMember]
+        public int NumberOfSimulationsLylesMethod { get; set; }
+
+        /// <summary>
         /// Seed for random number generator (non-negative value uses computer time).
         /// </summary>
         [DataMember]
@@ -207,6 +225,9 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             stringBuilder.AppendLine(format("ExperimentalDesignType", ExperimentalDesignType));
             stringBuilder.AppendLine(format("PowerCalculationMethod", PowerCalculationMethodType));
             stringBuilder.AppendLine(format("UseWaldTest", UseWaldTest));
+            stringBuilder.AppendLine(format("NumberOfSimulationsLylesMethod", NumberOfSimulationsLylesMethod));
+            stringBuilder.AppendLine(format("IsOutputSimulatedData", IsOutputSimulatedData));
+            stringBuilder.AppendLine(format("NumberOfSimulationsGCI", NumberOfSimulationsGCI));
             stringBuilder.AppendLine(format("RandomNumberSeed", RandomNumberSeed));
             stringBuilder.AppendLine(format("NumberOfSimulatedDataSets", NumberOfSimulatedDataSets));
 

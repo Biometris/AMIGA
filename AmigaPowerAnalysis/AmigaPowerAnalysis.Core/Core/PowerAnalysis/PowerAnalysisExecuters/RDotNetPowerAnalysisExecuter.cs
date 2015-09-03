@@ -16,9 +16,6 @@ using Biometris.Statistics.Measurements;
 namespace AmigaPowerAnalysis.Core.PowerAnalysis {
     public sealed class RDotNetPowerAnalysisExecuter : PowerAnalysisExecuterBase {
 
-        private static string _writeData = "TRUE";
-        private static string _displayFit = "TRUE";
-
         private sealed class EffectCSD {
             public double CSD { get; set; }
             public double Effect { get; set; }
@@ -34,6 +31,10 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
         public override OutputPowerAnalysis Run(InputPowerAnalysis inputPowerAnalysis, ProgressState progressState) {
             progressState.Update(string.Format("Analysis of endpoint: {0}, loading data...", inputPowerAnalysis.Endpoint), 0);
 
+            inputPowerAnalysis.IsOutputSimulatedData = true;
+            inputPowerAnalysis.NumberOfSimulationsGCI = 100000;
+            inputPowerAnalysis.NumberOfSimulationsLylesMethod = 1000;
+
             var applicationDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             var scriptsDirectory = string.Format(@"{0}\Resources\RScripts", applicationDirectory);
             var scriptFilename = Path.Combine(scriptsDirectory, "AMIGAPowerAnalysis.R");
@@ -46,6 +47,8 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             var inputGenerator = new PowerAnalysisInputGenerator();
             createAnalysisInputFile(inputPowerAnalysis, comparisonInputFilename);
             createAnalysisSettingsFile(inputPowerAnalysis, comparisonSettingsFilename);
+
+            var isWriteData = inputPowerAnalysis.IsOutputSimulatedData ? "TRUE" : "FALSE";
 
             var logger = new FileLogger(comparisonLogFilename);
             var effects = createCsdEvaluationGrid(inputPowerAnalysis.LocLower, inputPowerAnalysis.LocUpper, inputPowerAnalysis.OverallMean, inputPowerAnalysis.NumberOfRatios, inputPowerAnalysis.MeasurementType);
@@ -80,7 +83,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                                 progressState.Update(string.Format("Endpoint {0}, replicate {1}/{2}, effect {3}/{4}", inputPowerAnalysis.Endpoint, i, inputPowerAnalysis.NumberOfReplications.Count, j, effects.Count), 100 * ((double)counter / totalLoops));
 
                                 // Define settings for Debugging the Rscript
-                                rEngine.EvaluateNoReturn(string.Format("debugSettings = list(iRep={0}, iEffect={1}, iDataset=NaN, writeData={2}, displayFit={3})", i, j, _writeData, _displayFit));
+                                rEngine.EvaluateNoReturn(string.Format("debugSettings = list(iRep={0}, iEffect={1}, iDataset=NaN, writeData={2}, displayFit={3})", i, j, isWriteData, isWriteData));
 
                                 // Run Monte Carlo
                                 var output = runMonteCarloSimulation(effect, blocks, inputPowerAnalysis.SelectedAnalysisMethodTypes, inputPowerAnalysis.NumberOfSimulatedDataSets, rEngine);
