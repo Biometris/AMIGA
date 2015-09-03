@@ -110,10 +110,17 @@ namespace AmigaPowerAnalysis.GUI {
             checkbox.HeaderText = "Excess zeroes";
             dataGridViewEndpoints.Columns.Add(checkbox);
 
+            column = new DataGridViewTextBoxColumn();
+            column.DataPropertyName = "ExcessZeroesPercentage";
+            column.Name = "ExcessZeroesPercentage";
+            column.HeaderText = "Percentage excess zeros";
+            column.ValueType = typeof(int);
+            dataGridViewEndpoints.Columns.Add(column);
+
             dataGridViewEndpoints.Columns["Name"].ReadOnly = true;
             dataGridViewEndpoints.Columns["Measurement"].ReadOnly = true;
-            dataGridViewEndpoints.Columns["ExcessZeroes"].ReadOnly = true;
-            dataGridViewEndpoints.Columns["ExcessZeroes"].DefaultCellStyle.BackColor = Color.LightGray;
+            //dataGridViewEndpoints.Columns["ExcessZeroes"].ReadOnly = true;
+            //dataGridViewEndpoints.Columns["ExcessZeroes"].DefaultCellStyle.BackColor = Color.LightGray;
             //dataGridViewEndpoints.Columns["RepeatedMeasures"].ReadOnly = true;
             //dataGridViewEndpoints.Columns["RepeatedMeasures"].DefaultCellStyle.BackColor = Color.LightGray;
         }
@@ -140,6 +147,13 @@ namespace AmigaPowerAnalysis.GUI {
                 } else {
                     dataGridViewEndpoints.Rows[i].Cells["CvComparator"].ReadOnly = false;
                     dataGridViewEndpoints.Rows[i].Cells["CvComparator"].Style.BackColor = Color.White;
+                }
+                if (_project.Endpoints[i].ExcessZeroes) {
+                    dataGridViewEndpoints.Rows[i].Cells["ExcessZeroesPercentage"].ReadOnly = false;
+                    dataGridViewEndpoints.Rows[i].Cells["ExcessZeroesPercentage"].Style.BackColor = Color.White;
+                } else {
+                    dataGridViewEndpoints.Rows[i].Cells["ExcessZeroesPercentage"].ReadOnly = true;
+                    dataGridViewEndpoints.Rows[i].Cells["ExcessZeroesPercentage"].Style.BackColor = Color.LightGray;
                 }
                 var measurementType = _project.Endpoints[i].Measurement;
                 var datagridCellComboBox = (DataGridViewComboBoxCell)dataGridViewEndpoints.Rows[i].Cells["DistributionType"];
@@ -193,6 +207,10 @@ namespace AmigaPowerAnalysis.GUI {
                 _currentEndpoint = newSelectedEndpoint;
                 updateEndpointDistributionChart();
             }
+        }
+
+        private void dataGridViewEndpoints_CellContentClick(object sender, DataGridViewCellEventArgs e) {
+            dataGridViewEndpoints.CommitEdit(DataGridViewDataErrorContexts.Commit);
         }
     }
 }

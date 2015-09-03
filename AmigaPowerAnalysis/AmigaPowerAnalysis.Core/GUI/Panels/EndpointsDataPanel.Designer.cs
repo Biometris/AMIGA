@@ -42,12 +42,14 @@
             this.dataGridViewEndpoints.BackgroundColor = System.Drawing.Color.White;
             this.dataGridViewEndpoints.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewEndpoints.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridViewEndpoints.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
             this.dataGridViewEndpoints.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewEndpoints.Name = "dataGridViewEndpoints";
             this.dataGridViewEndpoints.RowHeadersWidth = 24;
             this.dataGridViewEndpoints.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dataGridViewEndpoints.Size = new System.Drawing.Size(854, 273);
             this.dataGridViewEndpoints.TabIndex = 2;
+            this.dataGridViewEndpoints.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewEndpoints_CellContentClick);
             this.dataGridViewEndpoints.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewEndpoints_CellValueChanged);
             this.dataGridViewEndpoints.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dataGridViewEndpoints_DataError);
             this.dataGridViewEndpoints.SelectionChanged += new System.EventHandler(this.dataGridViewEndpoints_SelectionChanged);

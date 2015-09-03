@@ -26,6 +26,9 @@ namespace AmigaPowerAnalysis.Core {
         private bool _excessZeroes;
 
         [DataMember]
+        private int _excessZeroesPercentage;
+
+        [DataMember]
         private double _muComparator;
 
         [DataMember]
@@ -127,11 +130,19 @@ namespace AmigaPowerAnalysis.Core {
         }
 
         /// <summary>
-        /// 
+        /// Gets/sets whether excess zeroes are expected.
         /// </summary>
         public bool ExcessZeroes {
             get { return _excessZeroes; }
             set { _excessZeroes = value; }
+        }
+
+        /// <summary>
+        /// The percentage of excess zeroes.
+        /// </summary>
+        public int ExcessZeroesPercentage {
+            get { return _excessZeroesPercentage; }
+            set { _excessZeroesPercentage = value; }
         }
 
         /// <summary>

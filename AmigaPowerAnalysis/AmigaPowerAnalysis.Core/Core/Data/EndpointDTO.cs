@@ -15,5 +15,6 @@ namespace AmigaPowerAnalysis.Core.Data {
         public double PowerLawPower { get; set; }
         public bool RepeatedMeasurements { get; set; }
         public bool ExcessZeroes { get; set; }
+        public int ExcessZeroesPercentage { get; set; }
     }
 }

@@ -146,7 +146,7 @@
           <string>CV</string>
         </Aliases>
       </ColumnDefinition>
-      <ColumnDefinition IsRequired="true">
+      <ColumnDefinition IsRequired="false">
         <ColumnID>RepeatedMeasurements</ColumnID>
         <Aliases>
           <string>RepeatedMeasurements</string>
@@ -156,6 +156,12 @@
         <ColumnID>ExcessZeroes</ColumnID>
         <Aliases>
           <string>ExcessZeroes</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>ExcessZeroesPercentage</ColumnID>
+        <Aliases>
+          <string>ExcessZeroesPercentage</string>
         </Aliases>
       </ColumnDefinition>
     </ColumnDefinitions>

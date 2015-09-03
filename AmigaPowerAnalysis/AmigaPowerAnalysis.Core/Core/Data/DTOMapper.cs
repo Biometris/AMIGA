@@ -82,6 +82,7 @@ namespace AmigaPowerAnalysis.Core.Data {
                 PowerLawPower = endpoint.PowerLawPower,
                 RepeatedMeasurements = endpoint.RepeatedMeasures,
                 ExcessZeroes = endpoint.ExcessZeroes,
+                ExcessZeroesPercentage = endpoint.ExcessZeroesPercentage,
             };
         }
 
