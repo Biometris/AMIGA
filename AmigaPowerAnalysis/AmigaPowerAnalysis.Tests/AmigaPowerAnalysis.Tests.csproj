@@ -87,6 +87,7 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Include="Resources\DefaultGroups.csv" />
     <None Include="Resources\EndpointDataFileReader_Tests1.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

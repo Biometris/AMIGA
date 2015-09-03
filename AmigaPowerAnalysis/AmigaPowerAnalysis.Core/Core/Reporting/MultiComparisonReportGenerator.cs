@@ -23,7 +23,8 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             html += generatePrimaryComparisonsSummary(_comparisons);
             var analysisMethodTypes = _comparisons.First().OutputPowerAnalysis.InputPowerAnalysis.SelectedAnalysisMethodTypes.GetFlags().Cast<AnalysisMethodType>().ToList();
             var records = getSummaryRecords(primaryComparisons);
-            html += generateComparisonOutputHtml(records, analysisMethodTypes, true);
+            html += generateComparisonOutputHtml(records, analysisMethodTypes, TestType.Difference, true);
+            html += generateComparisonOutputHtml(records, analysisMethodTypes, TestType.Equivalence, true);
             html += generateComparisonsChartHtml(records, analysisMethodTypes, _filesPath, imagesAsPng);
             html += "<h1>Results per primary comparison</h1>";
             foreach (var comparison in primaryComparisons) {
@@ -31,7 +32,8 @@ namespace AmigaPowerAnalysis.Core.Reporting {
                 html += generateComparisonMessagesHtml(comparison);
                 html += generateComparisonSettingsHtml(comparison.OutputPowerAnalysis.InputPowerAnalysis);
                 //html += generateComparisonInputDataHtml(comparison.OutputPowerAnalysis.InputPowerAnalysis);
-                html += generateComparisonOutputHtml(comparison.OutputPowerAnalysis.OutputRecords, analysisMethodTypes);
+                html += generateComparisonOutputHtml(comparison.OutputPowerAnalysis.OutputRecords, analysisMethodTypes, TestType.Difference);
+                html += generateComparisonOutputHtml(comparison.OutputPowerAnalysis.OutputRecords, analysisMethodTypes, TestType.Equivalence);
                 html += generateComparisonChartsHtml(comparison, _filesPath, imagesAsPng);
             }
             return format(html);
@@ -54,6 +56,7 @@ namespace AmigaPowerAnalysis.Core.Reporting {
                 stringBuilder.AppendLine(printNumericTableRecord(comparison.Endpoint.MuComparator));
                 stringBuilder.AppendLine(printNumericTableRecord(comparison.Endpoint.CvComparator));
                 stringBuilder.AppendLine(string.Format("<td>{0}</td>", comparison.IsPrimary ? "Yes" : "No"));
+                stringBuilder.AppendLine("</tr>");
             }
             stringBuilder.AppendLine("</table>");
             return stringBuilder.ToString();

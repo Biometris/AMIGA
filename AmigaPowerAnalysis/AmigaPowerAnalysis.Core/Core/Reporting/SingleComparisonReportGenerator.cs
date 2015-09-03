@@ -19,7 +19,8 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             html += generateComparisonSettingsHtml(_comparison.OutputPowerAnalysis.InputPowerAnalysis);
             //html += generateComparisonInputDataHtml(comparison.OutputPowerAnalysis.InputPowerAnalysis);
             var selectedAnalysisMethods = _comparison.OutputPowerAnalysis.InputPowerAnalysis.SelectedAnalysisMethodTypes.GetFlags().Cast<AnalysisMethodType>().ToList();
-            html += generateComparisonOutputHtml(_comparison.OutputPowerAnalysis.OutputRecords, selectedAnalysisMethods);
+            html += generateComparisonOutputHtml(_comparison.OutputPowerAnalysis.OutputRecords, selectedAnalysisMethods, TestType.Difference);
+            html += generateComparisonOutputHtml(_comparison.OutputPowerAnalysis.OutputRecords, selectedAnalysisMethods, TestType.Equivalence);
             html += generateComparisonChartsHtml(_comparison, _filesPath, imagesAsPng);
             return format(html);
         }

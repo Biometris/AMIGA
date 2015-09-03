@@ -182,7 +182,41 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             return stringBuilder.ToString();
         }
 
-        protected static string generateComparisonOutputHtml(IEnumerable<OutputPowerAnalysisRecord> records, List<AnalysisMethodType> selectedAnalysisMethods, bool csdOnly = false) {
+        protected static string generateComparisonOutputHtml(IEnumerable<OutputPowerAnalysisRecord> records, List<AnalysisMethodType> selectedAnalysisMethods, TestType testType, bool csdOnly = false) {
+            var stringBuilder = new StringBuilder();
+            stringBuilder.Append(string.Format("<h2>Results {0} tests</h2>", testType.ToString().ToLower()));
+            stringBuilder.Append("<table>");
+
+            stringBuilder.Append("<tr>");
+            if (!csdOnly) {
+                stringBuilder.Append("<th>Ratio</th>");
+                stringBuilder.Append("<th>Log(ratio)</th>");
+            }
+            stringBuilder.Append("<th>CSD</th>");
+            stringBuilder.Append("<th>Repl.</th>");
+            foreach (var analysisMethodType in selectedAnalysisMethods) {
+                stringBuilder.Append(string.Format("<th>{0} {1}</th>", testType.GetShortName(), analysisMethodType.GetShortName()));
+            }
+            stringBuilder.Append("</tr>");
+            foreach (var item in records) {
+                stringBuilder.Append("<tr>");
+                if (!csdOnly) {
+                    stringBuilder.Append(printNumericTableRecord(item.Effect));
+                    stringBuilder.Append(printNumericTableRecord(item.TransformedEffect));
+                }
+                stringBuilder.Append(printNumericTableRecord(item.ConcernStandardizedDifference));
+                stringBuilder.Append(string.Format("<td>{0}</td>", item.NumberOfReplications));
+                foreach (var analysisMethodType in selectedAnalysisMethods) {
+                    var powerEquivalence = item.GetPower(testType, analysisMethodType);
+                    stringBuilder.Append(printNumericTableRecord(powerEquivalence));
+                }
+                stringBuilder.Append("</tr>");
+            }
+            stringBuilder.Append("</table>");
+            return stringBuilder.ToString();
+        }
+
+        private static string generateComparisonOutputHtml(IEnumerable<OutputPowerAnalysisRecord> records, List<AnalysisMethodType> selectedAnalysisMethods, bool csdOnly = false) {
             var stringBuilder = new StringBuilder();
             stringBuilder.Append("<h2>Output power analysis</h2>");
             stringBuilder.Append("<table>");
@@ -225,34 +259,6 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             } else {
                 return string.Format("<td>{0:0.###}</td>", value);
             }
-        }
-
-        protected static string generateComparisonOutputHtml_old(IEnumerable<OutputPowerAnalysisRecord> records) {
-            var stringBuilder = new StringBuilder();
-            stringBuilder.Append("<h2>Output power analysis</h2>");
-            stringBuilder.Append("<table>");
-            var properties = typeof(OutputPowerAnalysisRecord).GetProperties();
-            stringBuilder.Append("<tr>");
-            foreach (var propInfo in properties) {
-                var propertyInfo = propInfo.PropertyType;
-                var columnType = Nullable.GetUnderlyingType(propertyInfo) ?? propertyInfo;
-                stringBuilder.Append(string.Format("<th>{0}</th>", propInfo.GetShortName()));
-            }
-            stringBuilder.Append("</tr>");
-            foreach (var item in records) {
-                stringBuilder.Append("<tr>");
-                foreach (PropertyInfo propInfo in properties) {
-                    var value = propInfo.GetValue(item, null) ?? DBNull.Value;
-                    if (value is double) {
-                        stringBuilder.Append(string.Format("<td>{0:0.###}</td>", (double)value));
-                    } else {
-                        stringBuilder.Append(string.Format("<td>{0}</td>", value.ToString()));
-                    }
-                }
-                stringBuilder.Append("</tr>");
-            }
-            stringBuilder.Append("</table>");
-            return stringBuilder.ToString();
         }
     }
 }

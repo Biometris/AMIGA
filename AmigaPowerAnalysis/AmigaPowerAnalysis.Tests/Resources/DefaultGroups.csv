@@ -1,0 +1,9 @@
+Group,MeasurementType,LocLower,LocUpper,DistributionType,BinomialTotal,PowerLawPower,MuComparator,CvComparator
+Non-Target insects counts,Count,0.5,2,PowerLaw,0,1.7,10,100
+Non-Target insects presence,Fraction,0.5,2,BinomialLogitNormal,0,0,10,100
+Soil biology,Count,NaN,3,LogNormal,0,0,10,50
+Soil physics,Nonnegative,0.5,NaN,LogNormal,100,0,0.4,0.02
+Weeds,Nonnegative,0.25,4,LogNormal,0,0,20,4
+Economics,Nonnegative,0.2,NaN,LogNormal,0,0,500,10
+Yield,Nonnegative,0.8,1.2,LogNormal,0,0,80,0.5
+
