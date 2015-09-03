@@ -98,13 +98,13 @@ namespace AmigaPowerAnalysis.GUI {
             column.ValueType = typeof(double);
             dataGridViewEndpoints.Columns.Add(column);
 
-            var checkbox = new DataGridViewCheckBoxColumn();
-            checkbox.DataPropertyName = "RepeatedMeasures";
-            checkbox.Name = "RepeatedMeasures";
-            checkbox.HeaderText = "Repeated measures";
-            dataGridViewEndpoints.Columns.Add(checkbox);
+            //var checkbox = new DataGridViewCheckBoxColumn();
+            //checkbox.DataPropertyName = "RepeatedMeasures";
+            //checkbox.Name = "RepeatedMeasures";
+            //checkbox.HeaderText = "Repeated measures";
+            //dataGridViewEndpoints.Columns.Add(checkbox);
 
-            checkbox = new DataGridViewCheckBoxColumn();
+            var checkbox = new DataGridViewCheckBoxColumn();
             checkbox.DataPropertyName = "ExcessZeroes";
             checkbox.Name = "ExcessZeroes";
             checkbox.HeaderText = "Excess zeroes";
@@ -114,8 +114,8 @@ namespace AmigaPowerAnalysis.GUI {
             dataGridViewEndpoints.Columns["Measurement"].ReadOnly = true;
             dataGridViewEndpoints.Columns["ExcessZeroes"].ReadOnly = true;
             dataGridViewEndpoints.Columns["ExcessZeroes"].DefaultCellStyle.BackColor = Color.LightGray;
-            dataGridViewEndpoints.Columns["RepeatedMeasures"].ReadOnly = true;
-            dataGridViewEndpoints.Columns["RepeatedMeasures"].DefaultCellStyle.BackColor = Color.LightGray;
+            //dataGridViewEndpoints.Columns["RepeatedMeasures"].ReadOnly = true;
+            //dataGridViewEndpoints.Columns["RepeatedMeasures"].DefaultCellStyle.BackColor = Color.LightGray;
         }
 
         private void updateEditableColumns() {
@@ -123,10 +123,16 @@ namespace AmigaPowerAnalysis.GUI {
                 if (_project.Endpoints[i].Measurement != MeasurementType.Fraction) {
                     dataGridViewEndpoints.Rows[i].Cells["BinomialTotal"].ReadOnly = true;
                     dataGridViewEndpoints.Rows[i].Cells["BinomialTotal"].Style.BackColor = Color.LightGray;
+                } else {
+                    dataGridViewEndpoints.Rows[i].Cells["BinomialTotal"].ReadOnly = false;
+                    dataGridViewEndpoints.Rows[i].Cells["BinomialTotal"].Style.BackColor = Color.White;
                 }
                 if (_project.Endpoints[i].DistributionType != DistributionType.PowerLaw) {
                     dataGridViewEndpoints.Rows[i].Cells["PowerLawPower"].ReadOnly = true;
                     dataGridViewEndpoints.Rows[i].Cells["PowerLawPower"].Style.BackColor = Color.LightGray;
+                } else {
+                    dataGridViewEndpoints.Rows[i].Cells["PowerLawPower"].ReadOnly = false;
+                    dataGridViewEndpoints.Rows[i].Cells["PowerLawPower"].Style.BackColor = Color.White;
                 }
                 var measurementType = _project.Endpoints[i].Measurement;
                 var datagridCellComboBox = (DataGridViewComboBoxCell)dataGridViewEndpoints.Rows[i].Cells["DistributionType"];
