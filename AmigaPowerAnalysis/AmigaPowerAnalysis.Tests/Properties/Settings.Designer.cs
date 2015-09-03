@@ -25,7 +25,7 @@ namespace AmigaPowerAnalysis.Tests.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("..\\..\\..\\AutoTests")]
+        [global::System.Configuration.DefaultSettingValueAttribute("..\\..\\..\\IntegrationTests")]
         public string TestPath {
             get {
                 return ((string)(this["TestPath"]));

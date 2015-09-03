@@ -39,23 +39,23 @@ namespace AmigaPowerAnalysis.Tests.IntegrationTests {
         }
 
         [TestMethod]
-        public void FullProjectIntegrationTests_MockProject0() {
-            runProject(MockProjectsCreator.MockProject0(), "IntegrationTest0");
+        public void FullProjectIntegrationTests_MockSimple() {
+            runProject(MockProjectsCreator.MockSimple(), "Simple");
         }
 
         [TestMethod]
         public void FullProjectIntegrationTests_MockProject1() {
-            runProject(MockProjectsCreator.MockProject1(), "IntegrationTest1");
+            runProject(MockProjectsCreator.MockProject1(), "ValidationProject1");
         }
 
         [TestMethod]
         public void FullProjectIntegrationTests_MockProject2() {
-            runProject(MockProjectsCreator.MockProject2(), "IntegrationTest2");
+            runProject(MockProjectsCreator.MockProject2(), "ValidationProject2");
         }
 
         [TestMethod]
         public void FullProjectIntegrationTests_MockProject3() {
-            runProject(MockProjectsCreator.MockProject3(), "IntegrationTest3");
+            runProject(MockProjectsCreator.MockProject3(), "ValidationProject3");
         }
     }
 }

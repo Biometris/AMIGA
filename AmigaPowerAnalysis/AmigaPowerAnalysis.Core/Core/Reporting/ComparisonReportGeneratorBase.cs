@@ -182,16 +182,18 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             return stringBuilder.ToString();
         }
 
-        protected static string generateComparisonOutputHtml(IEnumerable<OutputPowerAnalysisRecord> records, List<AnalysisMethodType> selectedAnalysisMethods) {
+        protected static string generateComparisonOutputHtml(IEnumerable<OutputPowerAnalysisRecord> records, List<AnalysisMethodType> selectedAnalysisMethods, bool csdOnly = false) {
             var stringBuilder = new StringBuilder();
             stringBuilder.Append("<h2>Output power analysis</h2>");
             stringBuilder.Append("<table>");
 
             stringBuilder.Append("<tr>");
-            stringBuilder.Append("<th>Ratio</th>");
-            stringBuilder.Append("<th>Log(ratio)</th>");
+            if (!csdOnly) {
+                stringBuilder.Append("<th>Ratio</th>");
+                stringBuilder.Append("<th>Log(ratio)</th>");
+            }
             stringBuilder.Append("<th>CSD</th>");
-            stringBuilder.Append("<th>Replicates</th>");
+            stringBuilder.Append("<th>Repl.</th>");
             foreach (var analysisMethodType in selectedAnalysisMethods) {
                 stringBuilder.Append(string.Format("<th>{0} {1}</th>", TestType.Difference.GetShortName(), analysisMethodType.GetShortName()));
                 stringBuilder.Append(string.Format("<th>{0} {1}</th>", TestType.Equivalence.GetShortName(), analysisMethodType.GetShortName()));
@@ -199,8 +201,10 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             stringBuilder.Append("</tr>");
             foreach (var item in records) {
                 stringBuilder.Append("<tr>");
-                stringBuilder.Append(printNumericTableRecord(item.Effect));
-                stringBuilder.Append(printNumericTableRecord(item.TransformedEffect));
+                if (!csdOnly) {
+                    stringBuilder.Append(printNumericTableRecord(item.Effect));
+                    stringBuilder.Append(printNumericTableRecord(item.TransformedEffect));
+                }
                 stringBuilder.Append(printNumericTableRecord(item.ConcernStandardizedDifference));
                 stringBuilder.Append(string.Format("<td>{0}</td>", item.NumberOfReplications));
                 foreach (var analysisMethodType in selectedAnalysisMethods) {

@@ -12,7 +12,7 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             _comparison = comparison;
             _filesPath = filesPath;
         }
-        
+
         public override string Generate(bool imagesAsPng) {
             var html = string.Empty;
             html += generateComparisonMessagesHtml(_comparison);

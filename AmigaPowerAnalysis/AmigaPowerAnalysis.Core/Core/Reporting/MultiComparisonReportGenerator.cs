@@ -23,7 +23,7 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             html += generatePrimaryComparisonsSummary(_comparisons);
             var analysisMethodTypes = _comparisons.First().OutputPowerAnalysis.InputPowerAnalysis.SelectedAnalysisMethodTypes.GetFlags().Cast<AnalysisMethodType>().ToList();
             var records = getSummaryRecords(primaryComparisons);
-            html += generateComparisonOutputHtml(records, analysisMethodTypes);
+            html += generateComparisonOutputHtml(records, analysisMethodTypes, true);
             html += generateComparisonsChartHtml(records, analysisMethodTypes, _filesPath, imagesAsPng);
             html += "<h1>Results per primary comparison</h1>";
             foreach (var comparison in primaryComparisons) {
@@ -41,9 +41,19 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             var stringBuilder = new StringBuilder();
             stringBuilder.AppendLine(string.Format("<h1>Summary primary comparisons</h1>"));
             stringBuilder.AppendLine("<table>");
-            stringBuilder.AppendLine("<tr><th>Comparison</th><th>Primary</th></tr>");
+            stringBuilder.AppendLine("<tr>");
+            stringBuilder.AppendLine("<th>Comparison</th>");
+            stringBuilder.AppendLine("<th>Measurement</th>");
+            stringBuilder.AppendLine("<th>Mean comparator</th>");
+            stringBuilder.AppendLine("<th>CV</th>");
+            stringBuilder.AppendLine("<th>Primary</th>");
+            stringBuilder.AppendLine("</tr>");
             foreach (var comparison in comparisons) {
-                stringBuilder.AppendLine(string.Format("<tr><td>{0}</td><td>{1}</td></tr>", comparison.Endpoint.Name, comparison.IsPrimary ? "Yes" : "No"));
+                stringBuilder.AppendLine(string.Format("<td>{0}</td>", comparison.Endpoint.Name));
+                stringBuilder.AppendLine(string.Format("<td>{0}</td>", comparison.Endpoint.Measurement.GetDisplayName()));
+                stringBuilder.AppendLine(printNumericTableRecord(comparison.Endpoint.MuComparator));
+                stringBuilder.AppendLine(printNumericTableRecord(comparison.Endpoint.CvComparator));
+                stringBuilder.AppendLine(string.Format("<td>{0}</td>", comparison.IsPrimary ? "Yes" : "No"));
             }
             stringBuilder.AppendLine("</table>");
             return stringBuilder.ToString();
