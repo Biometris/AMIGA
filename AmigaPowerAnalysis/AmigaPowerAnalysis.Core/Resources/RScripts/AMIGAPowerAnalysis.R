@@ -248,7 +248,7 @@ createSimulationSettings <- function(settings) {
   return(simulationSettings)
 }
 
-createSimulatedDataTemplate <- function(data, settings, simulationSettings, blocks) {
+createSimulatedData <- function(data, settings, simulationSettings, blocks, effect) {
   setupSimulatedData <- data
   
   # Expand dataset and modify Block factor  
@@ -269,19 +269,15 @@ createSimulatedDataTemplate <- function(data, settings, simulationSettings, bloc
   setupSimulatedData["UppOffset"] <- setupSimulatedData["GMO"] * settings$TransformLocUpper
   
   # Add extra columns which are used to simulate and fit data
-  setupSimulatedData["TransformedEffect"] <- setupSimulatedData["GMO"] * NaN
-  setupSimulatedData["Effect"]            <- setupSimulatedData["GMO"] * NaN
+  setupSimulatedData["TransformedEffect"] <- setupSimulatedData["TransformedMean"] + setupSimulatedData["BlockEffect"] + (setupSimulatedData["GMO"] == 1) * effect
+  setupSimulatedData["Effect"] <- inverseLinkFunction(setupSimulatedData["TransformedEffect"], settings$MeasurementType)
   setupSimulatedData["Response"]          <- setupSimulatedData["GMO"] * NaN
-  setupSimulatedData["LinearPredictor"]   <- setupSimulatedData["GMO"] * NaN
-  setupSimulatedData["FittedValues"]      <- setupSimulatedData["GMO"] * NaN
   return(setupSimulatedData)
 }
 
-simulateData <- function(data, settings, simulationSettings, effect) {
-  data["TransformedEffect"] <- data["TransformedMean"] + data["BlockEffect"] + (data["GMO"] == 1) * effect
-  data["Effect"] <- inverseLinkFunction(data["TransformedEffect"], settings$MeasurementType)
-  data["Response"] <- ropoisson(nrow(data), data[["Effect"]], simulationSettings$dispersion, settings$PowerLawPower, settings$Distribution)
-  return(data)
+simulateResponse <- function(simulatedData, settings, simulationSettings) {
+  response <- ropoisson(nrow(simulatedData), simulatedData[["Effect"]], simulationSettings$dispersion, settings$PowerLawPower, settings$Distribution)
+  return(response)
 }
 
 createEvaluationGrid <- function(LocLower, LocUpper, NumberOfEvaluations) {
@@ -462,16 +458,16 @@ overdispersedPoissonAnalysis <- function(data, settings, modelSettings, debugSet
     pvalues$Equi = max(pLowerEqui, pUpperEqui) # Both one-sided hypothesis must be rejected
   } else {
     # Results based on LR test; denominator based on Pearson statistic
-    data[["LinearPredictor"]] = glmH1$linear.predictor
-    glmH0 <- glm(modelSettings$formulaH0, family="quasipoisson", data=data, etastart=data[["LinearPredictor"]])
+    etastart = glmH1$linear.predictor
+    glmH0 <- glm(modelSettings$formulaH0, family="quasipoisson", data=data, etastart=etastart)
     pvalues$Diff <- pf((deviance(glmH0) - deviance(glmH1))/estDispersion, 1, resDF, lower.tail=FALSE)
     # and LR equivalence test
     if ((estiEffect < settings$TransformLocLower) | (estiEffect > settings$TransformLocUpper)) {
       pvalues$Equi <- 2
     } else {
       # LR equivalence test
-      glmH0low <- glm(modelSettings$formulaH0_low, family="quasipoisson", data=data, etastart=data[["LinearPredictor"]])
-      glmH0upp <- glm(modelSettings$formulaH0_upp, family="quasipoisson", data=data, etastart=data[["LinearPredictor"]])
+      glmH0low <- glm(modelSettings$formulaH0_low, family="quasipoisson", data=data, etastart=etastart)
+      glmH0upp <- glm(modelSettings$formulaH0_upp, family="quasipoisson", data=data, etastart=etastart)
       pvalLow <- pf((deviance(glmH0low) - deviance(glmH1))/estDispersion, 1, resDF, lower.tail=FALSE)
       pvalUpp <- pf((deviance(glmH0upp) - deviance(glmH1))/estDispersion, 1, resDF, lower.tail=FALSE)
       pvalues$Equi <- max(pvalLow, pvalUpp)/2
@@ -506,19 +502,19 @@ negativeBinomialAnalysis <- function(data, settings, modelSettings, debugSetting
     pvalues$Equi = max(pLowerEqui, pUpperEqui) # Both one-sided hypothesis must be rejected
   } else {
     # Results based on LR test
-    data[["LinearPredictor"]] = glmH1$linear.predictor
-    glmH0 <- fitNB(modelSettings$formulaH0, data, etastart=data[["LinearPredictor"]], method=modelSettings$NBmethod, lower=modelSettings$NBlower, upper=modelSettings$NBupper)
-    # glmH0 <- glm.nb(modelSettings$formulaH0, data=data, link=log, etastart=data[["LinearPredictor"]])
+    etastart = glmH1$linear.predictor
+    glmH0 <- fitNB(modelSettings$formulaH0, data, etastart=etastart, method=modelSettings$NBmethod, lower=modelSettings$NBlower, upper=modelSettings$NBupper)
+    # glmH0 <- glm.nb(modelSettings$formulaH0, data=data, link=log, etastart=etastart)
     pvalues$Diff <- as.numeric(pchisq(-2*logLik(glmH0) + 2*logLik(glmH1), 1, lower.tail=FALSE))
     # and LR equivalence test
     if ((estiEffect < settings$TransformLocLower) | (estiEffect > settings$TransformLocUpper)) {
       pvalues$Equi <- 2
     } else {
       # LR equivalence test
-      #glmH0low <- glm.nb(modelSettings$formulaH0_low, data=data, link=log, etastart=data[["LinearPredictor"]])
-      #glmH0upp <- glm.nb(modelSettings$formulaH0_upp, data=data, link=log, etastart=data[["LinearPredictor"]])
-      glmH0low <- fitNB(modelSettings$formulaH0_low, data, etastart=data[["LinearPredictor"]], method=modelSettings$NBmethod, lower=modelSettings$NBlower, upper=modelSettings$NBupper)
-      glmH0upp <- fitNB(modelSettings$formulaH0_upp, data, etastart=data[["LinearPredictor"]], method=modelSettings$NBmethod, lower=modelSettings$NBlower, upper=modelSettings$NBupper)
+      #glmH0low <- glm.nb(modelSettings$formulaH0_low, data=data, link=log, etastart=etastart)
+      #glmH0upp <- glm.nb(modelSettings$formulaH0_upp, data=data, link=log, etastart=etastart)
+      glmH0low <- fitNB(modelSettings$formulaH0_low, data, etastart=etastart, method=modelSettings$NBmethod, lower=modelSettings$NBlower, upper=modelSettings$NBupper)
+      glmH0upp <- fitNB(modelSettings$formulaH0_upp, data, etastart=etastart, method=modelSettings$NBmethod, lower=modelSettings$NBlower, upper=modelSettings$NBupper)
       pvalLow <- pchisq(-2*(logLik(glmH0low) - logLik(glmH1)), 1, lower.tail=FALSE)
       pvalUpp <- pchisq(-2*(logLik(glmH0upp) - logLik(glmH1)), 1, lower.tail=FALSE)
       pvalues$Equi <- max(pvalLow, pvalUpp)/2
@@ -579,14 +575,14 @@ monteCarloPowerAnalysis <- function(data, settings, modelSettings, blocks, effec
 
   # Setup simulation settings
   simulationSettings <- createSimulationSettings(settings)
-  simulatedDataTemplate <- createSimulatedDataTemplate(data, settings, simulationSettings, blocks)
+  simulatedData <- createSimulatedData(data, settings, simulationSettings, blocks, effect)
 
   # Do looping over simulations 
   ndigits = ceiling(log10(settings$NumberOfSimulatedDataSets) + 0.0001)
   for (k in 1:settings$NumberOfSimulatedDataSets) {
     debugSettings$iDataset = k
     # simulate data
-    simulatedData <- simulateData(simulatedDataTemplate, settings, simulationSettings, effect)
+    simulatedData[["Response"]] <- simulateResponse(simulatedData, settings, simulationSettings)
     if (settings$IsOutputSimulatedData) {
       csvFile = str_pad(k, ndigits, side="left", "0")      
       csvFile = paste0(localDir, "Data-", csvFile, ".csv")
