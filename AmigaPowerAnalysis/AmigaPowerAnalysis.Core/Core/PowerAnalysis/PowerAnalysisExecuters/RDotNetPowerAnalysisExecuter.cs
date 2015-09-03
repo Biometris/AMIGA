@@ -66,6 +66,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                     rEngine.EvaluateNoReturn(string.Format("inputData <- readDataFile('{0}')", comparisonInputFilename.Replace("\\", "/")));
                     rEngine.EvaluateNoReturn("#========== Creating settings");
                     rEngine.EvaluateNoReturn(string.Format("settings <- readSettings('{0}')", comparisonSettingsFilename.Replace("\\", "/")));
+                    rEngine.EvaluateNoReturn("set.seed(settings$RandomNumberSeed)");
                     rEngine.EvaluateNoReturn("modelSettings <- createModelSettings(inputData, settings)");
 
                     var totalLoops = inputPowerAnalysis.NumberOfReplications.Count * effects.Count;
@@ -79,10 +80,10 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                             var effect = effects[j];
                             try {
                                 // Update progress state
-                                progressState.Update(string.Format("Endpoint {0}, replicate {1}/{2}, effect {3}/{4}", inputPowerAnalysis.Endpoint, i, inputPowerAnalysis.NumberOfReplications.Count, j, effects.Count), 100 * ((double)counter / totalLoops));
+                                progressState.Update(string.Format("Endpoint {1}/{2}, replicate {3}/{4}, effect {5}/{6}   {0}", inputPowerAnalysis.Endpoint, inputPowerAnalysis.ComparisonId + 1, inputPowerAnalysis.NumberOfComparisons, i + 1, inputPowerAnalysis.NumberOfReplications.Count, j + 1, effects.Count), 100 * ((double)counter / totalLoops));
 
                                 // Define settings for Debugging the Rscript
-                                rEngine.EvaluateNoReturn(string.Format("debugSettings = list(iRep={0}, iEffect={1}, iDataset=NaN, writeData={2}, displayFit={3})", i, j, isWriteData, isWriteData));
+                                rEngine.EvaluateNoReturn(string.Format("debugSettings = list(iRep={0}, iEffect={1}, iDataset=NaN, writeData={2}, displayFit={3})", i + 1, j + 1, isWriteData, isWriteData));
 
                                 // Run Monte Carlo
                                 var output = runMonteCarloSimulation(effect, blocks, inputPowerAnalysis.SelectedAnalysisMethodTypes, inputPowerAnalysis.NumberOfSimulatedDataSets, rEngine);
