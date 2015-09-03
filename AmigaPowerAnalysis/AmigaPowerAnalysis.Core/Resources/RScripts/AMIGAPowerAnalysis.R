@@ -1,3 +1,14 @@
+# Remarks
+# 1. Due to an apparent bug in the LSMEANS package formulaH1 is saved as a string and fitted by 
+#    using as.formula()
+#
+# 2. OP and NB fails with mustart=data[["Response"]] when this contains zeros; 
+#    etastart is used instead
+#
+# 3. OP and NB equivalent tests return pval=2 in case the estimate is outside the LOC interval. 
+#    The pvalue is not calculate in that case to speed up the computation. 
+#    In effect the pvalue is then in the interval [0.5,1].
+
 linkFunction <- function(data, measurementType = c("Count", "Fraction", "Nonnegative", "Continuous")) {
   chkArg = match.arg(measurementType)
   if (measurementType == "Count") {
@@ -173,6 +184,12 @@ readSettings <- function(settingsFile) {
   } else {
     list$UseWaldTest = FALSE
   }
+  #  Redefine list$IsOutputSimulatedData as logical
+  if (list$IsOutputSimulatedData == "True") {
+    list$IsOutputSimulatedData = TRUE
+  } else {
+    list$IsOutputSimulatedData = FALSE
+  }
   # Add directory to list
   list$directory = paste0(dirname(settingsFile), "/")
   return(list)
@@ -196,15 +213,22 @@ createModelSettings <- function(data, settings) {
   if (settings$ExperimentalDesignType == "RandomizedCompleteBlocks") {
     nameH1 <- c(nameH1, "Block") # Add blocking effect
   }
-  modelSettings$formulaH1 <- as.formula(paste("Response ~ ", paste(nameH1, collapse="+")))
+
+  # Define models to fit
+  modelSettings$formulaH1 <- as.formula(paste0("Response ~ ", paste0(nameH1, collapse=" + ")))
   modelSettings$formulaH0 <- update(modelSettings$formulaH1, ~ . - GMO)
   modelSettings$formulaH0_low <- update(modelSettings$formulaH0, ~ . + offset(LowOffset))
   modelSettings$formulaH0_upp <- update(modelSettings$formulaH0, ~ . + offset(UppOffset))
+  # Due to an apparent bug in the LSMEANS package formulaH1 is saved as a string and fitted by using as.formula()
+  modelSettings$formulaH1 <- paste0("Response ~ ", paste0(nameH1, collapse=" + "))
 
-  # Test settings
-  modelSettings$SignificanceLevel = settings$SignificanceLevel
-  modelSettings$nGCI = 100000     # Number of draws for Generalized Confidence Interval
+  # Additional settings
   modelSettings$smallGCI = 0.0001 # Bound on back-transformed values for the LOG-transform
+
+  # Settings for fitting the NB model 
+  modelSettings$NBmethod = "optimize"   # method to fit the NB model (MASS, optimize)
+  modelSettings$NBlower = 0.001         # lower value for NB-theta when optimize is used to fit the model
+  modelSettings$NBupper = 10000         # upper value for NB-theta when optimize is used to fit the model
 
   return(modelSettings)
 }
@@ -244,6 +268,12 @@ createSimulatedDataTemplate <- function(data, settings, simulationSettings, bloc
   setupSimulatedData["LowOffset"] <- setupSimulatedData["GMO"] * settings$TransformLocLower
   setupSimulatedData["UppOffset"] <- setupSimulatedData["GMO"] * settings$TransformLocUpper
   
+  # Add extra columns which are used to simulate and fit data
+  setupSimulatedData["TransformedEffect"] <- setupSimulatedData["GMO"] * NaN
+  setupSimulatedData["Effect"]            <- setupSimulatedData["GMO"] * NaN
+  setupSimulatedData["Response"]          <- setupSimulatedData["GMO"] * NaN
+  setupSimulatedData["LinearPredictor"]   <- setupSimulatedData["GMO"] * NaN
+  setupSimulatedData["FittedValues"]      <- setupSimulatedData["GMO"] * NaN
   return(setupSimulatedData)
 }
 
@@ -300,8 +330,8 @@ normalAnalysis <- function(data, settings, modelSettings, debugSettings) {
   vcovLS = vcov(lsmeans)
 
   # GCI; this takes account of a possible covariance between predictions
-  chi  <- resDF * resMS / rchisq(modelSettings$nGCI, resDF)
-  random = mvrnorm(modelSettings$nGCI, c(0,0), vcovLS)*sqrt(chi/resMS)
+  chi  <- resDF * resMS / rchisq(settings$NumberOfSimulationsGCI, resDF)
+  random = mvrnorm(settings$NumberOfSimulationsGCI, c(0,0), vcovLS)*sqrt(chi/resMS)
   random[,1] = meanCMP + random[,1]
   random[,2] = meanGMO + random[,2]
   ratio <- random[,2] - random[,1]
@@ -330,15 +360,15 @@ logNormalAnalysis <- function(data, settings, modelSettings, debugSettings) {
   seEffect = sqrt(vcov(lmH1)[2,2])
   pvalues$Diff <- as.numeric(2*pt(abs(estiEffect)/seEffect, resDF, lower.tail=FALSE))
 
-  if (modelSettings$nGCI > 0) {
+  if (settings$NumberOfSimulationsGCI > 0) {
     # Obtain predicted means for CMP/GMO and corresponding VCOV
     lsmeans <- lsmeans(lmH1, "GMO", at=modelSettings$preddata)
     meanCMP <- summary(lsmeans)$lsmean[1]
     meanGMO <- summary(lsmeans)$lsmean[2]
     vcovLS = vcov(lsmeans)
     # GCI; this takes account of a possible covariance between predictions
-    chi  <- resDF * resMS / rchisq(modelSettings$nGCI, resDF)
-    random = mvrnorm(modelSettings$nGCI, c(0,0), vcovLS)*sqrt(chi/resMS)
+    chi  <- resDF * resMS / rchisq(settings$NumberOfSimulationsGCI, resDF)
+    random = mvrnorm(settings$NumberOfSimulationsGCI, c(0,0), vcovLS)*sqrt(chi/resMS)
     random[,1] = meanCMP + random[,1]
     random[,2] = meanGMO + random[,2]
     random <- exp(random + chi/2) - 1
@@ -356,15 +386,15 @@ logNormalAnalysis <- function(data, settings, modelSettings, debugSettings) {
   # seGMO = summary(lsmeans)$SE[2]
   # repCMP <- resMS / (seCMP^2)
   # repGMO <- resMS / (seGMO^2)
-  # chi  <- resDF * resMS / rchisq(modelSettings$nGCI, resDF)
-  # rCMP <- rnorm(modelSettings$nGCI, meanCMP, sqrt(chi/repCMP))
-  # rGMO <- rnorm(modelSettings$nGCI, meanGMO, sqrt(chi/repGMO))
+  # chi  <- resDF * resMS / rchisq(settings$NumberOfSimulationsGCI, resDF)
+  # rCMP <- rnorm(settings$NumberOfSimulationsGCI, meanCMP, sqrt(chi/repCMP))
+  # rGMO <- rnorm(settings$NumberOfSimulationsGCI, meanGMO, sqrt(chi/repGMO))
   # rCMP <- exp(rCMP + chi/2) - 1
   # rGMO <- exp(rGMO + chi/2) - 1
   # rCMP[rCMP < modelSettings$smallGCI] <- modelSettings$smallGCI
   # rGMO[rGMO < modelSettings$smallGCI] <- modelSettings$smallGCI
   # ratio <- rGMO/rCMP
-  # quantiles <- quantile(ratio, c(modelSettings$SignificanceLevel, 1 - modelSettings$SignificanceLevel), na.rm=TRUE)
+  # quantiles <- quantile(ratio, c(settings$SignificanceLevel, 1 - settings$SignificanceLevel), na.rm=TRUE)
   # print(quantiles)
 }
 
@@ -383,15 +413,15 @@ squareRootAnalysis <- function(data, settings, modelSettings, debugSettings) {
   seEffect = sqrt(vcov(lmH1)[2,2])
   pvalues$Diff <- as.numeric(2*pt(abs(estiEffect)/seEffect, resDF, lower.tail=FALSE))
 
-  if (modelSettings$nGCI > 0) {
+  if (settings$NumberOfSimulationsGCI > 0) {
     # Obtain predicted means for CMP/GMO and corresponding VCOV
     lsmeans <- lsmeans(lmH1, "GMO", at=modelSettings$preddata)
     meanCMP <- summary(lsmeans)$lsmean[1]
     meanGMO <- summary(lsmeans)$lsmean[2]
     vcovLS = vcov(lsmeans)
     # GCI; this takes account of a possible covariance between predictions
-    chi  <- resDF * resMS / rchisq(modelSettings$nGCI, resDF)
-    random = mvrnorm(modelSettings$nGCI, c(0,0), vcovLS)*sqrt(chi/resMS)
+    chi  <- resDF * resMS / rchisq(settings$NumberOfSimulationsGCI, resDF)
+    random = mvrnorm(settings$NumberOfSimulationsGCI, c(0,0), vcovLS)*sqrt(chi/resMS)
     random[,1] = meanCMP + random[,1]
     random[,2] = meanGMO + random[,2]
     random <- random*random + chi
@@ -408,14 +438,16 @@ overdispersedPoissonAnalysis <- function(data, settings, modelSettings, debugSet
 
   # Prepare results list and fit H1; default method is DMETHOD=pearson
   pvalues <- list(Diff = c(NaN), Equi = c(NaN), Dispersion=c(NaN))
-  glmH1 <- glm(modelSettings$formulaH1, family="quasipoisson", data=data, mustart=data[["Response"]])
+  glmH1 <- glm(as.formula(modelSettings$formulaH1), family="quasipoisson", data=data, etastart=data[["TransformedEffect"]])
+  #print(paste0("Number of iteration ", glmH1$iter))
+
   resDF <- df.residual(glmH1)
   estDispersion <- summary(glmH1)$dispersion
   estiEffect <- glmH1$coef[2]
   seEffect <- sqrt(vcov(glmH1)[2,2])
   # estDispersion <- sum(residuals(glmH1,type="pearson")^2)/resDF
   pvalues$Dispersion = estDispersion
-  if (debugSettings$displayFit) {
+  if (settings$IsOutputSimulatedData) {
     writeLines(paste0("\nOP iRep ", debugSettings$iRep, " iEffect ", debugSettings$iEffect, " Dataset ", debugSettings$iDataset), debugSettings$displayFile)
     writeLines(paste0("  dispersion: ", estDispersion), debugSettings$displayFile)
     writeLines(paste0("  estiEffect: ", estiEffect), debugSettings$displayFile)
@@ -430,15 +462,16 @@ overdispersedPoissonAnalysis <- function(data, settings, modelSettings, debugSet
     pvalues$Equi = max(pLowerEqui, pUpperEqui) # Both one-sided hypothesis must be rejected
   } else {
     # Results based on LR test; denominator based on Pearson statistic
-    glmH0 <- glm(modelSettings$formulaH0, family="quasipoisson", data=data, mustart=data[["Response"]])
+    data[["LinearPredictor"]] = glmH1$linear.predictor
+    glmH0 <- glm(modelSettings$formulaH0, family="quasipoisson", data=data, etastart=data[["LinearPredictor"]])
     pvalues$Diff <- pf((deviance(glmH0) - deviance(glmH1))/estDispersion, 1, resDF, lower.tail=FALSE)
     # and LR equivalence test
     if ((estiEffect < settings$TransformLocLower) | (estiEffect > settings$TransformLocUpper)) {
-      pvalues$Equi <- 1
+      pvalues$Equi <- 2
     } else {
       # LR equivalence test
-      glmH0low <- glm(modelSettings$formulaH0_low, family="quasipoisson", data=data, mustart=data[["Response"]])
-      glmH0upp <- glm(modelSettings$formulaH0_upp, family="quasipoisson", data=data, mustart=data[["Response"]])
+      glmH0low <- glm(modelSettings$formulaH0_low, family="quasipoisson", data=data, etastart=data[["LinearPredictor"]])
+      glmH0upp <- glm(modelSettings$formulaH0_upp, family="quasipoisson", data=data, etastart=data[["LinearPredictor"]])
       pvalLow <- pf((deviance(glmH0low) - deviance(glmH1))/estDispersion, 1, resDF, lower.tail=FALSE)
       pvalUpp <- pf((deviance(glmH0upp) - deviance(glmH1))/estDispersion, 1, resDF, lower.tail=FALSE)
       pvalues$Equi <- max(pvalLow, pvalUpp)/2
@@ -452,12 +485,13 @@ negativeBinomialAnalysis <- function(data, settings, modelSettings, debugSetting
 
   # Prepare results list and fit H1
   pvalues <- list(Diff = c(NaN), Equi = c(NaN), Dispersion=c(NaN))
-  glmH1 <- glm.nb(modelSettings$formulaH1, data=data, link=log, mustart=data[["Response"]])
+  glmH1 <- fitNB(as.formula(modelSettings$formulaH1), data, etastart=data[["TransformedEffect"]], method=modelSettings$NBmethod, lower=modelSettings$NBlower, upper=modelSettings$NBupper)
+  # glmH1 <- glm.nb(as.formula(modelSettings$formulaH1), data=data, link=log, etastart=data[["TransformedEffect"]])
   resDF <- df.residual(glmH1)
   pvalues$Dispersion = glmH1$theta
   estiEffect <- glmH1$coef[2]
   seEffect <- sqrt(vcov(glmH1)[2,2])
-  if (debugSettings$displayFit) {
+  if (settings$IsOutputSimulatedData) {
     writeLines(paste0("\nNB iRep ", debugSettings$iRep, " iEffect ", debugSettings$iEffect, " Dataset ", debugSettings$iDataset), debugSettings$displayFile)
     writeLines(paste0("  dispersion: ", glmH1$theta), debugSettings$displayFile)
     writeLines(paste0("  estiEffect: ", estiEffect), debugSettings$displayFile)
@@ -472,15 +506,19 @@ negativeBinomialAnalysis <- function(data, settings, modelSettings, debugSetting
     pvalues$Equi = max(pLowerEqui, pUpperEqui) # Both one-sided hypothesis must be rejected
   } else {
     # Results based on LR test
-    glmH0 <- glm.nb(modelSettings$formulaH0, data=data, link=log, mustart=data[["Response"]])
+    data[["LinearPredictor"]] = glmH1$linear.predictor
+    glmH0 <- fitNB(modelSettings$formulaH0, data, etastart=data[["LinearPredictor"]], method=modelSettings$NBmethod, lower=modelSettings$NBlower, upper=modelSettings$NBupper)
+    # glmH0 <- glm.nb(modelSettings$formulaH0, data=data, link=log, etastart=data[["LinearPredictor"]])
     pvalues$Diff <- as.numeric(pchisq(-2*logLik(glmH0) + 2*logLik(glmH1), 1, lower.tail=FALSE))
     # and LR equivalence test
     if ((estiEffect < settings$TransformLocLower) | (estiEffect > settings$TransformLocUpper)) {
-      pvalues$Equi <- 1
+      pvalues$Equi <- 2
     } else {
       # LR equivalence test
-      glmH0low <- glm.nb(modelSettings$formulaH0_low, data=data, link=log, mustart=data[["Response"]])
-      glmH0upp <- glm.nb(modelSettings$formulaH0_upp, data=data, link=log, mustart=data[["Response"]])
+      #glmH0low <- glm.nb(modelSettings$formulaH0_low, data=data, link=log, etastart=data[["LinearPredictor"]])
+      #glmH0upp <- glm.nb(modelSettings$formulaH0_upp, data=data, link=log, etastart=data[["LinearPredictor"]])
+      glmH0low <- fitNB(modelSettings$formulaH0_low, data, etastart=data[["LinearPredictor"]], method=modelSettings$NBmethod, lower=modelSettings$NBlower, upper=modelSettings$NBupper)
+      glmH0upp <- fitNB(modelSettings$formulaH0_upp, data, etastart=data[["LinearPredictor"]], method=modelSettings$NBmethod, lower=modelSettings$NBlower, upper=modelSettings$NBupper)
       pvalLow <- pchisq(-2*(logLik(glmH0low) - logLik(glmH1)), 1, lower.tail=FALSE)
       pvalUpp <- pchisq(-2*(logLik(glmH0upp) - logLik(glmH1)), 1, lower.tail=FALSE)
       pvalues$Equi <- max(pvalLow, pvalUpp)/2
@@ -489,19 +527,39 @@ negativeBinomialAnalysis <- function(data, settings, modelSettings, debugSetting
   return(pvalues)
 }
 
+fitNB <- function(model, data, etastart, method=c("MASS", "optimize"), lower=0.001, upper=10000) {
+  if (method == "MASS") {
+    glm <- glm.nb(model, data=data, link=log, etastart=etastart)
+  } else {
+    min = optimize(fitNBhelper, lower=log(lower), upper=log(upper), model=model, data=data)
+    theta = exp(min$minimum)
+    glm <- glm.nb(model, data=data, link=log, init.theta=theta)
+  }
+  return(glm)
+}
+
+fitNBhelper <- function(model, data, theta) {
+  agg = exp(theta)
+  glm = glm(model, family=negative.binomial(agg), data=data)
+  -2*logLik(glm)
+}
+
 monteCarloPowerAnalysis <- function(data, settings, modelSettings, blocks, effect, debugSettings) {
 
+  DEBUG = TRUE
+
+  # Global settings
   # debugSettings$iRep            counting Reps loop (integer)
   # debugSettings$iEffect         counting Effects loop (integer)
-  # debugSettings$iDataset        counting Datsets loop (integer)
-  # debugSettings$writeData       whether to write all data (TRUE or FALSE)
-  # debugSettings$displayFit      whether to display fit of models
+  # debugSettings$iDataset        counting Datasets loop (integer)
+  #
+  # Local settings
   # debugSettings$displayFile     File connection to display the fit of models
 
   # Prepare for debugging, i.e. create directory to write files to
-  if (debugSettings$writeData) {
+  if (settings$IsOutputSimulatedData) {
     localDir = paste0(settings$directory)
-    localDir = paste0(localDir, "Set", str_pad(settings$ComparisonId, 2, side="left", "0"), "/")
+    localDir = paste0(localDir, settings$ComparisonId, "-Endpoint", "/")
     dir.create(localDir, showWarnings=FALSE)
     localDir = paste0(localDir, "Rep", str_pad(debugSettings$iRep, 2, side="left", "0"), "/")
     dir.create(localDir, showWarnings=FALSE)
@@ -509,8 +567,6 @@ monteCarloPowerAnalysis <- function(data, settings, modelSettings, blocks, effec
     dir.create(localDir, showWarnings=FALSE)
     unlink(paste0(localDir, "*.csv"))
     debugSettings$displayFile = file(paste0(localDir, "00-DisplayFit.txt"), open="wt")
-  } else {
-    debugSettings$displayFit = FALSE
   }
 
   nanalysis = length(settings$AnalysisMethods)
@@ -529,38 +585,35 @@ monteCarloPowerAnalysis <- function(data, settings, modelSettings, blocks, effec
   ndigits = ceiling(log10(settings$NumberOfSimulatedDataSets) + 0.0001)
   for (k in 1:settings$NumberOfSimulatedDataSets) {
     debugSettings$iDataset = k
-    # set seed; this is to ensure that Wald and LR use the same simulated data
-    if (settings$RandomNumberSeed == .Machine$integer.max) {
-      settings$RandomNumberSeed = 1
-    } else {
-      settings$RandomNumberSeed = settings$RandomNumberSeed + 1
-    }
-    set.seed(settings$RandomNumberSeed)
     # simulate data
     simulatedData <- simulateData(simulatedDataTemplate, settings, simulationSettings, effect)
-    if (debugSettings$writeData) {
+    if (settings$IsOutputSimulatedData) {
       csvFile = str_pad(k, ndigits, side="left", "0")      
       csvFile = paste0(localDir, "Data-", csvFile, ".csv")
       write.csv(simulatedData, csvFile, row.names=FALSE)
     }
     # Fit models
     if (!is.na(match("LogNormal", settings$AnalysisMethods))) {
+      if (DEBUG) print(paste(k, "LogNormal"))
       result <- logNormalAnalysis(simulatedData, settings, modelSettings, debugSettings)
       pValues$Diff[k, "LogNormal"] <- result$Diff
       pValues$Equi[k, "LogNormal"] <- result$Equi
     }
     if (!is.na(match("SquareRoot", settings$AnalysisMethods))) {
+      if (DEBUG) print(paste(k, "SquareRoot"))
       result <- squareRootAnalysis(simulatedData, settings, modelSettings, debugSettings)
       pValues$Diff[k, "SquareRoot"] <- result$Diff
       pValues$Equi[k, "SquareRoot"] <- result$Equi
     }
     if (!is.na(match("OverdispersedPoisson", settings$AnalysisMethods))) {
+      if (DEBUG) print(paste(k, "OverdispersedPoisson"))
       result <- overdispersedPoissonAnalysis(simulatedData, settings, modelSettings, debugSettings)
       pValues$Diff[k, "OverdispersedPoisson"] <- result$Diff
       pValues$Equi[k, "OverdispersedPoisson"] <- result$Equi
       pValues$Extra[k, "OPdisp"] <- result$Dispersion
     }
     if (!is.na(match("NegativeBinomial", settings$AnalysisMethods))) {
+      if (DEBUG) print(paste(k, "NegativeBinomial"))
       result <- negativeBinomialAnalysis(simulatedData, settings, modelSettings, debugSettings)
       pValues$Diff[k, "NegativeBinomial"] <- result$Diff
       pValues$Equi[k, "NegativeBinomial"] <- result$Equi
@@ -568,7 +621,7 @@ monteCarloPowerAnalysis <- function(data, settings, modelSettings, blocks, effec
     }
   }
 
-  if (debugSettings$writeData) {
+  if (settings$IsOutputSimulatedData) {
     print(pValues)
     if (settings$UseWaldTest) {
       csvFile = paste0(localDir, "00-PvaluesWald.csv")

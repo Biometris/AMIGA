@@ -33,7 +33,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
 
             inputPowerAnalysis.IsOutputSimulatedData = true;
             inputPowerAnalysis.NumberOfSimulationsGCI = 100000;
-            inputPowerAnalysis.NumberOfSimulationsLylesMethod = 1000;
+            inputPowerAnalysis.NumberOfSimulationsLylesMethod = 100000;
 
             var applicationDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             var scriptsDirectory = string.Format(@"{0}\Resources\RScripts", applicationDirectory);
@@ -47,8 +47,6 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             var inputGenerator = new PowerAnalysisInputGenerator();
             createAnalysisInputFile(inputPowerAnalysis, comparisonInputFilename);
             createAnalysisSettingsFile(inputPowerAnalysis, comparisonSettingsFilename);
-
-            var isWriteData = inputPowerAnalysis.IsOutputSimulatedData ? "TRUE" : "FALSE";
 
             var logger = new FileLogger(comparisonLogFilename);
             var effects = createCsdEvaluationGrid(inputPowerAnalysis.LocLower, inputPowerAnalysis.LocUpper, inputPowerAnalysis.OverallMean, inputPowerAnalysis.NumberOfRatios, inputPowerAnalysis.MeasurementType);
@@ -83,7 +81,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                                 progressState.Update(string.Format("Endpoint {1}/{2}, replicate {3}/{4}, effect {5}/{6}   {0}", inputPowerAnalysis.Endpoint, inputPowerAnalysis.ComparisonId + 1, inputPowerAnalysis.NumberOfComparisons, i + 1, inputPowerAnalysis.NumberOfReplications.Count, j + 1, effects.Count), 100 * ((double)counter / totalLoops));
 
                                 // Define settings for Debugging the Rscript
-                                rEngine.EvaluateNoReturn(string.Format("debugSettings = list(iRep={0}, iEffect={1}, iDataset=NaN, writeData={2}, displayFit={3})", i + 1, j + 1, isWriteData, isWriteData));
+                                rEngine.EvaluateNoReturn(string.Format("debugSettings = list(iRep={0}, iEffect={1}, iDataset=NaN)", i + 1, j + 1));
 
                                 // Run Monte Carlo
                                 var output = runMonteCarloSimulation(effect, blocks, inputPowerAnalysis.SelectedAnalysisMethodTypes, inputPowerAnalysis.NumberOfSimulatedDataSets, rEngine);
