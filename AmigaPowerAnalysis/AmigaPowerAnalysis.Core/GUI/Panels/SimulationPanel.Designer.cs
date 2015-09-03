@@ -24,6 +24,8 @@
         /// </summary>
         private void InitializeComponent() {
             this.groupBoxOptions = new System.Windows.Forms.GroupBox();
+            this.checkBoxUseWaldTest = new System.Windows.Forms.CheckBox();
+            this.labelUseWaldTest = new System.Windows.Forms.Label();
             this.textBoxSeedForRandomNumbers = new System.Windows.Forms.TextBox();
             this.labelSeedForRandomNumbers = new System.Windows.Forms.Label();
             this.textBoxNumberSimulatedDatasets = new System.Windows.Forms.TextBox();
@@ -52,8 +54,6 @@
             this.groupBoxMethodsForAnalysisOfContinuous = new System.Windows.Forms.GroupBox();
             this.checkBoxMethodForAnalysesN = new System.Windows.Forms.CheckBox();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-            this.labelUseWaldTest = new System.Windows.Forms.Label();
-            this.checkBoxUseWaldTest = new System.Windows.Forms.CheckBox();
             this.groupBoxOptions.SuspendLayout();
             this.groupBoxMethodsForAnalysisOfCounts.SuspendLayout();
             this.groupBoxMethodsForAnalysisOfFractions.SuspendLayout();
@@ -88,6 +88,27 @@
             this.groupBoxOptions.TabIndex = 9;
             this.groupBoxOptions.TabStop = false;
             this.groupBoxOptions.Text = "Options";
+            // 
+            // checkBoxUseWaldTest
+            // 
+            this.checkBoxUseWaldTest.AutoSize = true;
+            this.checkBoxUseWaldTest.Checked = true;
+            this.checkBoxUseWaldTest.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxUseWaldTest.Location = new System.Drawing.Point(553, 138);
+            this.checkBoxUseWaldTest.Name = "checkBoxUseWaldTest";
+            this.checkBoxUseWaldTest.Size = new System.Drawing.Size(15, 14);
+            this.checkBoxUseWaldTest.TabIndex = 13;
+            this.checkBoxUseWaldTest.UseVisualStyleBackColor = true;
+            this.checkBoxUseWaldTest.CheckedChanged += new System.EventHandler(this.checkBoxUseWaldTest_CheckedChanged);
+            // 
+            // labelUseWaldTest
+            // 
+            this.labelUseWaldTest.AutoSize = true;
+            this.labelUseWaldTest.Location = new System.Drawing.Point(20, 136);
+            this.labelUseWaldTest.Name = "labelUseWaldTest";
+            this.labelUseWaldTest.Size = new System.Drawing.Size(74, 13);
+            this.labelUseWaldTest.TabIndex = 12;
+            this.labelUseWaldTest.Text = "Use Wald test";
             // 
             // textBoxSeedForRandomNumbers
             // 
@@ -280,7 +301,7 @@
             this.groupBoxMethodsForAnalysisOfFractions.Controls.Add(this.checkBoxMethodForAnalysesEL);
             this.groupBoxMethodsForAnalysisOfFractions.Controls.Add(this.checkBoxMethodForAnalysesBBN);
             this.groupBoxMethodsForAnalysisOfFractions.Controls.Add(this.checkBoxMethodForAnalysesOBN);
-            this.groupBoxMethodsForAnalysisOfFractions.Location = new System.Drawing.Point(241, 5);
+            this.groupBoxMethodsForAnalysisOfFractions.Location = new System.Drawing.Point(667, 5);
             this.groupBoxMethodsForAnalysisOfFractions.Margin = new System.Windows.Forms.Padding(5);
             this.groupBoxMethodsForAnalysisOfFractions.Name = "groupBoxMethodsForAnalysisOfFractions";
             this.groupBoxMethodsForAnalysisOfFractions.Size = new System.Drawing.Size(193, 144);
@@ -329,7 +350,7 @@
             // 
             this.groupBoxMethodsForAnalysisOfNonNegative.Controls.Add(this.checkBoxMethodForAnalysesLPM);
             this.groupBoxMethodsForAnalysisOfNonNegative.Controls.Add(this.checkBoxMethodForAnalysesG);
-            this.groupBoxMethodsForAnalysisOfNonNegative.Location = new System.Drawing.Point(444, 5);
+            this.groupBoxMethodsForAnalysisOfNonNegative.Location = new System.Drawing.Point(241, 5);
             this.groupBoxMethodsForAnalysisOfNonNegative.Margin = new System.Windows.Forms.Padding(5);
             this.groupBoxMethodsForAnalysisOfNonNegative.Name = "groupBoxMethodsForAnalysisOfNonNegative";
             this.groupBoxMethodsForAnalysisOfNonNegative.Size = new System.Drawing.Size(211, 144);
@@ -364,7 +385,7 @@
             // groupBoxMethodsForAnalysisOfContinuous
             // 
             this.groupBoxMethodsForAnalysisOfContinuous.Controls.Add(this.checkBoxMethodForAnalysesN);
-            this.groupBoxMethodsForAnalysisOfContinuous.Location = new System.Drawing.Point(665, 5);
+            this.groupBoxMethodsForAnalysisOfContinuous.Location = new System.Drawing.Point(462, 5);
             this.groupBoxMethodsForAnalysisOfContinuous.Margin = new System.Windows.Forms.Padding(5);
             this.groupBoxMethodsForAnalysisOfContinuous.Name = "groupBoxMethodsForAnalysisOfContinuous";
             this.groupBoxMethodsForAnalysisOfContinuous.Size = new System.Drawing.Size(195, 144);
@@ -391,34 +412,13 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.flowLayoutPanel1.AutoSize = true;
             this.flowLayoutPanel1.Controls.Add(this.groupBoxMethodsForAnalysisOfCounts);
-            this.flowLayoutPanel1.Controls.Add(this.groupBoxMethodsForAnalysisOfFractions);
             this.flowLayoutPanel1.Controls.Add(this.groupBoxMethodsForAnalysisOfNonNegative);
             this.flowLayoutPanel1.Controls.Add(this.groupBoxMethodsForAnalysisOfContinuous);
+            this.flowLayoutPanel1.Controls.Add(this.groupBoxMethodsForAnalysisOfFractions);
             this.flowLayoutPanel1.Location = new System.Drawing.Point(10, 288);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Size = new System.Drawing.Size(938, 154);
             this.flowLayoutPanel1.TabIndex = 18;
-            // 
-            // labelUseWaldTest
-            // 
-            this.labelUseWaldTest.AutoSize = true;
-            this.labelUseWaldTest.Location = new System.Drawing.Point(20, 136);
-            this.labelUseWaldTest.Name = "labelUseWaldTest";
-            this.labelUseWaldTest.Size = new System.Drawing.Size(74, 13);
-            this.labelUseWaldTest.TabIndex = 12;
-            this.labelUseWaldTest.Text = "Use Wald test";
-            // 
-            // checkBoxUseWaldTest
-            // 
-            this.checkBoxUseWaldTest.AutoSize = true;
-            this.checkBoxUseWaldTest.Checked = true;
-            this.checkBoxUseWaldTest.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxUseWaldTest.Location = new System.Drawing.Point(553, 138);
-            this.checkBoxUseWaldTest.Name = "checkBoxUseWaldTest";
-            this.checkBoxUseWaldTest.Size = new System.Drawing.Size(15, 14);
-            this.checkBoxUseWaldTest.TabIndex = 13;
-            this.checkBoxUseWaldTest.UseVisualStyleBackColor = true;
-            this.checkBoxUseWaldTest.CheckedChanged += new System.EventHandler(this.checkBoxUseWaldTest_CheckedChanged);
             // 
             // SimulationPanel
             // 
