@@ -17,7 +17,7 @@ namespace AmigaPowerAnalysis.GUI {
         public IntroductionPanel() {
             InitializeComponent();
             Name = "Introduction";
-            Description = "Welcome to Amiga Power Analysis for environmental risk assessment (ERA) using field trials. With this tool you can calculate the necessary replication for assessing differences and equivalences between a genetically modified organism (GMO) and a comparator plant variety.\r\nThe tool allows to specify the experimental design, additional factors in the experiment, and the method of statistical analysis that will be used.\r\nStart by opening an existing file or creating a new file.\r\nNote: The current implementation requires that the statistical system R is available (http://www.r-project.org/).";
+            Description = "Welcome to Amiga Power Analysis for environmental risk assessment (ERA) using field trials. With this tool you can calculate the necessary replication for assessing differences and equivalences between a test and a comparator plant variety.\r\nThe tool allows to specify the experimental design, additional factors in the experiment, and the method of statistical analysis that will be used.\r\nStart by opening an existing file or creating a new file.\r\nNote: The current implementation requires that the statistical system R is available (http://www.r-project.org/).";
         }
 
         public void Activate() {
