@@ -68,7 +68,6 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                     rEngine.EvaluateNoReturn(string.Format("settings <- readSettings('{0}')", comparisonSettingsFilename.Replace("\\", "/")));
                     rEngine.EvaluateNoReturn("modelSettings <- createModelSettings(inputData, settings)");
 
-                  
                     var totalLoops = inputPowerAnalysis.NumberOfReplications.Count * effects.Count;
                     var counter = 0;
                     for (int i = 0; i < inputPowerAnalysis.NumberOfReplications.Count; ++i) {
