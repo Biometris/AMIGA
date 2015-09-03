@@ -70,12 +70,12 @@ namespace AmigaPowerAnalysis.GUI {
             combo.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
             dataGridViewEndpoints.Columns.Add(combo);
 
-            column = new DataGridViewTextBoxColumn();
-            column.DataPropertyName = "BinomialTotal";
-            column.Name = "BinomialTotal";
-            column.HeaderText = "Binomial total (fractions)";
-            column.ValueType = typeof(int);
-            dataGridViewEndpoints.Columns.Add(column);
+            //column = new DataGridViewTextBoxColumn();
+            //column.DataPropertyName = "BinomialTotal";
+            //column.Name = "BinomialTotal";
+            //column.HeaderText = "Binomial total (fractions)";
+            //column.ValueType = typeof(int);
+            //dataGridViewEndpoints.Columns.Add(column);
 
             column = new DataGridViewTextBoxColumn();
             column.DataPropertyName = "PowerLawPower";
@@ -94,7 +94,7 @@ namespace AmigaPowerAnalysis.GUI {
             column = new DataGridViewTextBoxColumn();
             column.DataPropertyName = "CvComparator";
             column.Name = "CvComparator";
-            column.HeaderText = "CV";
+            column.HeaderText = "CV (%)";
             column.ValueType = typeof(double);
             dataGridViewEndpoints.Columns.Add(column);
 
@@ -120,19 +120,26 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void updateEditableColumns() {
             for (int i = 0; i < _project.Endpoints.Count(); ++i) {
-                if (_project.Endpoints[i].Measurement != MeasurementType.Fraction) {
-                    dataGridViewEndpoints.Rows[i].Cells["BinomialTotal"].ReadOnly = true;
-                    dataGridViewEndpoints.Rows[i].Cells["BinomialTotal"].Style.BackColor = Color.LightGray;
-                } else {
-                    dataGridViewEndpoints.Rows[i].Cells["BinomialTotal"].ReadOnly = false;
-                    dataGridViewEndpoints.Rows[i].Cells["BinomialTotal"].Style.BackColor = Color.White;
-                }
+                //if (_project.Endpoints[i].Measurement != MeasurementType.Fraction) {
+                //    dataGridViewEndpoints.Rows[i].Cells["BinomialTotal"].ReadOnly = true;
+                //    dataGridViewEndpoints.Rows[i].Cells["BinomialTotal"].Style.BackColor = Color.LightGray;
+                //} else {
+                //    dataGridViewEndpoints.Rows[i].Cells["BinomialTotal"].ReadOnly = false;
+                //    dataGridViewEndpoints.Rows[i].Cells["BinomialTotal"].Style.BackColor = Color.White;
+                //}
                 if (_project.Endpoints[i].DistributionType != DistributionType.PowerLaw) {
                     dataGridViewEndpoints.Rows[i].Cells["PowerLawPower"].ReadOnly = true;
                     dataGridViewEndpoints.Rows[i].Cells["PowerLawPower"].Style.BackColor = Color.LightGray;
                 } else {
                     dataGridViewEndpoints.Rows[i].Cells["PowerLawPower"].ReadOnly = false;
                     dataGridViewEndpoints.Rows[i].Cells["PowerLawPower"].Style.BackColor = Color.White;
+                }
+                if (_project.Endpoints[i].DistributionType == DistributionType.Poisson) {
+                    dataGridViewEndpoints.Rows[i].Cells["CvComparator"].ReadOnly = true;
+                    dataGridViewEndpoints.Rows[i].Cells["CvComparator"].Style.BackColor = Color.LightGray;
+                } else {
+                    dataGridViewEndpoints.Rows[i].Cells["CvComparator"].ReadOnly = false;
+                    dataGridViewEndpoints.Rows[i].Cells["CvComparator"].Style.BackColor = Color.White;
                 }
                 var measurementType = _project.Endpoints[i].Measurement;
                 var datagridCellComboBox = (DataGridViewComboBoxCell)dataGridViewEndpoints.Rows[i].Cells["DistributionType"];
