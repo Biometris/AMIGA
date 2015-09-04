@@ -386,6 +386,9 @@
     <None Include="Resources\GenstatScripts\AmigaPowerAnalysis.gen">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Resources\GenstatScripts\AmigaPowerValidation-Simulate.gen">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Resources\GenstatScripts\Lyles.pro">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -407,6 +410,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\FieldTrial.jpg" />
+    <Content Include="Resources\GenstatScripts\AmigaPowerValidation-Simulate.pro">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <EmbeddedResource Include="Resources\RScripts\ROutputTableDefinition.xml" />
     <EmbeddedResource Include="Resources\TableDefinitions.xml">
       <SubType>Designer</SubType>

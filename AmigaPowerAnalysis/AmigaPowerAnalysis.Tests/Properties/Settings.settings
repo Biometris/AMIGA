@@ -9,7 +9,7 @@
       <Value Profile="(Default)">C:\Program Files\R\R-3.1.1\bin\RScript.exe</Value>
     </Setting>
     <Setting Name="GenstatPath" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">C:\Program Files\Gen17Ed\Bin\GenBatch.exe</Value>
     </Setting>
   </Settings>
 </SettingsFile>

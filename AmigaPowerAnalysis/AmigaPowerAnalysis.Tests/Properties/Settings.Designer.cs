@@ -49,7 +49,7 @@ namespace AmigaPowerAnalysis.Tests.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Program Files\\Gen17Ed\\Bin\\GenBatch.exe")]
         public string GenstatPath {
             get {
                 return ((string)(this["GenstatPath"]));

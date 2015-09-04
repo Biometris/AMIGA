@@ -22,7 +22,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             var comparisonLogFilename = Path.Combine(_tempPath, string.Format("{0}-Log.log", inputPowerAnalysis.ComparisonId));
 
             var applicationDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            var scriptsDirectory = string.Format("{0}\\Resources", applicationDirectory);
+            var scriptsDirectory = string.Format("{0}\\Resources\\GenstatScripts", applicationDirectory);
             var scriptFilename = string.Format("{0}\\AmigaPowerAnalysis.gen", scriptsDirectory);
             var lylesScriptFilename = string.Format("{0}\\Lyles.pro", scriptsDirectory);
 
