@@ -272,6 +272,7 @@ createSimulatedData <- function(data, settings, simulationSettings, blocks, effe
   setupSimulatedData["TransformedEffect"] <- setupSimulatedData["TransformedMean"] + setupSimulatedData["BlockEffect"] + (setupSimulatedData["GMO"] == 1) * effect
   setupSimulatedData["Effect"] <- inverseLinkFunction(setupSimulatedData["TransformedEffect"], settings$MeasurementType)
   setupSimulatedData["Response"]          <- setupSimulatedData["GMO"] * NaN
+  setupSimulatedData["Lp"]          <- setupSimulatedData["GMO"] * NaN
   return(setupSimulatedData)
 }
 
@@ -458,16 +459,16 @@ overdispersedPoissonAnalysis <- function(data, settings, modelSettings, debugSet
     pvalues$Equi = max(pLowerEqui, pUpperEqui) # Both one-sided hypothesis must be rejected
   } else {
     # Results based on LR test; denominator based on Pearson statistic
-    etastart = glmH1$linear.predictor
-    glmH0 <- glm(modelSettings$formulaH0, family="quasipoisson", data=data, etastart=etastart)
+    data[["Lp"]] = glmH1$linear.predictor
+    glmH0 <- glm(modelSettings$formulaH0, family="quasipoisson", data=data, etastart=Lp)
     pvalues$Diff <- pf((deviance(glmH0) - deviance(glmH1))/estDispersion, 1, resDF, lower.tail=FALSE)
     # and LR equivalence test
     if ((estiEffect < settings$TransformLocLower) | (estiEffect > settings$TransformLocUpper)) {
       pvalues$Equi <- 2
     } else {
       # LR equivalence test
-      glmH0low <- glm(modelSettings$formulaH0_low, family="quasipoisson", data=data, etastart=etastart)
-      glmH0upp <- glm(modelSettings$formulaH0_upp, family="quasipoisson", data=data, etastart=etastart)
+      glmH0low <- glm(modelSettings$formulaH0_low, family="quasipoisson", data=data, etastart=Lp)
+      glmH0upp <- glm(modelSettings$formulaH0_upp, family="quasipoisson", data=data, etastart=Lp)
       pvalLow <- pf((deviance(glmH0low) - deviance(glmH1))/estDispersion, 1, resDF, lower.tail=FALSE)
       pvalUpp <- pf((deviance(glmH0upp) - deviance(glmH1))/estDispersion, 1, resDF, lower.tail=FALSE)
       pvalues$Equi <- max(pvalLow, pvalUpp)/2
@@ -502,8 +503,8 @@ negativeBinomialAnalysis <- function(data, settings, modelSettings, debugSetting
     pvalues$Equi = max(pLowerEqui, pUpperEqui) # Both one-sided hypothesis must be rejected
   } else {
     # Results based on LR test
-    etastart = glmH1$linear.predictor
-    glmH0 <- fitNB(modelSettings$formulaH0, data, etastart=etastart, method=modelSettings$NBmethod, lower=modelSettings$NBlower, upper=modelSettings$NBupper)
+    data[["Lp"]] = glmH1$linear.predictor
+    glmH0 <- fitNB(modelSettings$formulaH0, data, etastart=Lp, method=modelSettings$NBmethod, lower=modelSettings$NBlower, upper=modelSettings$NBupper)
     # glmH0 <- glm.nb(modelSettings$formulaH0, data=data, link=log, etastart=etastart)
     pvalues$Diff <- as.numeric(pchisq(-2*logLik(glmH0) + 2*logLik(glmH1), 1, lower.tail=FALSE))
     # and LR equivalence test
@@ -513,8 +514,8 @@ negativeBinomialAnalysis <- function(data, settings, modelSettings, debugSetting
       # LR equivalence test
       #glmH0low <- glm.nb(modelSettings$formulaH0_low, data=data, link=log, etastart=etastart)
       #glmH0upp <- glm.nb(modelSettings$formulaH0_upp, data=data, link=log, etastart=etastart)
-      glmH0low <- fitNB(modelSettings$formulaH0_low, data, etastart=etastart, method=modelSettings$NBmethod, lower=modelSettings$NBlower, upper=modelSettings$NBupper)
-      glmH0upp <- fitNB(modelSettings$formulaH0_upp, data, etastart=etastart, method=modelSettings$NBmethod, lower=modelSettings$NBlower, upper=modelSettings$NBupper)
+      glmH0low <- fitNB(modelSettings$formulaH0_low, data, etastart=Lp, method=modelSettings$NBmethod, lower=modelSettings$NBlower, upper=modelSettings$NBupper)
+      glmH0upp <- fitNB(modelSettings$formulaH0_upp, data, etastart=Lp, method=modelSettings$NBmethod, lower=modelSettings$NBlower, upper=modelSettings$NBupper)
       pvalLow <- pchisq(-2*(logLik(glmH0low) - logLik(glmH1)), 1, lower.tail=FALSE)
       pvalUpp <- pchisq(-2*(logLik(glmH0upp) - logLik(glmH1)), 1, lower.tail=FALSE)
       pvalues$Equi <- max(pvalLow, pvalUpp)/2
