@@ -8,6 +8,9 @@
 # 3. OP and NB equivalent tests return pval=2 in case the estimate is outside the LOC interval. 
 #    The pvalue is not calculate in that case to speed up the computation. 
 #    In effect the pvalue is then in the interval [0.5,1].
+#
+# 4. OP and NB fall back to the Poisson in case the OP overdispersion parameter is smaller than 1
+#
 
 linkFunction <- function(data, measurementType = c("Count", "Fraction", "Nonnegative", "Continuous")) {
   chkArg = match.arg(measurementType)
@@ -371,7 +374,7 @@ logNormalAnalysis <- function(data, settings, modelSettings, debugSettings) {
     random <- exp(random + chi/2) - 1
     random[random < modelSettings$smallGCI] <- modelSettings$smallGCI
     ratio <- random[,2]/random[,1]
-
+    ratio[ratio==Inf] = NaN
     pLowerCGI = mean(ratio < settings$LocLower)  # If this is smaller than alfa: reject H0: esti < LocLower
     pUpperCGI = mean(ratio > settings$LocUpper)  # If this is smaller than alfa: reject H0: esti > LocUpper
     pvalues$Equi = max(pLowerCGI, pUpperCGI)     # Both one-sided hypothesis must be rejected
@@ -423,7 +426,7 @@ squareRootAnalysis <- function(data, settings, modelSettings, debugSettings) {
     random[,2] = meanGMO + random[,2]
     random <- random*random + chi
     ratio <- random[,2]/random[,1]
-
+    ratio[ratio==Inf] = NaN
     pLowerCGI = mean(ratio < settings$LocLower)  # If this is smaller than alfa: reject H0: esti < LocLower
     pUpperCGI = mean(ratio > settings$LocUpper)  # If this is smaller than alfa: reject H0: esti > LocUpper
     pvalues$Equi = max(pLowerCGI, pUpperCGI)     # Both one-sided hypothesis must be rejected
@@ -432,18 +435,23 @@ squareRootAnalysis <- function(data, settings, modelSettings, debugSettings) {
 }
 
 overdispersedPoissonAnalysis <- function(data, settings, modelSettings, debugSettings) {
-
+  limitDispersion <- 1
+  family <- "quasipoisson"
   # Prepare results list and fit H1; default method is DMETHOD=pearson
   pvalues <- list(Diff = c(NaN), Equi = c(NaN), Dispersion=c(NaN))
-  glmH1 <- glm(as.formula(modelSettings$formulaH1), family="quasipoisson", data=data, etastart=data[["TransformedEffect"]])
+  glmH1 <- glm(as.formula(modelSettings$formulaH1), family=family, data=data, etastart=data[["TransformedEffect"]])
   #print(paste0("Number of iteration ", glmH1$iter))
-
   resDF <- df.residual(glmH1)
   estDispersion <- summary(glmH1)$dispersion
-  estiEffect <- glmH1$coef[2]
+  estiEffect <- as.numeric(glmH1$coef[2])
   seEffect <- sqrt(vcov(glmH1)[2,2])
+  if (estDispersion <= limitDispersion) {
+    seEffect <- seEffect / sqrt(estDispersion)
+    estDispersion <- NaN
+    family <- "poisson"
+  }
   # estDispersion <- sum(residuals(glmH1,type="pearson")^2)/resDF
-  pvalues$Dispersion = estDispersion
+  pvalues$Dispersion <- estDispersion
   if (settings$IsOutputSimulatedData) {
     writeLines(paste0("\nOP iRep ", debugSettings$iRep, " iEffect ", debugSettings$iEffect, " Dataset ", debugSettings$iDataset), debugSettings$displayFile)
     writeLines(paste0("  dispersion: ", estDispersion), debugSettings$displayFile)
@@ -453,24 +461,39 @@ overdispersedPoissonAnalysis <- function(data, settings, modelSettings, debugSet
 
   if (settings$UseWaldTest) {  
     # Results based on Wald tests
-    pvalues$Diff <- as.numeric(2*pt(abs(estiEffect)/seEffect, resDF, lower.tail=FALSE))
-    pLowerEqui = as.numeric(pt((estiEffect-settings$TransformLocLower)/seEffect, resDF, lower.tail=FALSE))
-    pUpperEqui = as.numeric(pt((estiEffect-settings$TransformLocUpper)/seEffect, resDF, lower.tail=TRUE))
-    pvalues$Equi = max(pLowerEqui, pUpperEqui) # Both one-sided hypothesis must be rejected
+    if (family == "poisson") {
+      pvalues$Diff <- 2*pnorm(abs(estiEffect)/seEffect, lower.tail=FALSE)
+      pLowerEqui <- pnorm((estiEffect-settings$TransformLocLower)/seEffect, lower.tail=FALSE)
+      pUpperEqui <- pnorm((estiEffect-settings$TransformLocUpper)/seEffect, lower.tail=TRUE)
+    } else {
+      pvalues$Diff <- 2*pt(abs(estiEffect)/seEffect, resDF, lower.tail=FALSE)
+      pLowerEqui <- pt((estiEffect-settings$TransformLocLower)/seEffect, resDF, lower.tail=FALSE)
+      pUpperEqui <- pt((estiEffect-settings$TransformLocUpper)/seEffect, resDF, lower.tail=TRUE)
+    }
+    pvalues$Equi <- max(pLowerEqui, pUpperEqui) # Both one-sided hypothesis must be rejected
   } else {
     # Results based on LR test; denominator based on Pearson statistic
-    data[["Lp"]] = glmH1$linear.predictor
-    glmH0 <- glm(modelSettings$formulaH0, family="quasipoisson", data=data, etastart=Lp)
+    data[["Lp"]] <- glmH1$linear.predictor
+    glmH0 <- glm(modelSettings$formulaH0, family=family, data=data, etastart=Lp)
+    if (family == "poisson") {
+        pvalues$Diff <- pchi(deviance(glmH0) - deviance(glmH1), 1, lower.tail=FALSE)
+    } else {
     pvalues$Diff <- pf((deviance(glmH0) - deviance(glmH1))/estDispersion, 1, resDF, lower.tail=FALSE)
+    }
     # and LR equivalence test
     if ((estiEffect < settings$TransformLocLower) | (estiEffect > settings$TransformLocUpper)) {
       pvalues$Equi <- 2
     } else {
       # LR equivalence test
-      glmH0low <- glm(modelSettings$formulaH0_low, family="quasipoisson", data=data, etastart=Lp)
-      glmH0upp <- glm(modelSettings$formulaH0_upp, family="quasipoisson", data=data, etastart=Lp)
+      glmH0low <- glm(modelSettings$formulaH0_low, family=family, data=data, etastart=Lp)
+      glmH0upp <- glm(modelSettings$formulaH0_upp, family=family, data=data, etastart=Lp)
+      if (family == "poisson") {
+        pvalLow <- pchi(deviance(glmH0low) - deviance(glmH1), 1, lower.tail=FALSE)
+        pvalUpp <- pchi(deviance(glmH0upp) - deviance(glmH1), 1, lower.tail=FALSE)
+      } else {
       pvalLow <- pf((deviance(glmH0low) - deviance(glmH1))/estDispersion, 1, resDF, lower.tail=FALSE)
       pvalUpp <- pf((deviance(glmH0upp) - deviance(glmH1))/estDispersion, 1, resDF, lower.tail=FALSE)
+      }
       pvalues$Equi <- max(pvalLow, pvalUpp)/2
     }
   }
@@ -602,19 +625,24 @@ monteCarloPowerAnalysis <- function(data, settings, modelSettings, blocks, effec
       pValues$Diff[k, "SquareRoot"] <- result$Diff
       pValues$Equi[k, "SquareRoot"] <- result$Equi
     }
-    if (!is.na(match("OverdispersedPoisson", settings$AnalysisMethods))) {
+    # Fit overdispersed Poisson anyway to get the overdispersion parameter
+    if ((!is.na(match("OverdispersedPoisson", settings$AnalysisMethods))) | (!is.na(match("NegativeBinomial", settings$AnalysisMethods)))) {
       if (DEBUG) print(paste(k, "OverdispersedPoisson"))
       result <- overdispersedPoissonAnalysis(simulatedData, settings, modelSettings, debugSettings)
+      if (!is.na(match("OverdispersedPoisson", settings$AnalysisMethods))) {
       pValues$Diff[k, "OverdispersedPoisson"] <- result$Diff
       pValues$Equi[k, "OverdispersedPoisson"] <- result$Equi
       pValues$Extra[k, "OPdisp"] <- result$Dispersion
     }
     if (!is.na(match("NegativeBinomial", settings$AnalysisMethods))) {
       if (DEBUG) print(paste(k, "NegativeBinomial"))
+        if (!is.na(result$Dispersion)) {
       result <- negativeBinomialAnalysis(simulatedData, settings, modelSettings, debugSettings)
+        }
       pValues$Diff[k, "NegativeBinomial"] <- result$Diff
       pValues$Equi[k, "NegativeBinomial"] <- result$Equi
       pValues$Extra[k, "NBtheta"] <- result$Dispersion
+      }
     }
   }
 
