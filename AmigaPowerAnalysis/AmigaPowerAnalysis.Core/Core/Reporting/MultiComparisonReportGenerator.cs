@@ -21,11 +21,18 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             var html = "";
             var primaryComparisons = _comparisons.Where(c => c.IsPrimary);
             html += generatePrimaryComparisonsSummary(_comparisons);
-            var analysisMethodTypes = _comparisons.First().OutputPowerAnalysis.InputPowerAnalysis.SelectedAnalysisMethodTypes.GetFlags().Cast<AnalysisMethodType>().ToList();
+
+            var firstInputSettings = _comparisons.First().OutputPowerAnalysis.InputPowerAnalysis;
+            var analysisMethodTypes = firstInputSettings.SelectedAnalysisMethodTypes.GetFlags().Cast<AnalysisMethodType>().ToList();
+
+            html += generateDesignOverviewHtml(firstInputSettings);
+            html += generateAnalysisSettingsHtml(firstInputSettings);
+
             var records = getSummaryRecords(primaryComparisons);
             html += generateComparisonOutputHtml(records, analysisMethodTypes, TestType.Difference, true);
             html += generateComparisonOutputHtml(records, analysisMethodTypes, TestType.Equivalence, true);
             html += generateComparisonsChartHtml(records, analysisMethodTypes, _filesPath, imagesAsPng);
+
             html += "<h1>Results per primary comparison</h1>";
             foreach (var comparison in primaryComparisons) {
                 html += string.Format("<h1>Results comparison {0}</h1>", comparison.OutputPowerAnalysis.InputPowerAnalysis.Endpoint);
@@ -85,13 +92,13 @@ namespace AmigaPowerAnalysis.Core.Reporting {
 
         private static string generateComparisonsChartHtml(List<OutputPowerAnalysisRecord> records, IEnumerable<AnalysisMethodType> analysisMethodTypes, string tempPath, bool imagesAsPng) {
             var stringBuilder = new StringBuilder();
-            stringBuilder.AppendLine("<h2>Comparisons charts primary comparisons</h2>");
+            stringBuilder.AppendLine("<h2>Charts joint power analysis primary comparisons</h2>");
 
             var fileBaseId = "Aggregate_";
             string imageFilename;
             foreach (var analysisMethodType in analysisMethodTypes) {
 
-                stringBuilder.Append("<h2>" + analysisMethodType.GetDisplayName() + "</h2>");
+                stringBuilder.Append("<h3>Power analysis " + analysisMethodType.GetDisplayName() + " tests</h3>");
                 stringBuilder.Append("<table>");
                 stringBuilder.Append("<tr>");
 

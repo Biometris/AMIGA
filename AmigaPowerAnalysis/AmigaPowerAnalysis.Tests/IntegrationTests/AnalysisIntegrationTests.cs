@@ -77,6 +77,11 @@ namespace AmigaPowerAnalysis.Tests.IntegrationTests {
         }
 
         [TestMethod]
+        public void FullProjectIntegrationTests_MockSimpleOP() {
+            runProject(MockProjectsCreator.MockSimpleOP(), "Simple_OP");
+        }
+
+        [TestMethod]
         public void FullProjectIntegrationTests_MockProject1() {
             runProject(MockProjectsCreator.MockProject1(), "ValidationProject1");
         }

@@ -17,6 +17,20 @@ namespace AmigaPowerAnalysis.Tests.Mocks.Projects {
         private static EndpointType PLNEndpoint = new EndpointType("Endpoint (PLN)", true, MeasurementType.Count, 0, 0.5, 2, 100, 40, DistributionType.PoissonLogNormal, 1.7);
         private static EndpointType PLEndpoint = new EndpointType("Endpoint (PL)", true, MeasurementType.Count, 0, 0.5, 2, 100, 40, DistributionType.PowerLaw, 1.7);
 
+
+        public static Project MockSimpleOP() {
+            var project = new Project();
+
+            project.AddEndpoint(new Endpoint("Endpoint (OP)", OPEndpoint));
+
+            project.PowerCalculationSettings.NumberOfRatios = 1;
+            project.PowerCalculationSettings.NumberOfReplications = new List<int>() { 4 };
+            project.PowerCalculationSettings.NumberOfSimulatedDataSets = 10;
+            project.PowerCalculationSettings.SelectedAnalysisMethodTypes = AnalysisMethodType.LogNormal | AnalysisMethodType.SquareRoot | AnalysisMethodType.OverdispersedPoisson | AnalysisMethodType.NegativeBinomial;
+
+            return project;
+        }
+
         public static Project MockSimple() {
             var project = new Project();
 
@@ -26,8 +40,8 @@ namespace AmigaPowerAnalysis.Tests.Mocks.Projects {
             project.AddEndpoint(new Endpoint("Endpoint (PLN)", PLNEndpoint));
             project.AddEndpoint(new Endpoint("Endpoint (PL)", PLEndpoint));
 
-            project.PowerCalculationSettings.NumberOfRatios = 2;
-            project.PowerCalculationSettings.NumberOfReplications = new List<int>() { 2, 4 };
+            project.PowerCalculationSettings.NumberOfRatios = 1;
+            project.PowerCalculationSettings.NumberOfReplications = new List<int>() { 4 };
             project.PowerCalculationSettings.NumberOfSimulatedDataSets = 10;
             project.PowerCalculationSettings.SelectedAnalysisMethodTypes = AnalysisMethodType.LogNormal | AnalysisMethodType.SquareRoot | AnalysisMethodType.OverdispersedPoisson | AnalysisMethodType.NegativeBinomial;
 

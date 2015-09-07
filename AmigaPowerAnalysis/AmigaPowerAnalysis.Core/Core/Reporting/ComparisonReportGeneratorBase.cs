@@ -7,9 +7,71 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using Biometris.Statistics.Distributions;
 
 namespace AmigaPowerAnalysis.Core.Reporting {
     public abstract class ComparisonReportGeneratorBase : ReportGeneratorBase {
+
+        protected static string generateDesignOverviewHtml(InputPowerAnalysis inputPowerAnalysis) {
+            var stringBuilder = new StringBuilder();
+            Func<string, object, string> format = (parameter, setting) => { return string.Format("<tr><td>{0}</td><td>{1}</td></tr>", parameter, setting); };
+
+            stringBuilder.AppendLine(string.Format("<h2>Design</h2>"));
+            stringBuilder.AppendLine("<table>");
+            stringBuilder.AppendLine(format("Experimental design type", inputPowerAnalysis.ExperimentalDesignType));
+            stringBuilder.AppendLine("</table>");
+
+            var headers = new List<string>();
+            headers.Add("MainPlot");
+            headers.Add("SubPlot");
+            foreach (var factor in inputPowerAnalysis.Factors) {
+                headers.Add(factor);
+            }
+            headers.Add("Frequency");
+
+            stringBuilder.AppendLine(string.Format("<h2>Block structure</h2>"));
+            stringBuilder.AppendLine("<table>");
+            stringBuilder.AppendLine("<tr><th>" + string.Join("</th><th>", headers) + "</th></tr>");
+            foreach (var record in inputPowerAnalysis.InputRecords) {
+                var line = new List<string>();
+                line.Add(record.MainPlot.ToString());
+                line.Add(record.SubPlot.ToString());
+                foreach (var factor in record.FactorLevels) {
+                    line.Add(factor.ToString());
+                }
+                line.Add(record.Frequency.ToString());
+                stringBuilder.AppendLine("<tr><td>" + string.Join("</td><td>", line) + "</td></tr>");
+            }
+            stringBuilder.AppendLine("</table>");
+
+            return stringBuilder.ToString();
+        }
+
+        protected static string generateAnalysisSettingsHtml(InputPowerAnalysis inputPowerAnalysis) {
+            var stringBuilder = new StringBuilder();
+            Func<string, object, string> format = (parameter, setting) => { return string.Format("<tr><td>{0}</td><td>{1}</td></tr>", parameter, setting); };
+
+            stringBuilder.AppendLine(string.Format("<h2>Power analysis settings</h2>"));
+            stringBuilder.AppendLine("<table>");
+            stringBuilder.AppendLine(format("Significance level", inputPowerAnalysis.SignificanceLevel));
+            stringBuilder.AppendLine(format("Number of evaluation points", inputPowerAnalysis.NumberOfRatios));
+            stringBuilder.AppendLine(format("Tested replications", string.Join(" ", inputPowerAnalysis.NumberOfReplications.Select(r => r.ToString()).ToList())));
+            var analysisMethods = AnalysisModelFactory.AnalysisMethodsForMeasurementType(inputPowerAnalysis.MeasurementType) & inputPowerAnalysis.SelectedAnalysisMethodTypes;
+            for (int i = 0; i < analysisMethods.GetFlags().Count(); ++i) {
+                if (i == 0) {
+                    stringBuilder.AppendLine(format("AnalysisMethods", analysisMethods.GetFlags().ElementAt(i)));
+                } else {
+                    stringBuilder.AppendLine(format(string.Empty, analysisMethods.GetFlags().ElementAt(i)));
+                }
+            }
+            stringBuilder.AppendLine(format("Use Wald test", inputPowerAnalysis.UseWaldTest));
+            stringBuilder.AppendLine(format("Power calculation method", inputPowerAnalysis.PowerCalculationMethodType));
+            stringBuilder.AppendLine(format("Number of simulated data sets", inputPowerAnalysis.NumberOfSimulatedDataSets));
+            stringBuilder.AppendLine(format("Seed random number generation", inputPowerAnalysis.RandomNumberSeed));
+            stringBuilder.AppendLine("</table>");
+
+            return stringBuilder.ToString();
+        }
 
         protected static string generateComparisonSettingsHtml(InputPowerAnalysis inputPowerAnalysis) {
             var stringBuilder = new StringBuilder();
@@ -28,7 +90,9 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             stringBuilder.AppendLine(format("Distribution type", inputPowerAnalysis.DistributionType));
             stringBuilder.AppendLine(format("Overall mean", inputPowerAnalysis.OverallMean));
             stringBuilder.AppendLine(format("CV comparator", inputPowerAnalysis.CvComparator));
-            stringBuilder.AppendLine(format("Power law power", inputPowerAnalysis.PowerLawPower));
+            if (inputPowerAnalysis.DistributionType == DistributionType.PowerLaw) {
+                stringBuilder.AppendLine(format("Power law power", inputPowerAnalysis.PowerLawPower));
+            }
             stringBuilder.AppendLine("</table>");
 
             stringBuilder.AppendLine(string.Format("<h2>Design</h2>"));
@@ -64,25 +128,6 @@ namespace AmigaPowerAnalysis.Core.Reporting {
                 line.Add(record.Comparison.ToString());
                 stringBuilder.AppendLine("<tr><td>" + string.Join("</td><td>", line) + "</td></tr>");
             }
-            stringBuilder.AppendLine("</table>");
-
-            stringBuilder.AppendLine(string.Format("<h2>Power analysis settings</h2>"));
-            stringBuilder.AppendLine("<table>");
-            stringBuilder.AppendLine(format("Significance level", inputPowerAnalysis.SignificanceLevel));
-            stringBuilder.AppendLine(format("Number of evaluation points", inputPowerAnalysis.NumberOfRatios));
-            stringBuilder.AppendLine(format("Tested replications", string.Join(" ", inputPowerAnalysis.NumberOfReplications.Select(r => r.ToString()).ToList())));
-            var analysisMethods = AnalysisModelFactory.AnalysisMethodsForMeasurementType(inputPowerAnalysis.MeasurementType) & inputPowerAnalysis.SelectedAnalysisMethodTypes;
-            for (int i = 0; i < analysisMethods.GetFlags().Count(); ++i) {
-                if (i == 0) {
-                    stringBuilder.AppendLine(format("AnalysisMethods", analysisMethods.GetFlags().ElementAt(i)));
-                } else {
-                    stringBuilder.AppendLine(format(string.Empty, analysisMethods.GetFlags().ElementAt(i)));
-                }
-            }
-            stringBuilder.AppendLine(format("Use Wald test", inputPowerAnalysis.UseWaldTest));
-            stringBuilder.AppendLine(format("Power calculation method", inputPowerAnalysis.PowerCalculationMethodType));
-            stringBuilder.AppendLine(format("Number of simulated data sets", inputPowerAnalysis.NumberOfSimulatedDataSets));
-            stringBuilder.AppendLine(format("Seed random number generation", inputPowerAnalysis.RandomNumberSeed));
             stringBuilder.AppendLine("</table>");
 
             return stringBuilder.ToString();
@@ -171,7 +216,7 @@ namespace AmigaPowerAnalysis.Core.Reporting {
                 imageFilename = fileBaseId + "_" + analysisMethodType.ToString() + "_Ratio_Equivalence.png";
                 var plotEquivalenceLogRatio = AnalysisResultsChartGenerator.CreatePlotViewLogRatioReplicates(comparison.OutputPowerAnalysis.OutputRecords, TestType.Equivalence, analysisMethodType);
                 stringBuilder.Append("<td>");
-                includeChart(plotEquivalenceReplicates, 400, 300, imagePath, imageFilename, stringBuilder, imagesAsPng);
+                includeChart(plotEquivalenceLogRatio, 400, 300, imagePath, imageFilename, stringBuilder, imagesAsPng);
                 stringBuilder.Append("</td>");
 
                 stringBuilder.Append("</tr>");
@@ -184,7 +229,7 @@ namespace AmigaPowerAnalysis.Core.Reporting {
 
         protected static string generateComparisonOutputHtml(IEnumerable<OutputPowerAnalysisRecord> records, List<AnalysisMethodType> selectedAnalysisMethods, TestType testType, bool csdOnly = false) {
             var stringBuilder = new StringBuilder();
-            stringBuilder.Append(string.Format("<h2>Results {0} tests</h2>", testType.ToString().ToLower()));
+            stringBuilder.Append(string.Format("<h2>Power analysis {0} tests</h2>", testType.ToString().ToLower()));
             stringBuilder.Append("<table>");
 
             stringBuilder.Append("<tr>");
