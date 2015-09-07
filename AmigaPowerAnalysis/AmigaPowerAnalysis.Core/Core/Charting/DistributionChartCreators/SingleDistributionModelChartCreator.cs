@@ -38,23 +38,68 @@ namespace AmigaPowerAnalysis.Core.Charting.DistributionChartCreators {
             plotModel.Annotations.Add(meanLineAnnotation);
 
             if (!double.IsNaN(LocLower)) {
-                var locLowerRegionAnnotation = new RectangleAnnotation() {
-                    //MinimumX = 0,
-                    MaximumX = MeasurementFactory.ComputeLimit(_distribution.Mean(), LocLower, _distribution.SupportType()),
-                    Fill = OxyColor.FromArgb(99, 255, 0, 0)
+                var locLowerLineAnnotation = new LineAnnotation() {
+                    Type = LineAnnotationType.Vertical,
+                    X = MeasurementFactory.ComputeLimit(_distribution.Mean(), LocLower, _distribution.SupportType()),
+                    Color = OxyColors.OrangeRed,
+                    StrokeThickness = 2,
+                    LineStyle = LineStyle.Dash
                 };
-                plotModel.Annotations.Add(locLowerRegionAnnotation);
+                plotModel.Annotations.Add(locLowerLineAnnotation);
             }
 
             if (!double.IsNaN(LocUpper)) {
-                var locUpperAnnotation = new RectangleAnnotation() {
-                    MinimumX = MeasurementFactory.ComputeLimit(_distribution.Mean(), LocUpper, _distribution.SupportType()),
-                    //MaximumX = _distribution.SupportMax(),
-                    Fill = OxyColor.FromArgb(99, 255, 0, 0)
+                var locUpperLineAnnotation = new LineAnnotation() {
+                    Type = LineAnnotationType.Vertical,
+                    X = MeasurementFactory.ComputeLimit(_distribution.Mean(), LocUpper, _distribution.SupportType()),
+                    Color = OxyColors.OrangeRed,
+                    StrokeThickness = 2,
+                    LineStyle = LineStyle.Dash
                 };
-                plotModel.Annotations.Add(locUpperAnnotation);
+                plotModel.Annotations.Add(locUpperLineAnnotation);
             }
 
+            var printOutsideRegion = false;
+            if (printOutsideRegion) {
+                if (!double.IsNaN(LocLower)) {
+                    var locLowerRegionAnnotation = new RectangleAnnotation() {
+                        //MinimumX = 0,
+                        MaximumX = MeasurementFactory.ComputeLimit(_distribution.Mean(), LocLower, _distribution.SupportType()),
+                        Fill = OxyColor.FromArgb(99, 255, 0, 0)
+                    };
+                    plotModel.Annotations.Add(locLowerRegionAnnotation);
+                }
+
+                if (!double.IsNaN(LocUpper)) {
+                    var locUpperAnnotation = new RectangleAnnotation() {
+                        MinimumX = MeasurementFactory.ComputeLimit(_distribution.Mean(), LocUpper, _distribution.SupportType()),
+                        //MaximumX = _distribution.SupportMax(),
+                        Fill = OxyColor.FromArgb(99, 255, 0, 0)
+                    };
+                    plotModel.Annotations.Add(locUpperAnnotation);
+                }
+            }
+
+            var printLoncRegion = true;
+            if (printLoncRegion && (!double.IsNaN(LocUpper) || !double.IsNaN(LocLower))) {
+                double loncLowerBound, loncUpperBound;
+                if (!double.IsNaN(LocLower)) {
+                    loncLowerBound = MeasurementFactory.ComputeLimit(_distribution.Mean(), LocLower, _distribution.SupportType());
+                } else {
+                    loncLowerBound = double.NaN;
+                }
+                if (!double.IsNaN(LocUpper)) {
+                    loncUpperBound = MeasurementFactory.ComputeLimit(_distribution.Mean(), LocUpper, _distribution.SupportType());
+                } else {
+                    loncUpperBound = double.NaN;
+                }
+                var loncAnnotation = new RectangleAnnotation() {
+                    MinimumX = loncLowerBound,
+                    MaximumX = loncUpperBound,
+                    Fill = OxyColor.FromArgb(70, 204, 229, 255)
+                };
+                plotModel.Annotations.Add(loncAnnotation);
+            }
 
             return plotModel;
         }
