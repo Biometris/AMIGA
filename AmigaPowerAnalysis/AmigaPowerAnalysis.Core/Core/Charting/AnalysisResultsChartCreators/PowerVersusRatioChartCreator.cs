@@ -10,17 +10,16 @@ namespace AmigaPowerAnalysis.Core.Charting.AnalysisResultsChartCreators {
 
     public sealed class PowerVersusRatioChartCreator : AnalysisResultsChartCreatorBase {
 
-        public PowerVersusRatioChartCreator(TestType testType, AnalysisMethodType analysisMethodType)
-            : base(testType, analysisMethodType) {
+        public PowerVersusRatioChartCreator(List<OutputPowerAnalysisRecord> powerAnalysisOutputRecords, TestType testType, AnalysisMethodType analysisMethodType)
+            : base(powerAnalysisOutputRecords, testType, analysisMethodType) {
         }
 
         public override PlotModel Create() {
             var plotModel = base.Create();
-
-            return plotModel;
+            return Create(PowerAnalysisOutputRecords, TestType, AnalysisMethodType);
         }
 
-        public static PlotModel CreatePlotViewLogRatioReplicates(List<OutputPowerAnalysisRecord> powerAnalysisOutputRecords, TestType testType, AnalysisMethodType analysisMethodType) {
+        public static PlotModel Create(List<OutputPowerAnalysisRecord> powerAnalysisOutputRecords, TestType testType, AnalysisMethodType analysisMethodType) {
             var model = AnalysisResultsChartCreatorBase.CreatePlotModel(testType, analysisMethodType);
             var horizontalAxis = new LogarithmicAxis() {
                 Title = "Ratio",

@@ -83,9 +83,9 @@ namespace AmigaPowerAnalysis.GUI {
                 var plotType = (AnalysisPlotType)comboBoxAnalysisPlotTypes.SelectedValue;
                 var testType = (TestType)comboBoxTestType.SelectedValue;
                 if (plotType == AnalysisPlotType.Replicates) {
-                    plotView.Model = PowerVersusReplicatesRatioChartCreator.CreatePlotViewReplicatesLogRatio(_currentComparison.OutputPowerAnalysis.OutputRecords, testType, _currentAnalysisType);
+                    plotView.Model = PowerVersusReplicatesRatioChartCreator.Create(_currentComparison.OutputPowerAnalysis.OutputRecords, testType, _currentAnalysisType);
                 } else if (plotType == AnalysisPlotType.Ratio) {
-                    plotView.Model = PowerVersusRatioChartCreator.CreatePlotViewLogRatioReplicates(_currentComparison.OutputPowerAnalysis.OutputRecords, testType, _currentAnalysisType);
+                    plotView.Model = PowerVersusRatioChartCreator.Create(_currentComparison.OutputPowerAnalysis.OutputRecords, testType, _currentAnalysisType);
                 }
                 labelPlotsPerBlock.Text = string.Format("{0} plots per block", _currentComparison.OutputPowerAnalysis.InputPowerAnalysis.InputRecords.Sum(ir => ir.Frequency));
                 labelLocLowerValue.Text = string.Format("{0:0.###}", _currentComparison.OutputPowerAnalysis.InputPowerAnalysis.LocLower);

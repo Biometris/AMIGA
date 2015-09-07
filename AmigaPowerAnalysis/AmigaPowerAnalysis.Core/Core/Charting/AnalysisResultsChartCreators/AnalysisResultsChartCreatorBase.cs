@@ -1,5 +1,7 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using AmigaPowerAnalysis.Core.DataAnalysis.AnalysisModels;
+using AmigaPowerAnalysis.Core.PowerAnalysis;
 using Biometris.ExtensionMethods;
 using OxyPlot;
 using OxyPlot.Annotations;
@@ -18,10 +20,12 @@ namespace AmigaPowerAnalysis.Core.Charting.AnalysisResultsChartCreators {
 
         public TestType TestType { get; set; }
         public AnalysisMethodType AnalysisMethodType { get; set; }
+        public List<OutputPowerAnalysisRecord> PowerAnalysisOutputRecords { get; set; }
 
-        public AnalysisResultsChartCreatorBase(TestType testType, AnalysisMethodType analysisMethodType) {
+        public AnalysisResultsChartCreatorBase(List<OutputPowerAnalysisRecord> powerAnalysisOutputRecords, TestType testType, AnalysisMethodType analysisMethodType) {
             TestType = testType;
             AnalysisMethodType = analysisMethodType;
+            PowerAnalysisOutputRecords = powerAnalysisOutputRecords;
         }
 
         public virtual PlotModel Create() {

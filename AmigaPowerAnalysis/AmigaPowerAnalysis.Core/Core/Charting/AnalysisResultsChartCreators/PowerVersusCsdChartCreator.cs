@@ -10,17 +10,16 @@ namespace AmigaPowerAnalysis.Core.Charting.AnalysisResultsChartCreators {
 
     public sealed class PowerVersusCsdChartCreator : AnalysisResultsChartCreatorBase {
 
-        public PowerVersusCsdChartCreator(TestType testType, AnalysisMethodType analysisMethodType)
-            : base(testType, analysisMethodType) {
+        public PowerVersusCsdChartCreator(List<OutputPowerAnalysisRecord> powerAnalysisOutputRecords, TestType testType, AnalysisMethodType analysisMethodType)
+            : base(powerAnalysisOutputRecords, testType, analysisMethodType) {
         }
 
         public override PlotModel Create() {
             var plotModel = base.Create();
-
-            return plotModel;
+            return Create(PowerAnalysisOutputRecords, TestType, AnalysisMethodType);
         }
 
-        public static PlotModel CreatePlotViewConcernStandardizedDifferenceReplicates(List<OutputPowerAnalysisRecord> powerAnalysisOutputRecords, TestType testType, AnalysisMethodType analysisMethodType) {
+        public static PlotModel Create(List<OutputPowerAnalysisRecord> powerAnalysisOutputRecords, TestType testType, AnalysisMethodType analysisMethodType) {
             var model = AnalysisResultsChartCreatorBase.CreatePlotModel(testType, analysisMethodType);
             var horizontalAxis = new LinearAxis() {
                 Title = "Concern Standardized Difference",
