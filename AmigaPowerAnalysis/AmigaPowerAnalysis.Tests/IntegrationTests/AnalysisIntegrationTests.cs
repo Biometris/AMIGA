@@ -13,7 +13,7 @@ using OpenHtmlToPdf;
 
 namespace AmigaPowerAnalysis.Tests.IntegrationTests {
     [TestClass]
-    public class FullProjectIntegrationTests {
+    public class AnalysisIntegrationTests {
 
         private static string _testPath = Path.Combine(Properties.Settings.Default.TestPath);
 

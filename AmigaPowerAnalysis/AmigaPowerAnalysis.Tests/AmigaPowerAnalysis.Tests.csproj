@@ -71,7 +71,7 @@
     <Compile Include="Core\PowerAnalysis\RPowerAnalysisExecuterTests.cs" />
     <Compile Include="Core\ProjectEntities\FactoLevelCombinationTests.cs" />
     <Compile Include="Core\ProjectEntities\FactorTests.cs" />
-    <Compile Include="IntegrationTests\FullProjectIntegrationTests.cs" />
+    <Compile Include="IntegrationTests\AnalysisIntegrationTests.cs" />
     <Compile Include="Mocks\Projects\MockProjectsCreator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
