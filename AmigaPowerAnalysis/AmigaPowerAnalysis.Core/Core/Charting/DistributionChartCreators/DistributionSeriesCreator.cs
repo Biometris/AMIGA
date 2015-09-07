@@ -1,11 +1,12 @@
-﻿using Biometris.Statistics;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Biometris.Statistics;
 using Biometris.Statistics.Distributions;
+using Biometris.Statistics.Histograms;
 using Biometris.Statistics.Measurements;
 using OxyPlot;
 using OxyPlot.Series;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace AmigaPowerAnalysis.Core.Charting.DistributionChartCreators {
 

@@ -59,6 +59,7 @@
     <Compile Include="Statistics\Distributions\OverdispersedPoissonDistributionTests.cs" />
     <Compile Include="Statistics\Distributions\PoissonDistributionTests.cs" />
     <Compile Include="Statistics\CombinatoricsTests.cs" />
+    <Compile Include="Statistics\Histograms\HistogramBinUtilitiesTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Biometris\Biometris.csproj">

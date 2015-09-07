@@ -1,8 +1,8 @@
-﻿using Biometris.Statistics;
+﻿using System;
+using System.Collections.Generic;
+using Biometris.Statistics.Histograms;
 using OxyPlot;
 using OxyPlot.Series;
-using System;
-using System.Collections.Generic;
 
 namespace AmigaPowerAnalysis.Core.Charting.DistributionChartCreators {
     public sealed class HistogramSeries : XYAxisSeries {
