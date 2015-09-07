@@ -5,6 +5,7 @@ namespace Biometris.Statistics.Distributions {
     public abstract class DistributionBase : IDistribution {
 
         public abstract MeasurementType SupportType();
+        public abstract double SupportMin();
         public abstract double SupportMax();
 
         public abstract double Cdf(double x);

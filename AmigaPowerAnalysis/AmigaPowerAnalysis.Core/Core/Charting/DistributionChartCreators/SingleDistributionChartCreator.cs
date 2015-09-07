@@ -1,6 +1,7 @@
 ﻿using Biometris.Statistics.Distributions;
 using OxyPlot;
 using OxyPlot.Annotations;
+using OxyPlot.Axes;
 
 namespace AmigaPowerAnalysis.Core.Charting.DistributionChartCreators {
 
@@ -35,10 +36,10 @@ namespace AmigaPowerAnalysis.Core.Charting.DistributionChartCreators {
                 plotModel.Series.Add(histogram);
             }
             if (DistributionChartPreferenceType == DistributionChartPreferenceType.DistributionFunction || DistributionChartPreferenceType == DistributionChartPreferenceType.Both) {
-                var histogram = seriesCreator.Create(DistributionSeriesType.LineSeries);
-                plotModel.Series.Add(histogram);
+                var series = seriesCreator.Create(DistributionSeriesType.LineSeries);
+                plotModel.Series.Add(series);
             }
- 
+
             return plotModel;
         }
     }

@@ -18,6 +18,8 @@ namespace Biometris.Statistics.Distributions {
 
         double SupportMax();
 
+        double SupportMin();
+
         double Draw();
 
         List<double> Draw(int samples);

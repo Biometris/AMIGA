@@ -74,7 +74,7 @@ namespace AmigaPowerAnalysis.Core.Charting.DistributionChartCreators {
         }
 
         private static Series createApproximateDistributionSeries(IDistribution distribution, double lowerBound, double upperBound, double step, int numberOfSamples) {
-            var bins = createApproximateDensityHistogramBins(distribution, step, numberOfSamples);
+            var bins = createApproximateDensityHistogramBins(distribution, lowerBound, upperBound, step, numberOfSamples);
             var series = new LineSeries() {
                 Title = "Approximate density " + distribution.Description()
             };
@@ -87,17 +87,17 @@ namespace AmigaPowerAnalysis.Core.Charting.DistributionChartCreators {
         }
 
         private static Series createHistogramSeries(IDistribution distribution, double lowerBound, double upperBound, double step, int numberOfSamples) {
-            var bins = createApproximateDensityHistogramBins(distribution, step, numberOfSamples);
+            var bins = createApproximateDensityHistogramBins(distribution, lowerBound, upperBound, step, numberOfSamples);
             var series = new HistogramSeries() {
                 Items = bins
             };
             return series;
         }
 
-        private static List<HistogramBin> createApproximateDensityHistogramBins(IDistribution distribution, double step, int numberOfSamples) {
+        private static List<HistogramBin> createApproximateDensityHistogramBins(IDistribution distribution, double lowerBound, double upperBound, double step, int numberOfSamples) {
             var samples = distribution.Draw(numberOfSamples);
-            var lb = samples.Min();
-            var ub = samples.Max();
+            var lb = !double.IsNaN(lowerBound) ? lowerBound : samples.Min();
+            var ub = !double.IsNaN(upperBound) ? upperBound : samples.Max();
             var s = double.IsNaN(step) ? GriddingFunctions.GetSmartInterval(lb, ub, 60, computeStep(distribution, lb, ub)) : step;
             var bins = HistogramBinUtilities.MakeHistogramBins(samples, (int)((ub - lb) / s), lb, ub);
             bins.ForEach(b => b.Frequency = ((b.Frequency / b.Width) / numberOfSamples));

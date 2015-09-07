@@ -53,6 +53,10 @@ namespace Biometris.Statistics.Distributions {
             return MeasurementType.Fraction;
         }
 
+        public override double SupportMin() {
+            return 0;
+        }
+
         public override double SupportMax() {
             return N;
         }

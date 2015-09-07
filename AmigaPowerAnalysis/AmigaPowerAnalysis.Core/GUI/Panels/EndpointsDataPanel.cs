@@ -167,7 +167,6 @@ namespace AmigaPowerAnalysis.GUI {
                 var chartCreator = new SingleDistributionModelChartCreator(distribution, _currentEndpoint.LocLower, _currentEndpoint.LocUpper) {
                     DistributionChartPreferenceType = DistributionChartPreferenceType.Histogram
                 };
-                var plotModel = chartCreator.Create();
                 distributionChartPlotView.Model = chartCreator.Create();
             }
         }
@@ -188,11 +187,13 @@ namespace AmigaPowerAnalysis.GUI {
         private void dataGridViewEndpoints_CellValueChanged(object sender, DataGridViewCellEventArgs e) {
             if (dataGridViewEndpoints.Columns[e.ColumnIndex].Name == "DistributionType") {
                 var value = dataGridViewEndpoints.Rows[e.RowIndex].Cells["DistributionType"].Value.ToString();
+                this.dataGridViewEndpoints.CellValueChanged -= new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewEndpoints_CellValueChanged);
                 if (value == DistributionType.PowerLaw.ToString()) {
                     dataGridViewEndpoints.Rows[e.RowIndex].Cells["PowerLawPower"].Value = 1.7;
                 } else {
                     dataGridViewEndpoints.Rows[e.RowIndex].Cells["PowerLawPower"].Value = 0;
                 }
+                this.dataGridViewEndpoints.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewEndpoints_CellValueChanged);
             }
             updateEditableColumns();
             updateEndpointDistributionChart();

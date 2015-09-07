@@ -1,7 +1,9 @@
 ﻿using Biometris.Statistics.Distributions;
 using Biometris.Statistics.Measurements;
+using System.Linq;
 using OxyPlot;
 using OxyPlot.Annotations;
+using OxyPlot.Axes;
 
 namespace AmigaPowerAnalysis.Core.Charting.DistributionChartCreators {
 
@@ -22,11 +24,18 @@ namespace AmigaPowerAnalysis.Core.Charting.DistributionChartCreators {
         }
 
         public override PlotModel Create() {
-            var plotModel = base.Create();
-
             if (_distribution == null) {
-                return plotModel;
+                return null;
             }
+
+            if (double.IsNaN(LowerBound) && _distribution.SupportMin() == double.NegativeInfinity && !double.IsNaN(LocLower)) {
+                LowerBound = MeasurementFactory.ComputeLimit(_distribution.Mean(), 1.5 * LocLower, _distribution.SupportType());
+            }
+            if (double.IsNaN(UpperBound) && _distribution.SupportMax() == double.PositiveInfinity && !double.IsNaN(LocUpper)) {
+                UpperBound = MeasurementFactory.ComputeLimit(_distribution.Mean(), 1.5 * LocUpper, _distribution.SupportType());
+            }
+
+            var plotModel = base.Create();
 
             var meanLineAnnotation = new LineAnnotation() {
                 Type = LineAnnotationType.Vertical,
@@ -100,6 +109,10 @@ namespace AmigaPowerAnalysis.Core.Charting.DistributionChartCreators {
                 };
                 plotModel.Annotations.Add(loncAnnotation);
             }
+
+            var axis = plotModel.Axes.First(a => a.Position == AxisPosition.Bottom);
+            axis.Minimum = LowerBound;
+            axis.Maximum = UpperBound;
 
             return plotModel;
         }

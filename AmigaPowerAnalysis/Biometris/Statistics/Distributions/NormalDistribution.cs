@@ -45,6 +45,10 @@ namespace Biometris.Statistics.Distributions {
             return MeasurementType.Continuous;
         }
 
+        public override double SupportMin() {
+            return double.NegativeInfinity;
+        }
+
         public override double SupportMax() {
             return double.PositiveInfinity;
         }
