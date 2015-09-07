@@ -92,7 +92,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Core\Charting\AnalysisResultsChartGenerator.cs" />
+    <Compile Include="Core\Charting\AnalysisResultsChartCreators\AnalysisResultsChartCreatorBase.cs" />
+    <Compile Include="Core\Charting\AnalysisResultsChartCreators\PowerVersusReplicatesCsdChartCreator.cs" />
+    <Compile Include="Core\Charting\AnalysisResultsChartCreators\PowerVersusCsdChartCreator.cs" />
+    <Compile Include="Core\Charting\AnalysisResultsChartCreators\PowerVersusRatioChartCreator.cs" />
+    <Compile Include="Core\Charting\AnalysisResultsChartCreators\PowerVersusReplicatesRatioChartCreator.cs" />
     <Compile Include="Core\Charting\DistributionChartCreators\DistributionChartCreatorBase.cs" />
     <Compile Include="Core\Charting\DistributionChartCreators\SingleDistributionModelChartCreator.cs" />
     <Compile Include="Core\Charting\DistributionChartCreators\SingleDistributionChartCreator.cs" />

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows.Forms;
 using AmigaPowerAnalysis.Core;
 using AmigaPowerAnalysis.Core.Charting;
+using AmigaPowerAnalysis.Core.Charting.AnalysisResultsChartCreators;
 using AmigaPowerAnalysis.Core.DataAnalysis.AnalysisModels;
 using AmigaPowerAnalysis.Core.PowerAnalysis;
 using AmigaPowerAnalysis.Core.Reporting;
@@ -124,9 +125,9 @@ namespace AmigaPowerAnalysis.GUI {
                     var plotType = (AnalysisPlotType)comboBoxAnalysisPlotTypes.SelectedValue;
                     var testType = (TestType)comboBoxTestType.SelectedValue;
                     if (plotType == AnalysisPlotType.Replicates) {
-                        plotView.Model = AnalysisResultsChartGenerator.CreatePlotViewReplicatesConcernStandardizedDifference(records, testType, _currentAnalysisType);
+                        plotView.Model = PowerVersusReplicatesCsdChartCreator.CreatePlotViewReplicatesConcernStandardizedDifference(records, testType, _currentAnalysisType);
                     } else if (plotType == AnalysisPlotType.ConcernStandardizedDifference) {
-                        plotView.Model = AnalysisResultsChartGenerator.CreatePlotViewConcernStandardizedDifferenceReplicates(records, testType, _currentAnalysisType);
+                        plotView.Model = PowerVersusCsdChartCreator.CreatePlotViewConcernStandardizedDifferenceReplicates(records, testType, _currentAnalysisType);
                     }
                     var plotsPerBlockCounts = primaryComparisons.Select(pc => pc.OutputPowerAnalysis.InputPowerAnalysis.InputRecords.Sum(ir => ir.Frequency));
                     var minPlotsPerBlockCount = plotsPerBlockCounts.Min();

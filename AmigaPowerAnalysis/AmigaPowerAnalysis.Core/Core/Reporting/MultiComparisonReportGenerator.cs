@@ -5,6 +5,7 @@ using Biometris.ExtensionMethods;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using AmigaPowerAnalysis.Core.Charting.AnalysisResultsChartCreators;
 
 namespace AmigaPowerAnalysis.Core.Reporting {
     public sealed class MultiComparisonReportGenerator : ComparisonReportGeneratorBase {
@@ -103,13 +104,13 @@ namespace AmigaPowerAnalysis.Core.Reporting {
                 stringBuilder.Append("<tr>");
 
                 imageFilename = fileBaseId + analysisMethodType.ToString() + "_Replicates_Difference.png";
-                var plotDifferenceReplicates = AnalysisResultsChartGenerator.CreatePlotViewReplicatesConcernStandardizedDifference(records, TestType.Difference, analysisMethodType);
+                var plotDifferenceReplicates = PowerVersusReplicatesCsdChartCreator.CreatePlotViewReplicatesConcernStandardizedDifference(records, TestType.Difference, analysisMethodType);
                 stringBuilder.Append("<td>");
                 includeChart(plotDifferenceReplicates, 400, 300, tempPath, imageFilename, stringBuilder, imagesAsPng);
                 stringBuilder.Append("</td>");
 
                 imageFilename = fileBaseId + analysisMethodType.ToString() + "_LevelOfConcern_Difference.png";
-                var plotDifferenceLogRatio = AnalysisResultsChartGenerator.CreatePlotViewConcernStandardizedDifferenceReplicates(records, TestType.Difference, analysisMethodType);
+                var plotDifferenceLogRatio = PowerVersusCsdChartCreator.CreatePlotViewConcernStandardizedDifferenceReplicates(records, TestType.Difference, analysisMethodType);
                 stringBuilder.Append("<td>");
                 includeChart(plotDifferenceLogRatio, 400, 300, tempPath, imageFilename, stringBuilder, imagesAsPng);
                 stringBuilder.Append("</td>");
@@ -117,13 +118,13 @@ namespace AmigaPowerAnalysis.Core.Reporting {
                 stringBuilder.Append("</tr><tr>");
 
                 imageFilename = fileBaseId + analysisMethodType.ToString() + "_Replicates_Equivalence.png";
-                var plotEquivalenceReplicates = AnalysisResultsChartGenerator.CreatePlotViewReplicatesConcernStandardizedDifference(records, TestType.Equivalence, analysisMethodType);
+                var plotEquivalenceReplicates = PowerVersusReplicatesCsdChartCreator.CreatePlotViewReplicatesConcernStandardizedDifference(records, TestType.Equivalence, analysisMethodType);
                 stringBuilder.Append("<td>");
                 includeChart(plotEquivalenceReplicates, 400, 300, tempPath, imageFilename, stringBuilder, imagesAsPng);
                 stringBuilder.Append("</td>");
 
                 imageFilename = fileBaseId + analysisMethodType.ToString() + "_LevelOfConcern_Equivalence.png";
-                var plotEquivalenceLogRatio = AnalysisResultsChartGenerator.CreatePlotViewConcernStandardizedDifferenceReplicates(records, TestType.Equivalence, analysisMethodType);
+                var plotEquivalenceLogRatio = PowerVersusCsdChartCreator.CreatePlotViewConcernStandardizedDifferenceReplicates(records, TestType.Equivalence, analysisMethodType);
                 stringBuilder.Append("<td>");
                 includeChart(plotEquivalenceLogRatio, 400, 300, tempPath, imageFilename, stringBuilder, imagesAsPng);
                 stringBuilder.Append("</td>");
