@@ -107,14 +107,14 @@ namespace AmigaPowerAnalysis.Core {
             set {
                 _endpointType = value;
                 if (_endpointType != null) {
-                    BinomialTotal = _endpointType.BinomialTotal;
-                    PowerLawPower = _endpointType.PowerLawPower;
-                    Measurement = _endpointType.Measurement;
-                    LocLower = _endpointType.LocLower;
-                    LocUpper = _endpointType.LocUpper;
-                    MuComparator = _endpointType.MuComparator;
-                    CvComparator = _endpointType.CvComparator;
-                    DistributionType = _endpointType.DistributionType;
+                    _binomialTotal = _endpointType.BinomialTotal;
+                    _powerLawPower = _endpointType.PowerLawPower;
+                    _measurement = _endpointType.Measurement;
+                    _locLower = _endpointType.LocLower;
+                    _locUpper = _endpointType.LocUpper;
+                    _muComparator = _endpointType.MuComparator;
+                    _cvComparator = _endpointType.CvComparator;
+                    _distributionType = _endpointType.DistributionType;
                     validateMeasurementParameters();
                     validateDistribution();
                 }
