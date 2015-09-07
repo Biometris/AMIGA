@@ -95,8 +95,8 @@ namespace AmigaPowerAnalysis.GUI {
             var editedCell = dataGridViewFactorLevels.Rows[e.RowIndex].Cells[e.ColumnIndex];
             var newValue = editedCell.Value;
             if (_currentEndpointFactorLevels != null) {
-                var index = (int)dataGridViewFactorLevels.Rows[e.RowIndex].Cells["_index"].Value;
                 if (editedCell.ColumnIndex == dataGridViewFactorLevels.Columns["Mean"].Index) {
+                    var index = (int)dataGridViewFactorLevels.Rows[e.RowIndex].Cells["_index"].Value;
                     _currentEndpointFactorLevels[index].Mean = (double)newValue;
                 }
             }

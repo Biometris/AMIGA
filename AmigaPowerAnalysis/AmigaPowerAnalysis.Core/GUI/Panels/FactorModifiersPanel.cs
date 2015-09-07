@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Windows.Forms;
@@ -11,7 +12,7 @@ namespace AmigaPowerAnalysis.GUI {
         private Project _project;
 
         private Endpoint _currentEndpoint;
-        //private List<ModifierFactorLevelCombination> _currentFactorModifiers;
+        private List<ModifierFactorLevelCombination> _currentFactorModifiers;
 
         public FactorModifiersPanel(Project project) {
             InitializeComponent();
@@ -58,22 +59,25 @@ namespace AmigaPowerAnalysis.GUI {
         private void updateDataGridFactorModifiers() {
             dataGridViewFactorModifiers.DataSource = null;
             if (_currentEndpoint != null) {
+                _currentFactorModifiers = _currentEndpoint.Modifiers;
                 var dataTable = new DataTable();
                 var modifierFactors = _currentEndpoint.NonInteractionFactors.ToList();
+                dataTable.Columns.Add("_index", typeof(int));
                 foreach (var modifierFactor in modifierFactors) {
                     dataTable.Columns.Add(modifierFactor.Name, typeof(string));
                 }
                 dataTable.Columns.Add("Modifier", typeof(double));
                 dataTable.Columns.Add("Frequency", typeof(double));
                 dataTable.Columns.Add("Modified mean", typeof(double));
-                foreach (var factorLevelCombination in _currentEndpoint.Modifiers) {
+                for (int i = 0; i < _currentFactorModifiers.Count; ++i) {
                     DataRow row = dataTable.NewRow();
-                    foreach (var factorLevel in factorLevelCombination.Levels) {
+                    row["_index"] = i;
+                    foreach (var factorLevel in _currentFactorModifiers[i].Levels) {
                         row[factorLevel.Parent.Name] = factorLevel.Label;
                     }
-                    row["Modifier"] = Math.Round(factorLevelCombination.ModifierFactor, 2);
-                    row["Frequency"] = Math.Round(factorLevelCombination.Frequency, 2);
-                    row["Modified mean"] = Math.Round(MeasurementFactory.Modify(_currentEndpoint.MuComparator, factorLevelCombination.ModifierFactor, _currentEndpoint.Measurement), 2);
+                    row["Modifier"] = Math.Round(_currentFactorModifiers[i].ModifierFactor, 2);
+                    row["Frequency"] = Math.Round(_currentFactorModifiers[i].Frequency, 2);
+                    row["Modified mean"] = Math.Round(MeasurementFactory.Modify(_currentEndpoint.MuComparator, _currentFactorModifiers[i].ModifierFactor, _currentEndpoint.Measurement), 2);
                     dataTable.Rows.Add(row);
                 }
                 dataGridViewFactorModifiers.Columns.Clear();
@@ -81,13 +85,29 @@ namespace AmigaPowerAnalysis.GUI {
                 for (int i = 0; i < modifierFactors.Count; ++i) {
                     dataGridViewFactorModifiers.Columns[i].ReadOnly = true;
                 }
-            }
-            foreach (DataGridViewColumn column in dataGridViewFactorModifiers.Columns) {
-                column.SortMode = DataGridViewColumnSortMode.NotSortable;
+            } else {
+                _currentFactorModifiers = null;
             }
             dataGridViewFactorModifiers.Columns["Frequency"].ReadOnly = true;
             dataGridViewFactorModifiers.Columns["Modified mean"].ReadOnly = true;
+            dataGridViewFactorModifiers.Columns["_index"].Visible = false;
             dataGridViewFactorModifiers.Refresh();
+        }
+
+        private void updateDataGridFactorModifierValues() {
+            if (_currentFactorModifiers != null) {
+                for (int i = 0; i < _currentFactorModifiers.Count; ++i) {
+                    var row = dataGridViewFactorModifiers.Rows[i];
+                    var index = (int)row.Cells["_index"].Value;
+                    var modifier = _currentFactorModifiers[index];
+                    row.Cells["_index"].Value = i;
+                    row.Cells["Modifier"].Value = Math.Round(modifier.ModifierFactor, 2);
+                    row.Cells["Frequency"].Value = Math.Round(modifier.Frequency, 2);
+                    row.Cells["Modified mean"].Value = Math.Round(MeasurementFactory.Modify(_currentEndpoint.MuComparator, modifier.ModifierFactor, _currentEndpoint.Measurement), 2);
+                }
+            } else {
+                _currentFactorModifiers = null;
+            }
         }
 
         private void dataGridViewEndpoints_SelectionChanged(object sender, EventArgs e) {
@@ -105,9 +125,10 @@ namespace AmigaPowerAnalysis.GUI {
             var editedCell = dataGridViewFactorModifiers.Rows[e.RowIndex].Cells[e.ColumnIndex];
             if (_currentEndpoint != null) {
                 if (editedCell.ColumnIndex == dataGridViewFactorModifiers.Columns["Modifier"].Index) {
-                    var modifier = _currentEndpoint.Modifiers[e.RowIndex];
+                    var index = (int)dataGridViewFactorModifiers.Rows[e.RowIndex].Cells["_index"].Value;
+                    var modifier = _currentEndpoint.Modifiers[index];
                     _currentEndpoint.SetModifier(modifier, (double)editedCell.Value);
-                    updateDataGridFactorModifiers();
+                    updateDataGridFactorModifierValues();
                 }
             }
         }
