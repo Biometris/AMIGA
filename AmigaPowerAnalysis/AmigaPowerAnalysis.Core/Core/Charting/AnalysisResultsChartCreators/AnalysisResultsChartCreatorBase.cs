@@ -39,7 +39,11 @@ namespace AmigaPowerAnalysis.Core.Charting.AnalysisResultsChartCreators {
                 DefaultFontSize = 11,
                 LegendPlacement = LegendPlacement.Outside,
                 LegendPosition = LegendPosition.RightTop,
-                LegendBorder = OxyColors.Black,
+                //LegendBorder = OxyColors.Black,
+                LegendBorderThickness = 0,
+                //LegendMargin = 4,
+                LegendPadding = 10,
+                LegendItemSpacing = 3,
             };
             var verticalAxis = new LinearAxis() {
                 Title = "Power",
