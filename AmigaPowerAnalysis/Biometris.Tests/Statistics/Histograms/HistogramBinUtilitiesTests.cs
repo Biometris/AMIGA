@@ -254,7 +254,7 @@ namespace Biometris.Test.UnitTests {
             Func<Person, List<CategoryContribution<Gender>>> categoryExtractor = (x) => x.Children.GroupBy(c => c).Select(g => new CategoryContribution<Gender>(g.Key, (double)g.Count())).ToList();
             Func<Person, double> valueExtractor = (x) => x.NumberOfChildren;
             var categorizedBins = persons.MakeCategorizedHistogramBins<Person, Gender>(categoryExtractor, valueExtractor, 4, 0.5, 4.5);
-            CollectionAssert.AreEqual(new List<int> { 1, 1, 2, 2 }, categorizedBins.Select(b => b.Frequency).ToList());
+            CollectionAssert.AreEqual(new List<double> { 1D, 1D, 2D, 2D }, categorizedBins.Select(b => b.Frequency).ToList());
             CollectionAssert.AreEqual(new List<double> { 1D }, categorizedBins.ElementAt(0).ContributionFractions.Select(cf => cf.Contribution).OrderBy(cf => cf).ToList());
             CollectionAssert.AreEqual(new List<double> { 0.5, 0.5 }, categorizedBins.ElementAt(1).ContributionFractions.Select(cf => cf.Contribution).OrderBy(cf => cf).ToList());
             CollectionAssert.AreEqual(new List<double> { 1D/3, 2D/3 }, categorizedBins.ElementAt(2).ContributionFractions.Select(cf => cf.Contribution).OrderBy(cf => cf).ToList());
