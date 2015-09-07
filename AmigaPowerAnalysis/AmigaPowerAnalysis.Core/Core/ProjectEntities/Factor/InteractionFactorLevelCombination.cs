@@ -1,11 +1,15 @@
-﻿using System.Linq;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Runtime.Serialization;
 
 namespace AmigaPowerAnalysis.Core {
 
     public enum ComparisonType {
+        [Display(Name="Exclude")]
         Exclude = 0,
+        [Display(Name = "Test-variety")]
         IncludeGMO = 1,
+        [Display(Name = "Comparator")]
         IncludeComparator = -1,
     }
 

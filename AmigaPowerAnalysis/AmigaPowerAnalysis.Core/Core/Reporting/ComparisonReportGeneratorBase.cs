@@ -60,9 +60,9 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             var analysisMethods = AnalysisModelFactory.AnalysisMethodsForMeasurementType(inputPowerAnalysis.MeasurementType) & inputPowerAnalysis.SelectedAnalysisMethodTypes;
             for (int i = 0; i < analysisMethods.GetFlags().Count(); ++i) {
                 if (i == 0) {
-                    stringBuilder.AppendLine(format("AnalysisMethods", analysisMethods.GetFlags().ElementAt(i)));
+                    stringBuilder.AppendLine(format("Analysis methods", analysisMethods.GetFlags().ElementAt(i)));
                 } else {
-                    stringBuilder.AppendLine(format(string.Empty, analysisMethods.GetFlags().ElementAt(i)));
+                    stringBuilder.AppendLine(format(string.Empty, analysisMethods.GetFlags().ElementAt(i).GetDisplayName()));
                 }
             }
             stringBuilder.AppendLine(format("Use Wald test", inputPowerAnalysis.UseWaldTest));
@@ -90,9 +90,12 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             stringBuilder.AppendLine("<table>");
             stringBuilder.AppendLine(format("Distribution type", inputPowerAnalysis.DistributionType));
             stringBuilder.AppendLine(format("Overall mean", inputPowerAnalysis.OverallMean));
-            stringBuilder.AppendLine(format("CV comparator", inputPowerAnalysis.CvComparator));
+            stringBuilder.AppendLine(format("CV comparator (%)", inputPowerAnalysis.CvComparator));
             if (inputPowerAnalysis.DistributionType == DistributionType.PowerLaw) {
                 stringBuilder.AppendLine(format("Power law power", inputPowerAnalysis.PowerLawPower));
+            }
+            if (inputPowerAnalysis.ExcessZeroesPercentage > 0) {
+                stringBuilder.AppendLine(format("Excess zeroes (%)", inputPowerAnalysis.ExcessZeroesPercentage));
             }
             stringBuilder.AppendLine("</table>");
 
@@ -126,7 +129,7 @@ namespace AmigaPowerAnalysis.Core.Reporting {
                 }
                 line.Add(record.Frequency.ToString());
                 line.Add(record.Mean.ToString());
-                line.Add(record.Comparison.ToString());
+                line.Add(record.Comparison.GetDisplayName());
                 stringBuilder.AppendLine("<tr><td>" + string.Join("</td><td>", line) + "</td></tr>");
             }
             stringBuilder.AppendLine("</table>");

@@ -167,6 +167,12 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
         public double PowerLawPower { get; set; }
 
         /// <summary>
+        /// The percentage of excess zeroes.
+        /// </summary>
+        [DataMember]
+        public double ExcessZeroesPercentage { get; set; }
+
+        /// <summary>
         /// The overall mean of the distribution.
         /// </summary>
         [DataMember]
@@ -214,6 +220,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             stringBuilder.AppendLine(format("MeasurementType", MeasurementType));
             stringBuilder.AppendLine(format("Distribution", DistributionType));
             stringBuilder.AppendLine(format("PowerLawPower", PowerLawPower));
+            stringBuilder.AppendLine(format("ExcessZeroesPercentage", ExcessZeroesPercentage));
             stringBuilder.AppendLine(format("OverallMean", OverallMean));
             stringBuilder.AppendLine(format("CVComparator", CvComparator));
             stringBuilder.AppendLine(format("CVBlocks", CvForBlocks));

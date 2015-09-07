@@ -30,6 +30,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                 LocUpper = comparison.Endpoint.LocUpper,
                 DistributionType = comparison.Endpoint.DistributionType,
                 PowerLawPower = comparison.Endpoint.PowerLawPower,
+                ExcessZeroesPercentage = comparison.Endpoint.ExcessZeroes ? comparison.Endpoint.ExcessZeroesPercentage : 0,
                 OverallMean = comparison.Endpoint.MuComparator,
                 SelectedAnalysisMethodTypes = selectedAnalysisMethods,
                 CvComparator = comparison.Endpoint.CvComparator,
