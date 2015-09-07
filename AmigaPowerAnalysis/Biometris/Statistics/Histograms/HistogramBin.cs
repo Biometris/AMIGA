@@ -1,4 +1,4 @@
-﻿namespace Biometris.Statistics {
+﻿namespace Biometris.Statistics.Histograms {
 
     /// <summary>
     /// Represents a bin of a histogram.

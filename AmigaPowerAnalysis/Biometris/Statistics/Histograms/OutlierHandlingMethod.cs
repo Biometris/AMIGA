@@ -1,4 +1,4 @@
-﻿namespace Biometris.Statistics {
+﻿namespace Biometris.Statistics.Histograms {
 
     /// <summary>
     /// Outlier handling method for histograms

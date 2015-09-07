@@ -1,4 +1,4 @@
-﻿namespace Biometris.Statistics {
+﻿namespace Biometris.Statistics.Histograms {
 
     /// <summary>
     /// A tuple value, used for storing the contribution per category of a categorized histogram bin object.

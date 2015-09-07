@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Biometris.ExtensionMethods;
 
-namespace Biometris.Statistics {
+namespace Biometris.Statistics.Histograms {
 
     /// <summary>
     /// Extension utility class for producing and handling histogram bins.
@@ -54,7 +53,7 @@ namespace Biometris.Statistics {
         /// <returns></returns>
         public static double Variance(this IEnumerable<HistogramBin> bins) {
             var mean = bins.Average();
-            return bins.Sum(b => (b.XMidPointValue - mean).Squared() * b.Frequency) / (bins.Sum(b => b.Frequency) - 1);
+            return bins.Sum(b => Math.Pow(b.XMidPointValue - mean, 2) * b.Frequency) / (bins.Sum(b => b.Frequency) - 1);
         }
 
         /// <summary>
@@ -221,13 +220,18 @@ namespace Biometris.Statistics {
         }
 
         /// <summary>
-        /// Creates a collection of bins that describe the target enumerable.
+        /// Creates a collection of bins that describe the target enumerable with weights
+        /// specified in the weights enumerable.
         /// </summary>
         /// <param name="source">The source collection of doubles</param>
-        /// <param name="numberOfBins">Number of bins to produce</param>
+        /// <param name="weights">The weights of the values</param>
         /// <returns></returns>
         public static List<HistogramBin> MakeHistogramBins(this IEnumerable<double> source, IEnumerable<double> weights) {
-            var numberOfBins = source.Count().Sqrt().Floor();
+            if (!source.Any()) {
+                return new List<HistogramBin>();
+            }
+            var maxbins = source.Count().Sqrt().Floor();
+            var numberOfBins = maxbins >= 100 ? 100 : maxbins;
             var minBound = source.Min();
             var maxBound = source.Max();
             var outlierHandlingMethod = OutlierHandlingMethod.IncludeNone;
@@ -241,6 +245,9 @@ namespace Biometris.Statistics {
         /// <param name="numberOfBins">Number of bins to produce</param>
         /// <returns></returns>
         public static List<HistogramBin> MakeHistogramBins(this IEnumerable<double> source, int numberOfBins) {
+            if (!source.Any()) {
+                return new List<HistogramBin>();
+            }
             var minBound = source.Min();
             var maxBound = source.Max();
             var outlierHandlingMethod = OutlierHandlingMethod.IncludeNone;
@@ -256,7 +263,11 @@ namespace Biometris.Statistics {
         /// <param name="maxBound">Maximum value of the data that is included in the bins</param>
         /// <returns></returns>
         public static List<HistogramBin> MakeHistogramBins(this IEnumerable<double> source, double minBound, double maxBound) {
-            var numberOfBins = source.Count().Sqrt().Floor();
+            if (!source.Any()) {
+                return new List<HistogramBin>();
+            }
+            var maxbins = source.Count().Sqrt().Floor();
+            var numberOfBins = maxbins >= 100 ? 100 : maxbins;
             var outlierHandlingMethod = OutlierHandlingMethod.IncludeNone;
             return source.MakeHistogramBins(numberOfBins, minBound, maxBound, outlierHandlingMethod);
         }
@@ -268,6 +279,9 @@ namespace Biometris.Statistics {
         /// <param name="source">The source collection of doubles</param>
         /// <returns></returns>
         public static List<HistogramBin> MakeHistogramBins(this IEnumerable<double> source) {
+            if (!source.Any()) {
+                return new List<HistogramBin>();
+            }
             var maxbins = source.Count().Sqrt().Floor();
             var numberOfBins = maxbins >= 100 ? 100 : maxbins;
             var outlierHandlingMethod = OutlierHandlingMethod.IncludeNone;
@@ -496,7 +510,7 @@ namespace Biometris.Statistics {
         /// <param name="valueExtractor">The value extractor extracts the total count per object</param>
         /// <returns></returns>
         public static List<CategorizedHistogramBin<TCategories>> MakeCategorizedHistogramBins<TList, TCategories>(this IEnumerable<TList> source, Func<TList, List<CategoryContribution<TCategories>>> categoryExtractor, Func<TList, double> valueExtractor) {
-            if (source.Count() == 0) {
+            if (!source.Any()) {
                 return new List<CategorizedHistogramBin<TCategories>>();
             }
             var sourceValues = source.Select(s => valueExtractor(s));
@@ -523,7 +537,7 @@ namespace Biometris.Statistics {
         /// <param name="valueExtractor">The value extractor extracts the total count per object</param>
         /// <returns></returns>
         public static List<CategorizedHistogramBin<TCategories>> MakeCategorizedHistogramBins<TList, TCategories>(this IEnumerable<TList> source, List<double> weights, Func<TList, List<CategoryContribution<TCategories>>> categoryExtractor, Func<TList, double> valueExtractor) {
-            if (source.Count() == 0) {
+            if (!source.Any()) {
                 return new List<CategorizedHistogramBin<TCategories>>();
             }
             var sourceValues = source.Select(s => valueExtractor(s));
@@ -550,11 +564,10 @@ namespace Biometris.Statistics {
         /// <param name="numberOfBins"></param>
         /// <returns></returns>
         public static List<CategorizedHistogramBin<TCategories>> MakeCategorizedHistogramBins<TList, TCategories>(this IEnumerable<TList> source, Func<TList, List<CategoryContribution<TCategories>>> categoryExtractor, Func<TList, double> valueExtractor, int numberOfBins) {
-            if (source.Count() == 0) {
+            if (!source.Any()) {
                 return new List<CategorizedHistogramBin<TCategories>>();
             }
             var sourceValues = source.Select(s => valueExtractor(s));
-            var maxbins = source.Count().Sqrt().Floor();
             var outlierHandlingMethod = OutlierHandlingMethod.IncludeNone;
             var minBound = sourceValues.Min();
             var maxBound = sourceValues.Max();
