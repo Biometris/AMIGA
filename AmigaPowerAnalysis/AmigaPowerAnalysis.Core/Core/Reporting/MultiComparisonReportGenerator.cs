@@ -83,7 +83,7 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             return records;
         }
 
-        protected static string generateComparisonsChartHtml(List<OutputPowerAnalysisRecord> records, IEnumerable<AnalysisMethodType> analysisMethodTypes, string tempPath, bool imagesAsPng) {
+        private static string generateComparisonsChartHtml(List<OutputPowerAnalysisRecord> records, IEnumerable<AnalysisMethodType> analysisMethodTypes, string tempPath, bool imagesAsPng) {
             var stringBuilder = new StringBuilder();
             stringBuilder.AppendLine("<h2>Comparisons charts primary comparisons</h2>");
 

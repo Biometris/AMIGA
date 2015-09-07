@@ -105,7 +105,8 @@ namespace AmigaPowerAnalysis.GUI {
             var editedCell = dataGridViewFactorModifiers.Rows[e.RowIndex].Cells[e.ColumnIndex];
             if (_currentEndpoint != null) {
                 if (editedCell.ColumnIndex == dataGridViewFactorModifiers.Columns["Modifier"].Index) {
-                    _currentEndpoint.SetModifier(e.RowIndex, (double)editedCell.Value);
+                    var modifier = _currentEndpoint.Modifiers[e.RowIndex];
+                    _currentEndpoint.SetModifier(modifier, (double)editedCell.Value);
                     updateDataGridFactorModifiers();
                 }
             }

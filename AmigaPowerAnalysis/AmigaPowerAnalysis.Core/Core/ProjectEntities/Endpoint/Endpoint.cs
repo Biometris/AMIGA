@@ -358,8 +358,9 @@ namespace AmigaPowerAnalysis.Core {
             updateComparisonLevels(defaultInteractions);
         }
 
-        public void SetModifier(int index, double value = double.NaN) {
-            if (Modifiers.Count > 0) {
+        public void SetModifier(ModifierFactorLevelCombination modifier, double value = double.NaN) {
+            int index = (modifier != null) ? Modifiers.IndexOf(modifier) : -1;
+            if (index > 0) {
                 var weights = Modifiers.Select(m => m.Frequency).ToList();
                 var newModifiers = Modifiers.Select(m => m.ModifierFactor).ToList();
                 newModifiers[index] = double.IsNaN(value) ? newModifiers[index] : value;
@@ -381,7 +382,7 @@ namespace AmigaPowerAnalysis.Core {
 
         private void fixModifiers(bool tryFix) {
             if (tryFix) {
-                SetModifier(0, double.NaN);
+                SetModifier(Modifiers.FirstOrDefault(), double.NaN);
             } else {
                 var modifiers = Modifiers.Select(m => m.ModifierFactor);
                 var weights = Modifiers.Select(m => m.Frequency);

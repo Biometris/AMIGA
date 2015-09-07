@@ -53,17 +53,20 @@ namespace AmigaPowerAnalysis.GUI {
             dataGridViewFactorLevels.DataSource = null;
             if (_currentEndpointFactorLevels != null) {
                 var dataTable = new DataTable();
+
                 var interactionFactors = _currentEndpoint.InteractionFactors.ToList();
                 foreach (var interactionFactor in interactionFactors) {
                     dataTable.Columns.Add(interactionFactor.Name, typeof(string));
                 }
+                dataTable.Columns.Add("_index", typeof(int)); 
                 dataTable.Columns.Add("Mean", typeof(double));
-                foreach (var factorLevelCombination in _currentEndpointFactorLevels) {
+                for (int i = 0; i < _currentEndpointFactorLevels.Count; ++i) {
                     DataRow row = dataTable.NewRow();
-                    foreach (var factorLevel in factorLevelCombination.Levels) {
+                    row["_index"] = i;
+                    foreach (var factorLevel in _currentEndpointFactorLevels[i].Levels) {
                         row[factorLevel.Parent.Name] = factorLevel.Label;
                     }
-                    row["Mean"] = factorLevelCombination.Mean;
+                    row["Mean"] = _currentEndpointFactorLevels[i].Mean;
                     dataTable.Rows.Add(row);
                 }
                 dataGridViewFactorLevels.Columns.Clear();
@@ -77,6 +80,7 @@ namespace AmigaPowerAnalysis.GUI {
                         dataGridViewFactorLevels.Rows[i].Cells["Mean"].ReadOnly = true;
                     }
                 }
+                dataGridViewFactorLevels.Columns["_index"].Visible = false;
             }
             dataGridViewFactorLevels.Refresh();
         }
@@ -91,8 +95,9 @@ namespace AmigaPowerAnalysis.GUI {
             var editedCell = dataGridViewFactorLevels.Rows[e.RowIndex].Cells[e.ColumnIndex];
             var newValue = editedCell.Value;
             if (_currentEndpointFactorLevels != null) {
+                var index = (int)dataGridViewFactorLevels.Rows[e.RowIndex].Cells["_index"].Value;
                 if (editedCell.ColumnIndex == dataGridViewFactorLevels.Columns["Mean"].Index) {
-                    _currentEndpointFactorLevels[e.RowIndex].Mean = (double)newValue;
+                    _currentEndpointFactorLevels[index].Mean = (double)newValue;
                 }
             }
         }
