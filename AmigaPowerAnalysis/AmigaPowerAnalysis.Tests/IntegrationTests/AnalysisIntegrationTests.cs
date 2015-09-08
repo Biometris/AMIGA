@@ -52,7 +52,7 @@ namespace AmigaPowerAnalysis.Tests.IntegrationTests {
             var comparisonInputFilename = Path.Combine(absoluteFilesPath, string.Format("{0}-Input.csv", comparisonId));
             var genstatOutputFilename = Path.Combine(absoluteFilesPath, string.Format("{0}-OutputGenstat.txt", comparisonId));
             var validationOutputFilename = Path.Combine(absoluteFilesPath, string.Format("{0}-Validation.csv", comparisonId));
-            File.WriteAllText(genstatOutputFilename, string.Empty);
+            File.Delete(validationOutputFilename);
 
             var startInfo = new ProcessStartInfo() {
                 CreateNoWindow = true,
