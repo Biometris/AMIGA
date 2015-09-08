@@ -30,10 +30,10 @@ if (open2.eq.0)
   else
     " Call from R: loop over all endpoints/reps/effects/datasets "
     text      maindir  ; ''
-    variate   endpoint ; !(1)
-    variate   reps     ; !(1)
-    variate   effects  ; !(1)
-    variate   datasets ; !(2,8,6)
+    variate   endpoint ; !(-1)
+    variate   reps     ; !(-1)
+    variate   effects  ; !(-1)
+    variate   datasets ; !(-1)
     if 0
       text      name2 ; 'D:\\Diverse Opdrachten\\AMIGA Power analysis\\'
       concatena name2, 'TestData\\Simple\\Simple-Wald\\0-Settings.csv'

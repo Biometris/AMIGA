@@ -13,9 +13,12 @@ PARAMETER 'DIRECTORY', 'ENDPOINT', 'REPS', 'EFFECTS', 'DATASETS', \
           DECLARED=5(yes),no ; PRESENT=5(yes),no
 
 CALLS     AM2_GET2SUBDIRS
+txconstru [tEndpoint] ENDPOINT ; deci=0
 
 " Import settings "
-txconstru [settingsFile] DIRECTORY, '\\', ENDPOINT, '-Settings.csv' ; deci=0
+txconstru [settingsFile] DIRECTORY, ENDPOINT, '-Settings.csv' ; deci=0
+enquire   channel=-1 ; name=settingsFile ; exist=found
+fault     [expl=!t('settingsFile not found for endpoint ', #tEndpoint)] found.eq.0
 import    [print=*] settingsFile ; isave=settings
 subset    [settings[1].in.!t(LocLower, LocUpper, SignificanceLevel, \
           NumberOfEvaluationPoints, NumberOfSimulationsGCI, \
@@ -42,7 +45,9 @@ if ('DETAILS'.IN.PRINT)
 endif
 
 " Import inputfile to define model "
-txconstru [inputFile] DIRECTORY, '/', ENDPOINT, '-Input.csv' ; decimals=0
+txconstru [inputFile] DIRECTORY, ENDPOINT, '-Input.csv' ; decimals=0
+enquire   channel=-1 ; name=inputFile ; exist=found
+fault     [expl=!t('inputFile not found for endpoint ', #tEndpoint)] found.eq.0
 import    [print=*] inputFile ; isave=input
 txconstru [tinput] input
 txpositio 2(tinput) ; 'Dummy','Mod' ; posDum,posMod
@@ -77,16 +82,14 @@ calculate init = urand(34832 ; 1)
 
 " Prepare main directory "
 txconstru [tendpoint] ENDPOINT ; deci=0
-txconstru [maindir] DIRECTORY, '/', ENDPOINT, '-Endpoint', '/' ; decimals=0
-sreplace  ['//' ; '/'] maindir
-
+txconstru [maindir] DIRECTORY, ENDPOINT, '-Endpoint', '\\' ; decimals=0
 " Define all subdirectories "
 variate   vReps ; !(#nEffects(1...#nReps))    ; deci=0
 variate   vEffects ; !((1...#nEffects)#nReps) ; deci=0
 txconstru [tReps] vReps
 txconstru [tEffects] vEffects
 txpad     [padd='0' ; method=before] tReps, tEffects ; width=2
-txconstru [subdir] maindir, 'Rep', tReps, '/Effect', tEffects, '/'
+txconstru [subdir] maindir, 'Rep', tReps, '\\Effect', tEffects, '\\'
 calculate nsubdir = nvalues(subdir)
 txconstru [SET] 'r', tReps, '-e', tEffects
 text      [modify=yes] SET ; extra='prSet'
@@ -140,13 +143,16 @@ for [ntimes=nsubdir ; index=isub]
   calculate diff[], equi[], OPextra[], NBextra[] = mis
   for [ntimes=nDatasets ; index=iDataset]
     exit      [control=for ; repeat=yes] (iDataset.NI.loopDatasets)
+	txconstru [tmessage] ENDPOINT, '  Rep ', iReps, \
+              '  Effect ', iEffects, '  Dataset ', iDataset ; deci=0
     IF SUM(!t(OP,NB).IN.PRINT)
-      txconstru [caption] iidir2, '  Endpoint ', ENDPOINT, '  Rep ', iReps, \
-                '  Effect ', iEffects, '  Dataset ', iDataset ; deci=0
+      txconstru [caption] iidir2, tmessage
       caption   caption ; style=meta
     endif
     " Import Data and define factors if in model "
     text      iDatafile ; Datafiles$[iDataset]
+	enquire   channel=-1 ; name=iDatafile ; exist=found
+    fault     [expl=!t('dataFile not found for endpoint', #tmessage)] (found.eq.0)
     import    [print=#primport] iDatafile ; isave=isave
     calculate nval = nvalues(Response)
     variate   [nvalues=nval] yy
