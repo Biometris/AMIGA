@@ -476,9 +476,9 @@ overdispersedPoissonAnalysis <- function(data, settings, modelSettings, debugSet
     data[["Lp"]] <- glmH1$linear.predictor
     glmH0 <- glm(modelSettings$formulaH0, family=family, data=data, etastart=Lp)
     if (family == "poisson") {
-        pvalues$Diff <- pchi(deviance(glmH0) - deviance(glmH1), 1, lower.tail=FALSE)
+      pvalues$Diff <- pchi(deviance(glmH0) - deviance(glmH1), 1, lower.tail=FALSE)
     } else {
-    pvalues$Diff <- pf((deviance(glmH0) - deviance(glmH1))/estDispersion, 1, resDF, lower.tail=FALSE)
+      pvalues$Diff <- pf((deviance(glmH0) - deviance(glmH1))/estDispersion, 1, resDF, lower.tail=FALSE)
     }
     # and LR equivalence test
     if ((estiEffect < settings$TransformLocLower) | (estiEffect > settings$TransformLocUpper)) {
@@ -491,8 +491,8 @@ overdispersedPoissonAnalysis <- function(data, settings, modelSettings, debugSet
         pvalLow <- pchi(deviance(glmH0low) - deviance(glmH1), 1, lower.tail=FALSE)
         pvalUpp <- pchi(deviance(glmH0upp) - deviance(glmH1), 1, lower.tail=FALSE)
       } else {
-      pvalLow <- pf((deviance(glmH0low) - deviance(glmH1))/estDispersion, 1, resDF, lower.tail=FALSE)
-      pvalUpp <- pf((deviance(glmH0upp) - deviance(glmH1))/estDispersion, 1, resDF, lower.tail=FALSE)
+        pvalLow <- pf((deviance(glmH0low) - deviance(glmH1))/estDispersion, 1, resDF, lower.tail=FALSE)
+        pvalUpp <- pf((deviance(glmH0upp) - deviance(glmH1))/estDispersion, 1, resDF, lower.tail=FALSE)
       }
       pvalues$Equi <- max(pvalLow, pvalUpp)/2
     }
@@ -630,18 +630,18 @@ monteCarloPowerAnalysis <- function(data, settings, modelSettings, blocks, effec
       if (DEBUG) print(paste(k, "OverdispersedPoisson"))
       result <- overdispersedPoissonAnalysis(simulatedData, settings, modelSettings, debugSettings)
       if (!is.na(match("OverdispersedPoisson", settings$AnalysisMethods))) {
-      pValues$Diff[k, "OverdispersedPoisson"] <- result$Diff
-      pValues$Equi[k, "OverdispersedPoisson"] <- result$Equi
-      pValues$Extra[k, "OPdisp"] <- result$Dispersion
-    }
-    if (!is.na(match("NegativeBinomial", settings$AnalysisMethods))) {
-      if (DEBUG) print(paste(k, "NegativeBinomial"))
+        pValues$Diff[k, "OverdispersedPoisson"] <- result$Diff
+        pValues$Equi[k, "OverdispersedPoisson"] <- result$Equi
+        pValues$Extra[k, "OPdisp"] <- result$Dispersion
+      }
+      if (!is.na(match("NegativeBinomial", settings$AnalysisMethods))) {
+        if (DEBUG) print(paste(k, "NegativeBinomial"))
         if (!is.na(result$Dispersion)) {
-      result <- negativeBinomialAnalysis(simulatedData, settings, modelSettings, debugSettings)
+          result <- negativeBinomialAnalysis(simulatedData, settings, modelSettings, debugSettings)
         }
-      pValues$Diff[k, "NegativeBinomial"] <- result$Diff
-      pValues$Equi[k, "NegativeBinomial"] <- result$Equi
-      pValues$Extra[k, "NBtheta"] <- result$Dispersion
+        pValues$Diff[k, "NegativeBinomial"] <- result$Diff
+        pValues$Equi[k, "NegativeBinomial"] <- result$Equi
+        pValues$Extra[k, "NBtheta"] <- result$Dispersion
       }
     }
   }

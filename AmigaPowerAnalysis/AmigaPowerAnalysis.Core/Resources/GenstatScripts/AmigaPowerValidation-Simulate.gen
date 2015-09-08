@@ -28,7 +28,8 @@ if (open2.eq.0)
     \text      dir[3] ; 'SimpleBlock-Wald'
     \text      dir[4] ; 'SimpleBlock-LR'
   else
-    " Call from R: loop over all endpoints/reps/effects/datasets "
+    " Called from C#: loop over endpoint defined by input on channel 2 "
+    " Loop over all reps/effects/datasets "
     text      maindir  ; ''
     variate   endpoint ; !(-1)
     variate   reps     ; !(-1)
@@ -38,8 +39,11 @@ if (open2.eq.0)
       text      name2 ; 'D:\\Diverse Opdrachten\\AMIGA Power analysis\\'
       concatena name2, 'TestData\\Simple\\Simple-Wald\\0-Settings.csv'
     endif
-    sfilename [inputname=name2] directory=dir[1]
-    print     dir[1]
+    sfilename [inputname=name2] surname=surname ; directory=dir[1]
+    concatena surname ; width=getposition(surname ; '-') - 1
+    read      [print=* ; channel=surname] endpoint
+    close     channel=surname
+    print     dir[1], endpoint ; decimals=0
 endif
 
 " Additional settings "
@@ -108,5 +112,3 @@ if open2
   export    [outfile=name2 ; method=overwrite] max[] ; columns=extra[][]
 endif
 stop
-
-

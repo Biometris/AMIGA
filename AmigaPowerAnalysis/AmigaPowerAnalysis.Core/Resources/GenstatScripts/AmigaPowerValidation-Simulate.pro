@@ -14,11 +14,14 @@ PARAMETER 'DIRECTORY', 'ENDPOINT', 'REPS', 'EFFECTS', 'DATASETS', \
 
 CALLS     AM2_GET2SUBDIRS
 txconstru [tEndpoint] ENDPOINT ; deci=0
+scalar    limitDispersion ; 1
+scalar    r2NegbinUpper ; 10000
 
 " Import settings "
 txconstru [settingsFile] DIRECTORY, ENDPOINT, '-Settings.csv' ; deci=0
 enquire   channel=-1 ; name=settingsFile ; exist=found
-fault     [expl=!t('settingsFile not found for endpoint ', #tEndpoint)] found.eq.0
+fault     [expl=!t('settingsFile not found for endpoint ', #tEndpoint)] \
+          found.eq.0
 import    [print=*] settingsFile ; isave=settings
 subset    [settings[1].in.!t(LocLower, LocUpper, SignificanceLevel, \
           NumberOfEvaluationPoints, NumberOfSimulationsGCI, \
@@ -126,7 +129,6 @@ calculate maxDiff[] = mis
 
 am2_get2  DIRECTORY ; iidir2
 
-
 " Loop over subdirs "
 calculate minREPS, minEFFECTS, minDATASETS = MIN(REPS,EFFECTS,DATASETS).GE.0
 if minDATASETS 
@@ -143,7 +145,7 @@ for [ntimes=nsubdir ; index=isub]
   calculate diff[], equi[], OPextra[], NBextra[] = mis
   for [ntimes=nDatasets ; index=iDataset]
     exit      [control=for ; repeat=yes] (iDataset.NI.loopDatasets)
-	txconstru [tmessage] ENDPOINT, '  Rep ', iReps, \
+    txconstru [tmessage] ENDPOINT, '  Rep ', iReps, \
               '  Effect ', iEffects, '  Dataset ', iDataset ; deci=0
     IF SUM(!t(OP,NB).IN.PRINT)
       txconstru [caption] iidir2, tmessage
@@ -151,8 +153,9 @@ for [ntimes=nsubdir ; index=isub]
     endif
     " Import Data and define factors if in model "
     text      iDatafile ; Datafiles$[iDataset]
-	enquire   channel=-1 ; name=iDatafile ; exist=found
-    fault     [expl=!t('dataFile not found for endpoint', #tmessage)] (found.eq.0)
+    enquire   channel=-1 ; name=iDatafile ; exist=found
+    fault     [expl=!t('dataFile not found for endpoint', #tmessage)] \
+              found.eq.0
     import    [print=#primport] iDatafile ; isave=isave
     calculate nval = nvalues(Response)
     variate   [nvalues=nval] yy
@@ -240,81 +243,113 @@ for [ntimes=nsubdir ; index=isub]
     calculate equi[2]$[iDataset] = vmax(!p(pLower, pUpper))
 
     " OP difference "
-    model     [dist=poisson ; ; disp=* ; dmethod=pear] Response
+    scalar    disp ; mis
+    model     [dist=poisson ; disp=disp ; dmethod=pear] Response
     fit       [print=#prOP ; tprob=yes ; nomes=res,lev,disp] #fitH1
     rkeep     esti=vesti ; se=vse ; dev=dev ; df=df ; pear=pear
     calculate esti,se = (vesti,vse)$[2]
     calculate estDispersion = pear/df
+    if (estDispersion.le.limitDispersion)
+      calculate se = se/sqrt(estDispersion)
+      calculate estDispersion = mis
+      calculate disp = 1
+      model     [dist=poisson ; disp=disp ; dmethod=pear] Response
+    endif
     calculate OPextra[1,2,4]$[iDataset] = esti,se,estDispersion
     if UseWaldTest
-        calculate pval = 2*cut(abs(esti/se) ; df)
+        if (disp.eq.1)
+            calculate pval = 2*cunormal(abs(esti/se))
+          else
+            calculate pval = 2*cut(abs(esti/se) ; df)
+        endif
       else
         fit       [print=#prOP ; tprob=yes ; nomes=res,lev,disp] #fitH0
         rkeep     dev=dev0 ; df=df0
-        calculate testStat = (dev0-dev)/(df0-df)/estDispersion
-        calculate pval = cuf(testStat ; df0-df ; df)
+        if (disp.eq.1)
+            calculate pval = cuchi(dev0-dev ; 1)
+          else
+            calculate pval = cuf((dev0-dev)/estDispersion ; 1 ; df)
+        endif
     endif
     calculate diff[3]$[iDataset] = pval
 
     " OP equivalence "
     if UseWaldTest
-        calculate pLower = cut((esti-locLowerTrans)/se ; df)
-        calculate pUpper = clt((esti-locUpperTrans)/se ; df)
+        if (disp.eq.1)
+            calculate pLower = cunormal((esti-locLowerTrans)/se)
+            calculate pUpper = clnormal((esti-locUpperTrans)/se)
+          else
+            calculate pLower = cut((esti-locLowerTrans)/se ; df)
+            calculate pUpper = clt((esti-locUpperTrans)/se ; df)
+        endif
         calculate pval = vmax( !p(pLower, pUpper))
       else
         if (esti.lt.locLowerTrans) .or. (esti.gt.locUpperTrans)
             calculate pval = 2
           else
-            model     [dist=poisson ; ; disp=* ; offset=LowOffset] Response
+            model     [dist=poisson ; disp=disp ; offset=LowOffset] Response
             fit       [print=#prOP ; nomes=res,lev,disp] #fitH0
             rkeep     dev=devLower
-            calculate pLower = cuf((devLower - dev)/estDispersion ; 1 ; df)
-            model     [dist=poisson ; ; disp=* ; offset=UppOffset] Response
+            model     [dist=poisson ; disp=disp ; offset=UppOffset] Response
             fit       [print=#prOP ; nomes=res,lev,disp] #fitH0
             rkeep     dev=devUpper
-            calculate pUpper = cuf((devUpper - dev)/estDispersion ; 1 ; df)
+            if (disp.eq.1)
+                calculate pLower = cuchi((devLower - dev) ; 1)
+                calculate pUpper = cuchi((devUpper - dev) ; 1)
+              else
+                calculate pLower = cuf((devLower - dev)/estDispersion ; 1 ; df)
+                calculate pUpper = cuf((devUpper - dev)/estDispersion ; 1 ; df)
+            endif
             calculate pval = vmax(!p(pLower, pUpper))/2
         endif
     endif
     calculate equi[3]$[iDataset] = pval
 
     " NB difference ; GenStat uses df=inf for calculation of Wald test "
-    model     [dist=negative ; link=log] Response
-    r2negbin  [print=#prNB ; _2loglik=dev ; aggregation=agg ; \
-              tprob=yes ; nomes=res,lev,disp,warn] #fitH1
-    rkeep     esti=vesti ; se=vse ; df=df ;
-    calculate esti,se = (vesti,vse)$[2]
-    calculate NBextra[1,2,4]$[iDataset] = esti,se,agg
-    if UseWaldTest
-        calculate pval = 2*cut(abs(esti/se) ; df)
+    if (disp.eq.1)
+        calculate NBextra[1,2,4]$[iDataset] = OPextra[1,2,4]$[iDataset]
+        calculate diff[4]$[iDataset] = diff[3]$[iDataset]
+        calculate equi[4]$[iDataset] = equi[3]$[iDataset]
       else
-        r2negbin  [print=#prNB ; tprob=yes ; _2loglik=dev0 ; \
-                  tprob=yes ; nomes=res,lev,disp,warn] #fitH0
-        calculate pval = cuchi(dev0-dev ; 1)
-    endif
-    calculate diff[4]$[iDataset] = pval
-
-    " NB equivalence "
-    if UseWaldTest
-        calculate pLower = cut((esti-locLowerTrans)/se ; df)
-        calculate pUpper = clt((esti-locUpperTrans)/se ; df)
-        calculate pval = vmax( !p(pLower, pUpper))
-      else
-        if (esti.lt.locLowerTrans) .or. (esti.gt.locUpperTrans)
-            calculate pval = 2
+        model     [dist=negative ; link=log] Response
+        r2negbin  [print=#prNB ; _2loglik=dev ; agg=agg ; tprob=yes ; \
+                  nomes=res,lev,disp,warn ; upper=r2NegbinUpper] #fitH1
+        rkeep     esti=vesti ; se=vse ; df=df ;
+        calculate esti,se = (vesti,vse)$[2]
+        calculate NBextra[1,2,4]$[iDataset] = esti,se,agg
+        if UseWaldTest
+            calculate pval = 2*cut(abs(esti/se) ; df)
           else
-            model     [dist=negative ; link=log ; offset=LowOffset] Response
-            r2negbin  [print=#prNB ; _2loglik=devLower ; \
-                      tprob=yes ; nomes=res,lev,disp,warn] #fitH0
-            calculate pLower = cuchi((devLower - dev) ; 1)
-            model     [dist=negative ; link=log ; offset=UppOffset] Response
-            r2negbin  [print=#prNB ; _2loglik=devUpper ; \
-                      tprob=yes ; nomes=res,lev,disp,warn] #fitH0
-            calculate pUpper = cuchi((devUpper - dev) ; 1)
-            calculate pval = vmax(!p(pLower, pUpper))/2
+            r2negbin  [print=#prNB ; tprob=yes ; _2loglik=dev0 ; tprob=yes ; \
+                      nomes=res,lev,disp,warn ; upper=r2NegbinUpper] #fitH0
+            calculate pval = cuchi(dev0-dev ; 1)
         endif
+        calculate diff[4]$[iDataset] = pval
+
+        " NB equivalence "
+        if UseWaldTest
+            calculate pLower = cut((esti-locLowerTrans)/se ; df)
+            calculate pUpper = clt((esti-locUpperTrans)/se ; df)
+            calculate pval = vmax( !p(pLower, pUpper))
+          else
+            if (esti.lt.locLowerTrans) .or. (esti.gt.locUpperTrans)
+                calculate pval = 2
+              else
+                model     [dist=negativ ; link=log ; offset=LowOffset] Response
+                r2negbin  [print=#prNB ; _2loglik=devLower ; \
+                          tprob=yes ; nomes=res,lev,disp,warn ; \
+                          upper=r2NegbinUpper] #fitH0
+                calculate pLower = cuchi((devLower - dev) ; 1)
+                model     [dist=negativ ; link=log ; offset=UppOffset] Response
+                r2negbin  [print=#prNB ; _2loglik=devUpper ; \
+                          tprob=yes ; nomes=res,lev,disp,warn ; \
+                          upper=r2NegbinUpper] #fitH0
+                calculate pUpper = cuchi((devUpper - dev) ; 1)
+                calculate pval = vmax(!p(pLower, pUpper))/2
+            endif
+        endif
+        calculate equi[4]$[iDataset] = pval
     endif
-    calculate equi[4]$[iDataset] = pval
     exit      TEST
   endfor
   calculate OPextra[3],NBextra[3] = OPextra[1],NBextra[1]/OPextra[2],NBextra[2]
