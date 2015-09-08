@@ -60,7 +60,7 @@ namespace AmigaPowerAnalysis.Tests.IntegrationTests {
                 FileName = genstatPath,
                 WindowStyle = ProcessWindowStyle.Hidden,
                 RedirectStandardOutput = true,
-                Arguments = string.Format("in=\"{0}\" out=\"{1}\" in2=\"{2}\" out2=\"{3}\"", scriptFilename, genstatOutputFilename, comparisonInputFilename, validationOutputFilename),
+                Arguments = string.Format("in=\"{0}\" /200 out=\"{1}\" /86 in2=\"{2}\" out2=\"{3}\"", scriptFilename, genstatOutputFilename, comparisonInputFilename, validationOutputFilename),
             };
             using (Process exeProcess = Process.Start(startInfo)) {
                 exeProcess.Start();
