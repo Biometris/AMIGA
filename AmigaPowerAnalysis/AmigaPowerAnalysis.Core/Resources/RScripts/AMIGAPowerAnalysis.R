@@ -497,7 +497,7 @@ overdispersedPoissonAnalysis <- function(data, settings, modelSettings, debugSet
     data[["Lp"]] <- glmH1$linear.predictor
     glmH0 <- glm(modelSettings$formulaH0, family=family, data=data, etastart=Lp)
     if (family == "poisson") {
-      pvalues$Diff <- pchi(deviance(glmH0) - deviance(glmH1), 1, lower.tail=FALSE)
+        pvalues$Diff <- pchisq(deviance(glmH0) - deviance(glmH1), 1, lower.tail=FALSE)
     } else {
       pvalues$Diff <- pf((deviance(glmH0) - deviance(glmH1))/estDispersion, 1, resDF, lower.tail=FALSE)
     }
@@ -509,8 +509,8 @@ overdispersedPoissonAnalysis <- function(data, settings, modelSettings, debugSet
       glmH0low <- glm(modelSettings$formulaH0_low, family=family, data=data, etastart=Lp)
       glmH0upp <- glm(modelSettings$formulaH0_upp, family=family, data=data, etastart=Lp)
       if (family == "poisson") {
-        pvalLow <- pchi(deviance(glmH0low) - deviance(glmH1), 1, lower.tail=FALSE)
-        pvalUpp <- pchi(deviance(glmH0upp) - deviance(glmH1), 1, lower.tail=FALSE)
+        pvalLow <- pchisq(deviance(glmH0low) - deviance(glmH1), 1, lower.tail=FALSE)
+        pvalUpp <- pchisq(deviance(glmH0upp) - deviance(glmH1), 1, lower.tail=FALSE)
       } else {
         pvalLow <- pf((deviance(glmH0low) - deviance(glmH1))/estDispersion, 1, resDF, lower.tail=FALSE)
         pvalUpp <- pf((deviance(glmH0upp) - deviance(glmH1))/estDispersion, 1, resDF, lower.tail=FALSE)
