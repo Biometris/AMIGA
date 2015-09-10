@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -23,9 +24,11 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
         }
 
         private string _tempPath;
+        private Stopwatch _timer;
 
         public RDotNetPowerAnalysisExecuter(string tempPath) {
             _tempPath = Path.GetFullPath(tempPath.Substring(0, tempPath.Length));
+            _timer = new Stopwatch();
         }
 
         public override OutputPowerAnalysis Run(InputPowerAnalysis inputPowerAnalysis, ProgressState progressState) {
@@ -70,16 +73,31 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
 
                     var totalLoops = inputPowerAnalysis.NumberOfReplications.Count * effects.Count;
                     var counter = 0;
+                    // Structures for timing
+                    var elapsedTime = "--:--:--";
+                    var remainingTime = "--:--:--";
+                    var timerCounter = inputPowerAnalysis.ComparisonId * inputPowerAnalysis.NumberOfReplications.Count * effects.Count;
+                    var timerTotalLoops = inputPowerAnalysis.NumberOfComparisons * inputPowerAnalysis.NumberOfReplications.Count * effects.Count;
+                    if (timerCounter == 0) {
+                        _timer.Start();
+                    }
                     for (int i = 0; i < inputPowerAnalysis.NumberOfReplications.Count; ++i) {
                         var blocks = inputPowerAnalysis.NumberOfReplications[i];
                         rEngine.EvaluateNoReturn("");
-                        rEngine.EvaluateNoReturn("#========== Number " + i.ToString() + "/" + inputPowerAnalysis.NumberOfReplications.Count.ToString() + " of replications");
+                        rEngine.EvaluateNoReturn("#========== Number " + (i + 1).ToString() + "/" + inputPowerAnalysis.NumberOfReplications.Count.ToString() + " of replications");
                         rEngine.SetSymbol("blocks", blocks);
                         for (int j = 0; j < effects.Count; ++j) {
                             var effect = effects[j];
                             try {
                                 // Update progress state
-                                progressState.Update(string.Format("Endpoint {1}/{2}, replicate {3}/{4}, effect {5}/{6}   {0}", inputPowerAnalysis.Endpoint, inputPowerAnalysis.ComparisonId + 1, inputPowerAnalysis.NumberOfComparisons, i + 1, inputPowerAnalysis.NumberOfReplications.Count, j + 1, effects.Count), 100 * ((double)counter / totalLoops));
+                                if (timerCounter > 0) {
+                                    TimeSpan elapsed = _timer.Elapsed;
+                                    elapsedTime = String.Format("{0:00}:{1:00}:{2:00}", elapsed.Hours, elapsed.Minutes, Math.Round(elapsed.Seconds + elapsed.Milliseconds / 1000.0));
+                                    long ticks = Convert.ToInt64(Convert.ToDouble(elapsed.Ticks) * (timerTotalLoops - timerCounter) / timerCounter);
+                                    TimeSpan remaining = TimeSpan.FromTicks(ticks);
+                                    remainingTime = String.Format("{0:00}:{1:00}:{2:00}", remaining.Hours, remaining.Minutes, Math.Round(remaining.Seconds + remaining.Milliseconds / 1000.0));
+                                }
+                                progressState.Update(string.Format("Endpoint {1}/{2}, replicate {3}/{4}, effect {5}/{6}   {0}\nElapsedTime: {7}    RemainingTime: {8}", inputPowerAnalysis.Endpoint, inputPowerAnalysis.ComparisonId + 1, inputPowerAnalysis.NumberOfComparisons, i + 1, inputPowerAnalysis.NumberOfReplications.Count, j + 1, effects.Count, elapsedTime, remainingTime), 100 * ((double)counter / totalLoops));
 
                                 // Define settings for Debugging the Rscript
                                 rEngine.EvaluateNoReturn(string.Format("debugSettings = list(iRep={0}, iEffect={1}, iDataset=NaN)", i + 1, j + 1));
@@ -103,6 +121,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                                 errorList.Add(msg);
                             }
                             counter++;
+                            timerCounter++;
                             rEngine.EvaluateNoReturn("");
                         }
                     }
