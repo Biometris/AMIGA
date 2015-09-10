@@ -5,6 +5,7 @@
   datasets: number of datasets;     negative number implies all
 "
 
+qstopwatc [mode=start ; print=*]
 " Attach procedure file "
 sfilename channel=1 ; filetype=input ; directory=thisdir
 txconstru [profile] thisdir, 'AmigaPowerValidation-Simulate.pro'
@@ -18,12 +19,12 @@ enquire   channel=2 ; filetype=input ; open=open2 ; name=name2
 if (open2.eq.0)
     " Call from GenStat/CRiSP"
     text      maindir  ; 'D:\\Diverse Opdrachten\\AMIGA Power analysis\\'
-    concatena maindir, 'TestData\\Simple\\'
+    concatena maindir, 'IntegrationTests\\'
     variate   endpoint ; !(1)
     variate   reps     ; !(1)
-    variate   effects  ; !(2)
-    variate   datasets ; !(2,7,5)
-    text      dir[1] ; 'Simple-Wald'
+    variate   effects  ; !(1)
+    variate   datasets ; !(-1,2)
+    text      dir[1] ; 'Simple'
     \text      dir[2] ; 'Simple-LR'
     \text      dir[3] ; 'SimpleBlock-Wald'
     \text      dir[4] ; 'SimpleBlock-LR'
@@ -65,7 +66,7 @@ for [ntimes=ndir ; index=ii]
       calculate nfiles = nvalues(files)
       variate   iendpoint[ii] ; !(1...nfiles) - 1 ; deci=0
     else
-      calculate nfiles = 1
+      calculate nfiles = nvalues(endpoint)
       variate   iendpoint[ii] ; !(#endpoint) ; deci=0
   endif
   text      [values=#nfiles(#dir[ii])] idir[ii]
@@ -87,28 +88,52 @@ for [ntimes=ndir ; index=ii]
             datasets ; maxDiff[ii]
 endfor
 
-" maximal Difference over All endpoints "
+" Get names of columns"
 calculate nmx, nmx1 = nvalues(maxDiff[1]) - (0,1)
 pointer   [nvalues=nmx1] extra
 getattrib [attribute=extra] maxDiff[1][1...nmx1] ; extra[]
-pointer   [nvalues=nmx1] mx, max
-variate   mx[] ; extra=extra[][]
-scalar    max[] ; extra=extra[][]
-for [ntimes=nmx1 ; index=ii]
-  calculate mx[ii] = vmax(!p(maxDiff[][ii]))
+
+" Combine results "
+calculate nLength = nvalues(maxDiff[1][0])
+factor    [levels=allEndpoint ; val=#nLength(#allEndpoint)] Endpoint ; deci=0
+getattrib [attribute=suffixes] maxDiff[1] ; save=suffixes
+for ss=#suffixes[]
+  append    maxDiff[][ss]
+  if (ss.gt.0)
+    calculate mx[ss] = maximum(maxDiff[1][ss])
+  endif
 endfor
-calculate max[] = max(mx[])
+calculate pos = getposition(maxDiff[1][0] ; '-')
+concatena [tReplication] maxDiff[1][0] ; width=pos-1
+concatena [tEffect]      maxDiff[1][0] ; skip=pos
+sreplace  ['r' ; ''] tReplication
+sreplace  ['e' ; ''] tEffect
+read      [channel=tReplication ; setn=yes] Replication
+read      [channel=tEffect ; setn=yes] Effect
+groups    [redefine=yes] Replication
+groups    [redefine=yes] Effect
+factor    [modify=yes] Replication, Effect ; deci=0
 for
-  print     [mis='-' ; iprint=extra] maxDiff[1][0],mx[] ; \
-            field=-9 ; deci=1 ; skip=0,2,3(0),2,3(0)
-  print     [mis='-' ; iprint=extra] 'Global',max[] ; \
-            field=-9 ; deci=1 ; skip=0,2,3(0),2,3(0)
+  print     Endpoint, Replication, Effect, maxDiff[1][1...nmx1] ; \
+            head='Endp', 'Rep', 'Eff',extra[][] ; field=5,4,4,8(-9) ; \
+            deci=*,*,*,8(1) ; skip=7(0),1,3(0)
+  print     'Global', mx[] ; head=*,extra[][] ; field=13,8(-9) ; \
+            deci=*,8(1) ; skip=5(0),1,3(0)
 endfor
 
 " Output to CSV in case output 2 is set"
 enquire   channel=2 ; filetype=output ; open=open2 ; name=name2
 if open2
   close     channel=2 ; filetype=output ; delete=yes
-  export    [outfile=name2 ; method=overwrite] max[] ; columns=extra[][]
+  export    [outfile=name2 ; method=overwrite] mx[] ; columns=extra[][]
+  " Also export the full set "
+  sreplace  ['.csv' ; 'Full.csv'] name2 ; fullname2
+  export    [outfile=fullname2 ; method=overwrite] \
+            Endpoint, Replication, Effect, maxDiff[1][1...nmx1] ; \
+            columns='Endpoint!', 'Replication!', 'Effect!',extra[][]
 endif
+
+" Timing "
+qstopwatc [mode=stop ; print=output]
+
 stop

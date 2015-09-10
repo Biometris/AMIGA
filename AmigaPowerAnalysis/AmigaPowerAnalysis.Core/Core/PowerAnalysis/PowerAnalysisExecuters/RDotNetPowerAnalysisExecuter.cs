@@ -59,6 +59,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                     rEngine.LoadLibrary("MASS");
                     rEngine.LoadLibrary("lsmeans");
                     rEngine.LoadLibrary("stringr");
+                    rEngine.LoadLibrary("reshape");
                     rEngine.EvaluateNoReturn("#========== Reading script and data");
                     rEngine.EvaluateNoReturn(string.Format(@"source('{0}')", scriptFilename.Replace("\\", "/")));
                     rEngine.EvaluateNoReturn(string.Format("inputData <- readDataFile('{0}')", comparisonInputFilename.Replace("\\", "/")));

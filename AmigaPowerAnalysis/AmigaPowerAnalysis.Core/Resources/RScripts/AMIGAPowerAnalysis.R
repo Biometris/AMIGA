@@ -11,7 +11,10 @@
 #
 # 4. OP and NB fall back to the Poisson in case the OP overdispersion parameter is smaller than 1
 #
+# 5. LN-GCI produces a NaN in case any of the ratios equals NaN
+#
 
+######################################################################################################################
 linkFunction <- function(data, measurementType = c("Count", "Fraction", "Nonnegative", "Continuous")) {
   chkArg = match.arg(measurementType)
   if (measurementType == "Count") {
@@ -25,6 +28,7 @@ linkFunction <- function(data, measurementType = c("Count", "Fraction", "Nonnega
   }
 }
 
+######################################################################################################################
 inverseLinkFunction <- function(data, measurementType = c("Count", "Fraction", "Nonnegative", "Continuous")) {
   chkArg = match.arg(measurementType)
   if (measurementType == "Count") {
@@ -38,6 +42,7 @@ inverseLinkFunction <- function(data, measurementType = c("Count", "Fraction", "
   }
 }
 
+######################################################################################################################
 ropoisson <- function(n, mean, dispersion=NaN, power=NaN, distribution=c("Poisson", "OverdispersedPoisson", "NegativeBinomial", "PoissonLogNormal", "PowerLaw")) {
   stopifnot(n == as.integer(n), n >= 1, mean >= 0)
   if ((length(mean) != 1) && (length(mean) != n)) {
@@ -97,6 +102,7 @@ ropoisson <- function(n, mean, dispersion=NaN, power=NaN, distribution=c("Poisso
   return(sample)
 }
 
+######################################################################################################################
 ropoissonVariance <- function(n, mean, dispersion=NaN, power=NaN, distribution=c("Poisson", "OverdispersedPoisson", "NegativeBinomial", "PoissonLogNormal", "PowerLaw")) {
   type = match.arg(distribution)
   if (type == "Poisson") {
@@ -113,6 +119,7 @@ ropoissonVariance <- function(n, mean, dispersion=NaN, power=NaN, distribution=c
   return(variance)
 }
 
+######################################################################################################################
 ropoissonDispersion <- function(mean, CV, power, distribution=c("Poisson", "OverdispersedPoisson", "NegativeBinomial", "PoissonLogNormal", "PowerLaw")) {
   if (mean <= 0) {
     stop("Mean of distribution must be positive.", call. = FALSE)
@@ -142,6 +149,7 @@ ropoissonDispersion <- function(mean, CV, power, distribution=c("Poisson", "Over
   return(dispersion)
 }
 
+######################################################################################################################
 readDataFile <- function(dataFile) {
   # Read data
   data <- read.csv(dataFile)
@@ -156,6 +164,7 @@ readDataFile <- function(dataFile) {
   return(data)
 }
 
+######################################################################################################################
 readSettings <- function(settingsFile) {
   settings <- read.csv(settingsFile, header=FALSE, as.is=TRUE, strip.white=TRUE)
   list = as.list(setNames(nm=settings$V1))
@@ -198,9 +207,9 @@ readSettings <- function(settingsFile) {
   return(list)
 }
 
+######################################################################################################################
 createModelSettings <- function(data, settings) {
   modelSettings <- list()
-
   colnames <- colnames(data)
 
   # Create dataframe for prediction; only use GMO columns and Dummy columns
@@ -236,11 +245,13 @@ createModelSettings <- function(data, settings) {
   return(modelSettings)
 }
 
+######################################################################################################################
 createSimulationSettings <- function(settings) {
   simulationSettings <- list()
 
   # Define dispersion parameter
   simulationSettings$dispersion <- ropoissonDispersion(settings$OverallMean, settings$CVComparator, settings$PowerLawPower, settings$Distribution)  
+  print(paste0("Dispersion parameter: ", simulationSettings$dispersion))
 
   # Add blocking effect to model 
   if (settings$ExperimentalDesignType == "RandomizedCompleteBlocks") {
@@ -251,11 +262,13 @@ createSimulationSettings <- function(settings) {
   return(simulationSettings)
 }
 
+######################################################################################################################
 createSimulatedData <- function(data, settings, simulationSettings, blocks, effect) {
   setupSimulatedData <- data
   
-  # Expand dataset and modify Block factor  
+  # Expand dataset; add Row and Block factor
   setupSimulatedData <- data[rep(row.names(data), blocks + 0*data[[1]]),]
+  setupSimulatedData[["Row"]] <- as.factor(c(1:(blocks*nrow(data))))
   setupSimulatedData[["Block"]] <- as.factor(rep(1:blocks, nrow(data)))
   
   # Add several additional columns to the dataframe
@@ -279,11 +292,13 @@ createSimulatedData <- function(data, settings, simulationSettings, blocks, effe
   return(setupSimulatedData)
 }
 
+######################################################################################################################
 simulateResponse <- function(simulatedData, settings, simulationSettings) {
   response <- ropoisson(nrow(simulatedData), simulatedData[["Effect"]], simulationSettings$dispersion, settings$PowerLawPower, settings$Distribution)
   return(response)
 }
 
+######################################################################################################################
 createEvaluationGrid <- function(LocLower, LocUpper, NumberOfEvaluations) {
   csd <- c(0)
   effect <- c(0)
@@ -302,6 +317,7 @@ createEvaluationGrid <- function(LocLower, LocUpper, NumberOfEvaluations) {
   return(list(csd=csd, effect=effect))
 }
 
+######################################################################################################################
 normalAnalysis <- function(data, settings, modelSettings, debugSettings) {
   require(lsmeans)
   require(MASS)
@@ -345,6 +361,7 @@ normalAnalysis <- function(data, settings, modelSettings, debugSettings) {
   return(pvalues)
 }
 
+######################################################################################################################
 logNormalAnalysis <- function(data, settings, modelSettings, debugSettings) {
   # Wald and LR are identical as there is no LR equivalence test
   require(lsmeans)
@@ -367,6 +384,7 @@ logNormalAnalysis <- function(data, settings, modelSettings, debugSettings) {
     meanGMO <- summary(lsmeans)$lsmean[2]
     vcovLS = vcov(lsmeans)
     # GCI; this takes account of a possible covariance between predictions
+	# In case any of the draws is Inf (after exponentiation) the corresponding ratio is set to NaN and the pvalue is also set to NaN
     chi  <- resDF * resMS / rchisq(settings$NumberOfSimulationsGCI, resDF)
     random = mvrnorm(settings$NumberOfSimulationsGCI, c(0,0), vcovLS)*sqrt(chi/resMS)
     random[,1] = meanCMP + random[,1]
@@ -374,7 +392,7 @@ logNormalAnalysis <- function(data, settings, modelSettings, debugSettings) {
     random <- exp(random + chi/2) - 1
     random[random < modelSettings$smallGCI] <- modelSettings$smallGCI
     ratio <- random[,2]/random[,1]
-    ratio[ratio==Inf] = NaN
+    ratio[(random[,1]==Inf) | (random[,2]==Inf)] = NaN
     pLowerCGI = mean(ratio < settings$LocLower)  # If this is smaller than alfa: reject H0: esti < LocLower
     pUpperCGI = mean(ratio > settings$LocUpper)  # If this is smaller than alfa: reject H0: esti > LocUpper
     pvalues$Equi = max(pLowerCGI, pUpperCGI)     # Both one-sided hypothesis must be rejected
@@ -398,6 +416,7 @@ logNormalAnalysis <- function(data, settings, modelSettings, debugSettings) {
   # print(quantiles)
 }
 
+######################################################################################################################
 squareRootAnalysis <- function(data, settings, modelSettings, debugSettings) {
   # Wald and LR are identical as there is no LR equivalence test
   require(lsmeans)
@@ -434,12 +453,14 @@ squareRootAnalysis <- function(data, settings, modelSettings, debugSettings) {
   return(pvalues)
 }
 
+######################################################################################################################
 overdispersedPoissonAnalysis <- function(data, settings, modelSettings, debugSettings) {
+  # Fall back to Poisson in case the overdispersion is less than or equal to limitDispersion
   limitDispersion <- 1
   family <- "quasipoisson"
   # Prepare results list and fit H1; default method is DMETHOD=pearson
   pvalues <- list(Diff = c(NaN), Equi = c(NaN), Dispersion=c(NaN))
-  glmH1 <- glm(as.formula(modelSettings$formulaH1), family=family, data=data, etastart=data[["TransformedEffect"]])
+  glmH1 <- glm(as.formula(modelSettings$formulaH1), family=family, data=data, etastart=TransformedEffect)
   #print(paste0("Number of iteration ", glmH1$iter))
   resDF <- df.residual(glmH1)
   estDispersion <- summary(glmH1)$dispersion
@@ -500,12 +521,13 @@ overdispersedPoissonAnalysis <- function(data, settings, modelSettings, debugSet
   return(pvalues)
 }
 
+######################################################################################################################
 negativeBinomialAnalysis <- function(data, settings, modelSettings, debugSettings) {
   require(MASS)
 
   # Prepare results list and fit H1
   pvalues <- list(Diff = c(NaN), Equi = c(NaN), Dispersion=c(NaN))
-  glmH1 <- fitNB(as.formula(modelSettings$formulaH1), data, etastart=data[["TransformedEffect"]], method=modelSettings$NBmethod, lower=modelSettings$NBlower, upper=modelSettings$NBupper)
+  glmH1 <- fitNB(as.formula(modelSettings$formulaH1), data, etastart=TransformedEffect, method=modelSettings$NBmethod, lower=modelSettings$NBlower, upper=modelSettings$NBupper)
   # glmH1 <- glm.nb(as.formula(modelSettings$formulaH1), data=data, link=log, etastart=data[["TransformedEffect"]])
   resDF <- df.residual(glmH1)
   pvalues$Dispersion = glmH1$theta
@@ -547,6 +569,7 @@ negativeBinomialAnalysis <- function(data, settings, modelSettings, debugSetting
   return(pvalues)
 }
 
+######################################################################################################################
 fitNB <- function(model, data, etastart, method=c("MASS", "optimize"), lower=0.001, upper=10000) {
   if (method == "MASS") {
     glm <- glm.nb(model, data=data, link=log, etastart=etastart)
@@ -558,12 +581,14 @@ fitNB <- function(model, data, etastart, method=c("MASS", "optimize"), lower=0.0
   return(glm)
 }
 
+######################################################################################################################
 fitNBhelper <- function(model, data, theta) {
   agg = exp(theta)
   glm = glm(model, family=negative.binomial(agg), data=data)
   -2*logLik(glm)
 }
 
+######################################################################################################################
 monteCarloPowerAnalysis <- function(data, settings, modelSettings, blocks, effect, debugSettings) {
 
   DEBUG = TRUE
@@ -614,20 +639,20 @@ monteCarloPowerAnalysis <- function(data, settings, modelSettings, blocks, effec
     }
     # Fit models
     if (!is.na(match("LogNormal", settings$AnalysisMethods))) {
-      if (DEBUG) print(paste(k, "LogNormal"))
+      if (DEBUG) print(paste(k, "LN"))
       result <- logNormalAnalysis(simulatedData, settings, modelSettings, debugSettings)
       pValues$Diff[k, "LogNormal"] <- result$Diff
       pValues$Equi[k, "LogNormal"] <- result$Equi
     }
     if (!is.na(match("SquareRoot", settings$AnalysisMethods))) {
-      if (DEBUG) print(paste(k, "SquareRoot"))
+      if (DEBUG) print(paste(k, "SQ"))
       result <- squareRootAnalysis(simulatedData, settings, modelSettings, debugSettings)
       pValues$Diff[k, "SquareRoot"] <- result$Diff
       pValues$Equi[k, "SquareRoot"] <- result$Equi
     }
     # Fit overdispersed Poisson anyway to get the overdispersion parameter
     if ((!is.na(match("OverdispersedPoisson", settings$AnalysisMethods))) | (!is.na(match("NegativeBinomial", settings$AnalysisMethods)))) {
-      if (DEBUG) print(paste(k, "OverdispersedPoisson"))
+      if (DEBUG) print(paste(k, "OP"))
       result <- overdispersedPoissonAnalysis(simulatedData, settings, modelSettings, debugSettings)
       if (!is.na(match("OverdispersedPoisson", settings$AnalysisMethods))) {
         pValues$Diff[k, "OverdispersedPoisson"] <- result$Diff
@@ -635,7 +660,7 @@ monteCarloPowerAnalysis <- function(data, settings, modelSettings, blocks, effec
         pValues$Extra[k, "OPdisp"] <- result$Dispersion
       }
       if (!is.na(match("NegativeBinomial", settings$AnalysisMethods))) {
-        if (DEBUG) print(paste(k, "NegativeBinomial"))
+        if (DEBUG) print(paste(k, "NB"))
         if (!is.na(result$Dispersion)) {
           result <- negativeBinomialAnalysis(simulatedData, settings, modelSettings, debugSettings)
         }
@@ -659,6 +684,7 @@ monteCarloPowerAnalysis <- function(data, settings, modelSettings, blocks, effec
   return(pValues)
 }
 
+######################################################################################################################
 runPowerAnalysis <- function(data, settings) {
   
   # Compute evaluation grid

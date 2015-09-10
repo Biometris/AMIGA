@@ -16,6 +16,7 @@ CALLS     AM2_GET2SUBDIRS
 txconstru [tEndpoint] ENDPOINT ; deci=0
 scalar    limitDispersion ; 1
 scalar    r2NegbinUpper ; 10000
+scalar    limitExp ; 700
 
 " Import settings "
 txconstru [settingsFile] DIRECTORY, ENDPOINT, '-Settings.csv' ; deci=0
@@ -209,12 +210,19 @@ for [ntimes=nsubdir ; index=isub]
     calculate copyVcov = vcov
     calculate chi = dev/grchi(nGCI ; df)
     grmulti   [nvalues=nGCI ; vcov=copyVcov] random
-    calculate random[] = #pred + random[]*sqrt(chi/(dev/df))
-    calculate random[] = exp(random[] + chi/2) - 1
-    calculate random[] = bound(random[] ; smallGCI ; mis)
-    calculate ratio = random[2]/random[1]
-    calculate pLower = mean(ratio .lt. locLower)
-    calculate pUpper = mean(ratio .gt. locUpper)
+    calculate random[] = #pred + random[]*sqrt(chi/(dev/df)) + chi/2
+    " R produces a NaN when any of the ratios is infinity "
+    restrict  random[] ; random[].gt.limitExp ; null=null1,null2
+    restrict  random[]
+    if (null1.eq.0) .or. (null2.eq.0)
+        calculate pLower,pUpper = mis
+      else
+        calculate random[] = exp(random[]) - 1
+        calculate random[] = bound(random[] ; smallGCI ; mis)
+        calculate ratio = random[2]/random[1]
+        calculate pLower = mean(ratio .lt. locLower)
+        calculate pUpper = mean(ratio .gt. locUpper)
+    endif
     calculate equi[1]$[iDataset] = vmax(!p(pLower, pUpper))
 
     " SQ difference "
@@ -364,7 +372,7 @@ for [ntimes=nsubdir ; index=isub]
     else
       txconstru [Rresults] isubdir, '00-PvaluesLR.csv'
   endif
-  import    [print=*] Rresults ; isave=saveR
+  import    [print=* ; missing='NA' ; keep=row,col] Rresults ; isave=saveR
   pointer   [nvalues=which] compare
   variate   [nvalues=nDatasets] compare[]
   " Take special care of pvalues larger than 2 for equiOP and equiNB "
