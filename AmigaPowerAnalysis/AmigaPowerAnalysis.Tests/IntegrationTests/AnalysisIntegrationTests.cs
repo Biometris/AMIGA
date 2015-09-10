@@ -21,6 +21,10 @@ namespace AmigaPowerAnalysis.Tests.IntegrationTests {
             var filesPath = Path.Combine(_testPath, projectId);
             if (!Directory.Exists(filesPath)) {
                 Directory.CreateDirectory(filesPath);
+            } else {
+                var directory = new DirectoryInfo(filesPath);
+                directory.GetFiles().ToList().ForEach(f => f.Delete());
+                directory.GetDirectories().ToList().ForEach(f => f.Delete(true));
             }
             var comparisons = project.GetComparisons().ToList();
             for (int i = 0; i < comparisons.Count(); ++i) {
@@ -60,14 +64,15 @@ namespace AmigaPowerAnalysis.Tests.IntegrationTests {
                 FileName = genstatPath,
                 WindowStyle = ProcessWindowStyle.Hidden,
                 RedirectStandardOutput = true,
+                RedirectStandardError = true,
                 Arguments = string.Format("in=\"{0}\" /200 out=\"{1}\" /86 in2=\"{2}\" out2=\"{3}\"", scriptFilename, genstatOutputFilename, comparisonInputFilename, validationOutputFilename),
             };
-            using (Process exeProcess = Process.Start(startInfo)) {
-                exeProcess.Start();
-                while (!exeProcess.StandardOutput.EndOfStream) {
-                    string line = exeProcess.StandardOutput.ReadLine();
-                    Trace.WriteLine(line);
-                }
+            using (var exeProcess = Process.Start(startInfo)) {
+                var output = exeProcess.StandardOutput.ReadToEnd();
+                Trace.WriteLine(output);
+                var error = exeProcess.StandardError.ReadToEnd();
+                Trace.WriteLine(error);
+                exeProcess.WaitForExit();
             }
         }
 
