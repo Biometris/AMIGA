@@ -36,9 +36,9 @@ namespace AmigaPowerAnalysis.Tests.Mocks.Projects {
 
             project.AddEndpoint(new Endpoint("Endpoint (P)", PEndpoint));
             project.AddEndpoint(new Endpoint("Endpoint (OP)", OPEndpoint));
-            project.AddEndpoint(new Endpoint("Endpoint (NB)", NBEndpoint));
-            project.AddEndpoint(new Endpoint("Endpoint (PLN)", PLNEndpoint));
-            project.AddEndpoint(new Endpoint("Endpoint (PL)", PLEndpoint));
+            //project.AddEndpoint(new Endpoint("Endpoint (NB)", NBEndpoint));
+            //project.AddEndpoint(new Endpoint("Endpoint (PLN)", PLNEndpoint));
+            //project.AddEndpoint(new Endpoint("Endpoint (PL)", PLEndpoint));
 
             project.PowerCalculationSettings.NumberOfRatios = 1;
             project.PowerCalculationSettings.NumberOfReplications = new List<int>() { 4 };

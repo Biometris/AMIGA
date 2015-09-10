@@ -31,7 +31,6 @@ if (open2.eq.0)
     " Called from C#: loop over endpoint defined by input on channel 2 "
     " Loop over all reps/effects/datasets "
     text      maindir  ; ''
-    variate   endpoint ; !(-1)
     variate   reps     ; !(-1)
     variate   effects  ; !(-1)
     variate   datasets ; !(-1)
@@ -44,6 +43,7 @@ if (open2.eq.0)
     read      [print=* ; channel=surname] endpoint
     close     channel=surname
     print     dir[1], endpoint ; decimals=0
+    variate   endpoint ; !(-1)
 endif
 
 " Additional settings "

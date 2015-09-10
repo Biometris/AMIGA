@@ -33,10 +33,10 @@ namespace AmigaPowerAnalysis.Tests.IntegrationTests {
                 var filenamePdf = Path.Combine(filesPath, string.Format("Comparison-{0}.pdf", i));
                 var singleComparisonReportGenerator = new SingleComparisonReportGenerator(comparisons[i], filesPath);
                 singleComparisonReportGenerator.SaveAsPdf(filenamePdf);
-                runValidationGenstat(i, filesPath);
             }
             var multiComparisonReportGenerator = new MultiComparisonReportGenerator(comparisons, filesPath);
             multiComparisonReportGenerator.SaveAsPdf(Path.Combine(filesPath, "Report.pdf"));
+            runValidationGenstat(0, filesPath);
         }
 
         private static void runValidationGenstat(int comparisonId, string filesPath) {
