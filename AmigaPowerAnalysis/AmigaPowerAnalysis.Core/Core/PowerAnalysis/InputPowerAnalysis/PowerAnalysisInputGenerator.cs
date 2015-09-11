@@ -40,7 +40,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                 NumberOfModifiers = (comparison.Endpoint.UseModifier ? comparison.Endpoint.NonInteractionFactors.Count() : 0),
                 SignificanceLevel = powerCalculationSettings.SignificanceLevel,
                 NumberOfRatios = powerCalculationSettings.NumberOfRatios,
-                NumberOfReplications = powerCalculationSettings.NumberOfReplications,
+                NumberOfReplications = (powerCalculationSettings.PowerCalculationMethod == PowerCalculationMethod.Simulate) ? powerCalculationSettings.NumberOfReplications : new List<int>() { powerCalculationSettings.NumberOfReplications.Max() },
                 ExperimentalDesignType = designSettings.ExperimentalDesignType,
                 PowerCalculationMethodType = powerCalculationSettings.PowerCalculationMethod,
                 UseWaldTest = powerCalculationSettings.UseWaldTest,

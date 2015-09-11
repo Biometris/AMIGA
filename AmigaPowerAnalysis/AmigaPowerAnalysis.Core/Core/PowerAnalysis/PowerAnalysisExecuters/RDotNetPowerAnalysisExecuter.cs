@@ -91,20 +91,23 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                             try {
                                 // Update progress state
                                 if (timerCounter > 0) {
-                                    TimeSpan elapsed = _timer.Elapsed;
-                                    elapsedTime = String.Format("{0:00}:{1:00}:{2:00}", elapsed.Hours, elapsed.Minutes, Math.Round(elapsed.Seconds + elapsed.Milliseconds / 1000.0));
-                                    long ticks = Convert.ToInt64(Convert.ToDouble(elapsed.Ticks) * (timerTotalLoops - timerCounter) / timerCounter);
-                                    TimeSpan remaining = TimeSpan.FromTicks(ticks);
-                                    remainingTime = String.Format("{0:00}:{1:00}:{2:00}", remaining.Hours, remaining.Minutes, Math.Round(remaining.Seconds + remaining.Milliseconds / 1000.0));
+                                    elapsedTime = string.Format("{0:hh\\:mm\\:ss}", _timer.Elapsed);
+                                    var ticks = Convert.ToInt64(Convert.ToDouble(_timer.Elapsed.Ticks) * (timerTotalLoops - timerCounter) / timerCounter);
+                                    remainingTime = string.Format("{0:hh\\:mm\\:ss}", TimeSpan.FromTicks(ticks));
                                 }
                                 progressState.Update(string.Format("Endpoint {1}/{2}, replicate {3}/{4}, effect {5}/{6}   {0}\nElapsedTime: {7}    RemainingTime: {8}", inputPowerAnalysis.Endpoint, inputPowerAnalysis.ComparisonId + 1, inputPowerAnalysis.NumberOfComparisons, i + 1, inputPowerAnalysis.NumberOfReplications.Count, j + 1, effects.Count, elapsedTime, remainingTime), 100 * ((double)counter / totalLoops));
 
                                 // Define settings for Debugging the Rscript
                                 rEngine.EvaluateNoReturn(string.Format("debugSettings = list(iRep={0}, iEffect={1}, iDataset=NaN)", i + 1, j + 1));
 
-                                // Run Monte Carlo
-                                var output = runMonteCarloSimulation(effect, blocks, inputPowerAnalysis.SelectedAnalysisMethodTypes, inputPowerAnalysis.NumberOfSimulatedDataSets, rEngine);
-                                outputResults.Add(output);
+                                if (inputPowerAnalysis.PowerCalculationMethodType == PowerCalculationMethod.Approximate) {
+                                    var output = runLylesApproximation(effect, blocks, inputPowerAnalysis.SelectedAnalysisMethodTypes, inputPowerAnalysis.NumberOfSimulatedDataSets, rEngine);
+                                    outputResults.AddRange(output);
+                                } else {
+                                    // Run Monte Carlo
+                                    var output = runMonteCarloSimulation(effect, blocks, inputPowerAnalysis.SelectedAnalysisMethodTypes, inputPowerAnalysis.NumberOfSimulatedDataSets, rEngine);
+                                    outputResults.Add(output);
+                                }
                             }
                             catch (OperationCanceledException ex) {
                                 throw ex;
@@ -151,6 +154,12 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             }
         }
 
+        private static List<OutputPowerAnalysisRecord> runLylesApproximation(EffectCSD effect, int blocks, AnalysisMethodType selectedAnalysisMethodTypes, int monteCarloSimulations, LoggingRDotNetEngine rEngine) {
+            var outputRecords = new List<OutputPowerAnalysisRecord>();
+            throw new NotImplementedException();
+            return outputRecords;
+        }
+
         private static OutputPowerAnalysisRecord runMonteCarloSimulation(EffectCSD effect, int blocks, AnalysisMethodType selectedAnalysisMethodTypes, int monteCarloSimulations, LoggingRDotNetEngine rEngine) {
             rEngine.SetSymbol("effect", effect.TransformedEfffect);
             rEngine.EvaluateNoReturn("pValues <- monteCarloPowerAnalysis(inputData, settings, modelSettings, blocks, effect, debugSettings)");
@@ -179,17 +188,17 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             return output;
         }
 
-        private static void createAnalysisInputFile(InputPowerAnalysis inputPowerAnalysis, string filename) {
-            using (var file = new System.IO.StreamWriter(filename)) {
-                file.WriteLine(createPartialAnalysisDesignMatrix(inputPowerAnalysis));
-                file.Close();
-            }
-        }
-
         private static void createAnalysisSettingsFile(InputPowerAnalysis inputPowerAnalysis, string filename) {
             using (var file = new System.IO.StreamWriter(filename)) {
                 Func<string, object, string> formatDelegate = (parameter, setting) => { return string.Format("{0}, {1}", parameter, setting); };
                 file.WriteLine(inputPowerAnalysis.PrintSettings(formatDelegate));
+                file.Close();
+            }
+        }
+
+        private static void createAnalysisInputFile(InputPowerAnalysis inputPowerAnalysis, string filename) {
+            using (var file = new System.IO.StreamWriter(filename)) {
+                file.WriteLine(createPartialAnalysisDesignMatrix(inputPowerAnalysis));
                 file.Close();
             }
         }
