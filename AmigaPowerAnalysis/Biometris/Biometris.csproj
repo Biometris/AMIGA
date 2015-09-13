@@ -79,6 +79,7 @@
     <Compile Include="Logger\FileLogger.cs" />
     <Compile Include="Logger\ILogger.cs" />
     <Compile Include="ProgressReporting\CompositeProgressState.cs" />
+    <Compile Include="ProgressReporting\TimingProgressReport.cs" />
     <Compile Include="ProgressReporting\SimpleProgressState.cs" />
     <Compile Include="ProgressReporting\IProgressState.cs" />
     <Compile Include="ProgressReporting\ProgressReport.cs" />

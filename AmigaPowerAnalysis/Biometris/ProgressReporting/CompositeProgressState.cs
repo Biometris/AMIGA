@@ -86,15 +86,6 @@ namespace Biometris.ProgressReporting {
         }
 
         /// <summary>
-        /// Action on change of current activity
-        /// </summary>
-        protected virtual void OnCurrentActivityChanged() {
-            if (CurrentActivityChanged != null) {
-                CurrentActivityChanged(this, new EventArgs());
-            }
-        }
-
-        /// <summary>
         /// Handles a sub-progress activity changed event.
         /// </summary>
         /// <param name="sender"></param>
@@ -109,7 +100,23 @@ namespace Biometris.ProgressReporting {
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void OnSubProgressStateChanged(object sender, EventArgs e) {
+        protected void OnSubProgressStateChanged(object sender, EventArgs e) {
+            OnCurrentProgressChanged();
+        }
+
+        /// <summary>
+        /// Action on change of current activity.
+        /// </summary>
+        protected virtual void OnCurrentActivityChanged() {
+            if (CurrentActivityChanged != null) {
+                CurrentActivityChanged(this, new EventArgs());
+            }
+        }
+
+        /// <summary>
+        /// Action on change of current progress.
+        /// </summary>
+        protected virtual void OnCurrentProgressChanged() {
             if (ProgressStateChanged != null) {
                 ProgressStateChanged(this, new EventArgs());
             }
@@ -150,5 +157,6 @@ namespace Biometris.ProgressReporting {
         /// Fires when the current activity message has changed
         /// </summary>
         public event ProgressStateChangedEventHandler CurrentActivityChanged;
+
     }
 }

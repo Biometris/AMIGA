@@ -52,6 +52,8 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Numerics\Optimization\OneDimensionalOptimizationTests.cs" />
+    <Compile Include="ProgressReporting\TimingProgressReportTests.cs" />
+    <Compile Include="ProgressReporting\ProgressReportTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Statistics\Distributions\PowerLawDistributionTests.cs" />
     <Compile Include="Statistics\Distributions\NegativeBinomialDistributionTests.cs" />
