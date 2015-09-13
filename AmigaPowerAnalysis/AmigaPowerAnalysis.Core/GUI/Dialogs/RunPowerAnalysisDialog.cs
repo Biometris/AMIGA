@@ -34,6 +34,8 @@ namespace AmigaPowerAnalysis.GUI {
                 var progressReporter = new ProgressReporter(p => {
                     labelCurrentActivity.Text = p.CurrentActivity;
                     progressBarCurrentProgress.Value = (int)p.Progress;
+                    labelElapsedValue.Text = string.Format("{0:hh\\:mm\\:ss}", p.Elapsed);
+                    labelRemainingValue.Text = string.Format("{0:hh\\:mm\\:ss}", p.Remaining);
                 }, _cancellationTokenSource.Token);
                 await runSimulation(progressReporter.ProgressReport);
             } catch (OperationCanceledException) {

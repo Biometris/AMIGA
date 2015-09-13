@@ -24,11 +24,9 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
         }
 
         private string _tempPath;
-        private Stopwatch _timer;
 
         public RDotNetPowerAnalysisExecuter(string tempPath) {
             _tempPath = Path.GetFullPath(tempPath.Substring(0, tempPath.Length));
-            _timer = new Stopwatch();
         }
 
         public override OutputPowerAnalysis Run(InputPowerAnalysis inputPowerAnalysis, ProgressState progressState) {
@@ -74,13 +72,8 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                     var totalLoops = inputPowerAnalysis.NumberOfReplications.Count * effects.Count;
                     var counter = 0;
                     // Structures for timing
-                    var elapsedTime = "--:--:--";
-                    var remainingTime = "--:--:--";
                     var timerCounter = inputPowerAnalysis.ComparisonId * inputPowerAnalysis.NumberOfReplications.Count * effects.Count;
                     var timerTotalLoops = inputPowerAnalysis.NumberOfComparisons * inputPowerAnalysis.NumberOfReplications.Count * effects.Count;
-                    if (timerCounter == 0) {
-                        _timer.Start();
-                    }
                     for (int i = 0; i < inputPowerAnalysis.NumberOfReplications.Count; ++i) {
                         var blocks = inputPowerAnalysis.NumberOfReplications[i];
                         rEngine.EvaluateNoReturn("");
@@ -89,13 +82,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                         for (int j = 0; j < effects.Count; ++j) {
                             var effect = effects[j];
                             try {
-                                // Update progress state
-                                if (timerCounter > 0) {
-                                    elapsedTime = string.Format("{0:hh\\:mm\\:ss}", _timer.Elapsed);
-                                    var ticks = Convert.ToInt64(Convert.ToDouble(_timer.Elapsed.Ticks) * (timerTotalLoops - timerCounter) / timerCounter);
-                                    remainingTime = string.Format("{0:hh\\:mm\\:ss}", TimeSpan.FromTicks(ticks));
-                                }
-                                progressState.Update(string.Format("Endpoint {1}/{2}, replicate {3}/{4}, effect {5}/{6}   {0}\nElapsedTime: {7}    RemainingTime: {8}", inputPowerAnalysis.Endpoint, inputPowerAnalysis.ComparisonId + 1, inputPowerAnalysis.NumberOfComparisons, i + 1, inputPowerAnalysis.NumberOfReplications.Count, j + 1, effects.Count, elapsedTime, remainingTime), 100 * ((double)counter / totalLoops));
+                                progressState.Update(string.Format("Endpoint {1}/{2}, replicate {3}/{4}, effect {5}/{6}: {0}", inputPowerAnalysis.Endpoint, inputPowerAnalysis.ComparisonId + 1, inputPowerAnalysis.NumberOfComparisons, i + 1, inputPowerAnalysis.NumberOfReplications.Count, j + 1, effects.Count));
 
                                 // Define settings for Debugging the Rscript
                                 rEngine.EvaluateNoReturn(string.Format("debugSettings = list(iRep={0}, iEffect={1}, iDataset=NaN)", i + 1, j + 1));
@@ -128,7 +115,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                             rEngine.EvaluateNoReturn("");
                         }
                     }
-                    progressState.Update(string.Format("done", 100));
+                    progressState.Update(string.Format("Analysis complete", 100));
                 }
                 CsvWriter.WriteToCsvFile(comparisonOutputFilename, ",", outputResults);
                 logger.WriteToFile();

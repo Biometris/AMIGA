@@ -26,19 +26,23 @@
             this.progressBarCurrentProgress = new System.Windows.Forms.ProgressBar();
             this.labelCurrentActivity = new System.Windows.Forms.Label();
             this.buttonCancel = new System.Windows.Forms.Button();
+            this.labelElapsed = new System.Windows.Forms.Label();
+            this.labelRemaining = new System.Windows.Forms.Label();
+            this.labelElapsedValue = new System.Windows.Forms.Label();
+            this.labelRemainingValue = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // progressBarCurrentProgress
             // 
-            this.progressBarCurrentProgress.Location = new System.Drawing.Point(23, 45);
+            this.progressBarCurrentProgress.Location = new System.Drawing.Point(12, 67);
             this.progressBarCurrentProgress.Name = "progressBarCurrentProgress";
-            this.progressBarCurrentProgress.Size = new System.Drawing.Size(342, 25);
+            this.progressBarCurrentProgress.Size = new System.Drawing.Size(365, 25);
             this.progressBarCurrentProgress.TabIndex = 0;
             // 
             // labelCurrentActivity
             // 
             this.labelCurrentActivity.AutoSize = true;
-            this.labelCurrentActivity.Location = new System.Drawing.Point(20, 19);
+            this.labelCurrentActivity.Location = new System.Drawing.Point(12, 14);
             this.labelCurrentActivity.Name = "labelCurrentActivity";
             this.labelCurrentActivity.Size = new System.Drawing.Size(119, 13);
             this.labelCurrentActivity.TabIndex = 1;
@@ -46,7 +50,7 @@
             // 
             // buttonCancel
             // 
-            this.buttonCancel.Location = new System.Drawing.Point(290, 85);
+            this.buttonCancel.Location = new System.Drawing.Point(302, 101);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 2;
@@ -54,11 +58,51 @@
             this.buttonCancel.UseVisualStyleBackColor = true;
             this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
             // 
+            // labelElapsed
+            // 
+            this.labelElapsed.AutoSize = true;
+            this.labelElapsed.Location = new System.Drawing.Point(12, 43);
+            this.labelElapsed.Name = "labelElapsed";
+            this.labelElapsed.Size = new System.Drawing.Size(73, 13);
+            this.labelElapsed.TabIndex = 3;
+            this.labelElapsed.Text = "Time elapsed:";
+            // 
+            // labelRemaining
+            // 
+            this.labelRemaining.AutoSize = true;
+            this.labelRemaining.Location = new System.Drawing.Point(162, 43);
+            this.labelRemaining.Name = "labelRemaining";
+            this.labelRemaining.Size = new System.Drawing.Size(81, 13);
+            this.labelRemaining.TabIndex = 4;
+            this.labelRemaining.Text = "Time remaining:";
+            // 
+            // labelElapsedValue
+            // 
+            this.labelElapsedValue.AutoSize = true;
+            this.labelElapsedValue.Location = new System.Drawing.Point(91, 43);
+            this.labelElapsedValue.Name = "labelElapsedValue";
+            this.labelElapsedValue.Size = new System.Drawing.Size(43, 13);
+            this.labelElapsedValue.TabIndex = 5;
+            this.labelElapsedValue.Text = "0:00:00";
+            // 
+            // labelRemainingValue
+            // 
+            this.labelRemainingValue.AutoSize = true;
+            this.labelRemainingValue.Location = new System.Drawing.Point(249, 43);
+            this.labelRemainingValue.Name = "labelRemainingValue";
+            this.labelRemainingValue.Size = new System.Drawing.Size(43, 13);
+            this.labelRemainingValue.TabIndex = 6;
+            this.labelRemainingValue.Text = "0:00:00";
+            // 
             // RunPowerAnalysisDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(386, 118);
+            this.ClientSize = new System.Drawing.Size(389, 136);
+            this.Controls.Add(this.labelRemainingValue);
+            this.Controls.Add(this.labelElapsedValue);
+            this.Controls.Add(this.labelRemaining);
+            this.Controls.Add(this.labelElapsed);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.labelCurrentActivity);
             this.Controls.Add(this.progressBarCurrentProgress);
@@ -81,5 +125,9 @@
         private System.Windows.Forms.ProgressBar progressBarCurrentProgress;
         private System.Windows.Forms.Label labelCurrentActivity;
         private System.Windows.Forms.Button buttonCancel;
+        private System.Windows.Forms.Label labelElapsed;
+        private System.Windows.Forms.Label labelRemaining;
+        private System.Windows.Forms.Label labelElapsedValue;
+        private System.Windows.Forms.Label labelRemainingValue;
     }
 }
