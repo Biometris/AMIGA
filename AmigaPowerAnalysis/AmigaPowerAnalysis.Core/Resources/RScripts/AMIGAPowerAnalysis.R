@@ -210,6 +210,7 @@ readSettings <- function(settingsFile) {
 ######################################################################################################################
 createModelSettings <- function(data, settings) {
   modelSettings <- list()
+  modelSettings$ndata = nrow(data)
   colnames <- colnames(data)
 
   # Create dataframe for prediction; only use GMO columns and Dummy columns
@@ -235,7 +236,7 @@ createModelSettings <- function(data, settings) {
   modelSettings$formulaH1 <- paste0("Response ~ ", paste0(nameH1, collapse=" + "))
 
   # Additional settings
-  modelSettings$smallGCI = 0.0001 # Bound on back-transformed values for the LOG-transform
+  modelSettings$smallGCI = 0.0001       # Bound on back-transformed values for the LOG-transform
 
   # Settings for fitting the NB model 
   modelSettings$NBmethod = "optimize"   # method to fit the NB model (MASS, optimize)
@@ -251,7 +252,6 @@ createSimulationSettings <- function(settings) {
 
   # Define dispersion parameter
   simulationSettings$dispersion <- ropoissonDispersion(settings$OverallMean, settings$CVComparator, settings$PowerLawPower, settings$Distribution)  
-  print(paste0("Dispersion parameter: ", simulationSettings$dispersion))
 
   # Add blocking effect to model 
   if (settings$ExperimentalDesignType == "RandomizedCompleteBlocks") {
@@ -384,7 +384,7 @@ logNormalAnalysis <- function(data, settings, modelSettings, debugSettings) {
     meanGMO <- summary(lsmeans)$lsmean[2]
     vcovLS = vcov(lsmeans)
     # GCI; this takes account of a possible covariance between predictions
-	# In case any of the draws is Inf (after exponentiation) the corresponding ratio is set to NaN and the pvalue is also set to NaN
+    # In case any of the draws is Inf (after exponentiation) the corresponding ratio is set to NaN and the pvalue is also set to NaN
     chi  <- resDF * resMS / rchisq(settings$NumberOfSimulationsGCI, resDF)
     random = mvrnorm(settings$NumberOfSimulationsGCI, c(0,0), vcovLS)*sqrt(chi/resMS)
     random[,1] = meanCMP + random[,1]
@@ -591,7 +591,7 @@ fitNBhelper <- function(model, data, theta) {
 ######################################################################################################################
 monteCarloPowerAnalysis <- function(data, settings, modelSettings, blocks, effect, debugSettings) {
 
-  DEBUG = TRUE
+  DEBUG = FALSE
 
   # Global settings
   # debugSettings$iRep            counting Reps loop (integer)
