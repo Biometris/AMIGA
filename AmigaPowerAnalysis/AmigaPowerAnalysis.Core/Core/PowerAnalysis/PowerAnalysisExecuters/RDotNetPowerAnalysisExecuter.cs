@@ -38,7 +38,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
 
             var applicationDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             var scriptsDirectory = string.Format(@"{0}\Resources\RScripts", applicationDirectory);
-            var scriptFilename = Path.Combine(scriptsDirectory, "AMIGAPowerAnalysis.R");
+            var scriptFiles = new List<string>() { "AMIGAPowerAnalysis.R", "AMIGAPowerLyles.R" };
 
             var comparisonInputFilename = Path.Combine(_tempPath, string.Format("{0}-Input.csv", inputPowerAnalysis.ComparisonId));
             var comparisonSettingsFilename = Path.Combine(_tempPath, string.Format("{0}-Settings.csv", inputPowerAnalysis.ComparisonId));
@@ -55,7 +55,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             try {
                 var errorList = new List<string>();
                 using (var rEngine = new LoggingRDotNetEngine(logger)) {
-                    progressState.Update(string.Format("Analysis of endpoint: {0}, initializing R...", inputPowerAnalysis.Endpoint), 0);
+                    progressState.Update(string.Format("Analysis of endpoint: {0}, initializing R...", inputPowerAnalysis.Endpoint));
 
                     rEngine.LoadLibrary("MASS");
                     rEngine.LoadLibrary("lsmeans");
@@ -63,7 +63,10 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                     rEngine.LoadLibrary("reshape");
                     rEngine.LoadLibrary("mvtnorm");
                     rEngine.EvaluateNoReturn("#========== Reading script and data");
-                    rEngine.EvaluateNoReturn(string.Format(@"source('{0}')", scriptFilename.Replace("\\", "/")));
+                    foreach (var scriptFile in scriptFiles) {
+                        var filePath = Path.Combine(scriptsDirectory, scriptFile).Replace("\\", "/");
+                        rEngine.EvaluateNoReturn(string.Format(@"source('{0}')", filePath));
+                    }
                     rEngine.EvaluateNoReturn(string.Format("inputData <- readDataFile('{0}')", comparisonInputFilename.Replace("\\", "/")));
                     rEngine.EvaluateNoReturn("#========== Creating settings");
                     rEngine.EvaluateNoReturn(string.Format("settings <- readSettings('{0}')", comparisonSettingsFilename.Replace("\\", "/")));
@@ -72,9 +75,6 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
 
                     var totalLoops = inputPowerAnalysis.NumberOfReplications.Count * effects.Count;
                     var counter = 0;
-                    // Structures for timing
-                    var timerCounter = inputPowerAnalysis.ComparisonId * inputPowerAnalysis.NumberOfReplications.Count * effects.Count;
-                    var timerTotalLoops = inputPowerAnalysis.NumberOfComparisons * inputPowerAnalysis.NumberOfReplications.Count * effects.Count;
                     for (int i = 0; i < inputPowerAnalysis.NumberOfReplications.Count; ++i) {
                         var blocks = inputPowerAnalysis.NumberOfReplications[i];
                         rEngine.EvaluateNoReturn("");
@@ -83,7 +83,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                         for (int j = 0; j < effects.Count; ++j) {
                             var effect = effects[j];
                             try {
-                                progressState.Update(string.Format("Endpoint {1}/{2}, replicate {3}/{4}, effect {5}/{6}: {0}", inputPowerAnalysis.Endpoint, inputPowerAnalysis.ComparisonId + 1, inputPowerAnalysis.NumberOfComparisons, i + 1, inputPowerAnalysis.NumberOfReplications.Count, j + 1, effects.Count));
+                                progressState.Update(string.Format("Endpoint {1}/{2}, replicate {3}/{4}, effect {5}/{6}: {0}", inputPowerAnalysis.Endpoint, inputPowerAnalysis.ComparisonId + 1, inputPowerAnalysis.NumberOfComparisons, i + 1, inputPowerAnalysis.NumberOfReplications.Count, j + 1, effects.Count), (double)counter / totalLoops * 100);
 
                                 // Define settings for Debugging the Rscript
                                 rEngine.EvaluateNoReturn(string.Format("debugSettings = list(iRep={0}, iEffect={1}, iDataset=NaN)", i + 1, j + 1));
@@ -112,7 +112,6 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                                 errorList.Add(msg);
                             }
                             counter++;
-                            timerCounter++;
                             rEngine.EvaluateNoReturn("");
                         }
                     }
@@ -142,9 +141,37 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             }
         }
 
-        private static List<OutputPowerAnalysisRecord> runLylesApproximation(EffectCSD effect, int blocks, AnalysisMethodType selectedAnalysisMethodTypes, int monteCarloSimulations, LoggingRDotNetEngine rEngine) {
+        private static List<OutputPowerAnalysisRecord> runLylesApproximation(EffectCSD effect, int maxBlocks, AnalysisMethodType selectedAnalysisMethodTypes, int monteCarloSimulations, LoggingRDotNetEngine rEngine) {
+            rEngine.SetSymbol("effect", effect.TransformedEfffect);
+            rEngine.EvaluateNoReturn("pValues <- lylesPowerAnalysis(inputData, settings, modelSettings, blocks, effect, debugSettings)");
             var outputRecords = new List<OutputPowerAnalysisRecord>();
-            throw new NotImplementedException();
+            var rows = rEngine.EvaluateInteger("nrow(pValues$Extra)");
+            for (int i = 0; i < rows; ++i) {
+                var blocks = rEngine.EvaluateInteger(string.Format("pValues$Extra[{0},\"Reps\"]", i + 1));
+                var record = new OutputPowerAnalysisRecord() {
+                    ConcernStandardizedDifference = effect.CSD,
+                    Effect = effect.Effect,
+                    TransformedEffect = effect.TransformedEfffect,
+                    NumberOfReplications = blocks,
+                };
+                if (selectedAnalysisMethodTypes.Has(AnalysisMethodType.LogNormal)) {
+                    record.PowerDifferenceLogNormal = rEngine.EvaluateDouble(string.Format("pValues$Diff[{0},\"LogNormal\"]", i + 1));
+                    record.PowerEquivalenceLogNormal = rEngine.EvaluateDouble(string.Format("pValues$Equi[{0},\"LogNormal\"]", i + 1));
+                }
+                if (selectedAnalysisMethodTypes.Has(AnalysisMethodType.SquareRoot)) {
+                    record.PowerDifferenceSquareRoot = rEngine.EvaluateDouble(string.Format("pValues$Diff[{0},\"SquareRoot\"]", i + 1));
+                    record.PowerEquivalenceSquareRoot = rEngine.EvaluateDouble(string.Format("pValues$Equi[{0},\"SquareRoot\"]", i + 1));
+                }
+                if (selectedAnalysisMethodTypes.Has(AnalysisMethodType.OverdispersedPoisson)) {
+                    record.PowerDifferenceOverdispersedPoisson = rEngine.EvaluateDouble(string.Format("pValues$Diff[{0},\"OverdispersedPoisson\"]", i + 1));
+                    record.PowerEquivalenceOverdispersedPoisson = rEngine.EvaluateDouble(string.Format("pValues$Equi[{0},\"OverdispersedPoisson\"]", i + 1));
+                }
+                if (selectedAnalysisMethodTypes.Has(AnalysisMethodType.NegativeBinomial)) {
+                    record.PowerDifferenceNegativeBinomial = rEngine.EvaluateDouble(string.Format("pValues$Diff[{0},\"NegativeBinomial\"]", i + 1));
+                    record.PowerEquivalenceNegativeBinomial = rEngine.EvaluateDouble(string.Format("pValues$Equi[{0},\"NegativeBinomial\"]", i + 1));
+                }
+                outputRecords.Add(record);
+            }
             return outputRecords;
         }
 

@@ -82,6 +82,11 @@ namespace AmigaPowerAnalysis.Tests.IntegrationTests {
         }
 
         [TestMethod]
+        public void FullProjectIntegrationTests_MockSimpleLyles() {
+            runProject(MockProjectsCreator.MockSimpleLyles(), "SimpleLyles");
+        }
+
+        [TestMethod]
         public void FullProjectIntegrationTests_MockSimpleOP() {
             runProject(MockProjectsCreator.MockSimpleOP(), "Simple_OP");
         }

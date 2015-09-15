@@ -48,6 +48,24 @@ namespace AmigaPowerAnalysis.Tests.Mocks.Projects {
             return project;
         }
 
+        public static Project MockSimpleLyles() {
+            var project = new Project();
+
+            project.AddEndpoint(new Endpoint("Endpoint (P)", PEndpoint));
+            project.AddEndpoint(new Endpoint("Endpoint (OP)", OPEndpoint));
+            project.AddEndpoint(new Endpoint("Endpoint (NB)", NBEndpoint));
+            project.AddEndpoint(new Endpoint("Endpoint (PLN)", PLNEndpoint));
+            project.AddEndpoint(new Endpoint("Endpoint (PL)", PLEndpoint));
+
+            project.PowerCalculationSettings.PowerCalculationMethod = PowerCalculationMethod.Approximate;
+            project.PowerCalculationSettings.NumberOfRatios = 1;
+            project.PowerCalculationSettings.NumberOfReplications = new List<int>() { 2, 4, 8 };
+            project.PowerCalculationSettings.NumberOfSimulatedDataSets = 10;
+            project.PowerCalculationSettings.SelectedAnalysisMethodTypes = AnalysisMethodType.LogNormal | AnalysisMethodType.SquareRoot | AnalysisMethodType.OverdispersedPoisson | AnalysisMethodType.NegativeBinomial;
+
+            return project;
+        }
+
         public static Project MockProject1() {
             var project = new Project();
 
