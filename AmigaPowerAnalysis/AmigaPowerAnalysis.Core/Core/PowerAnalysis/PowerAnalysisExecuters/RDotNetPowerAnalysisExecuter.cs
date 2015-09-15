@@ -32,7 +32,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
         public override OutputPowerAnalysis Run(InputPowerAnalysis inputPowerAnalysis, ProgressState progressState) {
             progressState.Update(string.Format("Analysis of endpoint: {0}, loading data...", inputPowerAnalysis.Endpoint), 0);
 
-            inputPowerAnalysis.IsOutputSimulatedData = true;
+            inputPowerAnalysis.IsOutputSimulatedData = false;
             inputPowerAnalysis.NumberOfSimulationsGCI = 100000;
             inputPowerAnalysis.NumberOfSimulationsLylesMethod = 100000;
 
@@ -61,6 +61,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                     rEngine.LoadLibrary("lsmeans");
                     rEngine.LoadLibrary("stringr");
                     rEngine.LoadLibrary("reshape");
+                    rEngine.LoadLibrary("mvtnorm");
                     rEngine.EvaluateNoReturn("#========== Reading script and data");
                     rEngine.EvaluateNoReturn(string.Format(@"source('{0}')", scriptFilename.Replace("\\", "/")));
                     rEngine.EvaluateNoReturn(string.Format("inputData <- readDataFile('{0}')", comparisonInputFilename.Replace("\\", "/")));

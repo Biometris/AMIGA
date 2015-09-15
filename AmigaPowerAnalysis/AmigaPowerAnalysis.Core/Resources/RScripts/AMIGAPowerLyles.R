@@ -3,8 +3,6 @@
 # 2. Fitting the NB distribution with fixed theta gives wrong standard errors.
 #    Standard errors need to be divided by the squared root of the dispersion parameter
 
-require(mvtnorm)
-
 ######################################################################################################################
 createSyntheticData <- function(simulatedData, settings, simulationSettings, multiplyWeight) {
   require(reshape)  # for untable()
@@ -32,7 +30,10 @@ logNormalLyles <- function(data, settings, modelSettings, nreps, multiplyWeight)
 
   # Transform data (this is done locally)
   data[["Response"]] = log(data[["Response"]]+1)
-  print(nrow(data))
+  locLower <- log(settings$LocLower + 1)
+  locUpper <- log(settings$LocUpper + 1)
+  data[["LowOffset"]][ data[["LowOffset"]]==settings$TransformLocLower ] = locLower
+  data[["UppOffset"]][ data[["UppOffset"]]==settings$TransformLocUpper ] = locUpper
   # Estimate dispersion parameter by mean of Variance
   Means <- tapply(data[["Weight"]] * data[["Response"]], data[["Row"]], sum)/multiplyWeight
   expanded2 <- (data[["Response"]] - Means[data[["Row"]]])^2
@@ -55,8 +56,66 @@ logNormalLyles <- function(data, settings, modelSettings, nreps, multiplyWeight)
     estiEffect <- as.numeric(glmH1$coef[2])
     seEffect <- sqrt(vcov(glmH1)[2,2]) / sigma1
     ncDiff <- (abs(estiEffect)/seEffect)^2
-    ncEquiLow <- (estiEffect-settings$TransformLocLower)/seEffect
-    ncEquiUpp <- (estiEffect-settings$TransformLocUpper)/seEffect
+    ncEquiLow <- (estiEffect-locLower)/seEffect
+    ncEquiUpp <- (estiEffect-locUpper)/seEffect
+  } else {
+    # LR: fit alternative models
+    # Difference test
+    glmH0 <- lm(modelSettings$formulaH0, data=data, weight=Weight)
+    ncDiff <- glmH0$df.residual*summary(glmH0)$sigma^2 - glmH1$df.residual*summary(glmH1)$sigma^2
+    ncDiff[ncDiff<0] = 0
+    # Lower equivalence limit 
+    glmH0low <- lm(modelSettings$formulaH0_low, data=data, weight=Weight)
+    ncEquiLow <- glmH0low$df.residual*summary(glmH0low)$sigma^2 - glmH1$df.residual*summary(glmH1)$sigma^2
+    ncEquiLow[ncEquiLow<0] = 0
+    ncEquiLow <- sqrt(ncEquiLow)
+    # Upper equivalence limit 
+    glmH0upp <- lm(modelSettings$formulaH0_upp, data=data, weight=Weight)
+    ncEquiUpp <- glmH0upp$df.residual*summary(glmH0upp)$sigma^2 - glmH1$df.residual*summary(glmH1)$sigma^2
+    ncEquiUpp[ncEquiUpp<0] = 0
+    ncEquiUpp <- -1*sqrt(ncEquiUpp)
+  }
+
+  # Scale non-centrality parameters
+  scale = nreps/estDispersion/multiplyWeight
+  ncDiff = ncDiff * scale
+  ncEquiLow = ncEquiLow * sqrt(scale)
+  ncEquiUpp = ncEquiUpp * sqrt(scale)
+  power = calculatePowerFromNc(ncDiff, ncEquiLow, ncEquiUpp, df, settings$SignificanceLevel)
+  return(power)
+}
+
+######################################################################################################################
+squareRootLyles <- function(data, settings, modelSettings, nreps, multiplyWeight) {
+
+  # Transform data (this is done locally)
+  data[["Response"]] = sqrt(data[["Response"]])
+  locLower <- sqrt(settings$LocLower)
+  locUpper <- sqrt(settings$LocUpper)
+  # Estimate dispersion parameter by mean of Variance
+  Means <- tapply(data[["Weight"]] * data[["Response"]], data[["Row"]], sum)/multiplyWeight
+  expanded2 <- (data[["Response"]] - Means[data[["Row"]]])^2
+  Variances <- tapply(data[["Weight"]] * expanded2, data[["Row"]], sum)/multiplyWeight
+  estDispersion <- mean(Variances)
+
+  # Fit full model and determine degrees of freedom
+  glmH1 <- lm(as.formula(modelSettings$formulaH1), data=data, weight=Weight)
+  sigma1 <- summary(glmH1)$sigma
+  dfModel = nrow(data) - glmH1$df.residual
+  if (settings$ExperimentalDesignType == "CompletelyRandomized") {
+    df = nreps*modelSettings$ndata - dfModel
+  } else {
+    df = nreps*(modelSettings$ndata-1) - dfModel + 1
+  }
+
+  # Return signed non-centrality parameters for equivalence test;  
+  if (settings$UseWaldTest) {  
+    # Wald
+    estiEffect <- as.numeric(glmH1$coef[2])
+    seEffect <- sqrt(vcov(glmH1)[2,2]) / sigma1
+    ncDiff <- (abs(estiEffect)/seEffect)^2
+    ncEquiLow <- (estiEffect-locLower)/seEffect
+    ncEquiUpp <- (estiEffect-locUpper)/seEffect
   } else {
     # LR: fit alternative models
     # Difference test
@@ -231,18 +290,22 @@ calculatePowerFromNc <- function(ncDiff, ncEquiLow, ncEquiUpp, df, alfa, towside
 ######################################################################################################################
 lylesPowerAnalysis <- function(data, settings, modelSettings, blocks, effect, debugSettings) {
 
+  # Define number of reps
+  nreps  <- c(6,10,12,14,16,18,20,25)
+  nreps  <- rep(2:blocks)
+
   # Define output structure
-  nanalysis = length(settings$AnalysisMethods)
-  nrow = settings$NumberOfSimulatedDataSets
-  pValues = list(
+  nrow <- length(nreps)
+  nanalysis <- length(settings$AnalysisMethods)
+  pValues <- list(
     Diff  = matrix(nrow=nrow, ncol=nanalysis, dimnames=list(NULL, settings$AnalysisMethods)),
     Equi  = matrix(nrow=nrow, ncol=nanalysis, dimnames=list(NULL, settings$AnalysisMethods)),
     Extra = matrix(nrow=nrow, ncol=2, dimnames=list(NULL, c("Reps", "Effect")))
   )
+  pValues$Extra[,"Reps"] <- nreps
+  pValues$Extra[,"Effect"] <- effect
 
   DEBUG  <- TRUE
-  nreps  <- c(6,10,12,14,16,18,20,25)
-  nreps  <- rep(2:blocks)
   blocks <- 1
   multiplyWeight <- 10
 
@@ -257,23 +320,30 @@ lylesPowerAnalysis <- function(data, settings, modelSettings, blocks, effect, de
     if (DEBUG) print(paste("Lyles ", "LN"))
     powerLN <- logNormalLyles(synData, settings, modelSettings, nreps, multiplyWeight)
     print(powerLN, digits=3)
+    pValues$Diff[,"LogNormal"] <- powerLN[["powerDiff"]]
+    pValues$Equi[,"LogNormal"] <- powerLN[["powerEqui"]]
   }
   if (!is.na(match("SquareRoot", settings$AnalysisMethods))) {
     if (DEBUG) print(paste("Lyles ", "SQ"))
-    powerLN <- logNormalLyles(synData, settings, modelSettings, nreps, multiplyWeight)
-    print(powerLN, digits=3)
+    powerSQ <- squareRootLyles(synData, settings, modelSettings, nreps, multiplyWeight)
+    print(powerSQ, digits=3)
+    pValues$Diff[,"SquareRoot"] <- powerSQ[["powerDiff"]]
+    pValues$Equi[,"SquareRoot"] <- powerSQ[["powerEqui"]]
   }
-  # Fit overdispersed Poisson anyway to get the overdispersion parameter
   if (!is.na(match("OverdispersedPoisson", settings$AnalysisMethods))) {
     if (DEBUG) print(paste("Lyles ", "OP"))
     powerOP <- overdispersedPoissonLyles(synData, settings, modelSettings, nreps, multiplyWeight)
     print(powerOP, digits=3)
+    pValues$Diff[,"OverdispersedPoisson"] <- powerOP[["powerDiff"]]
+    pValues$Equi[,"OverdispersedPoisson"] <- powerOP[["powerEqui"]]
   }
   if (!is.na(match("NegativeBinomial", settings$AnalysisMethods))) {
     if (DEBUG) print(paste("Lyles ", "NB"))
     powerNB <- negativeBinomialLyles(synData, settings, modelSettings, nreps, multiplyWeight)
     print(powerNB, digits=3)
+    pValues$Diff[,"NegativeBinomial"] <- powerNB[["powerDiff"]]
+    pValues$Equi[,"NegativeBinomial"] <- powerNB[["powerEqui"]]
   }
+  return(pValues)
 }
-
 
