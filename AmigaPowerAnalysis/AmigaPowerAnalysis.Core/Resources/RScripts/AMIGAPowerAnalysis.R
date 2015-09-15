@@ -43,13 +43,18 @@ inverseLinkFunction <- function(data, measurementType = c("Count", "Fraction", "
 }
 
 ######################################################################################################################
-ropoisson <- function(n, mean, dispersion=NaN, power=NaN, distribution=c("Poisson", "OverdispersedPoisson", "NegativeBinomial", "PoissonLogNormal", "PowerLaw")) {
+ropoisson <- function(n, mean, dispersion=NaN, power=NaN, 
+        distribution=c("Poisson", "OverdispersedPoisson", "NegativeBinomial", "PoissonLogNormal", "PowerLaw"), 
+        excessZero=0.0) {
   stopifnot(n == as.integer(n), n >= 1, mean >= 0)
   if ((length(mean) != 1) && (length(mean) != n)) {
     stop("The length of mean must equal 1 or the value of n.", call. = FALSE)
   }
   if ((length(dispersion) != 1) && (length(dispersion) != n)) {
     stop("The length of dispersion must equal 1 or the value of n.", call. = FALSE)
+  }
+  if ((excessZero < 0.0) | (excessZero >= 100.0)) {
+    stop("The ExcessZero parameter must be a percentage in the interval [0,100).", call. = FALSE)
   }
   mean[mean==0] <- 1.0e-200
   if (min(mean) < 0) {
@@ -98,6 +103,11 @@ ropoisson <- function(n, mean, dispersion=NaN, power=NaN, distribution=c("Poisso
     a <- mean/s
     sample <- rgamma(n, shape=a, scale=s)
     sample <- rpois(n, sample)
+  }
+  # Add excess Zero
+  if (excessZero > 0.0) {
+    zero <- 100*runif(n)
+    sample[zero<excessZero] <- 0
   }
   return(sample)
 }
@@ -294,7 +304,7 @@ createSimulatedData <- function(data, settings, simulationSettings, blocks, effe
 
 ######################################################################################################################
 simulateResponse <- function(simulatedData, settings, simulationSettings) {
-  response <- ropoisson(nrow(simulatedData), simulatedData[["Effect"]], simulationSettings$dispersion, settings$PowerLawPower, settings$Distribution)
+  response <- ropoisson(nrow(simulatedData), simulatedData[["Effect"]], simulationSettings$dispersion, settings$PowerLawPower, settings$Distribution, settings$ExcessZeroesPercentage)
   return(response)
 }
 
