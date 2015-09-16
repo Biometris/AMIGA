@@ -1,15 +1,15 @@
 ﻿using System;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using Biometris.ExtensionMethods;
+using AmigaPowerAnalysis.Core;
+using AmigaPowerAnalysis.Core.PowerAnalysis;
+using AmigaPowerAnalysis.Core.Reporting;
 using AmigaPowerAnalysis.Tests.Mocks.Projects;
 using Biometris.ProgressReporting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Linq;
-using AmigaPowerAnalysis.Core;
-using System.IO;
-using AmigaPowerAnalysis.Core.PowerAnalysis;
-using AmigaPowerAnalysis.Core.Reporting;
-using System.Reflection;
-using System.Diagnostics;
-using OpenHtmlToPdf;
 
 namespace AmigaPowerAnalysis.Tests.IntegrationTests {
     [TestClass]
@@ -32,8 +32,11 @@ namespace AmigaPowerAnalysis.Tests.IntegrationTests {
                 var inputPowerAnalysis = inputGenerator.CreateInputPowerAnalysis(comparisons[i], project.DesignSettings, project.PowerCalculationSettings, i, comparisons.Count);
                 var progressReport = new ProgressReport();
                 var rDotNetExecuter = new RDotNetPowerAnalysisExecuter(filesPath);
-                var output = rDotNetExecuter.Run(inputPowerAnalysis, progressReport.NewProgressState(100));
-                comparisons[i].OutputPowerAnalysis = output;
+                comparisons[i].OutputPowerAnalysis = rDotNetExecuter.Run(inputPowerAnalysis, progressReport.NewProgressState(100));
+
+                var filenameXml = Path.Combine(filesPath, string.Format("Comparison-{0}.xml", i));
+                comparisons[i].OutputPowerAnalysis.ToXmlFile(filenameXml);
+
                 var filenamePdf = Path.Combine(filesPath, string.Format("Comparison-{0}.pdf", i));
                 var singleComparisonReportGenerator = new SingleComparisonReportGenerator(comparisons[i], filesPath);
                 singleComparisonReportGenerator.SaveAsPdf(filenamePdf);
