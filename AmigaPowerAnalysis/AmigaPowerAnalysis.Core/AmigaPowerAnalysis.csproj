@@ -122,7 +122,6 @@
     <Compile Include="Core\PowerAnalysis\OutputPowerAnalysis\OutputPowerAnalysisFileReader.cs" />
     <Compile Include="Core\PowerAnalysis\PowerAnalysisExecuters\RDotNetPowerAnalysisExecuter.cs" />
     <Compile Include="Core\ProjectEntities\Factor\ComparisonDummyFactorLevel.cs" />
-    <Compile Include="Core\PowerAnalysis\PowerAnalysisExecuters\RPowerAnalysisExecuter.cs" />
     <Compile Include="Core\PowerAnalysis\PowerAnalysisExecuters\GenstatPowerAnalysisExecuter.cs" />
     <Compile Include="Core\PowerAnalysis\PowerAnalysisExecuters\PowerAnalysisExecuterBase.cs" />
     <Compile Include="Core\ProjectEntities\Factor\ModifierDummyFactorLevel.cs" />
