@@ -38,7 +38,7 @@ namespace AmigaPowerAnalysis.Tests.IntegrationTests {
                 comparisons[i].OutputPowerAnalysis.ToXmlFile(filenameXml);
 
                 var filenamePdf = Path.Combine(filesPath, string.Format("Comparison-{0}.pdf", i));
-                var singleComparisonReportGenerator = new SingleComparisonReportGenerator(comparisons[i], filesPath);
+                var singleComparisonReportGenerator = new SingleComparisonReportGenerator(comparisons[i].OutputPowerAnalysis, filesPath);
                 singleComparisonReportGenerator.SaveAsPdf(filenamePdf);
             }
             var multiComparisonReportGenerator = new MultiComparisonReportGenerator(comparisons, filesPath);

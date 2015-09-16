@@ -37,12 +37,12 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             html += "<h1>Results per primary comparison</h1>";
             foreach (var comparison in primaryComparisons) {
                 html += string.Format("<h1>Results comparison {0}</h1>", comparison.OutputPowerAnalysis.InputPowerAnalysis.Endpoint);
-                html += generateComparisonMessagesHtml(comparison);
+                html += generateComparisonMessagesHtml(comparison.OutputPowerAnalysis);
                 html += generateComparisonSettingsHtml(comparison.OutputPowerAnalysis.InputPowerAnalysis);
                 //html += generateComparisonInputDataHtml(comparison.OutputPowerAnalysis.InputPowerAnalysis);
                 html += generateComparisonOutputHtml(comparison.OutputPowerAnalysis.OutputRecords, analysisMethodTypes, TestType.Difference);
                 html += generateComparisonOutputHtml(comparison.OutputPowerAnalysis.OutputRecords, analysisMethodTypes, TestType.Equivalence);
-                html += generateComparisonChartsHtml(comparison, _filesPath, imagesAsPng);
+                html += generateComparisonChartsHtml(comparison.OutputPowerAnalysis, _filesPath, imagesAsPng);
             }
             return format(html);
         }

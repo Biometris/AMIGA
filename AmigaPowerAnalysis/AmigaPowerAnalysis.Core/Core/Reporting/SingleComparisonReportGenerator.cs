@@ -1,28 +1,29 @@
 ﻿using AmigaPowerAnalysis.Core.DataAnalysis.AnalysisModels;
 using Biometris.ExtensionMethods;
 using System.Linq;
+using AmigaPowerAnalysis.Core.PowerAnalysis;
 
 namespace AmigaPowerAnalysis.Core.Reporting {
     public sealed class SingleComparisonReportGenerator : ComparisonReportGeneratorBase {
 
-        private Comparison _comparison;
+        private OutputPowerAnalysis _comparisonOutput;
         private string _filesPath;
 
-        public SingleComparisonReportGenerator(Comparison comparison, string filesPath) {
-            _comparison = comparison;
+        public SingleComparisonReportGenerator(OutputPowerAnalysis comparisonOutput, string filesPath) {
+            _comparisonOutput = comparisonOutput;
             _filesPath = filesPath;
         }
 
         public override string Generate(bool imagesAsPng) {
             var html = string.Empty;
-            html += generateComparisonMessagesHtml(_comparison);
-            html += generateComparisonSettingsHtml(_comparison.OutputPowerAnalysis.InputPowerAnalysis);
-            html += generateAnalysisSettingsHtml(_comparison.OutputPowerAnalysis.InputPowerAnalysis);
+            html += generateComparisonMessagesHtml(_comparisonOutput);
+            html += generateComparisonSettingsHtml(_comparisonOutput.InputPowerAnalysis);
+            html += generateAnalysisSettingsHtml(_comparisonOutput.InputPowerAnalysis);
             //html += generateComparisonInputDataHtml(comparison.OutputPowerAnalysis.InputPowerAnalysis);
-            var selectedAnalysisMethods = _comparison.OutputPowerAnalysis.InputPowerAnalysis.SelectedAnalysisMethodTypes.GetFlags().Cast<AnalysisMethodType>().ToList();
-            html += generateComparisonOutputHtml(_comparison.OutputPowerAnalysis.OutputRecords, selectedAnalysisMethods, TestType.Difference);
-            html += generateComparisonOutputHtml(_comparison.OutputPowerAnalysis.OutputRecords, selectedAnalysisMethods, TestType.Equivalence);
-            html += generateComparisonChartsHtml(_comparison, _filesPath, imagesAsPng);
+            var selectedAnalysisMethods = _comparisonOutput.InputPowerAnalysis.SelectedAnalysisMethodTypes.GetFlags().Cast<AnalysisMethodType>().ToList();
+            html += generateComparisonOutputHtml(_comparisonOutput.OutputRecords, selectedAnalysisMethods, TestType.Difference);
+            html += generateComparisonOutputHtml(_comparisonOutput.OutputRecords, selectedAnalysisMethods, TestType.Equivalence);
+            html += generateComparisonChartsHtml(_comparisonOutput, _filesPath, imagesAsPng);
             return format(html);
         }
     }

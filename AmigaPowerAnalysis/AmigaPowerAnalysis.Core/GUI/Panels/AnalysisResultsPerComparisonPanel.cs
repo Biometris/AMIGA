@@ -126,7 +126,7 @@ namespace AmigaPowerAnalysis.GUI {
         private void buttonShowInputData_Click(object sender, EventArgs e) {
             if (_currentComparison != null && _currentComparison.OutputPowerAnalysis != null) {
                 var title = Path.GetFileNameWithoutExtension(_currentProjectFilesPath) + "_" + _currentComparison.Endpoint.Name;
-                var reportGenerator = new SingleComparisonReportGenerator(_currentComparison, _currentProjectFilesPath);
+                var reportGenerator = new SingleComparisonReportGenerator(_currentComparison.OutputPowerAnalysis, _currentProjectFilesPath);
                 var htmlReportForm = new HtmlReportForm(reportGenerator, title, _currentProjectFilesPath);
                 htmlReportForm.ShowDialog();
             }
