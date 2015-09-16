@@ -1,13 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -48,7 +41,7 @@ namespace AmigaPowerAnalysis.GUI {
 
         private async Task runSimulation(CompositeProgressState progressReport) {
             _project.ClearProjectOutput();
-            var comparisons = _project.GetComparisons();
+            var comparisons = _project.GetComparisons().ToList();
             var projectPath = Path.GetDirectoryName(_projectFilename);
             var projectName = Path.GetFileNameWithoutExtension(_projectFilename);
             var filesPath = Path.Combine(projectPath, projectName);
@@ -64,18 +57,15 @@ namespace AmigaPowerAnalysis.GUI {
                     var msg = ex.Message;
                 }
             }
-
             var inputGenerator = new PowerAnalysisInputGenerator();
-            //var powerAnalysisExecuter = new RPowerAnalysisExecuter(filesPath);
             var powerAnalysisExecuter = new RDotNetPowerAnalysisExecuter(filesPath);
-
             var numberOfComparisons = comparisons.Count();
             var progressStep = 100D / numberOfComparisons;
-            for (int i = 0; i < comparisons.Count(); ++i) {
+            for (int i = 0; i < comparisons.Count; ++i) {
                 var localProgress = progressReport.NewProgressState(100D / comparisons.Count());
                 localProgress.Update(string.Format("Running power analysis for comparison {0} of {1}...", i + 1, comparisons.Count()));
                 var inputPowerAnalysis = inputGenerator.CreateInputPowerAnalysis(comparisons.ElementAt(i), _project.DesignSettings, _project.PowerCalculationSettings, i, numberOfComparisons);
-                comparisons.ElementAt(i).OutputPowerAnalysis = await powerAnalysisExecuter.RunAsync(inputPowerAnalysis, localProgress);
+                comparisons[i].OutputPowerAnalysis = await powerAnalysisExecuter.RunAsync(inputPowerAnalysis, localProgress);
                 localProgress.Update(100);
             }
             if (comparisons.Any(r => !r.OutputPowerAnalysis.Success)) {
