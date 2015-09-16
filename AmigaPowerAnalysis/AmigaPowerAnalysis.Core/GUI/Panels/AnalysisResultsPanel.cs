@@ -60,7 +60,7 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void updateVisibilities() {
-            var primaryComparisons = _comparisons.Where(c => c.OutputPowerAnalysis != null && c.IsPrimary).ToList();
+            var primaryComparisons = _comparisons.Where(c => c.OutputPowerAnalysis != null && c.OutputPowerAnalysis.IsPrimary).ToList();
             if (primaryComparisons.Count > 0) {
                 comboBoxAnalysisType.Visible = true;
                 splitContainerComparisons.Panel2.Show();
@@ -162,7 +162,7 @@ namespace AmigaPowerAnalysis.GUI {
             if (primaryComparisons.Count > 0) {
                 var tempPath = Path.GetTempPath();
                 var title = Path.GetFileNameWithoutExtension(_currentProjectFilePath) + "_CSD";
-                var multiComparisonReportGenerator = new MultiComparisonReportGenerator(_comparisons, _currentProjectFilePath);
+                var multiComparisonReportGenerator = new MultiComparisonReportGenerator(_comparisons.Select(c => c.OutputPowerAnalysis), _currentProjectFilePath);
                 var htmlReportForm = new HtmlReportForm(multiComparisonReportGenerator, title, _currentProjectFilePath);
                 htmlReportForm.ShowDialog();
             }

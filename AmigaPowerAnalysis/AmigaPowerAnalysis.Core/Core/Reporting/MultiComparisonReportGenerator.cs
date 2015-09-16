@@ -10,44 +10,44 @@ using AmigaPowerAnalysis.Core.Charting.AnalysisResultsChartCreators;
 namespace AmigaPowerAnalysis.Core.Reporting {
     public sealed class MultiComparisonReportGenerator : ComparisonReportGeneratorBase {
 
-        private IEnumerable<Comparison> _comparisons;
+        private IEnumerable<OutputPowerAnalysis> _comparisonOutputs;
         private string _filesPath;
 
-        public MultiComparisonReportGenerator(IEnumerable<Comparison> comparisons, string tempPath) {
-            _comparisons = comparisons;
+        public MultiComparisonReportGenerator(IEnumerable<OutputPowerAnalysis> comparisonOutputs, string tempPath) {
+            _comparisonOutputs = comparisonOutputs;
             _filesPath = tempPath;
         }
 
         public override string Generate(bool imagesAsPng) {
             var html = "";
-            var primaryComparisons = _comparisons.Where(c => c.IsPrimary);
-            html += generatePrimaryComparisonsSummary(_comparisons);
+            var primaryComparisonOutputs = _comparisonOutputs.Where(c => c.IsPrimary);
+            html += generatePrimaryComparisonsSummary(_comparisonOutputs);
 
-            var firstInputSettings = _comparisons.First().OutputPowerAnalysis.InputPowerAnalysis;
+            var firstInputSettings = _comparisonOutputs.First().InputPowerAnalysis;
             var analysisMethodTypes = firstInputSettings.SelectedAnalysisMethodTypes.GetFlags().Cast<AnalysisMethodType>().ToList();
 
             html += generateDesignOverviewHtml(firstInputSettings);
             html += generateAnalysisSettingsHtml(firstInputSettings);
 
-            var records = getSummaryRecords(primaryComparisons);
+            var records = getSummaryRecords(primaryComparisonOutputs);
             html += generateComparisonOutputHtml(records, analysisMethodTypes, TestType.Difference, true);
             html += generateComparisonOutputHtml(records, analysisMethodTypes, TestType.Equivalence, true);
             html += generateComparisonsChartHtml(records, analysisMethodTypes, _filesPath, imagesAsPng);
 
             html += "<h1>Results per primary comparison</h1>";
-            foreach (var comparison in primaryComparisons) {
-                html += string.Format("<h1>Results comparison {0}</h1>", comparison.OutputPowerAnalysis.InputPowerAnalysis.Endpoint);
-                html += generateComparisonMessagesHtml(comparison.OutputPowerAnalysis);
-                html += generateComparisonSettingsHtml(comparison.OutputPowerAnalysis.InputPowerAnalysis);
+            foreach (var comparisonOutput in primaryComparisonOutputs) {
+                html += string.Format("<h1>Results comparison {0}</h1>", comparisonOutput.InputPowerAnalysis.Endpoint);
+                html += generateComparisonMessagesHtml(comparisonOutput);
+                html += generateComparisonSettingsHtml(comparisonOutput.InputPowerAnalysis);
                 //html += generateComparisonInputDataHtml(comparison.OutputPowerAnalysis.InputPowerAnalysis);
-                html += generateComparisonOutputHtml(comparison.OutputPowerAnalysis.OutputRecords, analysisMethodTypes, TestType.Difference);
-                html += generateComparisonOutputHtml(comparison.OutputPowerAnalysis.OutputRecords, analysisMethodTypes, TestType.Equivalence);
-                html += generateComparisonChartsHtml(comparison.OutputPowerAnalysis, _filesPath, imagesAsPng);
+                html += generateComparisonOutputHtml(comparisonOutput.OutputRecords, analysisMethodTypes, TestType.Difference);
+                html += generateComparisonOutputHtml(comparisonOutput.OutputRecords, analysisMethodTypes, TestType.Equivalence);
+                html += generateComparisonChartsHtml(comparisonOutput, _filesPath, imagesAsPng);
             }
             return format(html);
         }
 
-        private static string generatePrimaryComparisonsSummary(IEnumerable<Comparison> comparisons) {
+        private static string generatePrimaryComparisonsSummary(IEnumerable<OutputPowerAnalysis> comparisonOutputs) {
             var stringBuilder = new StringBuilder();
             stringBuilder.AppendLine(string.Format("<h1>Summary primary comparisons</h1>"));
             stringBuilder.AppendLine("<table>");
@@ -58,11 +58,11 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             stringBuilder.AppendLine("<th>CV</th>");
             stringBuilder.AppendLine("<th>Primary</th>");
             stringBuilder.AppendLine("</tr>");
-            foreach (var comparison in comparisons) {
-                stringBuilder.AppendLine(string.Format("<td>{0}</td>", comparison.Endpoint.Name));
-                stringBuilder.AppendLine(string.Format("<td>{0}</td>", comparison.Endpoint.Measurement.GetDisplayName()));
-                stringBuilder.AppendLine(printNumericTableRecord(comparison.Endpoint.MuComparator));
-                stringBuilder.AppendLine(printNumericTableRecord(comparison.Endpoint.CvComparator));
+            foreach (var comparison in comparisonOutputs) {
+                stringBuilder.AppendLine(string.Format("<td>{0}</td>", comparison.InputPowerAnalysis.Endpoint));
+                stringBuilder.AppendLine(string.Format("<td>{0}</td>", comparison.InputPowerAnalysis.MeasurementType.GetDisplayName()));
+                stringBuilder.AppendLine(printNumericTableRecord(comparison.InputPowerAnalysis.OverallMean));
+                stringBuilder.AppendLine(printNumericTableRecord(comparison.InputPowerAnalysis.CvComparator));
                 stringBuilder.AppendLine(string.Format("<td>{0}</td>", comparison.IsPrimary ? "Yes" : "No"));
                 stringBuilder.AppendLine("</tr>");
             }
@@ -70,8 +70,8 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             return stringBuilder.ToString();
         }
 
-        private static List<OutputPowerAnalysisRecord> getSummaryRecords(IEnumerable<Comparison> comparisons) {
-            var records = comparisons.SelectMany(c => c.OutputPowerAnalysis.OutputRecords)
+        private static List<OutputPowerAnalysisRecord> getSummaryRecords(IEnumerable<OutputPowerAnalysis> comparisonOutputs) {
+            var records = comparisonOutputs.SelectMany(c => c.OutputRecords)
                 .GroupBy(r => new { ConcernStandardizedDifference = r.ConcernStandardizedDifference, NumberOfReplicates = r.NumberOfReplications })
                 .Select(g => new OutputPowerAnalysisRecord() {
                     ConcernStandardizedDifference = g.Key.ConcernStandardizedDifference,

@@ -3,6 +3,10 @@
 namespace AmigaPowerAnalysis.Core.PowerAnalysis {
     public sealed class OutputPowerAnalysis {
 
+        public OutputPowerAnalysis() {
+            IsPrimary = true;
+        }
+
         /// <summary>
         /// The input used for this output.
         /// </summary>
@@ -22,5 +26,10 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
         /// A list of output records belonging to the output of a power analysis.
         /// </summary>
         public List<OutputPowerAnalysisRecord> OutputRecords { get; set; }
+
+        /// <summary>
+        /// Returns whether this output should be considered as a primary output.
+        /// </summary>
+        public bool IsPrimary { get; set; }
     }
 }

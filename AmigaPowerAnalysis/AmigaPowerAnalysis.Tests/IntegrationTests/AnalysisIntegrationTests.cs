@@ -41,7 +41,7 @@ namespace AmigaPowerAnalysis.Tests.IntegrationTests {
                 var singleComparisonReportGenerator = new SingleComparisonReportGenerator(comparisons[i].OutputPowerAnalysis, filesPath);
                 singleComparisonReportGenerator.SaveAsPdf(filenamePdf);
             }
-            var multiComparisonReportGenerator = new MultiComparisonReportGenerator(comparisons, filesPath);
+            var multiComparisonReportGenerator = new MultiComparisonReportGenerator(comparisons.Select(c => c.OutputPowerAnalysis), filesPath);
             multiComparisonReportGenerator.SaveAsPdf(Path.Combine(filesPath, "Report.pdf"));
             runValidationGenstat(0, filesPath);
         }

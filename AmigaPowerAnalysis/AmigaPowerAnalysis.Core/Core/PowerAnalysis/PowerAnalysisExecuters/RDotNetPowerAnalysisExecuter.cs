@@ -123,7 +123,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                     InputPowerAnalysis = inputPowerAnalysis,
                     OutputRecords = outputResults,
                     Success = errorList.Count == 0,
-                    Messages = errorList,
+                    Messages = errorList
                 };
             }
             catch (OperationCanceledException ex) {

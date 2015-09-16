@@ -6,11 +6,13 @@ namespace AmigaPowerAnalysis.Core {
     [DataContract]
     public sealed class Comparison {
 
+        private bool _isPrimary;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Comparison"/> class.
         /// </summary>
         public Comparison() {
-            IsPrimary = true;
+            _isPrimary = true;
         }
 
         /// <summary>
@@ -23,7 +25,21 @@ namespace AmigaPowerAnalysis.Core {
         /// Whether the comparison is primary (true) or secondary (false).
         /// </summary>
         [DataMember(Order = 0)]
-        public bool IsPrimary { get; set; }
+        public bool IsPrimary {
+            get {
+                if (OutputPowerAnalysis != null) {
+                    return OutputPowerAnalysis.IsPrimary;
+                } else {
+                    return _isPrimary;
+                }
+            }
+            set {
+                _isPrimary = value;
+                if (OutputPowerAnalysis != null) {
+                    OutputPowerAnalysis.IsPrimary = value;
+                }
+            }
+        }
 
         /// <summary>
         /// Contains the output of a power analysis.
