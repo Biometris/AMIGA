@@ -68,7 +68,6 @@
     <Compile Include="Core\PowerAnalysis\OutputPowerAnalysisFileReaderTests.cs" />
     <Compile Include="Core\PowerAnalysis\PowerAnalysisInputGeneratorTests.cs" />
     <Compile Include="Core\PowerAnalysis\RDotNetPowerAnalysisExecuterTests.cs" />
-    <Compile Include="Core\PowerAnalysis\RPowerAnalysisExecuterTests.cs" />
     <Compile Include="Core\ProjectEntities\FactoLevelCombinationTests.cs" />
     <Compile Include="Core\ProjectEntities\FactorTests.cs" />
     <Compile Include="IntegrationTests\AnalysisIntegrationTests.cs" />
