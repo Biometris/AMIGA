@@ -21,11 +21,11 @@ namespace AmigaPowerAnalysis.Tests.Core {
                 IsInteractionWithVariety = true,
                 ExperimentUnitType = ExperimentUnitType.SubPlot
             };
-            var dtoOriginal = original.ToDTO();
+            var dtoOriginal = FactorDTO.ToDTO(original);
             CsvWriter.WriteToCsvFile(filename, ",", new List<FactorDTO>() { dtoOriginal });
             var outputFileReader = new DTODataFileReader();
             var dtoRecord = outputFileReader.ReadFactors(filename).Single();
-            var record = dtoRecord.ToFactor();
+            var record = FactorDTO.FromDTO(dtoRecord);
             Assert.IsTrue(ObjectComparisonExtensions.PublicInstancePropertiesEqual(dtoOriginal, dtoRecord));
             Assert.IsTrue(ObjectComparisonExtensions.PublicInstancePropertiesEqual(original, record));
         }
@@ -34,17 +34,16 @@ namespace AmigaPowerAnalysis.Tests.Core {
         public void FactorDTO_TestSingleVarietyFactor() {
             var filename = @"SingleVarietyFactor.csv";
             var original = new VarietyFactor();
-            var dtoOriginal = original.ToDTO();
+            var dtoOriginal = FactorDTO.ToDTO(original);
             CsvWriter.WriteToCsvFile(filename, ",", new List<FactorDTO>() { dtoOriginal });
             var outputFileReader = new DTODataFileReader();
-            var record = outputFileReader.ReadFactors(filename).Single().ToFactor();
+            var record = FactorDTO.FromDTO(outputFileReader.ReadFactors(filename).Single());
             Assert.IsTrue(ObjectComparisonExtensions.PublicInstancePropertiesEqual(original, record));
         }
 
         [TestMethod]
         public void FactorDTO_TestMultiple() {
             var filename = @"MultipleFactors.csv";
-
         }
     }
 }

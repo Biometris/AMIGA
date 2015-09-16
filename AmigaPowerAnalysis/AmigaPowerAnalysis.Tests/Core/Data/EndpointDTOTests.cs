@@ -17,10 +17,10 @@ namespace AmigaPowerAnalysis.Tests.Core {
         public void EndpointGroupDTO_TestSingle() {
             var filename = @"SingleGroup.csv";
             var original = new EndpointType("Non-Target insects counts", true, MeasurementType.Count, 0, 0.5, 2, 10, 100, DistributionType.PowerLaw, 1.7);
-            var dtoOriginal = original.ToDTO();
+            var dtoOriginal = EndpointGroupDTO.ToDTO(original);
             CsvWriter.WriteToCsvFile(filename, ",", new List<EndpointGroupDTO>() { dtoOriginal });
             var outputFileReader = new DTODataFileReader();
-            var record = outputFileReader.ReadGroups(filename).Single().ToEndpointGroup();
+            var record = EndpointGroupDTO.FromDTO(outputFileReader.ReadGroups(filename).Single());
             Assert.IsTrue(ObjectComparisonExtensions.PublicInstancePropertiesEqual(original, record));
         }
 
@@ -28,9 +28,9 @@ namespace AmigaPowerAnalysis.Tests.Core {
         public void EndpointGroupDTO_TestMultiple() {
             var filename = @"DefaultGroups.csv";
             var defaultGroups = EndpointTypeProvider.NewProjectDefaultEndpointTypes();
-            CsvWriter.WriteToCsvFile(filename, ",", defaultGroups.Select(r => r.ToDTO()));
+            CsvWriter.WriteToCsvFile(filename, ",", defaultGroups.Select(r => EndpointGroupDTO.ToDTO(r)));
             var outputFileReader = new DTODataFileReader();
-            var records = outputFileReader.ReadGroups(filename).Select(r => r.ToEndpointGroup()).ToList();
+            var records = outputFileReader.ReadGroups(filename).Select(r => EndpointGroupDTO.FromDTO(r)).ToList();
             var zips = defaultGroups.Zip(defaultGroups, (d, r) => new { d, r });
             Assert.AreEqual(defaultGroups.Count, records.Count);
             foreach (var zip in zips) {

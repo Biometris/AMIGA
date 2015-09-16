@@ -53,7 +53,7 @@ namespace AmigaPowerAnalysis.Core {
             var project = new Project();
             project.EndpointTypes = EndpointTypeProvider.NewProjectDefaultEndpointTypes();
             foreach (var dto in endpoints) {
-                project.AddEndpoint(dto.ToEndpoint(project.EndpointTypes));
+                project.AddEndpoint(EndpointDTO.ToEndpoint(dto, project.EndpointTypes));
             }
             project.UpdateEndpointFactors();
             return project;
