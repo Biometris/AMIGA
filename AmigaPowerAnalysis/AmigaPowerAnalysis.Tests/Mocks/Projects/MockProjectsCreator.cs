@@ -23,8 +23,23 @@ namespace AmigaPowerAnalysis.Tests.Mocks.Projects {
 
             project.AddEndpoint(new Endpoint("Endpoint (OP)", OPEndpoint));
 
+            project.PowerCalculationSettings.PowerCalculationMethod = PowerCalculationMethod.Simulate;
             project.PowerCalculationSettings.NumberOfRatios = 1;
-            project.PowerCalculationSettings.NumberOfReplications = new List<int>() { 4 };
+            project.PowerCalculationSettings.NumberOfReplications = new List<int>() { 4, 8, 16 };
+            project.PowerCalculationSettings.NumberOfSimulatedDataSets = 10;
+            project.PowerCalculationSettings.SelectedAnalysisMethodTypes = AnalysisMethodType.LogNormal | AnalysisMethodType.SquareRoot | AnalysisMethodType.OverdispersedPoisson | AnalysisMethodType.NegativeBinomial;
+
+            return project;
+        }
+
+        public static Project MockSimpleOPLyles() {
+            var project = new Project();
+
+            project.AddEndpoint(new Endpoint("Endpoint (OP)", OPEndpoint));
+
+            project.PowerCalculationSettings.PowerCalculationMethod = PowerCalculationMethod.Approximate;
+            project.PowerCalculationSettings.NumberOfRatios = 1;
+            project.PowerCalculationSettings.NumberOfReplications = new List<int>() { 4, 8, 16 };
             project.PowerCalculationSettings.NumberOfSimulatedDataSets = 10;
             project.PowerCalculationSettings.SelectedAnalysisMethodTypes = AnalysisMethodType.LogNormal | AnalysisMethodType.SquareRoot | AnalysisMethodType.OverdispersedPoisson | AnalysisMethodType.NegativeBinomial;
 
@@ -40,6 +55,7 @@ namespace AmigaPowerAnalysis.Tests.Mocks.Projects {
             project.AddEndpoint(new Endpoint("Endpoint (PLN)", PLNEndpoint));
             project.AddEndpoint(new Endpoint("Endpoint (PL)", PLEndpoint));
 
+            project.PowerCalculationSettings.PowerCalculationMethod = PowerCalculationMethod.Simulate;
             project.PowerCalculationSettings.NumberOfRatios = 1;
             project.PowerCalculationSettings.NumberOfReplications = new List<int>() { 2, 4, 8 };
             project.PowerCalculationSettings.NumberOfSimulatedDataSets = 10;
@@ -58,9 +74,8 @@ namespace AmigaPowerAnalysis.Tests.Mocks.Projects {
             project.AddEndpoint(new Endpoint("Endpoint (PL)", PLEndpoint));
 
             project.PowerCalculationSettings.PowerCalculationMethod = PowerCalculationMethod.Approximate;
-            project.PowerCalculationSettings.NumberOfRatios = 1;
-            project.PowerCalculationSettings.NumberOfReplications = new List<int>() { 2, 4, 8 };
-            project.PowerCalculationSettings.NumberOfSimulatedDataSets = 10;
+            project.PowerCalculationSettings.NumberOfRatios = 5;
+            project.PowerCalculationSettings.NumberOfReplications = new List<int>() { 32 };
             project.PowerCalculationSettings.SelectedAnalysisMethodTypes = AnalysisMethodType.LogNormal | AnalysisMethodType.SquareRoot | AnalysisMethodType.OverdispersedPoisson | AnalysisMethodType.NegativeBinomial;
 
             return project;
@@ -75,6 +90,7 @@ namespace AmigaPowerAnalysis.Tests.Mocks.Projects {
             project.AddEndpoint(new Endpoint("Endpoint (PLN)", PLNEndpoint));
             project.AddEndpoint(new Endpoint("Endpoint (PL)", PLEndpoint));
 
+            project.PowerCalculationSettings.PowerCalculationMethod = PowerCalculationMethod.Simulate;
             project.PowerCalculationSettings.NumberOfRatios = 3;
             project.PowerCalculationSettings.NumberOfReplications = new List<int>() { 2, 4, 8, 16, 32 };
             project.PowerCalculationSettings.NumberOfSimulatedDataSets = 100;
@@ -95,6 +111,7 @@ namespace AmigaPowerAnalysis.Tests.Mocks.Projects {
             var factorF1 = new Factor("F1", 3, false);
             project.AddFactor(factorF1);
 
+            project.PowerCalculationSettings.PowerCalculationMethod = PowerCalculationMethod.Simulate;
             project.PowerCalculationSettings.NumberOfRatios = 3;
             project.PowerCalculationSettings.NumberOfReplications = new List<int>() { 2, 4, 8, 16, 32 };
             project.PowerCalculationSettings.NumberOfSimulatedDataSets = 100;
@@ -118,6 +135,7 @@ namespace AmigaPowerAnalysis.Tests.Mocks.Projects {
             var factorF2 = new Factor("F2", 3, false);
             project.AddFactor(factorF2);
 
+            project.PowerCalculationSettings.PowerCalculationMethod = PowerCalculationMethod.Simulate;
             project.PowerCalculationSettings.NumberOfRatios = 3;
             project.PowerCalculationSettings.NumberOfReplications = new List<int>() { 2, 4, 8 };
             project.PowerCalculationSettings.NumberOfSimulatedDataSets = 100;

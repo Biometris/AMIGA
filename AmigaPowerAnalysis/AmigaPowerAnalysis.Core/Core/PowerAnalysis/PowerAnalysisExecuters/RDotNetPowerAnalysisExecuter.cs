@@ -154,21 +154,11 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                     TransformedEffect = effect.TransformedEfffect,
                     NumberOfReplications = blocks,
                 };
-                if (selectedAnalysisMethodTypes.Has(AnalysisMethodType.LogNormal)) {
-                    record.PowerDifferenceLogNormal = rEngine.EvaluateDouble(string.Format("pValues$Diff[{0},\"LogNormal\"]", i + 1));
-                    record.PowerEquivalenceLogNormal = rEngine.EvaluateDouble(string.Format("pValues$Equi[{0},\"LogNormal\"]", i + 1));
-                }
-                if (selectedAnalysisMethodTypes.Has(AnalysisMethodType.SquareRoot)) {
-                    record.PowerDifferenceSquareRoot = rEngine.EvaluateDouble(string.Format("pValues$Diff[{0},\"SquareRoot\"]", i + 1));
-                    record.PowerEquivalenceSquareRoot = rEngine.EvaluateDouble(string.Format("pValues$Equi[{0},\"SquareRoot\"]", i + 1));
-                }
-                if (selectedAnalysisMethodTypes.Has(AnalysisMethodType.OverdispersedPoisson)) {
-                    record.PowerDifferenceOverdispersedPoisson = rEngine.EvaluateDouble(string.Format("pValues$Diff[{0},\"OverdispersedPoisson\"]", i + 1));
-                    record.PowerEquivalenceOverdispersedPoisson = rEngine.EvaluateDouble(string.Format("pValues$Equi[{0},\"OverdispersedPoisson\"]", i + 1));
-                }
-                if (selectedAnalysisMethodTypes.Has(AnalysisMethodType.NegativeBinomial)) {
-                    record.PowerDifferenceNegativeBinomial = rEngine.EvaluateDouble(string.Format("pValues$Diff[{0},\"NegativeBinomial\"]", i + 1));
-                    record.PowerEquivalenceNegativeBinomial = rEngine.EvaluateDouble(string.Format("pValues$Equi[{0},\"NegativeBinomial\"]", i + 1));
+                foreach (var analysisMethodType in selectedAnalysisMethodTypes.GetFlags().Cast<AnalysisMethodType>()) {
+                    var powerDifference = rEngine.EvaluateDouble(string.Format("pValues$Diff[{0},\"{1}\"]", i + 1, analysisMethodType));
+                    record.SetPower(TestType.Difference, analysisMethodType, powerDifference);
+                    var powerEquivalence = rEngine.EvaluateDouble(string.Format("pValues$Equi[{0},\"{1}\"]", i + 1, analysisMethodType));
+                    record.SetPower(TestType.Equivalence, analysisMethodType, powerEquivalence);
                 }
                 outputRecords.Add(record);
             }
@@ -184,21 +174,11 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                 TransformedEffect = effect.TransformedEfffect,
                 NumberOfReplications = blocks,
             };
-            if (selectedAnalysisMethodTypes.Has(AnalysisMethodType.LogNormal)) {
-                output.PowerDifferenceLogNormal = rEngine.EvaluateDouble("sum(pValues$Diff[,\"LogNormal\"] < settings$SignificanceLevel)") / monteCarloSimulations;
-                output.PowerEquivalenceLogNormal = rEngine.EvaluateDouble("sum(pValues$Equi[,\"LogNormal\"] < settings$SignificanceLevel)") / monteCarloSimulations;
-            }
-            if (selectedAnalysisMethodTypes.Has(AnalysisMethodType.SquareRoot)) {
-                output.PowerDifferenceSquareRoot = rEngine.EvaluateDouble("sum(pValues$Diff[,\"SquareRoot\"] < settings$SignificanceLevel)") / monteCarloSimulations;
-                output.PowerEquivalenceSquareRoot = rEngine.EvaluateDouble("sum(pValues$Equi[,\"SquareRoot\"] < settings$SignificanceLevel)") / monteCarloSimulations;
-            }
-            if (selectedAnalysisMethodTypes.Has(AnalysisMethodType.OverdispersedPoisson)) {
-                output.PowerDifferenceOverdispersedPoisson = rEngine.EvaluateDouble("sum(pValues$Diff[,\"OverdispersedPoisson\"] < settings$SignificanceLevel)") / monteCarloSimulations;
-                output.PowerEquivalenceOverdispersedPoisson = rEngine.EvaluateDouble("sum(pValues$Equi[,\"OverdispersedPoisson\"] < settings$SignificanceLevel)") / monteCarloSimulations;
-            }
-            if (selectedAnalysisMethodTypes.Has(AnalysisMethodType.NegativeBinomial)) {
-                output.PowerDifferenceNegativeBinomial = rEngine.EvaluateDouble("sum(pValues$Diff[,\"NegativeBinomial\"] < settings$SignificanceLevel)") / monteCarloSimulations;
-                output.PowerEquivalenceNegativeBinomial = rEngine.EvaluateDouble("sum(pValues$Equi[,\"NegativeBinomial\"] < settings$SignificanceLevel)") / monteCarloSimulations;
+            foreach (var analysisMethodType in selectedAnalysisMethodTypes.GetFlags().Cast<AnalysisMethodType>()) {
+                var powerDifference = rEngine.EvaluateDouble(string.Format("sum(pValues$Diff[,\"{0}\"] < settings$SignificanceLevel)", analysisMethodType)) / monteCarloSimulations;
+                output.SetPower(TestType.Difference, analysisMethodType, powerDifference);
+                var powerEquivalence = rEngine.EvaluateDouble(string.Format("sum(pValues$Equi[,\"{0}\"] < settings$SignificanceLevel)", analysisMethodType)) / monteCarloSimulations;
+                output.SetPower(TestType.Equivalence, analysisMethodType, powerEquivalence);
             }
             return output;
         }
