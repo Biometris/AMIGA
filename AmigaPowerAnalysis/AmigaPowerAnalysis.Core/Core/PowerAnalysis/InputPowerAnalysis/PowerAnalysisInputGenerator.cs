@@ -40,7 +40,9 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                 NumberOfModifiers = (comparison.Endpoint.UseModifier ? comparison.Endpoint.NonInteractionFactors.Count() : 0),
                 SignificanceLevel = powerCalculationSettings.SignificanceLevel,
                 NumberOfRatios = powerCalculationSettings.NumberOfRatios,
-                NumberOfReplications = (powerCalculationSettings.PowerCalculationMethod == PowerCalculationMethod.Simulate) ? powerCalculationSettings.NumberOfReplications : new List<int>() { powerCalculationSettings.NumberOfReplications.Max() },
+                NumberOfReplications = ((powerCalculationSettings.PowerCalculationMethod == PowerCalculationMethod.Approximate) & 
+                        ((designSettings.ExperimentalDesignType== ExperimentalDesignType.CompletelyRandomized) | (comparison.Endpoint.CvForBlocks==0d)))
+                        ? new List<int>() { powerCalculationSettings.NumberOfReplications.Max() } : powerCalculationSettings.NumberOfReplications,
                 ExperimentalDesignType = designSettings.ExperimentalDesignType,
                 PowerCalculationMethodType = powerCalculationSettings.PowerCalculationMethod,
                 UseWaldTest = powerCalculationSettings.UseWaldTest,
@@ -98,12 +100,12 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
 
         public List<ComparisonDummyFactorLevel> CreateComparisonDummyFactorLevels(Comparison comparison) {
             var comparisonLevelGMO = new ComparisonDummyFactorLevel() {
-                    Label = "GMO",
-                    ComparisonType = ComparisonType.IncludeGMO,
-                    FactorLevelCombinations = comparison.Endpoint.Interactions
-                        .Where(i => i.ComparisonType == ComparisonType.IncludeGMO)
-                        .ToList(),
-                };
+                Label = "GMO",
+                ComparisonType = ComparisonType.IncludeGMO,
+                FactorLevelCombinations = comparison.Endpoint.Interactions
+                    .Where(i => i.ComparisonType == ComparisonType.IncludeGMO)
+                    .ToList(),
+            };
             var nonComparisonLevels = comparison.Endpoint.Interactions
                 .Where(vi => vi.ComparisonType == ComparisonType.Exclude)
                 .Select((vi, index) => new ComparisonDummyFactorLevel() {
@@ -132,7 +134,8 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                     Label = "Mod",
                     FactorLevelCombination = new ModifierFactorLevelCombination(),
                 });
-            } else {
+            }
+            else {
                 levels.AddRange(
                     comparison.Endpoint.Modifiers.Select((m, index) => new ModifierDummyFactorLevel() {
                         Label = string.Format("Mod{0}", index),
