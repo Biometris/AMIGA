@@ -24,7 +24,7 @@ namespace AmigaPowerAnalysis.GUI.Wrappers {
             FactorLevelCombinations.Single(flc => flc.VarietyLevel == varietyLevel).IsComparisonLevel = isComparisonLevel;
         }
 
-        public bool IsComparisonLevelGMO {
+        public bool IsComparisonLevelTest {
             get {
                 return FactorLevelCombinations.Single(flc => flc.VarietyLevel.VarietyLevelType == VarietyLevelType.Test).IsComparisonLevel;
             }
@@ -42,7 +42,7 @@ namespace AmigaPowerAnalysis.GUI.Wrappers {
             }
         }
 
-        public double MeanGMO {
+        public double MeanTest {
             get {
                 return FactorLevelCombinations.Single(flc => flc.VarietyLevel.VarietyLevelType == VarietyLevelType.Test).Mean;
             }

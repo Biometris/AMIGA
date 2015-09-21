@@ -87,7 +87,7 @@ namespace AmigaPowerAnalysis.GUI {
                     foreach (var factorLevel in factorLevelCombination.Levels) {
                         row[factorLevel.Parent.Name] = factorLevel.Label;
                     }
-                    row["Comparison level Test"] = factorLevelCombination.IsComparisonLevelGMO;
+                    row["Comparison level Test"] = factorLevelCombination.IsComparisonLevelTest;
                     row["Comparison level Comparator"] = factorLevelCombination.IsComparisonLevelComparator;
                     dataTable.Rows.Add(row);
                 }
@@ -129,7 +129,7 @@ namespace AmigaPowerAnalysis.GUI {
                 var factorLevelCombination = _currentEndpointInteractionLevels[e.RowIndex];
                 if (e.ColumnIndex == dataGridViewFactorLevels.Columns["Comparison level Test"].Index) {
                     var isChecked = (bool)dataGridViewFactorLevels.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
-                    factorLevelCombination.IsComparisonLevelGMO = (bool)dataGridViewFactorLevels.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
+                    factorLevelCombination.IsComparisonLevelTest = (bool)dataGridViewFactorLevels.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
                 } else if (e.ColumnIndex == dataGridViewFactorLevels.Columns["Comparison level Comparator"].Index) {
                     var isChecked = (bool)dataGridViewFactorLevels.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
                     factorLevelCombination.IsComparisonLevelComparator = (bool)dataGridViewFactorLevels.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
