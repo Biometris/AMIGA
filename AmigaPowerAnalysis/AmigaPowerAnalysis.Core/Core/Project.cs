@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
+using AmigaPowerAnalysis.Core.PowerAnalysis;
 
 namespace AmigaPowerAnalysis.Core {
 
@@ -48,6 +49,9 @@ namespace AmigaPowerAnalysis.Core {
         [DataMember]
         private double _cVForMainPlots;
 
+        [DataMember]
+        private List<ResultPowerAnalysis> _analysisResults;
+
         #endregion
 
         public Project() {
@@ -61,6 +65,7 @@ namespace AmigaPowerAnalysis.Core {
             _useFactorModifiers = false;
             _useBlockModifier = false;
             _useMainPlotModifier = false;
+            _analysisResults = new List<ResultPowerAnalysis>();
         }
 
         /// <summary>
@@ -327,6 +332,21 @@ namespace AmigaPowerAnalysis.Core {
         /// </summary>
         public IEnumerable<Comparison> GetComparisons() {
             return Endpoints.Select(ep => ep.Comparison);
+        }
+
+        /// <summary>
+        /// The power analysis results of this project.
+        /// </summary>
+        public List<ResultPowerAnalysis> AnalysisResults {
+            get {
+                if (_analysisResults == null) {
+                    _analysisResults = new List<ResultPowerAnalysis>();
+                }
+                return _analysisResults;
+            }
+            set {
+                _analysisResults = value;
+            }
         }
 
         /// <summary>

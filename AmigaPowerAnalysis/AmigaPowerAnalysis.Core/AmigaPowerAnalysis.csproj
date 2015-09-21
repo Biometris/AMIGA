@@ -118,6 +118,7 @@
     <Compile Include="Core\Data\FactorDTO.cs" />
     <Compile Include="Core\Data\EndpointGroupDTO.cs" />
     <Compile Include="Core\Data\EndpointDTO.cs" />
+    <Compile Include="Core\PowerAnalysis\OutputPowerAnalysis\ResultPowerAnalysis.cs" />
     <Compile Include="Core\PowerAnalysis\OutputPowerAnalysis\OutputPowerAnalysisFileReader.cs" />
     <Compile Include="Core\PowerAnalysis\PowerAnalysisExecuters\RDotNetPowerAnalysisExecuter.cs" />
     <Compile Include="Core\ProjectEntities\Factor\ComparisonDummyFactorLevel.cs" />

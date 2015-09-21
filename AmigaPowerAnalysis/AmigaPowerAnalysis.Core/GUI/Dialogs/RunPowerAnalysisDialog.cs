@@ -57,6 +57,7 @@ namespace AmigaPowerAnalysis.GUI {
                     var msg = ex.Message;
                 }
             }
+            var resultPowerAnalysis = new ResultPowerAnalysis();
             var inputGenerator = new PowerAnalysisInputGenerator();
             var powerAnalysisExecuter = new RDotNetPowerAnalysisExecuter(filesPath);
             var numberOfComparisons = comparisons.Count();
@@ -65,12 +66,17 @@ namespace AmigaPowerAnalysis.GUI {
                 var localProgress = progressReport.NewProgressState(100D / comparisons.Count());
                 localProgress.Update(string.Format("Running power analysis for comparison {0} of {1}...", i + 1, comparisons.Count()));
                 var inputPowerAnalysis = inputGenerator.CreateInputPowerAnalysis(comparisons.ElementAt(i), _project.DesignSettings, _project.PowerCalculationSettings, i, numberOfComparisons);
-                comparisons[i].OutputPowerAnalysis = await powerAnalysisExecuter.RunAsync(inputPowerAnalysis, localProgress);
+                var output = await powerAnalysisExecuter.RunAsync(inputPowerAnalysis, localProgress);
+                comparisons[i].OutputPowerAnalysis = output;
+                resultPowerAnalysis.ComparisonPowerAnalysisResults.Clear();
+                resultPowerAnalysis.ComparisonPowerAnalysisResults.Add(output);
                 localProgress.Update(100);
             }
             if (comparisons.Any(r => !r.OutputPowerAnalysis.Success)) {
                 showWarning("Warning", "Power Analysis completed with errors. Some results may be incomplete or non existent.");
             }
+            resultPowerAnalysis.OuputTimeStamp = DateTime.Now;
+            _project.AnalysisResults.Add(resultPowerAnalysis);
         }
 
         private void buttonCancel_Click(object sender, EventArgs e) {
