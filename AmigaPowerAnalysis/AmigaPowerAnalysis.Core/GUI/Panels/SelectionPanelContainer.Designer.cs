@@ -25,10 +25,10 @@
         private void InitializeComponent() {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SelectionPanelContainer));
             this.panelTabDescription = new System.Windows.Forms.Panel();
+            this.pictureBoxLogo = new System.Windows.Forms.PictureBox();
             this.textBoxTabDescription = new System.Windows.Forms.RichTextBox();
             this.textBoxTabTitle = new System.Windows.Forms.TextBox();
             this.panelSelectionForm = new System.Windows.Forms.Panel();
-            this.pictureBoxLogo = new System.Windows.Forms.PictureBox();
             this.panelTabDescription.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLogo)).BeginInit();
             this.SuspendLayout();
@@ -44,6 +44,17 @@
             this.panelTabDescription.Name = "panelTabDescription";
             this.panelTabDescription.Size = new System.Drawing.Size(874, 161);
             this.panelTabDescription.TabIndex = 10;
+            // 
+            // pictureBoxLogo
+            // 
+            this.pictureBoxLogo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.pictureBoxLogo.ErrorImage = null;
+            this.pictureBoxLogo.Image = ((System.Drawing.Image)(resources.GetObject("pictureBoxLogo.Image")));
+            this.pictureBoxLogo.Location = new System.Drawing.Point(665, 28);
+            this.pictureBoxLogo.Name = "pictureBoxLogo";
+            this.pictureBoxLogo.Size = new System.Drawing.Size(209, 95);
+            this.pictureBoxLogo.TabIndex = 11;
+            this.pictureBoxLogo.TabStop = false;
             // 
             // textBoxTabDescription
             // 
@@ -89,17 +100,6 @@
             this.panelSelectionForm.Size = new System.Drawing.Size(874, 342);
             this.panelSelectionForm.TabIndex = 11;
             this.panelSelectionForm.SizeChanged += new System.EventHandler(this.panelSelectionForm_SizeChanged);
-            // 
-            // pictureBoxLogo
-            // 
-            this.pictureBoxLogo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.pictureBoxLogo.ErrorImage = null;
-            this.pictureBoxLogo.Image = ((System.Drawing.Image)(resources.GetObject("pictureBoxLogo.Image")));
-            this.pictureBoxLogo.Location = new System.Drawing.Point(665, 28);
-            this.pictureBoxLogo.Name = "pictureBoxLogo";
-            this.pictureBoxLogo.Size = new System.Drawing.Size(209, 95);
-            this.pictureBoxLogo.TabIndex = 11;
-            this.pictureBoxLogo.TabStop = false;
             // 
             // SelectionPanelContainer
             // 

@@ -69,6 +69,8 @@
             this.checkBoxAnalysisMethodELEquivalence = new System.Windows.Forms.CheckBox();
             this.checkBoxAnalysisMethodBBNEquivalence = new System.Windows.Forms.CheckBox();
             this.checkBoxAnalysisMethodOBNEquivalence = new System.Windows.Forms.CheckBox();
+            this.groupBoxCountsSettings = new System.Windows.Forms.GroupBox();
+            this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
             this.groupBoxOptions.SuspendLayout();
             this.groupBoxAnalysisMethodsCountsDifference.SuspendLayout();
             this.groupBoxAnalysisFractionsMethodsDifference.SuspendLayout();
@@ -80,6 +82,8 @@
             this.groupBoxAnalysisMethodsNonNegativeEquivalence.SuspendLayout();
             this.groupBoxAnalysisMethodsContinuousEquivalence.SuspendLayout();
             this.groupBoxAnalysisFractionsMethodsEquivalence.SuspendLayout();
+            this.groupBoxCountsSettings.SuspendLayout();
+            this.flowLayoutPanel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBoxOptions
@@ -87,34 +91,26 @@
             this.groupBoxOptions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBoxOptions.AutoSize = true;
-            this.groupBoxOptions.Controls.Add(this.checkBoxUseWaldTest);
-            this.groupBoxOptions.Controls.Add(this.labelUseWaldTest);
-            this.groupBoxOptions.Controls.Add(this.textBoxSeedForRandomNumbers);
-            this.groupBoxOptions.Controls.Add(this.labelSeedForRandomNumbers);
-            this.groupBoxOptions.Controls.Add(this.textBoxNumberSimulatedDatasets);
-            this.groupBoxOptions.Controls.Add(this.labelNumberSimulatedDatasets);
-            this.groupBoxOptions.Controls.Add(this.comboBoxMethodForPowerCalculation);
-            this.groupBoxOptions.Controls.Add(this.labelMethodForPowerCalculation);
             this.groupBoxOptions.Controls.Add(this.textBoxNumberOfReplications);
             this.groupBoxOptions.Controls.Add(this.labelNumberOfReplications);
             this.groupBoxOptions.Controls.Add(this.textBoxNumberOfEvaluationPoints);
             this.groupBoxOptions.Controls.Add(this.labelNumberOfRatios);
             this.groupBoxOptions.Controls.Add(this.textBoxSignificanceLevel);
             this.groupBoxOptions.Controls.Add(this.labelSignificanceLevel);
-            this.groupBoxOptions.Location = new System.Drawing.Point(15, 56);
+            this.groupBoxOptions.Location = new System.Drawing.Point(13, 64);
             this.groupBoxOptions.Margin = new System.Windows.Forms.Padding(0);
             this.groupBoxOptions.Name = "groupBoxOptions";
-            this.groupBoxOptions.Size = new System.Drawing.Size(943, 229);
+            this.groupBoxOptions.Size = new System.Drawing.Size(895, 112);
             this.groupBoxOptions.TabIndex = 9;
             this.groupBoxOptions.TabStop = false;
-            this.groupBoxOptions.Text = "Options";
+            this.groupBoxOptions.Text = "Power analysis settings";
             // 
             // checkBoxUseWaldTest
             // 
             this.checkBoxUseWaldTest.AutoSize = true;
             this.checkBoxUseWaldTest.Checked = true;
             this.checkBoxUseWaldTest.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxUseWaldTest.Location = new System.Drawing.Point(553, 138);
+            this.checkBoxUseWaldTest.Location = new System.Drawing.Point(555, 51);
             this.checkBoxUseWaldTest.Name = "checkBoxUseWaldTest";
             this.checkBoxUseWaldTest.Size = new System.Drawing.Size(15, 14);
             this.checkBoxUseWaldTest.TabIndex = 13;
@@ -124,7 +120,7 @@
             // labelUseWaldTest
             // 
             this.labelUseWaldTest.AutoSize = true;
-            this.labelUseWaldTest.Location = new System.Drawing.Point(20, 136);
+            this.labelUseWaldTest.Location = new System.Drawing.Point(22, 51);
             this.labelUseWaldTest.Name = "labelUseWaldTest";
             this.labelUseWaldTest.Size = new System.Drawing.Size(74, 13);
             this.labelUseWaldTest.TabIndex = 12;
@@ -132,7 +128,7 @@
             // 
             // textBoxSeedForRandomNumbers
             // 
-            this.textBoxSeedForRandomNumbers.Location = new System.Drawing.Point(553, 190);
+            this.textBoxSeedForRandomNumbers.Location = new System.Drawing.Point(555, 97);
             this.textBoxSeedForRandomNumbers.Name = "textBoxSeedForRandomNumbers";
             this.textBoxSeedForRandomNumbers.Size = new System.Drawing.Size(100, 20);
             this.textBoxSeedForRandomNumbers.TabIndex = 11;
@@ -142,7 +138,7 @@
             // labelSeedForRandomNumbers
             // 
             this.labelSeedForRandomNumbers.AutoSize = true;
-            this.labelSeedForRandomNumbers.Location = new System.Drawing.Point(20, 192);
+            this.labelSeedForRandomNumbers.Location = new System.Drawing.Point(22, 99);
             this.labelSeedForRandomNumbers.Name = "labelSeedForRandomNumbers";
             this.labelSeedForRandomNumbers.Size = new System.Drawing.Size(365, 13);
             this.labelSeedForRandomNumbers.TabIndex = 10;
@@ -150,7 +146,7 @@
             // 
             // textBoxNumberSimulatedDatasets
             // 
-            this.textBoxNumberSimulatedDatasets.Location = new System.Drawing.Point(553, 161);
+            this.textBoxNumberSimulatedDatasets.Location = new System.Drawing.Point(555, 71);
             this.textBoxNumberSimulatedDatasets.Name = "textBoxNumberSimulatedDatasets";
             this.textBoxNumberSimulatedDatasets.Size = new System.Drawing.Size(100, 20);
             this.textBoxNumberSimulatedDatasets.TabIndex = 9;
@@ -160,7 +156,7 @@
             // labelNumberSimulatedDatasets
             // 
             this.labelNumberSimulatedDatasets.AutoSize = true;
-            this.labelNumberSimulatedDatasets.Location = new System.Drawing.Point(20, 164);
+            this.labelNumberSimulatedDatasets.Location = new System.Drawing.Point(22, 75);
             this.labelNumberSimulatedDatasets.Name = "labelNumberSimulatedDatasets";
             this.labelNumberSimulatedDatasets.Size = new System.Drawing.Size(246, 13);
             this.labelNumberSimulatedDatasets.TabIndex = 8;
@@ -170,7 +166,7 @@
             // 
             this.comboBoxMethodForPowerCalculation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxMethodForPowerCalculation.FormattingEnabled = true;
-            this.comboBoxMethodForPowerCalculation.Location = new System.Drawing.Point(553, 108);
+            this.comboBoxMethodForPowerCalculation.Location = new System.Drawing.Point(555, 24);
             this.comboBoxMethodForPowerCalculation.Name = "comboBoxMethodForPowerCalculation";
             this.comboBoxMethodForPowerCalculation.Size = new System.Drawing.Size(100, 21);
             this.comboBoxMethodForPowerCalculation.TabIndex = 7;
@@ -179,7 +175,7 @@
             // labelMethodForPowerCalculation
             // 
             this.labelMethodForPowerCalculation.AutoSize = true;
-            this.labelMethodForPowerCalculation.Location = new System.Drawing.Point(20, 108);
+            this.labelMethodForPowerCalculation.Location = new System.Drawing.Point(22, 27);
             this.labelMethodForPowerCalculation.Name = "labelMethodForPowerCalculation";
             this.labelMethodForPowerCalculation.Size = new System.Drawing.Size(332, 13);
             this.labelMethodForPowerCalculation.TabIndex = 6;
@@ -187,7 +183,7 @@
             // 
             // textBoxNumberOfReplications
             // 
-            this.textBoxNumberOfReplications.Location = new System.Drawing.Point(553, 79);
+            this.textBoxNumberOfReplications.Location = new System.Drawing.Point(553, 73);
             this.textBoxNumberOfReplications.Name = "textBoxNumberOfReplications";
             this.textBoxNumberOfReplications.Size = new System.Drawing.Size(100, 20);
             this.textBoxNumberOfReplications.TabIndex = 5;
@@ -197,7 +193,7 @@
             // labelNumberOfReplications
             // 
             this.labelNumberOfReplications.AutoSize = true;
-            this.labelNumberOfReplications.Location = new System.Drawing.Point(20, 80);
+            this.labelNumberOfReplications.Location = new System.Drawing.Point(20, 74);
             this.labelNumberOfReplications.Name = "labelNumberOfReplications";
             this.labelNumberOfReplications.Size = new System.Drawing.Size(425, 13);
             this.labelNumberOfReplications.TabIndex = 4;
@@ -206,7 +202,7 @@
             // 
             // textBoxNumberOfEvaluationPoints
             // 
-            this.textBoxNumberOfEvaluationPoints.Location = new System.Drawing.Point(553, 50);
+            this.textBoxNumberOfEvaluationPoints.Location = new System.Drawing.Point(553, 47);
             this.textBoxNumberOfEvaluationPoints.Name = "textBoxNumberOfEvaluationPoints";
             this.textBoxNumberOfEvaluationPoints.Size = new System.Drawing.Size(100, 20);
             this.textBoxNumberOfEvaluationPoints.TabIndex = 3;
@@ -216,7 +212,7 @@
             // labelNumberOfRatios
             // 
             this.labelNumberOfRatios.AutoSize = true;
-            this.labelNumberOfRatios.Location = new System.Drawing.Point(20, 52);
+            this.labelNumberOfRatios.Location = new System.Drawing.Point(20, 49);
             this.labelNumberOfRatios.Name = "labelNumberOfRatios";
             this.labelNumberOfRatios.Size = new System.Drawing.Size(524, 13);
             this.labelNumberOfRatios.TabIndex = 2;
@@ -308,7 +304,7 @@
             // 
             this.buttonRunPowerAnalysis.BackColor = System.Drawing.SystemColors.Control;
             this.buttonRunPowerAnalysis.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonRunPowerAnalysis.Location = new System.Drawing.Point(15, 13);
+            this.buttonRunPowerAnalysis.Location = new System.Drawing.Point(3, 3);
             this.buttonRunPowerAnalysis.Name = "buttonRunPowerAnalysis";
             this.buttonRunPowerAnalysis.Size = new System.Drawing.Size(102, 35);
             this.buttonRunPowerAnalysis.TabIndex = 11;
@@ -431,14 +427,13 @@
             this.flowLayoutPanelAnalysisMethodsDifference.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.flowLayoutPanelAnalysisMethodsDifference.AutoSize = true;
-            this.flowLayoutPanelAnalysisMethodsDifference.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.flowLayoutPanelAnalysisMethodsDifference.Controls.Add(this.groupBoxAnalysisMethodsCountsDifference);
             this.flowLayoutPanelAnalysisMethodsDifference.Controls.Add(this.groupBoxAnalysisMethodsNonNegativeDifference);
             this.flowLayoutPanelAnalysisMethodsDifference.Controls.Add(this.groupBoxAnalysisMethodsContinuousDifference);
             this.flowLayoutPanelAnalysisMethodsDifference.Controls.Add(this.groupBoxAnalysisFractionsMethodsDifference);
-            this.flowLayoutPanelAnalysisMethodsDifference.Location = new System.Drawing.Point(10, 288);
+            this.flowLayoutPanelAnalysisMethodsDifference.Location = new System.Drawing.Point(10, 319);
             this.flowLayoutPanelAnalysisMethodsDifference.Name = "flowLayoutPanelAnalysisMethodsDifference";
-            this.flowLayoutPanelAnalysisMethodsDifference.Size = new System.Drawing.Size(865, 154);
+            this.flowLayoutPanelAnalysisMethodsDifference.Size = new System.Drawing.Size(898, 154);
             this.flowLayoutPanelAnalysisMethodsDifference.TabIndex = 18;
             // 
             // flowLayoutPanel1
@@ -446,14 +441,13 @@
             this.flowLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.flowLayoutPanel1.AutoSize = true;
-            this.flowLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.flowLayoutPanel1.Controls.Add(this.groupBoxAnalysisMethodsCountsEquivalence);
             this.flowLayoutPanel1.Controls.Add(this.groupBoxAnalysisMethodsNonNegativeEquivalence);
             this.flowLayoutPanel1.Controls.Add(this.groupBoxAnalysisMethodsContinuousEquivalence);
             this.flowLayoutPanel1.Controls.Add(this.groupBoxAnalysisFractionsMethodsEquivalence);
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(10, 448);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(10, 479);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(865, 154);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(898, 154);
             this.flowLayoutPanel1.TabIndex = 19;
             // 
             // groupBoxAnalysisMethodsCountsEquivalence
@@ -629,20 +623,52 @@
             this.checkBoxAnalysisMethodOBNEquivalence.UseVisualStyleBackColor = true;
             this.checkBoxAnalysisMethodOBNEquivalence.CheckedChanged += new System.EventHandler(this.checkBoxAnalysisMethodOBNEquivalence_CheckedChanged);
             // 
+            // groupBoxCountsSettings
+            // 
+            this.groupBoxCountsSettings.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBoxCountsSettings.AutoSize = true;
+            this.groupBoxCountsSettings.Controls.Add(this.checkBoxUseWaldTest);
+            this.groupBoxCountsSettings.Controls.Add(this.labelMethodForPowerCalculation);
+            this.groupBoxCountsSettings.Controls.Add(this.labelUseWaldTest);
+            this.groupBoxCountsSettings.Controls.Add(this.comboBoxMethodForPowerCalculation);
+            this.groupBoxCountsSettings.Controls.Add(this.textBoxSeedForRandomNumbers);
+            this.groupBoxCountsSettings.Controls.Add(this.labelNumberSimulatedDatasets);
+            this.groupBoxCountsSettings.Controls.Add(this.labelSeedForRandomNumbers);
+            this.groupBoxCountsSettings.Controls.Add(this.textBoxNumberSimulatedDatasets);
+            this.groupBoxCountsSettings.Location = new System.Drawing.Point(13, 181);
+            this.groupBoxCountsSettings.Name = "groupBoxCountsSettings";
+            this.groupBoxCountsSettings.Size = new System.Drawing.Size(895, 136);
+            this.groupBoxCountsSettings.TabIndex = 20;
+            this.groupBoxCountsSettings.TabStop = false;
+            this.groupBoxCountsSettings.Text = "Options for analysis of counts";
+            // 
+            // flowLayoutPanel2
+            // 
+            this.flowLayoutPanel2.AutoSize = true;
+            this.flowLayoutPanel2.Controls.Add(this.buttonRunPowerAnalysis);
+            this.flowLayoutPanel2.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.flowLayoutPanel2.Location = new System.Drawing.Point(15, 21);
+            this.flowLayoutPanel2.Name = "flowLayoutPanel2";
+            this.flowLayoutPanel2.Size = new System.Drawing.Size(893, 41);
+            this.flowLayoutPanel2.TabIndex = 20;
+            // 
             // SimulationPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScroll = true;
             this.AutoSize = true;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.Controls.Add(this.flowLayoutPanelAnalysisMethodsDifference);
-            this.Controls.Add(this.buttonRunPowerAnalysis);
             this.Controls.Add(this.groupBoxOptions);
+            this.Controls.Add(this.groupBoxCountsSettings);
+            this.Controls.Add(this.flowLayoutPanel2);
+            this.Controls.Add(this.flowLayoutPanelAnalysisMethodsDifference);
             this.Controls.Add(this.flowLayoutPanel1);
             this.MinimumSize = new System.Drawing.Size(500, 400);
             this.Name = "SimulationPanel";
             this.Padding = new System.Windows.Forms.Padding(10);
-            this.Size = new System.Drawing.Size(961, 615);
+            this.Size = new System.Drawing.Size(921, 646);
             this.groupBoxOptions.ResumeLayout(false);
             this.groupBoxOptions.PerformLayout();
             this.groupBoxAnalysisMethodsCountsDifference.ResumeLayout(false);
@@ -665,6 +691,9 @@
             this.groupBoxAnalysisMethodsContinuousEquivalence.PerformLayout();
             this.groupBoxAnalysisFractionsMethodsEquivalence.ResumeLayout(false);
             this.groupBoxAnalysisFractionsMethodsEquivalence.PerformLayout();
+            this.groupBoxCountsSettings.ResumeLayout(false);
+            this.groupBoxCountsSettings.PerformLayout();
+            this.flowLayoutPanel2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -718,5 +747,7 @@
         private System.Windows.Forms.CheckBox checkBoxAnalysisMethodELEquivalence;
         private System.Windows.Forms.CheckBox checkBoxAnalysisMethodBBNEquivalence;
         private System.Windows.Forms.CheckBox checkBoxAnalysisMethodOBNEquivalence;
+        private System.Windows.Forms.GroupBox groupBoxCountsSettings;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
     }
 }
