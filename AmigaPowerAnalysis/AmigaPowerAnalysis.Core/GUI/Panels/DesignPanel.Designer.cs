@@ -24,7 +24,6 @@
         /// </summary>
         private void InitializeComponent() {
             this.groupBoxTypeOfDesign = new System.Windows.Forms.GroupBox();
-            this.radioButtonSplitPlot = new System.Windows.Forms.RadioButton();
             this.radioButtonRandomizedCompleteBlocks = new System.Windows.Forms.RadioButton();
             this.radioButtonCompletelyRandomized = new System.Windows.Forms.RadioButton();
             this.dataGridViewFactors = new System.Windows.Forms.DataGridView();
@@ -37,28 +36,15 @@
             this.groupBoxTypeOfDesign.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBoxTypeOfDesign.AutoSize = true;
-            this.groupBoxTypeOfDesign.Controls.Add(this.radioButtonSplitPlot);
             this.groupBoxTypeOfDesign.Controls.Add(this.radioButtonRandomizedCompleteBlocks);
             this.groupBoxTypeOfDesign.Controls.Add(this.radioButtonCompletelyRandomized);
             this.groupBoxTypeOfDesign.Location = new System.Drawing.Point(13, 13);
             this.groupBoxTypeOfDesign.Name = "groupBoxTypeOfDesign";
             this.groupBoxTypeOfDesign.Padding = new System.Windows.Forms.Padding(3, 3, 3, 0);
-            this.groupBoxTypeOfDesign.Size = new System.Drawing.Size(643, 100);
+            this.groupBoxTypeOfDesign.Size = new System.Drawing.Size(643, 77);
             this.groupBoxTypeOfDesign.TabIndex = 5;
             this.groupBoxTypeOfDesign.TabStop = false;
             this.groupBoxTypeOfDesign.Text = "Type of design";
-            // 
-            // radioButtonSplitPlot
-            // 
-            this.radioButtonSplitPlot.AutoSize = true;
-            this.radioButtonSplitPlot.Location = new System.Drawing.Point(11, 67);
-            this.radioButtonSplitPlot.Name = "radioButtonSplitPlot";
-            this.radioButtonSplitPlot.Size = new System.Drawing.Size(168, 17);
-            this.radioButtonSplitPlot.TabIndex = 2;
-            this.radioButtonSplitPlot.TabStop = true;
-            this.radioButtonSplitPlot.Text = "Split plot (not yet implemented)";
-            this.radioButtonSplitPlot.UseVisualStyleBackColor = true;
-            this.radioButtonSplitPlot.CheckedChanged += new System.EventHandler(this.radioButtonTypeOfDesign_CheckedChanged);
             // 
             // radioButtonRandomizedCompleteBlocks
             // 
@@ -95,14 +81,14 @@
             this.dataGridViewFactors.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewFactors.BackgroundColor = System.Drawing.Color.White;
             this.dataGridViewFactors.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewFactors.Location = new System.Drawing.Point(13, 119);
+            this.dataGridViewFactors.Location = new System.Drawing.Point(13, 96);
             this.dataGridViewFactors.MultiSelect = false;
             this.dataGridViewFactors.Name = "dataGridViewFactors";
             this.dataGridViewFactors.RowHeadersVisible = false;
             this.dataGridViewFactors.RowHeadersWidth = 24;
             this.dataGridViewFactors.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dataGridViewFactors.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewFactors.Size = new System.Drawing.Size(643, 295);
+            this.dataGridViewFactors.Size = new System.Drawing.Size(643, 318);
             this.dataGridViewFactors.TabIndex = 3;
             this.dataGridViewFactors.SelectionChanged += new System.EventHandler(this.dataGridFactors_SelectionChanged);
             // 
@@ -127,7 +113,6 @@
         #endregion
 
         private System.Windows.Forms.GroupBox groupBoxTypeOfDesign;
-        private System.Windows.Forms.RadioButton radioButtonSplitPlot;
         private System.Windows.Forms.RadioButton radioButtonRandomizedCompleteBlocks;
         private System.Windows.Forms.RadioButton radioButtonCompletelyRandomized;
         private System.Windows.Forms.DataGridView dataGridViewFactors;

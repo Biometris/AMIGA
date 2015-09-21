@@ -34,7 +34,7 @@ namespace AmigaPowerAnalysis.GUI {
             createDataGridFactors();
             this.radioButtonCompletelyRandomized.Checked = _project.DesignSettings.ExperimentalDesignType == ExperimentalDesignType.CompletelyRandomized;
             this.radioButtonRandomizedCompleteBlocks.Checked = _project.DesignSettings.ExperimentalDesignType == ExperimentalDesignType.RandomizedCompleteBlocks;
-            this.radioButtonSplitPlot.Checked = _project.DesignSettings.ExperimentalDesignType == ExperimentalDesignType.SplitPlots;
+            //this.radioButtonSplitPlot.Checked = _project.DesignSettings.ExperimentalDesignType == ExperimentalDesignType.SplitPlots;
         }
 
         public string Description { get; private set; }
@@ -60,9 +60,9 @@ namespace AmigaPowerAnalysis.GUI {
         private void updateVisibilities() {
             if (_project.NonVarietyFactors.Count() == 0) {
                 dataGridViewFactors.Visible = false;
-                radioButtonSplitPlot.Visible = false;
+                //radioButtonSplitPlot.Visible = false;
             } else {
-                radioButtonSplitPlot.Visible = true;
+                //radioButtonSplitPlot.Visible = true;
                 dataGridViewFactors.Visible = _project.DesignSettings.ExperimentalDesignType == ExperimentalDesignType.SplitPlots;
             }
         }
@@ -106,8 +106,8 @@ namespace AmigaPowerAnalysis.GUI {
                 _project.DesignSettings.ExperimentalDesignType = ExperimentalDesignType.CompletelyRandomized;
             } else if (this.radioButtonRandomizedCompleteBlocks.Checked) {
                 _project.DesignSettings.ExperimentalDesignType = ExperimentalDesignType.RandomizedCompleteBlocks;
-            } else if (this.radioButtonSplitPlot.Checked) {
-                _project.DesignSettings.ExperimentalDesignType = ExperimentalDesignType.SplitPlots;
+            //} else if (this.radioButtonSplitPlot.Checked) {
+            //    _project.DesignSettings.ExperimentalDesignType = ExperimentalDesignType.SplitPlots;
             }
             if (dataGridViewFactors.ColumnCount > 0) {
                 dataGridViewFactors.Columns["ExperimentUnitType"].Visible = _project.DesignSettings.ExperimentalDesignType == ExperimentalDesignType.SplitPlots;
