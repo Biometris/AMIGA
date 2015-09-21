@@ -20,9 +20,10 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             html += generateComparisonSettingsHtml(_comparisonOutput.InputPowerAnalysis);
             html += generateAnalysisSettingsHtml(_comparisonOutput.InputPowerAnalysis);
             //html += generateComparisonInputDataHtml(comparison.OutputPowerAnalysis.InputPowerAnalysis);
-            var selectedAnalysisMethods = _comparisonOutput.InputPowerAnalysis.SelectedAnalysisMethodTypes.GetFlags().Cast<AnalysisMethodType>().ToList();
-            html += generateComparisonOutputHtml(_comparisonOutput.OutputRecords, selectedAnalysisMethods, TestType.Difference);
-            html += generateComparisonOutputHtml(_comparisonOutput.OutputRecords, selectedAnalysisMethods, TestType.Equivalence);
+            var selectedAnalysisMethodsDifferenceTests = _comparisonOutput.InputPowerAnalysis.SelectedAnalysisMethodTypesDifferenceTests.GetFlags().Cast<AnalysisMethodType>().ToList();
+            var selectedAnalysisMethodsEquivalenceTests = _comparisonOutput.InputPowerAnalysis.SelectedAnalysisMethodTypesEquivalenceTests.GetFlags().Cast<AnalysisMethodType>().ToList();
+            html += generateComparisonOutputHtml(_comparisonOutput.OutputRecords, selectedAnalysisMethodsDifferenceTests, TestType.Difference);
+            html += generateComparisonOutputHtml(_comparisonOutput.OutputRecords, selectedAnalysisMethodsEquivalenceTests, TestType.Equivalence);
             html += generateComparisonChartsHtml(_comparisonOutput, _filesPath, imagesAsPng);
             return format(html);
         }

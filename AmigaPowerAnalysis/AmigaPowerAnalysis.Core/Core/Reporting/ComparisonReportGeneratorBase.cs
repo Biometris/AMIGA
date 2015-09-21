@@ -57,12 +57,20 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             stringBuilder.AppendLine(format("Significance level", inputPowerAnalysis.SignificanceLevel));
             stringBuilder.AppendLine(format("Number of evaluation points", inputPowerAnalysis.NumberOfRatios));
             stringBuilder.AppendLine(format("Tested replications", string.Join(" ", inputPowerAnalysis.NumberOfReplications.Select(r => r.ToString()).ToList())));
-            var analysisMethods = AnalysisModelFactory.AnalysisMethodsForMeasurementType(inputPowerAnalysis.MeasurementType) & inputPowerAnalysis.SelectedAnalysisMethodTypes;
-            for (int i = 0; i < analysisMethods.GetFlags().Count(); ++i) {
+            var analysisMethodsDifferenceTests = AnalysisModelFactory.AnalysisMethodsForMeasurementType(inputPowerAnalysis.MeasurementType) & inputPowerAnalysis.SelectedAnalysisMethodTypesDifferenceTests;
+            for (int i = 0; i < analysisMethodsDifferenceTests.GetFlags().Count(); ++i) {
                 if (i == 0) {
-                    stringBuilder.AppendLine(format("Analysis methods", analysisMethods.GetFlags().ElementAt(i)));
+                    stringBuilder.AppendLine(format("Analysis methods", analysisMethodsDifferenceTests.GetFlags().ElementAt(i)));
                 } else {
-                    stringBuilder.AppendLine(format(string.Empty, analysisMethods.GetFlags().ElementAt(i).GetDisplayName()));
+                    stringBuilder.AppendLine(format(string.Empty, analysisMethodsDifferenceTests.GetFlags().ElementAt(i).GetDisplayName()));
+                }
+            }
+            var analysisMethodsEquivalenceTests = AnalysisModelFactory.AnalysisMethodsForMeasurementType(inputPowerAnalysis.MeasurementType) & inputPowerAnalysis.SelectedAnalysisMethodTypesEquivalenceTests;
+            for (int i = 0; i < analysisMethodsEquivalenceTests.GetFlags().Count(); ++i) {
+                if (i == 0) {
+                    stringBuilder.AppendLine(format("Analysis methods", analysisMethodsEquivalenceTests.GetFlags().ElementAt(i)));
+                } else {
+                    stringBuilder.AppendLine(format(string.Empty, analysisMethodsEquivalenceTests.GetFlags().ElementAt(i).GetDisplayName()));
                 }
             }
             stringBuilder.AppendLine(format("Use Wald test", inputPowerAnalysis.UseWaldTest));
@@ -189,11 +197,12 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             var stringBuilder = new StringBuilder();
             var fileBaseId = comparisonOutput.InputPowerAnalysis.ComparisonId + "_" + comparisonOutput.InputPowerAnalysis.Endpoint;
             string imageFilename;
-            var selectedAnalysisMethods = comparisonOutput.InputPowerAnalysis.SelectedAnalysisMethodTypes.GetFlags().Cast<AnalysisMethodType>().ToList();
+            var selectedAnalysisMethodDifferenceTests = comparisonOutput.InputPowerAnalysis.SelectedAnalysisMethodTypesDifferenceTests.GetFlags().Cast<AnalysisMethodType>().ToList();
+            var selectedAnalysisMethodEquivalenceTests = comparisonOutput.InputPowerAnalysis.SelectedAnalysisMethodTypesEquivalenceTests.GetFlags().Cast<AnalysisMethodType>().ToList();
 
             stringBuilder.Append("<h2>Charts power analysis</h2>");
 
-            foreach (var analysisMethodType in selectedAnalysisMethods) {
+            foreach (var analysisMethodType in selectedAnalysisMethodDifferenceTests) {
 
                 stringBuilder.Append("<h3>Power analysis " + analysisMethodType.GetDisplayName() + " tests</h3>");
                 stringBuilder.Append("<table>");
@@ -212,7 +221,18 @@ namespace AmigaPowerAnalysis.Core.Reporting {
                 includeChart(plotDifferenceLogRatio, 400, 300, imagePath, imageFilename, stringBuilder, imagesAsPng);
                 stringBuilder.Append("</td>");
 
-                stringBuilder.Append("</tr><tr>");
+                stringBuilder.Append("</tr>");
+
+                stringBuilder.Append("</table>");
+            }
+
+
+            foreach (var analysisMethodType in selectedAnalysisMethodEquivalenceTests) {
+
+                stringBuilder.Append("<h3>Power analysis " + analysisMethodType.GetDisplayName() + " tests</h3>");
+                stringBuilder.Append("<table>");
+
+                stringBuilder.Append("<tr>");
 
                 imageFilename = fileBaseId + "_" + analysisMethodType.ToString() + "_Replicates_Equivalence.png";
                 var plotEquivalenceReplicates = PowerVersusReplicatesRatioChartCreator.Create(comparisonOutput.OutputRecords, TestType.Equivalence, analysisMethodType);

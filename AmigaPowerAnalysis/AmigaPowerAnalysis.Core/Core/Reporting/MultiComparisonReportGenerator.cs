@@ -24,15 +24,16 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             html += generatePrimaryComparisonsSummary(_comparisonOutputs);
 
             var firstInputSettings = _comparisonOutputs.First().InputPowerAnalysis;
-            var analysisMethodTypes = firstInputSettings.SelectedAnalysisMethodTypes.GetFlags().Cast<AnalysisMethodType>().ToList();
+            var analysisMethodTypesDifferenceTests = firstInputSettings.SelectedAnalysisMethodTypesDifferenceTests.GetFlags().Cast<AnalysisMethodType>().ToList();
+            var analysisMethodTypesEquivalenceTests = firstInputSettings.SelectedAnalysisMethodTypesEquivalenceTests.GetFlags().Cast<AnalysisMethodType>().ToList();
 
             html += generateDesignOverviewHtml(firstInputSettings);
             html += generateAnalysisSettingsHtml(firstInputSettings);
 
             var records = getSummaryRecords(primaryComparisonOutputs);
-            html += generateComparisonOutputHtml(records, analysisMethodTypes, TestType.Difference, true);
-            html += generateComparisonOutputHtml(records, analysisMethodTypes, TestType.Equivalence, true);
-            html += generateComparisonsChartHtml(records, analysisMethodTypes, _filesPath, imagesAsPng);
+            html += generateComparisonOutputHtml(records, analysisMethodTypesDifferenceTests, TestType.Difference, true);
+            html += generateComparisonOutputHtml(records, analysisMethodTypesEquivalenceTests, TestType.Equivalence, true);
+            html += generateComparisonsChartHtml(records, analysisMethodTypesDifferenceTests, analysisMethodTypesEquivalenceTests, _filesPath, imagesAsPng);
 
             html += "<h1>Results per primary comparison</h1>";
             foreach (var comparisonOutput in primaryComparisonOutputs) {
@@ -40,8 +41,8 @@ namespace AmigaPowerAnalysis.Core.Reporting {
                 html += generateComparisonMessagesHtml(comparisonOutput);
                 html += generateComparisonSettingsHtml(comparisonOutput.InputPowerAnalysis);
                 //html += generateComparisonInputDataHtml(comparison.OutputPowerAnalysis.InputPowerAnalysis);
-                html += generateComparisonOutputHtml(comparisonOutput.OutputRecords, analysisMethodTypes, TestType.Difference);
-                html += generateComparisonOutputHtml(comparisonOutput.OutputRecords, analysisMethodTypes, TestType.Equivalence);
+                html += generateComparisonOutputHtml(comparisonOutput.OutputRecords, analysisMethodTypesDifferenceTests, TestType.Difference);
+                html += generateComparisonOutputHtml(comparisonOutput.OutputRecords, analysisMethodTypesEquivalenceTests, TestType.Equivalence);
                 html += generateComparisonChartsHtml(comparisonOutput, _filesPath, imagesAsPng);
             }
             return format(html);
@@ -91,13 +92,13 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             return records;
         }
 
-        private static string generateComparisonsChartHtml(List<OutputPowerAnalysisRecord> records, IEnumerable<AnalysisMethodType> analysisMethodTypes, string tempPath, bool imagesAsPng) {
+        private static string generateComparisonsChartHtml(List<OutputPowerAnalysisRecord> records, IEnumerable<AnalysisMethodType> analysisMethodTypesDifferenceTests, IEnumerable<AnalysisMethodType> analysisMethodTypesEquivalenceTests, string tempPath, bool imagesAsPng) {
             var stringBuilder = new StringBuilder();
             stringBuilder.AppendLine("<h2>Charts joint power analysis primary comparisons</h2>");
 
             var fileBaseId = "Aggregate_";
             string imageFilename;
-            foreach (var analysisMethodType in analysisMethodTypes) {
+            foreach (var analysisMethodType in analysisMethodTypesDifferenceTests) {
 
                 stringBuilder.Append("<h3>Power analysis " + analysisMethodType.GetDisplayName() + " tests</h3>");
                 stringBuilder.Append("<table>");
@@ -115,7 +116,15 @@ namespace AmigaPowerAnalysis.Core.Reporting {
                 includeChart(plotDifferenceLogRatio, 400, 300, tempPath, imageFilename, stringBuilder, imagesAsPng);
                 stringBuilder.Append("</td>");
 
-                stringBuilder.Append("</tr><tr>");
+                stringBuilder.Append("</tr>");
+                stringBuilder.Append("</table>");
+            }
+
+            foreach (var analysisMethodType in analysisMethodTypesEquivalenceTests) {
+
+                stringBuilder.Append("<h3>Power analysis " + analysisMethodType.GetDisplayName() + " tests</h3>");
+                stringBuilder.Append("<table>");
+                stringBuilder.Append("<tr>");
 
                 imageFilename = fileBaseId + analysisMethodType.ToString() + "_Replicates_Equivalence.png";
                 var plotEquivalenceReplicates = PowerVersusReplicatesCsdChartCreator.Create(records, TestType.Equivalence, analysisMethodType);

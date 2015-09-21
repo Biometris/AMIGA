@@ -95,9 +95,20 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void dataGridViewComparisons_SelectionChanged(object sender, EventArgs e) {
             _currentComparison = _project.GetComparisons().ElementAt(dataGridViewComparisons.CurrentRow.Index);
+            updateComboBoxAnalysisMethodTypes();
+            updateAnalysisOutputPanel();
+        }
+
+        private void updateComboBoxAnalysisMethodTypes() {
             if (_currentComparison != null) {
                 this.comboBoxAnalysisType.Visible = true;
-                var selectedAnalysisMethodTypes = _currentComparison.OutputPowerAnalysis.InputPowerAnalysis.SelectedAnalysisMethodTypes.GetFlags().ToArray();
+                var testType = (TestType)comboBoxTestType.SelectedValue;
+                Enum[] selectedAnalysisMethodTypes;
+                if (testType == TestType.Difference) {
+                    selectedAnalysisMethodTypes = _currentComparison.OutputPowerAnalysis.InputPowerAnalysis.SelectedAnalysisMethodTypesDifferenceTests.GetFlags().ToArray();
+                } else {
+                    selectedAnalysisMethodTypes = _currentComparison.OutputPowerAnalysis.InputPowerAnalysis.SelectedAnalysisMethodTypesEquivalenceTests.GetFlags().ToArray();
+                }
                 this.comboBoxAnalysisType.Visible = selectedAnalysisMethodTypes.Count() > 1;
                 this.comboBoxAnalysisType.DataSource = selectedAnalysisMethodTypes;
                 if (selectedAnalysisMethodTypes.Count() > 0) {
@@ -106,7 +117,6 @@ namespace AmigaPowerAnalysis.GUI {
             } else {
                 this.comboBoxAnalysisType.Visible = false;
             }
-            updateAnalysisOutputPanel();
         }
 
         private void comboBoxAnalysisType_SelectedIndexChanged(object sender, EventArgs e) {
@@ -134,6 +144,7 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void comboBoxTestType_SelectedIndexChanged(object sender, EventArgs e) {
             updateAnalysisOutputPanel();
+            updateComboBoxAnalysisMethodTypes();
         }
 
         private void comboBoxAnalysisPlotTypes_SelectedIndexChanged(object sender, EventArgs e) {

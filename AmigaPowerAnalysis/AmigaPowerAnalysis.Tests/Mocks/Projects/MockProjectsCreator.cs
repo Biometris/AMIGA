@@ -27,7 +27,8 @@ namespace AmigaPowerAnalysis.Tests.Mocks.Projects {
             project.PowerCalculationSettings.NumberOfRatios = 1;
             project.PowerCalculationSettings.NumberOfReplications = new List<int>() { 4, 8, 16 };
             project.PowerCalculationSettings.NumberOfSimulatedDataSets = 10;
-            project.PowerCalculationSettings.SelectedAnalysisMethodTypes = AnalysisMethodType.LogNormal | AnalysisMethodType.SquareRoot | AnalysisMethodType.OverdispersedPoisson | AnalysisMethodType.NegativeBinomial;
+            project.PowerCalculationSettings.SelectedAnalysisMethodTypesDifferenceTests = AnalysisMethodType.LogNormal | AnalysisMethodType.SquareRoot | AnalysisMethodType.OverdispersedPoisson | AnalysisMethodType.NegativeBinomial;
+            project.PowerCalculationSettings.SelectedAnalysisMethodTypesEquivalenceTests = AnalysisMethodType.LogNormal | AnalysisMethodType.SquareRoot | AnalysisMethodType.OverdispersedPoisson | AnalysisMethodType.NegativeBinomial;
 
             return project;
         }
@@ -41,7 +42,8 @@ namespace AmigaPowerAnalysis.Tests.Mocks.Projects {
             project.PowerCalculationSettings.NumberOfRatios = 1;
             project.PowerCalculationSettings.NumberOfReplications = new List<int>() { 4, 8, 16 };
             project.PowerCalculationSettings.NumberOfSimulatedDataSets = 10;
-            project.PowerCalculationSettings.SelectedAnalysisMethodTypes = AnalysisMethodType.LogNormal | AnalysisMethodType.SquareRoot | AnalysisMethodType.OverdispersedPoisson | AnalysisMethodType.NegativeBinomial;
+            project.PowerCalculationSettings.SelectedAnalysisMethodTypesDifferenceTests = AnalysisMethodType.LogNormal | AnalysisMethodType.SquareRoot | AnalysisMethodType.OverdispersedPoisson | AnalysisMethodType.NegativeBinomial;
+            project.PowerCalculationSettings.SelectedAnalysisMethodTypesEquivalenceTests = AnalysisMethodType.LogNormal | AnalysisMethodType.SquareRoot | AnalysisMethodType.OverdispersedPoisson | AnalysisMethodType.NegativeBinomial;
 
             return project;
         }
@@ -59,7 +61,8 @@ namespace AmigaPowerAnalysis.Tests.Mocks.Projects {
             project.PowerCalculationSettings.NumberOfRatios = 1;
             project.PowerCalculationSettings.NumberOfReplications = new List<int>() { 2, 4, 8 };
             project.PowerCalculationSettings.NumberOfSimulatedDataSets = 10;
-            project.PowerCalculationSettings.SelectedAnalysisMethodTypes = AnalysisMethodType.LogNormal | AnalysisMethodType.SquareRoot | AnalysisMethodType.OverdispersedPoisson | AnalysisMethodType.NegativeBinomial;
+            project.PowerCalculationSettings.SelectedAnalysisMethodTypesDifferenceTests = AnalysisMethodType.LogNormal | AnalysisMethodType.SquareRoot | AnalysisMethodType.OverdispersedPoisson | AnalysisMethodType.NegativeBinomial;
+            project.PowerCalculationSettings.SelectedAnalysisMethodTypesEquivalenceTests = AnalysisMethodType.LogNormal | AnalysisMethodType.SquareRoot | AnalysisMethodType.OverdispersedPoisson | AnalysisMethodType.NegativeBinomial;
 
             return project;
         }
@@ -76,7 +79,8 @@ namespace AmigaPowerAnalysis.Tests.Mocks.Projects {
             project.PowerCalculationSettings.PowerCalculationMethod = PowerCalculationMethod.Approximate;
             project.PowerCalculationSettings.NumberOfRatios = 5;
             project.PowerCalculationSettings.NumberOfReplications = new List<int>() { 32 };
-            project.PowerCalculationSettings.SelectedAnalysisMethodTypes = AnalysisMethodType.LogNormal | AnalysisMethodType.SquareRoot | AnalysisMethodType.OverdispersedPoisson | AnalysisMethodType.NegativeBinomial;
+            project.PowerCalculationSettings.SelectedAnalysisMethodTypesDifferenceTests = AnalysisMethodType.LogNormal | AnalysisMethodType.SquareRoot | AnalysisMethodType.OverdispersedPoisson | AnalysisMethodType.NegativeBinomial;
+            project.PowerCalculationSettings.SelectedAnalysisMethodTypesEquivalenceTests = AnalysisMethodType.LogNormal | AnalysisMethodType.SquareRoot | AnalysisMethodType.OverdispersedPoisson | AnalysisMethodType.NegativeBinomial;
 
             return project;
         }
@@ -94,7 +98,8 @@ namespace AmigaPowerAnalysis.Tests.Mocks.Projects {
             project.PowerCalculationSettings.NumberOfRatios = 3;
             project.PowerCalculationSettings.NumberOfReplications = new List<int>() { 2, 4, 8, 16, 32 };
             project.PowerCalculationSettings.NumberOfSimulatedDataSets = 100;
-            project.PowerCalculationSettings.SelectedAnalysisMethodTypes = AnalysisMethodType.LogNormal | AnalysisMethodType.SquareRoot | AnalysisMethodType.OverdispersedPoisson | AnalysisMethodType.NegativeBinomial;
+            project.PowerCalculationSettings.SelectedAnalysisMethodTypesDifferenceTests = AnalysisMethodType.LogNormal | AnalysisMethodType.SquareRoot | AnalysisMethodType.OverdispersedPoisson | AnalysisMethodType.NegativeBinomial;
+            project.PowerCalculationSettings.SelectedAnalysisMethodTypesEquivalenceTests = AnalysisMethodType.LogNormal | AnalysisMethodType.SquareRoot | AnalysisMethodType.OverdispersedPoisson | AnalysisMethodType.NegativeBinomial;
 
             return project;
         }
@@ -115,7 +120,8 @@ namespace AmigaPowerAnalysis.Tests.Mocks.Projects {
             project.PowerCalculationSettings.NumberOfRatios = 3;
             project.PowerCalculationSettings.NumberOfReplications = new List<int>() { 2, 4, 8, 16, 32 };
             project.PowerCalculationSettings.NumberOfSimulatedDataSets = 100;
-            project.PowerCalculationSettings.SelectedAnalysisMethodTypes = AnalysisMethodType.LogNormal | AnalysisMethodType.SquareRoot | AnalysisMethodType.OverdispersedPoisson | AnalysisMethodType.NegativeBinomial;
+            project.PowerCalculationSettings.SelectedAnalysisMethodTypesDifferenceTests = AnalysisMethodType.LogNormal | AnalysisMethodType.SquareRoot | AnalysisMethodType.OverdispersedPoisson | AnalysisMethodType.NegativeBinomial;
+            project.PowerCalculationSettings.SelectedAnalysisMethodTypesEquivalenceTests = AnalysisMethodType.LogNormal | AnalysisMethodType.SquareRoot | AnalysisMethodType.OverdispersedPoisson | AnalysisMethodType.NegativeBinomial;
 
             return project;
         }
@@ -139,7 +145,8 @@ namespace AmigaPowerAnalysis.Tests.Mocks.Projects {
             project.PowerCalculationSettings.NumberOfRatios = 3;
             project.PowerCalculationSettings.NumberOfReplications = new List<int>() { 2, 4, 8 };
             project.PowerCalculationSettings.NumberOfSimulatedDataSets = 100;
-            project.PowerCalculationSettings.SelectedAnalysisMethodTypes = AnalysisMethodType.LogNormal | AnalysisMethodType.SquareRoot | AnalysisMethodType.OverdispersedPoisson | AnalysisMethodType.NegativeBinomial;
+            project.PowerCalculationSettings.SelectedAnalysisMethodTypesDifferenceTests = AnalysisMethodType.LogNormal | AnalysisMethodType.SquareRoot | AnalysisMethodType.OverdispersedPoisson | AnalysisMethodType.NegativeBinomial;
+            project.PowerCalculationSettings.SelectedAnalysisMethodTypesEquivalenceTests = AnalysisMethodType.LogNormal | AnalysisMethodType.SquareRoot | AnalysisMethodType.OverdispersedPoisson | AnalysisMethodType.NegativeBinomial;
 
             return project;
         }

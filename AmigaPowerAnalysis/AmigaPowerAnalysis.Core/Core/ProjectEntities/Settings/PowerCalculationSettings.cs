@@ -21,7 +21,8 @@ namespace AmigaPowerAnalysis.Core {
     public sealed class PowerCalculationSettings {
 
         public PowerCalculationSettings() {
-            SelectedAnalysisMethodTypes = AnalysisMethodType.LogNormal;
+            SelectedAnalysisMethodTypesDifferenceTests = AnalysisMethodType.LogNormal;
+            SelectedAnalysisMethodTypesEquivalenceTests = AnalysisMethodType.OverdispersedPoisson;
             SignificanceLevel = 0.05;
             NumberOfRatios = 3;
             NumberOfReplications = new List<int> { 2, 4, 8, 16 };
@@ -95,18 +96,37 @@ namespace AmigaPowerAnalysis.Core {
         /// The selected analysis methods.
         /// </summary>
         [DataMember]
-        public AnalysisMethodType SelectedAnalysisMethodTypes { get; set; }
+        public AnalysisMethodType SelectedAnalysisMethodTypesDifferenceTests { get; set; }
 
         /// <summary>
-        /// Includes/exclused analysis types for simulation.
+        /// The selected analysis methods.
+        /// </summary>
+        [DataMember]
+        public AnalysisMethodType SelectedAnalysisMethodTypesEquivalenceTests { get; set; }
+
+        /// <summary>
+        /// Includes/exclused analysis types for difference tests.
         /// </summary>
         /// <param name="analysisMethodType"></param>
         /// <param name="selected"></param>
-        public void SetAnalysisMethodType(AnalysisMethodType analysisMethodType, bool selected) {
+        public void SetAnalysisMethodTypeDifferenceTests(AnalysisMethodType analysisMethodType, bool selected) {
             if (selected) {
-                SelectedAnalysisMethodTypes |= analysisMethodType;
+                SelectedAnalysisMethodTypesDifferenceTests |= analysisMethodType;
             } else {
-                SelectedAnalysisMethodTypes &= ~analysisMethodType;
+                SelectedAnalysisMethodTypesDifferenceTests &= ~analysisMethodType;
+            }
+        }
+
+        /// <summary>
+        /// Includes/exclused analysis types for equivalence tests.
+        /// </summary>
+        /// <param name="analysisMethodType"></param>
+        /// <param name="selected"></param>
+        public void SetAnalysisMethodTypeEquivalenceTests(AnalysisMethodType analysisMethodType, bool selected) {
+            if (selected) {
+                SelectedAnalysisMethodTypesEquivalenceTests |= analysisMethodType;
+            } else {
+                SelectedAnalysisMethodTypesEquivalenceTests &= ~analysisMethodType;
             }
         }
     }

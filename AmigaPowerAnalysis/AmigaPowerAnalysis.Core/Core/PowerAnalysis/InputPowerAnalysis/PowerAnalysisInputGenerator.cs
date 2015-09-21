@@ -18,7 +18,8 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
         public InputPowerAnalysis CreateInputPowerAnalysis(Comparison comparison, DesignSettings designSettings, PowerCalculationSettings powerCalculationSettings, int idComparison, int totalNumberOfComparisons, bool useBlockModifier) {
             var comparisonLevels = CreateComparisonDummyFactorLevels(comparison);
             var modifierLevels = CreateModifierDummyFactorLevels(comparison);
-            var selectedAnalysisMethods = powerCalculationSettings.SelectedAnalysisMethodTypes & AnalysisModelFactory.AnalysisMethodsForMeasurementType(comparison.Endpoint.Measurement);
+            var selectedAnalysisMethodsDifferenceTests = powerCalculationSettings.SelectedAnalysisMethodTypesDifferenceTests & AnalysisModelFactory.AnalysisMethodsForMeasurementType(comparison.Endpoint.Measurement);
+            var selectedAnalysisMethodsEquivalenceTests = powerCalculationSettings.SelectedAnalysisMethodTypesEquivalenceTests & AnalysisModelFactory.AnalysisMethodsForMeasurementType(comparison.Endpoint.Measurement);
             var inputPowerAnalysis = new InputPowerAnalysis() {
                 ComparisonId = idComparison,
                 NumberOfComparisons = totalNumberOfComparisons,
@@ -32,7 +33,8 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                 PowerLawPower = comparison.Endpoint.PowerLawPower,
                 ExcessZeroesPercentage = comparison.Endpoint.ExcessZeroes ? comparison.Endpoint.ExcessZeroesPercentage : 0,
                 OverallMean = comparison.Endpoint.MuComparator,
-                SelectedAnalysisMethodTypes = selectedAnalysisMethods,
+                SelectedAnalysisMethodTypesDifferenceTests = selectedAnalysisMethodsDifferenceTests,
+                SelectedAnalysisMethodTypesEquivalenceTests = selectedAnalysisMethodsEquivalenceTests,
                 CvComparator = comparison.Endpoint.CvComparator,
                 CvForBlocks = useBlockModifier ? comparison.Endpoint.CvForBlocks : 0D,
                 NumberOfInteractions = comparison.Endpoint.InteractionFactors.Count(),

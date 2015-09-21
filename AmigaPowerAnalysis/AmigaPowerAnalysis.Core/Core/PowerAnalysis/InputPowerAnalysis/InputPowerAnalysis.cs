@@ -191,10 +191,16 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
         public double CvForBlocks { get; set; }
 
         /// <summary>
-        /// The selected analysis methods.
+        /// The selected analysis methods for difference testing.
         /// </summary>
         [DataMember]
-        public AnalysisMethodType SelectedAnalysisMethodTypes { get; set; }
+        public AnalysisMethodType SelectedAnalysisMethodTypesDifferenceTests { get; set; }
+
+        /// <summary>
+        /// The selected analysis methods for equivalence testing.
+        /// </summary>
+        [DataMember]
+        public AnalysisMethodType SelectedAnalysisMethodTypesEquivalenceTests { get; set; }
 
         /// <summary>
         /// A list of input records belonging for a power analysis.
@@ -238,8 +244,11 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             stringBuilder.AppendLine(format("RandomNumberSeed", RandomNumberSeed));
             stringBuilder.AppendLine(format("NumberOfSimulatedDataSets", NumberOfSimulatedDataSets));
 
-            var analysisMethods = AnalysisModelFactory.AnalysisMethodsForMeasurementType(MeasurementType) & SelectedAnalysisMethodTypes;
-            stringBuilder.AppendLine(format("AnalysisMethods", string.Join(" ", analysisMethods.GetFlags().Cast<AnalysisMethodType>().Select(am => am.ToString()).ToList())));
+            var analysisMethodsDifferenceTests = AnalysisModelFactory.AnalysisMethodsForMeasurementType(MeasurementType) & SelectedAnalysisMethodTypesDifferenceTests;
+            stringBuilder.AppendLine(format("AnalysisMethodsDifferenceTests", string.Join(" ", analysisMethodsDifferenceTests.GetFlags().Cast<AnalysisMethodType>().Select(am => am.ToString()).ToList())));
+
+            var analysisMethodsEquivalenceTests = AnalysisModelFactory.AnalysisMethodsForMeasurementType(MeasurementType) & SelectedAnalysisMethodTypesEquivalenceTests;
+            stringBuilder.AppendLine(format("AnalysisMethodsEquivalenceTests", string.Join(" ", analysisMethodsEquivalenceTests.GetFlags().Cast<AnalysisMethodType>().Select(am => am.ToString()).ToList())));
 
             return stringBuilder.ToString();
         }

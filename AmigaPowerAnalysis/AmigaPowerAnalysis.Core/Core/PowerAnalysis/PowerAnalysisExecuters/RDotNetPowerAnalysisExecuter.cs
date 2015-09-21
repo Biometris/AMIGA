@@ -94,11 +94,11 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                                 rEngine.EvaluateNoReturn(string.Format("debugSettings = list(iRep={0}, iEffect={1}, iDataset=NaN)", i + 1, j + 1));
 
                                 if (inputPowerAnalysis.PowerCalculationMethodType == PowerCalculationMethod.Approximate) {
-                                    var output = runLylesApproximation(effect, blocks, inputPowerAnalysis.SelectedAnalysisMethodTypes, inputPowerAnalysis.NumberOfSimulatedDataSets, rEngine);
+                                    var output = runLylesApproximation(effect, blocks, inputPowerAnalysis.SelectedAnalysisMethodTypesDifferenceTests, inputPowerAnalysis.SelectedAnalysisMethodTypesEquivalenceTests, inputPowerAnalysis.NumberOfSimulatedDataSets, rEngine);
                                     outputResults.AddRange(output);
                                 } else {
                                     // Run Monte Carlo
-                                    var output = runMonteCarloSimulation(effect, blocks, inputPowerAnalysis.SelectedAnalysisMethodTypes, inputPowerAnalysis.NumberOfSimulatedDataSets, rEngine);
+                                    var output = runMonteCarloSimulation(effect, blocks, inputPowerAnalysis.SelectedAnalysisMethodTypesDifferenceTests, inputPowerAnalysis.SelectedAnalysisMethodTypesEquivalenceTests, inputPowerAnalysis.NumberOfSimulatedDataSets, rEngine);
                                     outputResults.Add(output);
                                 }
                             }
@@ -146,7 +146,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             }
         }
 
-        private static List<OutputPowerAnalysisRecord> runLylesApproximation(EffectCSD effect, int maxBlocks, AnalysisMethodType selectedAnalysisMethodTypes, int monteCarloSimulations, LoggingRDotNetEngine rEngine) {
+        private static List<OutputPowerAnalysisRecord> runLylesApproximation(EffectCSD effect, int maxBlocks, AnalysisMethodType selectedAnalysisMethodTypesDifferenceTests, AnalysisMethodType selectedAnalysisMethodTypesEquivalenceTests, int monteCarloSimulations, LoggingRDotNetEngine rEngine) {
             rEngine.SetSymbol("effect", effect.TransformedEfffect);
             rEngine.EvaluateNoReturn("pValues <- lylesPowerAnalysis(inputData, settings, modelSettings, blocks, effect, debugSettings)");
             var outputRecords = new List<OutputPowerAnalysisRecord>();
@@ -159,9 +159,11 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                     TransformedEffect = effect.TransformedEfffect,
                     NumberOfReplications = blocks,
                 };
-                foreach (var analysisMethodType in selectedAnalysisMethodTypes.GetFlags().Cast<AnalysisMethodType>()) {
+                foreach (var analysisMethodType in selectedAnalysisMethodTypesDifferenceTests.GetFlags().Cast<AnalysisMethodType>()) {
                     var powerDifference = rEngine.EvaluateDouble(string.Format("pValues$Diff[{0},\"{1}\"]", i + 1, analysisMethodType));
                     record.SetPower(TestType.Difference, analysisMethodType, powerDifference);
+                }
+                foreach (var analysisMethodType in selectedAnalysisMethodTypesEquivalenceTests.GetFlags().Cast<AnalysisMethodType>()) {
                     var powerEquivalence = rEngine.EvaluateDouble(string.Format("pValues$Equi[{0},\"{1}\"]", i + 1, analysisMethodType));
                     record.SetPower(TestType.Equivalence, analysisMethodType, powerEquivalence);
                 }
@@ -170,7 +172,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             return outputRecords;
         }
 
-        private static OutputPowerAnalysisRecord runMonteCarloSimulation(EffectCSD effect, int blocks, AnalysisMethodType selectedAnalysisMethodTypes, int monteCarloSimulations, LoggingRDotNetEngine rEngine) {
+        private static OutputPowerAnalysisRecord runMonteCarloSimulation(EffectCSD effect, int blocks, AnalysisMethodType selectedAnalysisMethodTypesDifferenceTests, AnalysisMethodType selectedAnalysisMethodTypesEquivalenceTests, int monteCarloSimulations, LoggingRDotNetEngine rEngine) {
             rEngine.SetSymbol("effect", effect.TransformedEfffect);
             rEngine.EvaluateNoReturn("pValues <- monteCarloPowerAnalysis(inputData, settings, modelSettings, blocks, effect, debugSettings)");
             var output = new OutputPowerAnalysisRecord() {
@@ -179,9 +181,11 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                 TransformedEffect = effect.TransformedEfffect,
                 NumberOfReplications = blocks,
             };
-            foreach (var analysisMethodType in selectedAnalysisMethodTypes.GetFlags().Cast<AnalysisMethodType>()) {
+            foreach (var analysisMethodType in selectedAnalysisMethodTypesDifferenceTests.GetFlags().Cast<AnalysisMethodType>()) {
                 var powerDifference = rEngine.EvaluateDouble(string.Format("sum(pValues$Diff[,\"{0}\"] < settings$SignificanceLevel)", analysisMethodType)) / monteCarloSimulations;
                 output.SetPower(TestType.Difference, analysisMethodType, powerDifference);
+            }
+            foreach (var analysisMethodType in selectedAnalysisMethodTypesEquivalenceTests.GetFlags().Cast<AnalysisMethodType>()) {
                 var powerEquivalence = rEngine.EvaluateDouble(string.Format("sum(pValues$Equi[,\"{0}\"] < settings$SignificanceLevel)", analysisMethodType)) / monteCarloSimulations;
                 output.SetPower(TestType.Equivalence, analysisMethodType, powerEquivalence);
             }

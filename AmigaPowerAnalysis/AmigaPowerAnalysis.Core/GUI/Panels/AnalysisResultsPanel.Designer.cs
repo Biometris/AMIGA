@@ -30,7 +30,6 @@
             this.flowLayoutPanelReport = new System.Windows.Forms.FlowLayoutPanel();
             this.buttonShowReport = new System.Windows.Forms.Button();
             this.plotTypePanel = new System.Windows.Forms.FlowLayoutPanel();
-            this.comboBoxAnalysisType = new System.Windows.Forms.ComboBox();
             this.comboBoxTestType = new System.Windows.Forms.ComboBox();
             this.comboBoxAnalysisPlotTypes = new System.Windows.Forms.ComboBox();
             this.flowLayoutPanelComparisonInfo = new System.Windows.Forms.FlowLayoutPanel();
@@ -139,7 +138,6 @@
             // 
             // plotTypePanel
             // 
-            this.plotTypePanel.Controls.Add(this.comboBoxAnalysisType);
             this.plotTypePanel.Controls.Add(this.comboBoxTestType);
             this.plotTypePanel.Controls.Add(this.comboBoxAnalysisPlotTypes);
             this.plotTypePanel.Dock = System.Windows.Forms.DockStyle.Top;
@@ -148,21 +146,11 @@
             this.plotTypePanel.Size = new System.Drawing.Size(549, 29);
             this.plotTypePanel.TabIndex = 17;
             // 
-            // comboBoxAnalysisType
-            // 
-            this.comboBoxAnalysisType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxAnalysisType.FormattingEnabled = true;
-            this.comboBoxAnalysisType.Location = new System.Drawing.Point(3, 3);
-            this.comboBoxAnalysisType.Name = "comboBoxAnalysisType";
-            this.comboBoxAnalysisType.Size = new System.Drawing.Size(182, 21);
-            this.comboBoxAnalysisType.TabIndex = 6;
-            this.comboBoxAnalysisType.SelectedIndexChanged += new System.EventHandler(this.comboBoxAnalysisType_SelectedIndexChanged);
-            // 
             // comboBoxTestType
             // 
             this.comboBoxTestType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxTestType.FormattingEnabled = true;
-            this.comboBoxTestType.Location = new System.Drawing.Point(191, 3);
+            this.comboBoxTestType.Location = new System.Drawing.Point(3, 3);
             this.comboBoxTestType.Name = "comboBoxTestType";
             this.comboBoxTestType.Size = new System.Drawing.Size(182, 21);
             this.comboBoxTestType.TabIndex = 7;
@@ -172,7 +160,7 @@
             // 
             this.comboBoxAnalysisPlotTypes.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxAnalysisPlotTypes.FormattingEnabled = true;
-            this.comboBoxAnalysisPlotTypes.Location = new System.Drawing.Point(3, 30);
+            this.comboBoxAnalysisPlotTypes.Location = new System.Drawing.Point(191, 3);
             this.comboBoxAnalysisPlotTypes.Name = "comboBoxAnalysisPlotTypes";
             this.comboBoxAnalysisPlotTypes.Size = new System.Drawing.Size(182, 21);
             this.comboBoxAnalysisPlotTypes.TabIndex = 8;
@@ -245,6 +233,5 @@
         private System.Windows.Forms.ComboBox comboBoxTestType;
         private System.Windows.Forms.ComboBox comboBoxAnalysisPlotTypes;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanelReport;
-        private System.Windows.Forms.ComboBox comboBoxAnalysisType;
     }
 }

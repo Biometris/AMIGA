@@ -22,17 +22,29 @@ namespace AmigaPowerAnalysis.GUI {
         public string Description { get; private set; }
 
         public void Activate() {
-            var selectedAnalysisMethodType = _project.PowerCalculationSettings.SelectedAnalysisMethodTypes;
-            checkBoxMethodForAnalysesLN.Checked = selectedAnalysisMethodType.Has(AnalysisMethodType.LogNormal);
-            checkBoxMethodForAnalysesSQ.Checked = selectedAnalysisMethodType.Has(AnalysisMethodType.SquareRoot);
-            checkBoxMethodForAnalysesOP.Checked = selectedAnalysisMethodType.Has(AnalysisMethodType.OverdispersedPoisson);
-            checkBoxMethodForAnalysesNB.Checked = selectedAnalysisMethodType.Has(AnalysisMethodType.NegativeBinomial);
-            checkBoxMethodForAnalysesEL.Checked = selectedAnalysisMethodType.Has(AnalysisMethodType.EmpiricalLogit);
-            checkBoxMethodForAnalysesBBN.Checked = selectedAnalysisMethodType.Has(AnalysisMethodType.Betabinomial);
-            checkBoxMethodForAnalysesOBN.Checked = selectedAnalysisMethodType.Has(AnalysisMethodType.OverdispersedBinomial);
-            checkBoxMethodForAnalysesLPM.Checked = selectedAnalysisMethodType.Has(AnalysisMethodType.LogPlusM);
-            checkBoxMethodForAnalysesG.Checked = selectedAnalysisMethodType.Has(AnalysisMethodType.Gamma);
-            checkBoxMethodForAnalysesN.Checked = selectedAnalysisMethodType.Has(AnalysisMethodType.Normal);
+            var selectedAnalysisMethodTypesDifferenceTests = _project.PowerCalculationSettings.SelectedAnalysisMethodTypesDifferenceTests;
+            checkBoxAnalysisMethodLNDifference.Checked = selectedAnalysisMethodTypesDifferenceTests.Has(AnalysisMethodType.LogNormal);
+            checkBoxAnalysisMethodSQDifference.Checked = selectedAnalysisMethodTypesDifferenceTests.Has(AnalysisMethodType.SquareRoot);
+            checkBoxAnalysisMethodOPDifference.Checked = selectedAnalysisMethodTypesDifferenceTests.Has(AnalysisMethodType.OverdispersedPoisson);
+            checkBoxAnalysisMethodNBDifference.Checked = selectedAnalysisMethodTypesDifferenceTests.Has(AnalysisMethodType.NegativeBinomial);
+            checkBoxAnalysisMethodELDifference.Checked = selectedAnalysisMethodTypesDifferenceTests.Has(AnalysisMethodType.EmpiricalLogit);
+            checkBoxAnalysisMethodBBNDifference.Checked = selectedAnalysisMethodTypesDifferenceTests.Has(AnalysisMethodType.Betabinomial);
+            checkBoxAnalysisMethodOBNDifference.Checked = selectedAnalysisMethodTypesDifferenceTests.Has(AnalysisMethodType.OverdispersedBinomial);
+            checkBoxAnalysisMethodLPMDifference.Checked = selectedAnalysisMethodTypesDifferenceTests.Has(AnalysisMethodType.LogPlusM);
+            checkBoxAnalysisMethodGDifference.Checked = selectedAnalysisMethodTypesDifferenceTests.Has(AnalysisMethodType.Gamma);
+            checkBoxAnalysisMethodNormalDifference.Checked = selectedAnalysisMethodTypesDifferenceTests.Has(AnalysisMethodType.Normal);
+
+            var selectedAnalysisMethodTypesEquivalenceTests = _project.PowerCalculationSettings.SelectedAnalysisMethodTypesEquivalenceTests;
+            checkBoxAnalysisMethodLNEquivalence.Checked = selectedAnalysisMethodTypesEquivalenceTests.Has(AnalysisMethodType.LogNormal);
+            checkBoxAnalysisMethodSQEquivalence.Checked = selectedAnalysisMethodTypesEquivalenceTests.Has(AnalysisMethodType.SquareRoot);
+            checkBoxAnalysisMethodOPEquivalence.Checked = selectedAnalysisMethodTypesEquivalenceTests.Has(AnalysisMethodType.OverdispersedPoisson);
+            checkBoxAnalysisMethodNBEquivalence.Checked = selectedAnalysisMethodTypesEquivalenceTests.Has(AnalysisMethodType.NegativeBinomial);
+            checkBoxAnalysisMethodELEquivalence.Checked = selectedAnalysisMethodTypesEquivalenceTests.Has(AnalysisMethodType.EmpiricalLogit);
+            checkBoxAnalysisMethodBBNEquivalence.Checked = selectedAnalysisMethodTypesEquivalenceTests.Has(AnalysisMethodType.Betabinomial);
+            checkBoxAnalysisMethodOBNEquivalence.Checked = selectedAnalysisMethodTypesEquivalenceTests.Has(AnalysisMethodType.OverdispersedBinomial);
+            checkBoxAnalysisMethodLPMEquivalence.Checked = selectedAnalysisMethodTypesEquivalenceTests.Has(AnalysisMethodType.LogPlusM);
+            checkBoxAnalysisMethodGEquivalence.Checked = selectedAnalysisMethodTypesEquivalenceTests.Has(AnalysisMethodType.Gamma);
+            checkBoxAnalysisMethodNormalEquivalence.Checked = selectedAnalysisMethodTypesEquivalenceTests.Has(AnalysisMethodType.Normal);
 
             textBoxSignificanceLevel.Text = _project.PowerCalculationSettings.SignificanceLevel.ToString();
             textBoxNumberOfEvaluationPoints.Text = _project.PowerCalculationSettings.NumberOfRatios.ToString();
@@ -43,10 +55,16 @@ namespace AmigaPowerAnalysis.GUI {
             textBoxNumberSimulatedDatasets.Text = _project.PowerCalculationSettings.NumberOfSimulatedDataSets.ToString();
             textBoxSeedForRandomNumbers.Text = _project.PowerCalculationSettings.Seed.ToString();
 
-            groupBoxMethodsForAnalysisOfContinuous.Visible = _project.Endpoints.Any(ep => ep.Measurement == MeasurementType.Continuous);
-            groupBoxMethodsForAnalysisOfCounts.Visible = _project.Endpoints.Any(ep => ep.Measurement == MeasurementType.Count);
-            groupBoxMethodsForAnalysisOfFractions.Visible = _project.Endpoints.Any(ep => ep.Measurement == MeasurementType.Fraction);
-            groupBoxMethodsForAnalysisOfNonNegative.Visible = _project.Endpoints.Any(ep => ep.Measurement == MeasurementType.Nonnegative);
+            groupBoxAnalysisMethodsContinuousDifference.Visible = _project.Endpoints.Any(ep => ep.Measurement == MeasurementType.Continuous);
+            groupBoxAnalysisMethodsCountsDifference.Visible = _project.Endpoints.Any(ep => ep.Measurement == MeasurementType.Count);
+            groupBoxAnalysisFractionsMethodsDifference.Visible = _project.Endpoints.Any(ep => ep.Measurement == MeasurementType.Fraction);
+            groupBoxAnalysisMethodsNonNegativeDifference.Visible = _project.Endpoints.Any(ep => ep.Measurement == MeasurementType.Nonnegative);
+
+            groupBoxAnalysisMethodsContinuousEquivalence.Visible = _project.Endpoints.Any(ep => ep.Measurement == MeasurementType.Continuous);
+            groupBoxAnalysisMethodsCountsEquivalence.Visible = _project.Endpoints.Any(ep => ep.Measurement == MeasurementType.Count);
+            groupBoxAnalysisFractionsMethodsEquivalence.Visible = _project.Endpoints.Any(ep => ep.Measurement == MeasurementType.Fraction);
+            groupBoxAnalysisMethodsNonNegativeEquivalence.Visible = _project.Endpoints.Any(ep => ep.Measurement == MeasurementType.Nonnegative);
+
         }
 
         public bool IsVisible() {
@@ -109,48 +127,88 @@ namespace AmigaPowerAnalysis.GUI {
             textBox.Text = _project.PowerCalculationSettings.Seed.ToString();
         }
 
-        private void checkBoxMethodForAnalysesLN_CheckedChanged(object sender, EventArgs e) {
-            _project.PowerCalculationSettings.SetAnalysisMethodType(AnalysisMethodType.LogNormal, checkBoxMethodForAnalysesLN.Checked);
-        }
-
-        private void checkBoxMethodForAnalysesSQ_CheckedChanged(object sender, EventArgs e) {
-            _project.PowerCalculationSettings.SetAnalysisMethodType(AnalysisMethodType.SquareRoot, checkBoxMethodForAnalysesSQ.Checked);
-        }
-
-        private void checkBoxMethodForAnalysesOP_CheckedChanged(object sender, EventArgs e) {
-            _project.PowerCalculationSettings.SetAnalysisMethodType(AnalysisMethodType.OverdispersedPoisson, checkBoxMethodForAnalysesOP.Checked);
-        }
-
-        private void checkBoxMethodForAnalysesNB_CheckedChanged(object sender, EventArgs e) {
-            _project.PowerCalculationSettings.SetAnalysisMethodType(AnalysisMethodType.NegativeBinomial, checkBoxMethodForAnalysesNB.Checked);
-        }
-
-        private void checkBoxMethodForAnalysesEL_CheckedChanged(object sender, EventArgs e) {
-            _project.PowerCalculationSettings.SetAnalysisMethodType(AnalysisMethodType.EmpiricalLogit, checkBoxMethodForAnalysesEL.Checked);
-        }
-
-        private void checkBoxMethodForAnalysesOBN_CheckedChanged(object sender, EventArgs e) {
-            _project.PowerCalculationSettings.SetAnalysisMethodType(AnalysisMethodType.OverdispersedBinomial, checkBoxMethodForAnalysesOBN.Checked);
-        }
-
-        private void checkBoxMethodForAnalysesBBN_CheckedChanged(object sender, EventArgs e) {
-            _project.PowerCalculationSettings.SetAnalysisMethodType(AnalysisMethodType.Betabinomial, checkBoxMethodForAnalysesBBN.Checked);
-        }
-
-        private void checkBoxMethodForAnalysesLPM_CheckedChanged(object sender, EventArgs e) {
-            _project.PowerCalculationSettings.SetAnalysisMethodType(AnalysisMethodType.LogPlusM, checkBoxMethodForAnalysesLPM.Checked);
-        }
-
-        private void checkBoxMethodForAnalysesG_CheckedChanged(object sender, EventArgs e) {
-            _project.PowerCalculationSettings.SetAnalysisMethodType(AnalysisMethodType.Gamma, checkBoxMethodForAnalysesG.Checked);
-        }
-
-        private void checkBoxMethodForAnalysesN_CheckedChanged(object sender, EventArgs e) {
-            _project.PowerCalculationSettings.SetAnalysisMethodType(AnalysisMethodType.Normal, checkBoxMethodForAnalysesN.Checked);
-        }
-
         private void checkBoxUseWaldTest_CheckedChanged(object sender, EventArgs e) {
             _project.PowerCalculationSettings.UseWaldTest = checkBoxUseWaldTest.Checked;
+        }
+
+        private void checkBoxAnalysisMethodLNDifference_CheckedChanged(object sender, EventArgs e) {
+            _project.PowerCalculationSettings.SetAnalysisMethodTypeDifferenceTests(AnalysisMethodType.LogNormal, checkBoxAnalysisMethodLNDifference.Checked);
+        }
+
+        private void checkBoxAnalysisMethodSQDifference_CheckedChanged(object sender, EventArgs e) {
+            _project.PowerCalculationSettings.SetAnalysisMethodTypeDifferenceTests(AnalysisMethodType.SquareRoot, checkBoxAnalysisMethodSQDifference.Checked);
+        }
+
+        private void checkBoxAnalysisMethodOPDifference_CheckedChanged(object sender, EventArgs e) {
+            _project.PowerCalculationSettings.SetAnalysisMethodTypeDifferenceTests(AnalysisMethodType.OverdispersedPoisson, checkBoxAnalysisMethodOPDifference.Checked);
+        }
+
+        private void checkBoxAnalysisMethodNBDifference_CheckedChanged(object sender, EventArgs e) {
+            _project.PowerCalculationSettings.SetAnalysisMethodTypeDifferenceTests(AnalysisMethodType.NegativeBinomial, checkBoxAnalysisMethodNBDifference.Checked);
+        }
+
+        private void checkBoxAnalysisMethodELDifference_CheckedChanged(object sender, EventArgs e) {
+            _project.PowerCalculationSettings.SetAnalysisMethodTypeDifferenceTests(AnalysisMethodType.EmpiricalLogit, checkBoxAnalysisMethodELDifference.Checked);
+        }
+
+        private void checkBoxAnalysisMethodOBNDifference_CheckedChanged(object sender, EventArgs e) {
+            _project.PowerCalculationSettings.SetAnalysisMethodTypeDifferenceTests(AnalysisMethodType.OverdispersedBinomial, checkBoxAnalysisMethodOBNDifference.Checked);
+        }
+
+        private void checkBoxAnalysisMethodBBNDifference_CheckedChanged(object sender, EventArgs e) {
+            _project.PowerCalculationSettings.SetAnalysisMethodTypeDifferenceTests(AnalysisMethodType.Betabinomial, checkBoxAnalysisMethodBBNDifference.Checked);
+        }
+
+        private void checkBoxAnalysisMethodLPMDifference_CheckedChanged(object sender, EventArgs e) {
+            _project.PowerCalculationSettings.SetAnalysisMethodTypeDifferenceTests(AnalysisMethodType.LogPlusM, checkBoxAnalysisMethodLPMDifference.Checked);
+        }
+
+        private void checkBoxAnalysisMethodGDifference_CheckedChanged(object sender, EventArgs e) {
+            _project.PowerCalculationSettings.SetAnalysisMethodTypeDifferenceTests(AnalysisMethodType.Gamma, checkBoxAnalysisMethodGDifference.Checked);
+        }
+
+        private void checkBoxAnalysisMethodNDifference_CheckedChanged(object sender, EventArgs e) {
+            _project.PowerCalculationSettings.SetAnalysisMethodTypeDifferenceTests(AnalysisMethodType.Normal, checkBoxAnalysisMethodNormalDifference.Checked);
+        }
+
+        private void checkBoxAnalysisMethodLNEquivalence_CheckedChanged(object sender, EventArgs e) {
+            _project.PowerCalculationSettings.SetAnalysisMethodTypeEquivalenceTests(AnalysisMethodType.LogNormal, checkBoxAnalysisMethodLNEquivalence.Checked);
+        }
+
+        private void checkBoxAnalysisMethodSQEquivalence_CheckedChanged(object sender, EventArgs e) {
+            _project.PowerCalculationSettings.SetAnalysisMethodTypeEquivalenceTests(AnalysisMethodType.SquareRoot, checkBoxAnalysisMethodSQEquivalence.Checked);
+        }
+
+        private void checkBoxAnalysisMethodOPEquivalence_CheckedChanged(object sender, EventArgs e) {
+            _project.PowerCalculationSettings.SetAnalysisMethodTypeEquivalenceTests(AnalysisMethodType.OverdispersedPoisson, checkBoxAnalysisMethodOPEquivalence.Checked);
+        }
+
+        private void checkBoxAnalysisMethodNBEquivalence_CheckedChanged(object sender, EventArgs e) {
+            _project.PowerCalculationSettings.SetAnalysisMethodTypeEquivalenceTests(AnalysisMethodType.NegativeBinomial, checkBoxAnalysisMethodNBEquivalence.Checked);
+        }
+
+        private void checkBoxAnalysisMethodLPMEquivalence_CheckedChanged(object sender, EventArgs e) {
+            _project.PowerCalculationSettings.SetAnalysisMethodTypeEquivalenceTests(AnalysisMethodType.LogPlusM, checkBoxAnalysisMethodLPMEquivalence.Checked);
+        }
+
+        private void checkBoxAnalysisMethodGEquivalence_CheckedChanged(object sender, EventArgs e) {
+            _project.PowerCalculationSettings.SetAnalysisMethodTypeEquivalenceTests(AnalysisMethodType.Gamma, checkBoxAnalysisMethodGEquivalence.Checked);
+        }
+
+        private void checkBoxAnalysisMethodNormalEquivalence_CheckedChanged(object sender, EventArgs e) {
+            _project.PowerCalculationSettings.SetAnalysisMethodTypeEquivalenceTests(AnalysisMethodType.Normal, checkBoxAnalysisMethodNormalEquivalence.Checked);
+        }
+
+        private void checkBoxAnalysisMethodELEquivalence_CheckedChanged(object sender, EventArgs e) {
+            _project.PowerCalculationSettings.SetAnalysisMethodTypeEquivalenceTests(AnalysisMethodType.EmpiricalLogit, checkBoxAnalysisMethodELEquivalence.Checked);
+        }
+
+        private void checkBoxAnalysisMethodOBNEquivalence_CheckedChanged(object sender, EventArgs e) {
+            _project.PowerCalculationSettings.SetAnalysisMethodTypeEquivalenceTests(AnalysisMethodType.OverdispersedBinomial, checkBoxAnalysisMethodOBNEquivalence.Checked);
+        }
+
+        private void checkBoxAnalysisMethodBBNEquivalence_CheckedChanged(object sender, EventArgs e) {
+            _project.PowerCalculationSettings.SetAnalysisMethodTypeEquivalenceTests(AnalysisMethodType.Betabinomial, checkBoxAnalysisMethodBBNEquivalence.Checked);
         }
 
         private void comboBoxMethodForPowerCalculation_SelectionChangeCommitted(object sender, EventArgs e) {

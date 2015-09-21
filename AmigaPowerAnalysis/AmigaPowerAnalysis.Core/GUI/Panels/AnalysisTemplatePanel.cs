@@ -36,8 +36,8 @@ namespace AmigaPowerAnalysis.GUI {
             _project = project;
             _numberOfReplicates = 3;
             var analysisMethodType = Enum.GetValues(typeof(AnalysisMethodType));
-            this.comboBoxAnalysisMethodType.DataSource = analysisMethodType;
-            this.comboBoxAnalysisMethodType.SelectedIndex = 0;
+            this.comboBoxAnalysisMethodTypeDifferenceTests.DataSource = analysisMethodType;
+            this.comboBoxAnalysisMethodTypeDifferenceTests.SelectedIndex = 0;
         }
 
         public string Description { get; private set; }
@@ -93,17 +93,22 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void dataGridViewComparisons_SelectionChanged(object sender, EventArgs e) {
             _currentComparison = _project.GetComparisons().ElementAt(dataGridViewComparisons.CurrentRow.Index);
-            var selectedAnalysisMethodTypes = _currentComparison.OutputPowerAnalysis.InputPowerAnalysis.SelectedAnalysisMethodTypes.GetFlags().ToArray();
-            this.comboBoxAnalysisMethodType.DataSource = selectedAnalysisMethodTypes;
-            if (selectedAnalysisMethodTypes.Count() > 0) {
-                this.comboBoxAnalysisMethodType.SelectedIndex = 0;
+            var selectedAnalysisMethodTypesDifferenceTests = _currentComparison.OutputPowerAnalysis.InputPowerAnalysis.SelectedAnalysisMethodTypesDifferenceTests.GetFlags().ToArray();
+            this.comboBoxAnalysisMethodTypeDifferenceTests.DataSource = selectedAnalysisMethodTypesDifferenceTests;
+            if (selectedAnalysisMethodTypesDifferenceTests.Count() > 0) {
+                this.comboBoxAnalysisMethodTypeDifferenceTests.SelectedIndex = 0;
+            }
+            var selectedAnalysisMethodTypesEquivalenceTests = _currentComparison.OutputPowerAnalysis.InputPowerAnalysis.SelectedAnalysisMethodTypesEquivalenceTests.GetFlags().ToArray();
+            this.comboBoxAnalysisMethodTypeEquivalenceTests.DataSource = selectedAnalysisMethodTypesEquivalenceTests;
+            if (selectedAnalysisMethodTypesEquivalenceTests.Count() > 0) {
+                this.comboBoxAnalysisMethodTypeEquivalenceTests.SelectedIndex = 0;
             }
             updatePanelModelInfo();
         }
 
         private void comboBoxAnalysisMethodType_SelectedIndexChanged(object sender, EventArgs e) {
             AnalysisMethodType analysisType;
-            Enum.TryParse<AnalysisMethodType>(comboBoxAnalysisMethodType.SelectedValue.ToString(), out analysisType);
+            Enum.TryParse<AnalysisMethodType>(comboBoxAnalysisMethodTypeDifferenceTests.SelectedValue.ToString(), out analysisType);
             _currentAnalysisMethodType = analysisType;
             updatePanelModelInfo();
         }

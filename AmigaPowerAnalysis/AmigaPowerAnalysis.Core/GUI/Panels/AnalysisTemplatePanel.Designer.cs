@@ -24,23 +24,24 @@
         /// </summary>
         private void InitializeComponent() {
             this.panelModelInfo = new System.Windows.Forms.Panel();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.comboBoxAnalysisMethodTypeDifferenceTests = new System.Windows.Forms.ComboBox();
             this.textBoxGeneratedAnalysisScript = new System.Windows.Forms.TextBox();
             this.flowLayoutPanelReport = new System.Windows.Forms.FlowLayoutPanel();
             this.buttonGenerateDataTemplate = new System.Windows.Forms.Button();
-            this.dataGridViewComparisons = new System.Windows.Forms.DataGridView();
-            this.splitContainerComparisons = new System.Windows.Forms.SplitContainer();
             this.textBoxNumberOfReplicates = new System.Windows.Forms.TextBox();
             this.labelNumberOfReplicates = new System.Windows.Forms.Label();
-            this.comboBoxAnalysisMethodType = new System.Windows.Forms.ComboBox();
-            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.dataGridViewComparisons = new System.Windows.Forms.DataGridView();
+            this.splitContainerComparisons = new System.Windows.Forms.SplitContainer();
+            this.comboBoxAnalysisMethodTypeEquivalenceTests = new System.Windows.Forms.ComboBox();
             this.panelModelInfo.SuspendLayout();
+            this.flowLayoutPanel1.SuspendLayout();
             this.flowLayoutPanelReport.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewComparisons)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerComparisons)).BeginInit();
             this.splitContainerComparisons.Panel1.SuspendLayout();
             this.splitContainerComparisons.Panel2.SuspendLayout();
             this.splitContainerComparisons.SuspendLayout();
-            this.flowLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelModelInfo
@@ -55,6 +56,27 @@
             this.panelModelInfo.Padding = new System.Windows.Forms.Padding(5);
             this.panelModelInfo.Size = new System.Drawing.Size(610, 477);
             this.panelModelInfo.TabIndex = 0;
+            // 
+            // flowLayoutPanel1
+            // 
+            this.flowLayoutPanel1.Controls.Add(this.comboBoxAnalysisMethodTypeDifferenceTests);
+            this.flowLayoutPanel1.Controls.Add(this.comboBoxAnalysisMethodTypeEquivalenceTests);
+            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(5, 412);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(598, 29);
+            this.flowLayoutPanel1.TabIndex = 20;
+            // 
+            // comboBoxAnalysisMethodTypeDifferenceTests
+            // 
+            this.comboBoxAnalysisMethodTypeDifferenceTests.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxAnalysisMethodTypeDifferenceTests.FormattingEnabled = true;
+            this.comboBoxAnalysisMethodTypeDifferenceTests.Location = new System.Drawing.Point(413, 3);
+            this.comboBoxAnalysisMethodTypeDifferenceTests.Name = "comboBoxAnalysisMethodTypeDifferenceTests";
+            this.comboBoxAnalysisMethodTypeDifferenceTests.Size = new System.Drawing.Size(182, 21);
+            this.comboBoxAnalysisMethodTypeDifferenceTests.TabIndex = 12;
+            this.comboBoxAnalysisMethodTypeDifferenceTests.SelectedIndexChanged += new System.EventHandler(this.comboBoxAnalysisMethodType_SelectedIndexChanged);
             // 
             // textBoxGeneratedAnalysisScript
             // 
@@ -89,6 +111,25 @@
             this.buttonGenerateDataTemplate.Text = "Export data template";
             this.buttonGenerateDataTemplate.UseVisualStyleBackColor = true;
             this.buttonGenerateDataTemplate.Click += new System.EventHandler(this.buttonGenerateDataTemplate_Click);
+            // 
+            // textBoxNumberOfReplicates
+            // 
+            this.textBoxNumberOfReplicates.Location = new System.Drawing.Point(404, 3);
+            this.textBoxNumberOfReplicates.Name = "textBoxNumberOfReplicates";
+            this.textBoxNumberOfReplicates.Size = new System.Drawing.Size(42, 20);
+            this.textBoxNumberOfReplicates.TabIndex = 11;
+            this.textBoxNumberOfReplicates.Text = "2";
+            this.textBoxNumberOfReplicates.TextChanged += new System.EventHandler(this.textBoxNumberOfReplicates_TextChanged);
+            // 
+            // labelNumberOfReplicates
+            // 
+            this.labelNumberOfReplicates.AutoSize = true;
+            this.labelNumberOfReplicates.Location = new System.Drawing.Point(291, 8);
+            this.labelNumberOfReplicates.Margin = new System.Windows.Forms.Padding(3, 8, 3, 0);
+            this.labelNumberOfReplicates.Name = "labelNumberOfReplicates";
+            this.labelNumberOfReplicates.Size = new System.Drawing.Size(107, 13);
+            this.labelNumberOfReplicates.TabIndex = 10;
+            this.labelNumberOfReplicates.Text = "Number of replicates:";
             // 
             // dataGridViewComparisons
             // 
@@ -131,44 +172,14 @@
             this.splitContainerComparisons.SplitterDistance = 283;
             this.splitContainerComparisons.TabIndex = 9;
             // 
-            // textBoxNumberOfReplicates
+            // comboBoxAnalysisMethodTypeEquivalenceTests
             // 
-            this.textBoxNumberOfReplicates.Location = new System.Drawing.Point(404, 3);
-            this.textBoxNumberOfReplicates.Name = "textBoxNumberOfReplicates";
-            this.textBoxNumberOfReplicates.Size = new System.Drawing.Size(42, 20);
-            this.textBoxNumberOfReplicates.TabIndex = 11;
-            this.textBoxNumberOfReplicates.Text = "2";
-            this.textBoxNumberOfReplicates.TextChanged += new System.EventHandler(this.textBoxNumberOfReplicates_TextChanged);
-            // 
-            // labelNumberOfReplicates
-            // 
-            this.labelNumberOfReplicates.AutoSize = true;
-            this.labelNumberOfReplicates.Location = new System.Drawing.Point(291, 8);
-            this.labelNumberOfReplicates.Margin = new System.Windows.Forms.Padding(3, 8, 3, 0);
-            this.labelNumberOfReplicates.Name = "labelNumberOfReplicates";
-            this.labelNumberOfReplicates.Size = new System.Drawing.Size(107, 13);
-            this.labelNumberOfReplicates.TabIndex = 10;
-            this.labelNumberOfReplicates.Text = "Number of replicates:";
-            // 
-            // comboBoxAnalysisMethodType
-            // 
-            this.comboBoxAnalysisMethodType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxAnalysisMethodType.FormattingEnabled = true;
-            this.comboBoxAnalysisMethodType.Location = new System.Drawing.Point(413, 3);
-            this.comboBoxAnalysisMethodType.Name = "comboBoxAnalysisMethodType";
-            this.comboBoxAnalysisMethodType.Size = new System.Drawing.Size(182, 21);
-            this.comboBoxAnalysisMethodType.TabIndex = 12;
-            this.comboBoxAnalysisMethodType.SelectedIndexChanged += new System.EventHandler(this.comboBoxAnalysisMethodType_SelectedIndexChanged);
-            // 
-            // flowLayoutPanel1
-            // 
-            this.flowLayoutPanel1.Controls.Add(this.comboBoxAnalysisMethodType);
-            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(5, 412);
-            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(598, 29);
-            this.flowLayoutPanel1.TabIndex = 20;
+            this.comboBoxAnalysisMethodTypeEquivalenceTests.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxAnalysisMethodTypeEquivalenceTests.FormattingEnabled = true;
+            this.comboBoxAnalysisMethodTypeEquivalenceTests.Location = new System.Drawing.Point(225, 3);
+            this.comboBoxAnalysisMethodTypeEquivalenceTests.Name = "comboBoxAnalysisMethodTypeEquivalenceTests";
+            this.comboBoxAnalysisMethodTypeEquivalenceTests.Size = new System.Drawing.Size(182, 21);
+            this.comboBoxAnalysisMethodTypeEquivalenceTests.TabIndex = 13;
             // 
             // AnalysisTemplatePanel
             // 
@@ -182,6 +193,7 @@
             this.Size = new System.Drawing.Size(923, 503);
             this.panelModelInfo.ResumeLayout(false);
             this.panelModelInfo.PerformLayout();
+            this.flowLayoutPanel1.ResumeLayout(false);
             this.flowLayoutPanelReport.ResumeLayout(false);
             this.flowLayoutPanelReport.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewComparisons)).EndInit();
@@ -189,7 +201,6 @@
             this.splitContainerComparisons.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerComparisons)).EndInit();
             this.splitContainerComparisons.ResumeLayout(false);
-            this.flowLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -204,8 +215,9 @@
         private System.Windows.Forms.TextBox textBoxGeneratedAnalysisScript;
         private System.Windows.Forms.TextBox textBoxNumberOfReplicates;
         private System.Windows.Forms.Label labelNumberOfReplicates;
-        private System.Windows.Forms.ComboBox comboBoxAnalysisMethodType;
+        private System.Windows.Forms.ComboBox comboBoxAnalysisMethodTypeDifferenceTests;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
+        private System.Windows.Forms.ComboBox comboBoxAnalysisMethodTypeEquivalenceTests;
 
     }
 }
