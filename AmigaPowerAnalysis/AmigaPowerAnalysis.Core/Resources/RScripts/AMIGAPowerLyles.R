@@ -4,19 +4,32 @@
 #    Standard errors need to be divided by the squared root of the dispersion parameter
 
 ######################################################################################################################
-createSyntheticData <- function(simulatedData, settings, simulationSettings, multiplyWeight) {
+createSyntheticDataOld <- function(simulatedData, settings, simulationSettings, multiplyWeight) {
   require(reshape)  # for untable()
   nrows <- nrow(simulatedData)
+
+  # The number of random draws depends on the size of the dataset (=nrows)
+  maxTotalDraws <- 4000000
+  maxNdraws <- settings$NumberOfSimulationsLylesMethod
+  minNdraws <- 10000
+  nRandomDraws = ceiling(maxTotalDraws/nrows)
+  if (nRandomDraws > maxNdraws) {
+    nRandomDraws = maxNdraws
+  } else if (nRandomDraws < minNdraws) {
+    nRandomDraws = minNdraws
+  }
+
+  # Sample for all rows
   nsamplerow <- rep(NaN,nrows)
   Response <- c()
   Weight   <- c()
   for (i in 1:nrows) {
     # Simulate possibble outcomes and their probabilities
-    simulate <- ropoisson(settings$NumberOfSimulationsLylesMethod, simulatedData[["Effect"]][i], simulationSettings$dispersion, settings$PowerLawPower, settings$Distribution, settings$ExcessZeroesPercentage)
+    simulate <- ropoisson(nRandomDraws, simulatedData[["Effect"]][i], simulationSettings$dispersion, settings$PowerLawPower, settings$Distribution, settings$ExcessZeroesPercentage)
     table <- as.data.frame(table(simulate))
     nsamplerow[i] <- nrow(table)
     Response <- c(Response, as.numeric(levels(table[["simulate"]])))
-    Weight   <- c(Weight, table[["Freq"]]/settings$NumberOfSimulationsLylesMethod)
+    Weight   <- c(Weight, table[["Freq"]]/nRandomDraws)
   }
   # Stack Design matrix and append Response and Weight
   syntheticData <- untable(simulatedData, num=nsamplerow)  
@@ -26,7 +39,58 @@ createSyntheticData <- function(simulatedData, settings, simulationSettings, mul
 }
 
 ######################################################################################################################
-normalLyles <- function(data, settings, modelSettings, nreps, multiplyWeight, doEquivalence=FALSE) {
+createSyntheticData <- function(simulatedData, settings, simulationSettings, multiplyWeight) {
+  require(reshape)  # for untable()
+  nrows <- nrow(simulatedData)
+
+  # Obtain the unique values of the Means for which to simulate
+  uniqueMu <- unique(simulatedData[["Effect"]])
+  nUniqueMu = length(uniqueMu)
+  
+  # The number of random draws depends on the size of the dataset (=nUnique)
+  maxTotalDraws <- 4000000
+  maxNdraws <- settings$NumberOfSimulationsLylesMethod
+  minNdraws <- 10000
+  nRandomDraws = ceiling(maxTotalDraws/nUniqueMu)
+  if (nRandomDraws > maxNdraws) {
+    nRandomDraws = maxNdraws
+  } else if (nRandomDraws < minNdraws) {
+    nRandomDraws = minNdraws
+  }
+
+  # Sample for these unique values
+  nsamplerow <- rep(NaN,nUniqueMu)
+  ResponseTmp <- c()
+  WeightTmp   <- c()
+  for (i in 1:nUniqueMu) {
+    simulate <- ropoisson(nRandomDraws, uniqueMu[i], simulationSettings$dispersion, settings$PowerLawPower, settings$Distribution, settings$ExcessZeroesPercentage)
+    table <- as.data.frame(table(simulate))
+    nsamplerow[i] <- nrow(table)
+    ResponseTmp <- c(ResponseTmp, as.numeric(levels(table[["simulate"]])))
+    WeightTmp   <- c(WeightTmp, table[["Freq"]]/nRandomDraws)
+  }
+  UnitTmp <- rep(c(1:nUniqueMu), nsamplerow)
+
+  # Combine using the correct position
+  matchMu <- match(simulatedData[["Effect"]], uniqueMu)
+  Response <- c()
+  Weight   <- c()
+  for (mm in matchMu) {
+    Response <- c(Response, ResponseTmp[UnitTmp==mm])
+    Weight   <- c(Weight,   WeightTmp[UnitTmp==mm])
+  }
+  nsamplerow <- nsamplerow[matchMu]
+     
+  # Stack Design matrix and append Response and Weight
+  syntheticData <- untable(simulatedData, num=nsamplerow)
+  syntheticData[["Response"]] <- Response
+  syntheticData[["Weight"]]   <- multiplyWeight*Weight
+  row.names(syntheticData) <- paste0(rep(row.names(simulatedData), nsamplerow), "-", Response)
+  return(syntheticData)
+}
+
+######################################################################################################################
+normalLyles <- function(data, settings, modelSettings, nreps, effect, multiplyWeight, doEquivalence=FALSE) {
 
   # Estimate dispersion parameter by mean of Variance
   Means <- tapply(data[["Weight"]] * data[["Response"]], data[["Row"]], sum)/multiplyWeight
@@ -37,11 +101,11 @@ normalLyles <- function(data, settings, modelSettings, nreps, multiplyWeight, do
   # Fit full model and determine degrees of freedom
   glmH1 <- lm(as.formula(modelSettings$formulaH1), data=data, weight=Weight)
   sigma1 <- summary(glmH1)$sigma
-  dfModel = nrow(data) - glmH1$df.residual
+  modelDf = nrow(data) - glmH1$df.residual
   if (settings$ExperimentalDesignType == "CompletelyRandomized") {
-    df = nreps*modelSettings$ndata - dfModel
+    df = nreps*modelSettings$ndata - modelDf
   } else {
-    df = nreps*(modelSettings$ndata-1) - dfModel + 1
+    df = nreps*(modelSettings$ndata-1) - modelDf + modelSettings$blocks 
   }
 
   ncEquiLow = NaN
@@ -77,16 +141,16 @@ normalLyles <- function(data, settings, modelSettings, nreps, multiplyWeight, do
   }
 
   # Scale non-centrality parameters
-  scale = nreps/estDispersion/multiplyWeight
+  scale = nreps/estDispersion/multiplyWeight/modelSettings$blocks
   ncDiff = ncDiff * scale
   ncEquiLow = ncEquiLow * sqrt(scale)
   ncEquiUpp = ncEquiUpp * sqrt(scale)
-  power = calculatePowerFromNc(nreps, df, ncDiff, ncEquiLow, ncEquiUpp, settings$SignificanceLevel)
+  power = calculatePowerFromNc(nreps, effect, df, ncDiff, ncEquiLow, ncEquiUpp, settings$SignificanceLevel)
   return(power)
 }
 
 ######################################################################################################################
-logNormalLyles <- function(data, settings, modelSettings, nreps, multiplyWeight) {
+logNormalLyles <- function(data, settings, modelSettings, nreps, effect, multiplyWeight) {
 
   # Transform data (this is done locally)
   data[["Response"]] = log(data[["Response"]]+1)
@@ -94,11 +158,11 @@ logNormalLyles <- function(data, settings, modelSettings, nreps, multiplyWeight)
   settings$TransformLocUpper <- log(settings$LocUpper + 1)
   data[["LowOffset"]][ data[["LowOffset"]]==settings$TransformLocLower ] = settings$TransformLocLower
   data[["UppOffset"]][ data[["UppOffset"]]==settings$TransformLocUpper ] = settings$TransformLocUpper
-  return(normalLyles(data, settings, modelSettings, nreps, multiplyWeight))
+  return(normalLyles(data, settings, modelSettings, nreps, effect, multiplyWeight))
 }
 
 ######################################################################################################################
-squareRootLyles <- function(data, settings, modelSettings, nreps, multiplyWeight) {
+squareRootLyles <- function(data, settings, modelSettings, nreps, effect, multiplyWeight) {
 
   # Transform data (this is done locally)
   data[["Response"]] = sqrt(data[["Response"]])
@@ -106,11 +170,11 @@ squareRootLyles <- function(data, settings, modelSettings, nreps, multiplyWeight
   settings$TransformLocUpper <- sqrt(settings$LocUpper)
   data[["LowOffset"]][ data[["LowOffset"]]==settings$TransformLocLower ] = settings$TransformLocLower
   data[["UppOffset"]][ data[["UppOffset"]]==settings$TransformLocUpper ] = settings$TransformLocUpper
-  return(normalLyles(data, settings, modelSettings, nreps, multiplyWeight))
+  return(normalLyles(data, settings, modelSettings, nreps, effect, multiplyWeight))
 }
 
 ######################################################################################################################
-overdispersedPoissonLyles <- function(data, settings, modelSettings, nreps, multiplyWeight) {
+overdispersedPoissonLyles <- function(data, settings, modelSettings, nreps, effect, multiplyWeight) {
 
   # Estimate dispersion parameter by mean of Variance/Mean
   Means <- tapply(data[["Weight"]] * data[["Response"]], data[["Row"]], sum)/multiplyWeight
@@ -120,12 +184,12 @@ overdispersedPoissonLyles <- function(data, settings, modelSettings, nreps, mult
 
   # Fit full model and determine degrees of freedom
   family <- "poisson"
-  glmH1 <- glm(as.formula(modelSettings$formulaH1), family=family, data=data, weight=Weight, etastart=TransformedEffect)
-  dfModel = nrow(data) - glmH1$df.residual
+  glmH1 <- glm(as.formula(modelSettings$formulaH1), family=family, data=data, weight=Weight, etastart=Lp)
+  modelDf = nrow(data) - glmH1$df.residual
   if (settings$ExperimentalDesignType == "CompletelyRandomized") {
-    df = nreps*modelSettings$ndata - dfModel
+    df = nreps*modelSettings$ndata - modelDf
   } else {
-    df = nreps*(modelSettings$ndata-1) - dfModel + 1
+    df = nreps*(modelSettings$ndata-1) - modelDf + modelSettings$blocks 
   }
 
   # Return signed non-centrality parameters for equivalence test;  
@@ -156,16 +220,16 @@ overdispersedPoissonLyles <- function(data, settings, modelSettings, nreps, mult
   }
 
   # Scale non-centrality parameters
-  scale = nreps/estDispersion/multiplyWeight
+  scale = nreps/estDispersion/multiplyWeight/modelSettings$blocks
   ncDiff = ncDiff * scale
   ncEquiLow = ncEquiLow * sqrt(scale)
   ncEquiUpp = ncEquiUpp * sqrt(scale)
-  power = calculatePowerFromNc(nreps, df, ncDiff, ncEquiLow, ncEquiUpp, settings$SignificanceLevel)
+  power = calculatePowerFromNc(nreps, effect, df, ncDiff, ncEquiLow, ncEquiUpp, settings$SignificanceLevel)
   return(power)
 }
 
 ######################################################################################################################
-negativeBinomialLyles <- function(data, settings, modelSettings, nreps, multiplyWeight) {
+negativeBinomialLyles <- function(data, settings, modelSettings, nreps, effect, multiplyWeight) {
 
   # Estimate dispersion parameter by mean of Variance/Mean
   Means <- tapply(data[["Weight"]] * data[["Response"]], data[["Row"]], sum)/multiplyWeight
@@ -175,12 +239,12 @@ negativeBinomialLyles <- function(data, settings, modelSettings, nreps, multiply
 
   # Fit full model and determine degrees of freedom
   family <- negative.binomial(theta = estDispersion, link="log")
-  glmH1 <- glm(as.formula(modelSettings$formulaH1), family=family, data=data, weight=Weight, etastart=TransformedEffect)
-  dfModel = nrow(data) - glmH1$df.residual
+  glmH1 <- glm(as.formula(modelSettings$formulaH1), family=family, data=data, weight=Weight, etastart=Lp)
+  modelDf = nrow(data) - glmH1$df.residual
   if (settings$ExperimentalDesignType == "CompletelyRandomized") {
-    df = nreps*modelSettings$ndata - dfModel
+    df = nreps*modelSettings$ndata - modelDf
   } else {
-    df = nreps*(modelSettings$ndata-1) - dfModel + 1
+    df = nreps*(modelSettings$ndata-1) - modelDf + modelSettings$blocks 
   }
 
   # Return signed non-centrality parameters for equivalence test;
@@ -213,16 +277,16 @@ negativeBinomialLyles <- function(data, settings, modelSettings, nreps, multiply
   }
 
   # Scale non-centrality parameters
-  scale = nreps/multiplyWeight
+  scale = nreps/multiplyWeight/modelSettings$blocks
   ncDiff = ncDiff * scale
   ncEquiLow = ncEquiLow * sqrt(scale)
   ncEquiUpp = ncEquiUpp * sqrt(scale)
-  power = calculatePowerFromNc(nreps, df, ncDiff, ncEquiLow, ncEquiUpp, settings$SignificanceLevel)
+  power = calculatePowerFromNc(nreps, effect, df, ncDiff, ncEquiLow, ncEquiUpp, settings$SignificanceLevel)
   return(power)
 }
 
 ######################################################################################################################
-calculatePowerFromNc <- function(nreps, df, ncDiff, ncEquiLow, ncEquiUpp, alfa, towsided=TRUE) {
+calculatePowerFromNc <- function(nreps, effect, df, ncDiff, ncEquiLow, ncEquiUpp, alfa, towsided=TRUE) {
   # Twosided difference test
   critFvalue = qf(1.0-alfa, 1, df)
   powerDiff = pf(critFvalue, 1, df, ncDiff, lower.tail=FALSE)
@@ -243,7 +307,7 @@ calculatePowerFromNc <- function(nreps, df, ncDiff, ncEquiLow, ncEquiUpp, alfa, 
     powerEqui[i] = pp
   }
   }
-  power = as.data.frame(cbind(nreps, df, ncDiff, ncEquiLow, ncEquiUpp, powerDiff, powerEqui))
+  power = as.data.frame(cbind(effect, nreps, df, ncDiff, ncEquiLow, ncEquiUpp, powerDiff, powerEqui))
   return(power)
 
   # Compare with simple product
@@ -261,9 +325,32 @@ calculatePowerFromNc <- function(nreps, df, ncDiff, ncEquiLow, ncEquiUpp, alfa, 
 ######################################################################################################################
 lylesPowerAnalysis <- function(data, settings, modelSettings, blocks, effect, debugSettings) {
 
-  # Define number of reps
-  nreps  <- c(6,10,12,14,16,18,20,25)
+  DEBUG  <- TRUE
+
+  # Prepare for debugging, i.e. create directory to write files to
+  if (settings$IsOutputSimulatedData) {
+    localDir = paste0(settings$directory)
+    localDir = paste0(localDir, settings$ComparisonId, "-Endpoint", "/")
+    dir.create(localDir, showWarnings=FALSE)
+    #localDir = paste0(localDir, "Rep", str_pad(debugSettings$iRep, 2, side="left", "0"), "/")
+    #dir.create(localDir, showWarnings=FALSE)
+    localDir = paste0(localDir, "Effect", str_pad(debugSettings$iEffect, 2, side="left", "0"), "/")
+    dir.create(localDir, showWarnings=FALSE)
+    #unlink(paste0(localDir, "*.csv"))
+    debugSettings$displayFile = file(paste0(localDir, "00-DisplayFit.txt"), open="wt")
+  } 
+
+  # Define number of reps depending on the design
+  if (settings$ExperimentalDesignType == "CompletelyRandomized") {
   nreps  <- rep(2:blocks)
+    blocks <- 1
+  } else if (settings$CVBlocks == 0.0) {
+    nreps <- rep(2:blocks)
+    blocks <- 2
+  } else {
+    nreps <- blocks
+  }
+  modelSettings$blocks <- blocks
 
   # Define output structure
   nrow <- length(nreps)
@@ -271,48 +358,56 @@ lylesPowerAnalysis <- function(data, settings, modelSettings, blocks, effect, de
   pValues <- list(
     Diff  = matrix(nrow=nrow, ncol=nanalysis, dimnames=list(NULL, settings$AnalysisMethods)),
     Equi  = matrix(nrow=nrow, ncol=nanalysis, dimnames=list(NULL, settings$AnalysisMethods)),
-    Extra = matrix(nrow=nrow, ncol=2, dimnames=list(NULL, c("Reps", "Effect")))
+    Extra = matrix(nrow=nrow, ncol=3, dimnames=list(NULL, c("Reps", "Effect", "Df")))
   )
   pValues$Extra[,"Reps"] <- nreps
   pValues$Extra[,"Effect"] <- effect
 
-  DEBUG  <- TRUE
-  blocks <- 1
-  multiplyWeight <- 10
-
   # Setup simulation settings
+  multiplyWeight <- 10
   simulationSettings <- createSimulationSettings(settings)
   simulatedData <- createSimulatedData(data, settings, simulationSettings, blocks, effect)
   synData <- createSyntheticData(simulatedData, settings, simulationSettings, multiplyWeight) 
-  #print(cbind(synData[["Response"]],synData[["Weight"]]))
+  if (settings$IsOutputSimulatedData) {
+    csvFile = paste0(localDir, "simulatedData-", blocks, ".csv")
+    write.csv(simulatedData, csvFile, row.names=FALSE)
+    csvFile = paste0(localDir, "synData-", blocks, ".csv")
+    write.csv(synData, csvFile, row.names=FALSE)
+  }
+
+  #synDataOld <- createSyntheticDataNew(simulatedData, settings, simulationSettings, multiplyWeight) 
   # Fit models
   if (!is.na(match("LogNormal", settings$AnalysisMethods))) {
-    if (DEBUG) print(paste("Lyles ", "LN"))
-    powerLN <- logNormalLyles(synData, settings, modelSettings, nreps, multiplyWeight)
+    if (DEBUG) cat(paste("\nLyles LN", "---------------------------------------------------------\n"))
+    powerLN <- logNormalLyles(synData, settings, modelSettings, nreps, effect, multiplyWeight)
     if (DEBUG) print(powerLN, digits=3)
     pValues$Diff[,"LogNormal"] <- powerLN[["powerDiff"]]
     pValues$Equi[,"LogNormal"] <- powerLN[["powerEqui"]]
+    pValues$Extra[,"Df"] <- powerLN[["df"]]
   }
   if (!is.na(match("SquareRoot", settings$AnalysisMethods))) {
-    if (DEBUG) print(paste("Lyles ", "SQ"))
-    powerSQ <- squareRootLyles(synData, settings, modelSettings, nreps, multiplyWeight)
+    if (DEBUG) cat(paste("\nLyles SQ", "---------------------------------------------------------\n"))
+    powerSQ <- squareRootLyles(synData, settings, modelSettings, nreps, effect, multiplyWeight)
     if (DEBUG) print(powerSQ, digits=3)
     pValues$Diff[,"SquareRoot"] <- powerSQ[["powerDiff"]]
     pValues$Equi[,"SquareRoot"] <- powerSQ[["powerEqui"]]
+    pValues$Extra[,"Df"] <- powerSQ[["df"]]
   }
   if (!is.na(match("OverdispersedPoisson", settings$AnalysisMethods))) {
-    if (DEBUG) print(paste("Lyles ", "OP"))
-    powerOP <- overdispersedPoissonLyles(synData, settings, modelSettings, nreps, multiplyWeight)
+    if (DEBUG) cat(paste("\nLyles OP", "---------------------------------------------------------\n"))
+    powerOP <- overdispersedPoissonLyles(synData, settings, modelSettings, nreps, effect, multiplyWeight)
     if (DEBUG) print(powerOP, digits=3)
     pValues$Diff[,"OverdispersedPoisson"] <- powerOP[["powerDiff"]]
     pValues$Equi[,"OverdispersedPoisson"] <- powerOP[["powerEqui"]]
+    pValues$Extra[,"Df"] <- powerOP[["df"]]
   }
   if (!is.na(match("NegativeBinomial", settings$AnalysisMethods))) {
-    if (DEBUG) print(paste("Lyles ", "NB"))
-    powerNB <- negativeBinomialLyles(synData, settings, modelSettings, nreps, multiplyWeight)
+    if (DEBUG) cat(paste("\nLyles NB", "---------------------------------------------------------\n"))
+    powerNB <- negativeBinomialLyles(synData, settings, modelSettings, nreps, effect, multiplyWeight)
     if (DEBUG) print(powerNB, digits=3)
     pValues$Diff[,"NegativeBinomial"] <- powerNB[["powerDiff"]]
     pValues$Equi[,"NegativeBinomial"] <- powerNB[["powerEqui"]]
+    pValues$Extra[,"Df"] <- powerNB[["df"]]
   }
   return(pValues)
 }

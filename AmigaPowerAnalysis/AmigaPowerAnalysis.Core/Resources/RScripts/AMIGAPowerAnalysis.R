@@ -273,7 +273,7 @@ createSimulationSettings <- function(settings) {
 }
 
 ######################################################################################################################
-createSimulatedData <- function(data, settings, simulationSettings, blocks, effect) {
+createSimulatedDataOld <- function(data, settings, simulationSettings, blocks, effect) {
   setupSimulatedData <- data
   
   # Expand dataset; add Row and Block factor
@@ -299,6 +299,48 @@ createSimulatedData <- function(data, settings, simulationSettings, blocks, effe
   setupSimulatedData["Effect"] <- inverseLinkFunction(setupSimulatedData["TransformedEffect"], settings$MeasurementType)
   setupSimulatedData["Response"]          <- setupSimulatedData["GMO"] * NaN
   setupSimulatedData["Lp"]          <- setupSimulatedData["GMO"] * NaN
+  return(setupSimulatedData)
+}
+
+######################################################################################################################
+createSimulatedData <- function(data, settings, simulationSettings, blocks, effect) {
+
+  # Expand dataset and modify rownames
+  ndata = nrow(data)  
+  setupSimulatedData <- untable(data, num=blocks)
+  f1 <- rep(c(1:ndata), blocks)
+  f2 <- rep(c(1:blocks), each=ndata)
+  rownames <- paste0(str_pad(f2, 1+log10(blocks+0.001), side="left", "0"), "-", str_pad(f1, 1+log10(ndata+0.001), side="left", "0"))
+  row.names(setupSimulatedData) <- rownames
+
+  # add Row and Block factors
+  setupSimulatedData[["Row"]] <- as.factor(c(1:(blocks*ndata)))
+  setupSimulatedData[["Block"]] <- as.factor(rep(1:blocks, each=ndata))
+  
+  # Add several additional columns to the dataframe
+  transformedMean <- linkFunction(setupSimulatedData["Mean"], settings$MeasurementType)
+  
+  # Apply blocking Effect on the transformed scale; use Blom scores
+  if (settings$ExperimentalDesignType == "RandomizedCompleteBlocks") {
+    blomScores <- simulationSettings$sigBlock * qnorm(((1:blocks) - 0.375)/ (blocks + 0.25))
+    blockEffect <- blomScores[setupSimulatedData[["Block"]]]
+  } else {
+    blockEffect <- 0
+  }
+  setupSimulatedData["LowOffset"] <- setupSimulatedData["GMO"] * settings$TransformLocLower
+  setupSimulatedData["UppOffset"] <- setupSimulatedData["GMO"] * settings$TransformLocUpper
+  
+  # Add extra columns which are used to simulate and fit data
+  setupSimulatedData["Lp"] <- transformedMean + blockEffect + (setupSimulatedData["GMO"] == 1) * effect
+  setupSimulatedData["Effect"] <- inverseLinkFunction(setupSimulatedData["Lp"], settings$MeasurementType)
+  setupSimulatedData["Response"]    <- setupSimulatedData["GMO"] * NaN
+  if (FALSE) {
+    cat(paste0("\neffect: ", effect, "\n"))
+    print(data)
+    cat("\n")
+    print(setupSimulatedData)
+    cat("\n")
+  }
   return(setupSimulatedData)
 }
 
@@ -470,7 +512,7 @@ overdispersedPoissonAnalysis <- function(data, settings, modelSettings, debugSet
   family <- "quasipoisson"
   # Prepare results list and fit H1; default method is DMETHOD=pearson
   pvalues <- list(Diff = c(NaN), Equi = c(NaN), Dispersion=c(NaN))
-  glmH1 <- glm(as.formula(modelSettings$formulaH1), family=family, data=data, etastart=TransformedEffect)
+  glmH1 <- glm(as.formula(modelSettings$formulaH1), family=family, data=data, etastart=Lp)
   #print(paste0("Number of iteration ", glmH1$iter))
   resDF <- df.residual(glmH1)
   estDispersion <- summary(glmH1)$dispersion
@@ -537,8 +579,8 @@ negativeBinomialAnalysis <- function(data, settings, modelSettings, debugSetting
 
   # Prepare results list and fit H1
   pvalues <- list(Diff = c(NaN), Equi = c(NaN), Dispersion=c(NaN))
-  glmH1 <- fitNB(as.formula(modelSettings$formulaH1), data, etastart=TransformedEffect, method=modelSettings$NBmethod, lower=modelSettings$NBlower, upper=modelSettings$NBupper)
-  # glmH1 <- glm.nb(as.formula(modelSettings$formulaH1), data=data, link=log, etastart=data[["TransformedEffect"]])
+  glmH1 <- fitNB(as.formula(modelSettings$formulaH1), data, etastart=Lp, method=modelSettings$NBmethod, lower=modelSettings$NBlower, upper=modelSettings$NBupper)
+  # glmH1 <- glm.nb(as.formula(modelSettings$formulaH1), data=data, link=log, etastart=Lp)
   resDF <- df.residual(glmH1)
   pvalues$Dispersion = glmH1$theta
   estiEffect <- glmH1$coef[2]
@@ -741,3 +783,4 @@ runPowerAnalysis <- function(data, settings) {
 
   return(df)
 }
+
