@@ -33,7 +33,10 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         public bool IsVisible() {
-            return true;
+            if (_project != null) {
+                return _project.DesignSettings.ExperimentalDesignType != ExperimentalDesignType.CompletelyRandomized;
+            }
+            return false;
         }
 
         public event EventHandler TabVisibilitiesChanged;

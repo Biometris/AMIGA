@@ -113,6 +113,14 @@ namespace AmigaPowerAnalysis.GUI {
                 dataGridViewFactors.Columns["ExperimentUnitType"].Visible = _project.DesignSettings.ExperimentalDesignType == ExperimentalDesignType.SplitPlots;
             }
             dataGridViewFactors.Visible = _project.DesignSettings.ExperimentalDesignType == ExperimentalDesignType.SplitPlots;
+            fireTabVisibilitiesChanged();
+        }
+
+        private void fireTabVisibilitiesChanged() {
+            var tabVisibilitiesChanged = TabVisibilitiesChanged;
+            if (tabVisibilitiesChanged != null) {
+                tabVisibilitiesChanged(this, null);
+            }
         }
     }
 }
