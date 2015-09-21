@@ -78,9 +78,9 @@ namespace AmigaPowerAnalysis.Tests {
 
             project.UpdateEndpointFactors();
 
-            project.DefaultInteractionFactorLevelCombinations.Single(flc => flc.VarietyLevel.VarietyLevelType == VarietyLevelType.GMO && flc.Contains(f1)).IsComparisonLevel = true;
-            project.DefaultInteractionFactorLevelCombinations.Single(flc => flc.VarietyLevel.VarietyLevelType == VarietyLevelType.GMO && flc.Contains(f2)).IsComparisonLevel = false;
-            project.DefaultInteractionFactorLevelCombinations.Single(flc => flc.VarietyLevel.VarietyLevelType == VarietyLevelType.GMO && flc.Contains(f3)).IsComparisonLevel = false;
+            project.DefaultInteractionFactorLevelCombinations.Single(flc => flc.VarietyLevel.VarietyLevelType == VarietyLevelType.Test && flc.Contains(f1)).IsComparisonLevel = true;
+            project.DefaultInteractionFactorLevelCombinations.Single(flc => flc.VarietyLevel.VarietyLevelType == VarietyLevelType.Test && flc.Contains(f2)).IsComparisonLevel = false;
+            project.DefaultInteractionFactorLevelCombinations.Single(flc => flc.VarietyLevel.VarietyLevelType == VarietyLevelType.Test && flc.Contains(f3)).IsComparisonLevel = false;
         }
     }
 }

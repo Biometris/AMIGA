@@ -21,7 +21,7 @@ namespace AmigaPowerAnalysis.GUI {
         public EndpointsPanel(Project project) {
             InitializeComponent();
             Name = "Endpoints";
-            Description = "Enter a list of endpoints. For each endpoint indicate its group (retrieves default settings), and if needed adapt the measurement type and limits of concern (LoC). Endpoint groups can be edited under the Options menu. Note: currently only methods for Measurement type Count have been implemented.\r\n\r\nLimits of Concern are ratios of the expected values for the GMO and the Comparator. Within these limits there is no concern about safety.\r\nProvide a lower LoC, an upper LoC, or both. Unspecified (NaN) means no concern for changes in that direction.";
+            Description = "Enter a list of endpoints. For each endpoint indicate its group (retrieves default settings), and if needed adapt the measurement type and limits of concern (LoC). Endpoint groups can be edited under the Options menu. Note: currently only methods for Measurement type Count have been implemented.\r\n\r\nLimits of Concern are ratios of the expected values for the Test and the Comparator. Within these limits there is no concern about safety.\r\nProvide a lower LoC, an upper LoC, or both. Unspecified (NaN) means no concern for changes in that direction.";
             _project = project;
             createDataGridEndpoints();
         }

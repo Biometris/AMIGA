@@ -99,11 +99,11 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
         }
 
         public List<ComparisonDummyFactorLevel> CreateComparisonDummyFactorLevels(Comparison comparison) {
-            var comparisonLevelGMO = new ComparisonDummyFactorLevel() {
-                Label = "GMO",
-                ComparisonType = ComparisonType.IncludeGMO,
+            var comparisonLevelTest = new ComparisonDummyFactorLevel() {
+                Label = "Test",
+                ComparisonType = ComparisonType.IncludeTest,
                 FactorLevelCombinations = comparison.Endpoint.Interactions
-                    .Where(i => i.ComparisonType == ComparisonType.IncludeGMO)
+                    .Where(i => i.ComparisonType == ComparisonType.IncludeTest)
                     .ToList(),
             };
             var nonComparisonLevels = comparison.Endpoint.Interactions
@@ -121,7 +121,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                     .ToList(),
             };
             var comparisonLevels = new List<ComparisonDummyFactorLevel>();
-            comparisonLevels.Add(comparisonLevelGMO);
+            comparisonLevels.Add(comparisonLevelTest);
             comparisonLevels.AddRange(nonComparisonLevels);
             comparisonLevels.Add(comparisonLevelComparator);
             return comparisonLevels;

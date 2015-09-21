@@ -26,10 +26,10 @@ namespace AmigaPowerAnalysis.GUI.Wrappers {
 
         public bool IsComparisonLevelGMO {
             get {
-                return FactorLevelCombinations.Single(flc => flc.VarietyLevel.VarietyLevelType == VarietyLevelType.GMO).IsComparisonLevel;
+                return FactorLevelCombinations.Single(flc => flc.VarietyLevel.VarietyLevelType == VarietyLevelType.Test).IsComparisonLevel;
             }
             set {
-                FactorLevelCombinations.Single(flc => flc.VarietyLevel.VarietyLevelType == VarietyLevelType.GMO).IsComparisonLevel = value;
+                FactorLevelCombinations.Single(flc => flc.VarietyLevel.VarietyLevelType == VarietyLevelType.Test).IsComparisonLevel = value;
             }
         }
 
@@ -44,10 +44,10 @@ namespace AmigaPowerAnalysis.GUI.Wrappers {
 
         public double MeanGMO {
             get {
-                return FactorLevelCombinations.Single(flc => flc.VarietyLevel.VarietyLevelType == VarietyLevelType.GMO).Mean;
+                return FactorLevelCombinations.Single(flc => flc.VarietyLevel.VarietyLevelType == VarietyLevelType.Test).Mean;
             }
             set {
-                FactorLevelCombinations.Single(flc => flc.VarietyLevel.VarietyLevelType == VarietyLevelType.GMO).Mean = value;
+                FactorLevelCombinations.Single(flc => flc.VarietyLevel.VarietyLevelType == VarietyLevelType.Test).Mean = value;
             }
         }
 

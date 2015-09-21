@@ -18,7 +18,7 @@ namespace AmigaPowerAnalysis.GUI {
             InitializeComponent();
             _project = project;
             Name = "Additional means";
-            Description = "There are data which are not directly involved in the comparison GMO to CMP. Such data may be useful for pooling variance estimates, but the usefulness may depend on the expected means. Indicate if you expect less informative data due to low means. If so, specify expected mean values.";
+            Description = "There are data which are not directly involved in the comparison Test to CMP. Such data may be useful for pooling variance estimates, but the usefulness may depend on the expected means. Indicate if you expect less informative data due to low means. If so, specify expected mean values.";
         }
 
         public string Description { get; private set; }

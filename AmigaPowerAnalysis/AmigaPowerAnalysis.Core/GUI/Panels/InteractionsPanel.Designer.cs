@@ -105,7 +105,7 @@
             this.checkBoxUseInteractions.Name = "checkBoxUseInteractions";
             this.checkBoxUseInteractions.Size = new System.Drawing.Size(407, 17);
             this.checkBoxUseInteractions.TabIndex = 7;
-            this.checkBoxUseInteractions.Text = "Exclude data from the GMO vs. CMP comparison based on selected factor levels";
+            this.checkBoxUseInteractions.Text = "Exclude data from the Test vs. CMP comparison based on selected factor levels";
             this.checkBoxUseInteractions.UseVisualStyleBackColor = true;
             this.checkBoxUseInteractions.CheckedChanged += new System.EventHandler(this.checkBoxUseInteractions_CheckedChanged);
             // 

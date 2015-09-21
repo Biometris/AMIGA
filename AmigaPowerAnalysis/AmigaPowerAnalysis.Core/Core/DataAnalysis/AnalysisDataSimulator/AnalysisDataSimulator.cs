@@ -28,7 +28,7 @@ namespace AmigaPowerAnalysis.Core.DataAnalysis.AnalysisDataSimulator {
         }
 
         private static SimulationDataRecord createSimulatedDataRecord(MeasurementType measurementType, DistributionType distributionType, double blockEffect, double treatmentEffect, int block, InputPowerAnalysisRecord r, double dispersion, double powerLawPower, int numberOfSimulatedDataSets) {
-            var isComparisonLevel = r.Comparison == ComparisonType.IncludeGMO;
+            var isComparisonLevel = r.Comparison == ComparisonType.IncludeTest;
             var transformedMean = MeasurementFactory.Link(r.Mean, measurementType);
             var transformedEffect = (isComparisonLevel) ? transformedMean + blockEffect + treatmentEffect : transformedMean + blockEffect;
             var meanEffect = MeasurementFactory.InverseLink(transformedEffect, measurementType);

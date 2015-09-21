@@ -87,12 +87,12 @@ namespace AmigaPowerAnalysis.Core {
         }
 
         /// <summary>
-        /// Creates a new variety factor with a GMO and Comparator level.
+        /// Creates a new variety factor with a Test and Comparator level.
         /// </summary>
         /// <returns></returns>
         public static VarietyFactor CreateVarietyFactor() {
             var factor = new VarietyFactor();
-            factor.AddFactorLevel(new VarietyFactorLevel("GMO"));
+            factor.AddFactorLevel(new VarietyFactorLevel("Test"));
             factor.AddFactorLevel(new VarietyFactorLevel("Comparator"));
             //factor.AddFactorLevel(new VarietyFactorLevel("REF"));
             return factor;

@@ -8,7 +8,7 @@ namespace AmigaPowerAnalysis.Core {
         [Display(Name="Exclude")]
         Exclude = 0,
         [Display(Name = "Test-variety")]
-        IncludeGMO = 1,
+        IncludeTest = 1,
         [Display(Name = "Comparator")]
         IncludeComparator = -1,
     }
@@ -68,7 +68,7 @@ namespace AmigaPowerAnalysis.Core {
         }
 
         /// <summary>
-        /// Specifies whether this comparison interaction level is a GMO interaction level.
+        /// Specifies whether this comparison interaction level is a Test interaction level.
         /// </summary>
         public bool IsComparisonLevel {
             get {
@@ -83,7 +83,7 @@ namespace AmigaPowerAnalysis.Core {
         }
 
         /// <summary>
-        /// The mean of the GMO for this level.
+        /// The mean of the Test for this level.
         /// </summary>
         public double Mean {
             get {
@@ -110,8 +110,8 @@ namespace AmigaPowerAnalysis.Core {
         /// <returns></returns>
         public ComparisonType ComparisonType {
             get {
-                if (IsComparisonLevel && VarietyLevel.VarietyLevelType == VarietyLevelType.GMO) {
-                    return ComparisonType.IncludeGMO;
+                if (IsComparisonLevel && VarietyLevel.VarietyLevelType == VarietyLevelType.Test) {
+                    return ComparisonType.IncludeTest;
                 } else if (IsComparisonLevel && VarietyLevel.VarietyLevelType == VarietyLevelType.Comparator) {
                     return ComparisonType.IncludeComparator;
                 }

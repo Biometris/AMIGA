@@ -17,7 +17,7 @@ namespace AmigaPowerAnalysis.GUI {
             InitializeComponent();
             _project = project;
             Name = "Define comparison";
-            Description = "The GMO-CMP comparison may be restricted to a subset of levels of additional factors for the GMO and/or for the CMP. Indicate any factors for which this is relevant, and uncheck the levels to be excluded.";
+            Description = "The Test-CMP comparison may be restricted to a subset of levels of additional factors for the Test and/or for the CMP. Indicate any factors for which this is relevant, and uncheck the levels to be excluded.";
             createDataGridFactors();
             createDataGridViewInteractionFactorLevelCombinations();
             updateVisibilities();
@@ -114,7 +114,7 @@ namespace AmigaPowerAnalysis.GUI {
             foreach (var interactionFactor in interactionFactors) {
                 dataTable.Columns.Add(interactionFactor.Name, typeof(string));
             }
-            dataTable.Columns.Add("Comparison level GMO", typeof(bool));
+            dataTable.Columns.Add("Comparison level Test", typeof(bool));
             dataTable.Columns.Add("Comparison level Comparator", typeof(bool));
 
             // Create interaction wrappers
@@ -129,7 +129,7 @@ namespace AmigaPowerAnalysis.GUI {
                 foreach (var factorLevel in factorLevelCombination.Levels) {
                     row[factorLevel.Parent.Name] = factorLevel.Label;
                 }
-                row["Comparison level GMO"] = factorLevelCombination.IsComparisonLevelGMO;
+                row["Comparison level Test"] = factorLevelCombination.IsComparisonLevelGMO;
                 row["Comparison level Comparator"] = factorLevelCombination.IsComparisonLevelComparator;
                 dataTable.Rows.Add(row);
             }
@@ -174,7 +174,7 @@ namespace AmigaPowerAnalysis.GUI {
         private void dataGridViewInteractionFactorLevelCombinations_CellValueChanged(object sender, DataGridViewCellEventArgs e) {
             if (e.RowIndex < _defaultInteractionLevels.Count) {
                 var factorLevelCombination = _defaultInteractionLevels[e.RowIndex];
-                if (e.ColumnIndex == dataGridViewInteractionFactorLevelCombinations.Columns["Comparison level GMO"].Index) {
+                if (e.ColumnIndex == dataGridViewInteractionFactorLevelCombinations.Columns["Comparison level Test"].Index) {
                     var isChecked = (bool)dataGridViewInteractionFactorLevelCombinations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
                     factorLevelCombination.IsComparisonLevelGMO = (bool)dataGridViewInteractionFactorLevelCombinations.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
                 } else if (e.ColumnIndex == dataGridViewInteractionFactorLevelCombinations.Columns["Comparison level Comparator"].Index) {

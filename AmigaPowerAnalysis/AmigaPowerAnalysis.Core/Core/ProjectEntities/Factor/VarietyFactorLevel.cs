@@ -3,7 +3,7 @@
 namespace AmigaPowerAnalysis.Core {
 
     public enum VarietyLevelType {
-        GMO,
+        Test,
         Comparator,
         AdditionalVariety
     }
@@ -18,12 +18,12 @@ namespace AmigaPowerAnalysis.Core {
         }
 
         /// <summary>
-        /// The variety type of this variety level. I.e., GMO, Comparator, or additional variety.
+        /// The variety type of this variety level. I.e., Test, Comparator, or additional variety.
         /// </summary>
         public VarietyLevelType VarietyLevelType {
             get {
-                if (Label == "GMO") {
-                    return VarietyLevelType.GMO;
+                if (Label == "Test") {
+                    return VarietyLevelType.Test;
                 } else if (Label == "Comparator") {
                     return VarietyLevelType.Comparator;
                 }

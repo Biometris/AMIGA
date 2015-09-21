@@ -198,7 +198,7 @@ namespace AmigaPowerAnalysis.Core {
         }
 
         /// <summary>
-        /// Variety factor which includes GMO and Comparator.
+        /// Variety factor which includes Test and Comparator.
         /// </summary>
         public VarietyFactor VarietyFactor {
             get {

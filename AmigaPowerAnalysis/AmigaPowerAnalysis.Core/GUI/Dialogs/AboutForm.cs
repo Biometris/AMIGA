@@ -17,7 +17,7 @@ namespace AmigaPowerAnalysis.GUI {
             this.labelCopyright.Text = AssemblyCopyright;
             this.labelCompanyName.Text = AssemblyCompany;
             //this.textBoxDescription.Text = AssemblyDescription;
-            this.textBoxDescription.Text = "This program was developed in the AMIGA project (Assessing and monitoring the impacts of genetically modified plants on agro-ecosystems, http://www.amigaproject.eu/) on the amount of replication needed in field trials for GMO safety assessment.\r\n\r\nThe program was developed by the Biometris department of Wageningen University and Research centre (http://www.biometris.nl/).\r\n\r\nProgram developers: Johannes Kruisselbrink, Paul Goedhart, Hilko van der Voet";
+            this.textBoxDescription.Text = "This program was developed in the AMIGA project (Assessing and monitoring the impacts of genetically modified plants on agro-ecosystems, http://www.amigaproject.eu/) on the amount of replication needed in field trials for Test safety assessment.\r\n\r\nThe program was developed by the Biometris department of Wageningen University and Research centre (http://www.biometris.nl/).\r\n\r\nProgram developers: Johannes Kruisselbrink, Paul Goedhart, Hilko van der Voet";
         }
 
         #region Assembly Attribute Accessors

@@ -16,7 +16,7 @@ using AmigaPowerAnalysis.Core;
 // TODO A factor should have at least two labels; remove factors with 0/1 labels (present user with a message)
 // TODO Not allowed to remove (and rename?) the Variety factor 
 // TODO The Variety factor should not have an Interaction checkbox
-// TODO The First level of the variety factor is considered to be the GMO; second the comparator. renaming of these levels is not allowed???
+// TODO The First level of the variety factor is considered to be the Test; second the comparator. renaming of these levels is not allowed???
 // TODO Frequency off factor levels must be postitive
 
 namespace AmigaPowerAnalysis.GUI {
@@ -30,7 +30,7 @@ namespace AmigaPowerAnalysis.GUI {
             InitializeComponent();
             _project = project;
             Name = "Design";
-            Description = "Specify the type of experimental design. When other factors have been specified, the GMO-CMP Variety comparisons can be expected to be the same for all levels of such a factor (no interaction) or different (interaction). Indicate if such interactions are expected for one or more endpoints. Uncheck the box 'Use interactions for all endpoints' will allow you to specify specific endpoints in the next screen. Note: Interactions with Variety will lower the effective replication, because comparisons are now needed at the separate levels of the other factor. For specified interactions in a split-plot design, indicate the level where the factor is randomised. For specified interactions, indicate both for the GMO and the CMP the levels of the additional factor that have to be compared.";
+            Description = "Specify the type of experimental design. When other factors have been specified, the Test-CMP Variety comparisons can be expected to be the same for all levels of such a factor (no interaction) or different (interaction). Indicate if such interactions are expected for one or more endpoints. Uncheck the box 'Use interactions for all endpoints' will allow you to specify specific endpoints in the next screen. Note: Interactions with Variety will lower the effective replication, because comparisons are now needed at the separate levels of the other factor. For specified interactions in a split-plot design, indicate the level where the factor is randomised. For specified interactions, indicate both for the Test and the CMP the levels of the additional factor that have to be compared.";
             createDataGridFactors();
             this.radioButtonCompletelyRandomized.Checked = _project.DesignSettings.ExperimentalDesignType == ExperimentalDesignType.CompletelyRandomized;
             this.radioButtonRandomizedCompleteBlocks.Checked = _project.DesignSettings.ExperimentalDesignType == ExperimentalDesignType.RandomizedCompleteBlocks;

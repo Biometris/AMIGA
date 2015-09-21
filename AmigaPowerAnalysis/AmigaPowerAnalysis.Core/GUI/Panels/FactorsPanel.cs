@@ -18,7 +18,7 @@ namespace AmigaPowerAnalysis.GUI {
             InitializeComponent();
             _project = project;
             Name = "Factors";
-            Description = "The main factor in a GMO comparative evaluation experiment is always Variety, with levels 1 (labelled GMO) and 2 (labelled Comparator).\r\nIf the design contains more varieties enter additional rows in the Levels table.\r\nIf numbers of plots per variety are not equal, change the (relative) frequencies.\r\nIf the design contains more factors (e.g. spraying treatments), add additional rows in the Factor table, and specify the levels and relative frequencies in the Levels table.";
+            Description = "The main factor in a comparative evaluation experiment is always Variety, with levels 1 (labelled Test) and 2 (labelled Comparator).\r\nIf the design contains more varieties enter additional rows in the Levels table.\r\nIf numbers of plots per variety are not equal, change the (relative) frequencies.\r\nIf the design contains more factors (e.g. spraying treatments), add additional rows in the Factor table, and specify the levels and relative frequencies in the Levels table.";
             createDataGridFactors();
             createDataGridFactorLevels();
         }
@@ -131,7 +131,7 @@ namespace AmigaPowerAnalysis.GUI {
                 if (_currentFactor.FactorLevels.Count() <= 2) {
                     showError("Invalid operation", "A factor should have at least two levels.");
                 } else if (_currentFactor.IsVarietyFactor && currentRow < 2) {
-                    showError("Invalid operation", "Cannot delete GMO or comparator level of the variety.");
+                    showError("Invalid operation", "Cannot delete Test or Comparator level of the variety.");
                 } else {
                     _currentFactor.RemoveFactorLevel(_currentFactor.FactorLevels.ElementAt(currentRow));
                     _project.UpdateEndpointFactorLevels();
