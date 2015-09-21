@@ -16,7 +16,7 @@ namespace AmigaPowerAnalysis.GUI {
         public InteractionsPanel(Project project) {
             InitializeComponent();
             _project = project;
-            Name = "Exclude data";
+            Name = "Define comparison";
             Description = "The GMO-CMP comparison may be restricted to a subset of levels of additional factors for the GMO and/or for the CMP. Indicate any factors for which this is relevant, and uncheck the levels to be excluded.";
             createDataGridFactors();
             createDataGridViewInteractionFactorLevelCombinations();
