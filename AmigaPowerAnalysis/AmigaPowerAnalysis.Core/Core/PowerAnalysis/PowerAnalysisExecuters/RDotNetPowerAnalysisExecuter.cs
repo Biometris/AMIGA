@@ -73,17 +73,22 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                     rEngine.EvaluateNoReturn("set.seed(settings$RandomNumberSeed)");
                     rEngine.EvaluateNoReturn("modelSettings <- createModelSettings(inputData, settings)");
 
-                    var totalLoops = inputPowerAnalysis.NumberOfReplications.Count * effects.Count;
+                    var blockConfigurations = (inputPowerAnalysis.PowerCalculationMethodType == PowerCalculationMethod.Approximate &&
+                        ((inputPowerAnalysis.ExperimentalDesignType == ExperimentalDesignType.CompletelyRandomized) || (inputPowerAnalysis.CvForBlocks == 0D)))
+                        ? new List<int>() { inputPowerAnalysis.NumberOfReplications.Max() } : inputPowerAnalysis.NumberOfReplications;
+
+                    var totalLoops = blockConfigurations.Count * effects.Count;
+
                     var counter = 0;
-                    for (int i = 0; i < inputPowerAnalysis.NumberOfReplications.Count; ++i) {
-                        var blocks = inputPowerAnalysis.NumberOfReplications[i];
+                    for (int i = 0; i < blockConfigurations.Count; ++i) {
+                        var blocks = blockConfigurations[i];
                         rEngine.EvaluateNoReturn("");
-                        rEngine.EvaluateNoReturn("#========== Number " + (i + 1).ToString() + "/" + inputPowerAnalysis.NumberOfReplications.Count.ToString() + " of replications");
+                        rEngine.EvaluateNoReturn("#========== Number " + (i + 1).ToString() + "/" + blockConfigurations.Count.ToString() + " of replications");
                         rEngine.SetSymbol("blocks", blocks);
                         for (int j = 0; j < effects.Count; ++j) {
                             var effect = effects[j];
                             try {
-                                progressState.Update(string.Format("Endpoint {1}/{2}, replicate {3}/{4}, effect {5}/{6}: {0}", inputPowerAnalysis.Endpoint, inputPowerAnalysis.ComparisonId + 1, inputPowerAnalysis.NumberOfComparisons, i + 1, inputPowerAnalysis.NumberOfReplications.Count, j + 1, effects.Count), (double)counter / totalLoops * 100);
+                                progressState.Update(string.Format("Endpoint {1}/{2}, replicate {3}/{4}, effect {5}/{6}: {0}", inputPowerAnalysis.Endpoint, inputPowerAnalysis.ComparisonId + 1, inputPowerAnalysis.NumberOfComparisons, i + 1, blockConfigurations.Count, j + 1, effects.Count), (double)counter / totalLoops * 100);
 
                                 // Define settings for Debugging the Rscript
                                 rEngine.EvaluateNoReturn(string.Format("debugSettings = list(iRep={0}, iEffect={1}, iDataset=NaN)", i + 1, j + 1));
