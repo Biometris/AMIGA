@@ -18,7 +18,7 @@ namespace AmigaPowerAnalysis.GUI {
             InitializeComponent();
             _project = project;
             Name = "Factor modifiers";
-            Description = "The power of tests will be lower if data are uninformative or less informative, e.g. if counts are very low (<5), or fractions are close to 0 or 1. In principle, the already specified Comparator Means and CVs are sufficient to perform the power analysis. However, it should be specified if other factors in the design are expected to make part of the data less informative.\r\nFor fixed factors, provide multiplication factors for factor levels where data may become less informative (e.g. counts less than 5, or all binomial results positive or all negative).";
+            Description = "The power of tests will be lower if data are uninformative or less informative, e.g. if counts are very low (<5). In principle, the already specified Comparator Means and CVs are sufficient to perform the power analysis. However, it should be specified if other factors in the design are expected to make part of the data less informative.\r\nFor fixed factors, provide multiplication factors for factor levels where data may become less informative (e.g. counts less than 5).";
             checkBoxUseFactorModifiers.Checked = _project.UseFactorModifiers;
             createDataGridEndpoints();
         }

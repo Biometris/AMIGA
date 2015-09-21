@@ -115,7 +115,7 @@
             this.checkBoxUseBlockModifier.Size = new System.Drawing.Size(667, 17);
             this.checkBoxUseBlockModifier.TabIndex = 9;
             this.checkBoxUseBlockModifier.Text = "Are there large differences between blocks causing part of the data to be less in" +
-    "formative (e.g. counts below 5, fractions equal to 0 or 1?";
+    "formative (e.g. counts below 5?";
             this.checkBoxUseBlockModifier.UseVisualStyleBackColor = true;
             this.checkBoxUseBlockModifier.CheckedChanged += new System.EventHandler(this.checkBoxUseBlockModifier_CheckedChanged);
             // 
@@ -127,7 +127,7 @@
             this.checkBoxUseMainPlotModifier.Size = new System.Drawing.Size(683, 17);
             this.checkBoxUseMainPlotModifier.TabIndex = 8;
             this.checkBoxUseMainPlotModifier.Text = "Are there large differences between main plots causing part of the data to be les" +
-    "s informative (e.g. counts below 5, fractions equal to 0 or 1?";
+    "s informative (e.g. counts below 5?";
             this.checkBoxUseMainPlotModifier.UseVisualStyleBackColor = true;
             this.checkBoxUseMainPlotModifier.CheckedChanged += new System.EventHandler(this.checkBoxUseMainPlotModifier_CheckedChanged);
             // 

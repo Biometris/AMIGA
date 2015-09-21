@@ -97,7 +97,7 @@
             this.checkBoxUseFactorModifiers.Size = new System.Drawing.Size(760, 17);
             this.checkBoxUseFactorModifiers.TabIndex = 8;
             this.checkBoxUseFactorModifiers.Text = "Are there large differences between levels of factors (modifiers) causing part of" +
-    " the data to be less informative (e.g. counts below 5, fractions equal to 0 or 1" +
+    " the data to be less informative (e.g. counts below 5)" +
     "?";
             this.checkBoxUseFactorModifiers.UseVisualStyleBackColor = true;
             this.checkBoxUseFactorModifiers.CheckedChanged += new System.EventHandler(this.checkBoxUseFactorModifiers_CheckedChanged);
