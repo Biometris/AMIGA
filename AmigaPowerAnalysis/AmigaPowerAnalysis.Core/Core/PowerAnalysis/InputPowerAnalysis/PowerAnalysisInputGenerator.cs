@@ -15,7 +15,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
         /// <param name="powerCalculationSettings"></param>
         /// <param name="idComparison"></param>
         /// <returns></returns>
-        public InputPowerAnalysis CreateInputPowerAnalysis(Comparison comparison, DesignSettings designSettings, PowerCalculationSettings powerCalculationSettings, int idComparison, int totalNumberOfComparisons) {
+        public InputPowerAnalysis CreateInputPowerAnalysis(Comparison comparison, DesignSettings designSettings, PowerCalculationSettings powerCalculationSettings, int idComparison, int totalNumberOfComparisons, bool useBlockModifier) {
             var comparisonLevels = CreateComparisonDummyFactorLevels(comparison);
             var modifierLevels = CreateModifierDummyFactorLevels(comparison);
             var selectedAnalysisMethods = powerCalculationSettings.SelectedAnalysisMethodTypes & AnalysisModelFactory.AnalysisMethodsForMeasurementType(comparison.Endpoint.Measurement);
@@ -34,7 +34,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                 OverallMean = comparison.Endpoint.MuComparator,
                 SelectedAnalysisMethodTypes = selectedAnalysisMethods,
                 CvComparator = comparison.Endpoint.CvComparator,
-                CvForBlocks = comparison.Endpoint.CvForBlocks,
+                CvForBlocks = useBlockModifier ? comparison.Endpoint.CvForBlocks : 0D,
                 NumberOfInteractions = comparison.Endpoint.InteractionFactors.Count(),
                 NumberOfNonInteractions = comparison.Endpoint.NonInteractionFactors.Count(),
                 NumberOfModifiers = (comparison.Endpoint.UseModifier ? comparison.Endpoint.NonInteractionFactors.Count() : 0),

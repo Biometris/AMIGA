@@ -29,7 +29,7 @@ namespace AmigaPowerAnalysis.Tests.IntegrationTests {
             var comparisons = project.GetComparisons().ToList();
             for (int i = 0; i < comparisons.Count(); ++i) {
                 var inputGenerator = new PowerAnalysisInputGenerator();
-                var inputPowerAnalysis = inputGenerator.CreateInputPowerAnalysis(comparisons[i], project.DesignSettings, project.PowerCalculationSettings, i, comparisons.Count);
+                var inputPowerAnalysis = inputGenerator.CreateInputPowerAnalysis(comparisons[i], project.DesignSettings, project.PowerCalculationSettings, i, comparisons.Count, project.UseBlockModifier);
                 var progressReport = new ProgressReport();
                 var rDotNetExecuter = new RDotNetPowerAnalysisExecuter(filesPath);
                 comparisons[i].OutputPowerAnalysis = rDotNetExecuter.Run(inputPowerAnalysis, progressReport.NewProgressState(100));
