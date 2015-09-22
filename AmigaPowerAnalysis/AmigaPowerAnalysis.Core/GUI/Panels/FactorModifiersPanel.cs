@@ -32,7 +32,14 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         public bool IsVisible() {
-            return _project != null && _project.Endpoints.Any(ep => ep.NonInteractionFactors.Count() > 0);
+            if (_project != null) {
+                if (!_project.Endpoints.Any(ep => ep.Measurement == MeasurementType.Count)) {
+                    return false;
+                } else {
+                    return _project.Endpoints.Any(ep => ep.NonInteractionFactors.Count() > 0);
+                }
+            }
+            return false;
         }
 
         private void updateVisibilities() {
