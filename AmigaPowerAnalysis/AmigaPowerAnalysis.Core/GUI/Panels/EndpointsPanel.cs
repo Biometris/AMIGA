@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Windows.Forms;
 using AmigaPowerAnalysis.Core;
@@ -90,6 +91,29 @@ namespace AmigaPowerAnalysis.GUI {
             } else {
                 dataGridViewEndpoints.DataSource = null;
                 dataGridViewEndpoints.Update();
+            }
+
+            this.dataGridViewEndpoints.EditingControlShowing += new DataGridViewEditingControlShowingEventHandler(dataGridViewEndpoints_EditingControlShowing);
+        }
+
+        private ComboBox _currentComboBox;
+
+        void dataGridViewEndpoints_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e) {
+            if (e.Control is ComboBox) {
+                _currentComboBox = (ComboBox)e.Control;
+                if (_currentComboBox != null) {
+                    _currentComboBox.SelectedIndexChanged += new EventHandler(comboBox_SelectedIndexChanged);
+                }
+            }
+        }
+
+        void comboBox_SelectedIndexChanged(object sender, EventArgs e) {
+            this.BeginInvoke(new MethodInvoker(EndEdit));
+        }
+
+        void EndEdit() {
+            if (_currentComboBox != null) {
+                this.dataGridViewEndpoints.EndEdit();
             }
         }
 
