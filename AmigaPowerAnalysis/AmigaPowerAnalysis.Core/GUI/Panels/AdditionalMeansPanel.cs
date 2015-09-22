@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using AmigaPowerAnalysis.Core;
+using Biometris.Statistics.Measurements;
 
 namespace AmigaPowerAnalysis.GUI {
     public partial class AdditionalMeansPanel : UserControl, ISelectionForm {
@@ -28,7 +29,14 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         public bool IsVisible() {
-            return _project != null && (_project.Endpoints.Any(ep => ep.Interactions.Any(epi => !epi.IsComparisonLevel)) || _project.VarietyFactor.FactorLevels.Count() > 2);
+            if (_project != null) {
+                if (!_project.Endpoints.Any(ep => ep.Measurement == MeasurementType.Count)) {
+                    return false;
+                } else {
+                    return (_project.Endpoints.Any(ep => ep.Interactions.Any(epi => !epi.IsComparisonLevel)) || _project.VarietyFactor.FactorLevels.Count() > 2);
+                }
+            }
+            return false;
         }
 
         private void createDataGridEndpoints() {
