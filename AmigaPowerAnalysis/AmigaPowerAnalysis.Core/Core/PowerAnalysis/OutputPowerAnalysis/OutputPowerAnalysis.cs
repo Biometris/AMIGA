@@ -8,6 +8,11 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
         }
 
         /// <summary>
+        /// Returns whether this output should be considered as a primary output.
+        /// </summary>
+        public bool IsPrimary { get; set; }
+
+        /// <summary>
         /// The input used for this output.
         /// </summary>
         public InputPowerAnalysis InputPowerAnalysis { get; set; }
@@ -28,8 +33,12 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
         public List<OutputPowerAnalysisRecord> OutputRecords { get; set; }
 
         /// <summary>
-        /// Returns whether this output should be considered as a primary output.
+        /// Returns the endpoint of this analysis output.
         /// </summary>
-        public bool IsPrimary { get; set; }
+        public string Endpoint {
+            get {
+                return (InputPowerAnalysis != null) ? InputPowerAnalysis.Endpoint : string.Empty;
+            }
+        }
     }
 }

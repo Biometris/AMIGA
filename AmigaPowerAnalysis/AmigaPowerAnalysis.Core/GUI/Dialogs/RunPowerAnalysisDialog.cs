@@ -68,7 +68,6 @@ namespace AmigaPowerAnalysis.GUI {
                 var inputPowerAnalysis = inputGenerator.CreateInputPowerAnalysis(comparisons.ElementAt(i), _project.DesignSettings, _project.PowerCalculationSettings, i, numberOfComparisons, _project.UseBlockModifier);
                 var output = await powerAnalysisExecuter.RunAsync(inputPowerAnalysis, localProgress);
                 comparisons[i].OutputPowerAnalysis = output;
-                resultPowerAnalysis.ComparisonPowerAnalysisResults.Clear();
                 resultPowerAnalysis.ComparisonPowerAnalysisResults.Add(output);
                 localProgress.Update(100);
             }
@@ -76,6 +75,7 @@ namespace AmigaPowerAnalysis.GUI {
                 showWarning("Warning", "Power Analysis completed with errors. Some results may be incomplete or non existent.");
             }
             resultPowerAnalysis.OuputTimeStamp = DateTime.Now;
+            _project.AnalysisResults.Clear();
             _project.AnalysisResults.Add(resultPowerAnalysis);
         }
 

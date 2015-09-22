@@ -1,17 +1,18 @@
-﻿namespace AmigaPowerAnalysis.Core.Reporting {
+﻿using AmigaPowerAnalysis.Core.PowerAnalysis;
+namespace AmigaPowerAnalysis.Core.Reporting {
     public sealed class ComparisonSettingsGenerator : ComparisonReportGeneratorBase {
 
-        private Comparison _comparison;
+        private OutputPowerAnalysis _outputPowerAnalysis;
         private string _filesPath;
 
-        public ComparisonSettingsGenerator(Comparison comparison, string tempPath) {
-            _comparison = comparison;
+        public ComparisonSettingsGenerator(OutputPowerAnalysis outputPowerAnalysis, string tempPath) {
+            _outputPowerAnalysis = outputPowerAnalysis;
             _filesPath = tempPath;
         }
         
         public override string Generate(bool imagesAsPng) {
             var html = string.Empty;
-            html += generateComparisonSettingsHtml(_comparison.OutputPowerAnalysis.InputPowerAnalysis);
+            html += generateComparisonSettingsHtml(_outputPowerAnalysis.InputPowerAnalysis);
             return format(html);
         }
     }

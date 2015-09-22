@@ -10,6 +10,7 @@ using AmigaPowerAnalysis.Core.DataAnalysis.AnalysisModels;
 using AmigaPowerAnalysis.Core.Reporting;
 using OxyPlot.WindowsForms;
 using AmigaPowerAnalysis.Core.Charting.AnalysisResultsChartCreators;
+using AmigaPowerAnalysis.Core.PowerAnalysis;
 
 namespace AmigaPowerAnalysis.GUI {
     public partial class AnalysisResultsPerComparisonPanel : UserControl, ISelectionForm {
@@ -17,8 +18,8 @@ namespace AmigaPowerAnalysis.GUI {
         public event EventHandler TabVisibilitiesChanged;
 
         private Project _project;
-        private List<Comparison> _comparisons;
-        private Comparison _currentComparison;
+        private List<OutputPowerAnalysis> _comparisons;
+        private OutputPowerAnalysis _currentComparison;
         private AnalysisMethodType _currentAnalysisType = AnalysisMethodType.OverdispersedPoisson;
         private string _currentProjectFilesPath;
 
@@ -61,18 +62,16 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void updateDataGridComparisons() {
             dataGridViewComparisons.Columns.Clear();
-            var _availableEndpoints = _project.Endpoints.Select(h => new { Name = h.Name, Endpoint = h }).ToList();
 
-            var combo = new DataGridViewComboBoxColumn();
-            combo.DataSource = _availableEndpoints;
-            combo.DataPropertyName = "Endpoint";
-            combo.DisplayMember = "Name";
-            combo.ValueMember = "Endpoint";
-            combo.HeaderText = "Endpoint";
-            combo.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
-            dataGridViewComparisons.Columns.Add(combo);
+            _comparisons = _project.AnalysisResults.First().ComparisonPowerAnalysisResults;
 
-            _comparisons = _project.GetComparisons().Where(c => c.OutputPowerAnalysis != null).ToList();
+            var column = new DataGridViewTextBoxColumn();
+            column.DataPropertyName = "Endpoint";
+            column.Name = "Endpoint";
+            column.HeaderText = "Endpoint";
+            column.ValueType = typeof(string);
+            dataGridViewComparisons.Columns.Add(column);
+
             var comparisonsBindingSouce = new BindingSource(_comparisons, null);
             dataGridViewComparisons.AutoGenerateColumns = false;
             dataGridViewComparisons.DataSource = comparisonsBindingSouce;
@@ -83,18 +82,18 @@ namespace AmigaPowerAnalysis.GUI {
                 var plotType = (AnalysisPlotType)comboBoxAnalysisPlotTypes.SelectedValue;
                 var testType = (TestType)comboBoxTestType.SelectedValue;
                 if (plotType == AnalysisPlotType.Replicates) {
-                    plotView.Model = PowerVersusReplicatesRatioChartCreator.Create(_currentComparison.OutputPowerAnalysis.OutputRecords, testType, _currentAnalysisType);
+                    plotView.Model = PowerVersusReplicatesRatioChartCreator.Create(_currentComparison.OutputRecords, testType, _currentAnalysisType);
                 } else if (plotType == AnalysisPlotType.Ratio) {
-                    plotView.Model = PowerVersusRatioChartCreator.Create(_currentComparison.OutputPowerAnalysis.OutputRecords, testType, _currentAnalysisType, _currentComparison.OutputPowerAnalysis.InputPowerAnalysis.NumberOfReplications);
+                    plotView.Model = PowerVersusRatioChartCreator.Create(_currentComparison.OutputRecords, testType, _currentAnalysisType, _currentComparison.InputPowerAnalysis.NumberOfReplications);
                 }
-                labelPlotsPerBlock.Text = string.Format("{0} plots per block", _currentComparison.OutputPowerAnalysis.InputPowerAnalysis.InputRecords.Sum(ir => ir.Frequency));
-                labelLocLowerValue.Text = string.Format("{0:0.###}", _currentComparison.OutputPowerAnalysis.InputPowerAnalysis.LocLower);
-                labelLocUpperValue.Text = string.Format("{0:0.###}", _currentComparison.OutputPowerAnalysis.InputPowerAnalysis.LocUpper);
+                labelPlotsPerBlock.Text = string.Format("{0} plots per block", _currentComparison.InputPowerAnalysis.InputRecords.Sum(ir => ir.Frequency));
+                labelLocLowerValue.Text = string.Format("{0:0.###}", _currentComparison.InputPowerAnalysis.LocLower);
+                labelLocUpperValue.Text = string.Format("{0:0.###}", _currentComparison.InputPowerAnalysis.LocUpper);
             }
         }
 
         private void dataGridViewComparisons_SelectionChanged(object sender, EventArgs e) {
-            _currentComparison = _project.GetComparisons().ElementAt(dataGridViewComparisons.CurrentRow.Index);
+            _currentComparison = _comparisons.ElementAt(dataGridViewComparisons.CurrentRow.Index);
             updateComboBoxAnalysisMethodTypes();
             updateAnalysisOutputPanel();
         }
@@ -105,9 +104,9 @@ namespace AmigaPowerAnalysis.GUI {
                 var testType = (TestType)comboBoxTestType.SelectedValue;
                 Enum[] selectedAnalysisMethodTypes;
                 if (testType == TestType.Difference) {
-                    selectedAnalysisMethodTypes = _currentComparison.OutputPowerAnalysis.InputPowerAnalysis.SelectedAnalysisMethodTypesDifferenceTests.GetFlags().ToArray();
+                    selectedAnalysisMethodTypes = _currentComparison.InputPowerAnalysis.SelectedAnalysisMethodTypesDifferenceTests.GetFlags().ToArray();
                 } else {
-                    selectedAnalysisMethodTypes = _currentComparison.OutputPowerAnalysis.InputPowerAnalysis.SelectedAnalysisMethodTypesEquivalenceTests.GetFlags().ToArray();
+                    selectedAnalysisMethodTypes = _currentComparison.InputPowerAnalysis.SelectedAnalysisMethodTypesEquivalenceTests.GetFlags().ToArray();
                 }
                 this.comboBoxAnalysisType.Visible = selectedAnalysisMethodTypes.Count() > 1;
                 this.comboBoxAnalysisType.DataSource = selectedAnalysisMethodTypes;
@@ -127,16 +126,16 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void buttonShowSettings_Click(object sender, EventArgs e) {
-            var title = Path.GetFileNameWithoutExtension(_currentProjectFilesPath) + "_" + _currentComparison.Endpoint.Name + "_Settings";
+            var title = Path.GetFileNameWithoutExtension(_currentProjectFilesPath) + "_" + _currentComparison.Endpoint + "_Settings";
             var reportGenerator = new ComparisonSettingsGenerator(_currentComparison, _currentProjectFilesPath);
             var htmlReportForm = new HtmlReportForm(reportGenerator, title, _currentProjectFilesPath);
             htmlReportForm.ShowDialog();
         }
 
         private void buttonShowInputData_Click(object sender, EventArgs e) {
-            if (_currentComparison != null && _currentComparison.OutputPowerAnalysis != null) {
-                var title = Path.GetFileNameWithoutExtension(_currentProjectFilesPath) + "_" + _currentComparison.Endpoint.Name;
-                var reportGenerator = new SingleComparisonReportGenerator(_currentComparison.OutputPowerAnalysis, _currentProjectFilesPath);
+            if (_currentComparison != null && _currentComparison != null) {
+                var title = Path.GetFileNameWithoutExtension(_currentProjectFilesPath) + "_" + _currentComparison.Endpoint;
+                var reportGenerator = new SingleComparisonReportGenerator(_currentComparison, _currentProjectFilesPath);
                 var htmlReportForm = new HtmlReportForm(reportGenerator, title, _currentProjectFilesPath);
                 htmlReportForm.ShowDialog();
             }

@@ -11,19 +11,13 @@ using AmigaPowerAnalysis.Core.PowerAnalysis;
 using AmigaPowerAnalysis.Core.Reporting;
 using Biometris.ExtensionMethods;
 
-// TODO Obligatory to first enter a name for a new endpoint
-// TODO Binomial totals greyed out for non fractions
-// TODO Binomial totals must be positive
-// TODO LOC=NaN should be displayed as empty textbox; also empty textbox store as to NaN. Possibly better to use null
-// TODO LOC must be positive
-
 namespace AmigaPowerAnalysis.GUI {
     public partial class AnalysisResultsPanel : UserControl, ISelectionForm {
 
         public event EventHandler TabVisibilitiesChanged;
 
         private Project _project;
-        private List<Comparison> _comparisons;
+        private List<OutputPowerAnalysis> _outputRecords;
         private AnalysisMethodType _currentAnalysisType = AnalysisMethodType.OverdispersedPoisson;
         private string _currentProjectFilePath;
 
@@ -50,14 +44,14 @@ namespace AmigaPowerAnalysis.GUI {
         public void Activate() {
             updateDataGridComparisons();
             updateVisibilities();
-            var selectedAnalysisMethodTypesDifferenceTests = _comparisons.First().OutputPowerAnalysis.InputPowerAnalysis.SelectedAnalysisMethodTypesDifferenceTests.GetFlags().ToArray();
-            var selectedAnalysisMethodTypesEquivalenceTests = _comparisons.First().OutputPowerAnalysis.InputPowerAnalysis.SelectedAnalysisMethodTypesEquivalenceTests.GetFlags().ToArray();
+            var selectedAnalysisMethodTypesDifferenceTests = _outputRecords.First().InputPowerAnalysis.SelectedAnalysisMethodTypesDifferenceTests.GetFlags().ToArray();
+            var selectedAnalysisMethodTypesEquivalenceTests = _outputRecords.First().InputPowerAnalysis.SelectedAnalysisMethodTypesEquivalenceTests.GetFlags().ToArray();
             updateAnalysisOutputPanel();
             dataGridViewComparisons.CurrentCell = null;
         }
 
         private void updateVisibilities() {
-            var primaryComparisons = _comparisons.Where(c => c.OutputPowerAnalysis != null && c.OutputPowerAnalysis.IsPrimary).ToList();
+            var primaryComparisons = _outputRecords.Where(c => c.IsPrimary).ToList();
             if (primaryComparisons.Count > 0) {
                 splitContainerComparisons.Panel2.Show();
             } else {
@@ -75,15 +69,14 @@ namespace AmigaPowerAnalysis.GUI {
         private void updateDataGridComparisons() {
             dataGridViewComparisons.Columns.Clear();
 
-            var _availableEndpoints = _project.Endpoints.Select(h => new { Name = h.Name, Endpoint = h }).ToList();
-            var combo = new DataGridViewComboBoxColumn();
-            combo.DataSource = _availableEndpoints;
-            combo.DataPropertyName = "Endpoint";
-            combo.DisplayMember = "Name";
-            combo.ValueMember = "Endpoint";
-            combo.HeaderText = "Endpoint";
-            combo.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
-            dataGridViewComparisons.Columns.Add(combo);
+            _outputRecords = _project.AnalysisResults.First().ComparisonPowerAnalysisResults;
+
+            var column = new DataGridViewTextBoxColumn();
+            column.DataPropertyName = "Endpoint";
+            column.Name = "Endpoint";
+            column.HeaderText = "Endpoint";
+            column.ValueType = typeof(string);
+            dataGridViewComparisons.Columns.Add(column);
 
             var checkbox = new DataGridViewCheckBoxColumn();
             checkbox.DataPropertyName = "IsPrimary";
@@ -91,18 +84,17 @@ namespace AmigaPowerAnalysis.GUI {
             checkbox.HeaderText = "Primary";
             dataGridViewComparisons.Columns.Add(checkbox);
 
-            _comparisons = _project.GetComparisons().Where(c => c.OutputPowerAnalysis != null).ToList();
-            var comparisonsBindingSouce = new BindingSource(_comparisons, null);
+            var comparisonsBindingSouce = new BindingSource(_outputRecords, null);
             dataGridViewComparisons.AutoGenerateColumns = false;
             dataGridViewComparisons.DataSource = comparisonsBindingSouce;
             dataGridViewComparisons.Columns[0].ReadOnly = true;
         }
 
         private void updateAnalysisOutputPanel() {
-            if (_comparisons != null) {
-                var primaryComparisons = _comparisons.Where(c => c.OutputPowerAnalysis != null && c.IsPrimary).ToList();
+            if (_outputRecords != null) {
+                var primaryComparisons = _outputRecords.Where(c => c.IsPrimary).ToList();
                 if (primaryComparisons.Count > 0) {
-                    var records = primaryComparisons.SelectMany(c => c.OutputPowerAnalysis.OutputRecords)
+                    var records = primaryComparisons.SelectMany(c => c.OutputRecords)
                         .GroupBy(r => new { LevelOfConcern = r.ConcernStandardizedDifference, NumberOfReplicates = r.NumberOfReplications })
                         .Select(g => new OutputPowerAnalysisRecord() {
                             ConcernStandardizedDifference = g.Key.LevelOfConcern,
@@ -122,9 +114,9 @@ namespace AmigaPowerAnalysis.GUI {
                     if (plotType == AnalysisPlotType.Replicates) {
                         plotView.Model = PowerVersusReplicatesCsdChartCreator.Create(records, testType, _currentAnalysisType);
                     } else if (plotType == AnalysisPlotType.ConcernStandardizedDifference) {
-                        plotView.Model = PowerVersusCsdChartCreator.Create(records, testType, _currentAnalysisType, primaryComparisons.First().OutputPowerAnalysis.InputPowerAnalysis.NumberOfReplications);
+                        plotView.Model = PowerVersusCsdChartCreator.Create(records, testType, _currentAnalysisType, primaryComparisons.First().InputPowerAnalysis.NumberOfReplications);
                     }
-                    var plotsPerBlockCounts = primaryComparisons.Select(pc => pc.OutputPowerAnalysis.InputPowerAnalysis.InputRecords.Sum(ir => ir.Frequency));
+                    var plotsPerBlockCounts = primaryComparisons.Select(pc => pc.InputPowerAnalysis.InputRecords.Sum(ir => ir.Frequency));
                     var minPlotsPerBlockCount = plotsPerBlockCounts.Min();
                     var maxPlotsPerBlockCount = plotsPerBlockCounts.Max();
                     if (minPlotsPerBlockCount == maxPlotsPerBlockCount) {
@@ -146,11 +138,11 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void buttonShowReport_Click(object sender, EventArgs e) {
-            var primaryComparisons = _comparisons.Where(c => c.OutputPowerAnalysis != null && c.IsPrimary).ToList();
+            var primaryComparisons = _outputRecords.Where(c => c.IsPrimary).ToList();
             if (primaryComparisons.Count > 0) {
                 var tempPath = Path.GetTempPath();
                 var title = Path.GetFileNameWithoutExtension(_currentProjectFilePath) + "_CSD";
-                var multiComparisonReportGenerator = new MultiComparisonReportGenerator(_comparisons.Select(c => c.OutputPowerAnalysis), _currentProjectFilePath);
+                var multiComparisonReportGenerator = new MultiComparisonReportGenerator(_outputRecords, _currentProjectFilePath);
                 var htmlReportForm = new HtmlReportForm(multiComparisonReportGenerator, title, _currentProjectFilePath);
                 htmlReportForm.ShowDialog();
             }
