@@ -1,21 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Windows.Forms;
 using AmigaPowerAnalysis.Core;
 using Biometris.Statistics.Measurements;
 
-// TODO Obligatory to first enter a name for a new endpoint
-// TODO Binomial totals greyed out for non fractions
-// TODO Binomial totals must be positive
-// TODO LOC=NaN should be displayed as empty textbox; also empty textbox store as to NaN. Possibly better to use null
-// TODO LOC must be positive
-
 namespace AmigaPowerAnalysis.GUI {
     public partial class EndpointsPanel : UserControl, ISelectionForm {
 
         private Project _project;
+        private ComboBox _currentComboBox;
 
         public string Description { get; private set; }
 
@@ -95,8 +89,6 @@ namespace AmigaPowerAnalysis.GUI {
 
             this.dataGridViewEndpoints.EditingControlShowing += new DataGridViewEditingControlShowingEventHandler(dataGridViewEndpoints_EditingControlShowing);
         }
-
-        private ComboBox _currentComboBox;
 
         void dataGridViewEndpoints_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e) {
             if (e.Control is ComboBox) {
