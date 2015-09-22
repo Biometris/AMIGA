@@ -51,7 +51,6 @@ namespace AmigaPowerAnalysis.GUI {
             textBoxNumberOfReplications.Text = string.Join(", ", _project.PowerCalculationSettings.NumberOfReplications.Select(r => r.ToString()).ToList());
             comboBoxMethodForPowerCalculation.DataSource = Enum.GetValues(typeof(PowerCalculationMethod));
             comboBoxMethodForPowerCalculation.SelectedIndex = (int)_project.PowerCalculationSettings.PowerCalculationMethod;
-            checkBoxUseWaldTest.Checked = _project.PowerCalculationSettings.UseWaldTest;
             textBoxNumberSimulatedDatasets.Text = _project.PowerCalculationSettings.NumberOfSimulatedDataSets.ToString();
             textBoxSeedForRandomNumbers.Text = _project.PowerCalculationSettings.Seed.ToString();
 
@@ -65,6 +64,8 @@ namespace AmigaPowerAnalysis.GUI {
             groupBoxAnalysisFractionsMethodsEquivalence.Visible = _project.Endpoints.Any(ep => ep.Measurement == MeasurementType.Fraction);
             groupBoxAnalysisMethodsNonNegativeEquivalence.Visible = _project.Endpoints.Any(ep => ep.Measurement == MeasurementType.Nonnegative);
 
+            radioButtonUseWaldTest.Checked = _project.PowerCalculationSettings.UseWaldTest;
+            radioButtonUseLogLikelihoodRatioTest.Checked = !_project.PowerCalculationSettings.UseWaldTest;
         }
 
         public bool IsVisible() {
@@ -125,10 +126,6 @@ namespace AmigaPowerAnalysis.GUI {
                 _project.PowerCalculationSettings.Seed = value;
             }
             textBox.Text = _project.PowerCalculationSettings.Seed.ToString();
-        }
-
-        private void checkBoxUseWaldTest_CheckedChanged(object sender, EventArgs e) {
-            _project.PowerCalculationSettings.UseWaldTest = checkBoxUseWaldTest.Checked;
         }
 
         private void checkBoxAnalysisMethodLNDifference_CheckedChanged(object sender, EventArgs e) {
@@ -219,6 +216,14 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void buttonRunPowerAnalysis_Click(object sender, EventArgs e) {
             onRunButtonPressed();
+        }
+
+        private void radioButtonUseLogLikelihoodRatioTest_CheckedChanged(object sender, EventArgs e) {
+            _project.PowerCalculationSettings.UseWaldTest = radioButtonUseWaldTest.Checked;
+        }
+
+        private void radioButtonUseWaldTest_CheckedChanged(object sender, EventArgs e) {
+            _project.PowerCalculationSettings.UseWaldTest = radioButtonUseWaldTest.Checked;
         }
     }
 }

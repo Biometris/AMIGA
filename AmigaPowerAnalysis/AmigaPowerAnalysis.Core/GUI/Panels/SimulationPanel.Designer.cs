@@ -30,7 +30,6 @@
             this.labelNumberOfRatios = new System.Windows.Forms.Label();
             this.textBoxSignificanceLevel = new System.Windows.Forms.TextBox();
             this.labelSignificanceLevel = new System.Windows.Forms.Label();
-            this.checkBoxUseWaldTest = new System.Windows.Forms.CheckBox();
             this.labelUseWaldTest = new System.Windows.Forms.Label();
             this.textBoxSeedForRandomNumbers = new System.Windows.Forms.TextBox();
             this.labelSeedForRandomNumbers = new System.Windows.Forms.Label();
@@ -72,8 +71,10 @@
             this.groupBoxCountsSettings = new System.Windows.Forms.GroupBox();
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
             this.flowLayoutPanel4 = new System.Windows.Forms.FlowLayoutPanel();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.panel2 = new System.Windows.Forms.Panel();
+            this.panelOptionsForCounts = new System.Windows.Forms.Panel();
+            this.panelOptions = new System.Windows.Forms.Panel();
+            this.radioButtonUseWaldTest = new System.Windows.Forms.RadioButton();
+            this.radioButtonUseLogLikelihoodRatioTest = new System.Windows.Forms.RadioButton();
             this.groupBoxOptions.SuspendLayout();
             this.groupBoxAnalysisMethodsCountsDifference.SuspendLayout();
             this.groupBoxAnalysisFractionsMethodsDifference.SuspendLayout();
@@ -87,12 +88,15 @@
             this.groupBoxAnalysisFractionsMethodsEquivalence.SuspendLayout();
             this.groupBoxCountsSettings.SuspendLayout();
             this.flowLayoutPanel2.SuspendLayout();
-            this.panel1.SuspendLayout();
-            this.panel2.SuspendLayout();
+            this.panelOptionsForCounts.SuspendLayout();
+            this.panelOptions.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBoxOptions
             // 
+            this.groupBoxOptions.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBoxOptions.AutoSize = true;
             this.groupBoxOptions.Controls.Add(this.textBoxNumberOfReplications);
             this.groupBoxOptions.Controls.Add(this.labelNumberOfReplications);
@@ -100,11 +104,11 @@
             this.groupBoxOptions.Controls.Add(this.labelNumberOfRatios);
             this.groupBoxOptions.Controls.Add(this.textBoxSignificanceLevel);
             this.groupBoxOptions.Controls.Add(this.labelSignificanceLevel);
-            this.groupBoxOptions.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBoxOptions.Location = new System.Drawing.Point(0, 0);
+            this.groupBoxOptions.Location = new System.Drawing.Point(0, 5);
             this.groupBoxOptions.Margin = new System.Windows.Forms.Padding(0);
             this.groupBoxOptions.Name = "groupBoxOptions";
-            this.groupBoxOptions.Size = new System.Drawing.Size(871, 112);
+            this.groupBoxOptions.Padding = new System.Windows.Forms.Padding(3, 3, 3, 0);
+            this.groupBoxOptions.Size = new System.Drawing.Size(904, 112);
             this.groupBoxOptions.TabIndex = 9;
             this.groupBoxOptions.TabStop = false;
             this.groupBoxOptions.Text = "Power analysis settings";
@@ -165,30 +169,18 @@
             this.labelSignificanceLevel.TabIndex = 0;
             this.labelSignificanceLevel.Text = "Significance level of statistical tests";
             // 
-            // checkBoxUseWaldTest
-            // 
-            this.checkBoxUseWaldTest.AutoSize = true;
-            this.checkBoxUseWaldTest.Checked = true;
-            this.checkBoxUseWaldTest.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxUseWaldTest.Location = new System.Drawing.Point(555, 51);
-            this.checkBoxUseWaldTest.Name = "checkBoxUseWaldTest";
-            this.checkBoxUseWaldTest.Size = new System.Drawing.Size(15, 14);
-            this.checkBoxUseWaldTest.TabIndex = 13;
-            this.checkBoxUseWaldTest.UseVisualStyleBackColor = true;
-            this.checkBoxUseWaldTest.CheckedChanged += new System.EventHandler(this.checkBoxUseWaldTest_CheckedChanged);
-            // 
             // labelUseWaldTest
             // 
             this.labelUseWaldTest.AutoSize = true;
             this.labelUseWaldTest.Location = new System.Drawing.Point(22, 51);
             this.labelUseWaldTest.Name = "labelUseWaldTest";
-            this.labelUseWaldTest.Size = new System.Drawing.Size(74, 13);
+            this.labelUseWaldTest.Size = new System.Drawing.Size(206, 13);
             this.labelUseWaldTest.TabIndex = 12;
-            this.labelUseWaldTest.Text = "Use Wald test";
+            this.labelUseWaldTest.Text = "Prefered test method for equivalence tests";
             // 
             // textBoxSeedForRandomNumbers
             // 
-            this.textBoxSeedForRandomNumbers.Location = new System.Drawing.Point(555, 97);
+            this.textBoxSeedForRandomNumbers.Location = new System.Drawing.Point(555, 121);
             this.textBoxSeedForRandomNumbers.Name = "textBoxSeedForRandomNumbers";
             this.textBoxSeedForRandomNumbers.Size = new System.Drawing.Size(100, 20);
             this.textBoxSeedForRandomNumbers.TabIndex = 11;
@@ -198,7 +190,7 @@
             // labelSeedForRandomNumbers
             // 
             this.labelSeedForRandomNumbers.AutoSize = true;
-            this.labelSeedForRandomNumbers.Location = new System.Drawing.Point(22, 99);
+            this.labelSeedForRandomNumbers.Location = new System.Drawing.Point(22, 123);
             this.labelSeedForRandomNumbers.Name = "labelSeedForRandomNumbers";
             this.labelSeedForRandomNumbers.Size = new System.Drawing.Size(365, 13);
             this.labelSeedForRandomNumbers.TabIndex = 10;
@@ -206,7 +198,7 @@
             // 
             // textBoxNumberSimulatedDatasets
             // 
-            this.textBoxNumberSimulatedDatasets.Location = new System.Drawing.Point(555, 71);
+            this.textBoxNumberSimulatedDatasets.Location = new System.Drawing.Point(555, 96);
             this.textBoxNumberSimulatedDatasets.Name = "textBoxNumberSimulatedDatasets";
             this.textBoxNumberSimulatedDatasets.Size = new System.Drawing.Size(100, 20);
             this.textBoxNumberSimulatedDatasets.TabIndex = 9;
@@ -216,7 +208,7 @@
             // labelNumberSimulatedDatasets
             // 
             this.labelNumberSimulatedDatasets.AutoSize = true;
-            this.labelNumberSimulatedDatasets.Location = new System.Drawing.Point(22, 75);
+            this.labelNumberSimulatedDatasets.Location = new System.Drawing.Point(22, 99);
             this.labelNumberSimulatedDatasets.Name = "labelNumberSimulatedDatasets";
             this.labelNumberSimulatedDatasets.Size = new System.Drawing.Size(246, 13);
             this.labelNumberSimulatedDatasets.TabIndex = 8;
@@ -434,10 +426,10 @@
             this.flowLayoutPanelAnalysisMethodsDifference.Controls.Add(this.groupBoxAnalysisMethodsContinuousDifference);
             this.flowLayoutPanelAnalysisMethodsDifference.Controls.Add(this.groupBoxAnalysisFractionsMethodsDifference);
             this.flowLayoutPanelAnalysisMethodsDifference.Dock = System.Windows.Forms.DockStyle.Top;
-            this.flowLayoutPanelAnalysisMethodsDifference.Location = new System.Drawing.Point(10, 305);
+            this.flowLayoutPanelAnalysisMethodsDifference.Location = new System.Drawing.Point(10, 339);
             this.flowLayoutPanelAnalysisMethodsDifference.Name = "flowLayoutPanelAnalysisMethodsDifference";
             this.flowLayoutPanelAnalysisMethodsDifference.Padding = new System.Windows.Forms.Padding(0, 3, 0, 3);
-            this.flowLayoutPanelAnalysisMethodsDifference.Size = new System.Drawing.Size(871, 160);
+            this.flowLayoutPanelAnalysisMethodsDifference.Size = new System.Drawing.Size(904, 160);
             this.flowLayoutPanelAnalysisMethodsDifference.TabIndex = 18;
             // 
             // flowLayoutPanel1
@@ -448,10 +440,10 @@
             this.flowLayoutPanel1.Controls.Add(this.groupBoxAnalysisMethodsContinuousEquivalence);
             this.flowLayoutPanel1.Controls.Add(this.groupBoxAnalysisFractionsMethodsEquivalence);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(10, 465);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(10, 499);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Padding = new System.Windows.Forms.Padding(0, 3, 0, 3);
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(871, 160);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(904, 160);
             this.flowLayoutPanel1.TabIndex = 19;
             // 
             // groupBoxAnalysisMethodsCountsEquivalence
@@ -629,8 +621,12 @@
             // 
             // groupBoxCountsSettings
             // 
+            this.groupBoxCountsSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBoxCountsSettings.AutoSize = true;
-            this.groupBoxCountsSettings.Controls.Add(this.checkBoxUseWaldTest);
+            this.groupBoxCountsSettings.Controls.Add(this.radioButtonUseLogLikelihoodRatioTest);
+            this.groupBoxCountsSettings.Controls.Add(this.radioButtonUseWaldTest);
             this.groupBoxCountsSettings.Controls.Add(this.labelMethodForPowerCalculation);
             this.groupBoxCountsSettings.Controls.Add(this.labelUseWaldTest);
             this.groupBoxCountsSettings.Controls.Add(this.comboBoxMethodForPowerCalculation);
@@ -638,11 +634,11 @@
             this.groupBoxCountsSettings.Controls.Add(this.labelNumberSimulatedDatasets);
             this.groupBoxCountsSettings.Controls.Add(this.labelSeedForRandomNumbers);
             this.groupBoxCountsSettings.Controls.Add(this.textBoxNumberSimulatedDatasets);
-            this.groupBoxCountsSettings.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBoxCountsSettings.Location = new System.Drawing.Point(0, 0);
+            this.groupBoxCountsSettings.Location = new System.Drawing.Point(0, 8);
             this.groupBoxCountsSettings.Margin = new System.Windows.Forms.Padding(0);
             this.groupBoxCountsSettings.Name = "groupBoxCountsSettings";
-            this.groupBoxCountsSettings.Size = new System.Drawing.Size(871, 136);
+            this.groupBoxCountsSettings.Padding = new System.Windows.Forms.Padding(3, 3, 3, 0);
+            this.groupBoxCountsSettings.Size = new System.Drawing.Size(904, 157);
             this.groupBoxCountsSettings.TabIndex = 20;
             this.groupBoxCountsSettings.TabStop = false;
             this.groupBoxCountsSettings.Text = "Options for analysis of counts";
@@ -655,38 +651,62 @@
             this.flowLayoutPanel2.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.flowLayoutPanel2.Location = new System.Drawing.Point(10, 10);
             this.flowLayoutPanel2.Name = "flowLayoutPanel2";
-            this.flowLayoutPanel2.Size = new System.Drawing.Size(871, 41);
+            this.flowLayoutPanel2.Size = new System.Drawing.Size(904, 41);
             this.flowLayoutPanel2.TabIndex = 20;
             // 
             // flowLayoutPanel4
             // 
             this.flowLayoutPanel4.AutoSize = true;
             this.flowLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Top;
-            this.flowLayoutPanel4.Location = new System.Drawing.Point(10, 299);
+            this.flowLayoutPanel4.Location = new System.Drawing.Point(10, 333);
             this.flowLayoutPanel4.Name = "flowLayoutPanel4";
             this.flowLayoutPanel4.Padding = new System.Windows.Forms.Padding(0, 3, 0, 3);
-            this.flowLayoutPanel4.Size = new System.Drawing.Size(871, 6);
+            this.flowLayoutPanel4.Size = new System.Drawing.Size(904, 6);
             this.flowLayoutPanel4.TabIndex = 22;
             // 
-            // panel1
+            // panelOptionsForCounts
             // 
-            this.panel1.AutoSize = true;
-            this.panel1.Controls.Add(this.groupBoxCountsSettings);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel1.Location = new System.Drawing.Point(10, 163);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(871, 136);
-            this.panel1.TabIndex = 23;
+            this.panelOptionsForCounts.AutoSize = true;
+            this.panelOptionsForCounts.Controls.Add(this.groupBoxCountsSettings);
+            this.panelOptionsForCounts.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelOptionsForCounts.Location = new System.Drawing.Point(10, 168);
+            this.panelOptionsForCounts.Name = "panelOptionsForCounts";
+            this.panelOptionsForCounts.Size = new System.Drawing.Size(904, 165);
+            this.panelOptionsForCounts.TabIndex = 23;
             // 
-            // panel2
+            // panelOptions
             // 
-            this.panel2.AutoSize = true;
-            this.panel2.Controls.Add(this.groupBoxOptions);
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel2.Location = new System.Drawing.Point(10, 51);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(871, 112);
-            this.panel2.TabIndex = 24;
+            this.panelOptions.AutoSize = true;
+            this.panelOptions.Controls.Add(this.groupBoxOptions);
+            this.panelOptions.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelOptions.Location = new System.Drawing.Point(10, 51);
+            this.panelOptions.Name = "panelOptions";
+            this.panelOptions.Size = new System.Drawing.Size(904, 117);
+            this.panelOptions.TabIndex = 24;
+            // 
+            // radioButtonUseWaldTest
+            // 
+            this.radioButtonUseWaldTest.AutoSize = true;
+            this.radioButtonUseWaldTest.Location = new System.Drawing.Point(555, 50);
+            this.radioButtonUseWaldTest.Name = "radioButtonUseWaldTest";
+            this.radioButtonUseWaldTest.Size = new System.Drawing.Size(70, 17);
+            this.radioButtonUseWaldTest.TabIndex = 14;
+            this.radioButtonUseWaldTest.TabStop = true;
+            this.radioButtonUseWaldTest.Text = "Wald test";
+            this.radioButtonUseWaldTest.UseVisualStyleBackColor = true;
+            this.radioButtonUseWaldTest.CheckedChanged += new System.EventHandler(this.radioButtonUseWaldTest_CheckedChanged);
+            // 
+            // radioButtonUseLogLikelihoodRatioTest
+            // 
+            this.radioButtonUseLogLikelihoodRatioTest.AutoSize = true;
+            this.radioButtonUseLogLikelihoodRatioTest.Location = new System.Drawing.Point(555, 73);
+            this.radioButtonUseLogLikelihoodRatioTest.Name = "radioButtonUseLogLikelihoodRatioTest";
+            this.radioButtonUseLogLikelihoodRatioTest.Size = new System.Drawing.Size(133, 17);
+            this.radioButtonUseLogLikelihoodRatioTest.TabIndex = 15;
+            this.radioButtonUseLogLikelihoodRatioTest.TabStop = true;
+            this.radioButtonUseLogLikelihoodRatioTest.Text = "Log-likelihood ratio test";
+            this.radioButtonUseLogLikelihoodRatioTest.UseVisualStyleBackColor = true;
+            this.radioButtonUseLogLikelihoodRatioTest.CheckedChanged += new System.EventHandler(this.radioButtonUseLogLikelihoodRatioTest_CheckedChanged);
             // 
             // SimulationPanel
             // 
@@ -698,13 +718,13 @@
             this.Controls.Add(this.flowLayoutPanel1);
             this.Controls.Add(this.flowLayoutPanelAnalysisMethodsDifference);
             this.Controls.Add(this.flowLayoutPanel4);
-            this.Controls.Add(this.panel1);
-            this.Controls.Add(this.panel2);
+            this.Controls.Add(this.panelOptionsForCounts);
+            this.Controls.Add(this.panelOptions);
             this.Controls.Add(this.flowLayoutPanel2);
             this.MinimumSize = new System.Drawing.Size(500, 400);
             this.Name = "SimulationPanel";
             this.Padding = new System.Windows.Forms.Padding(10);
-            this.Size = new System.Drawing.Size(891, 647);
+            this.Size = new System.Drawing.Size(924, 669);
             this.groupBoxOptions.ResumeLayout(false);
             this.groupBoxOptions.PerformLayout();
             this.groupBoxAnalysisMethodsCountsDifference.ResumeLayout(false);
@@ -730,10 +750,10 @@
             this.groupBoxCountsSettings.ResumeLayout(false);
             this.groupBoxCountsSettings.PerformLayout();
             this.flowLayoutPanel2.ResumeLayout(false);
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
-            this.panel2.ResumeLayout(false);
-            this.panel2.PerformLayout();
+            this.panelOptionsForCounts.ResumeLayout(false);
+            this.panelOptionsForCounts.PerformLayout();
+            this.panelOptions.ResumeLayout(false);
+            this.panelOptions.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -770,7 +790,6 @@
         private System.Windows.Forms.Label labelSeedForRandomNumbers;
         private System.Windows.Forms.Button buttonRunPowerAnalysis;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanelAnalysisMethodsDifference;
-        private System.Windows.Forms.CheckBox checkBoxUseWaldTest;
         private System.Windows.Forms.Label labelUseWaldTest;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.GroupBox groupBoxAnalysisMethodsCountsEquivalence;
@@ -790,7 +809,9 @@
         private System.Windows.Forms.GroupBox groupBoxCountsSettings;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel4;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Panel panelOptionsForCounts;
+        private System.Windows.Forms.Panel panelOptions;
+        private System.Windows.Forms.RadioButton radioButtonUseLogLikelihoodRatioTest;
+        private System.Windows.Forms.RadioButton radioButtonUseWaldTest;
     }
 }
