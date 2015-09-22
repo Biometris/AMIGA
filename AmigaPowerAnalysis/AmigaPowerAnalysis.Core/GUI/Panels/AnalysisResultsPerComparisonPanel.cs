@@ -85,7 +85,7 @@ namespace AmigaPowerAnalysis.GUI {
                 if (plotType == AnalysisPlotType.Replicates) {
                     plotView.Model = PowerVersusReplicatesRatioChartCreator.Create(_currentComparison.OutputPowerAnalysis.OutputRecords, testType, _currentAnalysisType);
                 } else if (plotType == AnalysisPlotType.Ratio) {
-                    plotView.Model = PowerVersusRatioChartCreator.Create(_currentComparison.OutputPowerAnalysis.OutputRecords, testType, _currentAnalysisType);
+                    plotView.Model = PowerVersusRatioChartCreator.Create(_currentComparison.OutputPowerAnalysis.OutputRecords, testType, _currentAnalysisType, _currentComparison.OutputPowerAnalysis.InputPowerAnalysis.NumberOfReplications);
                 }
                 labelPlotsPerBlock.Text = string.Format("{0} plots per block", _currentComparison.OutputPowerAnalysis.InputPowerAnalysis.InputRecords.Sum(ir => ir.Frequency));
                 labelLocLowerValue.Text = string.Format("{0:0.###}", _currentComparison.OutputPowerAnalysis.InputPowerAnalysis.LocLower);

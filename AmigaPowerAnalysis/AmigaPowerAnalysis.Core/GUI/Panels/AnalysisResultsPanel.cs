@@ -122,7 +122,7 @@ namespace AmigaPowerAnalysis.GUI {
                     if (plotType == AnalysisPlotType.Replicates) {
                         plotView.Model = PowerVersusReplicatesCsdChartCreator.Create(records, testType, _currentAnalysisType);
                     } else if (plotType == AnalysisPlotType.ConcernStandardizedDifference) {
-                        plotView.Model = PowerVersusCsdChartCreator.Create(records, testType, _currentAnalysisType);
+                        plotView.Model = PowerVersusCsdChartCreator.Create(records, testType, _currentAnalysisType, primaryComparisons.First().OutputPowerAnalysis.InputPowerAnalysis.NumberOfReplications);
                     }
                     var plotsPerBlockCounts = primaryComparisons.Select(pc => pc.OutputPowerAnalysis.InputPowerAnalysis.InputRecords.Sum(ir => ir.Frequency));
                     var minPlotsPerBlockCount = plotsPerBlockCounts.Min();

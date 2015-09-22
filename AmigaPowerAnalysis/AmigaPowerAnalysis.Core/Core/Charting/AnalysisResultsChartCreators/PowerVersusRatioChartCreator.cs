@@ -10,32 +10,37 @@ namespace AmigaPowerAnalysis.Core.Charting.AnalysisResultsChartCreators {
 
     public sealed class PowerVersusRatioChartCreator : AnalysisResultsChartCreatorBase {
 
-        public PowerVersusRatioChartCreator(List<OutputPowerAnalysisRecord> powerAnalysisOutputRecords, TestType testType, AnalysisMethodType analysisMethodType)
+        public List<int> BlockSizes { get; set; }
+
+        public PowerVersusRatioChartCreator(List<OutputPowerAnalysisRecord> powerAnalysisOutputRecords, TestType testType, AnalysisMethodType analysisMethodType, List<int> blockSizes)
             : base(powerAnalysisOutputRecords, testType, analysisMethodType) {
+            BlockSizes = blockSizes;
         }
 
         public override PlotModel Create() {
             var plotModel = base.Create();
-            return Create(PowerAnalysisOutputRecords, TestType, AnalysisMethodType);
+            return Create(PowerAnalysisOutputRecords, TestType, AnalysisMethodType, BlockSizes);
         }
 
-        public static PlotModel Create(List<OutputPowerAnalysisRecord> powerAnalysisOutputRecords, TestType testType, AnalysisMethodType analysisMethodType) {
+        public static PlotModel Create(List<OutputPowerAnalysisRecord> powerAnalysisOutputRecords, TestType testType, AnalysisMethodType analysisMethodType, List<int> blockSizes) {
             var model = AnalysisResultsChartCreatorBase.CreatePlotModel(testType, analysisMethodType);
             var horizontalAxis = new LogarithmicAxis() {
                 Title = "Ratio",
                 MajorGridlineStyle = LineStyle.Solid,
                 MinorGridlineStyle = LineStyle.Dot,
                 Position = AxisPosition.Bottom,
+                AbsoluteMaximum = powerAnalysisOutputRecords.Max(r => r.Effect),
+                AbsoluteMinimum = powerAnalysisOutputRecords.Min(r => r.Effect),
             };
             model.Axes.Add(horizontalAxis);
             if (powerAnalysisOutputRecords != null) {
-                var replicateGroups = powerAnalysisOutputRecords.GroupBy(r => r.NumberOfReplications).Where(g => !double.IsNaN(g.Key));
-                for (int i = 0; i < replicateGroups.Count(); ++i) {
-                    var replicateGroup = replicateGroups.ElementAt(i);
+                for (int i = 0; i < blockSizes.Count(); ++i) {
+                    var replicateGroup = powerAnalysisOutputRecords
+                        .Where(r => r.NumberOfReplications == blockSizes[i]);
                     var series = new LineSeries() {
                         MarkerType = (MarkerType)(i % 7 + 1),
                     };
-                    series.Title = string.Format("Repl {0:0.##}", replicateGroup.Key);
+                    series.Title = string.Format("Repl {0}", blockSizes[i]);
                     series.Points.AddRange(replicateGroup.Select(g => new DataPoint() {
                         X = g.Effect,
                         Y = g.GetPower(testType, analysisMethodType),

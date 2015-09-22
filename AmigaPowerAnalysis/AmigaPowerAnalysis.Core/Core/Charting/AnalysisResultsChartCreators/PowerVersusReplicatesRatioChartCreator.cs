@@ -27,6 +27,8 @@ namespace AmigaPowerAnalysis.Core.Charting.AnalysisResultsChartCreators {
                 MajorGridlineStyle = LineStyle.Solid,
                 MinorGridlineStyle = LineStyle.Dot,
                 Position = AxisPosition.Bottom,
+                AbsoluteMaximum = powerAnalysisOutputRecords.Max(r => r.NumberOfReplications),
+                AbsoluteMinimum = powerAnalysisOutputRecords.Min(r => r.NumberOfReplications),
             };
             model.Axes.Add(horizontalAxis);
             if (powerAnalysisOutputRecords != null) {
