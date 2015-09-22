@@ -148,6 +148,13 @@ namespace AmigaPowerAnalysis.GUI {
                     dataGridViewEndpoints.Rows[i].Cells["CvComparator"].ReadOnly = false;
                     dataGridViewEndpoints.Rows[i].Cells["CvComparator"].Style.BackColor = Color.White;
                 }
+                if (_project.Endpoints[i].Measurement == MeasurementType.Count) {
+                    dataGridViewEndpoints.Rows[i].Cells["ExcessZeroes"].ReadOnly = false;
+                    dataGridViewEndpoints.Rows[i].Cells["ExcessZeroes"].Style.BackColor = Color.White;
+                } else {
+                    dataGridViewEndpoints.Rows[i].Cells["ExcessZeroes"].ReadOnly = true;
+                    dataGridViewEndpoints.Rows[i].Cells["ExcessZeroes"].Style.BackColor = Color.LightGray;
+                }
                 if (_project.Endpoints[i].ExcessZeroes) {
                     dataGridViewEndpoints.Rows[i].Cells["ExcessZeroesPercentage"].ReadOnly = false;
                     dataGridViewEndpoints.Rows[i].Cells["ExcessZeroesPercentage"].Style.BackColor = Color.White;

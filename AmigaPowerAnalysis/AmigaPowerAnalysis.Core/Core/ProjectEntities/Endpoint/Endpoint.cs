@@ -467,6 +467,7 @@ namespace AmigaPowerAnalysis.Core {
                     if (_locUpper >= 1) {
                         _locUpper = 0.999;
                     }
+                    _excessZeroes = false;
                     break;
                 case MeasurementType.Nonnegative:
                     if (_muComparator <= 0) {
@@ -478,8 +479,10 @@ namespace AmigaPowerAnalysis.Core {
                     if (_locUpper <= _locLower) {
                         _locUpper = _locLower + 0.01;
                     }
+                    _excessZeroes = false;
                     break;
                 case MeasurementType.Continuous:
+                    _excessZeroes = false;
                     break;
                 default:
                     break;
