@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using AmigaPowerAnalysis.Core;
+using Biometris.Statistics.Measurements;
 
 namespace AmigaPowerAnalysis.GUI {
     public partial class BlockModifiersPanel : UserControl, ISelectionForm {
@@ -34,7 +35,13 @@ namespace AmigaPowerAnalysis.GUI {
 
         public bool IsVisible() {
             if (_project != null) {
-                return _project.DesignSettings.ExperimentalDesignType != ExperimentalDesignType.CompletelyRandomized;
+                if (_project.DesignSettings.ExperimentalDesignType == ExperimentalDesignType.CompletelyRandomized) {
+                    return false;
+                } else if (!_project.Endpoints.Any(ep => ep.Measurement == MeasurementType.Count)) {
+                    return false;
+                } else {
+                    return true;
+                }
             }
             return false;
         }

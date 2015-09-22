@@ -51,6 +51,7 @@
             this.dataGridViewEndpoints.Size = new System.Drawing.Size(809, 444);
             this.dataGridViewEndpoints.TabIndex = 2;
             this.dataGridViewEndpoints.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.dataGridViewEndpoints_CellValidating);
+            this.dataGridViewEndpoints.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewEndpoints_CellValueChanged);
             this.dataGridViewEndpoints.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dataGridViewEndpoints_DataError);
             this.dataGridViewEndpoints.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dataGridViewEndpoints_KeyDown);
             // 

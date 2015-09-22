@@ -103,12 +103,14 @@ namespace AmigaPowerAnalysis.GUI {
             _project.AddEndpoint(new Endpoint(newEndpointName, _project.EndpointTypes.First()));
             updateDataGridViewEndpoints();
             dataGridViewEndpoints.CurrentCell = dataGridViewEndpoints.Rows[dataGridViewEndpoints.RowCount - 1].Cells[0];
+            fireTabVisibilitiesChanged();
         }
 
         private void buttonDeleteEndpoint_Click(object sender, EventArgs e) {
             if (dataGridViewEndpoints.SelectedRows.Count == 1) {
                 _project.RemoveEndpoint(_project.Endpoints[dataGridViewEndpoints.CurrentRow.Index]);
                 updateDataGridViewEndpoints();
+                fireTabVisibilitiesChanged();
             } else {
                 showError("Invalid selection", "Please select one entire row in order to remove its corresponding endpoint.");
             }
@@ -197,6 +199,17 @@ namespace AmigaPowerAnalysis.GUI {
                     .Distinct()
                     .ToList();
             }
+        }
+
+        private void fireTabVisibilitiesChanged() {
+            var tabVisibilitiesChanged = TabVisibilitiesChanged;
+            if (tabVisibilitiesChanged != null) {
+                tabVisibilitiesChanged(this, null);
+            }
+        }
+
+        private void dataGridViewEndpoints_CellValueChanged(object sender, DataGridViewCellEventArgs e) {
+            fireTabVisibilitiesChanged();
         }
     }
 }
