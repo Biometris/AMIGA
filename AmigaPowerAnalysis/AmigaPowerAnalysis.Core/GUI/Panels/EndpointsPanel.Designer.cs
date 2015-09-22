@@ -43,6 +43,7 @@
             this.dataGridViewEndpoints.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewEndpoints.BackgroundColor = System.Drawing.Color.White;
             this.dataGridViewEndpoints.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewEndpoints.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
             this.dataGridViewEndpoints.Location = new System.Drawing.Point(13, 46);
             this.dataGridViewEndpoints.Name = "dataGridViewEndpoints";
             this.dataGridViewEndpoints.RowHeadersWidth = 24;
