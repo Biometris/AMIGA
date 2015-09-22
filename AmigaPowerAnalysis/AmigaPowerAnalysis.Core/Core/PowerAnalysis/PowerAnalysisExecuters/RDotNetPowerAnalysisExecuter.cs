@@ -182,11 +182,11 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                 NumberOfReplications = blocks,
             };
             foreach (var analysisMethodType in selectedAnalysisMethodTypesDifferenceTests.GetFlags().Cast<AnalysisMethodType>()) {
-                var powerDifference = rEngine.EvaluateDouble(string.Format("sum(pValues$Diff[,\"{0}\"] < settings$SignificanceLevel)", analysisMethodType)) / monteCarloSimulations;
+                var powerDifference = rEngine.EvaluateDouble(string.Format("pValues$Diff[\"{0}\", 1]", analysisMethodType));
                 output.SetPower(TestType.Difference, analysisMethodType, powerDifference);
             }
             foreach (var analysisMethodType in selectedAnalysisMethodTypesEquivalenceTests.GetFlags().Cast<AnalysisMethodType>()) {
-                var powerEquivalence = rEngine.EvaluateDouble(string.Format("sum(pValues$Equi[,\"{0}\"] < settings$SignificanceLevel)", analysisMethodType)) / monteCarloSimulations;
+                var powerEquivalence = rEngine.EvaluateDouble(string.Format("pValues$Equi[\"{0}\", 1]", analysisMethodType));
                 output.SetPower(TestType.Equivalence, analysisMethodType, powerEquivalence);
             }
             return output;
