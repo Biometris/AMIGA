@@ -13,6 +13,11 @@ namespace AmigaPowerAnalysis.Core.Reporting {
         private IEnumerable<OutputPowerAnalysis> _comparisonOutputs;
         private string _filesPath;
 
+        public MultiComparisonReportGenerator(ResultPowerAnalysis resultPowerAnalysis, string tempPath) {
+            _comparisonOutputs = resultPowerAnalysis.ComparisonPowerAnalysisResults;
+            _filesPath = tempPath;
+        }
+
         public MultiComparisonReportGenerator(IEnumerable<OutputPowerAnalysis> comparisonOutputs, string tempPath) {
             _comparisonOutputs = comparisonOutputs;
             _filesPath = tempPath;

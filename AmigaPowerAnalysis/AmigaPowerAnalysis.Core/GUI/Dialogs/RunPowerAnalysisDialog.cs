@@ -67,15 +67,13 @@ namespace AmigaPowerAnalysis.GUI {
                 localProgress.Update(string.Format("Running power analysis for comparison {0} of {1}...", i + 1, comparisons.Count()));
                 var inputPowerAnalysis = inputGenerator.CreateInputPowerAnalysis(comparisons.ElementAt(i), _project.DesignSettings, _project.PowerCalculationSettings, i, numberOfComparisons, _project.UseBlockModifier);
                 var output = await powerAnalysisExecuter.RunAsync(inputPowerAnalysis, localProgress);
-                comparisons[i].OutputPowerAnalysis = output;
                 resultPowerAnalysis.ComparisonPowerAnalysisResults.Add(output);
                 localProgress.Update(100);
             }
-            if (comparisons.Any(r => !r.OutputPowerAnalysis.Success)) {
+            if (resultPowerAnalysis.ComparisonPowerAnalysisResults.Any(r => !r.Success)) {
                 showWarning("Warning", "Power Analysis completed with errors. Some results may be incomplete or non existent.");
             }
             resultPowerAnalysis.OuputTimeStamp = DateTime.Now;
-            _project.AnalysisResults.Clear();
             _project.AnalysisResults.Add(resultPowerAnalysis);
         }
 

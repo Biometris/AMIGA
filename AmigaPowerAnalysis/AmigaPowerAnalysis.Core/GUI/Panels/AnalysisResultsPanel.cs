@@ -60,10 +60,7 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         public bool IsVisible() {
-            if (_project.GetComparisons().Any(c => c.OutputPowerAnalysis != null)) {
-                return true;
-            }
-            return false;
+            return _project != null && _project.HasOutput;
         }
 
         private void updateDataGridComparisons() {

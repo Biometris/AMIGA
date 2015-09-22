@@ -1,18 +1,16 @@
 ﻿using System.Runtime.Serialization;
 using AmigaPowerAnalysis.Core.PowerAnalysis;
+using System;
 
 namespace AmigaPowerAnalysis.Core {
 
     [DataContract]
     public sealed class Comparison {
 
-        private bool _isPrimary;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="Comparison"/> class.
         /// </summary>
         public Comparison() {
-            _isPrimary = true;
         }
 
         /// <summary>
@@ -24,27 +22,15 @@ namespace AmigaPowerAnalysis.Core {
         /// <summary>
         /// Whether the comparison is primary (true) or secondary (false).
         /// </summary>
-        [DataMember(Order = 0)]
-        public bool IsPrimary {
-            get {
-                if (OutputPowerAnalysis != null) {
-                    return OutputPowerAnalysis.IsPrimary;
-                } else {
-                    return _isPrimary;
-                }
-            }
-            set {
-                _isPrimary = value;
-                if (OutputPowerAnalysis != null) {
-                    OutputPowerAnalysis.IsPrimary = value;
-                }
-            }
-        }
+        [Obsolete]
+        [IgnoreDataMember]
+        public bool IsPrimary { get; set; }
 
         /// <summary>
         /// Contains the output of a power analysis.
         /// </summary>
-        [DataMember(Order = 1)]
+        [Obsolete]
+        [IgnoreDataMember]
         public OutputPowerAnalysis OutputPowerAnalysis { get; set; }
 
     }

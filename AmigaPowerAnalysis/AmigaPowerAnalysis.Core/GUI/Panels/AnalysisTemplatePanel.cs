@@ -10,12 +10,7 @@ using AmigaPowerAnalysis.Core.DataAnalysis;
 using AmigaPowerAnalysis.Core.DataAnalysis.AnalysisModels;
 using AmigaPowerAnalysis.Core.Reporting;
 using OxyPlot.WindowsForms;
-
-// TODO Obligatory to first enter a name for a new endpoint
-// TODO Binomial totals greyed out for non fractions
-// TODO Binomial totals must be positive
-// TODO LOC=NaN should be displayed as empty textbox; also empty textbox store as to NaN. Possibly better to use null
-// TODO LOC must be positive
+using AmigaPowerAnalysis.Core.PowerAnalysis;
 
 namespace AmigaPowerAnalysis.GUI {
     public partial class AnalysisTemplatePanel : UserControl, ISelectionForm {
@@ -23,8 +18,8 @@ namespace AmigaPowerAnalysis.GUI {
         public event EventHandler TabVisibilitiesChanged;
 
         private Project _project;
-        private Comparison _currentComparison;
-        private List<Comparison> _comparisons;
+        private OutputPowerAnalysis _currentComparisonAnalysisResult;
+        private List<OutputPowerAnalysis> _comparisonAnalysisResults;
         private string _currentProjectFilePath;
         private int _numberOfReplicates;
         private AnalysisMethodType _currentAnalysisMethodType;
@@ -53,52 +48,47 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void updateVisibilities() {
-            if (_currentComparison != null) {
+            if (_currentComparisonAnalysisResult != null) {
 
             }
         }
 
         public bool IsVisible() {
-            if (_project.GetComparisons().Any(c => c.OutputPowerAnalysis != null)) {
-                return true;
-            }
-            return false;
+            return _project.HasOutput;
         }
 
         private void updateDataGridComparisons() {
             dataGridViewComparisons.Columns.Clear();
 
-            var _availableEndpoints = _project.Endpoints.Select(h => new { Name = h.Name, Endpoint = h }).ToList();
-            var combo = new DataGridViewComboBoxColumn();
-            combo.DataSource = _availableEndpoints;
-            combo.DataPropertyName = "Endpoint";
-            combo.DisplayMember = "Name";
-            combo.ValueMember = "Endpoint";
-            combo.HeaderText = "Endpoint";
-            combo.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
-            dataGridViewComparisons.Columns.Add(combo);
+            _comparisonAnalysisResults = _project.AnalysisResults.First().ComparisonPowerAnalysisResults;
 
-            _comparisons = _project.GetComparisons().Where(c => c.OutputPowerAnalysis != null).ToList();
-            var comparisonsBindingSouce = new BindingSource(_comparisons, null);
+            var column = new DataGridViewTextBoxColumn();
+            column.DataPropertyName = "Endpoint";
+            column.Name = "Endpoint";
+            column.HeaderText = "Endpoint";
+            column.ValueType = typeof(string);
+            dataGridViewComparisons.Columns.Add(column);
+
+            var comparisonsBindingSouce = new BindingSource(_comparisonAnalysisResults, null);
             dataGridViewComparisons.AutoGenerateColumns = false;
             dataGridViewComparisons.DataSource = comparisonsBindingSouce;
         }
 
         private void updatePanelModelInfo() {
-            if (_currentComparison != null) {
+            if (_currentComparisonAnalysisResult != null) {
                 var AnalysisRScriptGenerator = new AnalysisRScriptGenerator();
-                textBoxGeneratedAnalysisScript.Text = AnalysisRScriptGenerator.Generate(_currentComparison.OutputPowerAnalysis.InputPowerAnalysis, _currentAnalysisMethodType);
+                textBoxGeneratedAnalysisScript.Text = AnalysisRScriptGenerator.Generate(_currentComparisonAnalysisResult.InputPowerAnalysis, _currentAnalysisMethodType);
             }
         }
 
         private void dataGridViewComparisons_SelectionChanged(object sender, EventArgs e) {
-            _currentComparison = _project.GetComparisons().ElementAt(dataGridViewComparisons.CurrentRow.Index);
-            var selectedAnalysisMethodTypesDifferenceTests = _currentComparison.OutputPowerAnalysis.InputPowerAnalysis.SelectedAnalysisMethodTypesDifferenceTests.GetFlags().ToArray();
+            _currentComparisonAnalysisResult = _comparisonAnalysisResults.ElementAt(dataGridViewComparisons.CurrentRow.Index);
+            var selectedAnalysisMethodTypesDifferenceTests = _currentComparisonAnalysisResult.InputPowerAnalysis.SelectedAnalysisMethodTypesDifferenceTests.GetFlags().ToArray();
             this.comboBoxAnalysisMethodTypeDifferenceTests.DataSource = selectedAnalysisMethodTypesDifferenceTests;
             if (selectedAnalysisMethodTypesDifferenceTests.Count() > 0) {
                 this.comboBoxAnalysisMethodTypeDifferenceTests.SelectedIndex = 0;
             }
-            var selectedAnalysisMethodTypesEquivalenceTests = _currentComparison.OutputPowerAnalysis.InputPowerAnalysis.SelectedAnalysisMethodTypesEquivalenceTests.GetFlags().ToArray();
+            var selectedAnalysisMethodTypesEquivalenceTests = _currentComparisonAnalysisResult.InputPowerAnalysis.SelectedAnalysisMethodTypesEquivalenceTests.GetFlags().ToArray();
             this.comboBoxAnalysisMethodTypeEquivalenceTests.DataSource = selectedAnalysisMethodTypesEquivalenceTests;
             if (selectedAnalysisMethodTypesEquivalenceTests.Count() > 0) {
                 this.comboBoxAnalysisMethodTypeEquivalenceTests.SelectedIndex = 0;

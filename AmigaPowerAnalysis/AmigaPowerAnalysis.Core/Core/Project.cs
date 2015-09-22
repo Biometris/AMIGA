@@ -350,13 +350,19 @@ namespace AmigaPowerAnalysis.Core {
         }
 
         /// <summary>
+        /// Returns whether the project has output.
+        /// </summary>
+        public bool HasOutput {
+            get {
+                return AnalysisResults != null && AnalysisResults.Count > 0;
+            }
+        }
+
+        /// <summary>
         /// Clears the project outputs.
         /// </summary>
         public void ClearProjectOutput() {
-            var comparisons = GetComparisons();
-            foreach (var comparison in comparisons) {
-                comparison.OutputPowerAnalysis = null;
-            }
+            AnalysisResults.Clear();
         }
     }
 }

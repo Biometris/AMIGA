@@ -27,21 +27,23 @@ namespace AmigaPowerAnalysis.Tests.IntegrationTests {
                 directory.GetDirectories().ToList().ForEach(f => f.Delete(true));
             }
             var comparisons = project.GetComparisons().ToList();
+            var resultPowerAnalysis = new ResultPowerAnalysis();
             for (int i = 0; i < comparisons.Count(); ++i) {
                 var inputGenerator = new PowerAnalysisInputGenerator();
                 var inputPowerAnalysis = inputGenerator.CreateInputPowerAnalysis(comparisons[i], project.DesignSettings, project.PowerCalculationSettings, i, comparisons.Count, project.UseBlockModifier);
                 var progressReport = new ProgressReport();
                 var rDotNetExecuter = new RDotNetPowerAnalysisExecuter(filesPath);
-                comparisons[i].OutputPowerAnalysis = rDotNetExecuter.Run(inputPowerAnalysis, progressReport.NewProgressState(100));
+                var comparisonOutput = rDotNetExecuter.Run(inputPowerAnalysis, progressReport.NewProgressState(100));
+                resultPowerAnalysis.ComparisonPowerAnalysisResults.Add(comparisonOutput);
 
                 var filenameXml = Path.Combine(filesPath, string.Format("Comparison-{0}.xml", i));
-                comparisons[i].OutputPowerAnalysis.ToXmlFile(filenameXml);
+                comparisonOutput.ToXmlFile(filenameXml);
 
                 var filenamePdf = Path.Combine(filesPath, string.Format("Comparison-{0}.pdf", i));
-                var singleComparisonReportGenerator = new SingleComparisonReportGenerator(comparisons[i].OutputPowerAnalysis, filesPath);
+                var singleComparisonReportGenerator = new SingleComparisonReportGenerator(comparisonOutput, filesPath);
                 singleComparisonReportGenerator.SaveAsPdf(filenamePdf);
             }
-            var multiComparisonReportGenerator = new MultiComparisonReportGenerator(comparisons.Select(c => c.OutputPowerAnalysis), filesPath);
+            var multiComparisonReportGenerator = new MultiComparisonReportGenerator(resultPowerAnalysis, filesPath);
             multiComparisonReportGenerator.SaveAsPdf(Path.Combine(filesPath, "Report.pdf"));
             runValidationGenstat(0, filesPath);
         }
