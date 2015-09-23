@@ -243,7 +243,7 @@
             // checkBoxAnalysisMethodSQDifference
             // 
             this.checkBoxAnalysisMethodSQDifference.AutoSize = true;
-            this.checkBoxAnalysisMethodSQDifference.Location = new System.Drawing.Point(20, 52);
+            this.checkBoxAnalysisMethodSQDifference.Location = new System.Drawing.Point(20, 50);
             this.checkBoxAnalysisMethodSQDifference.Name = "checkBoxAnalysisMethodSQDifference";
             this.checkBoxAnalysisMethodSQDifference.Size = new System.Drawing.Size(155, 17);
             this.checkBoxAnalysisMethodSQDifference.TabIndex = 12;
@@ -256,7 +256,7 @@
             this.checkBoxAnalysisMethodOPDifference.AutoSize = true;
             this.checkBoxAnalysisMethodOPDifference.Checked = true;
             this.checkBoxAnalysisMethodOPDifference.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxAnalysisMethodOPDifference.Location = new System.Drawing.Point(20, 80);
+            this.checkBoxAnalysisMethodOPDifference.Location = new System.Drawing.Point(20, 76);
             this.checkBoxAnalysisMethodOPDifference.Name = "checkBoxAnalysisMethodOPDifference";
             this.checkBoxAnalysisMethodOPDifference.Size = new System.Drawing.Size(196, 17);
             this.checkBoxAnalysisMethodOPDifference.TabIndex = 13;
@@ -267,7 +267,7 @@
             // checkBoxAnalysisMethodNBDifference
             // 
             this.checkBoxAnalysisMethodNBDifference.AutoSize = true;
-            this.checkBoxAnalysisMethodNBDifference.Location = new System.Drawing.Point(20, 108);
+            this.checkBoxAnalysisMethodNBDifference.Location = new System.Drawing.Point(20, 102);
             this.checkBoxAnalysisMethodNBDifference.Name = "checkBoxAnalysisMethodNBDifference";
             this.checkBoxAnalysisMethodNBDifference.Size = new System.Drawing.Size(200, 17);
             this.checkBoxAnalysisMethodNBDifference.TabIndex = 14;
@@ -285,7 +285,7 @@
             this.groupBoxAnalysisMethodsCountsDifference.Location = new System.Drawing.Point(0, 3);
             this.groupBoxAnalysisMethodsCountsDifference.Margin = new System.Windows.Forms.Padding(0, 0, 5, 5);
             this.groupBoxAnalysisMethodsCountsDifference.Name = "groupBoxAnalysisMethodsCountsDifference";
-            this.groupBoxAnalysisMethodsCountsDifference.Size = new System.Drawing.Size(226, 144);
+            this.groupBoxAnalysisMethodsCountsDifference.Size = new System.Drawing.Size(226, 138);
             this.groupBoxAnalysisMethodsCountsDifference.TabIndex = 10;
             this.groupBoxAnalysisMethodsCountsDifference.TabStop = false;
             this.groupBoxAnalysisMethodsCountsDifference.Text = "Analysis difference tests counts";
@@ -310,7 +310,7 @@
             this.groupBoxAnalysisFractionsMethodsDifference.Location = new System.Drawing.Point(662, 3);
             this.groupBoxAnalysisFractionsMethodsDifference.Margin = new System.Windows.Forms.Padding(5, 0, 5, 5);
             this.groupBoxAnalysisFractionsMethodsDifference.Name = "groupBoxAnalysisFractionsMethodsDifference";
-            this.groupBoxAnalysisFractionsMethodsDifference.Size = new System.Drawing.Size(193, 144);
+            this.groupBoxAnalysisFractionsMethodsDifference.Size = new System.Drawing.Size(193, 138);
             this.groupBoxAnalysisFractionsMethodsDifference.TabIndex = 15;
             this.groupBoxAnalysisFractionsMethodsDifference.TabStop = false;
             this.groupBoxAnalysisFractionsMethodsDifference.Text = "Analysis difference tests fractions";
@@ -333,7 +333,7 @@
             this.checkBoxAnalysisMethodBBNDifference.AutoSize = true;
             this.checkBoxAnalysisMethodBBNDifference.Checked = true;
             this.checkBoxAnalysisMethodBBNDifference.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxAnalysisMethodBBNDifference.Location = new System.Drawing.Point(20, 80);
+            this.checkBoxAnalysisMethodBBNDifference.Location = new System.Drawing.Point(20, 76);
             this.checkBoxAnalysisMethodBBNDifference.Name = "checkBoxAnalysisMethodBBNDifference";
             this.checkBoxAnalysisMethodBBNDifference.Size = new System.Drawing.Size(149, 17);
             this.checkBoxAnalysisMethodBBNDifference.TabIndex = 13;
@@ -344,7 +344,7 @@
             // checkBoxAnalysisMethodOBNDifference
             // 
             this.checkBoxAnalysisMethodOBNDifference.AutoSize = true;
-            this.checkBoxAnalysisMethodOBNDifference.Location = new System.Drawing.Point(20, 52);
+            this.checkBoxAnalysisMethodOBNDifference.Location = new System.Drawing.Point(20, 50);
             this.checkBoxAnalysisMethodOBNDifference.Name = "checkBoxAnalysisMethodOBNDifference";
             this.checkBoxAnalysisMethodOBNDifference.Size = new System.Drawing.Size(142, 17);
             this.checkBoxAnalysisMethodOBNDifference.TabIndex = 12;
@@ -359,7 +359,7 @@
             this.groupBoxAnalysisMethodsNonNegativeDifference.Location = new System.Drawing.Point(236, 3);
             this.groupBoxAnalysisMethodsNonNegativeDifference.Margin = new System.Windows.Forms.Padding(5, 0, 5, 5);
             this.groupBoxAnalysisMethodsNonNegativeDifference.Name = "groupBoxAnalysisMethodsNonNegativeDifference";
-            this.groupBoxAnalysisMethodsNonNegativeDifference.Size = new System.Drawing.Size(211, 144);
+            this.groupBoxAnalysisMethodsNonNegativeDifference.Size = new System.Drawing.Size(211, 138);
             this.groupBoxAnalysisMethodsNonNegativeDifference.TabIndex = 16;
             this.groupBoxAnalysisMethodsNonNegativeDifference.TabStop = false;
             this.groupBoxAnalysisMethodsNonNegativeDifference.Text = "Analysis difference tests non-negative";
@@ -380,7 +380,7 @@
             // checkBoxAnalysisMethodGDifference
             // 
             this.checkBoxAnalysisMethodGDifference.AutoSize = true;
-            this.checkBoxAnalysisMethodGDifference.Location = new System.Drawing.Point(20, 52);
+            this.checkBoxAnalysisMethodGDifference.Location = new System.Drawing.Point(20, 50);
             this.checkBoxAnalysisMethodGDifference.Name = "checkBoxAnalysisMethodGDifference";
             this.checkBoxAnalysisMethodGDifference.Size = new System.Drawing.Size(120, 17);
             this.checkBoxAnalysisMethodGDifference.TabIndex = 12;
@@ -394,7 +394,7 @@
             this.groupBoxAnalysisMethodsContinuousDifference.Location = new System.Drawing.Point(457, 3);
             this.groupBoxAnalysisMethodsContinuousDifference.Margin = new System.Windows.Forms.Padding(5, 0, 5, 5);
             this.groupBoxAnalysisMethodsContinuousDifference.Name = "groupBoxAnalysisMethodsContinuousDifference";
-            this.groupBoxAnalysisMethodsContinuousDifference.Size = new System.Drawing.Size(195, 144);
+            this.groupBoxAnalysisMethodsContinuousDifference.Size = new System.Drawing.Size(195, 138);
             this.groupBoxAnalysisMethodsContinuousDifference.TabIndex = 17;
             this.groupBoxAnalysisMethodsContinuousDifference.TabStop = false;
             this.groupBoxAnalysisMethodsContinuousDifference.Text = "Analysis difference tests continuous";
@@ -424,7 +424,7 @@
             this.flowLayoutPanelAnalysisMethodsDifference.Margin = new System.Windows.Forms.Padding(0);
             this.flowLayoutPanelAnalysisMethodsDifference.Name = "flowLayoutPanelAnalysisMethodsDifference";
             this.flowLayoutPanelAnalysisMethodsDifference.Padding = new System.Windows.Forms.Padding(0, 3, 0, 3);
-            this.flowLayoutPanelAnalysisMethodsDifference.Size = new System.Drawing.Size(904, 155);
+            this.flowLayoutPanelAnalysisMethodsDifference.Size = new System.Drawing.Size(904, 149);
             this.flowLayoutPanelAnalysisMethodsDifference.TabIndex = 18;
             // 
             // flowLayoutPanel1
@@ -435,11 +435,11 @@
             this.flowLayoutPanel1.Controls.Add(this.groupBoxAnalysisMethodsContinuousEquivalence);
             this.flowLayoutPanel1.Controls.Add(this.groupBoxAnalysisFractionsMethodsEquivalence);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(10, 475);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(10, 469);
             this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Padding = new System.Windows.Forms.Padding(0, 3, 0, 3);
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(904, 155);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(904, 149);
             this.flowLayoutPanel1.TabIndex = 19;
             // 
             // groupBoxAnalysisMethodsCountsEquivalence
@@ -452,7 +452,7 @@
             this.groupBoxAnalysisMethodsCountsEquivalence.Location = new System.Drawing.Point(0, 3);
             this.groupBoxAnalysisMethodsCountsEquivalence.Margin = new System.Windows.Forms.Padding(0, 0, 5, 5);
             this.groupBoxAnalysisMethodsCountsEquivalence.Name = "groupBoxAnalysisMethodsCountsEquivalence";
-            this.groupBoxAnalysisMethodsCountsEquivalence.Size = new System.Drawing.Size(226, 144);
+            this.groupBoxAnalysisMethodsCountsEquivalence.Size = new System.Drawing.Size(226, 138);
             this.groupBoxAnalysisMethodsCountsEquivalence.TabIndex = 10;
             this.groupBoxAnalysisMethodsCountsEquivalence.TabStop = false;
             this.groupBoxAnalysisMethodsCountsEquivalence.Text = "Analysis equivalence tests counts";
@@ -460,7 +460,7 @@
             // checkBoxAnalysisMethodNBEquivalence
             // 
             this.checkBoxAnalysisMethodNBEquivalence.AutoSize = true;
-            this.checkBoxAnalysisMethodNBEquivalence.Location = new System.Drawing.Point(20, 108);
+            this.checkBoxAnalysisMethodNBEquivalence.Location = new System.Drawing.Point(20, 102);
             this.checkBoxAnalysisMethodNBEquivalence.Name = "checkBoxAnalysisMethodNBEquivalence";
             this.checkBoxAnalysisMethodNBEquivalence.Size = new System.Drawing.Size(200, 17);
             this.checkBoxAnalysisMethodNBEquivalence.TabIndex = 14;
@@ -486,7 +486,7 @@
             this.checkBoxAnalysisMethodOPEquivalence.AutoSize = true;
             this.checkBoxAnalysisMethodOPEquivalence.Checked = true;
             this.checkBoxAnalysisMethodOPEquivalence.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxAnalysisMethodOPEquivalence.Location = new System.Drawing.Point(20, 80);
+            this.checkBoxAnalysisMethodOPEquivalence.Location = new System.Drawing.Point(20, 76);
             this.checkBoxAnalysisMethodOPEquivalence.Name = "checkBoxAnalysisMethodOPEquivalence";
             this.checkBoxAnalysisMethodOPEquivalence.Size = new System.Drawing.Size(196, 17);
             this.checkBoxAnalysisMethodOPEquivalence.TabIndex = 13;
@@ -497,7 +497,7 @@
             // checkBoxAnalysisMethodSQEquivalence
             // 
             this.checkBoxAnalysisMethodSQEquivalence.AutoSize = true;
-            this.checkBoxAnalysisMethodSQEquivalence.Location = new System.Drawing.Point(20, 52);
+            this.checkBoxAnalysisMethodSQEquivalence.Location = new System.Drawing.Point(20, 50);
             this.checkBoxAnalysisMethodSQEquivalence.Name = "checkBoxAnalysisMethodSQEquivalence";
             this.checkBoxAnalysisMethodSQEquivalence.Size = new System.Drawing.Size(155, 17);
             this.checkBoxAnalysisMethodSQEquivalence.TabIndex = 12;
@@ -512,7 +512,7 @@
             this.groupBoxAnalysisMethodsNonNegativeEquivalence.Location = new System.Drawing.Point(236, 3);
             this.groupBoxAnalysisMethodsNonNegativeEquivalence.Margin = new System.Windows.Forms.Padding(5, 0, 5, 5);
             this.groupBoxAnalysisMethodsNonNegativeEquivalence.Name = "groupBoxAnalysisMethodsNonNegativeEquivalence";
-            this.groupBoxAnalysisMethodsNonNegativeEquivalence.Size = new System.Drawing.Size(211, 144);
+            this.groupBoxAnalysisMethodsNonNegativeEquivalence.Size = new System.Drawing.Size(211, 138);
             this.groupBoxAnalysisMethodsNonNegativeEquivalence.TabIndex = 16;
             this.groupBoxAnalysisMethodsNonNegativeEquivalence.TabStop = false;
             this.groupBoxAnalysisMethodsNonNegativeEquivalence.Text = "Analysis equivalence tests non-negative";
@@ -533,7 +533,7 @@
             // checkBoxAnalysisMethodGEquivalence
             // 
             this.checkBoxAnalysisMethodGEquivalence.AutoSize = true;
-            this.checkBoxAnalysisMethodGEquivalence.Location = new System.Drawing.Point(20, 52);
+            this.checkBoxAnalysisMethodGEquivalence.Location = new System.Drawing.Point(20, 50);
             this.checkBoxAnalysisMethodGEquivalence.Name = "checkBoxAnalysisMethodGEquivalence";
             this.checkBoxAnalysisMethodGEquivalence.Size = new System.Drawing.Size(120, 17);
             this.checkBoxAnalysisMethodGEquivalence.TabIndex = 12;
@@ -547,7 +547,7 @@
             this.groupBoxAnalysisMethodsContinuousEquivalence.Location = new System.Drawing.Point(457, 3);
             this.groupBoxAnalysisMethodsContinuousEquivalence.Margin = new System.Windows.Forms.Padding(5, 0, 5, 5);
             this.groupBoxAnalysisMethodsContinuousEquivalence.Name = "groupBoxAnalysisMethodsContinuousEquivalence";
-            this.groupBoxAnalysisMethodsContinuousEquivalence.Size = new System.Drawing.Size(195, 144);
+            this.groupBoxAnalysisMethodsContinuousEquivalence.Size = new System.Drawing.Size(195, 138);
             this.groupBoxAnalysisMethodsContinuousEquivalence.TabIndex = 17;
             this.groupBoxAnalysisMethodsContinuousEquivalence.TabStop = false;
             this.groupBoxAnalysisMethodsContinuousEquivalence.Text = "Analysis equivalence tests continous";
@@ -573,7 +573,7 @@
             this.groupBoxAnalysisFractionsMethodsEquivalence.Location = new System.Drawing.Point(662, 3);
             this.groupBoxAnalysisFractionsMethodsEquivalence.Margin = new System.Windows.Forms.Padding(5, 0, 5, 5);
             this.groupBoxAnalysisFractionsMethodsEquivalence.Name = "groupBoxAnalysisFractionsMethodsEquivalence";
-            this.groupBoxAnalysisFractionsMethodsEquivalence.Size = new System.Drawing.Size(193, 144);
+            this.groupBoxAnalysisFractionsMethodsEquivalence.Size = new System.Drawing.Size(193, 138);
             this.groupBoxAnalysisFractionsMethodsEquivalence.TabIndex = 15;
             this.groupBoxAnalysisFractionsMethodsEquivalence.TabStop = false;
             this.groupBoxAnalysisFractionsMethodsEquivalence.Text = "Analysis equivalence tests fractions";
@@ -596,7 +596,7 @@
             this.checkBoxAnalysisMethodBBNEquivalence.AutoSize = true;
             this.checkBoxAnalysisMethodBBNEquivalence.Checked = true;
             this.checkBoxAnalysisMethodBBNEquivalence.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxAnalysisMethodBBNEquivalence.Location = new System.Drawing.Point(20, 80);
+            this.checkBoxAnalysisMethodBBNEquivalence.Location = new System.Drawing.Point(20, 76);
             this.checkBoxAnalysisMethodBBNEquivalence.Name = "checkBoxAnalysisMethodBBNEquivalence";
             this.checkBoxAnalysisMethodBBNEquivalence.Size = new System.Drawing.Size(149, 17);
             this.checkBoxAnalysisMethodBBNEquivalence.TabIndex = 13;
@@ -607,7 +607,7 @@
             // checkBoxAnalysisMethodOBNEquivalence
             // 
             this.checkBoxAnalysisMethodOBNEquivalence.AutoSize = true;
-            this.checkBoxAnalysisMethodOBNEquivalence.Location = new System.Drawing.Point(20, 52);
+            this.checkBoxAnalysisMethodOBNEquivalence.Location = new System.Drawing.Point(20, 50);
             this.checkBoxAnalysisMethodOBNEquivalence.Name = "checkBoxAnalysisMethodOBNEquivalence";
             this.checkBoxAnalysisMethodOBNEquivalence.Size = new System.Drawing.Size(142, 17);
             this.checkBoxAnalysisMethodOBNEquivalence.TabIndex = 12;

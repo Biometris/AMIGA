@@ -59,6 +59,12 @@ namespace AmigaPowerAnalysis.GUI {
             textBoxNumberSimulatedDatasets.Text = _project.PowerCalculationSettings.NumberOfSimulatedDataSets.ToString();
             textBoxSeedForRandomNumbers.Text = _project.PowerCalculationSettings.Seed.ToString();
 
+            if (_project.Endpoints.Any(ep => ep.Measurement == MeasurementType.Count)) {
+                groupBoxCountsSettings.Visible = true;
+            } else {
+                groupBoxCountsSettings.Visible = false;
+            }
+
             groupBoxAnalysisMethodsContinuousDifference.Visible = _project.Endpoints.Any(ep => ep.Measurement == MeasurementType.Continuous);
             groupBoxAnalysisMethodsCountsDifference.Visible = _project.Endpoints.Any(ep => ep.Measurement == MeasurementType.Count);
             groupBoxAnalysisFractionsMethodsDifference.Visible = _project.Endpoints.Any(ep => ep.Measurement == MeasurementType.Fraction);
