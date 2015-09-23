@@ -49,8 +49,13 @@ namespace AmigaPowerAnalysis.GUI {
             textBoxSignificanceLevel.Text = _project.PowerCalculationSettings.SignificanceLevel.ToString();
             textBoxNumberOfEvaluationPoints.Text = _project.PowerCalculationSettings.NumberOfRatios.ToString();
             textBoxNumberOfReplications.Text = string.Join(", ", _project.PowerCalculationSettings.NumberOfReplications.Select(r => r.ToString()).ToList());
-            comboBoxMethodForPowerCalculation.DataSource = Enum.GetValues(typeof(PowerCalculationMethod));
-            comboBoxMethodForPowerCalculation.SelectedIndex = (int)_project.PowerCalculationSettings.PowerCalculationMethod;
+
+            radioButtonApproximate.Checked = _project.PowerCalculationSettings.PowerCalculationMethod == PowerCalculationMethod.Approximate;
+            radioButtonSimulate.Checked = _project.PowerCalculationSettings.PowerCalculationMethod == PowerCalculationMethod.Simulate;
+
+            radioButtonUseWaldTest.Checked = _project.PowerCalculationSettings.UseWaldTest;
+            radioButtonUseLogLikelihoodRatioTest.Checked = !_project.PowerCalculationSettings.UseWaldTest;
+
             textBoxNumberSimulatedDatasets.Text = _project.PowerCalculationSettings.NumberOfSimulatedDataSets.ToString();
             textBoxSeedForRandomNumbers.Text = _project.PowerCalculationSettings.Seed.ToString();
 
@@ -63,9 +68,6 @@ namespace AmigaPowerAnalysis.GUI {
             groupBoxAnalysisMethodsCountsEquivalence.Visible = _project.Endpoints.Any(ep => ep.Measurement == MeasurementType.Count);
             groupBoxAnalysisFractionsMethodsEquivalence.Visible = _project.Endpoints.Any(ep => ep.Measurement == MeasurementType.Fraction);
             groupBoxAnalysisMethodsNonNegativeEquivalence.Visible = _project.Endpoints.Any(ep => ep.Measurement == MeasurementType.Nonnegative);
-
-            radioButtonUseWaldTest.Checked = _project.PowerCalculationSettings.UseWaldTest;
-            radioButtonUseLogLikelihoodRatioTest.Checked = !_project.PowerCalculationSettings.UseWaldTest;
         }
 
         public bool IsVisible() {
@@ -208,12 +210,6 @@ namespace AmigaPowerAnalysis.GUI {
             _project.PowerCalculationSettings.SetAnalysisMethodTypeEquivalenceTests(AnalysisMethodType.Betabinomial, checkBoxAnalysisMethodBBNEquivalence.Checked);
         }
 
-        private void comboBoxMethodForPowerCalculation_SelectionChangeCommitted(object sender, EventArgs e) {
-            PowerCalculationMethod powerCalculationMethod;
-            Enum.TryParse<PowerCalculationMethod>(comboBoxMethodForPowerCalculation.SelectedValue.ToString(), out powerCalculationMethod);
-            _project.PowerCalculationSettings.PowerCalculationMethod = powerCalculationMethod;
-        }
-
         private void buttonRunPowerAnalysis_Click(object sender, EventArgs e) {
             onRunButtonPressed();
         }
@@ -224,6 +220,14 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void radioButtonUseWaldTest_CheckedChanged(object sender, EventArgs e) {
             _project.PowerCalculationSettings.UseWaldTest = radioButtonUseWaldTest.Checked;
+        }
+
+        private void radioButtonSimulate_CheckedChanged(object sender, EventArgs e) {
+            _project.PowerCalculationSettings.PowerCalculationMethod = PowerCalculationMethod.Simulate;
+        }
+
+        private void radioButtonApproximate_CheckedChanged(object sender, EventArgs e) {
+            _project.PowerCalculationSettings.PowerCalculationMethod = PowerCalculationMethod.Approximate;
         }
     }
 }
