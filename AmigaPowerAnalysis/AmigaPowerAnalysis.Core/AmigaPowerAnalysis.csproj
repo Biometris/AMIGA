@@ -92,6 +92,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\Charting\AnalysisResultsChartCreators\AggregateAnalysisResultsChartCreatorBase.cs" />
     <Compile Include="Core\Charting\AnalysisResultsChartCreators\AnalysisResultsChartCreatorBase.cs" />
     <Compile Include="Core\Charting\AnalysisResultsChartCreators\PowerVersusReplicatesCsdChartCreator.cs" />
     <Compile Include="Core\Charting\AnalysisResultsChartCreators\PowerVersusCsdChartCreator.cs" />
@@ -118,6 +119,7 @@
     <Compile Include="Core\Data\FactorDTO.cs" />
     <Compile Include="Core\Data\EndpointGroupDTO.cs" />
     <Compile Include="Core\Data\EndpointDTO.cs" />
+    <Compile Include="Core\PowerAnalysis\OutputPowerAnalysis\AggregateOutputPowerAnalysisRecord.cs" />
     <Compile Include="Core\PowerAnalysis\OutputPowerAnalysis\ResultPowerAnalysis.cs" />
     <Compile Include="Core\PowerAnalysis\OutputPowerAnalysis\OutputPowerAnalysisFileReader.cs" />
     <Compile Include="Core\PowerAnalysis\PowerAnalysisExecuters\RDotNetPowerAnalysisExecuter.cs" />

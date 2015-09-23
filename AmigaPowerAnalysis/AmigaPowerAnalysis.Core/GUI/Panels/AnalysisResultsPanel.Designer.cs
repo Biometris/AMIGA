@@ -75,6 +75,7 @@
             this.dataGridViewComparisons.BackgroundColor = System.Drawing.Color.White;
             this.dataGridViewComparisons.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewComparisons.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridViewComparisons.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
             this.dataGridViewComparisons.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewComparisons.MultiSelect = false;
             this.dataGridViewComparisons.Name = "dataGridViewComparisons";

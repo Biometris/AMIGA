@@ -200,11 +200,11 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             var selectedAnalysisMethodDifferenceTests = comparisonOutput.InputPowerAnalysis.SelectedAnalysisMethodTypesDifferenceTests.GetFlags().Cast<AnalysisMethodType>().ToList();
             var selectedAnalysisMethodEquivalenceTests = comparisonOutput.InputPowerAnalysis.SelectedAnalysisMethodTypesEquivalenceTests.GetFlags().Cast<AnalysisMethodType>().ToList();
 
-            stringBuilder.Append("<h2>Charts power analysis</h2>");
+            stringBuilder.Append("<h2>Charts power analysis difference tests</h2>");
 
             foreach (var analysisMethodType in selectedAnalysisMethodDifferenceTests) {
 
-                stringBuilder.Append("<h3>Power analysis " + analysisMethodType.GetDisplayName() + " tests</h3>");
+                stringBuilder.Append("<h3>Power analysis " + analysisMethodType.GetDisplayName() + "</h3>");
                 stringBuilder.Append("<table>");
 
                 stringBuilder.Append("<tr>");
@@ -226,10 +226,11 @@ namespace AmigaPowerAnalysis.Core.Reporting {
                 stringBuilder.Append("</table>");
             }
 
+            stringBuilder.Append("<h2>Charts power analysis equivalence tests</h2>");
 
             foreach (var analysisMethodType in selectedAnalysisMethodEquivalenceTests) {
 
-                stringBuilder.Append("<h3>Power analysis " + analysisMethodType.GetDisplayName() + " tests</h3>");
+                stringBuilder.Append("<h3>Power analysis " + analysisMethodType.GetDisplayName() + "</h3>");
                 stringBuilder.Append("<table>");
 
                 stringBuilder.Append("<tr>");
@@ -254,69 +255,29 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             return stringBuilder.ToString();
         }
 
-        protected static string generateComparisonOutputHtml(IEnumerable<OutputPowerAnalysisRecord> records, List<AnalysisMethodType> selectedAnalysisMethods, TestType testType, bool csdOnly = false) {
+        protected static string generateComparisonOutputHtml(IEnumerable<OutputPowerAnalysisRecord> records, List<int> blockSizes, List<AnalysisMethodType> selectedAnalysisMethods, TestType testType) {
             var stringBuilder = new StringBuilder();
-            stringBuilder.Append(string.Format("<h2>Power analysis {0} tests</h2>", testType.ToString().ToLower()));
+            stringBuilder.Append(string.Format("<h2>Results power analysis {0} tests</h2>", testType.ToString().ToLower()));
             stringBuilder.Append("<table>");
 
             stringBuilder.Append("<tr>");
-            if (!csdOnly) {
-                stringBuilder.Append("<th>Ratio</th>");
-                stringBuilder.Append("<th>Log(ratio)</th>");
-            }
+            stringBuilder.Append("<th>Ratio</th>");
+            stringBuilder.Append("<th>Log(ratio)</th>");
             stringBuilder.Append("<th>CSD</th>");
             stringBuilder.Append("<th>Repl.</th>");
             foreach (var analysisMethodType in selectedAnalysisMethods) {
                 stringBuilder.Append(string.Format("<th>{0} {1}</th>", testType.GetShortName(), analysisMethodType.GetShortName()));
             }
             stringBuilder.Append("</tr>");
-            foreach (var item in records) {
+            var selectedRecords = records.Where(r => blockSizes.Contains(r.NumberOfReplications)).ToList();
+            foreach (var item in selectedRecords) {
                 stringBuilder.Append("<tr>");
-                if (!csdOnly) {
-                    stringBuilder.Append(printNumericTableRecord(item.Effect));
-                    stringBuilder.Append(printNumericTableRecord(item.TransformedEffect));
-                }
+                stringBuilder.Append(printNumericTableRecord(item.Effect));
+                stringBuilder.Append(printNumericTableRecord(item.TransformedEffect));
                 stringBuilder.Append(printNumericTableRecord(item.ConcernStandardizedDifference));
                 stringBuilder.Append(string.Format("<td>{0}</td>", item.NumberOfReplications));
                 foreach (var analysisMethodType in selectedAnalysisMethods) {
                     var powerEquivalence = item.GetPower(testType, analysisMethodType);
-                    stringBuilder.Append(printNumericTableRecord(powerEquivalence));
-                }
-                stringBuilder.Append("</tr>");
-            }
-            stringBuilder.Append("</table>");
-            return stringBuilder.ToString();
-        }
-
-        private static string generateComparisonOutputHtml(IEnumerable<OutputPowerAnalysisRecord> records, List<AnalysisMethodType> selectedAnalysisMethods, bool csdOnly = false) {
-            var stringBuilder = new StringBuilder();
-            stringBuilder.Append("<h2>Output power analysis</h2>");
-            stringBuilder.Append("<table>");
-
-            stringBuilder.Append("<tr>");
-            if (!csdOnly) {
-                stringBuilder.Append("<th>Ratio</th>");
-                stringBuilder.Append("<th>Log(ratio)</th>");
-            }
-            stringBuilder.Append("<th>CSD</th>");
-            stringBuilder.Append("<th>Repl.</th>");
-            foreach (var analysisMethodType in selectedAnalysisMethods) {
-                stringBuilder.Append(string.Format("<th>{0} {1}</th>", TestType.Difference.GetShortName(), analysisMethodType.GetShortName()));
-                stringBuilder.Append(string.Format("<th>{0} {1}</th>", TestType.Equivalence.GetShortName(), analysisMethodType.GetShortName()));
-            }
-            stringBuilder.Append("</tr>");
-            foreach (var item in records) {
-                stringBuilder.Append("<tr>");
-                if (!csdOnly) {
-                    stringBuilder.Append(printNumericTableRecord(item.Effect));
-                    stringBuilder.Append(printNumericTableRecord(item.TransformedEffect));
-                }
-                stringBuilder.Append(printNumericTableRecord(item.ConcernStandardizedDifference));
-                stringBuilder.Append(string.Format("<td>{0}</td>", item.NumberOfReplications));
-                foreach (var analysisMethodType in selectedAnalysisMethods) {
-                    var powerDifference = item.GetPower(TestType.Difference, analysisMethodType);
-                    stringBuilder.Append(printNumericTableRecord(powerDifference));
-                    var powerEquivalence = item.GetPower(TestType.Equivalence, analysisMethodType);
                     stringBuilder.Append(printNumericTableRecord(powerEquivalence));
                 }
                 stringBuilder.Append("</tr>");

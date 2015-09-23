@@ -22,8 +22,8 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             //html += generateComparisonInputDataHtml(comparison.OutputPowerAnalysis.InputPowerAnalysis);
             var selectedAnalysisMethodsDifferenceTests = _comparisonOutput.InputPowerAnalysis.SelectedAnalysisMethodTypesDifferenceTests.GetFlags().Cast<AnalysisMethodType>().ToList();
             var selectedAnalysisMethodsEquivalenceTests = _comparisonOutput.InputPowerAnalysis.SelectedAnalysisMethodTypesEquivalenceTests.GetFlags().Cast<AnalysisMethodType>().ToList();
-            html += generateComparisonOutputHtml(_comparisonOutput.OutputRecords, selectedAnalysisMethodsDifferenceTests, TestType.Difference);
-            html += generateComparisonOutputHtml(_comparisonOutput.OutputRecords, selectedAnalysisMethodsEquivalenceTests, TestType.Equivalence);
+            html += generateComparisonOutputHtml(_comparisonOutput.OutputRecords, _comparisonOutput.InputPowerAnalysis.NumberOfReplications, selectedAnalysisMethodsDifferenceTests, TestType.Difference);
+            html += generateComparisonOutputHtml(_comparisonOutput.OutputRecords, _comparisonOutput.InputPowerAnalysis.NumberOfReplications, selectedAnalysisMethodsEquivalenceTests, TestType.Equivalence);
             html += generateComparisonChartsHtml(_comparisonOutput, _filesPath, imagesAsPng);
             return format(html);
         }

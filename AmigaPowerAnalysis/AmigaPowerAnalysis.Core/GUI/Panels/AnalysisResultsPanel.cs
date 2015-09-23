@@ -17,8 +17,7 @@ namespace AmigaPowerAnalysis.GUI {
         public event EventHandler TabVisibilitiesChanged;
 
         private Project _project;
-        private List<OutputPowerAnalysis> _outputRecords;
-        private AnalysisMethodType _currentAnalysisType = AnalysisMethodType.OverdispersedPoisson;
+        private ResultPowerAnalysis _resultPowerAnalysis;
         private string _currentProjectFilePath;
 
         public AnalysisResultsPanel(Project project) {
@@ -44,15 +43,12 @@ namespace AmigaPowerAnalysis.GUI {
         public void Activate() {
             updateDataGridComparisons();
             updateVisibilities();
-            var selectedAnalysisMethodTypesDifferenceTests = _outputRecords.First().InputPowerAnalysis.SelectedAnalysisMethodTypesDifferenceTests.GetFlags().ToArray();
-            var selectedAnalysisMethodTypesEquivalenceTests = _outputRecords.First().InputPowerAnalysis.SelectedAnalysisMethodTypesEquivalenceTests.GetFlags().ToArray();
             updateAnalysisOutputPanel();
             dataGridViewComparisons.CurrentCell = null;
         }
 
         private void updateVisibilities() {
-            var primaryComparisons = _outputRecords.Where(c => c.IsPrimary).ToList();
-            if (primaryComparisons.Count > 0) {
+            if (_resultPowerAnalysis.GetPrimaryComparisons().Count() > 0) {
                 splitContainerComparisons.Panel2.Show();
             } else {
                 splitContainerComparisons.Panel2.Hide();
@@ -66,7 +62,7 @@ namespace AmigaPowerAnalysis.GUI {
         private void updateDataGridComparisons() {
             dataGridViewComparisons.Columns.Clear();
 
-            _outputRecords = _project.AnalysisResults.First().ComparisonPowerAnalysisResults;
+            _resultPowerAnalysis = _project.AnalysisResults.First();
 
             var column = new DataGridViewTextBoxColumn();
             column.DataPropertyName = "Endpoint";
@@ -81,37 +77,66 @@ namespace AmigaPowerAnalysis.GUI {
             checkbox.HeaderText = "Primary";
             dataGridViewComparisons.Columns.Add(checkbox);
 
-            var comparisonsBindingSouce = new BindingSource(_outputRecords, null);
+            var _availableAnalysisMethodTypesDifferenceTests = _resultPowerAnalysis.ComparisonPowerAnalysisResults.First().InputPowerAnalysis.SelectedAnalysisMethodTypesDifferenceTests.GetFlags().ToArray();
+
+            var combo = new DataGridViewComboBoxColumn();
+            combo.DataSource = _availableAnalysisMethodTypesDifferenceTests;
+            combo.DataPropertyName = "AnalysisMethodDifferenceTest";
+            combo.ValueType = typeof(AnalysisMethodType);
+            combo.HeaderText = "Difference test";
+            combo.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
+            dataGridViewComparisons.Columns.Add(combo);
+
+            var _availableAnalysisMethodTypesEquivalenceTests = _resultPowerAnalysis.ComparisonPowerAnalysisResults.First().InputPowerAnalysis.SelectedAnalysisMethodTypesEquivalenceTests.GetFlags().ToArray();
+
+            combo = new DataGridViewComboBoxColumn();
+            combo.DataSource = _availableAnalysisMethodTypesEquivalenceTests;
+            combo.DataPropertyName = "AnalysisMethodEquivalenceTest";
+            combo.ValueType = typeof(AnalysisMethodType);
+            combo.HeaderText = "Equivalence test";
+            combo.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
+            dataGridViewComparisons.Columns.Add(combo);
+
+            var comparisonsBindingSouce = new BindingSource(_resultPowerAnalysis.ComparisonPowerAnalysisResults, null);
             dataGridViewComparisons.AutoGenerateColumns = false;
             dataGridViewComparisons.DataSource = comparisonsBindingSouce;
             dataGridViewComparisons.Columns[0].ReadOnly = true;
+
+            this.dataGridViewComparisons.EditingControlShowing += new DataGridViewEditingControlShowingEventHandler(dataGridViewComparisons_EditingControlShowing);
+        }
+
+        private ComboBox _currentComboBox;
+
+        void dataGridViewComparisons_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e) {
+            if (e.Control is ComboBox) {
+                _currentComboBox = (ComboBox)e.Control;
+                if (_currentComboBox != null) {
+                    _currentComboBox.SelectedIndexChanged += new EventHandler(comboBox_SelectedIndexChanged);
+                }
+            }
+        }
+
+        void comboBox_SelectedIndexChanged(object sender, EventArgs e) {
+            this.BeginInvoke(new MethodInvoker(EndEdit));
+        }
+
+        void EndEdit() {
+            if (_currentComboBox != null) {
+                this.dataGridViewComparisons.EndEdit();
+            }
         }
 
         private void updateAnalysisOutputPanel() {
-            if (_outputRecords != null) {
-                var primaryComparisons = _outputRecords.Where(c => c.IsPrimary).ToList();
+            if (_resultPowerAnalysis != null) {
+                var primaryComparisons = _resultPowerAnalysis.GetPrimaryComparisons().ToList();
                 if (primaryComparisons.Count > 0) {
-                    var records = primaryComparisons.SelectMany(c => c.OutputRecords)
-                        .GroupBy(r => new { LevelOfConcern = r.ConcernStandardizedDifference, NumberOfReplicates = r.NumberOfReplications })
-                        .Select(g => new OutputPowerAnalysisRecord() {
-                            ConcernStandardizedDifference = g.Key.LevelOfConcern,
-                            NumberOfReplications = g.Key.NumberOfReplicates,
-                            PowerDifferenceLogNormal = g.Min(r => r.PowerDifferenceLogNormal),
-                            PowerDifferenceSquareRoot = g.Min(r => r.PowerDifferenceSquareRoot),
-                            PowerDifferenceOverdispersedPoisson = g.Min(r => r.PowerDifferenceOverdispersedPoisson),
-                            PowerDifferenceNegativeBinomial = g.Min(r => r.PowerDifferenceNegativeBinomial),
-                            PowerEquivalenceLogNormal = g.Min(r => r.PowerEquivalenceLogNormal),
-                            PowerEquivalenceSquareRoot = g.Min(r => r.PowerEquivalenceSquareRoot),
-                            PowerEquivalenceOverdispersedPoisson = g.Min(r => r.PowerEquivalenceOverdispersedPoisson),
-                            PowerEquivalenceNegativeBinomial = g.Min(r => r.PowerEquivalenceNegativeBinomial),
-                        })
-                        .ToList();
+                    var records = _resultPowerAnalysis.GetAggregateOutputRecords().ToList();
                     var plotType = (AnalysisPlotType)comboBoxAnalysisPlotTypes.SelectedValue;
                     var testType = (TestType)comboBoxTestType.SelectedValue;
                     if (plotType == AnalysisPlotType.Replicates) {
-                        plotView.Model = PowerVersusReplicatesCsdChartCreator.Create(records, testType, _currentAnalysisType);
+                        plotView.Model = PowerVersusReplicatesCsdChartCreator.Create(records, testType);
                     } else if (plotType == AnalysisPlotType.ConcernStandardizedDifference) {
-                        plotView.Model = PowerVersusCsdChartCreator.Create(records, testType, _currentAnalysisType, primaryComparisons.First().InputPowerAnalysis.NumberOfReplications);
+                        plotView.Model = PowerVersusCsdChartCreator.Create(records, testType, primaryComparisons.First().InputPowerAnalysis.NumberOfReplications);
                     }
                     var plotsPerBlockCounts = primaryComparisons.Select(pc => pc.InputPowerAnalysis.InputRecords.Sum(ir => ir.Frequency));
                     var minPlotsPerBlockCount = plotsPerBlockCounts.Min();
@@ -135,11 +160,10 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void buttonShowReport_Click(object sender, EventArgs e) {
-            var primaryComparisons = _outputRecords.Where(c => c.IsPrimary).ToList();
-            if (primaryComparisons.Count > 0) {
+            if (_resultPowerAnalysis.GetPrimaryComparisons().Count() > 0) {
                 var tempPath = Path.GetTempPath();
                 var title = Path.GetFileNameWithoutExtension(_currentProjectFilePath) + "_CSD";
-                var multiComparisonReportGenerator = new MultiComparisonReportGenerator(_outputRecords, _currentProjectFilePath);
+                var multiComparisonReportGenerator = new MultiComparisonReportGenerator(_resultPowerAnalysis, _currentProjectFilePath);
                 var htmlReportForm = new HtmlReportForm(multiComparisonReportGenerator, title, _currentProjectFilePath);
                 htmlReportForm.ShowDialog();
             }

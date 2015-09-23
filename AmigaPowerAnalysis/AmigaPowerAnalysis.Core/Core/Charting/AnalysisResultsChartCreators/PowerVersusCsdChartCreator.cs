@@ -8,34 +8,34 @@ using OxyPlot.Series;
 
 namespace AmigaPowerAnalysis.Core.Charting.AnalysisResultsChartCreators {
 
-    public sealed class PowerVersusCsdChartCreator : AnalysisResultsChartCreatorBase {
+    public sealed class PowerVersusCsdChartCreator : AggregateAnalysisResultsChartCreatorBase {
 
         public List<int> BlockSizes { get; set; }
 
-        public PowerVersusCsdChartCreator(List<OutputPowerAnalysisRecord> powerAnalysisOutputRecords, TestType testType, AnalysisMethodType analysisMethodType, List<int> blockSizes)
-            : base(powerAnalysisOutputRecords, testType, analysisMethodType) {
+        public PowerVersusCsdChartCreator(List<AggregateOutputPowerAnalysisRecord> aggregatePowerAnalysisRecords, TestType testType, List<int> blockSizes)
+            : base(aggregatePowerAnalysisRecords, testType) {
             BlockSizes = blockSizes;
         }
 
         public override PlotModel Create() {
             var plotModel = base.Create();
-            return Create(PowerAnalysisOutputRecords, TestType, AnalysisMethodType, BlockSizes);
+            return Create(AggregatePowerAnalysisRecords, TestType, BlockSizes);
         }
 
-        public static PlotModel Create(List<OutputPowerAnalysisRecord> powerAnalysisOutputRecords, TestType testType, AnalysisMethodType analysisMethodType, List<int> blockSizes) {
-            var model = AnalysisResultsChartCreatorBase.CreatePlotModel(testType, analysisMethodType);
+        public static PlotModel Create(IEnumerable<AggregateOutputPowerAnalysisRecord> aggregatePowerAnalysisRecords, TestType testType, List<int> blockSizes) {
+            var model = AggregateAnalysisResultsChartCreatorBase.CreatePlotModel(testType);
             var horizontalAxis = new LinearAxis() {
                 Title = "Concern Standardized Difference",
                 MajorGridlineStyle = LineStyle.Solid,
                 MinorGridlineStyle = LineStyle.Dot,
                 Position = AxisPosition.Bottom,
-                AbsoluteMaximum = powerAnalysisOutputRecords.Max(r => r.ConcernStandardizedDifference),
-                AbsoluteMinimum = powerAnalysisOutputRecords.Min(r => r.ConcernStandardizedDifference),
+                AbsoluteMaximum = aggregatePowerAnalysisRecords.Max(r => r.ConcernStandardizedDifference),
+                AbsoluteMinimum = aggregatePowerAnalysisRecords.Min(r => r.ConcernStandardizedDifference),
             };
             model.Axes.Add(horizontalAxis);
-            if (powerAnalysisOutputRecords != null) {
+            if (aggregatePowerAnalysisRecords != null) {
                 for (int i = 0; i < blockSizes.Count(); ++i) {
-                    var replicateGroup = powerAnalysisOutputRecords
+                    var replicateGroup = aggregatePowerAnalysisRecords
                         .Where(r => r.NumberOfReplications == blockSizes[i]);
                     var series = new LineSeries() {
                         MarkerType = (MarkerType)(i % 7 + 1),
@@ -43,7 +43,7 @@ namespace AmigaPowerAnalysis.Core.Charting.AnalysisResultsChartCreators {
                     series.Title = string.Format("Repl {0}", blockSizes[i]);
                     series.Points.AddRange(replicateGroup.Select(g => new DataPoint() {
                         X = g.ConcernStandardizedDifference,
-                        Y = g.GetPower(testType, analysisMethodType),
+                        Y = g.GetPower(testType),
                     }));
                     model.Series.Add(series);
                 }

@@ -10,25 +10,29 @@ using OxyPlot.WindowsForms;
 
 namespace AmigaPowerAnalysis.Core.Charting.AnalysisResultsChartCreators {
 
-    public abstract class AnalysisResultsChartCreatorBase : IChartCreator {
+    public enum AnalysisPlotType {
+        Replicates,
+        Ratio,
+        ConcernStandardizedDifference,
+    }
+
+    public abstract class AggregateAnalysisResultsChartCreatorBase : IChartCreator {
 
         public TestType TestType { get; set; }
-        public AnalysisMethodType AnalysisMethodType { get; set; }
-        public List<OutputPowerAnalysisRecord> PowerAnalysisOutputRecords { get; set; }
+        public List<AggregateOutputPowerAnalysisRecord> AggregatePowerAnalysisRecords { get; set; }
 
-        public AnalysisResultsChartCreatorBase(List<OutputPowerAnalysisRecord> powerAnalysisOutputRecords, TestType testType, AnalysisMethodType analysisMethodType) {
+        public AggregateAnalysisResultsChartCreatorBase(List<AggregateOutputPowerAnalysisRecord> aggregatePowerAnalysisRecords, TestType testType) {
             TestType = testType;
-            AnalysisMethodType = analysisMethodType;
-            PowerAnalysisOutputRecords = powerAnalysisOutputRecords;
+            AggregatePowerAnalysisRecords = aggregatePowerAnalysisRecords;
         }
 
         public virtual PlotModel Create() {
-            return CreatePlotModel(TestType, AnalysisMethodType);
+            return CreatePlotModel(TestType);
         }
 
-        protected static PlotModel CreatePlotModel(TestType testType, AnalysisMethodType analysisMethodType) {
+        protected static PlotModel CreatePlotModel(TestType testType) {
             var plotModel = new PlotModel() {
-                Title = testType.GetDisplayName() + " " + analysisMethodType.GetDisplayName(),
+                Title = testType.GetDisplayName(),
                 TitleFontSize = 11,
                 DefaultFontSize = 11,
                 LegendPlacement = LegendPlacement.Outside,
