@@ -13,6 +13,13 @@
 #
 # 5. LN-GCI produces a NaN in case any of the ratios equals NaN
 #
+# 6. A onesided equivalence test with alfa/2 need NOT to be equivalent with a twosided 
+#     equivalence test with alfa. This is because BOTH hypotheses must be rejected.
+#     Consider the case in which the deviance differences for the two-sided test equals
+#     4.51 and 2.42. The first has p-value 0.017, the second 0.051. So the two-sided
+#     equivalence test is not rejected, while one of the onesided tests is rejected.
+#     Note that two- and onesided difference tests are equivalent.
+#
 
 ######################################################################################################################
 linkFunction <- function(data, measurementType = c("Count", "Fraction", "Nonnegative", "Continuous")) {
@@ -53,7 +60,7 @@ ropoisson <- function(n, mean, dispersion=NaN, power=NaN,
   if ((length(dispersion) != 1) && (length(dispersion) != n)) {
     stop("The length of dispersion must equal 1 or the value of n.", call. = FALSE)
   }
-  if ((excessZero < 0.0) | (excessZero >= 100.0)) {
+  if ((excessZero < 0.0) || (excessZero >= 100.0)) {
     stop("The ExcessZero parameter must be a percentage in the interval [0,100).", call. = FALSE)
   }
   mean[mean==0] <- 1.0e-200
@@ -91,7 +98,7 @@ ropoisson <- function(n, mean, dispersion=NaN, power=NaN,
     if (min(dispersion) <= 0) {
       stop("The dispersion parameter must be larger than 0 for the PowerLaw distribution.", call. = FALSE)
     }
-    if ((power < 1) | (power > 2)) {
+    if ((power < 1) || (power > 2)) {
       stop("The power parameter must be interval [1,2].", call. = FALSE)
     }
     dispNegbin = (dispersion*mean^power - mean)/(mean*mean)
@@ -140,7 +147,7 @@ ropoissonDispersion <- function(mean, CV, power, distribution=c("Poisson", "Over
   
   type = match.arg(distribution)
   if (type == "PowerLaw") {
-    if ((power < 1) | (power > 2)) {
+    if ((power < 1) || (power > 2)) {
       stop("The power parameter must be interval [1,2].", call. = FALSE)
     }
   }
@@ -176,7 +183,7 @@ readDataFile <- function(dataFile) {
 
 ######################################################################################################################
 readSettings <- function(settingsFile) {
-  settings <- read.csv(settingsFile, header=FALSE, as.is=TRUE, strip.white=TRUE)
+  settings <- read.csv(settingsFile, header=FALSE, as.is=TRUE, strip.white=TRUE, na.strings=c("NA","NaN"))
   list = as.list(setNames(nm=settings$V1))
   for (i in 1:nrow(settings)) {
     if (settings$V1[i] != "Endpoint") {
@@ -192,26 +199,44 @@ readSettings <- function(settingsFile) {
     }
     list[[i]] <- element
   }
-  # Get transformed limits of concern
-  if (list$MeasurementType != "Continuous") {
-    list$TransformLocLower <- log(list$LocLower)
-    list$TransformLocUpper <- log(list$LocUpper)
-  } else {
-    list$TransformLocLower <- list$LocLower - list$OverallMean
-    list$TransformLocUpper <- list$LocUpper + list$OverallMean
+
+  # Get transformed limits of concern taking account of one/twosided
+  if ((is.na(list$LocLower)) && (is.na(list$LocUpper))) {
+    stop("Both LocLower and LocUpper are missing; this is not allowed.", call. = FALSE)
   }
-  #  Redefine list$UseWaldTest as logical
-  if (list$UseWaldTest == "True") {
-    list$UseWaldTest = TRUE
+  list$TestType = "twosided"
+  if (is.na(list$LocLower)) {
+    list$TransformLocLower <- NA
+    list$TestType = "right"
   } else {
-    list$UseWaldTest = FALSE
+    if (list$MeasurementType != "Continuous") {
+      list$TransformLocLower <- log(list$LocLower)
+    } else {
+      list$TransformLocLower <- list$LocLower - list$OverallMean
+    }
   }
-  #  Redefine list$IsOutputSimulatedData as logical
-  if (list$IsOutputSimulatedData == "True") {
-    list$IsOutputSimulatedData = TRUE
+  if (is.na(list$LocUpper)) {
+    list$TransformLocUpper <- NA
+    list$TestType = "left"
   } else {
-    list$IsOutputSimulatedData = FALSE
+    if (list$MeasurementType != "Continuous") {
+      list$TransformLocUpper <- log(list$LocUpper)
+    } else {
+      list$TransformLocUpper <- list$LocUpper - list$OverallMean
+    }
   }
+
+  #  Redefine some to logical 
+  isLogical <- c("UseWaldTest","IsOutputSimulatedData")
+  match = match(isLogical, names(list))
+  for (imatch in match) {
+    if (list[[imatch]] == "True") {
+      list[[imatch]] = TRUE
+    } else {
+      list[[imatch]] = FALSE
+    }
+  }
+
   # Add directory to list
   list$directory = paste0(dirname(settingsFile), "/")
 
@@ -362,25 +387,6 @@ simulateResponse <- function(simulatedData, settings, simulationSettings) {
 }
 
 ######################################################################################################################
-createEvaluationGrid <- function(LocLower, LocUpper, NumberOfEvaluations) {
-  csd <- c(0)
-  effect <- c(0)
-  if (!is.na(LocLower)) {
-    csdTmp <- -1 + rep(0:NumberOfEvaluations)/(NumberOfEvaluations+1)
-    effectTmp <- -LocLower*csdTmp
-    csd <- c(abs(csdTmp), csd)
-    effect <- c(effectTmp, effect)
-  } 
-  if (!is.na(LocUpper)) {
-    csdTmp <- 1 - rep(NumberOfEvaluations:0)/(NumberOfEvaluations+1)
-    effectTmp <- LocUpper*csdTmp
-    csd <- c(csd, abs(csdTmp))
-    effect <- c(effect, effectTmp)
-  } 
-  return(list(csd=csd, effect=effect))
-}
-
-######################################################################################################################
 normalAnalysis <- function(data, settings, modelSettings, debugSettings) {
   require(lsmeans)
   require(MASS)
@@ -390,14 +396,14 @@ normalAnalysis <- function(data, settings, modelSettings, debugSettings) {
   lmH1 <- lm(as.formula(modelSettings$formulaH1), data=data)
   resDF <- lmH1$df.residual
   resMS <- deviance(lmH1)/resDF
-  estiEffect = lmH1$coef[2]
+  estiEffect = as.numeric(lmH1$coef[2])
   seEffect = sqrt(vcov(lmH1)[2,2])
-  pvalues$Diff <- as.numeric(2*pt(abs(estiEffect)/seEffect, resDF, lower.tail=FALSE))
-
-  pLowerEqui = as.numeric(pt((estiEffect-settings$LocLower)/seEffect, resDF, lower.tail=FALSE))
-  pUpperEqui = as.numeric(pt((estiEffect-settings$LocUpper)/seEffect, resDF, lower.tail=TRUE))
-  pvalues$Equi = max(pLowerEqui, pUpperEqui) # Both one-sided hypothesis must be rejected
-
+  if (settings$DoNOdiff) {
+    pvalues$Diff <- waldDiffPvalue(estiEffect, seEffect, resDF, settings$TestType)
+  }
+  if (settings$DoNOequi) {
+    pvalues$Equi <- waldEquiPvalue(estiEffect, seEffect, resDF, settings$TestType, settings$TransformLocLower, settings$TransformLocUpper)
+  }
   return(pvalues)
 
   # Due to the return above this code is not executed
@@ -437,9 +443,9 @@ logNormalAnalysis <- function(data, settings, modelSettings, debugSettings) {
   resDF <- lmH1$df.residual
   resMS <- deviance(lmH1)/resDF
   if (settings$DoLNdiff) {
-    estiEffect = lmH1$coef[2]
+    estiEffect = as.numeric(lmH1$coef[2])
     seEffect = sqrt(vcov(lmH1)[2,2])
-    pvalues$Diff <- as.numeric(2*pt(abs(estiEffect)/seEffect, resDF, lower.tail=FALSE))
+    pvalues$Diff <- waldDiffPvalue(estiEffect, seEffect, resDF, settings$TestType)
   }
 
   if ((settings$NumberOfSimulationsGCI > 0) && (settings$DoLNequi)) {
@@ -449,7 +455,7 @@ logNormalAnalysis <- function(data, settings, modelSettings, debugSettings) {
     meanTST <- summary(lsmeans)$lsmean[2]
     vcovLS = vcov(lsmeans)
     # GCI; this takes account of a possible covariance between predictions
-	# In case any of the draws is Inf (after exponentiation) the corresponding ratio is set to NaN and the pvalue is also set to NaN
+  	# In case any of the draws is Inf (after exponentiation) the corresponding ratio is set to NaN and the pvalue is also set to NaN
     chi  <- resDF * resMS / rchisq(settings$NumberOfSimulationsGCI, resDF)
     random = mvrnorm(settings$NumberOfSimulationsGCI, c(0,0), vcovLS)*sqrt(chi/resMS)
     random[,1] = meanCMP + random[,1]
@@ -457,10 +463,8 @@ logNormalAnalysis <- function(data, settings, modelSettings, debugSettings) {
     random <- exp(random + chi/2) - 1
     random[random < modelSettings$smallGCI] <- modelSettings$smallGCI
     ratio <- random[,2]/random[,1]
-    ratio[(random[,1]==Inf) | (random[,2]==Inf)] = NaN
-    pLowerCGI = mean(ratio < settings$LocLower)  # If this is smaller than alfa: reject H0: esti < LocLower
-    pUpperCGI = mean(ratio > settings$LocUpper)  # If this is smaller than alfa: reject H0: esti > LocUpper
-    pvalues$Equi = max(pLowerCGI, pUpperCGI)     # Both one-sided hypothesis must be rejected
+    ratio[(random[,1]==Inf) || (random[,2]==Inf)] = NaN
+    pvalues$Equi = cgiEquiPvalue(ratio, settings$LocLower, settings$LocUpper, settings$TestType)
   }
   return(pvalues)
 
@@ -494,9 +498,9 @@ squareRootAnalysis <- function(data, settings, modelSettings, debugSettings) {
   resDF <- lmH1$df.residual
   resMS <- deviance(lmH1)/resDF
   if (settings$DoSQdiff) {
-    estiEffect = lmH1$coef[2]
+    estiEffect = as.numeric(lmH1$coef[2])
     seEffect = sqrt(vcov(lmH1)[2,2])
-    pvalues$Diff <- as.numeric(2*pt(abs(estiEffect)/seEffect, resDF, lower.tail=FALSE))
+    pvalues$Diff <- waldDiffPvalue(estiEffect, seEffect, resDF, settings$TestType)
   }
 
   if ((settings$NumberOfSimulationsGCI > 0) && (settings$DoSQequi)) {
@@ -513,9 +517,7 @@ squareRootAnalysis <- function(data, settings, modelSettings, debugSettings) {
     random <- random*random + chi
     ratio <- random[,2]/random[,1]
     ratio[ratio==Inf] = NaN
-    pLowerCGI = mean(ratio < settings$LocLower)  # If this is smaller than alfa: reject H0: esti < LocLower
-    pUpperCGI = mean(ratio > settings$LocUpper)  # If this is smaller than alfa: reject H0: esti > LocUpper
-    pvalues$Equi = max(pLowerCGI, pUpperCGI)     # Both one-sided hypothesis must be rejected
+    pvalues$Equi = cgiEquiPvalue(ratio, settings$LocLower, settings$LocUpper, settings$TestType)
   }
   return(pvalues)
 }
@@ -537,6 +539,7 @@ overdispersedPoissonAnalysis <- function(data, settings, modelSettings, debugSet
     seEffect <- seEffect / sqrt(estDispersion)
     estDispersion <- NaN
     family <- "poisson"
+    resDF  <- -1   # ensures using the Normal and Chi-squared instead of Student and Fisher
   }
   # estDispersion <- sum(residuals(glmH1,type="pearson")^2)/resDF
   pvalues$Dispersion <- estDispersion
@@ -549,52 +552,43 @@ overdispersedPoissonAnalysis <- function(data, settings, modelSettings, debugSet
 
   if (settings$UseWaldTest) {  
     # Results based on Wald tests
-    if (family == "poisson") {
-      if (settings$DoOPdiff) {
-        pvalues$Diff <- 2*pnorm(abs(estiEffect)/seEffect, lower.tail=FALSE)
-      }
-      if (settings$DoOPequi) {
-        pLowerEqui <- pnorm((estiEffect-settings$TransformLocLower)/seEffect, lower.tail=FALSE)
-        pUpperEqui <- pnorm((estiEffect-settings$TransformLocUpper)/seEffect, lower.tail=TRUE)
-        pvalues$Equi <- max(pLowerEqui, pUpperEqui) # Both one-sided hypothesis must be rejected
-      }
-    } else {
-      if (settings$DoOPdiff) {
-        pvalues$Diff <- 2*pt(abs(estiEffect)/seEffect, resDF, lower.tail=FALSE)
-      }
-      if (settings$DoOPequi) {
-        pLowerEqui <- pt((estiEffect-settings$TransformLocLower)/seEffect, resDF, lower.tail=FALSE)
-        pUpperEqui <- pt((estiEffect-settings$TransformLocUpper)/seEffect, resDF, lower.tail=TRUE)
-        pvalues$Equi <- max(pLowerEqui, pUpperEqui) # Both one-sided hypothesis must be rejected
-      }
+    if (settings$DoOPdiff) {
+      pvalues$Diff <- waldDiffPvalue(estiEffect, seEffect, resDF, settings$TestType)
+    }
+    if (settings$DoOPequi) {
+      pvalues$Equi <- waldEquiPvalue(estiEffect, seEffect, resDF, settings$TestType, settings$TransformLocLower, settings$TransformLocUpper)
     }
   } else {
     # Results based on LR test; denominator based on Pearson statistic
     data[["Lp"]] <- glmH1$linear.predictor
     if (settings$DoOPdiff) {
-      glmH0 <- glm(modelSettings$formulaH0, family=family, data=data, etastart=Lp)
-      if (family == "poisson") {
-          pvalues$Diff <- pchisq(deviance(glmH0) - deviance(glmH1), 1, lower.tail=FALSE)
+      if (lrDiffDo(estiEffect, 0, settings$TestType)) {
+        glmH0 <- glm(modelSettings$formulaH0, family=family, data=data, etastart=Lp)
+        devDiff = deviance(glmH0) - deviance(glmH1)
+        pvalues$Diff <- lrDiffPvalue(devDiff, estDispersion, resDF, settings$TestType)
       } else {
-          pvalues$Diff <- pf((deviance(glmH0) - deviance(glmH1))/estDispersion, 1, resDF, lower.tail=FALSE)
+        pvalues$Diff <- 2
       }
     }
     # and LR equivalence test
     if (settings$DoOPequi) {
-      if ((estiEffect < settings$TransformLocLower) | (estiEffect > settings$TransformLocUpper)) {
-        pvalues$Equi <- 2
-      } else {
+      if (lrEquiDo(estiEffect, settings$TransformLocLower, settings$TransformLocUpper, settings$TestType)) {
         # LR equivalence test
-        glmH0low <- glm(modelSettings$formulaH0_low, family=family, data=data, etastart=Lp)
-        glmH0upp <- glm(modelSettings$formulaH0_upp, family=family, data=data, etastart=Lp)
-        if (family == "poisson") {
-          pvalLow <- pchisq(deviance(glmH0low) - deviance(glmH1), 1, lower.tail=FALSE)
-          pvalUpp <- pchisq(deviance(glmH0upp) - deviance(glmH1), 1, lower.tail=FALSE)
+        if ((settings$TestType == "twosided") || (settings$TestType == "left")) {
+          glmH0low <- glm(modelSettings$formulaH0_low, family=family, data=data, etastart=Lp)
+          devDiffLower <- deviance(glmH0low) - deviance(glmH1)
         } else {
-          pvalLow <- pf((deviance(glmH0low) - deviance(glmH1))/estDispersion, 1, resDF, lower.tail=FALSE)
-          pvalUpp <- pf((deviance(glmH0upp) - deviance(glmH1))/estDispersion, 1, resDF, lower.tail=FALSE)
+          devDiffLower <- NA
         }
-      pvalues$Equi <- max(pvalLow, pvalUpp)/2
+        if ((settings$TestType == "twosided") || (settings$TestType == "right")) {
+          glmH0upp <- glm(modelSettings$formulaH0_upp, family=family, data=data, etastart=Lp)
+          devDiffUpper <- deviance(glmH0upp) - deviance(glmH1)
+        } else {
+          devDiffUpper <- NA
+        }
+        pvalues$Equi <- lrEquiPvalue(devDiffLower, devDiffUpper, estDispersion, resDF, settings$TestType)
+      } else {
+        pvalues$Equi <- 2
       }
     }
   }
@@ -611,7 +605,7 @@ negativeBinomialAnalysis <- function(data, settings, modelSettings, debugSetting
   # glmH1 <- glm.nb(as.formula(modelSettings$formulaH1), data=data, link=log, etastart=Lp)
   resDF <- df.residual(glmH1)
   pvalues$Dispersion = glmH1$theta
-  estiEffect <- glmH1$coef[2]
+  estiEffect <- as.numeric(glmH1$coef[2])
   seEffect <- sqrt(vcov(glmH1)[2,2])
   if (settings$IsOutputSimulatedData) {
     writeLines(paste0("\nNB iRep ", debugSettings$iRep, " iEffect ", debugSettings$iEffect, " Dataset ", debugSettings$iDataset), debugSettings$displayFile)
@@ -619,38 +613,49 @@ negativeBinomialAnalysis <- function(data, settings, modelSettings, debugSetting
     writeLines(paste0("  estiEffect: ", estiEffect), debugSettings$displayFile)
     writeLines(paste0("  seEffect:   ", seEffect), debugSettings$displayFile)
   }
-
   if (settings$UseWaldTest) {  
     # Results based on Wald tests
     if (settings$DoNBdiff) {
-      pvalues$Diff <- as.numeric(2*pt(abs(estiEffect)/seEffect, resDF, lower.tail=FALSE))
+      pvalues$Diff <- waldDiffPvalue(estiEffect, seEffect, resDF, settings$TestType)
     }
     if (settings$DoNBequi) {
-      pLowerEqui = as.numeric(pt((estiEffect-settings$TransformLocLower)/seEffect, resDF, lower.tail=FALSE))
-      pUpperEqui = as.numeric(pt((estiEffect-settings$TransformLocUpper)/seEffect, resDF, lower.tail=TRUE))
-      pvalues$Equi = max(pLowerEqui, pUpperEqui) # Both one-sided hypothesis must be rejected
+      pvalues$Equi <- waldEquiPvalue(estiEffect, seEffect, resDF, settings$TestType, settings$TransformLocLower, settings$TransformLocUpper)
     }
   } else {
     # Results based on LR test
     data[["Lp"]] = glmH1$linear.predictor
     if (settings$DoNBdiff) {
-      glmH0 <- fitNB(modelSettings$formulaH0, data, etastart=Lp, method=modelSettings$NBmethod, lower=modelSettings$NBlower, upper=modelSettings$NBupper)
-      # glmH0 <- glm.nb(modelSettings$formulaH0, data=data, link=log, etastart=etastart)
-      pvalues$Diff <- as.numeric(pchisq(-2*logLik(glmH0) + 2*logLik(glmH1), 1, lower.tail=FALSE))
+      if (lrDiffDo(estiEffect, 0, settings$TestType)) {
+        glmH0 <- fitNB(modelSettings$formulaH0, data, etastart=Lp, method=modelSettings$NBmethod, lower=modelSettings$NBlower, upper=modelSettings$NBupper)
+        # glmH0 <- glm.nb(modelSettings$formulaH0, data=data, link=log, etastart=etastart)
+        # cat(paste0("LikH0: ", round(10000*as.numeric(logLik(glmH0)))/10000, "   LikH1: ", round(10000*as.numeric(logLik(glmH0)))/10000))
+        devDiff = -2 * as.numeric(logLik(glmH0) - logLik(glmH1))
+        pvalues$Diff <- lrDiffPvalue(devDiff, 1, resDF, settings$TestType)
+      } else {
+        pvalues$Diff <- 2
+      }
     }
     # and LR equivalence test
     if (settings$DoNBequi) {
-      if ((estiEffect < settings$TransformLocLower) | (estiEffect > settings$TransformLocUpper)) {
-        pvalues$Equi <- 2
-      } else {
+      if (lrEquiDo(estiEffect, settings$TransformLocLower, settings$TransformLocUpper, settings$TestType)) {
         # LR equivalence test
-        #glmH0low <- glm.nb(modelSettings$formulaH0_low, data=data, link=log, etastart=etastart)
-        #glmH0upp <- glm.nb(modelSettings$formulaH0_upp, data=data, link=log, etastart=etastart)
-        glmH0low <- fitNB(modelSettings$formulaH0_low, data, etastart=Lp, method=modelSettings$NBmethod, lower=modelSettings$NBlower, upper=modelSettings$NBupper)
-        glmH0upp <- fitNB(modelSettings$formulaH0_upp, data, etastart=Lp, method=modelSettings$NBmethod, lower=modelSettings$NBlower, upper=modelSettings$NBupper)
-        pvalLow <- pchisq(-2*(logLik(glmH0low) - logLik(glmH1)), 1, lower.tail=FALSE)
-        pvalUpp <- pchisq(-2*(logLik(glmH0upp) - logLik(glmH1)), 1, lower.tail=FALSE)
-        pvalues$Equi <- max(pvalLow, pvalUpp)/2
+        if ((settings$TestType == "twosided") || (settings$TestType == "left")) {
+          glmH0low <- fitNB(modelSettings$formulaH0_low, data, etastart=Lp, method=modelSettings$NBmethod, lower=modelSettings$NBlower, upper=modelSettings$NBupper)
+          devDiffLower <- -2 * as.numeric(logLik(glmH0low) - logLik(glmH1))
+        } else {
+          devDiffLower <- NA
+        }
+        if ((settings$TestType == "twosided") || (settings$TestType == "right")) {
+          glmH0upp <- fitNB(modelSettings$formulaH0_upp, data, etastart=Lp, method=modelSettings$NBmethod, lower=modelSettings$NBlower, upper=modelSettings$NBupper)
+          devDiffUpper <- -2 * as.numeric(logLik(glmH0upp) - logLik(glmH1))
+        } else {
+          devDiffUpper <- NA
+        }
+        pvalues$Equi <- lrEquiPvalue(devDiffLower, devDiffUpper, 1, resDF, settings$TestType)
+        # cat(paste0("\nDevLO: ", round(10000*devDiffLower)/10000, "   DevUP: ", round(10000*devDiffUpper)/10000, "\n\n"))
+      } else {
+        pvalues$Equi <- 2
+        # cat(paste0("\nDevLO: ", NA, "   DevUP: ", NA, "\n\n"))
       }
     }
   }
@@ -674,6 +679,148 @@ fitNBhelper <- function(model, data, theta) {
   agg = exp(theta)
   glm = glm(model, family=negative.binomial(agg), data=data)
   -2*logLik(glm)
+}
+
+######################################################################################################################
+# Returns the pvalue for the CGI equivalence test
+cgiEquiPvalue <- function(ratio, locLower, locUpper, testType) {
+  if (testType == "twosided") {
+    pLowerCGI = mean(ratio < locLower)  # If this is smaller than alfa: reject H0: esti < LocLower
+    pUpperCGI = mean(ratio > locUpper)  # If this is smaller than alfa: reject H0: esti > LocUpper
+    return(max(pLowerCGI, pUpperCGI))   # Both one-sided hypothesis must be rejected
+  } else if (testType == "left") {
+    return(mean(ratio < locLower))      # If this is smaller than alfa: reject H0: esti < LocLower
+  } else { # right
+    return(mean(ratio > locUpper))      # If this is smaller than alfa: reject H0: esti > LocUpper
+  }
+}
+
+######################################################################################################################
+# Returns the pvalue for the Wald Difference test 
+waldDiffPvalue <- function(estiEffect, seEffect, resDF, testType) {
+  if (resDF < 0) {
+    # Normal distribution
+    if (testType == "twosided") {
+      return(2*pnorm(abs(estiEffect)/seEffect, lower.tail=FALSE))
+    } else if (testType == "left") {
+      return(pnorm(estiEffect/seEffect, lower.tail=TRUE))
+    } else { # right
+      return(pnorm(estiEffect/seEffect, lower.tail=FALSE))
+    }
+  } else {
+    # Student distribution
+    if (testType == "twosided") {
+      return(2*pt(abs(estiEffect)/seEffect, resDF, lower.tail=FALSE))
+    } else if (testType == "left") {
+      return(pt(estiEffect/seEffect, resDF, lower.tail=TRUE))
+    } else { # right
+      return(pt(estiEffect/seEffect, resDF, lower.tail=FALSE))
+    }
+  }
+}
+
+######################################################################################################################
+# Returns the pvalue for the Wald Equivalence test 
+waldEquiPvalue <- function(estiEffect, seEffect, resDF, testType, locLower, locUpper) {
+  if (resDF < 0) {
+    # Normal distribution
+    if (testType == "twosided") {
+      pLowerEqui <- pnorm((estiEffect-locLower)/seEffect, lower.tail=FALSE)
+      pUpperEqui <- pnorm((estiEffect-locUpper)/seEffect, lower.tail=TRUE)
+      return(max(pLowerEqui, pUpperEqui)) # Both one-sided hypothesis must be rejected
+    } else if (testType == "left") {
+      return(pnorm((estiEffect-locLower)/seEffect, lower.tail=FALSE))
+    } else { # right
+      return(pnorm((estiEffect-locUpper)/seEffect, lower.tail=TRUE))
+    }
+  } else {
+    # Student distribution
+    if (testType == "twosided") {
+      pLowerEqui <- pt((estiEffect-locLower)/seEffect, resDF, lower.tail=FALSE)
+      pUpperEqui <- pt((estiEffect-locUpper)/seEffect, resDF, lower.tail=TRUE)
+      return(max(pLowerEqui, pUpperEqui)) # Both one-sided hypothesis must be rejected
+    } else if (testType == "left") {
+      return(pt((estiEffect-locLower)/seEffect, resDF, lower.tail=FALSE))
+    } else { # right
+      return(pt((estiEffect-locUpper)/seEffect, resDF, lower.tail=TRUE))
+    }
+  }
+}
+
+######################################################################################################################
+# Returns whether it is usefull to perform the Likelihood Ratio Difference test
+lrDiffDo <- function(estiEffect, nullValue, testType) {
+  if (testType == "twosided") {
+    return(TRUE)
+  } else if (testType == "left") {
+    return(estiEffect < nullValue)
+  } else { # right
+    return(estiEffect > nullValue)
+  }
+}
+
+######################################################################################################################
+# Returns the pvalue for the Likelihood Ratio Difference test 
+lrDiffPvalue <- function(devDiff, dispersion, resDF, testType) {
+  if (resDF < 0) {
+    # Normal distribution
+    if (testType == "twosided") {
+      return(pchisq(devDiff, 1, lower.tail=FALSE))
+    } else if (testType == "left") {
+      return(pchisq(devDiff, 1, lower.tail=FALSE)/2)
+    } else { # right
+      return(pchisq(devDiff, 1, lower.tail=FALSE)/2)
+    }
+  } else {
+    # Student distribution
+    if (testType == "twosided") {
+      return(pf(devDiff/dispersion, 1, resDF, lower.tail=FALSE))
+    } else if (testType == "left") {
+      return(pf(devDiff/dispersion, 1, resDF, lower.tail=FALSE)/2)
+    } else { # right
+      return(pf(devDiff/dispersion, 1, resDF, lower.tail=FALSE)/2)
+    }
+  }
+}
+
+######################################################################################################################
+# Returns whether it is usefull to perform the Likelihood Ratio Equivalence test
+lrEquiDo <- function(estiEffect, locLower, locUpper, testType) {
+  if (testType == "twosided") {
+    return((estiEffect > locLower) && (estiEffect < locUpper))
+  } else if (testType == "left") {
+    return(estiEffect > locLower)
+  } else { # right
+    return(estiEffect < locUpper)
+  }
+}
+
+######################################################################################################################
+# Returns the pvalue for the Likelihood Ratio Equivalence test 
+lrEquiPvalue <- function(devDiffLower, devDiffUpper, dispersion, resDF, testType) {
+  if (resDF < 0) {
+    # Normal distribution
+    if (testType == "twosided") {
+      pvalLow <- pchisq(devDiffLower, 1, lower.tail=FALSE)/2
+      pvalUpp <- pchisq(devDiffUpper, 1, lower.tail=FALSE)/2
+      return(max(pvalLow, pvalUpp))
+    } else if (testType == "left") {
+      return(pchisq(devDiffLower, 1, lower.tail=FALSE)/2)
+    } else { # right
+      return(pchisq(devDiffUpper, 1, lower.tail=FALSE)/2)
+    }
+  } else {
+    # Student distribution
+    if (testType == "twosided") {
+      pvalLow <- pf(devDiffLower/dispersion, 1, resDF, lower.tail=FALSE)/2
+      pvalUpp <- pf(devDiffUpper/dispersion, 1, resDF, lower.tail=FALSE)/2
+      return(max(pvalLow, pvalUpp))
+    } else if (testType == "left") {
+      return(pf(devDiffLower/dispersion, 1, resDF, lower.tail=FALSE)/2)
+    } else { # right
+      return(pf(devDiffUpper/dispersion, 1, resDF, lower.tail=FALSE)/2)
+    }
+  }
 }
 
 ######################################################################################################################
@@ -729,20 +876,20 @@ monteCarloPowerAnalysis <- function(data, settings, modelSettings, blocks, effec
     }
     # Fit models
     if ((settings$DoLNdiff) || (settings$DoLNequi)) {
-      if (DEBUG) print(paste(k, "LN"))
+      if (DEBUG) cat(paste(k, "LN\n"))
       result <- logNormalAnalysis(simulatedData, settings, modelSettings, debugSettings)
       if (settings$DoLNdiff) pValues$Diff[k, "LogNormal"] <- result$Diff
       if (settings$DoLNequi) pValues$Equi[k, "LogNormal"] <- result$Equi
     }
     if ((settings$DoSQdiff) || (settings$DoSQequi)) {
-      if (DEBUG) print(paste(k, "SQ"))
+      if (DEBUG) cat(paste(k, "SQ\n"))
       result <- squareRootAnalysis(simulatedData, settings, modelSettings, debugSettings)
       if (settings$DoSQdiff) pValues$Diff[k, "SquareRoot"] <- result$Diff
       if (settings$DoSQequi) pValues$Equi[k, "SquareRoot"] <- result$Equi
     }
     # Fit overdispersed Poisson anyway to get the overdispersion parameter
     if ((settings$DoOPdiff) || (settings$DoOPequi) || (settings$DoNBdiff) || (settings$DoNBequi)) {
-      if (DEBUG) print(paste(k, "OP"))
+      if (DEBUG) cat(paste(k, "OP\n"))
       result <- overdispersedPoissonAnalysis(simulatedData, settings, modelSettings, debugSettings)
       pValues$Extra[k, "OPdisp"] <- result$Dispersion
       if ((settings$DoOPdiff) || (settings$DoOPequi)) {
@@ -750,7 +897,7 @@ monteCarloPowerAnalysis <- function(data, settings, modelSettings, blocks, effec
         if (settings$DoOPequi) pValues$Equi[k, "OverdispersedPoisson"] <- result$Equi
       }
       if ((settings$DoNBdiff) || (settings$DoNBequi)) {
-        if (DEBUG) print(paste(k, "NB"))
+        if ((FALSE) || (DEBUG)) cat(paste(k, "NB\n"))
         if (!is.na(result$Dispersion)) {
           result <- negativeBinomialAnalysis(simulatedData, settings, modelSettings, debugSettings)
         }
@@ -771,6 +918,12 @@ monteCarloPowerAnalysis <- function(data, settings, modelSettings, blocks, effec
     write.csv(pValues, csvFile, row.names=FALSE)
   }
 
+  if ((FALSE) || (DEBUG)) {
+    # Print raw pValues
+    printPvaluesSimulate(pValues, settings, blocks, effect)
+  }
+
+  # Return power values
   returnSummary = TRUE
   if (returnSummary) {
     pValues$Diff = as.matrix(colMeans(pValues$Diff < settings$SignificanceLevel, na.rm=TRUE))
@@ -780,6 +933,31 @@ monteCarloPowerAnalysis <- function(data, settings, modelSettings, blocks, effec
 }
 
 ######################################################################################################################
+# Function to display the raw pvalues for each dataset in a concise format
+printPvaluesSimulate <- function(pValues, settings, blocks, effect) {
+  pVal = cbind(pValues$Diff, pValues$Equi)
+  colnames <- colnames(pVal)
+  if (settings$DoLNdiff) colnames <- replaceFirst(colnames, "LogNormal",            "  diffLN")
+  if (settings$DoLNequi) colnames <- replaceFirst(colnames, "LogNormal",            "  equiLN")
+  if (settings$DoSQdiff) colnames <- replaceFirst(colnames, "SquareRoot",           "  diffSQ")
+  if (settings$DoSQequi) colnames <- replaceFirst(colnames, "SquareRoot",           "  equiSQ")
+  if (settings$DoOPdiff) colnames <- replaceFirst(colnames, "OverdispersedPoisson", "  diffOP")
+  if (settings$DoOPequi) colnames <- replaceFirst(colnames, "OverdispersedPoisson", "  equiOP")
+  if (settings$DoNBdiff) colnames <- replaceFirst(colnames, "NegativeBinomial",     "  diffNB")
+  if (settings$DoNBequi) colnames <- replaceFirst(colnames, "NegativeBinomial",     "  equiNB")
+  colnames(pVal) <- colnames
+  effectOriginalScale = round(10000*exp(effect))/10000
+  cat(paste0("\n", settings$ProjectName,";  Nreps: ", blocks, ";  Effect: ", effectOriginalScale, "\n"))
+  print(round(100000*pVal)/100000)
+}
+replaceFirst <- function(colnames, pattern, replacement) {
+  match = match(pattern, colnames)
+  colnames[match[1]] <- replacement
+  return(colnames)
+}
+
+######################################################################################################################
+# Redundant function
 runPowerAnalysis <- function(data, settings) {
   
   # Compute evaluation grid
@@ -826,4 +1004,25 @@ runPowerAnalysis <- function(data, settings) {
 
   return(df)
 }
+
+######################################################################################################################
+# Redundant function
+createEvaluationGrid <- function(LocLower, LocUpper, NumberOfEvaluations) {
+  csd <- c(0)
+  effect <- c(0)
+  if (!is.na(LocLower)) {
+    csdTmp <- -1 + rep(0:NumberOfEvaluations)/(NumberOfEvaluations+1)
+    effectTmp <- -LocLower*csdTmp
+    csd <- c(abs(csdTmp), csd)
+    effect <- c(effectTmp, effect)
+  } 
+  if (!is.na(LocUpper)) {
+    csdTmp <- 1 - rep(NumberOfEvaluations:0)/(NumberOfEvaluations+1)
+    effectTmp <- LocUpper*csdTmp
+    csd <- c(csd, abs(csdTmp))
+    effect <- c(effect, effectTmp)
+  } 
+  return(list(csd=csd, effect=effect))
+}
+
 

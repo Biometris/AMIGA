@@ -94,8 +94,7 @@ normalLyles <- function(data, settings, modelSettings, nreps, effect, multiplyWe
 
   # Define non-centrality parameters
   ncDiff    = NaN
-  ncEquiLow = NaN
-  ncEquiUpp = NaN
+  ncEqui = list(Low=NaN, Upp=NaN)
 
   # Estimate dispersion parameter by mean of Variance
   Means <- tapply(data[["Weight"]] * data[["Response"]], data[["Row"]], sum)/multiplyWeight
@@ -112,49 +111,54 @@ normalLyles <- function(data, settings, modelSettings, nreps, effect, multiplyWe
   } else {
     df = nreps*(modelSettings$ndata-1) - modelDf + modelSettings$blocks 
   }
+  estiEffect <- as.numeric(glmH1$coef[2])
+  seEffect <- sqrt(vcov(glmH1)[2,2]) / sigma1
 
-  # Return signed non-centrality parameters for equivalence test;  
-  if (settings$UseWaldTest) {  
-    # Wald
-    estiEffect <- as.numeric(glmH1$coef[2])
-    seEffect <- sqrt(vcov(glmH1)[2,2]) / sigma1
-    if (doDiff) {
-      ncDiff <- (abs(estiEffect)/seEffect)^2
-    }
-    if ((doEqui) && (FALSE)) {
-      ncEquiLow <- (estiEffect-settings$LocLower)/seEffect
-      ncEquiUpp <- (estiEffect-settings$LocUpper)/seEffect
-    }
-  } else {
-    # LR: fit alternative models
-    # Difference test
-    if (doDiff) {
-      glmH0 <- lm(modelSettings$formulaH0, data=data, weight=Weight)
-      ncDiff <- glmH0$df.residual*summary(glmH0)$sigma^2 - glmH1$df.residual*summary(glmH1)$sigma^2
-      ncDiff[ncDiff<0] = 0
-    }
-    if ((doEqui) && (FALSE)) {
-      # Lower equivalence limit 
-      glmH0low <- lm(modelSettings$formulaH0_low, data=data, weight=Weight)
-      ncEquiLow <- glmH0low$df.residual*summary(glmH0low)$sigma^2 - glmH1$df.residual*summary(glmH1)$sigma^2
-      ncEquiLow[ncEquiLow<0] = 0
-      ncEquiLow <- sqrt(ncEquiLow)
-      # Upper equivalence limit 
-      glmH0upp <- lm(modelSettings$formulaH0_upp, data=data, weight=Weight)
-      ncEquiUpp <- glmH0upp$df.residual*summary(glmH0upp)$sigma^2 - glmH1$df.residual*summary(glmH1)$sigma^2
-      ncEquiUpp[ncEquiUpp<0] = 0
-      ncEquiUpp <- -1*sqrt(ncEquiUpp)
-    }
+  # Results based on Wald tests; this is equiovalent to LR
+  if (doDiff) {
+    ncDiff <- estiEffect/seEffect
+  }
+  if ((doEqui) && (FALSE)) {
+    ncEqui <- waldEquiNoncentral(estiEffect, seEffect, settings$TestType, settings$TransformLocLower, settings$TransformLocUpper)
   }
 
   # Scale non-centrality parameters
   scale = nreps/estDispersion/multiplyWeight/modelSettings$blocks
-  ncDiff = ncDiff * scale
-  ncEquiLow = ncEquiLow * sqrt(scale)
-  ncEquiUpp = ncEquiUpp * sqrt(scale)
-  power = calculatePowerFromNc(nreps, effect, df, ncDiff, ncEquiLow, ncEquiUpp, settings$SignificanceLevel, 
-      doDiff, doEqui)
+  ncDiff = ncDiff * sqrt(scale)
+  ncEqui$Low = ncEqui$Low * sqrt(scale)
+  ncEqui$Upp = ncEqui$Upp * sqrt(scale)
+  power = calculatePowerFromNc(nreps, effect, df, ncDiff, ncEqui, settings, doDiff, doEqui)
   return(power)
+
+  # LR: fit alternative models; not this section is not executed; 
+  # It can be used to show that 
+  # Difference test
+  if (doDiff) {
+    glmH0 <- lm(modelSettings$formulaH0, data=data, weight=Weight)
+    ncDiff <- glmH0$df.residual*summary(glmH0)$sigma^2 - glmH1$df.residual*summary(glmH1)$sigma^2
+    ncDiff[ncDiff<0] = 0
+    ncDiff = sign(estiEffect)*sqrt(ncDiff)
+  }
+  if ((doEqui) && (FALSE)) {
+    if ((settings$TestType == "twosided") || (settings$TestType == "left")) {
+      # Lower equivalence limit 
+      glmH0low <- lm(modelSettings$formulaH0_low, data=data, weight=Weight)
+      ncEqui$Low <- glmH0low$df.residual*summary(glmH0low)$sigma^2 - glmH1$df.residual*summary(glmH1)$sigma^2
+      ncEqui$Low[ncEqui$Low<0] = 0
+      ncEqui$Low <- sqrt(ncEqui$Low)
+    } else {
+      ncEqui$Low  <- NA
+    }
+    if ((settings$TestType == "twosided") || (settings$TestType == "right")) {
+      # Upper equivalence limit 
+      glmH0upp <- lm(modelSettings$formulaH0_upp, data=data, weight=Weight)
+      ncEqui$Upp <- glmH0upp$df.residual*summary(glmH0upp)$sigma^2 - glmH1$df.residual*summary(glmH1)$sigma^2
+      ncEqui$Upp[ncEqui$Upp<0] = 0
+      ncEqui$Upp <- sqrt(ncEqui$Upp)
+    } else {
+      ncEqui$Upp  <- NA
+    }
+  }
 }
 
 ######################################################################################################################
@@ -162,8 +166,8 @@ logNormalLyles <- function(data, settings, modelSettings, nreps, effect, multipl
 
   # Transform data (this is done locally)
   data[["Response"]] = log(data[["Response"]]+1)
-  settings$TransformLocLower <- log(settings$LocLower + 1)
-  settings$TransformLocUpper <- log(settings$LocUpper + 1)
+  if (!is.na(settings$LocLower)) settings$TransformLocLower <- log(settings$LocLower + 1)
+  if (!is.na(settings$LocUpper)) settings$TransformLocUpper <- log(settings$LocUpper + 1)
   data[["LowOffset"]][ data[["LowOffset"]]==settings$TransformLocLower ] = settings$TransformLocLower
   data[["UppOffset"]][ data[["UppOffset"]]==settings$TransformLocUpper ] = settings$TransformLocUpper
   return(normalLyles(data, settings, modelSettings, nreps, effect, multiplyWeight, 
@@ -175,8 +179,8 @@ squareRootLyles <- function(data, settings, modelSettings, nreps, effect, multip
 
   # Transform data (this is done locally)
   data[["Response"]] = sqrt(data[["Response"]])
-  settings$TransformLocLower <- sqrt(settings$LocLower)
-  settings$TransformLocUpper <- sqrt(settings$LocUpper)
+  if (!is.na(settings$LocLower)) settings$TransformLocLower <- sqrt(settings$LocLower)
+  if (!is.na(settings$LocUpper)) settings$TransformLocUpper <- sqrt(settings$LocUpper)
   data[["LowOffset"]][ data[["LowOffset"]]==settings$TransformLocLower ] = settings$TransformLocLower
   data[["UppOffset"]][ data[["UppOffset"]]==settings$TransformLocUpper ] = settings$TransformLocUpper
   return(normalLyles(data, settings, modelSettings, nreps, effect, multiplyWeight, 
@@ -188,8 +192,7 @@ overdispersedPoissonLyles <- function(data, settings, modelSettings, nreps, effe
 
   # Define non-centrality parameters
   ncDiff    = NaN
-  ncEquiLow = NaN
-  ncEquiUpp = NaN
+  ncEqui = list(Low=NaN, Upp=NaN)
 
   # Estimate dispersion parameter by mean of Variance/Mean
   Means <- tapply(data[["Weight"]] * data[["Response"]], data[["Row"]], sum)/multiplyWeight
@@ -207,26 +210,25 @@ overdispersedPoissonLyles <- function(data, settings, modelSettings, nreps, effe
     df = nreps*(modelSettings$ndata-1) - modelDf + modelSettings$blocks 
   }
 
-  # Return signed non-centrality parameters for equivalence test;  
+  estiEffect <- as.numeric(glmH1$coef[2])
+  seEffect <- sqrt(vcov(glmH1)[2,2]) 
   if (settings$UseWaldTest) {  
-    # Wald
-    estiEffect <- as.numeric(glmH1$coef[2])
-    seEffect <- sqrt(vcov(glmH1)[2,2]) 
+    # Results based on Wald tests
     if (settings$DoOPdiff) {
-      ncDiff <- (abs(estiEffect)/seEffect)^2
+      ncDiff = estiEffect/seEffect
     }
     if (settings$DoOPequi) {
-      ncEquiLow <- (estiEffect-settings$TransformLocLower)/seEffect
-      ncEquiUpp <- (estiEffect-settings$TransformLocUpper)/seEffect
+      ncEqui <- waldEquiNoncentral(estiEffect, seEffect, settings$TestType, settings$TransformLocLower, settings$TransformLocUpper)
     }
+    
     if (FALSE) {
-      cat(paste0("estiEffect: ", estiEffect, "\n"))
       cat(paste0("estiEffect: ", estiEffect, "\n"))
       cat(paste0("seEffect: ", seEffect, "\n"))
       cat(paste0("ncDiff: ", ncDiff, "\n"))
-      cat(paste0("ncEquiLow: ", ncEquiLow, "\n"))
-      cat(paste0("ncEquiUpp: ", ncEquiUpp, "\n"))
+      cat(paste0("ncEqui$Low: ", ncEqui$Low, "\n"))
+      cat(paste0("ncEqui$Upp: ", ncEqui$Upp, "\n"))
     }
+
   } else {
     # LR: fit alternative models
     data[["Lp"]] <- glmH1$linear.predictor
@@ -235,28 +237,36 @@ overdispersedPoissonLyles <- function(data, settings, modelSettings, nreps, effe
       glmH0 <- glm(modelSettings$formulaH0, family=family, data=data, weight=Weight, etastart=Lp)
       ncDiff <- deviance(glmH0) - deviance(glmH1)
       ncDiff[ncDiff<0] = 0
+      ncDiff = sign(estiEffect)*sqrt(ncDiff)
     }
     if (settings$DoOPequi) {
-      # Lower equivalence limit 
-      glmH0low <- glm(modelSettings$formulaH0_low, family=family, data=data, weight=Weight, etastart=Lp)
-      ncEquiLow <- deviance(glmH0low) - deviance(glmH1)
-      ncEquiLow[ncEquiLow<0] = 0
-      ncEquiLow <- sqrt(ncEquiLow)
-      # Upper equivalence limit 
-      glmH0upp <- glm(modelSettings$formulaH0_upp, family=family, data=data, weight=Weight, etastart=Lp)
-      ncEquiUpp <- deviance(glmH0upp) - deviance(glmH1)
-      ncEquiUpp[ncEquiUpp<0] = 0
-      ncEquiUpp <- -1*sqrt(ncEquiUpp)
+      if ((settings$TestType == "twosided") || (settings$TestType == "left")) {
+        # Lower equivalence limit 
+        glmH0low <- glm(modelSettings$formulaH0_low, family=family, data=data, weight=Weight, etastart=Lp)
+        ncEqui$Low <- deviance(glmH0low) - deviance(glmH1)
+        ncEqui$Low[ncEqui$Low<0] = 0
+        ncEqui$Low <- sqrt(ncEqui$Low)
+      } else {
+        ncEqui$Low = NA
+      }
+      if ((settings$TestType == "twosided") || (settings$TestType == "right")) {
+        # Upper equivalence limit 
+        glmH0upp <- glm(modelSettings$formulaH0_upp, family=family, data=data, weight=Weight, etastart=Lp)
+        ncEqui$Upp <- deviance(glmH0upp) - deviance(glmH1)
+        ncEqui$Upp[ncEqui$Upp<0] = 0
+        ncEqui$Upp <- sqrt(ncEqui$Upp)
+      } else {
+        ncEqui$Upp = NA
+      }
     }
   }
 
   # Scale non-centrality parameters
   scale = nreps/estDispersion/multiplyWeight/modelSettings$blocks
-  ncDiff = ncDiff * scale
-  ncEquiLow = ncEquiLow * sqrt(scale)
-  ncEquiUpp = ncEquiUpp * sqrt(scale)
-  power = calculatePowerFromNc(nreps, effect, df, ncDiff, ncEquiLow, ncEquiUpp, settings$SignificanceLevel, 
-        settings$DoOPdiff, settings$DoOPequi)
+  ncDiff = ncDiff * sqrt(scale)
+  ncEqui$Low = ncEqui$Low * sqrt(scale)
+  ncEqui$Upp = ncEqui$Upp * sqrt(scale)
+  power = calculatePowerFromNc(nreps, effect, df, ncDiff, ncEqui, settings, settings$DoOPdiff, settings$DoOPequi)
   return(power)
 }
 
@@ -265,8 +275,7 @@ negativeBinomialLyles <- function(data, settings, modelSettings, nreps, effect, 
 
   # Define non-centrality parameters
   ncDiff    = NaN
-  ncEquiLow = NaN
-  ncEquiUpp = NaN
+  ncEqui = list(Low=NaN, Upp=NaN)
 
   # Estimate dispersion parameter by mean of Variance/Mean
   Means <- tapply(data[["Weight"]] * data[["Response"]], data[["Row"]], sum)/multiplyWeight
@@ -283,20 +292,18 @@ negativeBinomialLyles <- function(data, settings, modelSettings, nreps, effect, 
   } else {
     df = nreps*(modelSettings$ndata-1) - modelDf + modelSettings$blocks 
   }
-
-  # Return signed non-centrality parameters for equivalence test;
   # Note that the standard error must be corrected               
+  correction <- summary(glmH1)$dispersion
+  estiEffect <- as.numeric(glmH1$coef[2])
+  seEffect <- sqrt(vcov(glmH1)[2,2]/correction) 
+
   if (settings$UseWaldTest) {  
-    # Wald
-    correction <- summary(glmH1)$dispersion
-    estiEffect <- as.numeric(glmH1$coef[2])
-    seEffect <- sqrt(vcov(glmH1)[2,2]/correction) 
+    # Results based on Wald tests
     if (settings$DoNBdiff) {
-      ncDiff <- (abs(estiEffect)/seEffect)^2
+      ncDiff <- estiEffect/seEffect
     }
     if (settings$DoNBequi) {
-      ncEquiLow <- (estiEffect-settings$TransformLocLower)/seEffect
-      ncEquiUpp <- (estiEffect-settings$TransformLocUpper)/seEffect
+      ncEqui <- waldEquiNoncentral(estiEffect, seEffect, settings$TestType, settings$TransformLocLower, settings$TransformLocUpper)
     }
   } else {
     # LR: fit alternative models
@@ -306,80 +313,123 @@ negativeBinomialLyles <- function(data, settings, modelSettings, nreps, effect, 
       glmH0 <- glm(modelSettings$formulaH0, family=family, data=data, weight=Weight, etastart=Lp)
       ncDiff <- deviance(glmH0) - deviance(glmH1)
       ncDiff[ncDiff<0] = 0
+      ncDiff <- sign(estiEffect)*sqrt(ncDiff)
     }
     if (settings$DoNBequi) {
-      # Lower equivalence limit 
-      glmH0low <- glm(modelSettings$formulaH0_low, family=family, data=data, weight=Weight, etastart=Lp)
-      ncEquiLow <- deviance(glmH0low) - deviance(glmH1)
-      ncEquiLow[ncEquiLow<0] = 0
-      ncEquiLow <- sqrt(ncEquiLow)
-      # Upper equivalence limit 
-      glmH0upp <- glm(modelSettings$formulaH0_upp, family=family, data=data, weight=Weight, etastart=Lp)
-      ncEquiUpp <- deviance(glmH0upp) - deviance(glmH1)
-      ncEquiUpp[ncEquiUpp<0] = 0
-      ncEquiUpp <- -1*sqrt(ncEquiUpp)
+      if ((settings$TestType == "twosided") || (settings$TestType == "left")) {
+        # Lower equivalence limit 
+        glmH0low <- glm(modelSettings$formulaH0_low, family=family, data=data, weight=Weight, etastart=Lp)
+        ncEqui$Low <- deviance(glmH0low) - deviance(glmH1)
+        ncEqui$Low[ncEqui$Low<0] = 0
+        ncEqui$Low <- sqrt(ncEqui$Low)
+      } else {
+        ncEqui$Low = NA
+      }
+      if ((settings$TestType == "twosided") || (settings$TestType == "right")) {
+        # Upper equivalence limit 
+        glmH0upp <- glm(modelSettings$formulaH0_upp, family=family, data=data, weight=Weight, etastart=Lp)
+        ncEqui$Upp <- deviance(glmH0upp) - deviance(glmH1)
+        ncEqui$Upp[ncEqui$Upp<0] = 0
+        ncEqui$Upp <- sqrt(ncEqui$Upp)
+      } else {
+        ncEqui$Upp = NA
+      }
     }
   }
 
   # Scale non-centrality parameters
   scale = nreps/multiplyWeight/modelSettings$blocks
-  ncDiff = ncDiff * scale
-  ncEquiLow = ncEquiLow * sqrt(scale)
-  ncEquiUpp = ncEquiUpp * sqrt(scale)
-  power = calculatePowerFromNc(nreps, effect, df, ncDiff, ncEquiLow, ncEquiUpp, settings$SignificanceLevel, 
-        settings$DoNBdiff, settings$DoNBequi)
+  ncDiff = ncDiff * sqrt(scale)
+  ncEqui$Low = ncEqui$Low * sqrt(scale)
+  ncEqui$Upp = ncEqui$Upp * sqrt(scale)
+  power = calculatePowerFromNc(nreps, effect, df, ncDiff, ncEqui, settings, settings$DoNBdiff, settings$DoNBequi)
   return(power)
 }
 
 ######################################################################################################################
-calculatePowerFromNc <- function(nreps, effect, df, ncDiff, ncEquiLow, ncEquiUpp, alfa, doDiff, doEqui, twosided=TRUE) {
+# Returns the (signed) non-centrality parameter pvalue for the Wald Equivalence test 
+waldEquiNoncentral <- function(estiEffect, seEffect, testType, locLower, locUpper) {
+  if (testType == "twosided") {
+    ncLow <-  (estiEffect-locLower)/seEffect
+    ncUpp <- -(estiEffect-locUpper)/seEffect
+  } else if (testType == "left") {
+    ncLow <-  (estiEffect-locLower)/seEffect
+    ncUpp <- NA
+  } else { # right
+    ncLow <- NA
+    ncUpp <- -(estiEffect-locUpper)/seEffect
+  }
+  return(list(Low=ncLow, Upp=ncUpp))
+}
+
+######################################################################################################################
+calculatePowerFromNc <- function(nreps, effect, df, ncDiff, ncEqui, settings, doDiff, doEqui) {
   # Twosided difference test
   if (doDiff) {
-    critFvalue = qf(1.0-alfa, 1, df)
-    powerDiff = pf(critFvalue, 1, df, ncDiff, lower.tail=FALSE)
+    if (settings$TestType == "twosided") {
+      critFvalue = qf(1.0 - settings$SignificanceLevel, 1, df)
+      powerDiff = pf(critFvalue, 1, df, ncDiff^2, lower.tail=FALSE)
+      # Equivalent calculation is
+      # critTvalue = qt(1.0 - settings$SignificanceLevel/2, df)
+      # powerDiff = pt(critTvalue, df, ncDiff, lower.tail=FALSE) + pt(-critTvalue, df, ncDiff, lower.tail=TRUE)
+    } else {
+      critTvalue = qt(1.0 - settings$SignificanceLevel, df)
+      if (settings$TestType == "left") {
+        powerDiff = pt(critTvalue, df, -ncDiff, lower.tail=FALSE)
+      } else {
+        powerDiff = pt(critTvalue, df, ncDiff, lower.tail=FALSE)
+      }
+    }
   } else {
     powerDiff = NaN * nreps
   }
   # Twosided equivalence test
   if (doEqui) {
-    critTvalue = qt(1.0-alfa, df)
-    corr   = matrix(c(1,1,1,1), ncol=2)
-    ntimes = length(nreps)
-    powerEqui = rep(NA, ntimes)
-    for (i in 1:ntimes) {
-      if ((is.na(ncEquiLow[i])) | (is.na(ncEquiUpp[i]))) {
-        powerEqui[i] = NaN
-      } else {
-        tval = critTvalue[i]
-        low = c(tval, -Inf)
-        upp = c(Inf, -tval)
-        delta = c(ncEquiLow[i], ncEquiUpp[i])
-        pp = pmvt(low=low, upp=upp, delta=delta, df=df[i], corr=corr)
-        powerEqui[i] = pp
+    critTvalue = qt(1.0 - settings$SignificanceLevel, df)
+    if (settings$TestType == "twosided") {
+      # Bivariate non-central Student distribution
+      corr   = matrix(c(1,1,1,1), ncol=2)
+      ntimes = length(nreps)
+      powerEqui = rep(NA, ntimes)
+      for (i in 1:ntimes) {
+        if ((is.na(ncEqui$Low[i])) | (is.na(ncEqui$Upp[i]))) {
+          powerEqui[i] = NaN
+        } else {
+          tval = critTvalue[i]
+          low = c(tval, -Inf)
+          upp = c(Inf, -tval)
+          delta = c(ncEqui$Low[i], -ncEqui$Upp[i])
+          pp = pmvt(low=low, upp=upp, delta=delta, df=df[i], corr=corr)
+          powerEqui[i] = pp
+        }
       }
+    } else if (settings$TestType == "left") {
+      powerEqui = pt(critTvalue, df, ncEqui$Low, lower.tail=FALSE)
+    } else { # right
+      powerEqui = pt(critTvalue, df, ncEqui$Upp, lower.tail=FALSE)
     }
   } else {
     powerEqui = NaN * nreps
   }
-  power = as.data.frame(cbind(effect, nreps, df, ncDiff, ncEquiLow, ncEquiUpp, powerDiff, powerEqui))
+  power = as.data.frame(cbind(effect, nreps, df, ncDiff, ncEquiLow=ncEqui$Low, ncEquiUpp=ncEqui$Upp, powerDiff, powerEqui))
   return(power)
 
   # Compare with simple product
-  ncEquiLow = ncEquiLow^2
-  ncEquiUpp = ncEquiUpp^2
+  ncEqui$Low = ncEqui$Low^2
+  ncEqui$Upp = ncEqui$Upp^2
   critFvalue = qf(1.0-2*settings$SignificanceLevel, 1, df)
-  pEquiLow = pf(critFvalue, 1, df, ncEquiLow, lower.tail=FALSE)
-  pEquiUpp = pf(critFvalue, 1, df, ncEquiUpp, lower.tail=FALSE)
+  pEquiLow = pf(critFvalue, 1, df, ncEqui$Low, lower.tail=FALSE)
+  pEquiUpp = pf(critFvalue, 1, df, ncEqui$Upp, lower.tail=FALSE)
   pEquiPrd = pEquiLow*pEquiUpp
   compare = as.data.frame(cbind(df, pEquiLow, pEquiUpp, pEquiPrd, powerEqui))
-  print(compare, digits=3)
+  #print(compare, digits=3)
   return(power)
 }
 
 ######################################################################################################################
 lylesPowerAnalysis <- function(data, settings, modelSettings, blocks, effect, debugSettings) {
 
-  DEBUG  <- TRUE
+  DEBUG <- FALSE
 
   # Prepare for debugging, i.e. create directory to write files to
   if (settings$IsOutputSimulatedData) {
@@ -397,14 +447,15 @@ lylesPowerAnalysis <- function(data, settings, modelSettings, blocks, effect, de
   # Define number of reps depending on the design
   if (settings$ExperimentalDesignType == "CompletelyRandomized") {
     nreps <- rep(2:blocks)
-    blocks <- 1
+    localBlocks <- 1
   } else if (settings$CVBlocks == 0.0) {
     nreps <- rep(2:blocks)
-    blocks <- 2
+    localBlocks <- 2
   } else {
     nreps <- blocks
+    localBlocks <- blocks
   }
-  modelSettings$blocks <- blocks
+  modelSettings$blocks <- localBlocks
 
   # Define output structure
   nrow <- length(nreps)
@@ -421,16 +472,16 @@ lylesPowerAnalysis <- function(data, settings, modelSettings, blocks, effect, de
   # Setup simulation settings
   multiplyWeight <- 10
   simulationSettings <- createSimulationSettings(settings)
-  simulatedData <- createSimulatedData(data, settings, simulationSettings, blocks, effect)
+  simulatedData <- createSimulatedData(data, settings, simulationSettings, localBlocks, effect)
   if (FALSE) {
     pos = match(c("Test", "Mean", "Block", "Lp", "Effect"), names(simulatedData))
     print(simulatedData[,pos])
   }
   synData <- createSyntheticData(simulatedData, settings, simulationSettings, multiplyWeight) 
   if (settings$IsOutputSimulatedData) {
-    csvFile = paste0(localDir, "simulatedData-", blocks, ".csv")
+    csvFile = paste0(localDir, "simulatedData-", localBlocks, ".csv")
     write.csv(simulatedData, csvFile, row.names=FALSE)
-    csvFile = paste0(localDir, "synData-", blocks, ".csv")
+    csvFile = paste0(localDir, "synData-", localBlocks, ".csv")
     write.csv(synData, csvFile, row.names=FALSE)
   }
 
@@ -468,6 +519,36 @@ lylesPowerAnalysis <- function(data, settings, modelSettings, blocks, effect, de
     if (settings$DoNBequi) pValues$Equi[,"NegativeBinomial"] <- powerNB[["powerEqui"]]
     pValues$Extra[,"Df"] <- powerNB[["df"]]
   }
+
+  if ((FALSE) || (DEBUG)) {
+    # Print raw pValues
+    printPvaluesApproximate(pValues, settings, blocks, effect)
+  }
   return(pValues)
+}
+
+######################################################################################################################
+# Function to display the raw pvalues for each dataset in a concise format
+printPvaluesApproximate <- function(pValues, settings, blocks, effect) {
+  pVal = cbind(pValues$Diff, pValues$Equi)
+  rownames(pVal) <- paste0(" ", pValues$Extra[,1])
+  colnames <- colnames(pVal)
+  if (settings$DoLNdiff) colnames <- replaceFirst(colnames, "LogNormal",            "  diffLN")
+  if (settings$DoLNequi) colnames <- replaceFirst(colnames, "LogNormal",            "  equiLN")
+  if (settings$DoSQdiff) colnames <- replaceFirst(colnames, "SquareRoot",           "  diffSQ")
+  if (settings$DoSQequi) colnames <- replaceFirst(colnames, "SquareRoot",           "  equiSQ")
+  if (settings$DoOPdiff) colnames <- replaceFirst(colnames, "OverdispersedPoisson", "  diffOP")
+  if (settings$DoOPequi) colnames <- replaceFirst(colnames, "OverdispersedPoisson", "  equiOP")
+  if (settings$DoNBdiff) colnames <- replaceFirst(colnames, "NegativeBinomial",     "  diffNB")
+  if (settings$DoNBequi) colnames <- replaceFirst(colnames, "NegativeBinomial",     "  equiNB")
+  colnames(pVal) <- colnames
+  effectOriginalScale = round(10000*exp(effect))/10000
+  cat(paste0("\n", settings$ProjectName,";  Nreps: ", blocks, ";  Effect: ", effectOriginalScale, "\n"))
+  print(round(100000*pVal)/100000, na.print="-")
+}
+replaceFirst <- function(colnames, pattern, replacement) {
+  match = match(pattern, colnames)
+  colnames[match[1]] <- replacement
+  return(colnames)
 }
 
