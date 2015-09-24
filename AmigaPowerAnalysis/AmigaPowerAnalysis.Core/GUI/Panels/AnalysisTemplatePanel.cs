@@ -24,12 +24,10 @@ namespace AmigaPowerAnalysis.GUI {
         public AnalysisTemplatePanel(Project project) {
             InitializeComponent();
             Name = "Analysis template";
-            Description = "Creates analysis data template plus analysis scripts";
+            Description = "Creates analysis data template and generates the R scripts to analyse such data using the selected analysis methods.";
             _project = project;
             _numberOfReplicates = 3;
             var analysisMethodType = Enum.GetValues(typeof(AnalysisMethodType));
-            this.comboBoxAnalysisMethodTypeDifferenceTests.DataSource = analysisMethodType;
-            this.comboBoxAnalysisMethodTypeDifferenceTests.SelectedIndex = 0;
         }
 
         public string Description { get; private set; }
@@ -71,33 +69,8 @@ namespace AmigaPowerAnalysis.GUI {
             dataGridViewComparisons.DataSource = comparisonsBindingSouce;
         }
 
-        private void updatePanelModelInfo() {
-            if (_currentComparisonAnalysisResult != null) {
-                var AnalysisRScriptGenerator = new AnalysisRScriptGenerator();
-                textBoxGeneratedAnalysisScript.Text = AnalysisRScriptGenerator.Generate(_currentComparisonAnalysisResult.InputPowerAnalysis, _currentAnalysisMethodType);
-            }
-        }
-
         private void dataGridViewComparisons_SelectionChanged(object sender, EventArgs e) {
             _currentComparisonAnalysisResult = _comparisonAnalysisResults.ElementAt(dataGridViewComparisons.CurrentRow.Index);
-            var selectedAnalysisMethodTypesDifferenceTests = _currentComparisonAnalysisResult.InputPowerAnalysis.SelectedAnalysisMethodTypesDifferenceTests.GetFlags().ToArray();
-            this.comboBoxAnalysisMethodTypeDifferenceTests.DataSource = selectedAnalysisMethodTypesDifferenceTests;
-            if (selectedAnalysisMethodTypesDifferenceTests.Count() > 0) {
-                this.comboBoxAnalysisMethodTypeDifferenceTests.SelectedIndex = 0;
-            }
-            var selectedAnalysisMethodTypesEquivalenceTests = _currentComparisonAnalysisResult.InputPowerAnalysis.SelectedAnalysisMethodTypesEquivalenceTests.GetFlags().ToArray();
-            this.comboBoxAnalysisMethodTypeEquivalenceTests.DataSource = selectedAnalysisMethodTypesEquivalenceTests;
-            if (selectedAnalysisMethodTypesEquivalenceTests.Count() > 0) {
-                this.comboBoxAnalysisMethodTypeEquivalenceTests.SelectedIndex = 0;
-            }
-            updatePanelModelInfo();
-        }
-
-        private void comboBoxAnalysisMethodType_SelectedIndexChanged(object sender, EventArgs e) {
-            AnalysisMethodType analysisType;
-            Enum.TryParse<AnalysisMethodType>(comboBoxAnalysisMethodTypeDifferenceTests.SelectedValue.ToString(), out analysisType);
-            _currentAnalysisMethodType = analysisType;
-            updatePanelModelInfo();
         }
 
         private void textBoxNumberOfReplicates_TextChanged(object sender, EventArgs e) {
