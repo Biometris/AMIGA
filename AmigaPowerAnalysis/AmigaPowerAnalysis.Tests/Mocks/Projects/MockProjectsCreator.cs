@@ -19,8 +19,9 @@ namespace AmigaPowerAnalysis.Tests.Mocks.Projects {
 
 
         public static Project MockSimpleOP() {
-            var project = new Project();
-
+            var project = new Project() {
+                ProjectName = "MockSimpleOP"
+            };
             project.AddEndpoint(new Endpoint("Endpoint (OP)", OPEndpoint));
 
             project.PowerCalculationSettings.PowerCalculationMethod = PowerCalculationMethod.Simulate;
@@ -34,7 +35,9 @@ namespace AmigaPowerAnalysis.Tests.Mocks.Projects {
         }
 
         public static Project MockSimpleOPLyles() {
-            var project = new Project();
+            var project = new Project() {
+                ProjectName = "MockSimpleOPLyles"
+            };
 
             project.AddEndpoint(new Endpoint("Endpoint (OP)", OPEndpoint));
 
@@ -49,7 +52,9 @@ namespace AmigaPowerAnalysis.Tests.Mocks.Projects {
         }
 
         public static Project MockSimple() {
-            var project = new Project();
+            var project = new Project() {
+                ProjectName = "MockSimple"
+            };
 
             project.AddEndpoint(new Endpoint("Endpoint (P)", PEndpoint));
             project.AddEndpoint(new Endpoint("Endpoint (OP)", OPEndpoint));
@@ -68,7 +73,9 @@ namespace AmigaPowerAnalysis.Tests.Mocks.Projects {
         }
 
         public static Project MockSimpleLyles() {
-            var project = new Project();
+            var project = new Project() {
+                ProjectName = "MockSimpleLyles"
+            };
 
             project.AddEndpoint(new Endpoint("Endpoint (P)", PEndpoint));
             project.AddEndpoint(new Endpoint("Endpoint (OP)", OPEndpoint));
@@ -86,7 +93,9 @@ namespace AmigaPowerAnalysis.Tests.Mocks.Projects {
         }
 
         public static Project MockProject1() {
-            var project = new Project();
+            var project = new Project() {
+                ProjectName = "MockProject1"
+            };
 
             project.AddEndpoint(new Endpoint("Endpoint (P)", PEndpoint));
             project.AddEndpoint(new Endpoint("Endpoint (OP)", OPEndpoint));
@@ -105,7 +114,9 @@ namespace AmigaPowerAnalysis.Tests.Mocks.Projects {
         }
 
         public static Project MockProject2() {
-            var project = new Project();
+            var project = new Project() {
+                ProjectName = "MockProject2"
+            };
 
             project.AddEndpoint(new Endpoint("Endpoint (P)", PEndpoint));
             project.AddEndpoint(new Endpoint("Endpoint (OP)", OPEndpoint));
@@ -127,7 +138,9 @@ namespace AmigaPowerAnalysis.Tests.Mocks.Projects {
         }
 
         public static Project MockProject3() {
-            var project = new Project();
+            var project = new Project() {
+                ProjectName = "MockProject3"
+            };
 
             project.AddEndpoint(new Endpoint("Endpoint (P)", PEndpoint));
             project.AddEndpoint(new Endpoint("Endpoint (OP)", OPEndpoint));

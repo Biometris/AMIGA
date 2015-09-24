@@ -23,6 +23,7 @@ namespace AmigaPowerAnalysis.Core {
         /// <param name="project"></param>
         /// <param name="filename"></param>
         public static void SaveProject(Project project, string filename) {
+            project.ProjectName = Path.GetFileNameWithoutExtension(filename);
             var serializer = new DataContractSerializer(typeof(Project), null, 0x7FFF, false, true, null);
             using (var fileWriter = new FileStream(filename, FileMode.Create)) {
                 serializer.WriteObject(fileWriter, project);
@@ -40,6 +41,7 @@ namespace AmigaPowerAnalysis.Core {
             using (var fileStream = new FileStream(filename, FileMode.Open)) {
                 var project = (Project)serializer.ReadObject(fileStream);
                 fileStream.Close();
+                project.ProjectName = Path.GetFileNameWithoutExtension(filename);
                 return project;
             }
         }

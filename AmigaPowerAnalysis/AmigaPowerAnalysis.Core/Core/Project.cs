@@ -69,6 +69,11 @@ namespace AmigaPowerAnalysis.Core {
         }
 
         /// <summary>
+        /// The name of this project.
+        /// </summary>
+        public string ProjectName { get; set; }
+
+        /// <summary>
         /// The endpoint types available for the endpoints of this project.
         /// </summary>
         public List<EndpointType> EndpointTypes {

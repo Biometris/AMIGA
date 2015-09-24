@@ -23,6 +23,12 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
         public int ComparisonId { get; set; }
 
         /// <summary>
+        /// The name of the project.
+        /// </summary>
+        [DataMember]
+        public string ProjectName { get; set; }
+
+        /// <summary>
         /// The total number of comparisons in the analysis.
         /// </summary>
         [DataMember]
@@ -219,6 +225,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             var stringBuilder = new StringBuilder();
 
             stringBuilder.AppendLine(format("ComparisonId", ComparisonId));
+            stringBuilder.AppendLine(format("ProjectName", ProjectName));
             stringBuilder.AppendLine(format("NumberOfComparisons", NumberOfComparisons));
             stringBuilder.AppendLine(format("Endpoint", Endpoint));
             stringBuilder.AppendLine(format("LocLower", LocLower));
