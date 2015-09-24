@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Wageningen University and Research centre (WUR)")]
 [assembly: AssemblyProduct("Amiga Power Analysis")]
-[assembly: AssemblyCopyright("Copyright © Wageningen University and Research centre 2014")]
+[assembly: AssemblyCopyright("Copyright © Wageningen University and Research centre 2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
