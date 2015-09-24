@@ -57,6 +57,8 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             stringBuilder.AppendLine("<th>Mean comparator</th>");
             stringBuilder.AppendLine("<th>CV</th>");
             stringBuilder.AppendLine("<th>Primary</th>");
+            stringBuilder.AppendLine("<th>Difference</th>");
+            stringBuilder.AppendLine("<th>Equivalence</th>");
             stringBuilder.AppendLine("</tr>");
             foreach (var comparison in comparisonOutputs) {
                 stringBuilder.AppendLine(string.Format("<td>{0}</td>", comparison.InputPowerAnalysis.Endpoint));
@@ -64,6 +66,8 @@ namespace AmigaPowerAnalysis.Core.Reporting {
                 stringBuilder.AppendLine(printNumericTableRecord(comparison.InputPowerAnalysis.OverallMean));
                 stringBuilder.AppendLine(printNumericTableRecord(comparison.InputPowerAnalysis.CvComparator));
                 stringBuilder.AppendLine(string.Format("<td>{0}</td>", comparison.IsPrimary ? "Yes" : "No"));
+                stringBuilder.AppendLine(string.Format("<td>{0}</td>", comparison.AnalysisMethodDifferenceTest.GetDisplayName()));
+                stringBuilder.AppendLine(string.Format("<td>{0}</td>", comparison.AnalysisMethodEquivalenceTest.GetDisplayName()));
                 stringBuilder.AppendLine("</tr>");
             }
             stringBuilder.AppendLine("</table>");
