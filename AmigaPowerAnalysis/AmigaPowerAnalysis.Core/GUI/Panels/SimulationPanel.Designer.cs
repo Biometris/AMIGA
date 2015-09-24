@@ -180,7 +180,7 @@
             this.labelUseWaldTest.Name = "labelUseWaldTest";
             this.labelUseWaldTest.Size = new System.Drawing.Size(206, 13);
             this.labelUseWaldTest.TabIndex = 12;
-            this.labelUseWaldTest.Text = "Prefered test method for equivalence tests";
+            this.labelUseWaldTest.Text = "Method for equivalence tests";
             // 
             // textBoxSeedForRandomNumbers
             // 
@@ -198,7 +198,7 @@
             this.labelSeedForRandomNumbers.Name = "labelSeedForRandomNumbers";
             this.labelSeedForRandomNumbers.Size = new System.Drawing.Size(365, 13);
             this.labelSeedForRandomNumbers.TabIndex = 10;
-            this.labelSeedForRandomNumbers.Text = "Seed for random number generator (non-negative value uses computer time)";
+            this.labelSeedForRandomNumbers.Text = "Seed for random number generator (non-positive value leads to use of computer time as seed)";
             // 
             // textBoxNumberSimulatedDatasets
             // 
