@@ -3,14 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using Biometris.ExtensionMethods;
 using AmigaPowerAnalysis.Core;
-using AmigaPowerAnalysis.Core.Charting;
 using AmigaPowerAnalysis.Core.DataAnalysis;
 using AmigaPowerAnalysis.Core.DataAnalysis.AnalysisModels;
-using AmigaPowerAnalysis.Core.Reporting;
-using OxyPlot.WindowsForms;
 using AmigaPowerAnalysis.Core.PowerAnalysis;
+using Biometris.ExtensionMethods;
 
 namespace AmigaPowerAnalysis.GUI {
     public partial class AnalysisTemplatePanel : UserControl, ISelectionForm {
@@ -118,8 +115,12 @@ namespace AmigaPowerAnalysis.GUI {
                 try {
                     var generator = new AnalysisDataTemplateGenerator();
                     var template = generator.CreateAnalysisDataTemplate(_project, _numberOfReplicates);
-                    generator.AnalysisDataTemplateToCsv(template, saveFileDialog.FileName);
-                    System.Diagnostics.Process.Start(saveFileDialog.FileName);
+                    var filename = saveFileDialog.FileName;
+                    AnalysisDataTemplateGenerator.AnalysisDataTemplateToCsv(template, filename);
+                    var contrastsFileName = Path.Combine(Path.GetDirectoryName(filename), Path.GetFileNameWithoutExtension(filename) + "Contrasts.csv");
+                    AnalysisDataTemplateGenerator.AnalysisDataTemplateContrastsToCsv(template, contrastsFileName);
+                    System.Diagnostics.Process.Start(filename);
+                    System.Diagnostics.Process.Start(contrastsFileName);
                 } catch (Exception ex) {
                     this.showError("Error while exporting data template", ex.Message);
                 }

@@ -232,7 +232,7 @@ namespace AmigaPowerAnalysis.GUI {
                 simulationPanel.RunButtonPressed += onRunButtonPressed;
                 _selectionForms.Add(new AnalysisResultsPerComparisonPanel(_project));
                 _selectionForms.Add(new AnalysisResultsPanel(_project));
-                //_selectionForms.Add(new AnalysisTemplatePanel(_project));
+                _selectionForms.Add(new AnalysisTemplatePanel(_project));
 
                 _selectionForms.ForEach(s => s.TabVisibilitiesChanged += onVisibilitySettingsChanged);
 

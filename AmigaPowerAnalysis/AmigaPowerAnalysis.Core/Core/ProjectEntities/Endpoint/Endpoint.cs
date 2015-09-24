@@ -314,6 +314,19 @@ namespace AmigaPowerAnalysis.Core {
         }
 
         /// <summary>
+        /// Returns the comparison type for the given factor level combination.
+        /// </summary>
+        /// <param name="factorLevelCombination"></param>
+        /// <returns></returns>
+        public ComparisonType GetComparisonType(FactorLevelCombination factorLevelCombination) {
+            var interactionFactor = _interactions.FirstOrDefault(flc => flc == factorLevelCombination);
+            if (interactionFactor != null) {
+                return interactionFactor.ComparisonType;
+            }
+            return factorLevelCombination.ComparisonType;
+        }
+
+        /// <summary>
         /// Adds the given factor to the endpoint's factor list.
         /// </summary>
         /// <param name="factor"></param>

@@ -12,7 +12,7 @@ namespace AmigaPowerAnalysis.Core.DataAnalysis {
         /// <param name="filename">The name of the file to which the settings are written.</param>
         public void SaveToFile(AnalysisDataTemplate analysisDataTemplate, string filename) {
             using (var file = new System.IO.StreamWriter(filename)) {
-                file.WriteLine(analysisDataTemplate.Print());
+                file.WriteLine(analysisDataTemplate.PrintDataTemplate());
                 file.Close();
             }
         }

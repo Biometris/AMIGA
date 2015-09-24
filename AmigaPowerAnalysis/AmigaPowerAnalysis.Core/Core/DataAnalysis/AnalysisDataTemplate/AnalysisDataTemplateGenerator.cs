@@ -9,9 +9,21 @@ namespace AmigaPowerAnalysis.Core.DataAnalysis {
         /// </summary>
         /// <param name="inputPowerAnalysis">The power analysis input.</param>
         /// <param name="filename">The name of the file to which the settings are written.</param>
-        public void AnalysisDataTemplateToCsv(AnalysisDataTemplate analysisDataTemplate, string filename) {
+        public static void AnalysisDataTemplateToCsv(AnalysisDataTemplate analysisDataTemplate, string filename) {
             using (var file = new System.IO.StreamWriter(filename)) {
-                file.WriteLine(analysisDataTemplate.Print());
+                file.WriteLine(analysisDataTemplate.PrintDataTemplate());
+                file.Close();
+            }
+        }
+
+        /// <summary>
+        /// Writes the analysis data template to a csv file.
+        /// </summary>
+        /// <param name="inputPowerAnalysis">The power analysis input.</param>
+        /// <param name="filename">The name of the file to which the settings are written.</param>
+        public static void AnalysisDataTemplateContrastsToCsv(AnalysisDataTemplate analysisDataTemplate, string filename) {
+            using (var file = new System.IO.StreamWriter(filename)) {
+                file.WriteLine(analysisDataTemplate.PrintTemplateContrasts());
                 file.Close();
             }
         }
@@ -56,10 +68,21 @@ namespace AmigaPowerAnalysis.Core.DataAnalysis {
                 .ThenBy(r => r.SubPlot)
                 .ToList();
 
+            var endpoints = project.Endpoints.ToList();
+            var contrastRecords = factorLevelCombinations
+                .Select((r, i) => new AnalysisDataTemplateContrastRecord () {
+                    Variety = r.Levels.First(f => f.Parent.IsVarietyFactor).Label,
+                    FactorLevels = r.Levels.Where(f => !f.Parent.IsVarietyFactor).Select(fl => fl.Label).ToList(),
+                    ContrastsPerEndpoint  = endpoints.Select(ep => ep.GetComparisonType(r)).ToList()
+                })
+                .OrderBy(r => r.Variety)
+                .ToList();
+
             var analysisDataTemplate = new AnalysisDataTemplate() {
-                Endpoints = project.Endpoints.Select(e => e.Name).ToList(),
+                Endpoints = endpoints.Select(e => e.Name).ToList(),
                 Factors = project.Factors.Where(f => !f.IsVarietyFactor).Select(f => f.Name).ToList(),
                 AnalysisDataTemplateRecords = records,
+                AnalysisDataTemplateContrastRecords = contrastRecords,
             };
 
             return analysisDataTemplate;

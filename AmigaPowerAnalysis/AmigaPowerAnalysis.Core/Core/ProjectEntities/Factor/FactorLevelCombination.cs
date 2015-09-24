@@ -41,11 +41,36 @@ namespace AmigaPowerAnalysis.Core {
         }
 
         /// <summary>
+        /// Returns the variety of this interaction factor level.
+        /// </summary>
+        public VarietyFactorLevel VarietyLevel {
+            get {
+                return Levels.FirstOrDefault(fl => fl.Parent.IsVarietyFactor) as VarietyFactorLevel;
+            }
+        }
+
+        /// <summary>
         /// Returns the aggregated frequency of this factor level combination.
         /// </summary>
         public double Frequency {
             get {
                 return Levels.Select(l => l.Frequency).Product();
+            }
+        }
+
+        /// <summary>
+        /// Returns the mean for the given variety level.
+        /// </summary>
+        /// <param name="variety"></param>
+        /// <returns></returns>
+        public virtual ComparisonType ComparisonType {
+            get {
+                if (VarietyLevel.VarietyLevelType == VarietyLevelType.Test) {
+                    return ComparisonType.IncludeTest;
+                } else if (VarietyLevel.VarietyLevelType == VarietyLevelType.Comparator) {
+                    return ComparisonType.IncludeComparator;
+                }
+                return ComparisonType.Exclude;
             }
         }
 

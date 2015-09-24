@@ -110,6 +110,7 @@
     <Compile Include="Core\DataAnalysis\AnalysisDataTemplate\AnalysisDataTemplateRecord.cs" />
     <Compile Include="Core\DataAnalysis\AnalysisDataTemplate\AnalysisDataTemplateGenerator.cs" />
     <Compile Include="Core\DataAnalysis\AnalysisDataTemplate\AnalysisDataTemplate.cs" />
+    <Compile Include="Core\DataAnalysis\AnalysisDataTemplate\AnalysisDataTemplateContrastRecord.cs" />
     <Compile Include="Core\DataAnalysis\AnalysisModels\AnalysisModelFactory.cs" />
     <Compile Include="Core\DataAnalysis\AnalysisModels\NormalModel.cs" />
     <Compile Include="Core\DataAnalysis\AnalysisModels\OverDispersedPoissonModel.cs" />
