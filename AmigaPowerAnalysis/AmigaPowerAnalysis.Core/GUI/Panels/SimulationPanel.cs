@@ -74,6 +74,18 @@ namespace AmigaPowerAnalysis.GUI {
             groupBoxAnalysisMethodsCountsEquivalence.Visible = _project.Endpoints.Any(ep => ep.Measurement == MeasurementType.Count);
             groupBoxAnalysisFractionsMethodsEquivalence.Visible = _project.Endpoints.Any(ep => ep.Measurement == MeasurementType.Fraction);
             groupBoxAnalysisMethodsNonNegativeEquivalence.Visible = _project.Endpoints.Any(ep => ep.Measurement == MeasurementType.Nonnegative);
+
+            updateVisibilities();
+        }
+
+        private void updateVisibilities() {
+            if (_project.PowerCalculationSettings.PowerCalculationMethod == PowerCalculationMethod.Approximate && _project.PowerCalculationSettings.UseWaldTest) {
+                checkBoxAnalysisMethodLNEquivalence.Enabled = false;
+                checkBoxAnalysisMethodSQEquivalence.Enabled = false;
+            } else {
+                checkBoxAnalysisMethodLNEquivalence.Enabled = true;
+                checkBoxAnalysisMethodSQEquivalence.Enabled = true;
+            }
         }
 
         public bool IsVisible() {
@@ -222,10 +234,12 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void radioButtonUseLogLikelihoodRatioTest_CheckedChanged(object sender, EventArgs e) {
             _project.PowerCalculationSettings.UseWaldTest = radioButtonUseWaldTest.Checked;
+            updateVisibilities();
         }
 
         private void radioButtonUseWaldTest_CheckedChanged(object sender, EventArgs e) {
             _project.PowerCalculationSettings.UseWaldTest = radioButtonUseWaldTest.Checked;
+            updateVisibilities();
         }
 
         private void radioButtonSimulate_CheckedChanged(object sender, EventArgs e) {
