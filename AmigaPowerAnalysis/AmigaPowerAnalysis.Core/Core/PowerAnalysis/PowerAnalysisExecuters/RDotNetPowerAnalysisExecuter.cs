@@ -113,7 +113,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                                     NumberOfReplications = blocks,
                                 };
                                 outputResults.Add(output);
-                                var msg = string.Format("Error in simulation of effect {0} and {1} replicates: {2}", blocks, effect.Effect, ex.Message);
+                                var msg = string.Format("Error in simulation of effect {0} and {1} replicates: {2}", effect.Effect, blocks, ex.Message);
                                 errorList.Add(msg);
                             }
                             counter++;
