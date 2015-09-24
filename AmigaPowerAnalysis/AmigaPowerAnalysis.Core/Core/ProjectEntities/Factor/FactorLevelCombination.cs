@@ -43,9 +43,9 @@ namespace AmigaPowerAnalysis.Core {
         /// <summary>
         /// Returns the variety of this interaction factor level.
         /// </summary>
-        public VarietyFactorLevel VarietyLevel {
+        public FactorLevel VarietyLevel {
             get {
-                return Levels.FirstOrDefault(fl => fl.Parent.IsVarietyFactor) as VarietyFactorLevel;
+                return Levels.FirstOrDefault(fl => fl.Parent.IsVarietyFactor);
             }
         }
 

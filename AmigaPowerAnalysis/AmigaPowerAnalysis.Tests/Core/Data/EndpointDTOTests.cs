@@ -1,40 +1,55 @@
-﻿using System.Linq;
-using AmigaPowerAnalysis.Core;
+﻿using AmigaPowerAnalysis.Core;
 using AmigaPowerAnalysis.Core.Data;
 using AmigaPowerAnalysis.Core.DataReaders;
-using Biometris.Persistence;
 using Biometris.ExtensionMethods;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Biometris.Statistics.Measurements;
+using Biometris.Persistence;
 using Biometris.Statistics.Distributions;
+using Biometris.Statistics.Measurements;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace AmigaPowerAnalysis.Tests.Core {
     [TestClass]
     public class EndpointDTOTests {
 
+        private static string _testPath = Path.Combine(Properties.Settings.Default.TestPath);
+
+        private static DTODataFileReader _fileReader = new DTODataFileReader();
+
+        private static List<EndpointType> _mockEndpointGroups = new List<EndpointType>() {
+            new EndpointType("Count", true, MeasurementType.Count, 0, 0.5, 1.5, 80, 50, DistributionType.OverdispersedPoisson, 0),
+            new EndpointType("Fraction", true, MeasurementType.Fraction, 0, 0.6, 1.6, 90, 40, DistributionType.BinomialLogitNormal, 0),
+            new EndpointType("Nonnegative", true, MeasurementType.Nonnegative, 0, double.NaN, 1.8, 100, 30, DistributionType.LogNormal, 0),
+            new EndpointType("Continuous", true, MeasurementType.Continuous, 100, 0.8, double.NaN, 110, 20, DistributionType.Normal, 0),
+        };
+
         [TestMethod]
-        public void EndpointGroupDTO_TestSingle() {
-            var filename = @"SingleGroup.csv";
-            var original = new EndpointType("Non-Target insects counts", true, MeasurementType.Count, 0, 0.5, 2, 10, 100, DistributionType.PowerLaw, 1.7);
-            var dtoOriginal = EndpointGroupDTO.ToDTO(original);
-            CsvWriter.WriteToCsvFile(filename, ",", new List<EndpointGroupDTO>() { dtoOriginal });
+        public void EndpointDTO_TestSingle() {
+            var filename = Path.Combine(_testPath, "SingleEndpoint.csv");
+            var original = new List<Endpoint>() {
+                new Endpoint("Endpoint", _mockEndpointGroups.First())
+            };
+            var originalEndpointsDTO = original.Select(r => EndpointDTO.ToDTO(r));
+            CsvWriter.WriteToCsvFile(filename, ",", originalEndpointsDTO);
             var outputFileReader = new DTODataFileReader();
-            var record = EndpointGroupDTO.FromDTO(outputFileReader.ReadGroups(filename).Single());
-            Assert.IsTrue(ObjectComparisonExtensions.PublicInstancePropertiesEqual(original, record));
+            var record = outputFileReader.ReadEndpoints(filename, _mockEndpointGroups);
+            Assert.AreEqual(original.Single(), record.Single());
         }
 
         [TestMethod]
         public void EndpointGroupDTO_TestMultiple() {
-            var filename = @"DefaultGroups.csv";
-            var defaultGroups = EndpointTypeProvider.NewProjectDefaultEndpointTypes();
-            CsvWriter.WriteToCsvFile(filename, ",", defaultGroups.Select(r => EndpointGroupDTO.ToDTO(r)));
+            var filename = Path.Combine(_testPath, "MultipleEndpoints.csv");
+            var defaultGroups = EndpointTypeProvider.DefaultEndpointTypes();
+            var originals = _mockEndpointGroups.Select(r => new Endpoint("EP_" + r.Name, r)).ToList();
+            var originalEndpointDTOs = originals.Select(r => EndpointDTO.ToDTO(r));
+            CsvWriter.WriteToCsvFile(filename, ",", originalEndpointDTOs);
             var outputFileReader = new DTODataFileReader();
-            var records = outputFileReader.ReadGroups(filename).Select(r => EndpointGroupDTO.FromDTO(r)).ToList();
-            var zips = defaultGroups.Zip(defaultGroups, (d, r) => new { d, r });
-            Assert.AreEqual(defaultGroups.Count, records.Count);
-            foreach (var zip in zips) {
-                Assert.IsTrue(ObjectComparisonExtensions.PublicInstancePropertiesEqual(zip.r, zip.d));
+            var records = outputFileReader.ReadEndpoints(filename, _mockEndpointGroups);
+            Assert.AreEqual(records.Count, originals.Count);
+            foreach (var original in originals) {
+                Assert.IsTrue(records.Contains(original));
             }
         }
     }

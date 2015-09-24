@@ -29,20 +29,12 @@ namespace AmigaPowerAnalysis.Core.Data {
         }
 
         public static FactorDTO ToDTO(IFactor factor) {
-            if (factor is VarietyFactor) {
-                return new FactorDTO() {
-                    IsVarietyFactor = true,
-                    IsInteractionWithVariety = factor.IsInteractionWithVariety,
-                    ExperimentUnitType = factor.ExperimentUnitType,
-                };
-            } else {
-                return new FactorDTO() {
-                    Name = factor.Name,
-                    IsInteractionWithVariety = factor.IsInteractionWithVariety,
-                    IsVarietyFactor = false,
-                    ExperimentUnitType = factor.ExperimentUnitType,
-                };
-            }
+            return new FactorDTO() {
+                Name = factor.Name,
+                IsVarietyFactor = factor.IsVarietyFactor,
+                IsInteractionWithVariety = factor.IsInteractionWithVariety,
+                ExperimentUnitType = factor.ExperimentUnitType,
+            };
         }
     }
 }

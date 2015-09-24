@@ -115,11 +115,7 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void addFactorLevelButton_Click(object sender, EventArgs e) {
             if (_currentFactor != null) {
-                if (_currentFactor is VarietyFactor) {
-                    _currentFactor.AddFactorLevel(new VarietyFactorLevel(_currentFactor.GetUniqueFactorLabel()));
-                } else {
-                    _currentFactor.AddFactorLevel(new FactorLevel(_currentFactor.GetUniqueFactorLabel()));
-                }
+                _currentFactor.AddFactorLevel(new FactorLevel(_currentFactor.GetUniqueFactorLabel()));
                 _project.UpdateEndpointFactorLevels();
                 updateDataGridFactorLevels();
             }

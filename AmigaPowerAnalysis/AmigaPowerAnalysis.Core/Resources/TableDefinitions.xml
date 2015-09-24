@@ -205,5 +205,35 @@
     </ColumnDefinitions>
   </TableDefinition>
 
+  <TableDefinition>
+    <TableID>FactorLevels</TableID>
+    <Aliases>
+      <string>FactorLevel</string>
+      <string>FactorLevels</string>
+    </Aliases>
+    <ColumnDefinitions>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>FactorId</ColumnID>
+        <Aliases>
+          <string>FactorId</string>
+          <string>FactorName</string>
+          <string>Factor</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>Label</ColumnID>
+        <Aliases>
+          <string>Label</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>Frequency</ColumnID>
+        <Aliases>
+          <string>Frequency</string>
+        </Aliases>
+      </ColumnDefinition>
+    </ColumnDefinitions>
+  </TableDefinition>
+  
 </ArrayOfTableDefinition>
 

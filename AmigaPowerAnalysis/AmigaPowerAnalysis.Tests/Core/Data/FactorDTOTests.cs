@@ -1,49 +1,67 @@
-﻿using System.Linq;
-using AmigaPowerAnalysis.Core;
+﻿using AmigaPowerAnalysis.Core;
 using AmigaPowerAnalysis.Core.Data;
 using AmigaPowerAnalysis.Core.DataReaders;
-using Biometris.Persistence;
 using Biometris.ExtensionMethods;
+using Biometris.Persistence;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Biometris.Statistics.Measurements;
-using Biometris.Statistics.Distributions;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace AmigaPowerAnalysis.Tests.Core {
     [TestClass]
     public class FactorDTOTests {
 
+        private static string _testPath = Path.Combine(Properties.Settings.Default.TestPath);
+
+        private static DTODataFileReader _fileReader = new DTODataFileReader();
+
         [TestMethod]
         public void FactorDTO_TestSingle() {
-            var filename = @"SingleFactor.csv";
-            var original = new Factor() {
-                Name = "Single Factor",
-                IsInteractionWithVariety = true,
-                ExperimentUnitType = ExperimentUnitType.SubPlot
+            var filename = Path.Combine(_testPath, "SingleFactor.csv"); 
+            var originals = new List<IFactor>() { 
+                new Factor() {
+                    Name = "Single Factor",
+                    IsInteractionWithVariety = true,
+                    ExperimentUnitType = ExperimentUnitType.SubPlot
+                }
             };
-            var dtoOriginal = FactorDTO.ToDTO(original);
-            CsvWriter.WriteToCsvFile(filename, ",", new List<FactorDTO>() { dtoOriginal });
-            var outputFileReader = new DTODataFileReader();
-            var dtoRecord = outputFileReader.ReadFactors(filename).Single();
-            var record = FactorDTO.FromDTO(dtoRecord);
-            Assert.IsTrue(ObjectComparisonExtensions.PublicInstancePropertiesEqual(dtoOriginal, dtoRecord));
-            Assert.IsTrue(ObjectComparisonExtensions.PublicInstancePropertiesEqual(original, record));
+            var dtoOriginals = originals.Select(r => FactorDTO.ToDTO(r)).ToList();
+            CsvWriter.WriteToCsvFile(filename, ",", dtoOriginals);
+            var records = _fileReader.ReadFactors(filename);
+            Assert.IsTrue(ObjectComparisonExtensions.PublicInstancePropertiesEqual(originals.Single(), records.Single()));
+            Assert.AreEqual(originals.Single(), records.Single());
         }
 
         [TestMethod]
-        public void FactorDTO_TestSingleVarietyFactor() {
-            var filename = @"SingleVarietyFactor.csv";
-            var original = new VarietyFactor();
-            var dtoOriginal = FactorDTO.ToDTO(original);
-            CsvWriter.WriteToCsvFile(filename, ",", new List<FactorDTO>() { dtoOriginal });
-            var outputFileReader = new DTODataFileReader();
-            var record = FactorDTO.FromDTO(outputFileReader.ReadFactors(filename).Single());
-            Assert.IsTrue(ObjectComparisonExtensions.PublicInstancePropertiesEqual(original, record));
+        public void FactorDTO_TestSingleVariety() {
+            var filename = Path.Combine(_testPath, "SingleVarietyFactor.csv");
+            var originals = new List<IFactor>() { 
+                new VarietyFactor()
+            };
+            var dtoOriginals = originals.Select(r => FactorDTO.ToDTO(r)).ToList();
+            CsvWriter.WriteToCsvFile(filename, ",", dtoOriginals);
+            var records = _fileReader.ReadFactors(filename);
+            Assert.IsTrue(ObjectComparisonExtensions.PublicInstancePropertiesEqual(originals.Single(), records.Single()));
+            Assert.AreEqual(originals.Single(), records.Single());
         }
 
         [TestMethod]
         public void FactorDTO_TestMultiple() {
-            var filename = @"MultipleFactors.csv";
+            var filename = Path.Combine(_testPath, "MultipleFactors.csv");
+            var originals = new List<IFactor>() { 
+                new VarietyFactor(),
+                new Factor("F", 0, false),
+                new Factor("G", 0, true),
+                new Factor("H", 0, false),
+            };
+            var dtoOriginals = originals.Select(r => FactorDTO.ToDTO(r)).ToList();
+            CsvWriter.WriteToCsvFile(filename, ",", dtoOriginals);
+            var records = _fileReader.ReadFactors(filename);
+            Assert.AreEqual(records.Count, originals.Count);
+            foreach (var original in originals) {
+                Assert.IsTrue(records.Contains(original));
+            }
         }
     }
 }

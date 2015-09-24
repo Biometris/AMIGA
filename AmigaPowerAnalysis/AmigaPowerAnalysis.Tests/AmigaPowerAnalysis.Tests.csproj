@@ -62,6 +62,7 @@
     <Compile Include="Core\Data\EndpointDTOTests.cs" />
     <Compile Include="Core\Data\EndpointGroupDTOTests.cs" />
     <Compile Include="Core\Data\DTODataFileReaderTests.cs" />
+    <Compile Include="Core\Data\FactorLevelDTOTests.cs" />
     <Compile Include="Core\Data\FactorDTOTests.cs" />
     <Compile Include="Core\Persistence\SerializationTests.cs" />
     <Compile Include="Core\PowerAnalysis\AnalysisDataTemplateGeneratorTests.cs" />

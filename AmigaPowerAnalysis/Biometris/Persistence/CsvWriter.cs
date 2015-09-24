@@ -28,11 +28,11 @@ namespace Biometris.Persistence {
 
         private static string toCsvFields(string separator, PropertyInfo[] properties, object o) {
             var line = new StringBuilder();
-            foreach (var f in properties) {
-                if (line.Length > 0) {
+            for (int i = 0; i < properties.Length; ++i) {
+                if (i > 0) {
                     line.Append(separator);
                 }
-                var x = f.GetValue(o);
+                var x = properties[i].GetValue(o);
                 if (x != null) {
                     line.Append(x.ToString());
                 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
+using System.Xml;
 
 namespace AmigaPowerAnalysis.Core {
     public static class ProjectManager {
@@ -24,8 +25,9 @@ namespace AmigaPowerAnalysis.Core {
         /// <param name="filename"></param>
         public static void SaveProject(Project project, string filename) {
             project.ProjectName = Path.GetFileNameWithoutExtension(filename);
+            var settings = new XmlWriterSettings() { Indent = true };
             var serializer = new DataContractSerializer(typeof(Project), null, 0x7FFF, false, true, null);
-            using (var fileWriter = new FileStream(filename, FileMode.Create)) {
+            using (var fileWriter = XmlWriter.Create(filename, settings)) {
                 serializer.WriteObject(fileWriter, project);
                 fileWriter.Close();
             }
@@ -55,7 +57,7 @@ namespace AmigaPowerAnalysis.Core {
             var project = new Project();
             project.EndpointTypes = EndpointTypeProvider.NewProjectDefaultEndpointTypes();
             foreach (var dto in endpoints) {
-                project.AddEndpoint(EndpointDTO.ToEndpoint(dto, project.EndpointTypes));
+                project.AddEndpoint(EndpointDTO.FromDTO(dto, project.EndpointTypes));
             }
             project.UpdateEndpointFactors();
             return project;

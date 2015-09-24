@@ -115,11 +115,31 @@ namespace AmigaPowerAnalysis.Core {
         }
 
         /// <summary>
+        /// Override
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object obj) {
+            var item = obj as Factor;
+            if (item == null) {
+                return false;
+            }
+            return this.GetHashCode() == item.GetHashCode();
+        }
+
+        /// <summary>
         /// Returns the hash code of this object.
         /// </summary>
         /// <returns>The hash code of this object.</returns>
         public override int GetHashCode() {
-            return Name.GetHashCode();
+            int hash = 31;
+            hash = hash * 23 + ((_name != null) ? _name.GetHashCode() : 0);
+            hash = hash * 23 + _isInteractionWithVariety.GetHashCode();
+            hash = hash * 23 + _experimentUnitType.GetHashCode();
+            if (FactorLevels != null) {
+                hash = hash * 31 + FactorLevels.Count();
+            }
+            return hash;
         }
     }
 }

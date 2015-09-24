@@ -98,7 +98,7 @@ namespace Biometris.ExtensionMethods {
                     return -1;
                 }
             } else if (conversionType == typeof(bool)) {
-                if (rawValue == "true" || rawValue == "1") {
+                if (rawValue.ToLower() == "true" || rawValue == "1") {
                     return true;
                 } else {
                     return false;

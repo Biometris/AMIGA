@@ -3,8 +3,15 @@ using System.Runtime.Serialization;
 
 namespace AmigaPowerAnalysis.Core {
 
+    public enum VarietyLevelType {
+        Test,
+        Comparator,
+        AdditionalVariety,
+        NoVarietyLevel,
+    }
+
     [DataContract]
-    [KnownType(typeof(VarietyFactorLevel))]
+    //[KnownType(typeof(VarietyFactorLevel))]
     public class FactorLevel : IEquatable<FactorLevel> {
 
         #region DataMembers
@@ -53,6 +60,24 @@ namespace AmigaPowerAnalysis.Core {
         public int Frequency  {
             get { return _frequency; }
             set { _frequency = value; }
+        }
+
+        /// <summary>
+        /// The variety type of this variety level. I.e., Test, Comparator, or additional variety.
+        /// </summary>
+        public VarietyLevelType VarietyLevelType {
+            get {
+                if (Parent.IsVarietyFactor) {
+                    if (Label == "Test") {
+                        return VarietyLevelType.Test;
+                    } else if (Label == "Comparator") {
+                        return VarietyLevelType.Comparator;
+                    }
+                    return VarietyLevelType.AdditionalVariety;
+                } else {
+                    return Core.VarietyLevelType.NoVarietyLevel;
+                }
+            }
         }
 
         public bool Equals(FactorLevel other) {

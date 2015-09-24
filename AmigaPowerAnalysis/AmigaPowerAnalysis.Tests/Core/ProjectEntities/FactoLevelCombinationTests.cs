@@ -62,7 +62,7 @@ namespace AmigaPowerAnalysis.Tests.Core {
         public void FactorLevelCombination_Test4() {
 
             var variety = VarietyFactor.CreateVarietyFactor();
-            var additionalVariery = new VarietyFactorLevel("Add");
+            var additionalVariery = new FactorLevel("Add");
             variety.AddFactorLevel(additionalVariery);
 
             var factor = new Factor("Fac");

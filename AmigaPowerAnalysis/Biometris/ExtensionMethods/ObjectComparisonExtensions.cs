@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Reflection;
 
 namespace Biometris.ExtensionMethods {
@@ -20,7 +22,10 @@ namespace Biometris.ExtensionMethods {
             if (self != null && to != null) {
                 var type = typeof(T);
                 var ignoreList = new List<string>(ignore);
-                foreach (var pi in type.GetProperties(BindingFlags.Public | BindingFlags.Instance)) {
+                var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                    .Where(p => !typeof(IEnumerable).IsAssignableFrom(p.PropertyType))
+                    .ToList();
+                foreach (var pi in properties) {
                     if (!ignoreList.Contains(pi.Name)) {
                         var selfValue = type.GetProperty(pi.Name).GetValue(self, null);
                         var toValue = type.GetProperty(pi.Name).GetValue(to, null);

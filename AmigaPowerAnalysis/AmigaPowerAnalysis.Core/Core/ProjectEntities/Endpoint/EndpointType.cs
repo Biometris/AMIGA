@@ -29,10 +29,6 @@ namespace AmigaPowerAnalysis.Core {
             PowerLawPower = powerLawPower;
         }
 
-        public EndpointType Clone() {
-            return (EndpointType)this.MemberwiseClone();
-        }
-
         /// <summary>
         /// Name of endpoint; e.g. Predator, Detrivore.
         /// </summary>
@@ -87,5 +83,39 @@ namespace AmigaPowerAnalysis.Core {
         [DataMember]
         public double LocUpper { get; set; }
 
+        public EndpointType Clone() {
+            return (EndpointType)this.MemberwiseClone();
+        }
+
+        /// <summary>
+        /// Override
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object obj) {
+            var item = obj as EndpointType;
+            if (item == null) {
+                return false;
+            }
+            return this.GetHashCode() == item.GetHashCode();
+        }
+
+        /// <summary>
+        /// Override
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode() {
+            int hash = 19;
+            hash = hash * 23 + Name.GetHashCode();
+            hash = hash * 23 + Measurement.GetHashCode();
+            hash = hash * 23 + BinomialTotal.GetHashCode();
+            hash = hash * 23 + LocLower.GetHashCode();
+            hash = hash * 23 + LocUpper.GetHashCode();
+            hash = hash * 23 + MuComparator.GetHashCode();
+            hash = hash * 23 + CvComparator.GetHashCode();
+            hash = hash * 23 + DistributionType.GetHashCode();
+            hash = hash * 23 + PowerLawPower.GetHashCode();
+            return hash;
+        }
     }
 }

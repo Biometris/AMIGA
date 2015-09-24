@@ -70,16 +70,10 @@ namespace AmigaPowerAnalysis.Core {
         [DataMember]
         private List<ModifierFactorLevelCombination> _modifiers;
 
-        [DataMember]
-        private Comparison _comparison;
-
         #endregion
 
         public Endpoint() {
             _factors = new List<EndpointFactorSettings>();
-            _comparison = new Comparison() {
-                Endpoint = this,
-            };
             _modifiers = new List<ModifierFactorLevelCombination>();
             _interactions = new List<InteractionFactorLevelCombination>();
         }
@@ -253,14 +247,6 @@ namespace AmigaPowerAnalysis.Core {
         public bool UseModifier {
             get { return _useModifier; }
             set { _useModifier = value; }
-        }
-
-        /// <summary>
-        /// The comparisons of this endpoint.
-        /// </summary>
-        public Comparison Comparison {
-            get { return _comparison; }
-            set { _comparison = value; }
         }
 
         /// <summary>
@@ -545,6 +531,67 @@ namespace AmigaPowerAnalysis.Core {
                 default:
                     break;
             }
+        }
+
+        /// <summary>
+        /// Override
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object obj) {
+            var item = obj as Endpoint;
+            if (item == null) {
+                return false;
+            }
+            return this.GetHashCode() == item.GetHashCode();
+        }
+
+        /// <summary>
+        /// Override
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode() {
+            int hash = 19;
+
+            hash = hash * 23 + _endpointType.GetHashCode();
+            hash = hash * 23 + ((_endpointType != null) ? _endpointType.GetHashCode() : 0);
+            hash = hash * 23 + ((_name != null) ? _name.GetHashCode() : 0);
+            hash = hash * 23 + _repeatedMeasures.GetHashCode();
+            hash = hash * 23 + _excessZeroes.GetHashCode();
+            hash = hash * 23 + _excessZeroesPercentage.GetHashCode();
+            hash = hash * 23 + _muComparator.GetHashCode();
+            hash = hash * 23 + _cvComparator.GetHashCode();
+            hash = hash * 23 + _cvForBlocks.GetHashCode();
+            hash = hash * 23 + _distributionType.GetHashCode();
+
+            hash = hash * 23 + _binomialTotal.GetHashCode();
+            hash = hash * 23 + _powerLawPower.GetHashCode();
+            hash = hash * 23 + _measurement.GetHashCode();
+            hash = hash * 23 + _locLower.GetHashCode();
+            hash = hash * 23 + _locUpper.GetHashCode();
+            hash = hash * 23 + _useModifier.GetHashCode();
+
+            hash = hash * 23 + ((_varietyFactor != null) ? _endpointType.GetHashCode() : 0);
+
+            if (_factors != null) {
+                foreach (var factor in _factors) {
+                    hash = hash * 31 + factor.GetHashCode();
+                }
+            }
+
+            if (_interactions != null) {
+                foreach (var interaction in _interactions) {
+                    hash = hash * 31 + interaction.GetHashCode();
+                }
+            }
+
+            if (_modifiers != null) {
+                foreach (var modifier in _modifiers) {
+                    hash = hash * 31 + modifier.GetHashCode();
+                }
+            }
+
+            return hash;
         }
     }
 }

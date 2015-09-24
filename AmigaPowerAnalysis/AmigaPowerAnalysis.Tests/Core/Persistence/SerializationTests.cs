@@ -26,7 +26,7 @@ namespace AmigaPowerAnalysis.Tests.Core {
         [TestMethod]
         public void SerializationTests_VarietyFactor() {
             var factor = new VarietyFactor();
-            factor.AddFactorLevel(new VarietyFactorLevel(factor.GetUniqueFactorLabel()));
+            factor.AddFactorLevel(new FactorLevel(factor.GetUniqueFactorLabel()));
             var xml = DataContractSerializeObject<VarietyFactor>(factor);
         }
 

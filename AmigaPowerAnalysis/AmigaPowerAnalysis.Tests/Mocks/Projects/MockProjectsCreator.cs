@@ -17,7 +17,6 @@ namespace AmigaPowerAnalysis.Tests.Mocks.Projects {
         private static EndpointType PLNEndpoint = new EndpointType("Endpoint (PLN)", true, MeasurementType.Count, 0, 0.5, 2, 100, 40, DistributionType.PoissonLogNormal, 1.7);
         private static EndpointType PLEndpoint = new EndpointType("Endpoint (PL)", true, MeasurementType.Count, 0, 0.5, 2, 100, 40, DistributionType.PowerLaw, 1.7);
 
-
         public static Project MockSimpleOP() {
             var project = new Project() {
                 ProjectName = "MockSimpleOP"

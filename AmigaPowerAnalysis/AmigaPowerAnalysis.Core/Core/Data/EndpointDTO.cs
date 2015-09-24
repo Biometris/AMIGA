@@ -25,7 +25,7 @@ namespace AmigaPowerAnalysis.Core.Data {
 
         #endregion
 
-        public static Endpoint ToEndpoint(EndpointDTO dto, IEnumerable<EndpointType> groups) {
+        public static Endpoint FromDTO(EndpointDTO dto, IEnumerable<EndpointType> groups) {
             var group = groups.FirstOrDefault(r => r.Name == dto.Group);
             if (group == null) {
                 throw new Exception("Group not found");
@@ -43,6 +43,7 @@ namespace AmigaPowerAnalysis.Core.Data {
                 PowerLawPower = dto.PowerLawPower,
                 RepeatedMeasures = dto.RepeatedMeasurements,
                 ExcessZeroes = dto.ExcessZeroes,
+                ExcessZeroesPercentage = dto.ExcessZeroesPercentage,
             };
         }
 

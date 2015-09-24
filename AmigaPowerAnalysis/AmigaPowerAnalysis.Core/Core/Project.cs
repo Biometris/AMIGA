@@ -336,7 +336,7 @@ namespace AmigaPowerAnalysis.Core {
         /// The comparisons of this project.
         /// </summary>
         public IEnumerable<Comparison> GetComparisons() {
-            return Endpoints.Select(ep => ep.Comparison);
+            return Endpoints.Select(ep => new Comparison() { Endpoint = ep });
         }
 
         /// <summary>

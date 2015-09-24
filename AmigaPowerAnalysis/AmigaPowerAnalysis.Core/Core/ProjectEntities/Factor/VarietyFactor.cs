@@ -14,12 +14,12 @@ namespace AmigaPowerAnalysis.Core {
         private ExperimentUnitType _experimentUnitType;
 
         [DataMember]
-        private List<VarietyFactorLevel> _factorLevels;
+        private List<FactorLevel> _factorLevels;
 
         #endregion
 
         public VarietyFactor() {
-            _factorLevels = new List<VarietyFactorLevel>();
+            _factorLevels = new List<FactorLevel>();
         }
 
         public override string Name {
@@ -56,12 +56,8 @@ namespace AmigaPowerAnalysis.Core {
         /// </summary>
         /// <param name="factorLevel"></param>
         public override void AddFactorLevel(FactorLevel factorLevel) {
-            if (factorLevel is VarietyFactorLevel) {
-                factorLevel.Parent = this as IFactor;
-                _factorLevels.Add(factorLevel as VarietyFactorLevel);
-            } else {
-                throw new Exception("Cannot add non-variety factor level.");
-            }
+            factorLevel.Parent = this as IFactor;
+            _factorLevels.Add(factorLevel);
         }
 
         /// <summary>
@@ -69,7 +65,7 @@ namespace AmigaPowerAnalysis.Core {
         /// </summary>
         /// <param name="factorLevel"></param>
         public override void RemoveFactorLevel(FactorLevel factorLevel) {
-            _factorLevels.RemoveAll(fl => fl == (factorLevel as VarietyFactorLevel));
+            _factorLevels.RemoveAll(fl => fl == factorLevel);
         }
 
         /// <summary>
@@ -92,10 +88,36 @@ namespace AmigaPowerAnalysis.Core {
         /// <returns></returns>
         public static VarietyFactor CreateVarietyFactor() {
             var factor = new VarietyFactor();
-            factor.AddFactorLevel(new VarietyFactorLevel("Test"));
-            factor.AddFactorLevel(new VarietyFactorLevel("Comparator"));
+            factor.AddFactorLevel(new FactorLevel("Test"));
+            factor.AddFactorLevel(new FactorLevel("Comparator"));
             //factor.AddFactorLevel(new VarietyFactorLevel("REF"));
             return factor;
+        }
+
+        /// <summary>
+        /// Override
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object obj) {
+            var item = obj as VarietyFactor;
+            if (item == null) {
+                return false;
+            }
+            return this.GetHashCode() == item.GetHashCode();
+        }
+
+        /// <summary>
+        /// Returns the hash code of this object.
+        /// </summary>
+        /// <returns>The hash code of this object.</returns>
+        public override int GetHashCode() {
+            int hash = 33;
+            hash = hash * 23 + _experimentUnitType.GetHashCode();
+            if (FactorLevels != null) {
+                hash = hash * 31 + FactorLevels.Count();
+            }
+            return hash;
         }
     }
 }
