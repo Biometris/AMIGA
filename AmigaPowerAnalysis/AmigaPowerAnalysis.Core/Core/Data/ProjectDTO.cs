@@ -40,16 +40,16 @@ namespace AmigaPowerAnalysis.Core.Data {
             var endpoints = dto.Endpoints.Select(r => EndpointDTO.FromDTO(r, endpointGroups)).ToList();
             var factors = dto.Factors.Select(r => FactorDTO.FromDTO(r)).ToList();
             var factorLevels = dto.FactorLevels.Select(r => FactorLevelDTO.FromDTO(r, factors)).ToList();
-            var defaultInteractions = dto.DefaultInteractions.Select(r => DefaultInteractionDTO.FromDTO(r, factors)).ToList();
             var endpointFactorSettings = dto.EndpointFactorSettings.Select(r => EndpointFactorSettingDTO.FromDTO(r, factors, endpoints));
-            var endpointInteractions = dto.EndpointInteractions.Select(r => EndpointInteractionDTO.FromDTO(r, factors, endpoints)).ToList();
-            var endpointModifiers = dto.EndpointModifiers.Select(r => EndpointModifierDTO.FromDTO(r, factors, endpoints)).ToList();
             var project = new Project() {
                 EndpointTypes = endpointGroups,
                 Endpoints = endpoints,
                 Factors = factors,
-                DefaultInteractionFactorLevelCombinations = defaultInteractions,
             };
+            project.UpdateEndpointFactors();
+            project.DefaultInteractionFactorLevelCombinations = dto.DefaultInteractions.Select(r => DefaultInteractionDTO.FromDTO(r, factors)).ToList();
+            var endpointInteractions = dto.EndpointInteractions.Select(r => EndpointInteractionDTO.FromDTO(r, factors, endpoints)).ToList();
+            var endpointModifiers = dto.EndpointModifiers.Select(r => EndpointModifierDTO.FromDTO(r, factors, endpoints)).ToList();
             return project;
         }
 
