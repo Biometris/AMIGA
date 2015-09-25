@@ -19,9 +19,11 @@ namespace AmigaPowerAnalysis.Core.Data {
         public double CV { get; set; }
         public int BinomialTotal { get; set; }
         public double PowerLawPower { get; set; }
-        public bool RepeatedMeasurements { get; set; }
         public bool ExcessZeroes { get; set; }
         public int ExcessZeroesPercentage { get; set; }
+        public bool RepeatedMeasurements { get; set; }
+        public bool UseModifier { get; set; }
+        public double CvForBlocks { get; set; }
 
         #endregion
 
@@ -41,9 +43,11 @@ namespace AmigaPowerAnalysis.Core.Data {
                 CvComparator = dto.CV,
                 BinomialTotal = dto.BinomialTotal,
                 PowerLawPower = dto.PowerLawPower,
-                RepeatedMeasures = dto.RepeatedMeasurements,
                 ExcessZeroes = dto.ExcessZeroes,
                 ExcessZeroesPercentage = dto.ExcessZeroesPercentage,
+                RepeatedMeasures = dto.RepeatedMeasurements,
+                UseModifier = dto.UseModifier,
+                CvForBlocks = dto.CvForBlocks,
             };
         }
 
@@ -59,9 +63,11 @@ namespace AmigaPowerAnalysis.Core.Data {
                 CV = endpoint.CvComparator,
                 BinomialTotal = endpoint.BinomialTotal,
                 PowerLawPower = endpoint.PowerLawPower,
-                RepeatedMeasurements = endpoint.RepeatedMeasures,
                 ExcessZeroes = endpoint.ExcessZeroes,
                 ExcessZeroesPercentage = endpoint.ExcessZeroesPercentage,
+                RepeatedMeasurements = endpoint.RepeatedMeasures,
+                UseModifier = endpoint.UseModifier,
+                CvForBlocks = endpoint.CvForBlocks,
             };
         }
     }

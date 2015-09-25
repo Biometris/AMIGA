@@ -20,33 +20,6 @@ namespace AmigaPowerAnalysis.Core {
         private string _name;
 
         [DataMember]
-        private bool _repeatedMeasures;
-
-        [DataMember]
-        private bool _excessZeroes;
-
-        [DataMember]
-        private int _excessZeroesPercentage;
-
-        [DataMember]
-        private double _muComparator;
-
-        [DataMember]
-        private double _cvComparator;
-
-        [DataMember]
-        private double _cvForBlocks;
-
-        [DataMember]
-        private DistributionType _distributionType;
-
-        [DataMember]
-        private int _binomialTotal;
-
-        [DataMember]
-        private double _powerLawPower;
-
-        [DataMember]
         private MeasurementType _measurement;
 
         [DataMember]
@@ -56,7 +29,34 @@ namespace AmigaPowerAnalysis.Core {
         private double _locUpper;
 
         [DataMember]
+        private DistributionType _distributionType;
+
+        [DataMember]
+        private double _muComparator;
+
+        [DataMember]
+        private double _cvComparator;
+
+        [DataMember]
+        private int _binomialTotal;
+
+        [DataMember]
+        private double _powerLawPower;
+
+        [DataMember]
         private bool _useModifier;
+
+        [DataMember]
+        private bool _excessZeroes;
+
+        [DataMember]
+        private int _excessZeroesPercentage;
+
+        [DataMember]
+        private bool _repeatedMeasures;
+
+        [DataMember]
+        private double _cvForBlocks;
 
         [DataMember]
         private VarietyFactor _varietyFactor;
@@ -116,96 +116,6 @@ namespace AmigaPowerAnalysis.Core {
         }
 
         /// <summary>
-        /// 
-        /// </summary>
-        public bool RepeatedMeasures {
-            get { return _repeatedMeasures; }
-            set {_repeatedMeasures = value; }
-        }
-
-        /// <summary>
-        /// Gets/sets whether excess zeroes are expected.
-        /// </summary>
-        public bool ExcessZeroes {
-            get { return _excessZeroes; }
-            set { _excessZeroes = value; }
-        }
-
-        /// <summary>
-        /// The percentage of excess zeroes.
-        /// </summary>
-        public int ExcessZeroesPercentage {
-            get { return _excessZeroesPercentage; }
-            set { _excessZeroesPercentage = value; }
-        }
-
-        /// <summary>
-        /// The Mu of the comparator.
-        /// </summary>
-        public double MuComparator {
-            get { return _muComparator; }
-            set {
-                _muComparator = value;
-                validateMeasurementParameters();
-                validateDistribution();
-                fixModifiers(true);
-            }
-        }
-
-        /// <summary>
-        /// The CV of the comparator.
-        /// </summary>
-        public double CvComparator {
-            get { return _cvComparator; }
-            set {
-                _cvComparator = value;
-                validateDistribution();
-            }
-        }
-
-        /// <summary>
-        /// Gets and sets the CV for the blocks for this endpoint.
-        /// </summary>
-        public double CvForBlocks {
-            get { return _cvForBlocks; }
-            set { _cvForBlocks = value; }
-        }
-
-        /// <summary>
-        /// The distribution type of this endpoint.
-        /// </summary>
-        public DistributionType DistributionType {
-            get {
-                var availableDistributionTypes = DistributionFactory.AvailableDistributionTypes(_measurement);
-                if (_distributionType == 0 || !availableDistributionTypes.Has(_distributionType)) {
-                    _distributionType = (DistributionType)availableDistributionTypes.GetFlags().First();
-                }
-                return _distributionType;
-            }
-            set {
-                if (DistributionFactory.AvailableDistributionTypes(_measurement).Has(value)) {
-                    _distributionType = value;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Binomial total for fractions.
-        /// </summary>
-        public int BinomialTotal {
-            get { return _binomialTotal; }
-            set { _binomialTotal = value; }
-        }
-
-        /// <summary>
-        /// The power parameter for the power law distribution.
-        /// </summary>
-        public double PowerLawPower {
-            get { return _powerLawPower; }
-            set { _powerLawPower = value; }
-        }
-
-        /// <summary>
         /// Type of measurement (count, fraction, nonnegative).
         /// </summary>
         public MeasurementType Measurement {
@@ -242,11 +152,101 @@ namespace AmigaPowerAnalysis.Core {
         }
 
         /// <summary>
+        /// The distribution type of this endpoint.
+        /// </summary>
+        public DistributionType DistributionType {
+            get {
+                var availableDistributionTypes = DistributionFactory.AvailableDistributionTypes(_measurement);
+                if (_distributionType == 0 || !availableDistributionTypes.Has(_distributionType)) {
+                    _distributionType = (DistributionType)availableDistributionTypes.GetFlags().First();
+                }
+                return _distributionType;
+            }
+            set {
+                if (DistributionFactory.AvailableDistributionTypes(_measurement).Has(value)) {
+                    _distributionType = value;
+                }
+            }
+        }
+
+        /// <summary>
+        /// The Mu of the comparator.
+        /// </summary>
+        public double MuComparator {
+            get { return _muComparator; }
+            set {
+                _muComparator = value;
+                validateMeasurementParameters();
+                validateDistribution();
+                fixModifiers(true);
+            }
+        }
+
+        /// <summary>
+        /// The CV of the comparator.
+        /// </summary>
+        public double CvComparator {
+            get { return _cvComparator; }
+            set {
+                _cvComparator = value;
+                validateDistribution();
+            }
+        }
+
+        /// <summary>
+        /// Binomial total for fractions.
+        /// </summary>
+        public int BinomialTotal {
+            get { return _binomialTotal; }
+            set { _binomialTotal = value; }
+        }
+
+        /// <summary>
+        /// The power parameter for the power law distribution.
+        /// </summary>
+        public double PowerLawPower {
+            get { return _powerLawPower; }
+            set { _powerLawPower = value; }
+        }
+
+        /// <summary>
         /// Specifies whether to use a modifier for this endpoint or not.
         /// </summary>
         public bool UseModifier {
             get { return _useModifier; }
             set { _useModifier = value; }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool RepeatedMeasures {
+            get { return _repeatedMeasures; }
+            set { _repeatedMeasures = value; }
+        }
+
+        /// <summary>
+        /// Gets/sets whether excess zeroes are expected.
+        /// </summary>
+        public bool ExcessZeroes {
+            get { return _excessZeroes; }
+            set { _excessZeroes = value; }
+        }
+
+        /// <summary>
+        /// The percentage of excess zeroes.
+        /// </summary>
+        public int ExcessZeroesPercentage {
+            get { return _excessZeroesPercentage; }
+            set { _excessZeroesPercentage = value; }
+        }
+
+        /// <summary>
+        /// Gets and sets the CV for the blocks for this endpoint.
+        /// </summary>
+        public double CvForBlocks {
+            get { return _cvForBlocks; }
+            set { _cvForBlocks = value; }
         }
 
         /// <summary>

@@ -51,6 +51,7 @@
       <ColumnDefinition IsRequired="true">
         <ColumnID>PowerLawPower</ColumnID>
         <Aliases>
+          <string>PowerLawPower</string>
           <string>PPowerLaw</string>
         </Aliases>
       </ColumnDefinition>
@@ -123,6 +124,22 @@
         </Aliases>
       </ColumnDefinition>
       <ColumnDefinition IsRequired="true">
+        <ColumnID>Mean</ColumnID>
+        <Aliases>
+          <string>Mean</string>
+          <string>MeanComparator</string>
+          <string>Mu</string>
+          <string>MuComparator</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>CV</ColumnID>
+        <Aliases>
+          <string>CV</string>
+          <string>CvComparator</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition IsRequired="true">
         <ColumnID>BinomialTotal</ColumnID>
         <Aliases>
           <string>BinomialTotal</string>
@@ -132,24 +149,6 @@
         <ColumnID>PowerLawPower</ColumnID>
         <Aliases>
           <string>PPowerLaw</string>
-        </Aliases>
-      </ColumnDefinition>
-      <ColumnDefinition IsRequired="true">
-        <ColumnID>Mean</ColumnID>
-        <Aliases>
-          <string>Mean</string>
-        </Aliases>
-      </ColumnDefinition>
-      <ColumnDefinition IsRequired="true">
-        <ColumnID>CV</ColumnID>
-        <Aliases>
-          <string>CV</string>
-        </Aliases>
-      </ColumnDefinition>
-      <ColumnDefinition IsRequired="false">
-        <ColumnID>RepeatedMeasurements</ColumnID>
-        <Aliases>
-          <string>RepeatedMeasurements</string>
         </Aliases>
       </ColumnDefinition>
       <ColumnDefinition IsRequired="true">
@@ -164,6 +163,25 @@
           <string>ExcessZeroesPercentage</string>
         </Aliases>
       </ColumnDefinition>
+      <ColumnDefinition IsRequired="false">
+        <ColumnID>RepeatedMeasurements</ColumnID>
+        <Aliases>
+          <string>RepeatedMeasurements</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>UseModifier</ColumnID>
+        <Aliases>
+          <string>UseModifier</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition IsRequired="true">
+          <ColumnID>CvForBlocks</ColumnID>
+          <Aliases>
+            <string>CvForBlocks</string>
+            <string>CvBlocks</string>
+          </Aliases>
+        </ColumnDefinition>
     </ColumnDefinitions>
   </TableDefinition>
 
