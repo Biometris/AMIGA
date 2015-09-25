@@ -15,33 +15,33 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
         /// <param name="powerCalculationSettings"></param>
         /// <param name="idComparison"></param>
         /// <returns></returns>
-        public InputPowerAnalysis CreateInputPowerAnalysis(Comparison comparison, DesignSettings designSettings, PowerCalculationSettings powerCalculationSettings, int idComparison, int totalNumberOfComparisons, bool useBlockModifier, string projectName) {
-            var comparisonLevels = CreateComparisonDummyFactorLevels(comparison);
-            var modifierLevels = CreateModifierDummyFactorLevels(comparison);
-            var selectedAnalysisMethodsDifferenceTests = powerCalculationSettings.SelectedAnalysisMethodTypesDifferenceTests & AnalysisModelFactory.AnalysisMethodsForMeasurementType(comparison.Endpoint.Measurement);
-            var selectedAnalysisMethodsEquivalenceTests = powerCalculationSettings.SelectedAnalysisMethodTypesEquivalenceTests & AnalysisModelFactory.AnalysisMethodsForMeasurementType(comparison.Endpoint.Measurement);
+        public InputPowerAnalysis CreateInputPowerAnalysis(Endpoint endpoint, DesignSettings designSettings, PowerCalculationSettings powerCalculationSettings, int idComparison, int totalNumberOfComparisons, bool useBlockModifier, string projectName) {
+            var comparisonLevels = CreateComparisonDummyFactorLevels(endpoint);
+            var modifierLevels = CreateModifierDummyFactorLevels(endpoint);
+            var selectedAnalysisMethodsDifferenceTests = powerCalculationSettings.SelectedAnalysisMethodTypesDifferenceTests & AnalysisModelFactory.AnalysisMethodsForMeasurementType(endpoint.Measurement);
+            var selectedAnalysisMethodsEquivalenceTests = powerCalculationSettings.SelectedAnalysisMethodTypesEquivalenceTests & AnalysisModelFactory.AnalysisMethodsForMeasurementType(endpoint.Measurement);
             var inputPowerAnalysis = new InputPowerAnalysis() {
                 ComparisonId = idComparison,
                 ProjectName = projectName,
                 NumberOfComparisons = totalNumberOfComparisons,
-                Factors = comparison.Endpoint.InteractionFactors.Concat(comparison.Endpoint.NonInteractionFactors).Select(f => f.Name).ToList(),
+                Factors = endpoint.InteractionFactors.Concat(endpoint.NonInteractionFactors).Select(f => f.Name).ToList(),
                 DummyComparisonLevels = comparisonLevels.Select(m => m.Label).ToList(),
                 DummyModifierLevels = modifierLevels.Select(m => m.Label).ToList(),
-                Endpoint = comparison.Endpoint.Name,
-                MeasurementType = comparison.Endpoint.Measurement,
-                LocLower = comparison.Endpoint.LocLower,
-                LocUpper = comparison.Endpoint.LocUpper,
-                DistributionType = comparison.Endpoint.DistributionType,
-                PowerLawPower = comparison.Endpoint.PowerLawPower,
-                ExcessZeroesPercentage = comparison.Endpoint.ExcessZeroes ? comparison.Endpoint.ExcessZeroesPercentage : 0,
-                OverallMean = comparison.Endpoint.MuComparator,
+                Endpoint = endpoint.Name,
+                MeasurementType = endpoint.Measurement,
+                LocLower = endpoint.LocLower,
+                LocUpper = endpoint.LocUpper,
+                DistributionType = endpoint.DistributionType,
+                PowerLawPower = endpoint.PowerLawPower,
+                ExcessZeroesPercentage = endpoint.ExcessZeroes ? endpoint.ExcessZeroesPercentage : 0,
+                OverallMean = endpoint.MuComparator,
                 SelectedAnalysisMethodTypesDifferenceTests = selectedAnalysisMethodsDifferenceTests,
                 SelectedAnalysisMethodTypesEquivalenceTests = selectedAnalysisMethodsEquivalenceTests,
-                CvComparator = comparison.Endpoint.CvComparator,
-                CvForBlocks = useBlockModifier ? comparison.Endpoint.CvForBlocks : 0D,
-                NumberOfInteractions = comparison.Endpoint.InteractionFactors.Count(),
-                NumberOfNonInteractions = comparison.Endpoint.NonInteractionFactors.Count(),
-                NumberOfModifiers = (comparison.Endpoint.UseModifier ? comparison.Endpoint.NonInteractionFactors.Count() : 0),
+                CvComparator = endpoint.CvComparator,
+                CvForBlocks = useBlockModifier ? endpoint.CvForBlocks : 0D,
+                NumberOfInteractions = endpoint.InteractionFactors.Count(),
+                NumberOfNonInteractions = endpoint.NonInteractionFactors.Count(),
+                NumberOfModifiers = (endpoint.UseModifier ? endpoint.NonInteractionFactors.Count() : 0),
                 SignificanceLevel = powerCalculationSettings.SignificanceLevel,
                 NumberOfRatios = powerCalculationSettings.NumberOfRatios,
                 NumberOfReplications = powerCalculationSettings.NumberOfReplications,
@@ -55,7 +55,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                 NumberOfSimulatedDataSets = powerCalculationSettings.NumberOfSimulatedDataSets,
             };
 
-            inputPowerAnalysis.InputRecords = getComparisonInputPowerAnalysisRecords(comparisonLevels, modifierLevels, comparison.Endpoint.UseModifier, comparison.Endpoint.Measurement);
+            inputPowerAnalysis.InputRecords = getComparisonInputPowerAnalysisRecords(comparisonLevels, modifierLevels, endpoint.UseModifier, endpoint.Measurement);
 
             return inputPowerAnalysis;
         }
@@ -100,15 +100,15 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             return records;
         }
 
-        public List<ComparisonDummyFactorLevel> CreateComparisonDummyFactorLevels(Comparison comparison) {
+        public List<ComparisonDummyFactorLevel> CreateComparisonDummyFactorLevels(Endpoint endpoint) {
             var comparisonLevelTest = new ComparisonDummyFactorLevel() {
                 Label = "Test",
                 ComparisonType = ComparisonType.IncludeTest,
-                FactorLevelCombinations = comparison.Endpoint.Interactions
+                FactorLevelCombinations = endpoint.Interactions
                     .Where(i => i.ComparisonType == ComparisonType.IncludeTest)
                     .ToList(),
             };
-            var nonComparisonLevels = comparison.Endpoint.Interactions
+            var nonComparisonLevels = endpoint.Interactions
                 .Where(vi => vi.ComparisonType == ComparisonType.Exclude)
                 .Select((vi, index) => new ComparisonDummyFactorLevel() {
                     Label = string.Format("Dummy{0}", index),
@@ -118,7 +118,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             var comparisonLevelComparator = new ComparisonDummyFactorLevel() {
                 Label = "REF",
                 ComparisonType = ComparisonType.IncludeComparator,
-                FactorLevelCombinations = comparison.Endpoint.Interactions
+                FactorLevelCombinations = endpoint.Interactions
                     .Where(i => i.ComparisonType == ComparisonType.IncludeComparator)
                     .ToList(),
             };
@@ -129,9 +129,9 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             return comparisonLevels;
         }
 
-        public List<ModifierDummyFactorLevel> CreateModifierDummyFactorLevels(Comparison comparison) {
+        public List<ModifierDummyFactorLevel> CreateModifierDummyFactorLevels(Endpoint endpoint) {
             var levels = new List<ModifierDummyFactorLevel>();
-            if (comparison.Endpoint.Modifiers.Count == 0) {
+            if (endpoint.Modifiers.Count == 0) {
                 levels.Add(new ModifierDummyFactorLevel() {
                     Label = "Mod",
                     FactorLevelCombination = new ModifierFactorLevelCombination(),
@@ -139,7 +139,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             }
             else {
                 levels.AddRange(
-                    comparison.Endpoint.Modifiers.Select((m, index) => new ModifierDummyFactorLevel() {
+                    endpoint.Modifiers.Select((m, index) => new ModifierDummyFactorLevel() {
                         Label = string.Format("Mod{0}", index),
                         FactorLevelCombination = m
                     }));

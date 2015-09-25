@@ -26,11 +26,11 @@ namespace AmigaPowerAnalysis.Tests.IntegrationTests {
                 directory.GetFiles().ToList().ForEach(f => f.Delete());
                 directory.GetDirectories().ToList().ForEach(f => f.Delete(true));
             }
-            var comparisons = project.GetComparisons().ToList();
+            var endpoints = project.Endpoints;
             var resultPowerAnalysis = new ResultPowerAnalysis();
-            for (int i = 0; i < comparisons.Count(); ++i) {
+            for (int i = 0; i < endpoints.Count(); ++i) {
                 var inputGenerator = new PowerAnalysisInputGenerator();
-                var inputPowerAnalysis = inputGenerator.CreateInputPowerAnalysis(comparisons[i], project.DesignSettings, project.PowerCalculationSettings, i, comparisons.Count, project.UseBlockModifier, project.ProjectName);
+                var inputPowerAnalysis = inputGenerator.CreateInputPowerAnalysis(endpoints[i], project.DesignSettings, project.PowerCalculationSettings, i, endpoints.Count, project.UseBlockModifier, project.ProjectName);
                 var progressReport = new ProgressReport();
                 var rDotNetExecuter = new RDotNetPowerAnalysisExecuter(filesPath);
                 var comparisonOutput = rDotNetExecuter.Run(inputPowerAnalysis, progressReport.NewProgressState(100));

@@ -16,9 +16,9 @@ namespace AmigaPowerAnalysis.Tests {
             project.AddEndpoint(new Endpoint("Beatle", project.EndpointTypes.First()));
             project.UpdateEndpointFactors();
 
-            var comparison = project.GetComparisons().First();
+            var endpoint = project.Endpoints.First();
             var inputGenerator = new PowerAnalysisInputGenerator();
-            var inputPowerAnalysis = inputGenerator.CreateInputPowerAnalysis(comparison, project.DesignSettings, project.PowerCalculationSettings, 1, 1, project.UseBlockModifier, string.Empty);
+            var inputPowerAnalysis = inputGenerator.CreateInputPowerAnalysis(endpoint, project.DesignSettings, project.PowerCalculationSettings, 1, 1, project.UseBlockModifier, string.Empty);
             var records = inputPowerAnalysis.InputRecords;
 
             // 2 variety levels
@@ -33,9 +33,9 @@ namespace AmigaPowerAnalysis.Tests {
             project.AddFactor(new Factor("Spraying", 3));
             project.UpdateEndpointFactors();
 
-            var comparison = project.GetComparisons().First();
+            var endpoint = project.Endpoints.First();
             var inputGenerator = new PowerAnalysisInputGenerator();
-            var inputPowerAnalysis = inputGenerator.CreateInputPowerAnalysis(comparison, project.DesignSettings, project.PowerCalculationSettings, 1, 1, project.UseBlockModifier, string.Empty);
+            var inputPowerAnalysis = inputGenerator.CreateInputPowerAnalysis(endpoint, project.DesignSettings, project.PowerCalculationSettings, 1, 1, project.UseBlockModifier, string.Empty);
             var records = inputPowerAnalysis.InputRecords;
 
             // 2 variety levels * 3 levels spraying = 6 records
@@ -51,9 +51,9 @@ namespace AmigaPowerAnalysis.Tests {
             project.AddFactor(new Factor("Raking", 2));
             project.UpdateEndpointFactors();
 
-            var comparison = project.GetComparisons().First();
+            var endpoint = project.Endpoints.First();
             var inputGenerator = new PowerAnalysisInputGenerator();
-            var inputPowerAnalysis = inputGenerator.CreateInputPowerAnalysis(comparison, project.DesignSettings, project.PowerCalculationSettings, 1, 1, project.UseBlockModifier, string.Empty);
+            var inputPowerAnalysis = inputGenerator.CreateInputPowerAnalysis(endpoint, project.DesignSettings, project.PowerCalculationSettings, 1, 1, project.UseBlockModifier, string.Empty);
             var records = inputPowerAnalysis.InputRecords;
 
             // 2 variety levels * 3 levels spraying * 2 levels raking = 12 records
@@ -75,9 +75,8 @@ namespace AmigaPowerAnalysis.Tests {
             project.AddFactor(factorRaking);
             project.AddEndpoint(endpoint);
 
-            var comparison = project.GetComparisons().First();
             var inputGenerator = new PowerAnalysisInputGenerator();
-            var inputPowerAnalysis = inputGenerator.CreateInputPowerAnalysis(comparison, project.DesignSettings, project.PowerCalculationSettings, 1, 1, project.UseBlockModifier, project.ProjectName);
+            var inputPowerAnalysis = inputGenerator.CreateInputPowerAnalysis(endpoint, project.DesignSettings, project.PowerCalculationSettings, 1, 1, project.UseBlockModifier, project.ProjectName);
             var records = inputPowerAnalysis.InputRecords;
 
             // 2 variety levels * 3 levels spraying * 2 levels raking = 12 records
@@ -107,9 +106,8 @@ namespace AmigaPowerAnalysis.Tests {
             project.AddFactor(factorModifier2);
             project.AddEndpoint(endpoint);
 
-            var comparison = project.GetComparisons().First();
             var inputGenerator = new PowerAnalysisInputGenerator();
-            var inputPowerAnalysis = inputGenerator.CreateInputPowerAnalysis(comparison, project.DesignSettings, project.PowerCalculationSettings, 1, 1, project.UseBlockModifier, string.Empty);
+            var inputPowerAnalysis = inputGenerator.CreateInputPowerAnalysis(endpoint, project.DesignSettings, project.PowerCalculationSettings, 1, 1, project.UseBlockModifier, string.Empty);
             var records = inputPowerAnalysis.InputRecords;
 
             // 2 variety levels * 3 * 3 interaction factor levels * 2 * 2 modifier levels = 48 records

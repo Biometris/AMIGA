@@ -19,9 +19,9 @@ namespace AmigaPowerAnalysis.Tests.Core {
         public void RDotNetPowerAnalysisExecuter_TestRunAnalysis1() {
             var project = MockProjectsCreator.MockProject1();
 
-            var comparison = project.GetComparisons().First();
+            var endpoint = project.Endpoints.First();
             var inputGenerator = new PowerAnalysisInputGenerator();
-            var inputPowerAnalysis = inputGenerator.CreateInputPowerAnalysis(comparison, project.DesignSettings, project.PowerCalculationSettings, 1, 1, project.UseBlockModifier, project.ProjectName);
+            var inputPowerAnalysis = inputGenerator.CreateInputPowerAnalysis(endpoint, project.DesignSettings, project.PowerCalculationSettings, 1, 1, project.UseBlockModifier, project.ProjectName);
 
             var testPath = Properties.Settings.Default.TestPath;
 

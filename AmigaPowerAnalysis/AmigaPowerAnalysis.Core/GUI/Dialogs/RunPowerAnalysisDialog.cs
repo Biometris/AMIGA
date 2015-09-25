@@ -41,11 +41,10 @@ namespace AmigaPowerAnalysis.GUI {
 
         private async Task runSimulation(CompositeProgressState progressReport) {
             _project.ClearProjectOutput();
-            var comparisons = _project.GetComparisons().ToList();
+            var comparisons = _project.Endpoints.ToList();
             var projectPath = Path.GetDirectoryName(_projectFilename);
             var projectName = Path.GetFileNameWithoutExtension(_projectFilename);
             var filesPath = Path.Combine(projectPath, projectName);
-
             if (!Directory.Exists(filesPath)) {
                 Directory.CreateDirectory(filesPath);
             } else {
