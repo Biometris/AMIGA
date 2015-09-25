@@ -17,6 +17,7 @@ namespace AmigaPowerAnalysis.Tests.Core {
         private static DTODataFileReader _fileReader = new DTODataFileReader();
 
         [TestMethod]
+        [TestCategory("UnitTests")]
         public void FactorDTO_TestSingle() {
             var filename = Path.Combine(_testPath, "SingleFactor.csv"); 
             var originals = new List<IFactor>() { 
@@ -34,6 +35,7 @@ namespace AmigaPowerAnalysis.Tests.Core {
         }
 
         [TestMethod]
+        [TestCategory("UnitTests")]
         public void FactorDTO_TestSingleVariety() {
             var filename = Path.Combine(_testPath, "SingleVarietyFactor.csv");
             var originals = new List<IFactor>() { 
@@ -47,6 +49,7 @@ namespace AmigaPowerAnalysis.Tests.Core {
         }
 
         [TestMethod]
+        [TestCategory("UnitTests")]
         public void FactorDTO_TestMultiple() {
             var filename = Path.Combine(_testPath, "MultipleFactors.csv");
             var originals = new List<IFactor>() { 

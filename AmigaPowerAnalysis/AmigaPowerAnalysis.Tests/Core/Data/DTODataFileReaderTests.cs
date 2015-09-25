@@ -10,6 +10,7 @@ namespace AmigaPowerAnalysis.Tests.Core {
     public class DTODataFileReaderTests {
 
         [TestMethod]
+        [TestCategory("UnitTests")]
         public void EndpointDataFileReader_Tests1() {
             var testFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Resources\EndpointDataFileReader_Tests1.csv");
             var outputFileReader = new DTODataFileReader();

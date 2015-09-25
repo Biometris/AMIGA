@@ -26,6 +26,7 @@ namespace AmigaPowerAnalysis.Tests.Core {
         };
 
         [TestMethod]
+        [TestCategory("UnitTests")]
         public void EndpointDTO_TestSingle() {
             var filename = Path.Combine(_testPath, "SingleEndpoint.csv");
             var original = new List<Endpoint>() {
@@ -39,6 +40,7 @@ namespace AmigaPowerAnalysis.Tests.Core {
         }
 
         [TestMethod]
+        [TestCategory("UnitTests")]
         public void EndpointGroupDTO_TestMultiple() {
             var filename = Path.Combine(_testPath, "MultipleEndpoints.csv");
             var defaultGroups = EndpointTypeProvider.DefaultEndpointTypes();

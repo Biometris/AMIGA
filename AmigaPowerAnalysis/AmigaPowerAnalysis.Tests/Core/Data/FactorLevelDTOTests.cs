@@ -24,6 +24,7 @@ namespace AmigaPowerAnalysis.Tests.Core {
         };
 
         [TestMethod]
+        [TestCategory("UnitTests")]
         public void FactorDTO_TestSingle() {
             var filename = Path.Combine(_testPath, "SingleFactorLevel.csv");
             var originals = _factors.SelectMany(r => r.FactorLevels).Take(1).ToList();
@@ -35,13 +36,13 @@ namespace AmigaPowerAnalysis.Tests.Core {
         }
 
         [TestMethod]
+        [TestCategory("UnitTests")]
         public void FactorDTO_TestMultiple() {
             var filename = Path.Combine(_testPath, "MultipleFactorLevels.csv");
             var originals = _factors.SelectMany(r => r.FactorLevels).ToList();
             var dtoOriginals = originals.Select(r => FactorLevelDTO.ToDTO(r)).ToList();
             CsvWriter.WriteToCsvFile(filename, ",", dtoOriginals);
             var records = _fileReader.ReadFactorLevels(filename, _factors);
-            Assert.AreEqual(originals.Single(), records.Single());
             Assert.AreEqual(records.Count, originals.Count);
             foreach (var original in originals) {
                 Assert.IsTrue(records.Contains(original));

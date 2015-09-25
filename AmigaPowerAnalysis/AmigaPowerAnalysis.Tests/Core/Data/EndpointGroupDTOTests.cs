@@ -19,6 +19,7 @@ namespace AmigaPowerAnalysis.Tests.Core {
         private static DTODataFileReader _fileReader = new DTODataFileReader();
 
         [TestMethod]
+        [TestCategory("UnitTests")]
         public void EndpointGroupDTO_TestCreateAndLoadDefault() {
             var filename = Path.Combine(_testPath, "DefaultEndpointGroups.csv");
             var originalGroups = EndpointTypeProvider.DefaultEndpointTypes();

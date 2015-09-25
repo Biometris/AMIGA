@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 
 namespace AmigaPowerAnalysis.Tests.Core {
+
     [TestClass]
     public class DefaultInteractionsDTOTests {
 
@@ -26,6 +27,7 @@ namespace AmigaPowerAnalysis.Tests.Core {
         };
 
         [TestMethod]
+        [TestCategory("UnitTests")]
         public void DefaultInteractionsDTOTests_TestSingle() {
             var filename = Path.Combine(_testPath, "SingleDefaultInteraction.csv");
             var interactionFactors = _factors.Where(f => f.IsInteractionWithVariety).ToList();
@@ -38,6 +40,7 @@ namespace AmigaPowerAnalysis.Tests.Core {
         }
 
         [TestMethod]
+        [TestCategory("UnitTests")]
         public void DefaultInteractionsDTOTests_TestMultiple() {
             var filename = Path.Combine(_testPath, "MultipleDefaultInteractions.csv");
             var interactionFactors = _factors.Where(f => f.IsInteractionWithVariety).ToList();
