@@ -114,12 +114,17 @@ namespace Biometris.DataFileReader {
                     var rawValue = records[i].Replace("\"", "");
                     if (columnMapping.IsDynamic) {
                         var dynamicPropertyType = columnMapping.TargetProperty;
-                        if (columnMapping.TargetType == typeof(List<DynamicPropertyValue>)) {
-                            DynamicPropertyValue value;
-                            value = new DynamicPropertyValue() {
-                                Name = columnMapping.SourceColumnHeaderName,
-                                RawValue = rawValue,
-                            };
+                        Type elementType = null;
+                        foreach (Type typeInterface in columnMapping.TargetType.GetInterfaces()) {
+                            if (typeInterface.IsGenericType && typeInterface.GetGenericTypeDefinition().Equals(typeof(IEnumerable<>))) {
+                                elementType = typeInterface.GetGenericArguments()[0];
+                                break;
+                            }
+                        }
+                        if (elementType != null) {
+                            var value = (IDynamicPropertyValue)Activator.CreateInstance(elementType);
+                            value.Name = columnMapping.SourceColumnHeaderName;
+                            value.RawValue = rawValue;
                             var property = columnMapping.TargetProperty;
                             var list = (IList)property.GetValue(t, null);
                             list.Add(value);

@@ -12,7 +12,7 @@ namespace AmigaPowerAnalysis.Core.Data {
     public sealed class EndpointInteractionDTO {
 
         public EndpointInteractionDTO() {
-            Labels = new List<DynamicPropertyValue>();
+            Labels = new List<LevelDTO>();
         }
 
         #region Properties
@@ -20,7 +20,7 @@ namespace AmigaPowerAnalysis.Core.Data {
         public string Endpoint { get; set; }
 
         [XmlArrayItem("Levels")]
-        public List<DynamicPropertyValue> Labels { get; set; }
+        public List<LevelDTO> Labels { get; set; }
 
         public bool IsComparisonLevel { get; set; }
 
@@ -50,7 +50,7 @@ namespace AmigaPowerAnalysis.Core.Data {
                 Endpoint = factorLevel.Endpoint.Name,
                 IsComparisonLevel = factorLevel.IsComparisonLevel,
                 Mean = factorLevel.Mean,
-                Labels = factorLevel.Levels.Select(l => new DynamicPropertyValue() {
+                Labels = factorLevel.Levels.Select(l => new LevelDTO() {
                     Name = l.Parent.Name,
                     RawValue = l.Label,
                 }).ToList()

@@ -11,13 +11,13 @@ namespace AmigaPowerAnalysis.Core.Data {
     public sealed class DefaultInteractionDTO {
 
         public DefaultInteractionDTO() {
-            Labels = new List<DynamicPropertyValue>();
+            Labels = new List<LevelDTO>();
         }
 
         #region Properties
 
         [XmlArrayItem("Levels")]
-        public List<DynamicPropertyValue> Labels { get; set; }
+        public List<LevelDTO> Labels { get; set; }
 
         public bool IsComparisonLevel { get; set; }
 
@@ -36,7 +36,7 @@ namespace AmigaPowerAnalysis.Core.Data {
         public static DefaultInteractionDTO ToDTO(InteractionFactorLevelCombination factorLevel) {
             return new DefaultInteractionDTO() {
                 IsComparisonLevel = factorLevel.IsComparisonLevel,
-                Labels = factorLevel.Levels.Select(l => new DynamicPropertyValue() {
+                Labels = factorLevel.Levels.Select(l => new LevelDTO() {
                     Name = l.Parent.Name,
                     RawValue = l.Label,
                 }).ToList()

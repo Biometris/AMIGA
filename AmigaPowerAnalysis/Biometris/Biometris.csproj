@@ -74,7 +74,7 @@
     <Compile Include="DataFileReading\IDataFileReader.cs" />
     <Compile Include="DataFileReading\CsvFileReader.cs" />
     <Compile Include="DataFileReading\DynamicProperty.cs" />
-    <Compile Include="DataFileReading\DynamicPropertyValue.cs" />
+    <Compile Include="DataFileReading\IDynamicPropertyValue.cs" />
     <Compile Include="DataFileReading\DataDefinition\TableDefinition.cs" />
     <Compile Include="DataFileReading\DataDefinition\TableDefinitionCollection.cs" />
     <Compile Include="Logger\FileLogger.cs" />

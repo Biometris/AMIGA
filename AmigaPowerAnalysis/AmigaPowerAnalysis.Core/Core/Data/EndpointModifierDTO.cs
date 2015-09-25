@@ -12,7 +12,7 @@ namespace AmigaPowerAnalysis.Core.Data {
     public sealed class EndpointModifierDTO {
 
         public EndpointModifierDTO() {
-            Labels = new List<DynamicPropertyValue>();
+            Labels = new List<LevelDTO>();
         }
 
         #region Properties
@@ -20,7 +20,7 @@ namespace AmigaPowerAnalysis.Core.Data {
         public string Endpoint { get; set; }
 
         [XmlArrayItem("Levels")]
-        public List<DynamicPropertyValue> Labels { get; set; }
+        public List<LevelDTO> Labels { get; set; }
 
         public double ModifierFactor { get; set; }
 
@@ -44,7 +44,7 @@ namespace AmigaPowerAnalysis.Core.Data {
         public static EndpointModifierDTO ToDTO(ModifierFactorLevelCombination factorLevel, Endpoint endpoint) {
             return new EndpointModifierDTO() {
                 Endpoint = endpoint.Name,
-                Labels = factorLevel.Levels.Select(l => new DynamicPropertyValue() {
+                Labels = factorLevel.Levels.Select(l => new LevelDTO() {
                     Name = l.Parent.Name,
                     RawValue = l.Label,
                 }).ToList(),
