@@ -24,7 +24,7 @@ namespace Biometris.Statistics.Measurements {
                 case MeasurementType.Fraction:
                     return 1 / (1 + ((1 - mean) / (modifier * mean)));
                 case MeasurementType.Continuous:
-                    return mean + modifier;
+                    return mean * modifier;
                 default:
                     return double.NaN;
             }
