@@ -43,7 +43,7 @@ namespace AmigaPowerAnalysis.Core.Data {
 
         public double CVForMainPlots { get; set; }
 
-        //public DesignSettingsDTO DesignSettings { get; set; }
+        public DesignSettingsDTO DesignSettings { get; set; }
 
         //public PowerCalculationSettingsDTO PowerCalculationSettings { get; set; }
 
@@ -54,11 +54,11 @@ namespace AmigaPowerAnalysis.Core.Data {
             var endpoints = dto.Endpoints.Select(r => EndpointDTO.FromDTO(r, endpointGroups)).ToList();
             var factors = dto.Factors.Select(r => FactorDTO.FromDTO(r)).ToList();
             var factorLevels = dto.FactorLevels.Select(r => FactorLevelDTO.FromDTO(r, factors)).ToList();
-            var endpointFactorSettings = dto.EndpointFactorSettings.Select(r => EndpointFactorSettingDTO.FromDTO(r, factors, endpoints));
             var project = new Project() {
                 EndpointTypes = endpointGroups,
                 Endpoints = endpoints,
                 Factors = factors,
+                DesignSettings = DesignSettingsDTO.FromDTO(dto.DesignSettings),
                 UseFactorModifiers = dto.UseFactorModifiers,
                 UseBlockModifier = dto.UseBlockModifier,
                 CVForBlocks = dto.CVForBlocks,
@@ -67,6 +67,7 @@ namespace AmigaPowerAnalysis.Core.Data {
             };
             project.DefaultInteractionFactorLevelCombinations = dto.DefaultInteractions.Select(r => DefaultInteractionDTO.FromDTO(r, factors)).ToList();
             project.UpdateEndpointFactors();
+            var endpointFactorSettings = dto.EndpointFactorSettings.Select(r => EndpointFactorSettingDTO.FromDTO(r, factors, endpoints)).ToList();
             var endpointInteractions = dto.EndpointInteractions.Select(r => EndpointInteractionDTO.FromDTO(r, factors, endpoints)).ToList();
             var endpointModifiers = dto.EndpointModifiers.Select(r => EndpointModifierDTO.FromDTO(r, factors, endpoints)).ToList();
             return project;
@@ -82,6 +83,7 @@ namespace AmigaPowerAnalysis.Core.Data {
                 EndpointFactorSettings = project.Endpoints.SelectMany(r => r.FactorSettings, (ep, r) => EndpointFactorSettingDTO.ToDTO(r, ep)).ToList(),
                 EndpointInteractions = project.Endpoints.SelectMany(r => r.Interactions, (ep, r) => EndpointInteractionDTO.ToDTO(r)).ToList(),
                 EndpointModifiers = project.Endpoints.SelectMany(r => r.Modifiers, (ep, r) => EndpointModifierDTO.ToDTO(r, ep)).ToList(),
+                DesignSettings = DesignSettingsDTO.ToDTO(project.DesignSettings),
                 UseFactorModifiers = project.UseFactorModifiers,
                 UseBlockModifier = project.UseBlockModifier,
                 CVForBlocks = project.CVForBlocks,

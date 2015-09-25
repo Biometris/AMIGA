@@ -118,6 +118,7 @@ namespace AmigaPowerAnalysis.Core {
         /// </summary>
         public DesignSettings DesignSettings {
             get { return _designSettings; }
+            set { _designSettings = value; }
         }
 
         /// <summary>
@@ -125,6 +126,7 @@ namespace AmigaPowerAnalysis.Core {
         /// </summary>
         public PowerCalculationSettings PowerCalculationSettings {
             get { return _powerCalculationSettings; }
+            set { _powerCalculationSettings = value; }
         }
 
         /// <summary>
