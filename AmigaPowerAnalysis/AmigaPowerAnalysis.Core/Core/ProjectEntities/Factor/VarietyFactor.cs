@@ -100,7 +100,6 @@ namespace AmigaPowerAnalysis.Core {
             var factor = new VarietyFactor();
             factor.AddFactorLevel(new FactorLevel("Test"));
             factor.AddFactorLevel(new FactorLevel("Comparator"));
-            //factor.AddFactorLevel(new VarietyFactorLevel("REF"));
             return factor;
         }
 
