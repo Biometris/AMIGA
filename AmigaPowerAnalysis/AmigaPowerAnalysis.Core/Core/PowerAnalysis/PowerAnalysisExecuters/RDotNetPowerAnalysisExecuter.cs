@@ -73,10 +73,15 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                     rEngine.EvaluateNoReturn("set.seed(settings$RandomNumberSeed)");
                     rEngine.EvaluateNoReturn("modelSettings <- createModelSettings(inputData, settings)");
 
+                    // For Approximate Method and no blocks (or zero CVblock) the power can be calculated for all reps simultaneously
                     var blockConfigurations = (inputPowerAnalysis.PowerCalculationMethodType == PowerCalculationMethod.Approximate &&
                         ((inputPowerAnalysis.ExperimentalDesignType == ExperimentalDesignType.CompletelyRandomized) || (inputPowerAnalysis.CvForBlocks == 0D)))
                         ? new List<int>() { inputPowerAnalysis.NumberOfReplications.Max() } : inputPowerAnalysis.NumberOfReplications;
-                    blockConfigurations = (inputPowerAnalysis.MeasurementType== MeasurementType.Continuous)
+                    // For Normal distribution the power can be calculated for all reps simultaneously
+                    blockConfigurations = (inputPowerAnalysis.MeasurementType == MeasurementType.Continuous)
+                        ? new List<int>() { inputPowerAnalysis.NumberOfReplications.Max() } : inputPowerAnalysis.NumberOfReplications;
+                    // For LogNormal distribution and Analysis=LogPlusM the power can be calculated for all reps simultaneously
+                    blockConfigurations = ((inputPowerAnalysis.MeasurementType == MeasurementType.Nonnegative) && (inputPowerAnalysis.a))
                         ? new List<int>() { inputPowerAnalysis.NumberOfReplications.Max() } : inputPowerAnalysis.NumberOfReplications;
 
                     var totalLoops = blockConfigurations.Count * effects.Count;
@@ -95,7 +100,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                                 // Define settings for Debugging the Rscript
                                 rEngine.EvaluateNoReturn(string.Format("debugSettings = list(iRep={0}, iEffect={1}, iDataset=NaN)", i + 1, j + 1));
 
-                                if ((inputPowerAnalysis.PowerCalculationMethodType == PowerCalculationMethod.Approximate) || (inputPowerAnalysis.MeasurementType== MeasurementType.Continuous)) {
+                                if ((inputPowerAnalysis.PowerCalculationMethodType == PowerCalculationMethod.Approximate) || (inputPowerAnalysis.MeasurementType == MeasurementType.Continuous) || (inputPowerAnalysis.MeasurementType == MeasurementType.Nonnegative)) {
                                     // Lyles method for Counts
                                     var output = runLylesApproximation(effect, blocks, inputPowerAnalysis.SelectedAnalysisMethodTypesDifferenceTests, inputPowerAnalysis.SelectedAnalysisMethodTypesEquivalenceTests, inputPowerAnalysis.NumberOfSimulatedDataSets, rEngine);
                                     outputResults.AddRange(output);

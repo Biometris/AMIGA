@@ -142,7 +142,7 @@ ropoissonVariance <- function(n, mean, dispersion=NaN, power=NaN, distribution=c
 
 ######################################################################################################################
 # returns the Dispersion parameter for a Count distributions
-ropoissonDispersion <- function(mean, CV, power, distribution=c("Poisson", "OverdispersedPoisson", "NegativeBinomial", "PoissonLogNormal", "PowerLaw", "Normal")) {
+ropoissonDispersion <- function(mean, CV, power, distribution=c("Poisson", "OverdispersedPoisson", "NegativeBinomial", "PoissonLogNormal", "PowerLaw", "Normal", "LogNormal")) {
   if ((mean <= 0) && (distribution != "Normal")) {
     stop("Mean of distribution must be positive.", call. = FALSE)
   }
@@ -169,6 +169,10 @@ ropoissonDispersion <- function(mean, CV, power, distribution=c("Poisson", "Over
     dispersion <- (CV/100) * (CV/100) * mean^(2-power)
   } else if (type == "Normal") {
     dispersion <- ((CV/100) * mean)^2
+  } else if (type == "LogNormal") {
+    dispersion <- log((CV/100)^2 + 1)
+  } else {
+    stop(paste0("Distribution '", distribution, "' not implemented in function ropoissonDispersion."), call.=FALSE)
   }
   return(dispersion)
 }
@@ -254,11 +258,13 @@ readSettings <- function(settingsFile) {
   list$DoOPdiff = !is.na(match("OverdispersedPoisson", list$AnalysisMethodsDifferenceTests))
   list$DoNBdiff = !is.na(match("NegativeBinomial",     list$AnalysisMethodsDifferenceTests))
   list$DoNOdiff = !is.na(match("Normal",               list$AnalysisMethodsDifferenceTests))
+  list$DoLOdiff = !is.na(match("LogPlusM",             list$AnalysisMethodsDifferenceTests))
   list$DoLNequi = !is.na(match("LogNormal",            list$AnalysisMethodsEquivalenceTests))
   list$DoSQequi = !is.na(match("SquareRoot",           list$AnalysisMethodsEquivalenceTests))
   list$DoOPequi = !is.na(match("OverdispersedPoisson", list$AnalysisMethodsEquivalenceTests))
   list$DoNBequi = !is.na(match("NegativeBinomial",     list$AnalysisMethodsEquivalenceTests))
   list$DoNOequi = !is.na(match("Normal",               list$AnalysisMethodsEquivalenceTests))
+  list$DoLOequi = !is.na(match("LogPlusM",             list$AnalysisMethodsEquivalenceTests))
   return(list)
 }
 

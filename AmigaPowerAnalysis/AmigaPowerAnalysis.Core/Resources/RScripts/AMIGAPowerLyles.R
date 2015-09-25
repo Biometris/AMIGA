@@ -431,6 +431,8 @@ lylesPowerAnalysis <- function(data, settings, modelSettings, blocks, effect, de
 
   if (settings$MeasurementType == "Continuous") {
     return(normalPowerAnalysis(data, settings, modelSettings, blocks, effect, debugSettings))
+  } else if (settings$MeasurementType == "Nonnegative") {
+    return(lognormalPowerAnalysis(data, settings, modelSettings, blocks, effect, debugSettings))
   }
 
   DEBUG <- FALSE
@@ -562,19 +564,6 @@ normalPowerAnalysis <- function(data, settings, modelSettings, blocks, effect, d
 
   DEBUG <- FALSE
 
-  # Prepare for debugging, i.e. create directory to write files to
-  if (settings$IsOutputSimulatedData) {
-    localDir = paste0(settings$directory)
-    localDir = paste0(localDir, settings$ComparisonId, "-Endpoint", "/")
-    dir.create(localDir, showWarnings=FALSE)
-    #localDir = paste0(localDir, "Rep", str_pad(debugSettings$iRep, 2, side="left", "0"), "/")
-    #dir.create(localDir, showWarnings=FALSE)
-    localDir = paste0(localDir, "Effect", str_pad(debugSettings$iEffect, 2, side="left", "0"), "/")
-    dir.create(localDir, showWarnings=FALSE)
-    #unlink(paste0(localDir, "*.csv"))
-    debugSettings$displayFile = file(paste0(localDir, "00-DisplayFit.txt"), open="wt")
-  } 
-
   # Define number of reps and the variances
   nreps <- rep(2:blocks)
   variance <- (settings$OverallMean*settings$CVComparator/100)^2
@@ -614,9 +603,67 @@ normalPowerAnalysis <- function(data, settings, modelSettings, blocks, effect, d
   powerNO <- calculatePowerFromNc(nreps, effect, df, ncDiff, ncEqui, settings, settings$DoNOdiff, settings$DoNOequi)
   if (settings$DoNOdiff) pValues$Diff[,"Normal"] <- powerNO[["powerDiff"]]
   if (settings$DoNOequi) pValues$Equi[,"Normal"] <- powerNO[["powerEqui"]]
-  if ((FALSE) || (DEBUG)) {
-    # Print raw pValues
+
+  if (DEBUG) { # Print raw pValues
     print(powerNO)
+  }
+  return(pValues)
+}
+
+######################################################################################################################
+# Does power analysis for the normal distribution
+lognormalPowerAnalysis <- function(data, settings, modelSettings, blocks, effect, debugSettings) {
+
+  DEBUG <- FALSE
+
+  # Define number of reps and the variances
+  nreps <- rep(2:blocks)
+  variance <- log((settings$CVComparator/100)^2 + 1)
+  mean <- log(settings$OverallMean) - variance/2
+  settings$OverallMean <- mean
+
+  # Fit model to obtain degrees of freedom by using a dummy dataset
+  # Setup simulation settings and dataset for fitting
+  tmpBlocks <- 2
+  simulationSettings <- createSimulationSettings(settings)
+  simulatedData <- createSimulatedData(data, settings, simulationSettings, tmpBlocks, 0)
+  simulatedData[["Response"]] =  simulatedData[["Mean"]]
+  lmH1 <- lm(as.formula(modelSettings$formulaH1), data=simulatedData)
+  regDF <- nrow(simulatedData) - lmH1$df.residual
+  if (settings$ExperimentalDesignType == "CompletelyRandomized") {
+    df <- nreps*nrow(data) - regDF
+  } else {
+    df <- nreps*(nrow(data)-1) - (regDF - tmpBlocks)
+  }
+
+  # Define output structure
+  nrow <- length(nreps)
+  nDiffTests <- length(settings$AnalysisMethodsDifferenceTests)
+  nEquiTests <- length(settings$AnalysisMethodsEquivalenceTests)
+  pValues <- list(
+    Diff  = matrix(nrow=nrow, ncol=nDiffTests, dimnames=list(nreps, settings$AnalysisMethodsDifferenceTests)),
+    Equi  = matrix(nrow=nrow, ncol=nEquiTests, dimnames=list(nreps, settings$AnalysisMethodsEquivalenceTests)),
+    Extra = matrix(nrow=nrow, ncol=3, dimnames=list(nreps, c("Reps", "Effect", "Df")))
+  )
+  pValues$Extra[,"Reps"] <- nreps
+  pValues$Extra[,"Effect"] <- effect
+  pValues$Extra[,"Df"] <- df
+
+  # Difference test
+  varEffect <- 2*variance/nreps
+  sdEffect <- sqrt(varEffect)
+  ncDiff <- effect/sdEffect
+  ncEqui <- waldEquiNoncentral(effect, sdEffect, settings$TestType, settings$TransformLocLower, settings$TransformLocUpper)
+  powerLO <- calculatePowerFromNc(nreps, effect, df, ncDiff, ncEqui, settings, settings$DoLOdiff, settings$DoLOequi)
+  if (settings$DoLOdiff) pValues$Diff[,"LogPlusM"] <- powerLO[["powerDiff"]]
+  if (settings$DoLOequi) pValues$Equi[,"LogPlusM"] <- powerLO[["powerEqui"]]
+
+  if (DEBUG) { # Print raw pValues
+    print(settings$OverallMean)
+    print(exp(mean + variance/2))
+    print(settings$CVComparator)
+    print(100*sqrt(exp(variance)-1))
+    print(powerLO)
   }
   return(pValues)
 }
