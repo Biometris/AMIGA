@@ -9,29 +9,43 @@ namespace AmigaPowerAnalysis.Core.Data {
 
         #region Properties
 
-        [XmlArrayItem("EndpointGroups")]
+        [XmlArrayItem("EndpointGroup")]
         public List<EndpointGroupDTO> EndpointGroups { get; set; }
 
-        [XmlArrayItem("Endpoints")]
+        [XmlArrayItem("Endpoint")]
         public List<EndpointDTO> Endpoints { get; set; }
 
-        [XmlArrayItem("Factors")]
+        [XmlArrayItem("Factor")]
         public List<FactorDTO> Factors { get; set; }
 
-        [XmlArrayItem("FactorLevels")]
+        [XmlArrayItem("FactorLevel")]
         public List<FactorLevelDTO> FactorLevels { get; set; }
 
-        [XmlArrayItem("DefaultInteractions")]
+        [XmlArrayItem("DefaultInteraction")]
         public List<DefaultInteractionDTO> DefaultInteractions { get; set; }
 
         [XmlArrayItem("EndpointFactorSetting")]
         public List<EndpointFactorSettingDTO> EndpointFactorSettings { get; set; }
 
-        [XmlArrayItem("EndpointInteractions")]
+        [XmlArrayItem("EndpointInteraction")]
         public List<EndpointInteractionDTO> EndpointInteractions { get; set; }
 
-        [XmlArrayItem("EndpointModifiers")]
+        [XmlArrayItem("EndpointModifier")]
         public List<EndpointModifierDTO> EndpointModifiers { get; set; }
+
+        public bool UseFactorModifiers { get; set; }
+
+        public bool UseBlockModifier { get; set; }
+
+        public double CVForBlocks { get; set; }
+
+        public bool UseMainPlotModifier { get; set; }
+
+        public double CVForMainPlots { get; set; }
+
+        //public DesignSettingsDTO DesignSettings { get; set; }
+
+        //public PowerCalculationSettingsDTO PowerCalculationSettings { get; set; }
 
         #endregion
 
@@ -45,6 +59,11 @@ namespace AmigaPowerAnalysis.Core.Data {
                 EndpointTypes = endpointGroups,
                 Endpoints = endpoints,
                 Factors = factors,
+                UseFactorModifiers = dto.UseFactorModifiers,
+                UseBlockModifier = dto.UseBlockModifier,
+                CVForBlocks = dto.CVForBlocks,
+                UseMainPlotModifier = dto.UseMainPlotModifier,
+                CVForMainPlots = dto.CVForMainPlots,
             };
             project.DefaultInteractionFactorLevelCombinations = dto.DefaultInteractions.Select(r => DefaultInteractionDTO.FromDTO(r, factors)).ToList();
             project.UpdateEndpointFactors();
@@ -60,8 +79,14 @@ namespace AmigaPowerAnalysis.Core.Data {
                 Factors = project.Factors.Select(r => FactorDTO.ToDTO(r)).ToList(),
                 FactorLevels = project.Factors.SelectMany(r => r.FactorLevels).Select(r => FactorLevelDTO.ToDTO(r)).ToList(),
                 DefaultInteractions = project.DefaultInteractionFactorLevelCombinations.Select(r => DefaultInteractionDTO.ToDTO(r)).ToList(),
+                EndpointFactorSettings = project.Endpoints.SelectMany(r => r.FactorSettings, (ep, r) => EndpointFactorSettingDTO.ToDTO(r, ep)).ToList(),
                 EndpointInteractions = project.Endpoints.SelectMany(r => r.Interactions, (ep, r) => EndpointInteractionDTO.ToDTO(r)).ToList(),
                 EndpointModifiers = project.Endpoints.SelectMany(r => r.Modifiers, (ep, r) => EndpointModifierDTO.ToDTO(r, ep)).ToList(),
+                UseFactorModifiers = project.UseFactorModifiers,
+                UseBlockModifier = project.UseBlockModifier,
+                CVForBlocks = project.CVForBlocks,
+                UseMainPlotModifier = project.UseMainPlotModifier,
+                CVForMainPlots = project.CVForMainPlots,
             };
             return dto;
         }
