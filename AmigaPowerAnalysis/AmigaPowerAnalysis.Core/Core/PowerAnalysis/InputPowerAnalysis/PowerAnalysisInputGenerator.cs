@@ -28,6 +28,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                 DummyComparisonLevels = comparisonLevels.Select(m => m.Label).ToList(),
                 DummyModifierLevels = modifierLevels.Select(m => m.Label).ToList(),
                 Endpoint = comparison.Endpoint.Name,
+                MeasurementType = comparison.Endpoint.Measurement,
                 LocLower = comparison.Endpoint.LocLower,
                 LocUpper = comparison.Endpoint.LocUpper,
                 DistributionType = comparison.Endpoint.DistributionType,
