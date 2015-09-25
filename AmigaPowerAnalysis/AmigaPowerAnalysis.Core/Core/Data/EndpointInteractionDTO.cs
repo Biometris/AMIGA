@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 using System.Text;
+using System.Globalization;
 
 namespace AmigaPowerAnalysis.Core.Data {
     public sealed class EndpointInteractionDTO {
@@ -18,6 +19,7 @@ namespace AmigaPowerAnalysis.Core.Data {
         public string Endpoint { get; set; }
         public List<DynamicPropertyValue> Labels { get; set; }
         public bool IsComparisonLevel { get; set; }
+        public double Mean { get; set; }
 
         #endregion
 
@@ -32,6 +34,7 @@ namespace AmigaPowerAnalysis.Core.Data {
                 }
             }
             interaction.IsComparisonLevel = dto.IsComparisonLevel;
+            interaction.Mean = dto.Mean;
             return interaction;
         }
 
@@ -39,6 +42,7 @@ namespace AmigaPowerAnalysis.Core.Data {
             return new EndpointInteractionDTO() {
                 Endpoint = factorLevel.Endpoint.Name,
                 IsComparisonLevel = factorLevel.IsComparisonLevel,
+                Mean = factorLevel.Mean,
                 Labels = factorLevel.Levels.Select(l => new DynamicPropertyValue() {
                     Name = l.Parent.Name,
                     RawValue = l.Label,
@@ -60,13 +64,13 @@ namespace AmigaPowerAnalysis.Core.Data {
             }
             var lines = new List<string>();
             var levels = interactions.SelectMany(r => r.Labels).Select(l => l.Name).Distinct();
-            lines.Add("Endpoint" + separator + string.Join(separator, levels) + separator + "IsComparisonLevel");
+            lines.Add("Endpoint" + separator + string.Join(separator, levels) + separator + "IsComparisonLevel" + separator + "Mean");
             foreach (var level in interactions) {
                 var labels = levels.Select(l => {
                     var val = level.Labels.FirstOrDefault(r => r.Name == l);
                     return (val != null) ? val.RawValue : string.Empty;
                 });
-                lines.Add(level.Endpoint + separator + string.Join(separator, labels) + separator + level.IsComparisonLevel);
+                lines.Add(level.Endpoint + separator + string.Join(separator, labels) + separator + level.IsComparisonLevel + separator + string.Format("{0:G6}", level.Mean, CultureInfo.InvariantCulture));
             }
             var stringBuilder = new StringBuilder();
             lines.ForEach(l => stringBuilder.AppendLine(l));

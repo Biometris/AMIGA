@@ -50,7 +50,12 @@ namespace AmigaPowerAnalysis.Tests.Core {
                 }
                 endpoint.UpdateFactorLevelCombinations();
                 for (int j = 0; j < endpoint.Interactions.Count; ++j) {
-                    endpoint.Interactions[j].IsComparisonLevel = (j % 2 == 0);
+                    if (j % 2 == 0) {
+                        endpoint.Interactions[j].IsComparisonLevel = true;
+                    } else {
+                        endpoint.Interactions[j].IsComparisonLevel = false;
+                    }
+                    endpoint.Interactions[j].Mean += j;
                 }
             }
             var endpointInteractions = _endpoints.SelectMany(ep => ep.Interactions).ToList();

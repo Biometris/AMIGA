@@ -67,7 +67,7 @@ namespace AmigaPowerAnalysis.Core.Data {
                     var val = level.Labels.FirstOrDefault(r => r.Name == l);
                     return (val != null) ? val.RawValue : string.Empty;
                 });
-                lines.Add(level.Endpoint + separator + string.Join(separator, labels) + separator + string.Format("{0:G3}", level.ModifierFactor, CultureInfo.InvariantCulture));
+                lines.Add(level.Endpoint + separator + string.Join(separator, labels) + separator + string.Format("{0:G6}", level.ModifierFactor, CultureInfo.InvariantCulture));
             }
             var stringBuilder = new StringBuilder();
             lines.ForEach(l => stringBuilder.AppendLine(l));

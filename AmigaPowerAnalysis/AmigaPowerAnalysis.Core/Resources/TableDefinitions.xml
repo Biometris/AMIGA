@@ -302,6 +302,13 @@
           <string>IsComparisonLevel</string>
         </Aliases>
       </ColumnDefinition>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>Mean</ColumnID>
+        <Aliases>
+          <string>Mean</string>
+          <string>Mu</string>
+        </Aliases>
+      </ColumnDefinition>
     </ColumnDefinitions>
   </TableDefinition>
 
