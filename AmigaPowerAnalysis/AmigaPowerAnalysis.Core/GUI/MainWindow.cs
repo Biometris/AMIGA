@@ -179,14 +179,20 @@ namespace AmigaPowerAnalysis.GUI {
         private void openProjectDialog() {
             try {
                 OpenFileDialog openFileDialog = new OpenFileDialog();
-                openFileDialog.Filter = "Amiga Power Analysis files (*.apa)|*.apa|All files (*.*)|*.*";
+                openFileDialog.Filter = "Amiga Power Analysis files (*.apa)|*.apa|Amiga Power Analysis xml files (*.xml)|*.xml|All files (*.*)|*.*";
                 openFileDialog.FilterIndex = 1;
                 openFileDialog.RestoreDirectory = true;
                 openFileDialog.InitialDirectory = Properties.Settings.Default.LastOpenedDirectory;
                 if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                    Properties.Settings.Default.LastOpenedDirectory = Path.GetDirectoryName(openFileDialog.FileName);
+                    var filename = openFileDialog.FileName;
+                    Properties.Settings.Default.LastOpenedDirectory = Path.GetDirectoryName(filename);
                     Properties.Settings.Default.Save();
-                    var project = ProjectManager.LoadProject(openFileDialog.FileName);
+                    Project project;
+                    if (Path.GetExtension(filename) == ".apa") {
+                        project = ProjectManager.LoadProject(openFileDialog.FileName);
+                    } else {
+                        project = ProjectManager.LoadProjectXml(openFileDialog.FileName);
+                    }
                     loadProject(project);
                     CurrentProjectFilename = openFileDialog.FileName;
                 }
@@ -198,14 +204,19 @@ namespace AmigaPowerAnalysis.GUI {
         private void saveAsDialog() {
             try {
                 SaveFileDialog saveFileDialog = new SaveFileDialog();
-                saveFileDialog.Filter = "Amiga Power Analysis files (*.apa)|*.apa|All files (*.*)|*.*";
+                saveFileDialog.Filter = "Amiga Power Analysis files (*.apa)|*.apa|Amiga Power Analysis xml files (*.xml)|*.xml|All files (*.*)|*.*";
                 saveFileDialog.FilterIndex = 1;
                 saveFileDialog.RestoreDirectory = true;
                 saveFileDialog.InitialDirectory = Properties.Settings.Default.LastOpenedDirectory;
                 if (saveFileDialog.ShowDialog() == DialogResult.OK) {
-                    Properties.Settings.Default.LastOpenedDirectory = Path.GetDirectoryName(saveFileDialog.FileName);
+                    var filename = saveFileDialog.FileName;
+                    Properties.Settings.Default.LastOpenedDirectory = Path.GetDirectoryName(filename);
                     Properties.Settings.Default.Save();
-                    ProjectManager.SaveProject(_project, saveFileDialog.FileName);
+                    if (Path.GetExtension(filename) == ".apa") {
+                        ProjectManager.SaveProject(_project, saveFileDialog.FileName);
+                    } else {
+                        ProjectManager.SaveProjectXml(_project, saveFileDialog.FileName);
+                    }
                     CurrentProjectFilename = saveFileDialog.FileName;
                 }
             } catch (Exception ex) {

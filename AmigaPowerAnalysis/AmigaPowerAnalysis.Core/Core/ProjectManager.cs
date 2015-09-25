@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Xml;
+using Biometris.ExtensionMethods;
 
 namespace AmigaPowerAnalysis.Core {
     public static class ProjectManager {
@@ -49,17 +50,24 @@ namespace AmigaPowerAnalysis.Core {
         }
 
         /// <summary>
-        /// Tries to load a project file from the given file name.
+        /// Stores the project in an xml file with the specified name.
+        /// </summary>
+        /// <param name="project"></param>
+        /// <param name="filename"></param>
+        public static void SaveProjectXml(Project project, string filename) {
+            var dto = ProjectDTO.ToDTO(project);
+            dto.ToXmlFile(filename);
+        }
+
+        /// <summary>
+        /// Tries to load a project file xml from the file specified by the file name.
         /// </summary>
         /// <param name="filename"></param>
         /// <returns></returns>
-        public static Project ProjectFromDTO(IEnumerable<EndpointDTO> endpoints) {
-            var project = new Project();
-            project.EndpointTypes = EndpointTypeProvider.NewProjectDefaultEndpointTypes();
-            foreach (var dto in endpoints) {
-                project.AddEndpoint(EndpointDTO.FromDTO(dto, project.EndpointTypes));
-            }
-            project.UpdateEndpointFactors();
+        public static Project LoadProjectXml(string filename) {
+            var dto = SerializationExtensions.FromXmlFile<ProjectDTO>(filename);
+            var project = ProjectDTO.FromDTO(dto);
+            project.ProjectName = Path.GetFileNameWithoutExtension(filename); 
             return project;
         }
     }
