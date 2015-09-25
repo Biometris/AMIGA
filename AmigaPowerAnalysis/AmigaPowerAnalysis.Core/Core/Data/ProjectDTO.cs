@@ -24,6 +24,9 @@ namespace AmigaPowerAnalysis.Core.Data {
         [XmlArrayItem("DefaultInteractions")]
         public List<DefaultInteractionDTO> DefaultInteractions { get; set; }
 
+        [XmlArrayItem("EndpointFactorSetting")]
+        public List<EndpointFactorSettingDTO> EndpointFactorSettings { get; set; }
+
         [XmlArrayItem("EndpointInteractions")]
         public List<EndpointInteractionDTO> EndpointInteractions { get; set; }
 
@@ -38,6 +41,7 @@ namespace AmigaPowerAnalysis.Core.Data {
             var factors = dto.Factors.Select(r => FactorDTO.FromDTO(r)).ToList();
             var factorLevels = dto.FactorLevels.Select(r => FactorLevelDTO.FromDTO(r, factors)).ToList();
             var defaultInteractions = dto.DefaultInteractions.Select(r => DefaultInteractionDTO.FromDTO(r, factors)).ToList();
+            var endpointFactorSettings = dto.EndpointFactorSettings.Select(r => EndpointFactorSettingDTO.FromDTO(r, factors, endpoints));
             var endpointInteractions = dto.EndpointInteractions.Select(r => EndpointInteractionDTO.FromDTO(r, factors, endpoints)).ToList();
             var endpointModifiers = dto.EndpointModifiers.Select(r => EndpointModifierDTO.FromDTO(r, factors, endpoints)).ToList();
             var project = new Project() {

@@ -14,9 +14,9 @@ namespace AmigaPowerAnalysis.Core.Data {
 
         #endregion
 
-        public static EndpointFactorSettings FromDTO(EndpointFactorSettingDTO dto, IEnumerable<Factor> factors, IEnumerable<Endpoint> endpoints) {
+        public static EndpointFactorSettings FromDTO(EndpointFactorSettingDTO dto, IEnumerable<IFactor> factors, IEnumerable<Endpoint> endpoints) {
             var endpoint = endpoints.First(ep => ep.Name == dto.Endpoint);
-            var factor = factors.First(f => f.Name == dto.Factor);
+            var factor = factors.First(f => f.Name == dto.Factor) as Factor;
             var endpointFactorSetting = new EndpointFactorSettings() {
                 Factor = factor,
                 IsComparisonFactor = dto.IsComparisonFactor,

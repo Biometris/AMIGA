@@ -64,8 +64,7 @@ namespace AmigaPowerAnalysis.Tests.Core {
             var originals = endpoint.FactorSettings.Take(1).ToList();
             var dtos = endpoint.FactorSettings.Select(r => EndpointFactorSettingDTO.ToDTO(r, endpoint)).Take(1).ToList();
             CsvWriter.WriteToCsvFile(filename, ",", dtos);
-            var nonVarietyFactors = _factors.Where(f => f is Factor).Cast<Factor>();
-            var records = _fileReader.ReadEndpointFactorSettings(filename, nonVarietyFactors, _endpoints);
+            var records = _fileReader.ReadEndpointFactorSettings(filename, _factors, _endpoints);
             Assert.IsTrue(ObjectComparisonExtensions.PublicInstancePropertiesEqual(originals.Single(), records.Single()));
             Assert.AreEqual(originals.Single(), records.Single());
         }
@@ -78,8 +77,7 @@ namespace AmigaPowerAnalysis.Tests.Core {
             var originals = endpoints.SelectMany(ep => ep.FactorSettings).ToList();
             var dtos = endpoints.SelectMany(ep => ep.FactorSettings.Select(r => EndpointFactorSettingDTO.ToDTO(r, ep))).ToList();
             CsvWriter.WriteToCsvFile(filename, ",", dtos);
-            var nonVarietyFactors = _factors.Where(f => f is Factor).Cast<Factor>();
-            var records = _fileReader.ReadEndpointFactorSettings(filename, nonVarietyFactors, _endpoints);
+            var records = _fileReader.ReadEndpointFactorSettings(filename, _factors, _endpoints);
             Assert.AreEqual(records.Count, originals.Count);
             foreach (var original in originals) {
                 Assert.IsTrue(records.Contains(original));
