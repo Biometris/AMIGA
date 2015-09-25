@@ -51,6 +51,13 @@ namespace AmigaPowerAnalysis.Core.DataReaders {
             return records.Select(r => EndpointInteractionDTO.FromDTO(r, factors, endpoints)).ToList();
         }
 
+        public List<ModifierFactorLevelCombination> ReadEndpointModifiers(string filename, IEnumerable<IFactor> factors, IEnumerable<Endpoint> endpoints) {
+            var reader = new CsvFileReader();
+            var tableDefinition = tableDefinitions.GetTableDefinition("EndpointModifiers");
+            var records = reader.ReadDataSet<EndpointModifierDTO>(filename, tableDefinition);
+            return records.Select(r => EndpointModifierDTO.FromDTO(r, factors, endpoints)).ToList();
+        }
+
         private TableDefinitionCollection tableDefinitions {
             get {
                 if (_tableDefinitions == null) {

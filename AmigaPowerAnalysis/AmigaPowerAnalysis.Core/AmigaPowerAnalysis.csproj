@@ -117,6 +117,7 @@
     <Compile Include="Core\DataAnalysis\AnalysisModels\IAnalysisModel.cs" />
     <Compile Include="Core\DataAnalysis\AnalysisScriptGenerators\AnalysisRScriptGenerator.cs" />
     <Compile Include="Core\DataReaders\DTODataFileReader.cs" />
+    <Compile Include="Core\Data\EndpointModifierDTO.cs" />
     <Compile Include="Core\Data\EndpointInteractionDTO.cs" />
     <Compile Include="Core\Data\DefaultInteractionDTO.cs" />
     <Compile Include="Core\Data\FactorLevelDTO.cs" />

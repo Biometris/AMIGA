@@ -238,6 +238,7 @@
   <TableDefinition>
     <TableID>DefaultInteractions</TableID>
     <Aliases>
+      <string>DefaultInteractions</string>
       <string>DefaultInteractionFactorLevelCombinations</string>
     </Aliases>
     <ColumnDefinitions>
@@ -259,6 +260,7 @@
   <TableDefinition>
     <TableID>EndpointInteractions</TableID>
     <Aliases>
+      <string>EndpointInteractions</string>
       <string>EndpointInteractionFactorLevelCombinations</string>
     </Aliases>
     <ColumnDefinitions>
@@ -280,6 +282,36 @@
         <ColumnID>IsComparisonLevel</ColumnID>
         <Aliases>
           <string>IsComparisonLevel</string>
+        </Aliases>
+      </ColumnDefinition>
+    </ColumnDefinitions>
+  </TableDefinition>
+
+  <TableDefinition>
+    <TableID>EndpointModifiers</TableID>
+    <Aliases>
+      <string>EndpointModifiers</string>
+      <string>EndpointModifierFactorLevelCombinations</string>
+    </Aliases>
+    <ColumnDefinitions>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>Endpoint</ColumnID>
+        <Aliases>
+          <string>Endpoint</string>
+          <string>EndpointId</string>
+          <string>EndpointName</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition IsDynamic="true">
+        <ColumnID>Labels</ColumnID>
+        <Aliases>
+          <string>Labels</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>ModifierFactor</ColumnID>
+        <Aliases>
+          <string>ModifierFactor</string>
         </Aliases>
       </ColumnDefinition>
     </ColumnDefinitions>

@@ -65,10 +65,12 @@ namespace AmigaPowerAnalysis.Core {
         /// <returns></returns>
         public virtual ComparisonType ComparisonType {
             get {
-                if (VarietyLevel.VarietyLevelType == VarietyLevelType.Test) {
-                    return ComparisonType.IncludeTest;
-                } else if (VarietyLevel.VarietyLevelType == VarietyLevelType.Comparator) {
-                    return ComparisonType.IncludeComparator;
+                if (VarietyLevel != null) {
+                    if (VarietyLevel.VarietyLevelType == VarietyLevelType.Test) {
+                        return ComparisonType.IncludeTest;
+                    } else if (VarietyLevel.VarietyLevelType == VarietyLevelType.Comparator) {
+                        return ComparisonType.IncludeComparator;
+                    }
                 }
                 return ComparisonType.Exclude;
             }
