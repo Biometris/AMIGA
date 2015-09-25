@@ -248,6 +248,18 @@ namespace AmigaPowerAnalysis.Core {
             get { return _cvForBlocks; }
             set { _cvForBlocks = value; }
         }
+        
+        /// <summary>
+        /// Gets/sets the factor settings for this endpoint.
+        /// </summary>
+        public List<EndpointFactorSettings> FactorSettings {
+            get {
+                return _factors;
+            }
+            //set {
+            //    _factors = value;
+            //}
+        }
 
         /// <summary>
         /// Returns the variety factor.

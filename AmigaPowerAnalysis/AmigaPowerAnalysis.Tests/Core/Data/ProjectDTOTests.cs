@@ -24,7 +24,8 @@ namespace AmigaPowerAnalysis.Tests.Core {
             var filename = Path.Combine(_testPath, project.ProjectName + ".xml");
             var dto = ProjectDTO.ToDTO(project);
             dto.ToXmlFile(filename);
-            var restore = SerializationExtensions.FromXmlFile<ProjectDTO>(filename);
+            var restoredDto = SerializationExtensions.FromXmlFile<ProjectDTO>(filename);
+            var restored = ProjectDTO.FromDTO(restoredDto);
         }
     }
 }

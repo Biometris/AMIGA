@@ -38,5 +38,29 @@ namespace AmigaPowerAnalysis.Core {
             get { return _isComparisonFactor; }
             set { _isComparisonFactor = value; }
         }
+
+        /// <summary>
+        /// Override
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object obj) {
+            var item = obj as EndpointFactorSettings;
+            if (item == null) {
+                return false;
+            }
+            return this.GetHashCode() == item.GetHashCode();
+        }
+
+        /// <summary>
+        /// Override
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode() {
+            int hash = 41;
+            hash = hash * 19 + ((Factor != null) ? Factor.GetHashCode() : 0);
+            hash = hash * 19 + IsComparisonFactor.GetHashCode();
+            return hash;
+        }
     }
 }

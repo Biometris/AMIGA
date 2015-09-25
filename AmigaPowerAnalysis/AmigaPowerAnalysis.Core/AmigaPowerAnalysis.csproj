@@ -117,6 +117,7 @@
     <Compile Include="Core\DataAnalysis\AnalysisModels\IAnalysisModel.cs" />
     <Compile Include="Core\DataAnalysis\AnalysisScriptGenerators\AnalysisRScriptGenerator.cs" />
     <Compile Include="Core\DataReaders\DTODataFileReader.cs" />
+    <Compile Include="Core\Data\EndpointFactorSettingDTO.cs" />
     <Compile Include="Core\Data\LevelDTO.cs" />
     <Compile Include="Core\Data\ProjectDTO.cs" />
     <Compile Include="Core\Data\EndpointModifierDTO.cs" />
@@ -147,7 +148,7 @@
     <Compile Include="Core\ProjectEntities\Settings\DesignSettings.cs" />
     <Compile Include="Core\ProjectEntities\Endpoint\Endpoint.cs" />
     <Compile Include="Core\ProjectEntities\Factor\InteractionFactorLevelCombination.cs" />
-    <Compile Include="Core\ProjectEntities\Endpoint\EndpointFactor.cs" />
+    <Compile Include="Core\ProjectEntities\Endpoint\EndpointFactorSetting.cs" />
     <Compile Include="Core\ProjectEntities\Endpoint\EndpointTypeProvider.cs" />
     <Compile Include="Core\ProjectEntities\Endpoint\EndpointType.cs" />
     <Compile Include="Core\ProjectEntities\Factor\Factor.cs" />

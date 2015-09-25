@@ -254,6 +254,37 @@
   </TableDefinition>
 
   <TableDefinition>
+    <TableID>EndpointFactorSettings</TableID>
+    <Aliases>
+      <string>EndpointFactorSettings</string>
+    </Aliases>
+    <ColumnDefinitions>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>Endpoint</ColumnID>
+        <Aliases>
+          <string>Endpoint</string>
+          <string>EndpointId</string>
+          <string>EndpointName</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>Factor</ColumnID>
+        <Aliases>
+          <string>Factor</string>
+          <string>FactorId</string>
+          <string>FactorName</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>IsComparisonFactor</ColumnID>
+        <Aliases>
+          <string>IsComparisonFactor</string>
+        </Aliases>
+      </ColumnDefinition>
+    </ColumnDefinitions>
+  </TableDefinition>
+
+  <TableDefinition>
     <TableID>DefaultInteractions</TableID>
     <Aliases>
       <string>DefaultInteractions</string>
