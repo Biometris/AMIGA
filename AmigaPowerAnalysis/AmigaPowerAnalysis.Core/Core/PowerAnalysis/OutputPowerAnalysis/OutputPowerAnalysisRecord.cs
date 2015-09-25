@@ -10,10 +10,17 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             PowerDifferenceNegativeBinomial = double.NaN;
             PowerDifferenceOverdispersedPoisson = double.NaN;
             PowerDifferenceSquareRoot = double.NaN;
+            PowerDifferenceNormal = double.NaN;
+            PowerDifferenceLogPlusM = double.NaN;
+            PowerDifferenceGamma = double.NaN;
+
             PowerEquivalenceLogNormal = double.NaN;
             PowerEquivalenceNegativeBinomial = double.NaN;
             PowerEquivalenceOverdispersedPoisson = double.NaN;
             PowerEquivalenceSquareRoot = double.NaN;
+            PowerEquivalenceNormal = double.NaN;
+            PowerEquivalenceLogPlusM = double.NaN;
+            PowerEquivalenceGamma = double.NaN;
         }
 
         [Display(Name = "Ratio")]
@@ -34,6 +41,15 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
         [Display(Name = "Diff. square root")]
         public double PowerDifferenceSquareRoot { get; set; }
 
+        [Display(Name = "Diff. normal")]
+        public double PowerDifferenceNormal { get; set; }
+
+        [Display(Name = "Diff. log-normal")]
+        public double PowerDifferenceLogPlusM { get; set; }
+
+        [Display(Name = "Diff. gamma")]
+        public double PowerDifferenceGamma { get; set; }
+
         [Display(Name = "Diff. overdisp. Poisson")]
         public double PowerDifferenceOverdispersedPoisson { get; set; }
 
@@ -51,6 +67,15 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
 
         [Display(Name = "Equiv. neg. binom.")]
         public double PowerEquivalenceNegativeBinomial { get; set; }
+
+        [Display(Name = "Equiv. normal")]
+        public double PowerEquivalenceNormal { get; set; }
+
+        [Display(Name = "Equiv. log-normal")]
+        public double PowerEquivalenceLogPlusM { get; set; }
+
+        [Display(Name = "Equiv. gamma")]
+        public double PowerEquivalenceGamma { get; set; }
 
         /// <summary>
         /// Returns the power for the provided test type and analysis method.
@@ -74,8 +99,11 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                             case AnalysisMethodType.OverdispersedBinomial:
                             case AnalysisMethodType.Betabinomial:
                             case AnalysisMethodType.LogPlusM:
+                                return PowerDifferenceLogPlusM;
                             case AnalysisMethodType.Gamma:
+                                return PowerDifferenceGamma;
                             case AnalysisMethodType.Normal:
+                                return PowerDifferenceNormal;
                             default:
                                 return double.NaN;
                         }
@@ -94,8 +122,11 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                             case AnalysisMethodType.OverdispersedBinomial:
                             case AnalysisMethodType.Betabinomial:
                             case AnalysisMethodType.LogPlusM:
+                                return PowerEquivalenceLogPlusM;
                             case AnalysisMethodType.Gamma:
+                                return PowerEquivalenceGamma;
                             case AnalysisMethodType.Normal:
+                                return PowerEquivalenceNormal;
                             default:
                                 return double.NaN;
                         }
@@ -132,8 +163,14 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                             case AnalysisMethodType.OverdispersedBinomial:
                             case AnalysisMethodType.Betabinomial:
                             case AnalysisMethodType.LogPlusM:
+                                PowerDifferenceLogPlusM = power;
+                                break;
                             case AnalysisMethodType.Gamma:
+                                PowerDifferenceGamma = power;
+                                break;
                             case AnalysisMethodType.Normal:
+                                PowerDifferenceNormal = power;
+                                break;
                             default:
                                 break;
                         }
@@ -157,8 +194,14 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                             case AnalysisMethodType.OverdispersedBinomial:
                             case AnalysisMethodType.Betabinomial:
                             case AnalysisMethodType.LogPlusM:
+                                PowerEquivalenceLogPlusM = power;
+                                break;
                             case AnalysisMethodType.Gamma:
+                                PowerEquivalenceGamma = power;
+                                break;
                             case AnalysisMethodType.Normal:
+                                PowerEquivalenceNormal = power;
+                                break;
                             default:
                                 break;
                         }

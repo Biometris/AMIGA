@@ -22,6 +22,7 @@
 #
 
 ######################################################################################################################
+# Link function for the different measurementTypes 
 linkFunction <- function(data, measurementType = c("Count", "Fraction", "Nonnegative", "Continuous")) {
   chkArg = match.arg(measurementType)
   if (measurementType == "Count") {
@@ -36,6 +37,7 @@ linkFunction <- function(data, measurementType = c("Count", "Fraction", "Nonnega
 }
 
 ######################################################################################################################
+# Inverse of link function for the different measurementTypes 
 inverseLinkFunction <- function(data, measurementType = c("Count", "Fraction", "Nonnegative", "Continuous")) {
   chkArg = match.arg(measurementType)
   if (measurementType == "Count") {
@@ -50,6 +52,7 @@ inverseLinkFunction <- function(data, measurementType = c("Count", "Fraction", "
 }
 
 ######################################################################################################################
+# returns random draws from a Count distributions
 ropoisson <- function(n, mean, dispersion=NaN, power=NaN, 
         distribution=c("Poisson", "OverdispersedPoisson", "NegativeBinomial", "PoissonLogNormal", "PowerLaw"), 
         excessZero=0.0) {
@@ -120,6 +123,7 @@ ropoisson <- function(n, mean, dispersion=NaN, power=NaN,
 }
 
 ######################################################################################################################
+# returns the variance for a Count distributions
 ropoissonVariance <- function(n, mean, dispersion=NaN, power=NaN, distribution=c("Poisson", "OverdispersedPoisson", "NegativeBinomial", "PoissonLogNormal", "PowerLaw")) {
   type = match.arg(distribution)
   if (type == "Poisson") {
@@ -137,8 +141,9 @@ ropoissonVariance <- function(n, mean, dispersion=NaN, power=NaN, distribution=c
 }
 
 ######################################################################################################################
-ropoissonDispersion <- function(mean, CV, power, distribution=c("Poisson", "OverdispersedPoisson", "NegativeBinomial", "PoissonLogNormal", "PowerLaw")) {
-  if (mean <= 0) {
+# returns the Dispersion parameter for a Count distributions
+ropoissonDispersion <- function(mean, CV, power, distribution=c("Poisson", "OverdispersedPoisson", "NegativeBinomial", "PoissonLogNormal", "PowerLaw", "Normal")) {
+  if ((mean <= 0) && (distribution != "Normal")) {
     stop("Mean of distribution must be positive.", call. = FALSE)
   }
   if (CV <= 0) {
@@ -162,6 +167,8 @@ ropoissonDispersion <- function(mean, CV, power, distribution=c("Poisson", "Over
     dispersion <- (CV/100) * (CV/100) - 1/mean
   } else if (type == "PowerLaw") {
     dispersion <- (CV/100) * (CV/100) * mean^(2-power)
+  } else if (type == "Normal") {
+    dispersion <- ((CV/100) * mean)^2
   }
   return(dispersion)
 }
@@ -212,7 +219,7 @@ readSettings <- function(settingsFile) {
     if (list$MeasurementType != "Continuous") {
       list$TransformLocLower <- log(list$LocLower)
     } else {
-      list$TransformLocLower <- list$LocLower - list$OverallMean
+      list$TransformLocLower <- list$LocLower
     }
   }
   if (is.na(list$LocUpper)) {
@@ -222,7 +229,7 @@ readSettings <- function(settingsFile) {
     if (list$MeasurementType != "Continuous") {
       list$TransformLocUpper <- log(list$LocUpper)
     } else {
-      list$TransformLocUpper <- list$LocUpper - list$OverallMean
+      list$TransformLocUpper <- list$LocUpper
     }
   }
 
@@ -246,10 +253,12 @@ readSettings <- function(settingsFile) {
   list$DoSQdiff = !is.na(match("SquareRoot",           list$AnalysisMethodsDifferenceTests))
   list$DoOPdiff = !is.na(match("OverdispersedPoisson", list$AnalysisMethodsDifferenceTests))
   list$DoNBdiff = !is.na(match("NegativeBinomial",     list$AnalysisMethodsDifferenceTests))
+  list$DoNOdiff = !is.na(match("Normal",               list$AnalysisMethodsDifferenceTests))
   list$DoLNequi = !is.na(match("LogNormal",            list$AnalysisMethodsEquivalenceTests))
   list$DoSQequi = !is.na(match("SquareRoot",           list$AnalysisMethodsEquivalenceTests))
   list$DoOPequi = !is.na(match("OverdispersedPoisson", list$AnalysisMethodsEquivalenceTests))
   list$DoNBequi = !is.na(match("NegativeBinomial",     list$AnalysisMethodsEquivalenceTests))
+  list$DoNOequi = !is.na(match("Normal",               list$AnalysisMethodsEquivalenceTests))
   return(list)
 }
 
@@ -269,7 +278,7 @@ createModelSettings <- function(data, settings) {
   # Model formulas for H0 and H1; Note that the Test column is used to test the comparison
   nterms <- grep("Mean", colnames) - 1
   nameH1 <- colnames[c(2:nterms)]
-  if (settings$ExperimentalDesignType == "RandomizedCompleteBlocks") {
+  if (settings$ExperimentalDesignType != "CompletelyRandomized") {
     nameH1 <- c(nameH1, "Block") # Add blocking effect
   }
 
@@ -300,10 +309,10 @@ createSimulationSettings <- function(settings) {
   simulationSettings$dispersion <- ropoissonDispersion(settings$OverallMean, settings$CVComparator, settings$PowerLawPower, settings$Distribution)  
 
   # Add blocking effect to model 
-  if (settings$ExperimentalDesignType == "RandomizedCompleteBlocks") {
-    simulationSettings$sigBlock <- sqrt(log((settings$CVBlocks/100)^2 + 1))
-  } else {
+  if (settings$ExperimentalDesignType == "CompletelyRandomized") {
     simulationSettings$sigBlock <- 0
+  } else {
+    simulationSettings$sigBlock <- sqrt(log((settings$CVBlocks/100)^2 + 1))
   }
   return(simulationSettings)
 }
@@ -321,11 +330,11 @@ createSimulatedDataOld <- function(data, settings, simulationSettings, blocks, e
   setupSimulatedData["TransformedMean"] <- linkFunction(data["Mean"], settings$MeasurementType)
   
   # Apply blocking Effect on the transformed scale; use Blom scores
-  if (settings$ExperimentalDesignType == "RandomizedCompleteBlocks") {
+  if (settings$ExperimentalDesignType == "CompletelyRandomized") {
+    setupSimulatedData["BlockEffect"] <- 0
+  } else {
     blockeff = simulationSettings$sigBlock * qnorm(((1:blocks) - 0.375)/ (blocks + 0.25))
     setupSimulatedData["BlockEffect"] <- blockeff[setupSimulatedData[["Block"]]]
-  } else {
-    setupSimulatedData["BlockEffect"] <- 0
   }
   setupSimulatedData["LowOffset"] <- setupSimulatedData["Test"] * settings$TransformLocLower
   setupSimulatedData["UppOffset"] <- setupSimulatedData["Test"] * settings$TransformLocUpper
@@ -357,11 +366,11 @@ createSimulatedData <- function(data, settings, simulationSettings, blocks, effe
   transformedMean <- linkFunction(setupSimulatedData["Mean"], settings$MeasurementType)
   
   # Apply blocking Effect on the transformed scale; use Blom scores
-  if (settings$ExperimentalDesignType == "RandomizedCompleteBlocks") {
+  if (settings$ExperimentalDesignType == "CompletelyRandomized") {
+    blockEffect <- 0
+  } else {
     blomScores <- simulationSettings$sigBlock * qnorm(((1:blocks) - 0.375)/ (blocks + 0.25))
     blockEffect <- blomScores[setupSimulatedData[["Block"]]]
-  } else {
-    blockEffect <- 0
   }
   setupSimulatedData["LowOffset"] <- setupSimulatedData["Test"] * settings$TransformLocLower
   setupSimulatedData["UppOffset"] <- setupSimulatedData["Test"] * settings$TransformLocUpper

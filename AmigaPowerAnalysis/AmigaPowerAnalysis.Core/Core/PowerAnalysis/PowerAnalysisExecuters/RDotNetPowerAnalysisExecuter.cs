@@ -76,6 +76,8 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                     var blockConfigurations = (inputPowerAnalysis.PowerCalculationMethodType == PowerCalculationMethod.Approximate &&
                         ((inputPowerAnalysis.ExperimentalDesignType == ExperimentalDesignType.CompletelyRandomized) || (inputPowerAnalysis.CvForBlocks == 0D)))
                         ? new List<int>() { inputPowerAnalysis.NumberOfReplications.Max() } : inputPowerAnalysis.NumberOfReplications;
+                    blockConfigurations = (inputPowerAnalysis.MeasurementType== MeasurementType.Continuous)
+                        ? new List<int>() { inputPowerAnalysis.NumberOfReplications.Max() } : inputPowerAnalysis.NumberOfReplications;
 
                     var totalLoops = blockConfigurations.Count * effects.Count;
 
@@ -93,11 +95,12 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                                 // Define settings for Debugging the Rscript
                                 rEngine.EvaluateNoReturn(string.Format("debugSettings = list(iRep={0}, iEffect={1}, iDataset=NaN)", i + 1, j + 1));
 
-                                if (inputPowerAnalysis.PowerCalculationMethodType == PowerCalculationMethod.Approximate) {
+                                if ((inputPowerAnalysis.PowerCalculationMethodType == PowerCalculationMethod.Approximate) || (inputPowerAnalysis.MeasurementType== MeasurementType.Continuous)) {
+                                    // Lyles method for Counts
                                     var output = runLylesApproximation(effect, blocks, inputPowerAnalysis.SelectedAnalysisMethodTypesDifferenceTests, inputPowerAnalysis.SelectedAnalysisMethodTypesEquivalenceTests, inputPowerAnalysis.NumberOfSimulatedDataSets, rEngine);
                                     outputResults.AddRange(output);
                                 } else {
-                                    // Run Monte Carlo
+                                    // Monte Carlo for Counts
                                     var output = runMonteCarloSimulation(effect, blocks, inputPowerAnalysis.SelectedAnalysisMethodTypesDifferenceTests, inputPowerAnalysis.SelectedAnalysisMethodTypesEquivalenceTests, inputPowerAnalysis.NumberOfSimulatedDataSets, rEngine);
                                     outputResults.Add(output);
                                 }
@@ -241,8 +244,8 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
         private List<EffectCSD> createCsdEvaluationGrid(double locLower, double locUpper, double overallMean, int numberOfEvaluations, MeasurementType measurementType) {
             double transformedLocLower, transformedLocUpper;
             if (measurementType == MeasurementType.Continuous) {
-                transformedLocLower = locLower - overallMean;
-                transformedLocUpper = locUpper + overallMean;
+                transformedLocLower = locLower;
+                transformedLocUpper = locUpper;
             }
             else {
                 transformedLocLower = Math.Log(locLower);
