@@ -14,10 +14,10 @@ namespace AmigaPowerAnalysis.Core {
         #region DataMembers
 
         [DataMember]
-        private EndpointType _endpointType;
+        private string _name;
 
         [DataMember]
-        private string _name;
+        private EndpointType _endpointType;
 
         [DataMember]
         private MeasurementType _measurement;
