@@ -22,16 +22,26 @@ namespace AmigaPowerAnalysis.Core {
             _factorLevels = new List<FactorLevel>();
         }
 
+        /// <summary>
+        /// Returns the name of this factor, which is "Variety".
+        /// </summary>
         public override string Name {
             get { return "Variety"; }
             set { throw new Exception("Cannot set the name of the variety factor."); }
         }
 
+        /// <summary>
+        /// Returns true, cannot be set. This level is the variety factor,
+        /// hence it has by definition interaction with variety. 
+        /// </summary>
         public override bool IsInteractionWithVariety {
             get { return true; }
             set { }
         }
 
+        /// <summary>
+        /// Returns true: this is the variety factor.
+        /// </summary>
         public override bool IsVarietyFactor {
             get { return true; }
         }
