@@ -8,14 +8,14 @@ namespace AmigaPowerAnalysis.Core.Data {
 
         #region Properties
 
-        public string FactorId { get; set; }
+        public string Factor { get; set; }
         public string Label { get; set; }
         public int Frequency { get; set; }
 
         #endregion
 
         public static FactorLevel FromDTO(FactorLevelDTO dto, IEnumerable<IFactor> factors) {
-            var parent = factors.Single(f => f.Name == dto.FactorId);
+            var parent = factors.Single(f => f.Name == dto.Factor);
             var level = new FactorLevel() {
                 Parent = parent,
                 Label = dto.Label,
@@ -27,7 +27,7 @@ namespace AmigaPowerAnalysis.Core.Data {
 
         public static FactorLevelDTO ToDTO(FactorLevel factorLevel) {
             return new FactorLevelDTO() {
-                FactorId = factorLevel.Parent.Name,
+                Factor = factorLevel.Parent.Name,
                 Label = factorLevel.Label,
                 Frequency = factorLevel.Frequency,
             };

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 using System.Text;
+using System.Xml.Serialization;
 
 namespace AmigaPowerAnalysis.Core.Data {
     public sealed class DefaultInteractionDTO {
@@ -15,7 +16,9 @@ namespace AmigaPowerAnalysis.Core.Data {
 
         #region Properties
 
+        [XmlArrayItem("Levels")]
         public List<DynamicPropertyValue> Labels { get; set; }
+
         public bool IsComparisonLevel { get; set; }
 
         #endregion

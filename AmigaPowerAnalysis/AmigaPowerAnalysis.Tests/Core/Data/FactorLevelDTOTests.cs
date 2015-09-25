@@ -25,7 +25,7 @@ namespace AmigaPowerAnalysis.Tests.Core {
 
         [TestMethod]
         [TestCategory("UnitTests")]
-        public void FactorDTO_TestSingle() {
+        public void FactorLevelDTO_TestSingle() {
             var filename = Path.Combine(_testPath, "SingleFactorLevel.csv");
             var originals = _factors.SelectMany(r => r.FactorLevels).Take(1).ToList();
             var dtoOriginals = originals.Select(r => FactorLevelDTO.ToDTO(r)).ToList();
@@ -37,7 +37,7 @@ namespace AmigaPowerAnalysis.Tests.Core {
 
         [TestMethod]
         [TestCategory("UnitTests")]
-        public void FactorDTO_TestMultiple() {
+        public void FactorLevelDTO_TestMultiple() {
             var filename = Path.Combine(_testPath, "MultipleFactorLevels.csv");
             var originals = _factors.SelectMany(r => r.FactorLevels).ToList();
             var dtoOriginals = originals.Select(r => FactorLevelDTO.ToDTO(r)).ToList();

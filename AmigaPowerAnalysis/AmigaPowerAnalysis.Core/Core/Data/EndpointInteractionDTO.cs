@@ -6,6 +6,7 @@ using System.Linq;
 using System.IO;
 using System.Text;
 using System.Globalization;
+using System.Xml.Serialization;
 
 namespace AmigaPowerAnalysis.Core.Data {
     public sealed class EndpointInteractionDTO {
@@ -17,15 +18,20 @@ namespace AmigaPowerAnalysis.Core.Data {
         #region Properties
 
         public string Endpoint { get; set; }
+
+        [XmlArrayItem("Levels")]
         public List<DynamicPropertyValue> Labels { get; set; }
+
         public bool IsComparisonLevel { get; set; }
+
         public double Mean { get; set; }
 
         #endregion
 
         public static InteractionFactorLevelCombination FromDTO(EndpointInteractionDTO dto, IEnumerable<IFactor> factors, IEnumerable<Endpoint> endpoints) {
+            var endpoint = endpoints.First(ep => ep.Name == dto.Endpoint);
             var interaction = new InteractionFactorLevelCombination() {
-                Endpoint = endpoints.First(ep => ep.Name == dto.Endpoint),
+                Endpoint = endpoint,
             };
             foreach (var label in dto.Labels) {
                 if (!string.IsNullOrEmpty(label.RawValue)) {
@@ -35,6 +41,7 @@ namespace AmigaPowerAnalysis.Core.Data {
             }
             interaction.IsComparisonLevel = dto.IsComparisonLevel;
             interaction.Mean = dto.Mean;
+            endpoint.Interactions.Add(interaction);
             return interaction;
         }
 

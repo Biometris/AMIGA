@@ -6,6 +6,7 @@ using System.Linq;
 using System.IO;
 using System.Text;
 using System.Globalization;
+using System.Xml.Serialization;
 
 namespace AmigaPowerAnalysis.Core.Data {
     public sealed class EndpointModifierDTO {
@@ -17,7 +18,10 @@ namespace AmigaPowerAnalysis.Core.Data {
         #region Properties
 
         public string Endpoint { get; set; }
+
+        [XmlArrayItem("Levels")]
         public List<DynamicPropertyValue> Labels { get; set; }
+
         public double ModifierFactor { get; set; }
 
         #endregion
@@ -33,6 +37,7 @@ namespace AmigaPowerAnalysis.Core.Data {
                     modifier.Levels.Add(level);
                 }
             }
+            endpoint.Modifiers.Add(modifier);
             return modifier;
         }
 
