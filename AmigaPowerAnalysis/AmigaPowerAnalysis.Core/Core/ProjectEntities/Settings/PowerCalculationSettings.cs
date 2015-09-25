@@ -25,7 +25,7 @@ namespace AmigaPowerAnalysis.Core {
             SelectedAnalysisMethodTypesEquivalenceTests = AnalysisMethodType.OverdispersedPoisson;
             SignificanceLevel = 0.05;
             NumberOfRatios = 3;
-            NumberOfReplications = new List<int> { 2, 4, 8, 16 };
+            NumberOfReplications = new List<int> { 5, 10, 20, 40, 60 };
             PowerCalculationMethod = PowerCalculationMethod.Approximate;
             UseWaldTest = true;
             NumberOfSimulatedDataSets = 100;
