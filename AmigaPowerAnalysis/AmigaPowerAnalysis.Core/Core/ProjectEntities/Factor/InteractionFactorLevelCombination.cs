@@ -72,15 +72,6 @@ namespace AmigaPowerAnalysis.Core {
         }
 
         /// <summary>
-        /// Returns the non-variety factor level combination of this factor level combination.
-        /// </summary>
-        public FactorLevelCombination NonVarietyFactorLevelCombination {
-            get {
-                return new FactorLevelCombination(Levels.Where(fl => !fl.Parent.IsVarietyFactor).ToList());
-            }
-        }
-
-        /// <summary>
         /// Specifies whether this comparison interaction level is a Test interaction level.
         /// </summary>
         public bool IsComparisonLevel {
@@ -92,6 +83,15 @@ namespace AmigaPowerAnalysis.Core {
                 if (_isComparisonLevel) {
                     _mean = double.NaN;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Returns the non-variety factor level combination of this factor level combination.
+        /// </summary>
+        public FactorLevelCombination NonVarietyFactorLevelCombination {
+            get {
+                return new FactorLevelCombination(Levels.Where(fl => !fl.Parent.IsVarietyFactor).ToList());
             }
         }
 

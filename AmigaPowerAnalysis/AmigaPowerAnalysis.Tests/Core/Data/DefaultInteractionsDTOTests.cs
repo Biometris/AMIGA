@@ -21,20 +21,29 @@ namespace AmigaPowerAnalysis.Tests.Core {
 
         private static List<IFactor> _factors = new List<IFactor>() { 
             VarietyFactor.CreateVarietyFactor(),
-            new Factor("F", 3, true),
-            new Factor("G", 0, false),
-            new Factor("H", 2, false),
+            new Factor("F", 2, true),
+            new Factor("G", 3, false),
+            new Factor("H", 4, true),
         };
+
+        private static List<InteractionFactorLevelCombination> getInteractions() {
+            var interactionFactors = _factors.Where(f => f.IsInteractionWithVariety).ToList();
+            var interactions = FactorLevelCombinationsCreator.GenerateInteractionCombinations(interactionFactors)
+                .Select((r,i) => new InteractionFactorLevelCombination(r) {
+                    IsComparisonLevel = (i % 2 == 0)
+                })
+                .ToList();
+            return interactions;
+        }
 
         [TestMethod]
         [TestCategory("UnitTests")]
         public void DefaultInteractionsDTOTests_TestSingle() {
             var filename = Path.Combine(_testPath, "SingleDefaultInteraction.csv");
-            var interactionFactors = _factors.Where(f => f.IsInteractionWithVariety).ToList();
-            var originals = FactorLevelCombinationsCreator.GenerateInteractionCombinations(interactionFactors)
-                .Select(r => new InteractionFactorLevelCombination(r)).Take(1).ToList();
-            writeToCsvFile(originals, filename, ",");
-            var records = _fileReader.ReadInteractionFactorLevels(filename, _factors);
+            var originals = getInteractions().Take(1).ToList();
+            var dtos = originals.Select(r => DefaultInteractionDTO.ToDTO(r));
+            DefaultInteractionDTO.WriteToCsvFile(dtos, filename);
+            var records = _fileReader.ReadDefaultInteractions(filename, _factors);
             Assert.IsTrue(ObjectComparisonExtensions.PublicInstancePropertiesEqual(originals.Single(), records.Single()));
             Assert.AreEqual(originals.Single(), records.Single());
         }
@@ -44,38 +53,14 @@ namespace AmigaPowerAnalysis.Tests.Core {
         public void DefaultInteractionsDTOTests_TestMultiple() {
             var filename = Path.Combine(_testPath, "MultipleDefaultInteractions.csv");
             var interactionFactors = _factors.Where(f => f.IsInteractionWithVariety).ToList();
-            var originals = FactorLevelCombinationsCreator.GenerateInteractionCombinations(interactionFactors)
-                .Select(r => new InteractionFactorLevelCombination(r)).ToList();
-            writeToCsvFile(originals, filename, ",");
-            var records = _fileReader.ReadInteractionFactorLevels(filename, _factors);
+            var originals = getInteractions().ToList();
+            var dtos = originals.Select(r => DefaultInteractionDTO.ToDTO(r));
+            DefaultInteractionDTO.WriteToCsvFile(dtos, filename);
+            var records = _fileReader.ReadDefaultInteractions(filename, _factors);
             Assert.AreEqual(records.Count, originals.Count);
             foreach (var original in originals) {
                 Assert.IsTrue(records.Contains(original));
             }
-        }
-
-        public static void writeToCsvFile(IEnumerable<InteractionFactorLevelCombination> interactions, string filename, string separator) {
-            var csvString = csvTable(interactions, separator);
-            using (var file = new StreamWriter(filename)) {
-                file.WriteLine(csvString);
-                file.Close();
-            }
-        }
-
-        private static string csvTable(IEnumerable<InteractionFactorLevelCombination> interactions, string separator) {
-            if (interactions == null || interactions.Count() == 0) {
-                return string.Empty;
-            }
-            var lines = new List<string>();
-            var levels = interactions.First().Levels.Select(l => l.Parent.Name);
-            lines.Add(string.Join(separator, levels));
-            foreach (var level in interactions) {
-                var labels = levels.Select(l => level.Levels.FirstOrDefault(r => r.Parent.Name == l).Label);
-                lines.Add(string.Join(separator, labels));
-            }
-            var stringBuilder = new StringBuilder();
-            lines.ForEach(l => stringBuilder.AppendLine(l));
-            return stringBuilder.ToString();
         }
     }
 }

@@ -54,6 +54,20 @@ namespace Biometris.ExtensionMethods {
         }
 
         /// <summary>
+        /// A first or default implementation in which the default
+        /// value can be given as argument.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="alternate"></param>
+        /// <returns></returns>
+        public static T FirstOr<T>(this IEnumerable<T> source, T alternate) {
+            foreach (T t in source)
+                return t;
+            return alternate;
+        }
+
+        /// <summary>
         /// Prints the elements of the list as a table.
         /// </summary>
         /// <typeparam name="T"></typeparam>

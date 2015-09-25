@@ -328,7 +328,7 @@ namespace AmigaPowerAnalysis.Core {
         /// </summary>
         /// <param name="factor"></param>
         public void RemoveFactor(Factor factor) {
-            if (_factors.Any(f => f.Factor == factor)) {
+            if (_factors.Any(f => f.Factor.Name == factor.Name)) {
                 _factors.RemoveAll(f => f.Factor == factor);
                 updateNonComparisonLevels();
             }
@@ -341,7 +341,7 @@ namespace AmigaPowerAnalysis.Core {
         /// <param name="factor"></param>
         /// <param name="isInteraction"></param>
         public void SetFactorType(Factor factor, bool isInteraction) {
-            var fac = _factors.First(f => f.Factor == factor);
+            var fac = _factors.First(f => f.Factor.Name == factor.Name);
             if (fac.IsComparisonFactor != isInteraction) {
                 fac.IsComparisonFactor = isInteraction;
                 updateNonComparisonLevels();

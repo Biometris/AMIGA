@@ -236,10 +236,9 @@
   </TableDefinition>
 
   <TableDefinition>
-    <TableID>Interactions</TableID>
+    <TableID>DefaultInteractions</TableID>
     <Aliases>
-      <string>Interactions</string>
-      <string>InteractionFactorLevelCombinations</string>
+      <string>DefaultInteractionFactorLevelCombinations</string>
     </Aliases>
     <ColumnDefinitions>
       <ColumnDefinition IsDynamic="true">
@@ -248,8 +247,42 @@
           <string>Labels</string>
         </Aliases>
       </ColumnDefinition>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>IsComparisonLevel</ColumnID>
+        <Aliases>
+          <string>IsComparisonLevel</string>
+        </Aliases>
+      </ColumnDefinition>
     </ColumnDefinitions>
   </TableDefinition>
-  
-</ArrayOfTableDefinition>
 
+  <TableDefinition>
+    <TableID>EndpointInteractions</TableID>
+    <Aliases>
+      <string>EndpointInteractionFactorLevelCombinations</string>
+    </Aliases>
+    <ColumnDefinitions>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>Endpoint</ColumnID>
+        <Aliases>
+          <string>Endpoint</string>
+          <string>EndpointId</string>
+          <string>EndpointName</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition IsDynamic="true">
+        <ColumnID>Labels</ColumnID>
+        <Aliases>
+          <string>Labels</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>IsComparisonLevel</ColumnID>
+        <Aliases>
+          <string>IsComparisonLevel</string>
+        </Aliases>
+      </ColumnDefinition>
+    </ColumnDefinitions>
+  </TableDefinition>
+
+</ArrayOfTableDefinition>

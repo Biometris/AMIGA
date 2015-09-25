@@ -37,12 +37,18 @@ namespace AmigaPowerAnalysis.Core.DataReaders {
             return records.Select(r => FactorLevelDTO.FromDTO(r, factors)).ToList();
         }
 
-        public List<InteractionFactorLevelCombination> ReadInteractionFactorLevels(string filename, IEnumerable<IFactor> factors) {
+        public List<InteractionFactorLevelCombination> ReadDefaultInteractions(string filename, IEnumerable<IFactor> factors) {
             var reader = new CsvFileReader();
-            var tableDefinition = tableDefinitions.GetTableDefinition("Interactions");
-            var records = reader.ReadDataSet<InteractionFactorLevelCombinationDTO>(filename, tableDefinition);
-            var interactionFactors = factors.Where(f => f.IsInteractionWithVariety);
-            return records.Select(r => InteractionFactorLevelCombinationDTO.FromDTO(r, interactionFactors)).ToList();
+            var tableDefinition = tableDefinitions.GetTableDefinition("DefaultInteractions");
+            var records = reader.ReadDataSet<DefaultInteractionDTO>(filename, tableDefinition);
+            return records.Select(r => DefaultInteractionDTO.FromDTO(r, factors)).ToList();
+        }
+
+        public List<InteractionFactorLevelCombination> ReadEndpointInteractions(string filename, IEnumerable<IFactor> factors, IEnumerable<Endpoint> endpoints) {
+            var reader = new CsvFileReader();
+            var tableDefinition = tableDefinitions.GetTableDefinition("EndpointInteractions");
+            var records = reader.ReadDataSet<EndpointInteractionDTO>(filename, tableDefinition);
+            return records.Select(r => EndpointInteractionDTO.FromDTO(r, factors, endpoints)).ToList();
         }
 
         private TableDefinitionCollection tableDefinitions {
