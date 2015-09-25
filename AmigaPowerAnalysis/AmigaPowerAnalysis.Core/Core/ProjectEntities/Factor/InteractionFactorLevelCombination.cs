@@ -100,7 +100,7 @@ namespace AmigaPowerAnalysis.Core {
         /// </summary>
         /// <param name="variety"></param>
         /// <returns></returns>
-        public ComparisonType ComparisonType {
+        public override ComparisonType ComparisonType {
             get {
                 if (IsComparisonLevel && VarietyLevel.VarietyLevelType == VarietyLevelType.Test) {
                     return ComparisonType.IncludeTest;
