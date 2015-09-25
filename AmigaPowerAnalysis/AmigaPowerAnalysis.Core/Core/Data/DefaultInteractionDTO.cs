@@ -20,16 +20,13 @@ namespace AmigaPowerAnalysis.Core.Data {
 
         #endregion
 
-        public static InteractionFactorLevelCombination FromDTO(DefaultInteractionDTO dto, IEnumerable<IFactor> interactionFactors) {
-            var interaction = new InteractionFactorLevelCombination() {
-                IsComparisonLevel = dto.IsComparisonLevel,
-            };
-            if (dto.Labels.Count == interactionFactors.Count()) {
-                foreach (var label in dto.Labels) {
-                    var level = interactionFactors.First(f => f.Name == label.Name).FactorLevels.First(r => r.Label == label.RawValue);
-                    interaction.Levels.Add(level);
-                }
+        public static InteractionFactorLevelCombination FromDTO(DefaultInteractionDTO dto, IEnumerable<IFactor> factors) {
+            var interaction = new InteractionFactorLevelCombination();
+            foreach (var label in dto.Labels) {
+                var level = factors.First(f => f.Name == label.Name).FactorLevels.First(r => r.Label == label.RawValue);
+                interaction.Levels.Add(level);
             }
+            interaction.IsComparisonLevel = dto.IsComparisonLevel;
             return interaction;
         }
 

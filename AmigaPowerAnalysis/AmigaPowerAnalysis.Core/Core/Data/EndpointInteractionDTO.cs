@@ -24,7 +24,6 @@ namespace AmigaPowerAnalysis.Core.Data {
         public static InteractionFactorLevelCombination FromDTO(EndpointInteractionDTO dto, IEnumerable<IFactor> factors, IEnumerable<Endpoint> endpoints) {
             var interaction = new InteractionFactorLevelCombination() {
                 Endpoint = endpoints.First(ep => ep.Name == dto.Endpoint),
-                IsComparisonLevel = dto.IsComparisonLevel,
             };
             foreach (var label in dto.Labels) {
                 if (!string.IsNullOrEmpty(label.RawValue)) {
@@ -32,6 +31,7 @@ namespace AmigaPowerAnalysis.Core.Data {
                     interaction.Levels.Add(level);
                 }
             }
+            interaction.IsComparisonLevel = dto.IsComparisonLevel;
             return interaction;
         }
 
