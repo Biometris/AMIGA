@@ -27,7 +27,7 @@ namespace AmigaPowerAnalysis.Core {
         /// <summary>
         /// The factor levels that make up this factor level combination.
         /// </summary>
-        public IEnumerable<FactorLevel> Levels {
+        public List<FactorLevel> Levels {
             get { return _levels; }
         }
 

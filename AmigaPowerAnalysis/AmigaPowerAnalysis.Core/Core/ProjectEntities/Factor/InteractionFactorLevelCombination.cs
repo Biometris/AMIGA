@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.Serialization;
 
@@ -50,6 +51,27 @@ namespace AmigaPowerAnalysis.Core {
         }
 
         /// <summary>
+        /// The mean of the Test for this level.
+        /// </summary>
+        public double Mean {
+            get {
+                if (!double.IsNaN(_mean)) {
+                    return _mean;
+                } else if (Endpoint != null) {
+                    return Endpoint.MuComparator;
+                }
+                return double.NaN;
+            }
+            set {
+                if (IsComparisonLevel || (Endpoint != null && value == Endpoint.MuComparator)) {
+                    _mean = double.NaN;
+                } else {
+                    _mean = value;
+                }
+            }
+        }
+
+        /// <summary>
         /// Returns the non-variety factor level combination of this factor level combination.
         /// </summary>
         public FactorLevelCombination NonVarietyFactorLevelCombination {
@@ -69,27 +91,6 @@ namespace AmigaPowerAnalysis.Core {
                 _isComparisonLevel = value;
                 if (_isComparisonLevel) {
                     _mean = double.NaN;
-                }
-            }
-        }
-
-        /// <summary>
-        /// The mean of the Test for this level.
-        /// </summary>
-        public double Mean {
-            get {
-                if (!double.IsNaN(_mean)) {
-                    return _mean;
-                } else if (Endpoint != null) {
-                    return Endpoint.MuComparator;
-                }
-                return double.NaN;
-            }
-            set {
-                if (IsComparisonLevel || (Endpoint != null && value == Endpoint.MuComparator)) {
-                    _mean = double.NaN;
-                } else {
-                    _mean = value;
                 }
             }
         }

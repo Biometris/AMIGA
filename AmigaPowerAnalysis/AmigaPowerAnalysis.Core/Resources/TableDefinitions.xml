@@ -234,6 +234,22 @@
       </ColumnDefinition>
     </ColumnDefinitions>
   </TableDefinition>
+
+  <TableDefinition>
+    <TableID>Interactions</TableID>
+    <Aliases>
+      <string>Interactions</string>
+      <string>InteractionFactorLevelCombinations</string>
+    </Aliases>
+    <ColumnDefinitions>
+      <ColumnDefinition IsDynamic="true">
+        <ColumnID>Labels</ColumnID>
+        <Aliases>
+          <string>Labels</string>
+        </Aliases>
+      </ColumnDefinition>
+    </ColumnDefinitions>
+  </TableDefinition>
   
 </ArrayOfTableDefinition>
 
