@@ -73,16 +73,27 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                     rEngine.EvaluateNoReturn("set.seed(settings$RandomNumberSeed)");
                     rEngine.EvaluateNoReturn("modelSettings <- createModelSettings(inputData, settings)");
 
-                    // For Approximate Method and no blocks (or zero CVblock) the power can be calculated for all reps simultaneously
-                    var blockConfigurations = (inputPowerAnalysis.PowerCalculationMethodType == PowerCalculationMethod.Approximate &&
-                        ((inputPowerAnalysis.ExperimentalDesignType == ExperimentalDesignType.CompletelyRandomized) || (inputPowerAnalysis.CvForBlocks == 0D)))
-                        ? new List<int>() { inputPowerAnalysis.NumberOfReplications.Max() } : inputPowerAnalysis.NumberOfReplications;
-                    // For Normal distribution the power can be calculated for all reps simultaneously
-                    blockConfigurations = (inputPowerAnalysis.MeasurementType == MeasurementType.Continuous)
-                        ? new List<int>() { inputPowerAnalysis.NumberOfReplications.Max() } : inputPowerAnalysis.NumberOfReplications;
-                    // For LogNormal distribution and Analysis=LogPlusM the power can be calculated for all reps simultaneously
-                    blockConfigurations = ((inputPowerAnalysis.MeasurementType == MeasurementType.Nonnegative) && (inputPowerAnalysis.SelectedAnalysisMethodTypesDifferenceTests == AnalysisMethodType.LogPlusM) && (inputPowerAnalysis.SelectedAnalysisMethodTypesEquivalenceTests == AnalysisMethodType.LogPlusM))
-                        ? new List<int>() { inputPowerAnalysis.NumberOfReplications.Max() } : inputPowerAnalysis.NumberOfReplications;
+                    var blockConfigurations = new List<int>();
+                    var maxList = new List<int>() { inputPowerAnalysis.NumberOfReplications.Max() };
+                    if (inputPowerAnalysis.MeasurementType == MeasurementType.Continuous) {
+                        // For Continuous data (Normal distribution) the power can be calculated for all reps simultaneously
+                        blockConfigurations = maxList;
+                    }
+                    else if ((inputPowerAnalysis.MeasurementType == MeasurementType.Nonnegative) &&
+                        ((inputPowerAnalysis.SelectedAnalysisMethodTypesDifferenceTests == AnalysisMethodType.LogPlusM) || (inputPowerAnalysis.SelectedAnalysisMethodTypesDifferenceTests == 0)) &&
+                        ((inputPowerAnalysis.SelectedAnalysisMethodTypesEquivalenceTests == AnalysisMethodType.LogPlusM) || (inputPowerAnalysis.SelectedAnalysisMethodTypesEquivalenceTests == 0))) {
+                        // For Nonnegative data (LogNormal distribution) and analysis methods LogPlusM the power can be calculated for all reps simultaneously
+                        blockConfigurations = maxList;
+                    }
+                    else if ((inputPowerAnalysis.PowerCalculationMethodType == PowerCalculationMethod.Approximate) &&
+                            ((inputPowerAnalysis.ExperimentalDesignType == ExperimentalDesignType.CompletelyRandomized) || (inputPowerAnalysis.CvForBlocks == 0D))) {
+                        // For Counts and Nonnegative data 
+                        // For Approximate Method and no blocks (or zero CVblock) the power can be calculated for all reps simultaneously
+                        blockConfigurations = maxList;
+                    }
+                    else {
+                        blockConfigurations = inputPowerAnalysis.NumberOfReplications;
+                    }
 
                     var totalLoops = blockConfigurations.Count * effects.Count;
 
