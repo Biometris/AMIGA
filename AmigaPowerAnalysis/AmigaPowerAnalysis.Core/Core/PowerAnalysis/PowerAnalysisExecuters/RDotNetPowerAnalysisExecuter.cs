@@ -81,7 +81,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                     blockConfigurations = (inputPowerAnalysis.MeasurementType == MeasurementType.Continuous)
                         ? new List<int>() { inputPowerAnalysis.NumberOfReplications.Max() } : inputPowerAnalysis.NumberOfReplications;
                     // For LogNormal distribution and Analysis=LogPlusM the power can be calculated for all reps simultaneously
-                    blockConfigurations = ((inputPowerAnalysis.MeasurementType == MeasurementType.Nonnegative) && (inputPowerAnalysis.a))
+                    blockConfigurations = ((inputPowerAnalysis.MeasurementType == MeasurementType.Nonnegative) && (inputPowerAnalysis.SelectedAnalysisMethodTypesDifferenceTests == AnalysisMethodType.LogPlusM) && (inputPowerAnalysis.SelectedAnalysisMethodTypesEquivalenceTests == AnalysisMethodType.LogPlusM))
                         ? new List<int>() { inputPowerAnalysis.NumberOfReplications.Max() } : inputPowerAnalysis.NumberOfReplications;
 
                     var totalLoops = blockConfigurations.Count * effects.Count;
@@ -104,7 +104,8 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                                     // Lyles method for Counts
                                     var output = runLylesApproximation(effect, blocks, inputPowerAnalysis.SelectedAnalysisMethodTypesDifferenceTests, inputPowerAnalysis.SelectedAnalysisMethodTypesEquivalenceTests, inputPowerAnalysis.NumberOfSimulatedDataSets, rEngine);
                                     outputResults.AddRange(output);
-                                } else {
+                                }
+                                else {
                                     // Monte Carlo for Counts
                                     var output = runMonteCarloSimulation(effect, blocks, inputPowerAnalysis.SelectedAnalysisMethodTypesDifferenceTests, inputPowerAnalysis.SelectedAnalysisMethodTypesEquivalenceTests, inputPowerAnalysis.NumberOfSimulatedDataSets, rEngine);
                                     outputResults.Add(output);

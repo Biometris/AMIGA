@@ -69,7 +69,8 @@ namespace AmigaPowerAnalysis.GUI {
             column.ReadOnly = true;
             dataGridViewComparisons.Columns.Add(column);
 
-            var _availableAnalysisMethodTypesDifferenceTests = _resultPowerAnalysis.ComparisonPowerAnalysisResults.First().InputPowerAnalysis.SelectedAnalysisMethodTypesDifferenceTests.GetFlags().ToArray();
+            var _availableAnalysisMethodTypesDifferenceTests = _resultPowerAnalysis.ComparisonPowerAnalysisResults
+                .SelectMany(r => r.AnalysisMethodDifferenceTest.GetFlags().ToArray()).Distinct().ToList();
 
             var combo = new DataGridViewComboBoxColumn();
             combo.DataSource = _availableAnalysisMethodTypesDifferenceTests;
@@ -79,7 +80,8 @@ namespace AmigaPowerAnalysis.GUI {
             combo.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
             dataGridViewComparisons.Columns.Add(combo);
 
-            var _availableAnalysisMethodTypesEquivalenceTests = _resultPowerAnalysis.ComparisonPowerAnalysisResults.First().InputPowerAnalysis.SelectedAnalysisMethodTypesEquivalenceTests.GetFlags().ToArray();
+            var _availableAnalysisMethodTypesEquivalenceTests = _resultPowerAnalysis.ComparisonPowerAnalysisResults
+                .SelectMany(r => r.AnalysisMethodEquivalenceTest.GetFlags().ToArray()).Distinct().ToList();
 
             combo = new DataGridViewComboBoxColumn();
             combo.DataSource = _availableAnalysisMethodTypesEquivalenceTests;
@@ -134,7 +136,12 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void dataGridViewComparisons_SelectionChanged(object sender, EventArgs e) {
-            _currentComparisonAnalysisResult = _resultPowerAnalysis.ComparisonPowerAnalysisResults.ElementAt(dataGridViewComparisons.CurrentRow.Index);
+            if (dataGridViewComparisons.CurrentRow.Index < _resultPowerAnalysis.ComparisonPowerAnalysisResults.Count()) {
+                _currentComparisonAnalysisResult = _resultPowerAnalysis.ComparisonPowerAnalysisResults.ElementAt(dataGridViewComparisons.CurrentRow.Index);
+            }
+            else {
+                _currentComparisonAnalysisResult = null;
+            }
             updateAnalysisOutputPanel();
         }
 

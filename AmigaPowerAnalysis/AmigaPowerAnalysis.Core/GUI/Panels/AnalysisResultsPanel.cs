@@ -77,7 +77,8 @@ namespace AmigaPowerAnalysis.GUI {
             checkbox.HeaderText = "Primary";
             dataGridViewComparisons.Columns.Add(checkbox);
 
-            var _availableAnalysisMethodTypesDifferenceTests = _resultPowerAnalysis.ComparisonPowerAnalysisResults.First().InputPowerAnalysis.SelectedAnalysisMethodTypesDifferenceTests.GetFlags().ToArray();
+            var _availableAnalysisMethodTypesDifferenceTests = _resultPowerAnalysis.ComparisonPowerAnalysisResults
+                .SelectMany(r => r.AnalysisMethodDifferenceTest.GetFlags().ToArray()).Distinct().ToList();
 
             var combo = new DataGridViewComboBoxColumn();
             combo.DataSource = _availableAnalysisMethodTypesDifferenceTests;
@@ -87,7 +88,8 @@ namespace AmigaPowerAnalysis.GUI {
             combo.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
             dataGridViewComparisons.Columns.Add(combo);
 
-            var _availableAnalysisMethodTypesEquivalenceTests = _resultPowerAnalysis.ComparisonPowerAnalysisResults.First().InputPowerAnalysis.SelectedAnalysisMethodTypesEquivalenceTests.GetFlags().ToArray();
+            var _availableAnalysisMethodTypesEquivalenceTests = _resultPowerAnalysis.ComparisonPowerAnalysisResults
+                .SelectMany(r => r.AnalysisMethodEquivalenceTest.GetFlags().ToArray()).Distinct().ToList();
 
             combo = new DataGridViewComboBoxColumn();
             combo.DataSource = _availableAnalysisMethodTypesEquivalenceTests;
