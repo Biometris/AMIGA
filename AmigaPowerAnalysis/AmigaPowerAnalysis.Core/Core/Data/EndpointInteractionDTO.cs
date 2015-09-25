@@ -41,6 +41,7 @@ namespace AmigaPowerAnalysis.Core.Data {
             }
             interaction.IsComparisonLevel = dto.IsComparisonLevel;
             interaction.Mean = dto.Mean;
+            endpoint.Interactions.RemoveAll(r => r == interaction);
             endpoint.Interactions.Add(interaction);
             return interaction;
         }

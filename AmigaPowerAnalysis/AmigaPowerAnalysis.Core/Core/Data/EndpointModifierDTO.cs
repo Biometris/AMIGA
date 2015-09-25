@@ -37,6 +37,7 @@ namespace AmigaPowerAnalysis.Core.Data {
                     modifier.Levels.Add(level);
                 }
             }
+            endpoint.Modifiers.RemoveAll(r => r == modifier);
             endpoint.Modifiers.Add(modifier);
             return modifier;
         }
