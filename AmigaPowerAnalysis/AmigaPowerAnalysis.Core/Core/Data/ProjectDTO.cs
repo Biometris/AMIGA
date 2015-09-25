@@ -45,7 +45,7 @@ namespace AmigaPowerAnalysis.Core.Data {
 
         public DesignSettingsDTO DesignSettings { get; set; }
 
-        //public PowerCalculationSettingsDTO PowerCalculationSettings { get; set; }
+        public PowerCalculationSettingsDTO PowerCalculationSettings { get; set; }
 
         #endregion
 
@@ -59,6 +59,7 @@ namespace AmigaPowerAnalysis.Core.Data {
                 Endpoints = endpoints,
                 Factors = factors,
                 DesignSettings = DesignSettingsDTO.FromDTO(dto.DesignSettings),
+                PowerCalculationSettings = PowerCalculationSettingsDTO.FromDTO(dto.PowerCalculationSettings),
                 UseFactorModifiers = dto.UseFactorModifiers,
                 UseBlockModifier = dto.UseBlockModifier,
                 CVForBlocks = dto.CVForBlocks,
@@ -84,6 +85,7 @@ namespace AmigaPowerAnalysis.Core.Data {
                 EndpointInteractions = project.Endpoints.SelectMany(r => r.Interactions, (ep, r) => EndpointInteractionDTO.ToDTO(r)).ToList(),
                 EndpointModifiers = project.Endpoints.SelectMany(r => r.Modifiers, (ep, r) => EndpointModifierDTO.ToDTO(r, ep)).ToList(),
                 DesignSettings = DesignSettingsDTO.ToDTO(project.DesignSettings),
+                PowerCalculationSettings = PowerCalculationSettingsDTO.ToDTO(project.PowerCalculationSettings),
                 UseFactorModifiers = project.UseFactorModifiers,
                 UseBlockModifier = project.UseBlockModifier,
                 CVForBlocks = project.CVForBlocks,
