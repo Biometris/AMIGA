@@ -25,7 +25,7 @@ namespace AmigaPowerAnalysis.GUI {
         public EndpointsDataPanel(Project project) {
             InitializeComponent();
             Name = "Endpoints data";
-            Description = "For each endpoint, if needed adapt its distribution type, and the power (for Taylor's Power law distribution).\r\nIf needed adapt expected values of mean and coefficient of variation (CV) for the comparator variety. Note: CV will be increased if incompatible with distribution type and mean.\r\nIndicate if more zeroes are expected than corresponds to the chosen distribution (Excess zeroes, not yet implemented).";
+            Description = "For measurement types Count, Nonnegative and Continuous the program assumes PowerLaw, Lognormal and Normal distributions, respectively. For counts this can be adapted. Also the power (for Taylor's Power law distribution) can be chosen different from the default value 1.7.\r\nAdapt expected values of mean and coefficient of variation (CV) for the comparator variety. Note: CV will be increased if incompatible with distribution type and mean.\r\nIndicate if more zeroes are expected than corresponds to the chosen distribution, and in that case how many (Excess zeroes).";
             _project = project;
             createDataGridEndpoints();
         }
