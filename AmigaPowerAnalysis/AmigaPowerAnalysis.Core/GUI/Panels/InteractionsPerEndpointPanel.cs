@@ -1,14 +1,10 @@
-﻿using System;
+﻿using AmigaPowerAnalysis.Core;
+using AmigaPowerAnalysis.GUI.Wrappers;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
 using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using AmigaPowerAnalysis.Core;
-using AmigaPowerAnalysis.GUI.Wrappers;
 
 namespace AmigaPowerAnalysis.GUI {
     public partial class InteractionsPerEndpointPanel : UserControl, ISelectionForm {
@@ -25,6 +21,8 @@ namespace AmigaPowerAnalysis.GUI {
             Description = "The Test-CMP comparison may be restricted to a subset of levels of additional factors for the Test and/or for the CMP. Indicate per endpoint any factors for which this is relevant, and uncheck the levels to be excluded.";
             createDataGridInteractions();
         }
+
+        public event EventHandler TabVisibilitiesChanged;
 
         public string Description { get; private set; }
 
@@ -153,8 +151,6 @@ namespace AmigaPowerAnalysis.GUI {
                 MessageBoxIcon.Error,
                 MessageBoxDefaultButton.Button1);
         }
-
-        public event EventHandler TabVisibilitiesChanged;
 
         private void fireTabVisibilitiesChanged() {
             var tabVisibilitiesChanged = TabVisibilitiesChanged;

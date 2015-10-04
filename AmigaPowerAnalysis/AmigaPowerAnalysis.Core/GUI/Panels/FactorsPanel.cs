@@ -1,9 +1,8 @@
-﻿using System;
-using System.ComponentModel;
+﻿using AmigaPowerAnalysis.Core;
+using System;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using AmigaPowerAnalysis.Core;
 
 // TODO The Variety factor should not have an Interaction checkbox
 

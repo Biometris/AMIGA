@@ -1,7 +1,7 @@
 ﻿using AmigaPowerAnalysis.Core.DataAnalysis.AnalysisModels;
+using AmigaPowerAnalysis.Core.PowerAnalysis;
 using Biometris.ExtensionMethods;
 using System.Linq;
-using AmigaPowerAnalysis.Core.PowerAnalysis;
 
 namespace AmigaPowerAnalysis.Core.Reporting {
     public sealed class SingleComparisonReportGenerator : ComparisonReportGeneratorBase {
@@ -17,6 +17,7 @@ namespace AmigaPowerAnalysis.Core.Reporting {
         public override string Generate(bool imagesAsPng) {
             var html = string.Empty;
             html += generateComparisonMessagesHtml(_comparisonOutput);
+            html += generateEndpointInfoHtml(_comparisonOutput.InputPowerAnalysis); 
             html += generateComparisonSettingsHtml(_comparisonOutput.InputPowerAnalysis);
             html += generateAnalysisSettingsHtml(_comparisonOutput.InputPowerAnalysis);
             //html += generateComparisonInputDataHtml(comparison.OutputPowerAnalysis.InputPowerAnalysis);

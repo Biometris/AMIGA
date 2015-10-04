@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using AmigaPowerAnalysis.Core.PowerAnalysis;
+using System;
 
 namespace AmigaPowerAnalysis.Core.DataAnalysis {
     public sealed class AnalysisDataTemplateGenerator {
@@ -26,6 +27,12 @@ namespace AmigaPowerAnalysis.Core.DataAnalysis {
                 file.WriteLine(analysisDataTemplate.PrintTemplateContrasts());
                 file.Close();
             }
+        }
+
+        public AnalysisDataTemplate CreateAnalysisDataTemplate(ResultPowerAnalysis _resultPowerAnalysis, int replicates) {
+            //var primaryComparisons = _resultPowerAnalysis.GetPrimaryComparisons();
+            //var records = primaryComparisons.SelectMany(r => r.InputPowerAnalysis.InputRecords).GroupBy(r => r.)
+            throw new NotImplementedException();
         }
 
         public AnalysisDataTemplate CreateAnalysisDataTemplate(Project project, int replicates) {

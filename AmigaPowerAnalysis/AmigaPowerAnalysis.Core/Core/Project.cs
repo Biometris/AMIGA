@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using AmigaPowerAnalysis.Core.PowerAnalysis;
+using Biometris.ExtensionMethods;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
-using AmigaPowerAnalysis.Core.PowerAnalysis;
 
 namespace AmigaPowerAnalysis.Core {
 
@@ -51,6 +53,9 @@ namespace AmigaPowerAnalysis.Core {
 
         [DataMember]
         private List<ResultPowerAnalysis> _analysisResults;
+
+        [DataMember]
+        private string _primaryOutputFile;
 
         #endregion
 
@@ -167,6 +172,14 @@ namespace AmigaPowerAnalysis.Core {
         public double CVForMainPlots {
             get { return _cVForMainPlots; }
             set { _cVForMainPlots = value; }
+        }
+
+        /// <summary>
+        /// The primary output file of this project.
+        /// </summary>
+        public string PrimaryOutput {
+            get { return _primaryOutputFile; }
+            set { _primaryOutputFile = value; }
         }
 
         /// <summary>
@@ -363,6 +376,28 @@ namespace AmigaPowerAnalysis.Core {
             set {
                 _analysisResults = value;
             }
+        }
+
+        /// <summary>
+        /// Returns the primary output.
+        /// </summary>
+        /// <param name="currentProjectFilePath"></param>
+        /// <returns></returns>
+        public bool PrimaryOutputExists(string currentProjectFilePath) {
+            return !string.IsNullOrEmpty(PrimaryOutput) && File.Exists(Path.Combine(currentProjectFilePath, PrimaryOutput + ".xml"));
+        }
+
+        /// <summary>
+        /// Returns the primary output.
+        /// </summary>
+        /// <param name="currentProjectFilePath"></param>
+        /// <returns></returns>
+        public ResultPowerAnalysis GetPrimaryOutput(string currentProjectFilePath) {
+            var filename = Path.Combine(currentProjectFilePath, PrimaryOutput + ".xml");
+            if (File.Exists(filename)) {
+                return SerializationExtensions.FromXmlFile<ResultPowerAnalysis>(filename);
+            }
+            return null;
         }
 
         /// <summary>

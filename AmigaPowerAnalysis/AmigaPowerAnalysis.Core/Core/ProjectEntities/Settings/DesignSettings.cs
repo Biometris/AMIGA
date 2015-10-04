@@ -1,10 +1,14 @@
-﻿using System.Runtime.Serialization;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Runtime.Serialization;
 
 namespace AmigaPowerAnalysis.Core {
 
     public enum ExperimentalDesignType {
+        [Display(Name = "Completely randomized")]
         CompletelyRandomized,
+        [Display(Name = "Randomized complete blocks")]
         RandomizedCompleteBlocks,
+        [Display(Name = "Split-plots")]
         SplitPlots,
     };
 

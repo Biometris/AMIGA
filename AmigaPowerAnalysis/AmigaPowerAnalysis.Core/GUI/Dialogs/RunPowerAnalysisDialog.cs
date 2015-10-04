@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using AmigaPowerAnalysis.Core;
 using AmigaPowerAnalysis.Core.PowerAnalysis;
 using Biometris.ProgressReporting;
+using Biometris.ExtensionMethods;
 
 namespace AmigaPowerAnalysis.GUI {
     public partial class RunPowerAnalysisDialog : Form {
@@ -44,7 +45,8 @@ namespace AmigaPowerAnalysis.GUI {
             var comparisons = _project.Endpoints.ToList();
             var projectPath = Path.GetDirectoryName(_projectFilename);
             var projectName = Path.GetFileNameWithoutExtension(_projectFilename);
-            var filesPath = Path.Combine(projectPath, projectName);
+            var runId = string.Format("{0:yyyy-MM-dd-HH-mm-ss}", DateTime.Now);
+            var filesPath = Path.Combine(projectPath, projectName, runId);
             if (!Directory.Exists(filesPath)) {
                 Directory.CreateDirectory(filesPath);
             } else {
@@ -73,6 +75,8 @@ namespace AmigaPowerAnalysis.GUI {
                 showWarning("Warning", "Power Analysis completed with errors. Some results may be incomplete or non existent.");
             }
             resultPowerAnalysis.OuputTimeStamp = DateTime.Now;
+            resultPowerAnalysis.ToXmlFile(filesPath + ".xml");
+            _project.PrimaryOutput = filesPath + ".xml";
             _project.AnalysisResults.Add(resultPowerAnalysis);
         }
 

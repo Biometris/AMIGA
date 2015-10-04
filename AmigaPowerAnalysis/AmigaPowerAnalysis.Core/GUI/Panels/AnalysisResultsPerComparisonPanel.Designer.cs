@@ -23,32 +23,39 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AnalysisResultsPerComparisonPanel));
             this.splitContainerComparisons = new System.Windows.Forms.SplitContainer();
             this.dataGridViewComparisons = new System.Windows.Forms.DataGridView();
-            this.panelResultPlots = new System.Windows.Forms.Panel();
-            this.plotView = new OxyPlot.WindowsForms.PlotView();
-            this.plotTypePanel = new System.Windows.Forms.FlowLayoutPanel();
-            this.comboBoxTestType = new System.Windows.Forms.ComboBox();
-            this.comboBoxAnalysisPlotTypes = new System.Windows.Forms.ComboBox();
-            this.flowLayoutPanelComparisonInfo = new System.Windows.Forms.FlowLayoutPanel();
-            this.labelBlockSize = new System.Windows.Forms.Label();
-            this.labelPlotsPerBlock = new System.Windows.Forms.Label();
-            this.labelLocLower = new System.Windows.Forms.Label();
-            this.labelLocLowerValue = new System.Windows.Forms.Label();
-            this.labelLocUpper = new System.Windows.Forms.Label();
-            this.labelLocUpperValue = new System.Windows.Forms.Label();
-            this.flowLayoutPanelReport = new System.Windows.Forms.FlowLayoutPanel();
-            this.buttonShowSettings = new System.Windows.Forms.Button();
-            this.buttonShowInputData = new System.Windows.Forms.Button();
+            this.tabControlEndpointResult = new System.Windows.Forms.TabControl();
+            this.tabPageDifferenceTest = new System.Windows.Forms.TabPage();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.radioButtonReplicatesDifference = new System.Windows.Forms.RadioButton();
+            this.radioButtonRatioDifference = new System.Windows.Forms.RadioButton();
+            this.plotViewDifference = new OxyPlot.WindowsForms.PlotView();
+            this.tabPageEquivalenceTest = new System.Windows.Forms.TabPage();
+            this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
+            this.radioButtonReplicatesEquivalence = new System.Windows.Forms.RadioButton();
+            this.radioButtonRatioEquivalence = new System.Windows.Forms.RadioButton();
+            this.plotViewEquivalence = new OxyPlot.WindowsForms.PlotView();
+            this.tabPageSettings = new System.Windows.Forms.TabPage();
+            this.webBrowserSettingsReport = new System.Windows.Forms.WebBrowser();
+            this.tabPageFullReport = new System.Windows.Forms.TabPage();
+            this.webBrowserFullReport = new System.Windows.Forms.WebBrowser();
+            this.toolStrip = new System.Windows.Forms.ToolStrip();
+            this.toolStripButtonExportPdf = new System.Windows.Forms.ToolStripButton();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerComparisons)).BeginInit();
             this.splitContainerComparisons.Panel1.SuspendLayout();
             this.splitContainerComparisons.Panel2.SuspendLayout();
             this.splitContainerComparisons.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewComparisons)).BeginInit();
-            this.panelResultPlots.SuspendLayout();
-            this.plotTypePanel.SuspendLayout();
-            this.flowLayoutPanelComparisonInfo.SuspendLayout();
-            this.flowLayoutPanelReport.SuspendLayout();
+            this.tabControlEndpointResult.SuspendLayout();
+            this.tabPageDifferenceTest.SuspendLayout();
+            this.flowLayoutPanel1.SuspendLayout();
+            this.tabPageEquivalenceTest.SuspendLayout();
+            this.flowLayoutPanel2.SuspendLayout();
+            this.tabPageSettings.SuspendLayout();
+            this.tabPageFullReport.SuspendLayout();
+            this.toolStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // splitContainerComparisons
@@ -66,7 +73,7 @@
             // 
             // splitContainerComparisons.Panel2
             // 
-            this.splitContainerComparisons.Panel2.Controls.Add(this.panelResultPlots);
+            this.splitContainerComparisons.Panel2.Controls.Add(this.tabControlEndpointResult);
             this.splitContainerComparisons.Size = new System.Drawing.Size(848, 477);
             this.splitContainerComparisons.SplitterDistance = 283;
             this.splitContainerComparisons.TabIndex = 9;
@@ -93,166 +100,210 @@
             this.dataGridViewComparisons.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewComparisons_CellValueChanged);
             this.dataGridViewComparisons.SelectionChanged += new System.EventHandler(this.dataGridViewComparisons_SelectionChanged);
             // 
-            // panelResultPlots
+            // tabControlEndpointResult
             // 
-            this.panelResultPlots.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panelResultPlots.Controls.Add(this.plotView);
-            this.panelResultPlots.Controls.Add(this.plotTypePanel);
-            this.panelResultPlots.Controls.Add(this.flowLayoutPanelComparisonInfo);
-            this.panelResultPlots.Controls.Add(this.flowLayoutPanelReport);
-            this.panelResultPlots.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelResultPlots.Location = new System.Drawing.Point(0, 0);
-            this.panelResultPlots.Name = "panelResultPlots";
-            this.panelResultPlots.Padding = new System.Windows.Forms.Padding(5);
-            this.panelResultPlots.Size = new System.Drawing.Size(561, 477);
-            this.panelResultPlots.TabIndex = 0;
+            this.tabControlEndpointResult.Controls.Add(this.tabPageDifferenceTest);
+            this.tabControlEndpointResult.Controls.Add(this.tabPageEquivalenceTest);
+            this.tabControlEndpointResult.Controls.Add(this.tabPageSettings);
+            this.tabControlEndpointResult.Controls.Add(this.tabPageFullReport);
+            this.tabControlEndpointResult.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControlEndpointResult.Location = new System.Drawing.Point(0, 0);
+            this.tabControlEndpointResult.Name = "tabControlEndpointResult";
+            this.tabControlEndpointResult.SelectedIndex = 0;
+            this.tabControlEndpointResult.Size = new System.Drawing.Size(561, 477);
+            this.tabControlEndpointResult.TabIndex = 10;
+            this.tabControlEndpointResult.SelectedIndexChanged += new System.EventHandler(this.tabControlEndpointResult_SelectedIndexChanged);
             // 
-            // plotView
+            // tabPageDifferenceTest
             // 
-            this.plotView.BackColor = System.Drawing.SystemColors.Window;
-            this.plotView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.plotView.Location = new System.Drawing.Point(5, 52);
-            this.plotView.Name = "plotView";
-            this.plotView.PanCursor = System.Windows.Forms.Cursors.Hand;
-            this.plotView.Size = new System.Drawing.Size(549, 389);
-            this.plotView.TabIndex = 2;
-            this.plotView.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
-            this.plotView.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
-            this.plotView.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
+            this.tabPageDifferenceTest.Controls.Add(this.flowLayoutPanel1);
+            this.tabPageDifferenceTest.Controls.Add(this.plotViewDifference);
+            this.tabPageDifferenceTest.Location = new System.Drawing.Point(4, 22);
+            this.tabPageDifferenceTest.Name = "tabPageDifferenceTest";
+            this.tabPageDifferenceTest.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageDifferenceTest.Size = new System.Drawing.Size(553, 451);
+            this.tabPageDifferenceTest.TabIndex = 0;
+            this.tabPageDifferenceTest.Text = "Chart difference test";
+            this.tabPageDifferenceTest.UseVisualStyleBackColor = true;
             // 
-            // plotTypePanel
+            // flowLayoutPanel1
             // 
-            this.plotTypePanel.Controls.Add(this.comboBoxTestType);
-            this.plotTypePanel.Controls.Add(this.comboBoxAnalysisPlotTypes);
-            this.plotTypePanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.plotTypePanel.Location = new System.Drawing.Point(5, 23);
-            this.plotTypePanel.Name = "plotTypePanel";
-            this.plotTypePanel.Size = new System.Drawing.Size(549, 29);
-            this.plotTypePanel.TabIndex = 16;
+            this.flowLayoutPanel1.AutoSize = true;
+            this.flowLayoutPanel1.Controls.Add(this.radioButtonReplicatesDifference);
+            this.flowLayoutPanel1.Controls.Add(this.radioButtonRatioDifference);
+            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 3);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(547, 23);
+            this.flowLayoutPanel1.TabIndex = 17;
             // 
-            // comboBoxTestType
+            // radioButtonReplicatesDifference
             // 
-            this.comboBoxTestType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxTestType.FormattingEnabled = true;
-            this.comboBoxTestType.Location = new System.Drawing.Point(3, 3);
-            this.comboBoxTestType.Name = "comboBoxTestType";
-            this.comboBoxTestType.Size = new System.Drawing.Size(182, 21);
-            this.comboBoxTestType.TabIndex = 7;
-            this.comboBoxTestType.SelectedIndexChanged += new System.EventHandler(this.comboBoxTestType_SelectedIndexChanged);
+            this.radioButtonReplicatesDifference.AutoSize = true;
+            this.radioButtonReplicatesDifference.Location = new System.Drawing.Point(407, 3);
+            this.radioButtonReplicatesDifference.Name = "radioButtonReplicatesDifference";
+            this.radioButtonReplicatesDifference.Size = new System.Drawing.Size(137, 17);
+            this.radioButtonReplicatesDifference.TabIndex = 9;
+            this.radioButtonReplicatesDifference.TabStop = true;
+            this.radioButtonReplicatesDifference.Text = "Power versus replicates";
+            this.radioButtonReplicatesDifference.UseVisualStyleBackColor = true;
+            this.radioButtonReplicatesDifference.CheckedChanged += new System.EventHandler(this.radioButtonReplicatesDifference_CheckedChanged);
             // 
-            // comboBoxAnalysisPlotTypes
+            // radioButtonRatioDifference
             // 
-            this.comboBoxAnalysisPlotTypes.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxAnalysisPlotTypes.FormattingEnabled = true;
-            this.comboBoxAnalysisPlotTypes.Location = new System.Drawing.Point(191, 3);
-            this.comboBoxAnalysisPlotTypes.Name = "comboBoxAnalysisPlotTypes";
-            this.comboBoxAnalysisPlotTypes.Size = new System.Drawing.Size(182, 21);
-            this.comboBoxAnalysisPlotTypes.TabIndex = 8;
-            this.comboBoxAnalysisPlotTypes.SelectedIndexChanged += new System.EventHandler(this.comboBoxAnalysisPlotTypes_SelectedIndexChanged);
+            this.radioButtonRatioDifference.AutoSize = true;
+            this.radioButtonRatioDifference.Location = new System.Drawing.Point(289, 3);
+            this.radioButtonRatioDifference.Name = "radioButtonRatioDifference";
+            this.radioButtonRatioDifference.Size = new System.Drawing.Size(112, 17);
+            this.radioButtonRatioDifference.TabIndex = 8;
+            this.radioButtonRatioDifference.TabStop = true;
+            this.radioButtonRatioDifference.Text = "Power versus ratio";
+            this.radioButtonRatioDifference.UseVisualStyleBackColor = true;
+            this.radioButtonRatioDifference.CheckedChanged += new System.EventHandler(this.radioButtonRatioDifference_CheckedChanged);
             // 
-            // flowLayoutPanelComparisonInfo
+            // plotViewDifference
             // 
-            this.flowLayoutPanelComparisonInfo.Controls.Add(this.labelBlockSize);
-            this.flowLayoutPanelComparisonInfo.Controls.Add(this.labelPlotsPerBlock);
-            this.flowLayoutPanelComparisonInfo.Controls.Add(this.labelLocLower);
-            this.flowLayoutPanelComparisonInfo.Controls.Add(this.labelLocLowerValue);
-            this.flowLayoutPanelComparisonInfo.Controls.Add(this.labelLocUpper);
-            this.flowLayoutPanelComparisonInfo.Controls.Add(this.labelLocUpperValue);
-            this.flowLayoutPanelComparisonInfo.Dock = System.Windows.Forms.DockStyle.Top;
-            this.flowLayoutPanelComparisonInfo.Location = new System.Drawing.Point(5, 5);
-            this.flowLayoutPanelComparisonInfo.Name = "flowLayoutPanelComparisonInfo";
-            this.flowLayoutPanelComparisonInfo.Size = new System.Drawing.Size(549, 18);
-            this.flowLayoutPanelComparisonInfo.TabIndex = 14;
+            this.plotViewDifference.BackColor = System.Drawing.SystemColors.Window;
+            this.plotViewDifference.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.plotViewDifference.Location = new System.Drawing.Point(3, 3);
+            this.plotViewDifference.Name = "plotViewDifference";
+            this.plotViewDifference.PanCursor = System.Windows.Forms.Cursors.Hand;
+            this.plotViewDifference.Size = new System.Drawing.Size(547, 445);
+            this.plotViewDifference.TabIndex = 4;
+            this.plotViewDifference.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
+            this.plotViewDifference.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
+            this.plotViewDifference.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
             // 
-            // labelBlockSize
+            // tabPageEquivalenceTest
             // 
-            this.labelBlockSize.AutoSize = true;
-            this.labelBlockSize.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelBlockSize.Location = new System.Drawing.Point(3, 0);
-            this.labelBlockSize.Name = "labelBlockSize";
-            this.labelBlockSize.Size = new System.Drawing.Size(69, 13);
-            this.labelBlockSize.TabIndex = 11;
-            this.labelBlockSize.Text = "Block size:";
+            this.tabPageEquivalenceTest.Controls.Add(this.flowLayoutPanel2);
+            this.tabPageEquivalenceTest.Controls.Add(this.plotViewEquivalence);
+            this.tabPageEquivalenceTest.Location = new System.Drawing.Point(4, 22);
+            this.tabPageEquivalenceTest.Name = "tabPageEquivalenceTest";
+            this.tabPageEquivalenceTest.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageEquivalenceTest.Size = new System.Drawing.Size(553, 451);
+            this.tabPageEquivalenceTest.TabIndex = 1;
+            this.tabPageEquivalenceTest.Text = "Chart equivalence test";
+            this.tabPageEquivalenceTest.UseVisualStyleBackColor = true;
             // 
-            // labelPlotsPerBlock
+            // flowLayoutPanel2
             // 
-            this.labelPlotsPerBlock.AutoSize = true;
-            this.labelPlotsPerBlock.Location = new System.Drawing.Point(78, 0);
-            this.labelPlotsPerBlock.Name = "labelPlotsPerBlock";
-            this.labelPlotsPerBlock.Size = new System.Drawing.Size(88, 13);
-            this.labelPlotsPerBlock.TabIndex = 10;
-            this.labelPlotsPerBlock.Text = "... plots per block";
+            this.flowLayoutPanel2.AutoSize = true;
+            this.flowLayoutPanel2.Controls.Add(this.radioButtonReplicatesEquivalence);
+            this.flowLayoutPanel2.Controls.Add(this.radioButtonRatioEquivalence);
+            this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.flowLayoutPanel2.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
+            this.flowLayoutPanel2.Location = new System.Drawing.Point(3, 3);
+            this.flowLayoutPanel2.Name = "flowLayoutPanel2";
+            this.flowLayoutPanel2.Size = new System.Drawing.Size(547, 23);
+            this.flowLayoutPanel2.TabIndex = 18;
             // 
-            // labelLocLower
+            // radioButtonReplicatesEquivalence
             // 
-            this.labelLocLower.AutoSize = true;
-            this.labelLocLower.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelLocLower.Location = new System.Drawing.Point(172, 0);
-            this.labelLocLower.Name = "labelLocLower";
-            this.labelLocLower.Size = new System.Drawing.Size(66, 13);
-            this.labelLocLower.TabIndex = 13;
-            this.labelLocLower.Text = "LocLower:";
+            this.radioButtonReplicatesEquivalence.AutoSize = true;
+            this.radioButtonReplicatesEquivalence.Location = new System.Drawing.Point(407, 3);
+            this.radioButtonReplicatesEquivalence.Name = "radioButtonReplicatesEquivalence";
+            this.radioButtonReplicatesEquivalence.Size = new System.Drawing.Size(137, 17);
+            this.radioButtonReplicatesEquivalence.TabIndex = 11;
+            this.radioButtonReplicatesEquivalence.TabStop = true;
+            this.radioButtonReplicatesEquivalence.Text = "Power versus replicates";
+            this.radioButtonReplicatesEquivalence.UseVisualStyleBackColor = true;
+            this.radioButtonReplicatesEquivalence.CheckedChanged += new System.EventHandler(this.radioButtonReplicatesEquivalence_CheckedChanged);
             // 
-            // labelLocLowerValue
+            // radioButtonRatioEquivalence
             // 
-            this.labelLocLowerValue.AutoSize = true;
-            this.labelLocLowerValue.Location = new System.Drawing.Point(244, 0);
-            this.labelLocLowerValue.Name = "labelLocLowerValue";
-            this.labelLocLowerValue.Size = new System.Drawing.Size(16, 13);
-            this.labelLocLowerValue.TabIndex = 12;
-            this.labelLocLowerValue.Text = "...";
+            this.radioButtonRatioEquivalence.AutoSize = true;
+            this.radioButtonRatioEquivalence.Location = new System.Drawing.Point(289, 3);
+            this.radioButtonRatioEquivalence.Name = "radioButtonRatioEquivalence";
+            this.radioButtonRatioEquivalence.Size = new System.Drawing.Size(112, 17);
+            this.radioButtonRatioEquivalence.TabIndex = 10;
+            this.radioButtonRatioEquivalence.TabStop = true;
+            this.radioButtonRatioEquivalence.Text = "Power versus ratio";
+            this.radioButtonRatioEquivalence.UseVisualStyleBackColor = true;
+            this.radioButtonRatioEquivalence.CheckedChanged += new System.EventHandler(this.radioButtonRatioEquivalence_CheckedChanged);
             // 
-            // labelLocUpper
+            // plotViewEquivalence
             // 
-            this.labelLocUpper.AutoSize = true;
-            this.labelLocUpper.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelLocUpper.Location = new System.Drawing.Point(266, 0);
-            this.labelLocUpper.Name = "labelLocUpper";
-            this.labelLocUpper.Size = new System.Drawing.Size(68, 13);
-            this.labelLocUpper.TabIndex = 15;
-            this.labelLocUpper.Text = "Loc upper:";
+            this.plotViewEquivalence.BackColor = System.Drawing.SystemColors.Window;
+            this.plotViewEquivalence.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.plotViewEquivalence.Location = new System.Drawing.Point(3, 3);
+            this.plotViewEquivalence.Name = "plotViewEquivalence";
+            this.plotViewEquivalence.PanCursor = System.Windows.Forms.Cursors.Hand;
+            this.plotViewEquivalence.Size = new System.Drawing.Size(547, 445);
+            this.plotViewEquivalence.TabIndex = 4;
+            this.plotViewEquivalence.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
+            this.plotViewEquivalence.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
+            this.plotViewEquivalence.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
             // 
-            // labelLocUpperValue
+            // tabPageSettings
             // 
-            this.labelLocUpperValue.AutoSize = true;
-            this.labelLocUpperValue.Location = new System.Drawing.Point(340, 0);
-            this.labelLocUpperValue.Name = "labelLocUpperValue";
-            this.labelLocUpperValue.Size = new System.Drawing.Size(16, 13);
-            this.labelLocUpperValue.TabIndex = 14;
-            this.labelLocUpperValue.Text = "...";
+            this.tabPageSettings.Controls.Add(this.webBrowserSettingsReport);
+            this.tabPageSettings.Location = new System.Drawing.Point(4, 22);
+            this.tabPageSettings.Name = "tabPageSettings";
+            this.tabPageSettings.Size = new System.Drawing.Size(553, 451);
+            this.tabPageSettings.TabIndex = 3;
+            this.tabPageSettings.Text = "Power analysis settings";
+            this.tabPageSettings.UseVisualStyleBackColor = true;
             // 
-            // flowLayoutPanelReport
+            // webBrowserSettingsReport
             // 
-            this.flowLayoutPanelReport.Controls.Add(this.buttonShowSettings);
-            this.flowLayoutPanelReport.Controls.Add(this.buttonShowInputData);
-            this.flowLayoutPanelReport.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.flowLayoutPanelReport.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.flowLayoutPanelReport.Location = new System.Drawing.Point(5, 441);
-            this.flowLayoutPanelReport.Name = "flowLayoutPanelReport";
-            this.flowLayoutPanelReport.Size = new System.Drawing.Size(549, 29);
-            this.flowLayoutPanelReport.TabIndex = 17;
+            this.webBrowserSettingsReport.AllowNavigation = false;
+            this.webBrowserSettingsReport.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.webBrowserSettingsReport.IsWebBrowserContextMenuEnabled = false;
+            this.webBrowserSettingsReport.Location = new System.Drawing.Point(0, 0);
+            this.webBrowserSettingsReport.MinimumSize = new System.Drawing.Size(20, 20);
+            this.webBrowserSettingsReport.Name = "webBrowserSettingsReport";
+            this.webBrowserSettingsReport.Size = new System.Drawing.Size(553, 451);
+            this.webBrowserSettingsReport.TabIndex = 1;
             // 
-            // buttonShowSettings
+            // tabPageFullReport
             // 
-            this.buttonShowSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonShowSettings.Location = new System.Drawing.Point(471, 3);
-            this.buttonShowSettings.Name = "buttonShowSettings";
-            this.buttonShowSettings.Size = new System.Drawing.Size(75, 23);
-            this.buttonShowSettings.TabIndex = 15;
-            this.buttonShowSettings.Text = "Settings";
-            this.buttonShowSettings.UseVisualStyleBackColor = true;
-            this.buttonShowSettings.Click += new System.EventHandler(this.buttonShowSettings_Click);
+            this.tabPageFullReport.Controls.Add(this.webBrowserFullReport);
+            this.tabPageFullReport.Controls.Add(this.toolStrip);
+            this.tabPageFullReport.Location = new System.Drawing.Point(4, 22);
+            this.tabPageFullReport.Name = "tabPageFullReport";
+            this.tabPageFullReport.Size = new System.Drawing.Size(553, 451);
+            this.tabPageFullReport.TabIndex = 4;
+            this.tabPageFullReport.Text = "Endpoint report";
+            this.tabPageFullReport.UseVisualStyleBackColor = true;
             // 
-            // buttonShowInputData
+            // webBrowserFullReport
             // 
-            this.buttonShowInputData.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonShowInputData.Location = new System.Drawing.Point(390, 3);
-            this.buttonShowInputData.Name = "buttonShowInputData";
-            this.buttonShowInputData.Size = new System.Drawing.Size(75, 23);
-            this.buttonShowInputData.TabIndex = 7;
-            this.buttonShowInputData.Text = "Report";
-            this.buttonShowInputData.UseVisualStyleBackColor = true;
-            this.buttonShowInputData.Click += new System.EventHandler(this.buttonShowInputData_Click);
+            this.webBrowserFullReport.AllowNavigation = false;
+            this.webBrowserFullReport.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.webBrowserFullReport.IsWebBrowserContextMenuEnabled = false;
+            this.webBrowserFullReport.Location = new System.Drawing.Point(0, 25);
+            this.webBrowserFullReport.MinimumSize = new System.Drawing.Size(20, 20);
+            this.webBrowserFullReport.Name = "webBrowserFullReport";
+            this.webBrowserFullReport.Size = new System.Drawing.Size(553, 426);
+            this.webBrowserFullReport.TabIndex = 2;
+            // 
+            // toolStrip
+            // 
+            this.toolStrip.AllowMerge = false;
+            this.toolStrip.BackColor = System.Drawing.Color.Transparent;
+            this.toolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripButtonExportPdf});
+            this.toolStrip.Location = new System.Drawing.Point(0, 0);
+            this.toolStrip.Name = "toolStrip";
+            this.toolStrip.Padding = new System.Windows.Forms.Padding(0);
+            this.toolStrip.Size = new System.Drawing.Size(553, 25);
+            this.toolStrip.TabIndex = 3;
+            this.toolStrip.Text = "toolStrip";
+            // 
+            // toolStripButtonExportPdf
+            // 
+            this.toolStripButtonExportPdf.AutoSize = false;
+            this.toolStripButtonExportPdf.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonExportPdf.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonExportPdf.Image")));
+            this.toolStripButtonExportPdf.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonExportPdf.Name = "toolStripButtonExportPdf";
+            this.toolStripButtonExportPdf.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonExportPdf.Text = "Export pdf";
+            this.toolStripButtonExportPdf.ToolTipText = "Export pdf";
+            this.toolStripButtonExportPdf.Click += new System.EventHandler(this.toolStripButtonExportPdf_Click);
             // 
             // AnalysisResultsPerComparisonPanel
             // 
@@ -269,11 +320,20 @@
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerComparisons)).EndInit();
             this.splitContainerComparisons.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewComparisons)).EndInit();
-            this.panelResultPlots.ResumeLayout(false);
-            this.plotTypePanel.ResumeLayout(false);
-            this.flowLayoutPanelComparisonInfo.ResumeLayout(false);
-            this.flowLayoutPanelComparisonInfo.PerformLayout();
-            this.flowLayoutPanelReport.ResumeLayout(false);
+            this.tabControlEndpointResult.ResumeLayout(false);
+            this.tabPageDifferenceTest.ResumeLayout(false);
+            this.tabPageDifferenceTest.PerformLayout();
+            this.flowLayoutPanel1.ResumeLayout(false);
+            this.flowLayoutPanel1.PerformLayout();
+            this.tabPageEquivalenceTest.ResumeLayout(false);
+            this.tabPageEquivalenceTest.PerformLayout();
+            this.flowLayoutPanel2.ResumeLayout(false);
+            this.flowLayoutPanel2.PerformLayout();
+            this.tabPageSettings.ResumeLayout(false);
+            this.tabPageFullReport.ResumeLayout(false);
+            this.tabPageFullReport.PerformLayout();
+            this.toolStrip.ResumeLayout(false);
+            this.toolStrip.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -282,20 +342,22 @@
 
         private System.Windows.Forms.SplitContainer splitContainerComparisons;
         private System.Windows.Forms.DataGridView dataGridViewComparisons;
-        private System.Windows.Forms.Panel panelResultPlots;
-        private OxyPlot.WindowsForms.PlotView plotView;
-        private System.Windows.Forms.Button buttonShowInputData;
-        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanelComparisonInfo;
-        private System.Windows.Forms.Label labelBlockSize;
-        private System.Windows.Forms.Label labelPlotsPerBlock;
-        private System.Windows.Forms.Label labelLocLower;
-        private System.Windows.Forms.Label labelLocLowerValue;
-        private System.Windows.Forms.Label labelLocUpper;
-        private System.Windows.Forms.Label labelLocUpperValue;
-        private System.Windows.Forms.Button buttonShowSettings;
-        private System.Windows.Forms.FlowLayoutPanel plotTypePanel;
-        private System.Windows.Forms.ComboBox comboBoxTestType;
-        private System.Windows.Forms.ComboBox comboBoxAnalysisPlotTypes;
-        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanelReport;
+        private System.Windows.Forms.TabControl tabControlEndpointResult;
+        private System.Windows.Forms.TabPage tabPageDifferenceTest;
+        private System.Windows.Forms.TabPage tabPageEquivalenceTest;
+        private System.Windows.Forms.TabPage tabPageSettings;
+        private OxyPlot.WindowsForms.PlotView plotViewDifference;
+        private OxyPlot.WindowsForms.PlotView plotViewEquivalence;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
+        private System.Windows.Forms.RadioButton radioButtonReplicatesDifference;
+        private System.Windows.Forms.RadioButton radioButtonRatioDifference;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
+        private System.Windows.Forms.RadioButton radioButtonRatioEquivalence;
+        private System.Windows.Forms.RadioButton radioButtonReplicatesEquivalence;
+        private System.Windows.Forms.WebBrowser webBrowserSettingsReport;
+        private System.Windows.Forms.TabPage tabPageFullReport;
+        private System.Windows.Forms.WebBrowser webBrowserFullReport;
+        private System.Windows.Forms.ToolStrip toolStrip;
+        private System.Windows.Forms.ToolStripButton toolStripButtonExportPdf;
     }
 }

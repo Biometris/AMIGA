@@ -14,7 +14,7 @@ namespace AmigaPowerAnalysis.GUI {
 
         public SimulationPanel(Project project) {
             InitializeComponent();
-            Name = "Simulation";
+            Name = "Analysis";
             Description = "Specify how to perform the power analysis and which methods of analysis are to be compared. It is advised first to use the Approximate method (Lyles) because it is much faster.\r\nFor count data it is suggested to use the log(N+1) method for the difference tests and the Log-linear model with overdispersion for the equivalence tests.\r\nFor nonnegative and continuous data, the power analysis is performed using the normal distribution.";
             _project = project;
         }

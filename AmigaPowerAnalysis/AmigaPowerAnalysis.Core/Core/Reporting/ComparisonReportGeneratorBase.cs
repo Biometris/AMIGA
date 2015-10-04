@@ -1,14 +1,12 @@
-﻿using AmigaPowerAnalysis.Core.Charting;
+﻿using AmigaPowerAnalysis.Core.Charting.AnalysisResultsChartCreators;
 using AmigaPowerAnalysis.Core.DataAnalysis.AnalysisModels;
 using AmigaPowerAnalysis.Core.PowerAnalysis;
 using Biometris.ExtensionMethods;
+using Biometris.Statistics.Distributions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Text;
-using Biometris.Statistics.Distributions;
-using AmigaPowerAnalysis.Core.Charting.AnalysisResultsChartCreators;
 
 namespace AmigaPowerAnalysis.Core.Reporting {
     public abstract class ComparisonReportGeneratorBase : ReportGeneratorBase {
@@ -19,7 +17,7 @@ namespace AmigaPowerAnalysis.Core.Reporting {
 
             stringBuilder.AppendLine(string.Format("<h2>Design</h2>"));
             stringBuilder.AppendLine("<table>");
-            stringBuilder.AppendLine(format("Experimental design type", inputPowerAnalysis.ExperimentalDesignType));
+            stringBuilder.AppendLine(format("Experimental design type", inputPowerAnalysis.ExperimentalDesignType.GetShortName()));
             stringBuilder.AppendLine("</table>");
 
             var headers = new List<string>();
@@ -60,7 +58,7 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             var analysisMethodsDifferenceTests = AnalysisModelFactory.AnalysisMethodsForMeasurementType(inputPowerAnalysis.MeasurementType) & inputPowerAnalysis.SelectedAnalysisMethodTypesDifferenceTests;
             for (int i = 0; i < analysisMethodsDifferenceTests.GetFlags().Count(); ++i) {
                 if (i == 0) {
-                    stringBuilder.AppendLine(format("Analysis methods", analysisMethodsDifferenceTests.GetFlags().ElementAt(i)));
+                    stringBuilder.AppendLine(format("Analysis methods", analysisMethodsDifferenceTests.GetFlags().ElementAt(i).GetDisplayName()));
                 } else {
                     stringBuilder.AppendLine(format(string.Empty, analysisMethodsDifferenceTests.GetFlags().ElementAt(i).GetDisplayName()));
                 }
@@ -68,7 +66,7 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             var analysisMethodsEquivalenceTests = AnalysisModelFactory.AnalysisMethodsForMeasurementType(inputPowerAnalysis.MeasurementType) & inputPowerAnalysis.SelectedAnalysisMethodTypesEquivalenceTests;
             for (int i = 0; i < analysisMethodsEquivalenceTests.GetFlags().Count(); ++i) {
                 if (i == 0) {
-                    stringBuilder.AppendLine(format("Analysis methods", analysisMethodsEquivalenceTests.GetFlags().ElementAt(i)));
+                    stringBuilder.AppendLine(format("Analysis methods", analysisMethodsEquivalenceTests.GetFlags().ElementAt(i).GetDisplayName()));
                 } else {
                     stringBuilder.AppendLine(format(string.Empty, analysisMethodsEquivalenceTests.GetFlags().ElementAt(i).GetDisplayName()));
                 }
@@ -82,7 +80,7 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             return stringBuilder.ToString();
         }
 
-        protected static string generateComparisonSettingsHtml(InputPowerAnalysis inputPowerAnalysis) {
+        protected static string generateEndpointInfoHtml(InputPowerAnalysis inputPowerAnalysis) {
             var stringBuilder = new StringBuilder();
             Func<string, object, string> format = (parameter, setting) => { return string.Format("<tr><td>{0}</td><td>{1}</td></tr>", parameter, setting); };
 
@@ -96,7 +94,7 @@ namespace AmigaPowerAnalysis.Core.Reporting {
 
             stringBuilder.AppendLine(string.Format("<h2>Distribution</h2>"));
             stringBuilder.AppendLine("<table>");
-            stringBuilder.AppendLine(format("Distribution type", inputPowerAnalysis.DistributionType));
+            stringBuilder.AppendLine(format("Distribution type", inputPowerAnalysis.DistributionType.GetDisplayName()));
             stringBuilder.AppendLine(format("Overall mean", inputPowerAnalysis.OverallMean));
             stringBuilder.AppendLine(format("CV comparator (%)", inputPowerAnalysis.CvComparator));
             if (inputPowerAnalysis.DistributionType == DistributionType.PowerLaw) {
@@ -107,12 +105,19 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             }
             stringBuilder.AppendLine("</table>");
 
+            return stringBuilder.ToString();
+        }
+
+        protected static string generateComparisonSettingsHtml(InputPowerAnalysis inputPowerAnalysis) {
+            var stringBuilder = new StringBuilder();
+            Func<string, object, string> format = (parameter, setting) => { return string.Format("<tr><td>{0}</td><td>{1}</td></tr>", parameter, setting); };
+
             stringBuilder.AppendLine(string.Format("<h2>Design</h2>"));
             stringBuilder.AppendLine("<table>");
-            stringBuilder.AppendLine(format("Experimental design type", inputPowerAnalysis.ExperimentalDesignType));
+            stringBuilder.AppendLine(format("Experimental design type", inputPowerAnalysis.ExperimentalDesignType.GetShortName()));
             stringBuilder.AppendLine(format("Number of interactions", inputPowerAnalysis.NumberOfInteractions));
             stringBuilder.AppendLine(format("Number of modifiers", inputPowerAnalysis.NumberOfModifiers));
-            stringBuilder.AppendLine(format("CV for blocks", inputPowerAnalysis.CvForBlocks));
+            stringBuilder.AppendLine(format("CV for blocks (%)", inputPowerAnalysis.CvForBlocks));
             stringBuilder.AppendLine("</table>");
 
             var headers = new List<string>();

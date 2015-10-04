@@ -212,6 +212,12 @@
     <Compile Include="GUI\Dialogs\HtmlReportForm.Designer.cs">
       <DependentUpon>HtmlReportForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\Panels\OutputPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\Panels\OutputPanel.Designer.cs">
+      <DependentUpon>OutputPanel.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\Panels\RunPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -303,7 +309,9 @@
     <Compile Include="GUI\Forms\SelectionPanelForm.Designer.cs">
       <DependentUpon>SelectionPanelForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\Wrappers\OutputWrapper.cs" />
     <Compile Include="GUI\Wrappers\InteractionsWrapper.cs" />
+    <Compile Include="GUI\Wrappers\TabVisibilityChangedEventArgs.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Core\Project.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -331,6 +339,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Dialogs\HtmlReportForm.resx">
       <DependentUpon>HtmlReportForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Panels\OutputPanel.resx">
+      <DependentUpon>OutputPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Panels\RunPanel.resx">
       <DependentUpon>RunPanel.cs</DependentUpon>

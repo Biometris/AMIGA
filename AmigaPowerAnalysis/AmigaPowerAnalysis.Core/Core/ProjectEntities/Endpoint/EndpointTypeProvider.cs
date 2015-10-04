@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Biometris.Statistics.Distributions;
+using Biometris.Statistics.Measurements;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Windows.Forms;
-using Biometris.Statistics.Distributions;
-using Biometris.Statistics.Measurements;
 
 namespace AmigaPowerAnalysis.Core {
     public static class EndpointTypeProvider {

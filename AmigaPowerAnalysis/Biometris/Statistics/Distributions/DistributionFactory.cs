@@ -1,23 +1,34 @@
-﻿using System;
-using Biometris.Statistics.Measurements;
+﻿using Biometris.Statistics.Measurements;
+using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Biometris.Statistics.Distributions {
 
     [Flags]
     public enum DistributionType {
         // Counts
+        [Display(Name = "Poisson")]
         Poisson = 1,
+        [Display(Name = "Overdispersed Poisson")]
         OverdispersedPoisson = 2,
+        [Display(Name = "Negative binomial")]
         NegativeBinomial = 4,
+        [Display(Name = "Poisson log-Normal")]
         PoissonLogNormal = 8,
+        [Display(Name = "Power law")]
         PowerLaw = 16,
         // Fractions
+        [Display(Name = "Binomial")]
         Binomial = 32,
+        [Display(Name = "Beta-binomial")]
         BetaBinomial = 64,
+        [Display(Name = "Binomial logit Normal")]
         BinomialLogitNormal = 128,
         // Non-negative
+        [Display(Name = "Log-Normal")]
         LogNormal = 256,
         // Continuous
+        [Display(Name = "Normal")]
         Normal = 512,
     };
 

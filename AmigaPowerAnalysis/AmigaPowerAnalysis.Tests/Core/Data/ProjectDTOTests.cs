@@ -1,13 +1,9 @@
-﻿using AmigaPowerAnalysis.Core;
-using AmigaPowerAnalysis.Core.Data;
+﻿using AmigaPowerAnalysis.Core.Data;
 using AmigaPowerAnalysis.Core.DataReaders;
-using Biometris.ExtensionMethods;
-using Biometris.Persistence;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using AmigaPowerAnalysis.Tests.Mocks.Projects;
+using Biometris.ExtensionMethods;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.IO;
 
 namespace AmigaPowerAnalysis.Tests.Core {
     [TestClass]

@@ -1,63 +1,33 @@
-﻿using System;
+﻿using AmigaPowerAnalysis.Core;
+using AmigaPowerAnalysis.GUI.Wrappers;
+using AmigaPowerAnalysis.Properties;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Runtime.Serialization;
 using System.Windows.Forms;
-using AmigaPowerAnalysis.Core;
-using AmigaPowerAnalysis.Core.PowerAnalysis;
-using Biometris;
-using Biometris.Logger;
-using AmigaPowerAnalysis.Properties;
 
 namespace AmigaPowerAnalysis.GUI {
     public partial class MainWindow : Form {
+
+        #region Private properties
 
         private Project _project;
         private string _currentProjectFilename;
 
         private List<ISelectionForm> _selectionForms;
 
-        private ILogger _logger;
+        #endregion
 
         public MainWindow() {
             InitializeComponent();
             initialize();
         }
 
-        public string CurrentProjectFilename {
-            get { return _currentProjectFilename; }
-            set {
-                _currentProjectFilename = value;
-                if (!string.IsNullOrEmpty(_currentProjectFilename)) {
-                    this.Text = "Amiga Power Analysis - " + Path.GetFileNameWithoutExtension(_currentProjectFilename);
-                    var analysisResultsPanel = _selectionForms.Where(s => s is AnalysisResultsPanel).Single() as AnalysisResultsPanel;
-                    var analysisResultsPerPanel = _selectionForms.Where(s => s is AnalysisResultsPerComparisonPanel).Single() as AnalysisResultsPerComparisonPanel;
-                    var filesPath = getCurrentProjectFilesPath();
-                    analysisResultsPanel.CurrentProjectFilesPath = filesPath;
-                    analysisResultsPerPanel.CurrentProjectFilesPath = filesPath;
-                } else {
-                    this.Text = "Amiga Power Analysis";
-                }
-            }
-        }
-
-        private string getCurrentProjectFilesPath() {
-            var projectPath = Path.GetDirectoryName(_currentProjectFilename);
-            var projectName = Path.GetFileNameWithoutExtension(_currentProjectFilename);
-            var filesPath = Path.Combine(projectPath, projectName);
-            if (!Directory.Exists(filesPath)) {
-                Directory.CreateDirectory(filesPath);
-            }
-            return filesPath;
-        }
-
         #region Initialization
 
         private void initialize() {
             _selectionForms = new List<ISelectionForm>();
-            _logger = new FileLogger();
             this.closeProject();
         }
 
@@ -73,7 +43,6 @@ namespace AmigaPowerAnalysis.GUI {
                 this.Size = Settings.Default.WindowSize;
             }
             EndpointTypeProvider.LoadMyEndpointTypes();
-
             var currentGenstatPath = Properties.Settings.Default.GenstatPath;
             if (string.IsNullOrEmpty(currentGenstatPath)) {
                 var defaultGenstatDirective = @"C:\Program Files\Gen16ed\Bin\GenBatch.exe";
@@ -156,6 +125,13 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void onVisibilitySettingsChanged(object sender, EventArgs e) {
             updateTabs();
+            if (e != null && e is TabVisibilityChangedEventArgs) {
+                var analysisResultsPerEndpointPanel = _selectionForms.Where(s => s is AnalysisResultsPerComparisonPanel).First() as AnalysisResultsPerComparisonPanel;
+                var selectedTab = this.tabControl.TabPages.Cast<TabPage>().FirstOrDefault(tp => tp.Name == analysisResultsPerEndpointPanel.Name);
+                if (selectedTab != null) {
+                    this.tabControl.SelectTab(selectedTab);
+                }
+            }
         }
 
         private void onRunButtonPressed(object sender, EventArgs e) {
@@ -169,8 +145,7 @@ namespace AmigaPowerAnalysis.GUI {
         private void newProject() {
             try {
                 closeProject();
-                loadProject(ProjectManager.CreateNewProject());
-                CurrentProjectFilename = string.Empty;
+                loadProject(ProjectManager.CreateNewProject(), string.Empty);
             } catch (Exception ex) {
                 showErrorMessage(ex);
             }
@@ -189,12 +164,11 @@ namespace AmigaPowerAnalysis.GUI {
                     Properties.Settings.Default.Save();
                     Project project;
                     if (Path.GetExtension(filename) == ".apa") {
-                        project = ProjectManager.LoadProject(openFileDialog.FileName);
+                        project = ProjectManager.LoadProject(filename);
                     } else {
-                        project = ProjectManager.LoadProjectXml(openFileDialog.FileName);
+                        project = ProjectManager.LoadProjectXml(filename);
                     }
-                    loadProject(project);
-                    CurrentProjectFilename = openFileDialog.FileName;
+                    loadProject(project, filename);
                 }
             } catch (Exception ex) {
                 showErrorMessage(ex);
@@ -203,7 +177,7 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void saveAsDialog() {
             try {
-                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                var saveFileDialog = new SaveFileDialog();
                 saveFileDialog.Filter = "Amiga Power Analysis files (*.apa)|*.apa|Amiga Power Analysis xml files (*.xml)|*.xml|All files (*.*)|*.*";
                 saveFileDialog.FilterIndex = 1;
                 saveFileDialog.RestoreDirectory = true;
@@ -224,7 +198,7 @@ namespace AmigaPowerAnalysis.GUI {
             }
         }
 
-        private void loadProject(Project project) {
+        private void loadProject(Project project, string currentProjectFilename) {
             try {
                 closeProject();
                 _project = project;
@@ -241,6 +215,7 @@ namespace AmigaPowerAnalysis.GUI {
                 var simulationPanel = new SimulationPanel(_project);
                 _selectionForms.Add(simulationPanel);
                 simulationPanel.RunButtonPressed += onRunButtonPressed;
+                _selectionForms.Add(new OutputPanel(_project));
                 _selectionForms.Add(new AnalysisResultsPerComparisonPanel(_project));
                 _selectionForms.Add(new AnalysisResultsPanel(_project));
                 _selectionForms.Add(new AnalysisTemplatePanel(_project));
@@ -251,6 +226,8 @@ namespace AmigaPowerAnalysis.GUI {
                 this.saveAsToolStripMenuItem.Enabled = true;
                 this.saveToolStripMenuItem.Enabled = true;
                 this.goToolStripMenuItem.Enabled = true;
+                
+                CurrentProjectFilename = currentProjectFilename;
 
                 updateTabs();
             } catch (Exception ex) {
@@ -261,11 +238,11 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void saveProject() {
-            if (!string.IsNullOrEmpty(CurrentProjectFilename)) {
-                if (Path.GetExtension(CurrentProjectFilename) == ".apa") {
-                    ProjectManager.SaveProject(_project, CurrentProjectFilename);
+            if (!string.IsNullOrEmpty(_currentProjectFilename)) {
+                if (Path.GetExtension(_currentProjectFilename) == ".apa") {
+                    ProjectManager.SaveProject(_project, _currentProjectFilename);
                 } else {
-                    ProjectManager.SaveProjectXml(_project, CurrentProjectFilename);
+                    ProjectManager.SaveProjectXml(_project, _currentProjectFilename);
                 }
             } else {
                 saveAsDialog();
@@ -273,9 +250,16 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void closeProject() {
+            _selectionForms.ForEach(s => s.TabVisibilitiesChanged -= onVisibilitySettingsChanged);
+            var simulationPanel = _selectionForms.FirstOrDefault(r => r is SimulationPanel) as SimulationPanel;
+            _selectionForms.ForEach(s => s.Dispose());
+            this.tabControl.TabPages.Clear();
+            if (simulationPanel != null) {
+                simulationPanel.RunButtonPressed -= onRunButtonPressed;
+            }
+            _project = null;
             _selectionForms.Clear();
             _selectionForms.Add(new IntroductionPanel());
-            this.tabControl.TabPages.Clear();
             this.saveAsToolStripMenuItem.Enabled = false;
             this.saveToolStripMenuItem.Enabled = false;
             this.closeToolStripMenuItem.Enabled = false;
@@ -285,7 +269,6 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void updateTabs() {
             var currentTabName = this.tabControl.SelectedTab != null ? this.tabControl.SelectedTab.Name : null;
-            //this.tabControl.TabPages.Clear();
             var visibleForms = _selectionForms.Where(f => f.IsVisible()).ToList();
             var visibleTabCount = 0;
             foreach (var selectionForm in _selectionForms) {
@@ -312,7 +295,7 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void runPowerAnalysis() {
-            if (string.IsNullOrEmpty(CurrentProjectFilename)) {
+            if (string.IsNullOrEmpty(_currentProjectFilename)) {
                 MessageBox.Show("Please save the project first.",
                    "Save project first",
                    MessageBoxButtons.OK,
@@ -320,7 +303,7 @@ namespace AmigaPowerAnalysis.GUI {
                    MessageBoxDefaultButton.Button1);
                 return;
             }
-            var runSimulationDialog = new RunPowerAnalysisDialog(_project, CurrentProjectFilename);
+            var runSimulationDialog = new RunPowerAnalysisDialog(_project, _currentProjectFilename);
             runSimulationDialog.ShowDialog();
             this.saveProject();
             this.updateTabs();
@@ -338,10 +321,37 @@ namespace AmigaPowerAnalysis.GUI {
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Error,
                 MessageBoxDefaultButton.Button1);
-            _logger.Log(ex.Message);
         }
 
         #endregion
 
+        private string CurrentProjectFilename {
+            get { return _currentProjectFilename; }
+            set {
+                _currentProjectFilename = value;
+                if (!string.IsNullOrEmpty(_currentProjectFilename)) {
+                    this.Text = "Amiga Power Analysis - " + Path.GetFileNameWithoutExtension(_currentProjectFilename);
+                    var analysisResultsPanel = _selectionForms.Where(s => s is AnalysisResultsPanel).First() as AnalysisResultsPanel;
+                    var analysisResultsPerEndpointPanel = _selectionForms.Where(s => s is AnalysisResultsPerComparisonPanel).First() as AnalysisResultsPerComparisonPanel;
+                    var outputPerPanel = _selectionForms.Where(s => s is OutputPanel).First() as OutputPanel;
+                    var filesPath = getCurrentProjectFilesPath();
+                    analysisResultsPanel.CurrentProjectFilesPath = filesPath;
+                    analysisResultsPerEndpointPanel.CurrentProjectFilesPath = filesPath;
+                    outputPerPanel.CurrentProjectFilesPath = filesPath;
+                } else {
+                    this.Text = "Amiga Power Analysis";
+                }
+            }
+        }
+
+        private string getCurrentProjectFilesPath() {
+            var projectPath = Path.GetDirectoryName(_currentProjectFilename);
+            var projectName = Path.GetFileNameWithoutExtension(_currentProjectFilename);
+            var filesPath = Path.Combine(projectPath, projectName);
+            if (!Directory.Exists(filesPath)) {
+                Directory.CreateDirectory(filesPath);
+            }
+            return filesPath;
+        }
     }
 }

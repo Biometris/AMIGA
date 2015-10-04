@@ -1,9 +1,8 @@
-﻿using System;
-using System.IO;
+﻿using AmigaPowerAnalysis.Core;
 using AmigaPowerAnalysis.Core.DataReaders;
-using AmigaPowerAnalysis.Core.PowerAnalysis;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using AmigaPowerAnalysis.Core;
+using System;
+using System.IO;
 
 namespace AmigaPowerAnalysis.Tests.Core {
     [TestClass]

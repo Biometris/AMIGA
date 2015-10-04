@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 namespace AmigaPowerAnalysis.GUI {
     public interface ISelectionForm {
 
+        event EventHandler TabVisibilitiesChanged;
+
         string Name { get; }
 
         string Description { get; }
@@ -15,6 +17,6 @@ namespace AmigaPowerAnalysis.GUI {
 
         bool IsVisible();
 
-        event EventHandler TabVisibilitiesChanged;
+        void Dispose();
     }
 }

@@ -2,13 +2,10 @@
 using AmigaPowerAnalysis.Core.Data;
 using AmigaPowerAnalysis.Core.DataReaders;
 using Biometris.ExtensionMethods;
-using Biometris.Persistence;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace AmigaPowerAnalysis.Tests.Core {
 

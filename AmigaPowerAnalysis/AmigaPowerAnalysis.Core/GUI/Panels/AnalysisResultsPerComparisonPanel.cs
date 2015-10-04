@@ -5,7 +5,7 @@ using AmigaPowerAnalysis.Core.PowerAnalysis;
 using AmigaPowerAnalysis.Core.Reporting;
 using Biometris.ExtensionMethods;
 using System;
-using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -13,36 +13,44 @@ using System.Windows.Forms;
 namespace AmigaPowerAnalysis.GUI {
     public partial class AnalysisResultsPerComparisonPanel : UserControl, ISelectionForm {
 
-        public event EventHandler TabVisibilitiesChanged;
+        #region Private properties
 
         private Project _project;
         private ResultPowerAnalysis _resultPowerAnalysis;
         private OutputPowerAnalysis _currentComparisonAnalysisResult;
-        private string _currentProjectFilesPath;
+        private AnalysisPlotType _currentPlotType;
+
+        #endregion
 
         public AnalysisResultsPerComparisonPanel(Project project) {
             InitializeComponent();
             Name = "Results per endpoint";
             Description = "Choose endpoint in table. Choose method of analysis if more have been investigated. Power is shown for difference tests or equivalence tests, and as a function of the number of replicates or the Ratio Test/Comp (on a ln scale).\r\nNote: Number of plots in design is Number of replicates times Number of plots per block";
-            var testTypes = Enum.GetValues(typeof(TestType));
-            this.comboBoxTestType.DataSource = testTypes;
-            this.comboBoxTestType.SelectedIndex = 0;
-            var plotTypes = new List<AnalysisPlotType>() { AnalysisPlotType.Replicates, AnalysisPlotType.Ratio };
-            this.comboBoxAnalysisPlotTypes.DataSource = plotTypes;
-            this.comboBoxAnalysisPlotTypes.SelectedIndex = 0;
             _project = project;
+            _currentPlotType = AnalysisPlotType.Ratio;
+            dataGridViewComparisons.AutoGenerateColumns = false;
+            dataGridViewComparisons.EditingControlShowing += new DataGridViewEditingControlShowingEventHandler(dataGridViewComparisons_EditingControlShowing);
         }
+
+        public event EventHandler TabVisibilitiesChanged;
 
         public string Description { get; private set; }
 
-        public string CurrentProjectFilesPath {
-            get { return _currentProjectFilesPath; }
-            set { _currentProjectFilesPath = value; }
+        public string CurrentProjectFilesPath { get; set; }
+
+        public string CurrentOutputFilesPath {
+            get {
+                if (_resultPowerAnalysis.GetPrimaryComparisons().Count() > 0) {
+                    return Path.Combine(CurrentProjectFilesPath, _project.PrimaryOutput);
+                }
+                return null;
+            }
         }
 
         public void Activate() {
+            updatePlotTypeRadioButtons();
             updateDataGridComparisons();
-            if (_project.HasOutput) {
+            if (_resultPowerAnalysis.GetPrimaryComparisons().Count() > 0) {
                 splitContainerComparisons.Visible = true;
             } else {
                 splitContainerComparisons.Visible = false;
@@ -50,16 +58,13 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         public bool IsVisible() {
-            if (_project.HasOutput) {
-                return true;
-            }
-            return false;
+            return _project != null && CurrentProjectFilesPath != null && _project.PrimaryOutputExists(CurrentProjectFilesPath);
         }
 
         private void updateDataGridComparisons() {
             dataGridViewComparisons.Columns.Clear();
 
-            _resultPowerAnalysis = _project.AnalysisResults.First();
+            _resultPowerAnalysis = _project.GetPrimaryOutput(CurrentProjectFilesPath);
 
             var column = new DataGridViewTextBoxColumn();
             column.DataPropertyName = "Endpoint";
@@ -70,7 +75,7 @@ namespace AmigaPowerAnalysis.GUI {
             dataGridViewComparisons.Columns.Add(column);
 
             var _availableAnalysisMethodTypesDifferenceTests = _resultPowerAnalysis.ComparisonPowerAnalysisResults
-                .SelectMany(r => r.AnalysisMethodDifferenceTest.GetFlags().ToArray()).Distinct().ToList();
+                .SelectMany(r => r.InputPowerAnalysis.SelectedAnalysisMethodTypesDifferenceTests.GetFlags()).Distinct().ToList();
 
             var combo = new DataGridViewComboBoxColumn();
             combo.DataSource = _availableAnalysisMethodTypesDifferenceTests;
@@ -81,7 +86,7 @@ namespace AmigaPowerAnalysis.GUI {
             dataGridViewComparisons.Columns.Add(combo);
 
             var _availableAnalysisMethodTypesEquivalenceTests = _resultPowerAnalysis.ComparisonPowerAnalysisResults
-                .SelectMany(r => r.AnalysisMethodEquivalenceTest.GetFlags().ToArray()).Distinct().ToList();
+                .SelectMany(r => r.InputPowerAnalysis.SelectedAnalysisMethodTypesEquivalenceTests.GetFlags()).Distinct().ToList();
 
             combo = new DataGridViewComboBoxColumn();
             combo.DataSource = _availableAnalysisMethodTypesEquivalenceTests;
@@ -91,11 +96,14 @@ namespace AmigaPowerAnalysis.GUI {
             combo.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
             dataGridViewComparisons.Columns.Add(combo);
 
-            var comparisonsBindingSouce = new BindingSource(_resultPowerAnalysis.ComparisonPowerAnalysisResults, null);
-            dataGridViewComparisons.AutoGenerateColumns = false;
-            dataGridViewComparisons.DataSource = comparisonsBindingSouce;
-
-            this.dataGridViewComparisons.EditingControlShowing += new DataGridViewEditingControlShowingEventHandler(dataGridViewComparisons_EditingControlShowing);
+            if (_resultPowerAnalysis.ComparisonPowerAnalysisResults.Count > 0) {
+                var comparisonsBindingSouce = new BindingSource(_resultPowerAnalysis.ComparisonPowerAnalysisResults, null);
+                dataGridViewComparisons.DataSource = comparisonsBindingSouce;
+                dataGridViewComparisons.Update();
+            } else {
+                dataGridViewComparisons.DataSource = null;
+                dataGridViewComparisons.Update();
+            }
         }
 
         private ComboBox _currentComboBox;
@@ -121,18 +129,58 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void updateAnalysisOutputPanel() {
             if (_currentComparisonAnalysisResult != null) {
-                var plotType = (AnalysisPlotType)comboBoxAnalysisPlotTypes.SelectedValue;
-                var testType = (TestType)comboBoxTestType.SelectedValue;
-                var analysisMethodType = (testType == TestType.Difference) ? _currentComparisonAnalysisResult.AnalysisMethodDifferenceTest : _currentComparisonAnalysisResult.AnalysisMethodEquivalenceTest;
-                if (plotType == AnalysisPlotType.Replicates) {
-                    plotView.Model = PowerVersusReplicatesRatioChartCreator.Create(_currentComparisonAnalysisResult.OutputRecords, testType, analysisMethodType);
-                } else if (plotType == AnalysisPlotType.Ratio) {
-                    plotView.Model = PowerVersusRatioChartCreator.Create(_currentComparisonAnalysisResult.OutputRecords, testType, analysisMethodType, _currentComparisonAnalysisResult.InputPowerAnalysis.MeasurementType, _currentComparisonAnalysisResult.InputPowerAnalysis.NumberOfReplications);
+                if (tabControlEndpointResult.SelectedIndex < 2) {
+                    updateAnalysisCharts();
+                } else if (tabControlEndpointResult.SelectedIndex == 2) {
+                    updateSettingsReport();
+                } else if (tabControlEndpointResult.SelectedIndex == 3) {
+                    updateFullReport();
                 }
-                labelPlotsPerBlock.Text = string.Format("{0} plots per block", _currentComparisonAnalysisResult.InputPowerAnalysis.InputRecords.Sum(ir => ir.Frequency));
-                labelLocLowerValue.Text = string.Format("{0:0.###}", _currentComparisonAnalysisResult.InputPowerAnalysis.LocLower);
-                labelLocUpperValue.Text = string.Format("{0:0.###}", _currentComparisonAnalysisResult.InputPowerAnalysis.LocUpper);
             }
+        }
+
+        private void updateAnalysisCharts() {
+            var plotType = _currentPlotType;
+            if (plotType == AnalysisPlotType.Replicates) {
+                plotViewDifference.Model = PowerVersusReplicatesRatioChartCreator.Create(_currentComparisonAnalysisResult.OutputRecords, TestType.Difference, _currentComparisonAnalysisResult.AnalysisMethodDifferenceTest);
+                plotViewEquivalence.Model = PowerVersusReplicatesRatioChartCreator.Create(_currentComparisonAnalysisResult.OutputRecords, TestType.Equivalence, _currentComparisonAnalysisResult.AnalysisMethodEquivalenceTest);
+            } else if (plotType == AnalysisPlotType.Ratio) {
+                plotViewDifference.Model = PowerVersusRatioChartCreator.Create(_currentComparisonAnalysisResult.OutputRecords, TestType.Difference, _currentComparisonAnalysisResult.AnalysisMethodDifferenceTest, _currentComparisonAnalysisResult.InputPowerAnalysis.MeasurementType, _currentComparisonAnalysisResult.InputPowerAnalysis.NumberOfReplications);
+                plotViewEquivalence.Model = PowerVersusRatioChartCreator.Create(_currentComparisonAnalysisResult.OutputRecords, TestType.Equivalence, _currentComparisonAnalysisResult.AnalysisMethodEquivalenceTest, _currentComparisonAnalysisResult.InputPowerAnalysis.MeasurementType, _currentComparisonAnalysisResult.InputPowerAnalysis.NumberOfReplications);
+            }
+        }
+
+        private void updateSettingsReport() {
+            if (_currentComparisonAnalysisResult != null && _currentComparisonAnalysisResult != null) {
+                if (webBrowserSettingsReport.Document == null) {
+                    webBrowserSettingsReport.Navigate("about:blank");
+                }
+                var doc = webBrowserSettingsReport.Document.OpenNew(true);
+                var reportGenerator = new ComparisonSettingsGenerator(_currentComparisonAnalysisResult, CurrentOutputFilesPath);
+                var html = reportGenerator.Generate(true);
+                doc.Write(html);
+                doc.Title = "Settings report";
+            }
+        }
+
+        private void updateFullReport() {
+            if (_currentComparisonAnalysisResult != null && _currentComparisonAnalysisResult != null) {
+                if (webBrowserFullReport.Document == null) {
+                    webBrowserFullReport.Navigate("about:blank");
+                }
+                var doc = webBrowserFullReport.Document.OpenNew(true);
+                var reportGenerator = new SingleComparisonReportGenerator(_currentComparisonAnalysisResult, CurrentOutputFilesPath);
+                var html = reportGenerator.Generate(true);
+                doc.Write(html);
+                doc.Title = "Full report";
+            }
+        }
+
+        private void updatePlotTypeRadioButtons() {
+            radioButtonRatioDifference.Checked = _currentPlotType == AnalysisPlotType.Ratio;
+            radioButtonRatioEquivalence.Checked = _currentPlotType == AnalysisPlotType.Ratio;
+            radioButtonReplicatesDifference.Checked = _currentPlotType == AnalysisPlotType.Replicates;
+            radioButtonReplicatesEquivalence.Checked = _currentPlotType == AnalysisPlotType.Replicates;
         }
 
         private void dataGridViewComparisons_SelectionChanged(object sender, EventArgs e) {
@@ -145,32 +193,55 @@ namespace AmigaPowerAnalysis.GUI {
             updateAnalysisOutputPanel();
         }
 
-        private void buttonShowSettings_Click(object sender, EventArgs e) {
-            var title = Path.GetFileNameWithoutExtension(_currentProjectFilesPath) + "_" + _currentComparisonAnalysisResult.Endpoint + "_Settings";
-            var reportGenerator = new ComparisonSettingsGenerator(_currentComparisonAnalysisResult, _currentProjectFilesPath);
-            var htmlReportForm = new HtmlReportForm(reportGenerator, title, _currentProjectFilesPath);
-            htmlReportForm.ShowDialog();
-        }
-
-        private void buttonShowInputData_Click(object sender, EventArgs e) {
-            if (_currentComparisonAnalysisResult != null && _currentComparisonAnalysisResult != null) {
-                var title = Path.GetFileNameWithoutExtension(_currentProjectFilesPath) + "_" + _currentComparisonAnalysisResult.Endpoint;
-                var reportGenerator = new SingleComparisonReportGenerator(_currentComparisonAnalysisResult, _currentProjectFilesPath);
-                var htmlReportForm = new HtmlReportForm(reportGenerator, title, _currentProjectFilesPath);
-                htmlReportForm.ShowDialog();
-            }
-        }
-
-        private void comboBoxTestType_SelectedIndexChanged(object sender, EventArgs e) {
-            updateAnalysisOutputPanel();
-        }
-
-        private void comboBoxAnalysisPlotTypes_SelectedIndexChanged(object sender, EventArgs e) {
-            updateAnalysisOutputPanel();
-        }
-
         private void dataGridViewComparisons_CellValueChanged(object sender, DataGridViewCellEventArgs e) {
             updateAnalysisOutputPanel();
+        }
+
+        private void radioButtonRatioDifference_CheckedChanged(object sender, EventArgs e) {
+            _currentPlotType = radioButtonRatioDifference.Checked ? AnalysisPlotType.Ratio : AnalysisPlotType.Replicates;
+            updatePlotTypeRadioButtons();
+            updateAnalysisOutputPanel();
+        }
+
+        private void radioButtonReplicatesDifference_CheckedChanged(object sender, EventArgs e) {
+            _currentPlotType = radioButtonReplicatesDifference.Checked ? AnalysisPlotType.Replicates : AnalysisPlotType.Ratio;
+            updatePlotTypeRadioButtons();
+            updateAnalysisOutputPanel();
+        }
+
+        private void radioButtonRatioEquivalence_CheckedChanged(object sender, EventArgs e) {
+            _currentPlotType = radioButtonRatioEquivalence.Checked ? AnalysisPlotType.Ratio : AnalysisPlotType.Replicates;
+            updatePlotTypeRadioButtons();
+            updateAnalysisOutputPanel();
+        }
+
+        private void radioButtonReplicatesEquivalence_CheckedChanged(object sender, EventArgs e) {
+            _currentPlotType = radioButtonReplicatesEquivalence.Checked ? AnalysisPlotType.Replicates : AnalysisPlotType.Ratio;
+            updatePlotTypeRadioButtons();
+            updateAnalysisOutputPanel();
+        }
+
+        private void tabControlEndpointResult_SelectedIndexChanged(object sender, EventArgs e) {
+            updateAnalysisOutputPanel();
+        }
+
+        private void toolStripButtonExportPdf_Click(object sender, EventArgs e) {
+            var title = "Report " + _currentComparisonAnalysisResult.InputPowerAnalysis.Endpoint;
+            var saveFileDialog = new SaveFileDialog();
+            saveFileDialog.DefaultExt = ".pdf";
+            saveFileDialog.Filter = "PDF|*.pdf";
+            saveFileDialog.AddExtension = true;
+            saveFileDialog.FileName = title.ReplaceInvalidChars("_");
+            saveFileDialog.InitialDirectory = CurrentOutputFilesPath;
+            if (saveFileDialog.FileName.Length == 0) {
+                saveFileDialog.FileName = "unknown";
+            }
+            if (saveFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+                var filenamePdf = saveFileDialog.FileName;
+                var reportGenerator = new SingleComparisonReportGenerator(_currentComparisonAnalysisResult, CurrentOutputFilesPath);
+                reportGenerator.SaveAsPdf(filenamePdf);
+                Process.Start(filenamePdf);
+            }
         }
     }
 }

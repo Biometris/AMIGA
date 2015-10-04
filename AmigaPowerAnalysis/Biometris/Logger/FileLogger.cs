@@ -19,7 +19,6 @@ namespace Biometris.Logger {
         }
 
         ~FileLogger() {
-            WriteToFile();
         }
 
         public void Log(string message) {

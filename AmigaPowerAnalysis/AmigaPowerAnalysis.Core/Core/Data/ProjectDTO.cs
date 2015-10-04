@@ -47,6 +47,8 @@ namespace AmigaPowerAnalysis.Core.Data {
 
         public PowerCalculationSettingsDTO PowerCalculationSettings { get; set; }
 
+        public string PrimaryOutput { get; set; }
+
         #endregion
 
         public static Project FromDTO(ProjectDTO dto) {
@@ -65,6 +67,7 @@ namespace AmigaPowerAnalysis.Core.Data {
                 CVForBlocks = dto.CVForBlocks,
                 UseMainPlotModifier = dto.UseMainPlotModifier,
                 CVForMainPlots = dto.CVForMainPlots,
+                PrimaryOutput = dto.PrimaryOutput,
             };
             project.DefaultInteractionFactorLevelCombinations = dto.DefaultInteractions.Select(r => DefaultInteractionDTO.FromDTO(r, factors)).ToList();
             project.UpdateEndpointFactors();
@@ -91,6 +94,7 @@ namespace AmigaPowerAnalysis.Core.Data {
                 CVForBlocks = project.CVForBlocks,
                 UseMainPlotModifier = project.UseMainPlotModifier,
                 CVForMainPlots = project.CVForMainPlots,
+                PrimaryOutput = project.PrimaryOutput,
             };
             return dto;
         }

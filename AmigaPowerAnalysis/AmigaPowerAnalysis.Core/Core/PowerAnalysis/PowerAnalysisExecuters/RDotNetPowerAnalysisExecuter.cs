@@ -156,13 +156,14 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             }
             catch (Exception ex) {
                 logger.Log(string.Format("# Error: {0}", ex.Message));
-                logger.WriteToFile();
                 return new OutputPowerAnalysis() {
                     InputPowerAnalysis = inputPowerAnalysis,
                     OutputRecords = outputResults,
                     Success = false,
                     Messages = new List<string>() { ex.Message }
                 };
+            } finally {
+                logger.WriteToFile();
             }
         }
 

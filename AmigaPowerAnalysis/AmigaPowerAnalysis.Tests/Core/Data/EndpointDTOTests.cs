@@ -1,7 +1,6 @@
 ﻿using AmigaPowerAnalysis.Core;
 using AmigaPowerAnalysis.Core.Data;
 using AmigaPowerAnalysis.Core.DataReaders;
-using Biometris.ExtensionMethods;
 using Biometris.Persistence;
 using Biometris.Statistics.Distributions;
 using Biometris.Statistics.Measurements;

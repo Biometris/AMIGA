@@ -1,11 +1,10 @@
-﻿using AmigaPowerAnalysis.Core.Charting;
+﻿using AmigaPowerAnalysis.Core.Charting.AnalysisResultsChartCreators;
 using AmigaPowerAnalysis.Core.DataAnalysis.AnalysisModels;
 using AmigaPowerAnalysis.Core.PowerAnalysis;
 using Biometris.ExtensionMethods;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using AmigaPowerAnalysis.Core.Charting.AnalysisResultsChartCreators;
 
 namespace AmigaPowerAnalysis.Core.Reporting {
     public sealed class MultiComparisonReportGenerator : ComparisonReportGeneratorBase {
@@ -38,6 +37,7 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             foreach (var comparisonOutput in primaryComparisonOutputs) {
                 html += string.Format("<h1>Results comparison {0}</h1>", comparisonOutput.InputPowerAnalysis.Endpoint);
                 html += generateComparisonMessagesHtml(comparisonOutput);
+                html += generateEndpointInfoHtml(comparisonOutput.InputPowerAnalysis);
                 html += generateComparisonSettingsHtml(comparisonOutput.InputPowerAnalysis);
                 //html += generateComparisonInputDataHtml(comparison.OutputPowerAnalysis.InputPowerAnalysis);
                 html += generateComparisonOutputHtml(comparisonOutput.OutputRecords, comparisonOutput.InputPowerAnalysis.NumberOfReplications, analysisMethodTypesDifferenceTests, TestType.Difference);

@@ -1,4 +1,5 @@
 ﻿using AmigaPowerAnalysis.Core.PowerAnalysis;
+
 namespace AmigaPowerAnalysis.Core.Reporting {
     public sealed class ComparisonSettingsGenerator : ComparisonReportGeneratorBase {
 
@@ -12,7 +13,9 @@ namespace AmigaPowerAnalysis.Core.Reporting {
         
         public override string Generate(bool imagesAsPng) {
             var html = string.Empty;
+            html += generateEndpointInfoHtml(_outputPowerAnalysis.InputPowerAnalysis);
             html += generateComparisonSettingsHtml(_outputPowerAnalysis.InputPowerAnalysis);
+            html += generateAnalysisSettingsHtml(_outputPowerAnalysis.InputPowerAnalysis);
             return format(html);
         }
     }

@@ -1,9 +1,8 @@
 ﻿using AmigaPowerAnalysis.Core.Data;
-using System.Collections.Generic;
+using Biometris.ExtensionMethods;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Xml;
-using Biometris.ExtensionMethods;
 
 namespace AmigaPowerAnalysis.Core {
     public static class ProjectManager {
@@ -11,10 +10,6 @@ namespace AmigaPowerAnalysis.Core {
         public static Project CreateNewProject() {
             var project = new Project();
             project.EndpointTypes = EndpointTypeProvider.NewProjectDefaultEndpointTypes();
-            //project.Endpoints.Add(new Endpoint("Beatle", project.EndpointTypes.First(ept => ept.Name == "Predator")));
-            //project.Endpoints.Add(new Endpoint("Giraffe", project.EndpointTypes.First(ept => ept.Name == "Herbivore")));
-            //project.Factors.Add(new Factor("Spraying", 3));
-            //project.Factors.Add(new Factor("Raking", 2));
             project.UpdateEndpointFactors();
             return project;
         }
