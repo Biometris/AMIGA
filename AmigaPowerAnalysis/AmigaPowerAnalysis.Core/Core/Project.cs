@@ -1,9 +1,12 @@
-﻿using AmigaPowerAnalysis.Core.PowerAnalysis;
-using Biometris.ExtensionMethods;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
+using AmigaPowerAnalysis.Core.DataAnalysis.AnalysisModels;
+using AmigaPowerAnalysis.Core.PowerAnalysis;
+using Biometris.ExtensionMethods;
+using Biometris.Statistics.Measurements;
 
 namespace AmigaPowerAnalysis.Core {
 
@@ -361,6 +364,26 @@ namespace AmigaPowerAnalysis.Core {
         /// </summary>
         public IEnumerable<Comparison> GetComparisons() {
             return Endpoints.Select(ep => new Comparison() { Endpoint = ep });
+        }
+
+        /// <summary>
+        /// Checks the analysis settings and throws an exception when the analysis
+        /// settings are not correct.
+        /// </summary>
+        public void ValidateAnalysisSettings() {
+            var measurementTypes = Enum.GetValues(typeof(MeasurementType)).Cast<MeasurementType>();
+            foreach (var measurementType in measurementTypes) {
+                if (Endpoints.Any(r => r.Measurement == measurementType)) {
+                    var selectedAnalysisMethodsDifferenceTests = PowerCalculationSettings.SelectedAnalysisMethodTypesDifferenceTests & AnalysisModelFactory.AnalysisMethodsForMeasurementType(measurementType);
+                    if (selectedAnalysisMethodsDifferenceTests.GetFlags().Count() == 0) {
+                        throw new Exception(string.Format("No difference tests analysis method specified for the analysis of {0} data", measurementType.GetDisplayName().ToLower()));
+                    }
+                    var selectedAnalysisMethodsEquivalenceTests = PowerCalculationSettings.SelectedAnalysisMethodTypesEquivalenceTests & AnalysisModelFactory.AnalysisMethodsForMeasurementType(measurementType);
+                    if (selectedAnalysisMethodsEquivalenceTests.GetFlags().Count() == 0) {
+                        throw new Exception(string.Format("No equivalence tests analysis method specified for the analysis of {0} data", measurementType.GetDisplayName().ToLower()));
+                    }
+                }
+            }
         }
 
         /// <summary>

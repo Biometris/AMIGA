@@ -41,6 +41,7 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private async Task runSimulation(CompositeProgressState progressReport) {
+            _project.ValidateAnalysisSettings();
             _project.ClearProjectOutput();
             var comparisons = _project.Endpoints.ToList();
             var projectPath = Path.GetDirectoryName(_projectFilename);
