@@ -51,6 +51,8 @@ namespace AmigaPowerAnalysis.Core.Charting.AnalysisResultsChartCreators {
                 AbsoluteMaximum = 1.1,
                 Minimum = -0.01,
                 Maximum = 1.01,
+                MajorStep = 0.1,
+                MinorStep = 0.05,
             };
             plotModel.Axes.Add(verticalAxis);
             var lineAnnotation = new LineAnnotation() {
