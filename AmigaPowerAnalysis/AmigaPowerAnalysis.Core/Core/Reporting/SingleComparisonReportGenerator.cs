@@ -7,15 +7,20 @@ namespace AmigaPowerAnalysis.Core.Reporting {
     public sealed class SingleComparisonReportGenerator : ComparisonReportGeneratorBase {
 
         private OutputPowerAnalysis _comparisonOutput;
+        private ResultPowerAnalysis _resultPowerAnalysis;
         private string _filesPath;
+        private string _outputName;
 
-        public SingleComparisonReportGenerator(OutputPowerAnalysis comparisonOutput, string filesPath) {
+        public SingleComparisonReportGenerator(ResultPowerAnalysis resultPowerAnalysis, OutputPowerAnalysis comparisonOutput, string outputName, string filesPath) {
             _comparisonOutput = comparisonOutput;
+            _resultPowerAnalysis = resultPowerAnalysis;
+            _outputName = outputName;
             _filesPath = filesPath;
         }
 
         public override string Generate(bool imagesAsPng) {
             var html = string.Empty;
+            html += generateOutputOverviewHtml(_resultPowerAnalysis, _outputName);
             html += generateComparisonMessagesHtml(_comparisonOutput);
             html += generateEndpointInfoHtml(_comparisonOutput.InputPowerAnalysis); 
             html += generateComparisonSettingsHtml(_comparisonOutput.InputPowerAnalysis);

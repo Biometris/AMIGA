@@ -16,6 +16,7 @@ namespace AmigaPowerAnalysis.GUI {
         #region Private properties
 
         private Project _project;
+        private string _currentOutputName; 
         private ResultPowerAnalysis _resultPowerAnalysis;
         private OutputPowerAnalysis _currentComparisonAnalysisResult;
         private AnalysisPlotType _currentPlotType;
@@ -64,6 +65,7 @@ namespace AmigaPowerAnalysis.GUI {
         private void updateDataGridComparisons() {
             dataGridViewComparisons.Columns.Clear();
 
+            _currentOutputName = _project.PrimaryOutput;
             _resultPowerAnalysis = _project.GetPrimaryOutput(CurrentProjectFilesPath);
 
             var column = new DataGridViewTextBoxColumn();
@@ -169,7 +171,7 @@ namespace AmigaPowerAnalysis.GUI {
                     webBrowserFullReport.Navigate("about:blank");
                 }
                 var doc = webBrowserFullReport.Document.OpenNew(true);
-                var reportGenerator = new SingleComparisonReportGenerator(_currentComparisonAnalysisResult, CurrentOutputFilesPath);
+                var reportGenerator = new SingleComparisonReportGenerator(_resultPowerAnalysis, _currentComparisonAnalysisResult, _currentOutputName, CurrentOutputFilesPath);
                 var html = reportGenerator.Generate(true);
                 doc.Write(html);
                 doc.Title = "Full report";
@@ -238,7 +240,7 @@ namespace AmigaPowerAnalysis.GUI {
             }
             if (saveFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
                 var filenamePdf = saveFileDialog.FileName;
-                var reportGenerator = new SingleComparisonReportGenerator(_currentComparisonAnalysisResult, CurrentOutputFilesPath);
+                var reportGenerator = new SingleComparisonReportGenerator(_resultPowerAnalysis, _currentComparisonAnalysisResult, _currentOutputName, CurrentOutputFilesPath);
                 reportGenerator.SaveAsPdf(filenamePdf);
                 Process.Start(filenamePdf);
             }
