@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using AmigaPowerAnalysis.Core.DataAnalysis.AnalysisModels;
-using Biometris.Statistics;
 using Biometris.Statistics.Measurements;
 
 namespace AmigaPowerAnalysis.Core.PowerAnalysis {

@@ -1,12 +1,12 @@
-﻿using AmigaPowerAnalysis.Core.DataAnalysis.AnalysisModels;
-using Biometris.ExtensionMethods;
-using Biometris.Statistics.Distributions;
-using Biometris.Statistics.Measurements;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
+using AmigaPowerAnalysis.Core.DataAnalysis.AnalysisModels;
+using Biometris.ExtensionMethods;
+using Biometris.Statistics.Distributions;
+using Biometris.Statistics.Measurements;
 
 namespace AmigaPowerAnalysis.Core.PowerAnalysis {
 

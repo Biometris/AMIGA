@@ -76,7 +76,7 @@ namespace AmigaPowerAnalysis.GUI {
             }
             resultPowerAnalysis.OuputTimeStamp = DateTime.Now;
             resultPowerAnalysis.ToXmlFile(filesPath + ".xml");
-            _project.PrimaryOutput = filesPath + ".xml";
+            _project.PrimaryOutput = filesPath;
             _project.AnalysisResults.Add(resultPowerAnalysis);
         }
 
