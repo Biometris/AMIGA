@@ -75,21 +75,26 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
 
                     var blockConfigurations = new List<int>();
                     var maxList = new List<int>() { inputPowerAnalysis.NumberOfReplications.Max() };
+                    var doExactCalculation = false;
+                    var doApproximateLyles = false;
                     if (inputPowerAnalysis.MeasurementType == MeasurementType.Continuous) {
                         // For Continuous data (Normal distribution) the power can be calculated for all reps simultaneously
                         blockConfigurations = maxList;
+                        doExactCalculation = true;
                     }
                     else if ((inputPowerAnalysis.MeasurementType == MeasurementType.Nonnegative) &&
                         ((inputPowerAnalysis.SelectedAnalysisMethodTypesDifferenceTests == AnalysisMethodType.LogPlusM) || (inputPowerAnalysis.SelectedAnalysisMethodTypesDifferenceTests == 0)) &&
                         ((inputPowerAnalysis.SelectedAnalysisMethodTypesEquivalenceTests == AnalysisMethodType.LogPlusM) || (inputPowerAnalysis.SelectedAnalysisMethodTypesEquivalenceTests == 0))) {
-                        // For Nonnegative data (LogNormal distribution) and analysis methods LogPlusM the power can be calculated for all reps simultaneously
+                        // For Nonnegative data (LogNormal distribution) and analysis methods LogPlusM: the power can be calculated for all reps simultaneously
                         blockConfigurations = maxList;
+                        doExactCalculation = true;
                     }
                     else if ((inputPowerAnalysis.PowerCalculationMethodType == PowerCalculationMethod.Approximate) &&
                             ((inputPowerAnalysis.ExperimentalDesignType == ExperimentalDesignType.CompletelyRandomized) || (inputPowerAnalysis.CvForBlocks == 0D))) {
                         // For Counts and Nonnegative data 
                         // For Approximate Method and no blocks (or zero CVblock) the power can be calculated for all reps simultaneously
                         blockConfigurations = maxList;
+                        doApproximateLyles = true;
                     }
                     else {
                         blockConfigurations = inputPowerAnalysis.NumberOfReplications;
@@ -110,14 +115,17 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
 
                                 // Define settings for Debugging the Rscript
                                 rEngine.EvaluateNoReturn(string.Format("debugSettings = list(iRep={0}, iEffect={1}, iDataset=NaN)", i + 1, j + 1));
-
-                                if ((inputPowerAnalysis.PowerCalculationMethodType == PowerCalculationMethod.Approximate) || (inputPowerAnalysis.MeasurementType == MeasurementType.Continuous) || (inputPowerAnalysis.MeasurementType == MeasurementType.Nonnegative)) {
-                                    // Lyles method for Counts
+                                if (doExactCalculation) {
+                                    var output = runExactPowerCalculation(effect, blocks, inputPowerAnalysis.SelectedAnalysisMethodTypesDifferenceTests, inputPowerAnalysis.SelectedAnalysisMethodTypesEquivalenceTests, inputPowerAnalysis.NumberOfSimulatedDataSets, rEngine);
+                                    outputResults.AddRange(output);
+                                }
+                                else if (doApproximateLyles) {
+                                    // Approximate Lyles method
                                     var output = runLylesApproximation(effect, blocks, inputPowerAnalysis.SelectedAnalysisMethodTypesDifferenceTests, inputPowerAnalysis.SelectedAnalysisMethodTypesEquivalenceTests, inputPowerAnalysis.NumberOfSimulatedDataSets, rEngine);
                                     outputResults.AddRange(output);
                                 }
                                 else {
-                                    // Monte Carlo for Counts
+                                    // Method for Power calculation = Simulate for Counts and for Nonnegative with Gamma analysis 
                                     var output = runMonteCarloSimulation(effect, blocks, inputPowerAnalysis.SelectedAnalysisMethodTypesDifferenceTests, inputPowerAnalysis.SelectedAnalysisMethodTypesEquivalenceTests, inputPowerAnalysis.NumberOfSimulatedDataSets, rEngine);
                                     outputResults.Add(output);
                                 }
@@ -167,6 +175,33 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             }
         }
 
+        private static List<OutputPowerAnalysisRecord> runExactPowerCalculation(EffectCSD effect, int maxBlocks, AnalysisMethodType selectedAnalysisMethodTypesDifferenceTests, AnalysisMethodType selectedAnalysisMethodTypesEquivalenceTests, int monteCarloSimulations, LoggingRDotNetEngine rEngine) {
+            rEngine.SetSymbol("effect", effect.TransformedEfffect);
+            rEngine.EvaluateNoReturn("pValues <- exactPowerAnalysis(inputData, settings, modelSettings, blocks, effect, debugSettings)");
+            var outputRecords = new List<OutputPowerAnalysisRecord>();
+            var rows = rEngine.EvaluateInteger("nrow(pValues$Extra)");
+            for (int i = 0; i < rows; ++i) {
+                var blocks = rEngine.EvaluateInteger(string.Format("pValues$Extra[{0},\"Reps\"]", i + 1));
+                var record = new OutputPowerAnalysisRecord() {
+                    ConcernStandardizedDifference = effect.CSD,
+                    Effect = effect.Effect,
+                    TransformedEffect = effect.TransformedEfffect,
+                    NumberOfReplications = blocks,
+                };
+                foreach (var analysisMethodType in selectedAnalysisMethodTypesDifferenceTests.GetFlags().Cast<AnalysisMethodType>()) {
+                    var powerDifference = rEngine.EvaluateDouble(string.Format("pValues$Diff[{0},\"{1}\"]", i + 1, analysisMethodType));
+                    record.SetPower(TestType.Difference, analysisMethodType, powerDifference);
+                }
+                foreach (var analysisMethodType in selectedAnalysisMethodTypesEquivalenceTests.GetFlags().Cast<AnalysisMethodType>()) {
+                    var powerEquivalence = rEngine.EvaluateDouble(string.Format("pValues$Equi[{0},\"{1}\"]", i + 1, analysisMethodType));
+                    record.SetPower(TestType.Equivalence, analysisMethodType, powerEquivalence);
+                }
+                outputRecords.Add(record);
+            }
+            return outputRecords;
+        }
+
+
         private static List<OutputPowerAnalysisRecord> runLylesApproximation(EffectCSD effect, int maxBlocks, AnalysisMethodType selectedAnalysisMethodTypesDifferenceTests, AnalysisMethodType selectedAnalysisMethodTypesEquivalenceTests, int monteCarloSimulations, LoggingRDotNetEngine rEngine) {
             rEngine.SetSymbol("effect", effect.TransformedEfffect);
             rEngine.EvaluateNoReturn("pValues <- lylesPowerAnalysis(inputData, settings, modelSettings, blocks, effect, debugSettings)");
@@ -192,7 +227,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             }
             return outputRecords;
         }
-
+        
         private static OutputPowerAnalysisRecord runMonteCarloSimulation(EffectCSD effect, int blocks, AnalysisMethodType selectedAnalysisMethodTypesDifferenceTests, AnalysisMethodType selectedAnalysisMethodTypesEquivalenceTests, int monteCarloSimulations, LoggingRDotNetEngine rEngine) {
             rEngine.SetSymbol("effect", effect.TransformedEfffect);
             rEngine.EvaluateNoReturn("pValues <- monteCarloPowerAnalysis(inputData, settings, modelSettings, blocks, effect, debugSettings)");

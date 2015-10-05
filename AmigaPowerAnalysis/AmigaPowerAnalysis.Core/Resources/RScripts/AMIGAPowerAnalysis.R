@@ -123,8 +123,39 @@ ropoisson <- function(n, mean, dispersion=NaN, power=NaN,
 }
 
 ######################################################################################################################
+# returns random draws from a Nonnegative distributions
+rnonnegative <- function(n, mean, cv, distribution=c("LogNormal", "Gamma")) {
+  stopifnot(n == as.integer(n), n >= 1, mean >= 0)
+  if ((length(mean) != 1) && (length(mean) != n)) {
+    stop("The length of mean must equal 1 or the value of n.", call. = FALSE)
+  }
+  if ((length(cv) != 1) && (length(cv) != n)) {
+    stop("The length of dispersion must equal 1 or the value of n.", call. = FALSE)
+  }
+  if (min(cv) <= 0) {
+    stop("The cv must be positive.", call. = FALSE)
+  }
+  mean[mean==0] <- 1.0e-200
+  if (min(mean) < 0) {
+    stop("The mean must be positive.", call. = FALSE)
+  }
+  type = match.arg(distribution)
+  if (type == "LogNormal") {
+    dispersion <- log((cv/100)^2 + 1)
+    logmean    <- log(mean) - dispersion/2
+    sample <- rlnorm(n, logmean , sqrt(dispersion))
+  } else if (type == "Gamma") {
+    shape  <- (100/cv)^2
+    scale  <- mean/shape
+    sample <- rgamma(n, shape=shape, scale=scale)
+  }
+  return(sample)
+}
+
+######################################################################################################################
 # returns the variance for a Count distributions
-ropoissonVariance <- function(n, mean, dispersion=NaN, power=NaN, distribution=c("Poisson", "OverdispersedPoisson", "NegativeBinomial", "PoissonLogNormal", "PowerLaw")) {
+ropoissonVariance <- function(n, mean, dispersion=NaN, power=NaN, 
+    distribution=c("Poisson", "OverdispersedPoisson", "NegativeBinomial", "PoissonLogNormal", "PowerLaw")) {
   type = match.arg(distribution)
   if (type == "Poisson") {
     variance <- mean
@@ -142,7 +173,8 @@ ropoissonVariance <- function(n, mean, dispersion=NaN, power=NaN, distribution=c
 
 ######################################################################################################################
 # returns the Dispersion parameter for a Count distributions
-ropoissonDispersion <- function(mean, CV, power, distribution=c("Poisson", "OverdispersedPoisson", "NegativeBinomial", "PoissonLogNormal", "PowerLaw", "Normal", "LogNormal")) {
+ropoissonDispersion <- function(mean, CV, power, 
+    distribution=c("Poisson", "OverdispersedPoisson", "NegativeBinomial", "PoissonLogNormal", "PowerLaw", "Normal", "LogNormal")) {
   if ((mean <= 0) && (distribution != "Normal")) {
     stop("Mean of distribution must be positive.", call. = FALSE)
   }
@@ -169,7 +201,7 @@ ropoissonDispersion <- function(mean, CV, power, distribution=c("Poisson", "Over
     dispersion <- (CV/100) * (CV/100) * mean^(2-power)
   } else if (type == "Normal") {
     dispersion <- ((CV/100) * mean)^2
-  } else if (type == "LogNormal") {
+  } else if (type == "LogNormal") { # Variance on the log-scale!
     dispersion <- log((CV/100)^2 + 1)
   } else {
     stop(paste0("Distribution '", distribution, "' not implemented in function ropoissonDispersion."), call.=FALSE)
@@ -251,6 +283,14 @@ readSettings <- function(settingsFile) {
   # Add directory to list
   list$directory = paste0(dirname(settingsFile), "/")
 
+  # Add additional settings (previously simulationSettings)
+  list$dispersion <- ropoissonDispersion(list$OverallMean, list$CVComparator, list$PowerLawPower, list$Distribution)
+  if (list$ExperimentalDesignType == "CompletelyRandomized") {
+    list$sigBlock <- 0
+  } else {
+    list$sigBlock <- sqrt(log((list$CVBlocks/100)^2 + 1))
+  }
+
   # Add extra settings
   list$AnalysisMethods <- unique(c(list$AnalysisMethodsDifferenceTests, list$AnalysisMethodsEquivalenceTests))
   list$DoLNdiff = !is.na(match("LogNormal",            list$AnalysisMethodsDifferenceTests))
@@ -259,12 +299,14 @@ readSettings <- function(settingsFile) {
   list$DoNBdiff = !is.na(match("NegativeBinomial",     list$AnalysisMethodsDifferenceTests))
   list$DoNOdiff = !is.na(match("Normal",               list$AnalysisMethodsDifferenceTests))
   list$DoLOdiff = !is.na(match("LogPlusM",             list$AnalysisMethodsDifferenceTests))
+  list$DoGMdiff = !is.na(match("Gamma",                list$AnalysisMethodsDifferenceTests))
   list$DoLNequi = !is.na(match("LogNormal",            list$AnalysisMethodsEquivalenceTests))
   list$DoSQequi = !is.na(match("SquareRoot",           list$AnalysisMethodsEquivalenceTests))
   list$DoOPequi = !is.na(match("OverdispersedPoisson", list$AnalysisMethodsEquivalenceTests))
   list$DoNBequi = !is.na(match("NegativeBinomial",     list$AnalysisMethodsEquivalenceTests))
   list$DoNOequi = !is.na(match("Normal",               list$AnalysisMethodsEquivalenceTests))
   list$DoLOequi = !is.na(match("LogPlusM",             list$AnalysisMethodsEquivalenceTests))
+  list$DoGMequi = !is.na(match("Gamma",                list$AnalysisMethodsEquivalenceTests))
   return(list)
 }
 
@@ -324,7 +366,7 @@ createSimulationSettings <- function(settings) {
 }
 
 ######################################################################################################################
-createSimulatedDataOld <- function(data, settings, simulationSettings, blocks, effect) {
+createSimulatedDataOld <- function(data, settings, blocks, effect) {
   setupSimulatedData <- data
   
   # Expand dataset; add Row and Block factor
@@ -339,7 +381,7 @@ createSimulatedDataOld <- function(data, settings, simulationSettings, blocks, e
   if (settings$ExperimentalDesignType == "CompletelyRandomized") {
     setupSimulatedData["BlockEffect"] <- 0
   } else {
-    blockeff = simulationSettings$sigBlock * qnorm(((1:blocks) - 0.375)/ (blocks + 0.25))
+    blockeff = settings$sigBlock * qnorm(((1:blocks) - 0.375)/ (blocks + 0.25))
     setupSimulatedData["BlockEffect"] <- blockeff[setupSimulatedData[["Block"]]]
   }
   setupSimulatedData["LowOffset"] <- setupSimulatedData["Test"] * settings$TransformLocLower
@@ -354,7 +396,7 @@ createSimulatedDataOld <- function(data, settings, simulationSettings, blocks, e
 }
 
 ######################################################################################################################
-createSimulatedData <- function(data, settings, simulationSettings, blocks, effect) {
+createSimulatedData <- function(data, settings, blocks, effect) {
 
   # Expand dataset and modify rownames
   ndata = nrow(data)  
@@ -375,7 +417,7 @@ createSimulatedData <- function(data, settings, simulationSettings, blocks, effe
   if (settings$ExperimentalDesignType == "CompletelyRandomized") {
     blockEffect <- 0
   } else {
-    blomScores <- simulationSettings$sigBlock * qnorm(((1:blocks) - 0.375)/ (blocks + 0.25))
+    blomScores <- settings$sigBlock * qnorm(((1:blocks) - 0.375)/ (blocks + 0.25))
     blockEffect <- blomScores[setupSimulatedData[["Block"]]]
   }
   setupSimulatedData["LowOffset"] <- setupSimulatedData["Test"] * settings$TransformLocLower
@@ -396,8 +438,14 @@ createSimulatedData <- function(data, settings, simulationSettings, blocks, effe
 }
 
 ######################################################################################################################
-simulateResponse <- function(simulatedData, settings, simulationSettings) {
-  response <- ropoisson(nrow(simulatedData), simulatedData[["Effect"]], simulationSettings$dispersion, settings$PowerLawPower, settings$Distribution, settings$ExcessZeroesPercentage)
+simulateResponse <- function(simulatedData, settings) {
+  if (settings$MeasurementType == "Count") {
+    response <- ropoisson(nrow(simulatedData), simulatedData[["Effect"]], settings$dispersion, settings$PowerLawPower, settings$Distribution, settings$ExcessZeroesPercentage)
+  } else if (settings$MeasurementType == "Nonnegative") {
+    response <- rnonnegative(nrow(simulatedData), simulatedData[["Effect"]], settings$CVComparator, settings$Distribution)
+  } else {
+    stop(paste("MeasurementType", settings$MeasurementType, "in function simulateResponse is not implemented.", call. = FALSE))
+  }
   return(response)
 }
 
@@ -697,6 +745,70 @@ fitNBhelper <- function(model, data, theta) {
 }
 
 ######################################################################################################################
+gammaAnalysis <- function(data, settings, modelSettings, debugSettings) {
+  # Prepare results list and fit H1; default method is DMETHOD=pearson
+  pvalues <- list(Diff = c(NaN), Equi = c(NaN), Dispersion=c(NaN))
+  glmH1 <- glm(as.formula(modelSettings$formulaH1), family=Gamma(link=log), data=data, etastart=Lp)
+  #print(paste0("Number of iteration ", glmH1$iter))
+  resDF <- glmH1$df.residual
+  estDispersion <- summary(glmH1)$dispersion
+  estiEffect <- as.numeric(glmH1$coef[2])
+  seEffect <- sqrt(vcov(glmH1)[2,2]) 
+  # estDispersion <- sum(residuals(glmH1,type="pearson")^2)/resDF
+  pvalues$Dispersion <- estDispersion
+  if (settings$IsOutputSimulatedData) {
+    writeLines(paste0("\nGM iRep ", debugSettings$iRep, " iEffect ", debugSettings$iEffect, " Dataset ", debugSettings$iDataset), debugSettings$displayFile)
+    writeLines(paste0("  dispersion: ", estDispersion), debugSettings$displayFile)
+    writeLines(paste0("  estiEffect: ", estiEffect), debugSettings$displayFile)
+    writeLines(paste0("  seEffect:   ", seEffect), debugSettings$displayFile)
+  }
+
+  if (settings$UseWaldTest) {  
+    # Results based on Wald tests
+    if (settings$DoGMdiff) {
+      pvalues$Diff <- waldDiffPvalue(estiEffect, seEffect, resDF, settings$TestType)
+    }
+    if (settings$DoGMequi) {
+      pvalues$Equi <- waldEquiPvalue(estiEffect, seEffect, resDF, settings$TestType, settings$TransformLocLower, settings$TransformLocUpper)
+    }
+  } else {
+    # Results based on LR test; denominator based on Pearson statistic
+    data[["Lp"]] <- glmH1$linear.predictor
+    if (settings$DoGMdiff) {
+      if (lrDiffDo(estiEffect, 0, settings$TestType)) {
+        glmH0 <- glm(modelSettings$formulaH0, family=Gamma(link=log), data=data, etastart=Lp)
+        devDiff = glmH0$deviance - glmH1$deviance
+        pvalues$Diff <- lrDiffPvalue(devDiff, estDispersion, resDF, settings$TestType)
+      } else {
+        pvalues$Diff <- 2
+      }
+    }
+    # and LR equivalence test
+    if (settings$DoGMequi) {
+      if (lrEquiDo(estiEffect, settings$TransformLocLower, settings$TransformLocUpper, settings$TestType)) {
+        # LR equivalence test
+        if ((settings$TestType == "twosided") || (settings$TestType == "left")) {
+          glmH0low <- glm(modelSettings$formulaH0_low, family=Gamma(link=log), data=data, etastart=Lp)
+          devDiffLower <- glmH0low$deviance - glmH1$deviance
+        } else {
+          devDiffLower <- NA
+        }
+        if ((settings$TestType == "twosided") || (settings$TestType == "right")) {
+          glmH0upp <- glm(modelSettings$formulaH0_upp, family=Gamma(link=log), data=data, etastart=Lp)
+          devDiffUpper <- glmH0upp$deviance - glmH1$deviance
+        } else {
+          devDiffUpper <- NA
+        }
+        pvalues$Equi <- lrEquiPvalue(devDiffLower, devDiffUpper, estDispersion, resDF, settings$TestType)
+      } else {
+        pvalues$Equi <- 2
+      }
+    }
+  }
+  return(pvalues)
+}
+
+######################################################################################################################
 # Returns the pvalue for the CGI equivalence test
 cgiEquiPvalue <- function(ratio, locLower, locUpper, testType) {
   if (testType == "twosided") {
@@ -873,17 +985,15 @@ monteCarloPowerAnalysis <- function(data, settings, modelSettings, blocks, effec
     Extra = matrix(nrow=nrow, ncol=2, dimnames=list(NULL, c("OPdisp", "NBtheta")))
   )
 
-  # Setup simulation settings
-  simulationSettings <- createSimulationSettings(settings)
-  simulatedData <- createSimulatedData(data, settings, simulationSettings, blocks, effect)
-
+  # Setup simulation Data
+  simulatedData <- createSimulatedData(data, settings, blocks, effect)
 
   # Do looping over simulations 
   ndigits = ceiling(log10(settings$NumberOfSimulatedDataSets) + 0.0001)
   for (k in 1:settings$NumberOfSimulatedDataSets) {
     debugSettings$iDataset = k
     # simulate data
-    simulatedData[["Response"]] <- simulateResponse(simulatedData, settings, simulationSettings)
+    simulatedData[["Response"]] <- simulateResponse(simulatedData, settings)
     if (settings$IsOutputSimulatedData) {
       csvFile = str_pad(k, ndigits, side="left", "0")      
       csvFile = paste0(localDir, "Data-", csvFile, ".csv")
@@ -891,20 +1001,20 @@ monteCarloPowerAnalysis <- function(data, settings, modelSettings, blocks, effec
     }
     # Fit models
     if ((settings$DoLNdiff) || (settings$DoLNequi)) {
-      if (DEBUG) cat(paste(k, "LN\n"))
+      if (DEBUG) cat(paste("LN ", k, "\n"))
       result <- logNormalAnalysis(simulatedData, settings, modelSettings, debugSettings)
       if (settings$DoLNdiff) pValues$Diff[k, "LogNormal"] <- result$Diff
       if (settings$DoLNequi) pValues$Equi[k, "LogNormal"] <- result$Equi
     }
     if ((settings$DoSQdiff) || (settings$DoSQequi)) {
-      if (DEBUG) cat(paste(k, "SQ\n"))
+      if (DEBUG) cat(paste("SQ ", k, "\n"))
       result <- squareRootAnalysis(simulatedData, settings, modelSettings, debugSettings)
       if (settings$DoSQdiff) pValues$Diff[k, "SquareRoot"] <- result$Diff
       if (settings$DoSQequi) pValues$Equi[k, "SquareRoot"] <- result$Equi
     }
     # Fit overdispersed Poisson anyway to get the overdispersion parameter
     if ((settings$DoOPdiff) || (settings$DoOPequi) || (settings$DoNBdiff) || (settings$DoNBequi)) {
-      if (DEBUG) cat(paste(k, "OP\n"))
+      if (DEBUG) cat(paste("OP ", k, "\n"))
       result <- overdispersedPoissonAnalysis(simulatedData, settings, modelSettings, debugSettings)
       pValues$Extra[k, "OPdisp"] <- result$Dispersion
       if ((settings$DoOPdiff) || (settings$DoOPequi)) {
@@ -912,7 +1022,7 @@ monteCarloPowerAnalysis <- function(data, settings, modelSettings, blocks, effec
         if (settings$DoOPequi) pValues$Equi[k, "OverdispersedPoisson"] <- result$Equi
       }
       if ((settings$DoNBdiff) || (settings$DoNBequi)) {
-        if ((FALSE) || (DEBUG)) cat(paste(k, "NB\n"))
+        if (DEBUG) cat(paste("NB ", k, "\n"))
         if (!is.na(result$Dispersion)) {
           result <- negativeBinomialAnalysis(simulatedData, settings, modelSettings, debugSettings)
         }
@@ -921,6 +1031,18 @@ monteCarloPowerAnalysis <- function(data, settings, modelSettings, blocks, effec
         pValues$Extra[k, "NBtheta"] <- result$Dispersion
       }
     }
+    # Gamma for Nonnegative data
+    if ((settings$DoGMdiff) || (settings$DoGMequi)) {
+      if (DEBUG) cat(paste("GM ", k, "\n"))
+      result <- gammaAnalysis(simulatedData, settings, modelSettings, debugSettings)
+      if (settings$DoGMdiff) pValues$Diff[k, "Gamma"] <- result$Diff
+      if (settings$DoGMequi) pValues$Equi[k, "Gamma"] <- result$Equi
+    }
+  }
+  # LogNormal for Nonnegative data (simulated bij LogNormal) can be done exactly
+  if ((settings$DoLOdiff) || (settings$DoLOequi)) {
+    if (DEBUG) cat(paste("GM ", "exact calculation", "\n"))
+    resultsLogNormal <- exactPowerAnalysisHelper(data, settings, modelSettings, blocks, effect)
   }
 
   if (settings$IsOutputSimulatedData) {
@@ -938,12 +1060,12 @@ monteCarloPowerAnalysis <- function(data, settings, modelSettings, blocks, effec
     printPvaluesSimulate(pValues, settings, blocks, effect)
   }
 
-  # Return power values
-  returnSummary = TRUE
-  if (returnSummary) {
-    pValues$Diff = as.matrix(colMeans(pValues$Diff < settings$SignificanceLevel, na.rm=TRUE))
-    pValues$Equi = as.matrix(colMeans(pValues$Equi < settings$SignificanceLevel, na.rm=TRUE))
-  } 
+  # Return power values; special for LogNormal
+  pValues$Diff = as.matrix(colMeans(pValues$Diff < settings$SignificanceLevel, na.rm=TRUE))
+  pValues$Equi = as.matrix(colMeans(pValues$Equi < settings$SignificanceLevel, na.rm=TRUE))
+  if (settings$DoLOdiff) pValues$Diff["LogPlusM", 1] <- resultsLogNormal[1, "powerDiff"]
+  if (settings$DoLOequi) pValues$Equi["LogPlusM", 1] <- resultsLogNormal[1, "powerEqui"]
+
   return(pValues)
 }
 
@@ -1039,5 +1161,3 @@ createEvaluationGrid <- function(LocLower, LocUpper, NumberOfEvaluations) {
   } 
   return(list(csd=csd, effect=effect))
 }
-
-

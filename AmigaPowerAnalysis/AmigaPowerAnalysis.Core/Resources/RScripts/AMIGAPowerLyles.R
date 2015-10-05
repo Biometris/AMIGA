@@ -4,7 +4,7 @@
 #    Standard errors need to be divided by the squared root of the dispersion parameter
 
 ######################################################################################################################
-createSyntheticDataOld <- function(simulatedData, settings, simulationSettings, multiplyWeight) {
+createSyntheticDataOld <- function(simulatedData, settings, multiplyWeight) {
   require(reshape)  # for untable()
   nrows <- nrow(simulatedData)
 
@@ -25,7 +25,7 @@ createSyntheticDataOld <- function(simulatedData, settings, simulationSettings, 
   Weight   <- c()
   for (i in 1:nrows) {
     # Simulate possibble outcomes and their probabilities
-    simulate <- ropoisson(nRandomDraws, simulatedData[["Effect"]][i], simulationSettings$dispersion, settings$PowerLawPower, settings$Distribution, settings$ExcessZeroesPercentage)
+    simulate <- ropoisson(nRandomDraws, simulatedData[["Effect"]][i], settings$dispersion, settings$PowerLawPower, settings$Distribution, settings$ExcessZeroesPercentage)
     table <- as.data.frame(table(simulate))
     nsamplerow[i] <- nrow(table)
     Response <- c(Response, as.numeric(levels(table[["simulate"]])))
@@ -39,7 +39,7 @@ createSyntheticDataOld <- function(simulatedData, settings, simulationSettings, 
 }
 
 ######################################################################################################################
-createSyntheticData <- function(simulatedData, settings, simulationSettings, multiplyWeight) {
+createSyntheticData <- function(simulatedData, settings, multiplyWeight) {
   require(reshape)  # for untable()
   nrows <- nrow(simulatedData)
 
@@ -63,7 +63,7 @@ createSyntheticData <- function(simulatedData, settings, simulationSettings, mul
   ResponseTmp <- c()
   WeightTmp   <- c()
   for (i in 1:nUniqueMu) {
-    simulate <- ropoisson(nRandomDraws, uniqueMu[i], simulationSettings$dispersion, settings$PowerLawPower, settings$Distribution, settings$ExcessZeroesPercentage)
+    simulate <- ropoisson(nRandomDraws, uniqueMu[i], settings$dispersion, settings$PowerLawPower, settings$Distribution, settings$ExcessZeroesPercentage)
     table <- as.data.frame(table(simulate))
     nsamplerow[i] <- nrow(table)
     ResponseTmp <- c(ResponseTmp, as.numeric(levels(table[["simulate"]])))
@@ -429,12 +429,6 @@ calculatePowerFromNc <- function(nreps, effect, df, ncDiff, ncEqui, settings, do
 ######################################################################################################################
 lylesPowerAnalysis <- function(data, settings, modelSettings, blocks, effect, debugSettings) {
 
-  if (settings$MeasurementType == "Continuous") {
-    return(normalPowerAnalysis(data, settings, modelSettings, blocks, effect, debugSettings))
-  } else if (settings$MeasurementType == "Nonnegative") {
-    return(lognormalPowerAnalysis(data, settings, modelSettings, blocks, effect, debugSettings))
-  }
-
   DEBUG <- FALSE
 
   # Prepare for debugging, i.e. create directory to write files to
@@ -477,13 +471,13 @@ lylesPowerAnalysis <- function(data, settings, modelSettings, blocks, effect, de
 
   # Setup simulation settings
   multiplyWeight <- 10
-  simulationSettings <- createSimulationSettings(settings)
-  simulatedData <- createSimulatedData(data, settings, simulationSettings, localBlocks, effect)
+  #simulationSettings <- createSimulationSettings(settings)
+  simulatedData <- createSimulatedData(data, settings, localBlocks, effect)
   if (FALSE) {
     pos = match(c("Test", "Mean", "Block", "Lp", "Effect"), names(simulatedData))
     print(simulatedData[,pos])
   }
-  synData <- createSyntheticData(simulatedData, settings, simulationSettings, multiplyWeight) 
+  synData <- createSyntheticData(simulatedData, settings, multiplyWeight) 
   if (settings$IsOutputSimulatedData) {
     csvFile = paste0(localDir, "simulatedData-", localBlocks, ".csv")
     write.csv(simulatedData, csvFile, row.names=FALSE)
@@ -491,7 +485,7 @@ lylesPowerAnalysis <- function(data, settings, modelSettings, blocks, effect, de
     write.csv(synData, csvFile, row.names=FALSE)
   }
 
-  #synDataOld <- createSyntheticDataNew(simulatedData, settings, simulationSettings, multiplyWeight) 
+  #synDataOld <- createSyntheticDataNew(simulatedData, settings, multiplyWeight) 
   # Fit models
   if ((settings$DoLNdiff) || (settings$DoLNequi)) {
     if (DEBUG) cat(paste("\nLyles LN", "---------------------------------------------------------\n"))
@@ -534,6 +528,72 @@ lylesPowerAnalysis <- function(data, settings, modelSettings, blocks, effect, de
 }
 
 ######################################################################################################################
+# Does exact power analysis for the normal and lognormal distribution
+exactPowerAnalysis <- function(data, settings, modelSettings, blocks, effect, debugSettings) {
+  if (settings$MeasurementType == "Continuous") {
+    # Normal: Nothing
+    doDiff = settings$DoNOdiff 
+    doEqui = settings$DoNOdiff 
+    distribution = "Normal" 
+  } else if (settings$MeasurementType == "Nonnegative") {
+    # LogNormal: use mean on transformed scale; not that settings$dispersion is already on transformed scale
+    doDiff = settings$DoLOdiff 
+    doEqui = settings$DoLOdiff 
+    settings$OverallMean <- log(settings$OverallMean) - settings$dispersion/2
+    distribution = "LogPlusM" 
+  }
+
+  # Define number of reps and calculate the power
+  nreps <- rep(2:blocks)
+  power <- exactPowerAnalysisHelper(data, settings, modelSettings, nreps, effect) 
+
+  # Define and fill output structure
+  nrow <- length(nreps)
+  pValues <- list(Diff=NULL, Equi=NULL, 
+      Extra=matrix(nrow=nrow, ncol=3, dimnames=list(nreps, c("Reps", "Effect", "Df"))))
+  if (doDiff)  {
+    pValues$Diff <- matrix(power[,"powerDiff"], nrow=nrow, ncol=1, dimnames=list(nreps, distribution))
+  } 
+  if (doEqui) {
+    pValues$Equi <- matrix(power[,"powerEqui"], nrow=nrow, ncol=1, dimnames=list(nreps, distribution))
+  }
+  pValues$Extra[,"Reps"] <- nreps
+  pValues$Extra[,"Effect"] <- effect
+  pValues$Extra[,"Df"] <- power[,"Df"]
+  return(pValues)
+}
+
+######################################################################################################################
+# Helper for exact power analysis; always returns power for Difference AND equivalence test
+exactPowerAnalysisHelper <- function(data, settings, modelSettings, nreps, effect) {
+  # Define output structure
+  results <- matrix(nrow=length(nreps), ncol=3, dimnames=list(nreps, c("Df", "powerDiff", "powerEqui")))
+
+  # Fit model to obtain degrees of freedom by using a dummy dataset
+  tmpBlocks <- 2
+  simulatedData <- createSimulatedData(data, settings, tmpBlocks, 0)
+  simulatedData[["Response"]] =  simulatedData[["Mean"]]
+  lmH1 <- lm(as.formula(modelSettings$formulaH1), data=simulatedData)
+  regDF <- nrow(simulatedData) - lmH1$df.residual
+  if (settings$ExperimentalDesignType == "CompletelyRandomized") {
+    df <- nreps*nrow(data) - regDF
+  } else {
+    df <- nreps*(nrow(data)-1) - (regDF - tmpBlocks)
+  }
+  results[,"Df"] <- df
+
+  # Difference test
+  varEffect <- 2*settings$dispersion/nreps
+  sdEffect <- sqrt(varEffect)
+  ncDiff <- effect/sdEffect
+  ncEqui <- waldEquiNoncentral(effect, sdEffect, settings$TestType, settings$TransformLocLower, settings$TransformLocUpper)
+  power <- calculatePowerFromNc(nreps, effect, df, ncDiff, ncEqui, settings, TRUE, TRUE)
+  results[,"powerDiff"] <- power[["powerDiff"]]
+  results[,"powerEqui"] <- power[["powerEqui"]]
+  return(results)
+}
+
+######################################################################################################################
 # Function to display the raw pvalues for each dataset in a concise format
 printPvaluesApproximate <- function(pValues, settings, blocks, effect) {
   pVal = cbind(pValues$Diff, pValues$Equi)
@@ -558,113 +618,4 @@ replaceFirst <- function(colnames, pattern, replacement) {
   return(colnames)
 }
 
-######################################################################################################################
-# Does power analysis for the normal distribution
-normalPowerAnalysis <- function(data, settings, modelSettings, blocks, effect, debugSettings) {
-
-  DEBUG <- FALSE
-
-  # Define number of reps and the variances
-  nreps <- rep(2:blocks)
-  variance <- (settings$OverallMean*settings$CVComparator/100)^2
-
-  # Fit model to obtain degrees of freedom by using a dummy dataset
-  # Setup simulation settings and dataset for fitting
-  tmpBlocks <- 2
-  simulationSettings <- createSimulationSettings(settings)
-  simulatedData <- createSimulatedData(data, settings, simulationSettings, tmpBlocks, 0)
-  simulatedData[["Response"]] =  simulatedData[["Mean"]]
-  lmH1 <- lm(as.formula(modelSettings$formulaH1), data=simulatedData)
-  regDF <- nrow(simulatedData) - lmH1$df.residual
-  if (settings$ExperimentalDesignType == "CompletelyRandomized") {
-    df <- nreps*nrow(data) - regDF
-  } else {
-    df <- nreps*(nrow(data)-1) - (regDF - tmpBlocks)
-  }
-
-  # Define output structure
-  nrow <- length(nreps)
-  nDiffTests <- length(settings$AnalysisMethodsDifferenceTests)
-  nEquiTests <- length(settings$AnalysisMethodsEquivalenceTests)
-  pValues <- list(
-    Diff  = matrix(nrow=nrow, ncol=nDiffTests, dimnames=list(nreps, settings$AnalysisMethodsDifferenceTests)),
-    Equi  = matrix(nrow=nrow, ncol=nEquiTests, dimnames=list(nreps, settings$AnalysisMethodsEquivalenceTests)),
-    Extra = matrix(nrow=nrow, ncol=3, dimnames=list(nreps, c("Reps", "Effect", "Df")))
-  )
-  pValues$Extra[,"Reps"] <- nreps
-  pValues$Extra[,"Effect"] <- effect
-  pValues$Extra[,"Df"] <- df
-
-  # Difference test
-  varEffect <- 2*variance/nreps
-  sdEffect <- sqrt(varEffect)
-  ncDiff <- effect/sdEffect
-  ncEqui <- waldEquiNoncentral(effect, sdEffect, settings$TestType, settings$LocLower, settings$LocUpper)
-  powerNO <- calculatePowerFromNc(nreps, effect, df, ncDiff, ncEqui, settings, settings$DoNOdiff, settings$DoNOequi)
-  if (settings$DoNOdiff) pValues$Diff[,"Normal"] <- powerNO[["powerDiff"]]
-  if (settings$DoNOequi) pValues$Equi[,"Normal"] <- powerNO[["powerEqui"]]
-
-  if (DEBUG) { # Print raw pValues
-    print(powerNO)
-  }
-  return(pValues)
-}
-
-######################################################################################################################
-# Does power analysis for the normal distribution
-lognormalPowerAnalysis <- function(data, settings, modelSettings, blocks, effect, debugSettings) {
-
-  DEBUG <- FALSE
-
-  # Define number of reps and the variances
-  nreps <- rep(2:blocks)
-  variance <- log((settings$CVComparator/100)^2 + 1)
-  mean <- log(settings$OverallMean) - variance/2
-  settings$OverallMean <- mean
-
-  # Fit model to obtain degrees of freedom by using a dummy dataset
-  # Setup simulation settings and dataset for fitting
-  tmpBlocks <- 2
-  simulationSettings <- createSimulationSettings(settings)
-  simulatedData <- createSimulatedData(data, settings, simulationSettings, tmpBlocks, 0)
-  simulatedData[["Response"]] =  simulatedData[["Mean"]]
-  lmH1 <- lm(as.formula(modelSettings$formulaH1), data=simulatedData)
-  regDF <- nrow(simulatedData) - lmH1$df.residual
-  if (settings$ExperimentalDesignType == "CompletelyRandomized") {
-    df <- nreps*nrow(data) - regDF
-  } else {
-    df <- nreps*(nrow(data)-1) - (regDF - tmpBlocks)
-  }
-
-  # Define output structure
-  nrow <- length(nreps)
-  nDiffTests <- length(settings$AnalysisMethodsDifferenceTests)
-  nEquiTests <- length(settings$AnalysisMethodsEquivalenceTests)
-  pValues <- list(
-    Diff  = matrix(nrow=nrow, ncol=nDiffTests, dimnames=list(nreps, settings$AnalysisMethodsDifferenceTests)),
-    Equi  = matrix(nrow=nrow, ncol=nEquiTests, dimnames=list(nreps, settings$AnalysisMethodsEquivalenceTests)),
-    Extra = matrix(nrow=nrow, ncol=3, dimnames=list(nreps, c("Reps", "Effect", "Df")))
-  )
-  pValues$Extra[,"Reps"] <- nreps
-  pValues$Extra[,"Effect"] <- effect
-  pValues$Extra[,"Df"] <- df
-
-  # Difference test
-  varEffect <- 2*variance/nreps
-  sdEffect <- sqrt(varEffect)
-  ncDiff <- effect/sdEffect
-  ncEqui <- waldEquiNoncentral(effect, sdEffect, settings$TestType, settings$TransformLocLower, settings$TransformLocUpper)
-  powerLO <- calculatePowerFromNc(nreps, effect, df, ncDiff, ncEqui, settings, settings$DoLOdiff, settings$DoLOequi)
-  if (settings$DoLOdiff) pValues$Diff[,"LogPlusM"] <- powerLO[["powerDiff"]]
-  if (settings$DoLOequi) pValues$Equi[,"LogPlusM"] <- powerLO[["powerEqui"]]
-
-  if (DEBUG) { # Print raw pValues
-    print(settings$OverallMean)
-    print(exp(mean + variance/2))
-    print(settings$CVComparator)
-    print(100*sqrt(exp(variance)-1))
-    print(powerLO)
-  }
-  return(pValues)
-}
 
