@@ -59,12 +59,6 @@ namespace AmigaPowerAnalysis.GUI {
             textBoxNumberSimulatedDatasets.Text = _project.PowerCalculationSettings.NumberOfSimulatedDataSets.ToString();
             textBoxSeedForRandomNumbers.Text = _project.PowerCalculationSettings.Seed.ToString();
 
-            if (_project.Endpoints.Any(ep => ep.Measurement == MeasurementType.Count)) {
-                groupBoxCountsSettings.Visible = true;
-            } else {
-                groupBoxCountsSettings.Visible = false;
-            }
-
             groupBoxAnalysisMethodsContinuousDifference.Visible = _project.Endpoints.Any(ep => ep.Measurement == MeasurementType.Continuous);
             groupBoxAnalysisMethodsCountsDifference.Visible = _project.Endpoints.Any(ep => ep.Measurement == MeasurementType.Count);
             groupBoxAnalysisFractionsMethodsDifference.Visible = _project.Endpoints.Any(ep => ep.Measurement == MeasurementType.Fraction);
@@ -85,6 +79,15 @@ namespace AmigaPowerAnalysis.GUI {
             } else {
                 checkBoxAnalysisMethodLNEquivalence.Enabled = true;
                 checkBoxAnalysisMethodSQEquivalence.Enabled = true;
+            }
+
+            if (_project.Endpoints.Any(ep => ep.Measurement == MeasurementType.Count)
+                || (_project.Endpoints.Any(ep => ep.Measurement == MeasurementType.Nonnegative)
+                && (_project.PowerCalculationSettings.SelectedAnalysisMethodTypesDifferenceTests.HasFlag(AnalysisMethodType.Gamma)
+                || _project.PowerCalculationSettings.SelectedAnalysisMethodTypesEquivalenceTests.HasFlag(AnalysisMethodType.Gamma)))) {
+                groupBoxCountsSettings.Visible = true;
+            } else {
+                groupBoxCountsSettings.Visible = false;
             }
         }
 
@@ -182,6 +185,7 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void checkBoxAnalysisMethodGDifference_CheckedChanged(object sender, EventArgs e) {
             _project.PowerCalculationSettings.SetAnalysisMethodTypeDifferenceTests(AnalysisMethodType.Gamma, checkBoxAnalysisMethodGDifference.Checked);
+            updateVisibilities();
         }
 
         private void checkBoxAnalysisMethodNDifference_CheckedChanged(object sender, EventArgs e) {
@@ -210,6 +214,7 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void checkBoxAnalysisMethodGEquivalence_CheckedChanged(object sender, EventArgs e) {
             _project.PowerCalculationSettings.SetAnalysisMethodTypeEquivalenceTests(AnalysisMethodType.Gamma, checkBoxAnalysisMethodGEquivalence.Checked);
+            updateVisibilities();
         }
 
         private void checkBoxAnalysisMethodNormalEquivalence_CheckedChanged(object sender, EventArgs e) {

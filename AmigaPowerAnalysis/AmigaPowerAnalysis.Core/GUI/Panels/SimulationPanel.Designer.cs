@@ -636,7 +636,7 @@
             this.groupBoxCountsSettings.Size = new System.Drawing.Size(904, 141);
             this.groupBoxCountsSettings.TabIndex = 20;
             this.groupBoxCountsSettings.TabStop = false;
-            this.groupBoxCountsSettings.Text = "Options for analysis of counts";
+            this.groupBoxCountsSettings.Text = "Options for analysis of counts and non-negative with gamma distribution";
             // 
             // panel2
             // 

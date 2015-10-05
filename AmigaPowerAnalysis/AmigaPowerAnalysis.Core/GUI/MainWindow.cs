@@ -154,7 +154,7 @@ namespace AmigaPowerAnalysis.GUI {
         private void openProjectDialog() {
             try {
                 OpenFileDialog openFileDialog = new OpenFileDialog();
-                openFileDialog.Filter = "Amiga Power Analysis files (*.apa)|*.apa|Amiga Power Analysis xml files (*.xml)|*.xml|All files (*.*)|*.*";
+                openFileDialog.Filter = "Amiga Power Analysis settings file (*.xml)|*.xml|Amiga Power Analysis files (obsolete) (*.apa)|*.apa|All files (*.*)|*.*";
                 openFileDialog.FilterIndex = 1;
                 openFileDialog.RestoreDirectory = true;
                 openFileDialog.InitialDirectory = Properties.Settings.Default.LastOpenedDirectory;
@@ -178,7 +178,7 @@ namespace AmigaPowerAnalysis.GUI {
         private void saveAsDialog() {
             try {
                 var saveFileDialog = new SaveFileDialog();
-                saveFileDialog.Filter = "Amiga Power Analysis files (*.apa)|*.apa|Amiga Power Analysis xml files (*.xml)|*.xml|All files (*.*)|*.*";
+                saveFileDialog.Filter = "Amiga Power Analysis xml files (*.xml)|*.xml|Amiga Power Analysis files (*.apa)|*.apa|All files (*.*)|*.*";
                 saveFileDialog.FilterIndex = 1;
                 saveFileDialog.RestoreDirectory = true;
                 saveFileDialog.InitialDirectory = Properties.Settings.Default.LastOpenedDirectory;
