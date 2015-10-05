@@ -128,6 +128,15 @@ namespace AmigaPowerAnalysis.GUI {
             }
         }
 
+        private void dataGridViewEndpoints_CellParsing(object sender, DataGridViewCellParsingEventArgs e) {
+            if (dataGridViewEndpoints.Columns[e.ColumnIndex].Name == "LocLower" || dataGridViewEndpoints.Columns[e.ColumnIndex].Name == "LocUpper") {
+                if (string.IsNullOrEmpty(e.Value.ToString())) {
+                    e.Value = double.NaN;
+                    e.ParsingApplied = true;
+                }
+            }
+        }
+
         private void dataGridViewEndpoints_CellValidating(object sender, DataGridViewCellValidatingEventArgs e) {
             if (dataGridViewEndpoints.Columns[e.ColumnIndex].Name == "Name") {
                 var newValue = e.FormattedValue.ToString();
