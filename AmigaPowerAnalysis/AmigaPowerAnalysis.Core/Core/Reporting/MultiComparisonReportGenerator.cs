@@ -11,14 +11,18 @@ namespace AmigaPowerAnalysis.Core.Reporting {
 
         private ResultPowerAnalysis _resultPowerAnalysis;
         private string _filesPath;
+        private string _outputName;
 
-        public MultiComparisonReportGenerator(ResultPowerAnalysis resultPowerAnalysis, string tempPath) {
+        public MultiComparisonReportGenerator(ResultPowerAnalysis resultPowerAnalysis, string outputName, string tempPath) {
             _resultPowerAnalysis = resultPowerAnalysis;
+            _outputName = outputName;
             _filesPath = tempPath;
         }
 
         public override string Generate(bool imagesAsPng) {
             var html = "";
+            html += generateOutputOverviewHtml(_resultPowerAnalysis, _outputName);
+
             var primaryComparisonOutputs = _resultPowerAnalysis.GetPrimaryComparisons();
             html += generatePrimaryComparisonsSummary(primaryComparisonOutputs);
 

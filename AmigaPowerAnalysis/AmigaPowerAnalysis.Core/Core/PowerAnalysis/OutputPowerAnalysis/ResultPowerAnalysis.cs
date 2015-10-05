@@ -13,6 +13,12 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
         }
 
         /// <summary>
+        /// The Amiga Power Analysis version used to create the output.
+        /// </summary>
+        [DataMember]
+        public string Version { get; set; }
+
+        /// <summary>
         /// The timestamp of the output creation.
         /// </summary>
         [DataMember]

@@ -1,15 +1,29 @@
-﻿using AmigaPowerAnalysis.Core.Charting.AnalysisResultsChartCreators;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using AmigaPowerAnalysis.Core.Charting.AnalysisResultsChartCreators;
 using AmigaPowerAnalysis.Core.DataAnalysis.AnalysisModels;
 using AmigaPowerAnalysis.Core.PowerAnalysis;
 using Biometris.ExtensionMethods;
 using Biometris.Statistics.Distributions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace AmigaPowerAnalysis.Core.Reporting {
     public abstract class ComparisonReportGeneratorBase : ReportGeneratorBase {
+
+        protected static string generateOutputOverviewHtml(ResultPowerAnalysis resultPowerAnalysis, string outputName) {
+            var stringBuilder = new StringBuilder();
+            Func<string, object, string> format = (parameter, setting) => { return string.Format("<tr><td>{0}</td><td>{1}</td></tr>", parameter, setting); };
+
+            stringBuilder.AppendLine(string.Format("<h1>General info</h1>"));
+            stringBuilder.AppendLine("<table>");
+            stringBuilder.AppendLine(format("Output name", outputName));
+            stringBuilder.AppendLine(format("Output creation date", resultPowerAnalysis.OuputTimeStamp.ToString("u")));
+            stringBuilder.AppendLine(format("AMIGA Power Analysis version", resultPowerAnalysis.Version));
+            stringBuilder.AppendLine("</table>");
+
+            return stringBuilder.ToString();
+        }
 
         protected static string generateDesignOverviewHtml(InputPowerAnalysis inputPowerAnalysis) {
             var stringBuilder = new StringBuilder();

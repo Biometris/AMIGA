@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System.Diagnostics;
+using System.IO;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace Biometris.ApplicationUtilities {
@@ -29,6 +31,16 @@ namespace Biometris.ApplicationUtilities {
             foreach (DirectoryInfo dir in tempPathDirectoryInfo.GetDirectories()) {
                 dir.Delete(true);
             }
+        }
+
+        /// <summary>
+        /// Gets the entry assembly version number.
+        /// </summary>
+        /// <returns></returns>
+        public static string GetApplicationVersion() {
+            var assembly = Assembly.GetEntryAssembly();
+            var versionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
+            return versionInfo.FileVersion;
         }
     }
 }
