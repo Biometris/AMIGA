@@ -67,6 +67,7 @@ namespace AmigaPowerAnalysis.GUI {
 
             _currentOutputName = _project.PrimaryOutput;
             _resultPowerAnalysis = _project.GetPrimaryOutput(CurrentProjectFilesPath);
+            labelOutputName.Text = _currentOutputName;
 
             var column = new DataGridViewTextBoxColumn();
             column.DataPropertyName = "Endpoint";
