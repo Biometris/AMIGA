@@ -302,6 +302,7 @@ namespace AmigaPowerAnalysis.Core {
         /// </summary>
         public List<InteractionFactorLevelCombination> Interactions {
             get { return _interactions; }
+            private set { _interactions = value; }
         }
 
         /// <summary>
@@ -309,6 +310,7 @@ namespace AmigaPowerAnalysis.Core {
         /// </summary>
         public List<ModifierFactorLevelCombination> Modifiers {
             get { return _modifiers; }
+            private set { _modifiers = value; }
         }
 
         /// <summary>
