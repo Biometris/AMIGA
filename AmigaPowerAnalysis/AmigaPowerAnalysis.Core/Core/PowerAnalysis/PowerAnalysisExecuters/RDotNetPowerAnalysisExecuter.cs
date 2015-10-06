@@ -117,22 +117,19 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                                 if (doExactCalculation) {
                                     var output = runExactPowerCalculation(effect, blocks, inputPowerAnalysis.SelectedAnalysisMethodTypesDifferenceTests, inputPowerAnalysis.SelectedAnalysisMethodTypesEquivalenceTests, inputPowerAnalysis.NumberOfSimulatedDataSets, rEngine);
                                     outputResults.AddRange(output);
-                                }
-                                else if (doApproximateLyles) {
+                                } else if (doApproximateLyles) {
                                     // Approximate Lyles method
                                     var output = runLylesApproximation(effect, blocks, inputPowerAnalysis.SelectedAnalysisMethodTypesDifferenceTests, inputPowerAnalysis.SelectedAnalysisMethodTypesEquivalenceTests, inputPowerAnalysis.NumberOfSimulatedDataSets, rEngine);
                                     outputResults.AddRange(output);
-                                }
-                                else {
+                                } else {
                                     // Method for Power calculation = Simulate for Counts and for Nonnegative with Gamma analysis 
                                     var output = runMonteCarloSimulation(effect, blocks, inputPowerAnalysis.SelectedAnalysisMethodTypesDifferenceTests, inputPowerAnalysis.SelectedAnalysisMethodTypesEquivalenceTests, inputPowerAnalysis.NumberOfSimulatedDataSets, rEngine);
                                     outputResults.Add(output);
                                 }
-                            }
-                            catch (OperationCanceledException ex) {
+                                //rEngine.EvaluateNoReturn("TODO:clear workspace EXCEPT inputdate modelsettings and settings");
+                            } catch (OperationCanceledException ex) {
                                 throw ex;
-                            }
-                            catch (Exception ex) {
+                            } catch (Exception ex) {
                                 var output = new OutputPowerAnalysisRecord() {
                                     ConcernStandardizedDifference = effect.CSD,
                                     Effect = effect.Effect,
@@ -142,6 +139,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                                 outputResults.Add(output);
                                 var msg = string.Format("Error in simulation of effect {0} and {1} replicates: {2}", effect.Effect, blocks, ex.Message);
                                 errorList.Add(msg);
+                                //rEngine.EvaluateNoReturn("TODO:clear workspace EXCEPT inputdate modelsettings and settings");
                             }
                             counter++;
                             rEngine.EvaluateNoReturn("");
@@ -257,40 +255,9 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
 
         private static void createAnalysisInputFile(InputPowerAnalysis inputPowerAnalysis, string filename) {
             using (var file = new System.IO.StreamWriter(filename)) {
-                file.WriteLine(createPartialAnalysisDesignMatrix(inputPowerAnalysis));
+                file.WriteLine(inputPowerAnalysis.PrintPartialAnalysisDesignMatrix());
                 file.Close();
             }
-        }
-
-        private static string createPartialAnalysisDesignMatrix(InputPowerAnalysis inputPowerAnalysis) {
-            var stringBuilder = new StringBuilder();
-            var separator = ",";
-            var headers = new List<string>();
-            headers.Add("Constant");
-            foreach (var factor in inputPowerAnalysis.DummyComparisonLevels.Take(inputPowerAnalysis.DummyComparisonLevels.Count - 1)) {
-                headers.Add(escape(factor));
-            }
-            for (int i = 0; i < inputPowerAnalysis.NumberOfNonInteractions; i++) {
-                headers.Add(string.Format("Mod{0}", i));
-            }
-            headers.Add("Mean");
-            stringBuilder.AppendLine(string.Join(separator, headers));
-            foreach (var record in inputPowerAnalysis.InputRecords) {
-                var line = new List<string>();
-                line.Add("1");
-                line.AddRange(inputPowerAnalysis.DummyComparisonLevels.Select(l => l == record.ComparisonDummyFactorLevel ? "1" : "0"));
-                line.RemoveAt(line.Count - 1);
-                line.AddRange(record.ModifierLevels);
-                line.Add(record.Mean.ToString());
-                for (int i = 0; i < record.Frequency; ++i) {
-                    stringBuilder.AppendLine(string.Join(separator, line));
-                }
-            }
-            return stringBuilder.ToString();
-        }
-
-        private static string escape(string value) {
-            return value;
         }
 
         private List<EffectCSD> createCsdEvaluationGrid(double locLower, double locUpper, double overallMean, int numberOfEvaluations, MeasurementType measurementType) {

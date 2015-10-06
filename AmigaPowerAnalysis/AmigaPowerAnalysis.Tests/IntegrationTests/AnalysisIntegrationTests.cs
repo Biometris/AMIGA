@@ -31,10 +31,6 @@ namespace AmigaPowerAnalysis.Tests.IntegrationTests {
             for (int i = 0; i < endpoints.Count(); ++i) {
                 var inputGenerator = new PowerAnalysisInputGenerator();
                 var inputPowerAnalysis = inputGenerator.CreateInputPowerAnalysis(endpoints[i], project.DesignSettings, project.PowerCalculationSettings, i, endpoints.Count, project.UseBlockModifier, project.ProjectName);
-                using (var file = new System.IO.StreamWriter(Path.Combine(filesPath, string.Format("InputData-{0}.csv", i)))) {
-                    file.WriteLine(inputPowerAnalysis.Print());
-                    file.Close();
-                }
                 var progressReport = new ProgressReport();
                 var rDotNetExecuter = new RDotNetPowerAnalysisExecuter(filesPath);
                 var comparisonOutput = rDotNetExecuter.Run(inputPowerAnalysis, progressReport.NewProgressState(100));
