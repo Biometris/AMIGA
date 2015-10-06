@@ -75,6 +75,7 @@ namespace AmigaPowerAnalysis.GUI {
 
                 // Create interaction wrappers
                 _currentEndpointInteractionLevels = _currentEndpoint.Interactions
+                    .OrderBy(r => r)
                     .GroupBy(ifl => ifl.NonVarietyFactorLevelCombination)
                     .Select(g => new InteractionsWrapper(g.ToList()))
                     .Where(i => i.Levels.Count() > 0)

@@ -66,7 +66,7 @@ namespace AmigaPowerAnalysis.GUI {
         private void updateDataGridFactorModifiers() {
             dataGridViewFactorModifiers.DataSource = null;
             if (_currentEndpoint != null) {
-                _currentFactorModifiers = _currentEndpoint.Modifiers;
+                _currentFactorModifiers = _currentEndpoint.Modifiers.OrderBy(r => r).ToList();
                 var dataTable = new DataTable();
                 var modifierFactors = _currentEndpoint.NonInteractionFactors.ToList();
                 dataTable.Columns.Add("_index", typeof(int));

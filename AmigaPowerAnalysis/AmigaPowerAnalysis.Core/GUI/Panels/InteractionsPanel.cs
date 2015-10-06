@@ -19,7 +19,7 @@ namespace AmigaPowerAnalysis.GUI {
             Name = "Define comparison";
             Description = "The Test-CMP comparison may be restricted to a subset of levels of additional factors for the Test and/or for the CMP. Indicate any factors for which this is relevant, and uncheck the levels to be excluded.";
             createDataGridFactors();
-            createDataGridViewInteractionFactorLevelCombinations();
+            updateDataGridViewInteractionFactorLevelCombinations();
             updateVisibilities();
         }
 
@@ -93,10 +93,6 @@ namespace AmigaPowerAnalysis.GUI {
             dataGridViewFactors.Columns.Add(checkbox);
 
             updateDataGridViewFactors();
-        }
-
-        private void createDataGridViewInteractionFactorLevelCombinations() {
-            updateDataGridViewInteractionFactorLevelCombinations();
         }
 
         private void updateDataGridViewFactors() {
