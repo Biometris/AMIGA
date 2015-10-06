@@ -117,34 +117,17 @@ namespace AmigaPowerAnalysis.Core {
             return _levels.Contains(level);
         }
 
+        #region Implement IComparable
         /// <summary>
         /// Implementation of of compare to.
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
         public int CompareTo(FactorLevelCombination other) {
-            var thisFactors = this.Levels.Select(r => new {
-                Factor = r.Parent.Name,
-                Level = r.Label,
-            }).OrderBy(r => r.Factor).ToList();
-            var otherFactors = other.Levels.Select(r => new {
-                Factor = r.Parent.Name,
-                Level = r.Label,
-            }).OrderBy(r => r.Factor).ToList();
-            int i = 0;
-            while (i < thisFactors.Count && i < thisFactors.Count) {
-                var compareFactors = thisFactors[i].Factor.CompareTo(otherFactors[i].Factor);
-                if (compareFactors != 0) {
-                    return thisFactors[i].Factor.CompareTo(otherFactors[i].Factor);
-                }
-                var compareLevels = thisFactors[i].Level.CompareTo(otherFactors[i].Level);
-                if (compareLevels != 0) {
-                    return compareLevels;
-                }
-                i++;
-            }
-            return thisFactors.Count.CompareTo(thisFactors.Count);
+            return FactorLevelListComparer.StaticCompare(this.Levels, other.Levels);
         }
+
+        #endregion
 
         /// <summary>
         /// Compares this factor level combination to the other level. Returns true if

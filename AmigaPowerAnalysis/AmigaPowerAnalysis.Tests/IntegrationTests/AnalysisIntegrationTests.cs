@@ -31,6 +31,10 @@ namespace AmigaPowerAnalysis.Tests.IntegrationTests {
             for (int i = 0; i < endpoints.Count(); ++i) {
                 var inputGenerator = new PowerAnalysisInputGenerator();
                 var inputPowerAnalysis = inputGenerator.CreateInputPowerAnalysis(endpoints[i], project.DesignSettings, project.PowerCalculationSettings, i, endpoints.Count, project.UseBlockModifier, project.ProjectName);
+                using (var file = new System.IO.StreamWriter(Path.Combine(filesPath, string.Format("InputData-{0}.csv", i)))) {
+                    file.WriteLine(inputPowerAnalysis.Print());
+                    file.Close();
+                }
                 var progressReport = new ProgressReport();
                 var rDotNetExecuter = new RDotNetPowerAnalysisExecuter(filesPath);
                 var comparisonOutput = rDotNetExecuter.Run(inputPowerAnalysis, progressReport.NewProgressState(100));
@@ -82,38 +86,51 @@ namespace AmigaPowerAnalysis.Tests.IntegrationTests {
         }
 
         [TestMethod]
+        [TestCategory("IntegrationTests")]
         public void FullProjectIntegrationTests_MockSimpleOP() {
             runProject(MockProjectsCreator.MockSimpleOP(), "Simple_OP");
         }
 
         [TestMethod]
+        [TestCategory("IntegrationTests")]
         public void FullProjectIntegrationTests_MockSimpleOPLyles() {
             runProject(MockProjectsCreator.MockSimpleOPLyles(), "SimpleOPLyles");
         }
 
         [TestMethod]
+        [TestCategory("IntegrationTests")]
         public void FullProjectIntegrationTests_MockSimple() {
             runProject(MockProjectsCreator.MockSimple(), "Simple");
         }
 
         [TestMethod]
+        [TestCategory("IntegrationTests")]
         public void FullProjectIntegrationTests_MockSimpleLyles() {
             runProject(MockProjectsCreator.MockSimpleLyles(), "SimpleLyles");
         }
 
         [TestMethod]
+        [TestCategory("IntegrationTests")]
         public void FullProjectIntegrationTests_MockProject1() {
             runProject(MockProjectsCreator.MockProject1(), "ValidationProject1");
         }
 
         [TestMethod]
+        [TestCategory("IntegrationTests")]
         public void FullProjectIntegrationTests_MockProject2() {
             runProject(MockProjectsCreator.MockProject2(), "ValidationProject2");
         }
 
         [TestMethod]
+        [TestCategory("IntegrationTests")]
         public void FullProjectIntegrationTests_MockProject3() {
             runProject(MockProjectsCreator.MockProject3(), "ValidationProject3");
+        }
+
+        [TestMethod]
+        [TestCategory("IntegrationTests")]
+        public void FullProjectIntegrationTests_MockProject3OP() {
+            runProject(MockProjectsCreator.MockProject3(), "ValidationProject3_OP");
         }
     }
 }

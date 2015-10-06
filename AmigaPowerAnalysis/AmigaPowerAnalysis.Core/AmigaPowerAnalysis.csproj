@@ -136,6 +136,7 @@
     <Compile Include="Core\ProjectEntities\Factor\ComparisonDummyFactorLevel.cs" />
     <Compile Include="Core\PowerAnalysis\PowerAnalysisExecuters\GenstatPowerAnalysisExecuter.cs" />
     <Compile Include="Core\PowerAnalysis\PowerAnalysisExecuters\PowerAnalysisExecuterBase.cs" />
+    <Compile Include="Core\ProjectEntities\Factor\FactorLevelListComparer.cs" />
     <Compile Include="Core\ProjectEntities\Factor\ModifierDummyFactorLevel.cs" />
     <Compile Include="Core\PowerAnalysis\InputPowerAnalysis\InputPowerAnalysis.cs" />
     <Compile Include="Core\PowerAnalysis\OutputPowerAnalysis\OutputPowerAnalysisRecord.cs" />

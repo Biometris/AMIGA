@@ -66,11 +66,13 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                     InteractionFactorLevelCombination = cl
                 })
                 .SelectMany(r => modifierLevels, (r, ml) => new {
+                    FactorLevels = r.InteractionFactorLevelCombination.Levels.Concat(ml.FactorLevelCombination.Levels),
                     ComparisonDummyFactorLevel = r.ComparisonDummyFactorLevel,
                     ModifierDummyFactorLevel = ml,
                     ComparisonLevel = r.InteractionFactorLevelCombination,
                     ModifierLevel = ml.FactorLevelCombination,
                 })
+                .OrderBy(r => r.FactorLevels, new FactorLevelListComparer())
                 .Select((r, index) => new {
                     MainPlot = index + 1,
                     SubPlot = 1,

@@ -136,6 +136,29 @@ namespace AmigaPowerAnalysis.Tests.Mocks.Projects {
             return project;
         }
 
+        public static Project MockProject3_OP() {
+            var project = new Project() {
+                ProjectName = "MockProject3_OP"
+            };
+
+            project.AddEndpoint(new Endpoint("Endpoint (OP)", OPEndpoint));
+
+            var factorF1 = new Factor("F1", 3, false);
+            project.AddFactor(factorF1);
+
+            var factorF2 = new Factor("F2", 3, false);
+            project.AddFactor(factorF2);
+
+            project.PowerCalculationSettings.PowerCalculationMethod = PowerCalculationMethod.Simulate;
+            project.PowerCalculationSettings.NumberOfRatios = 3;
+            project.PowerCalculationSettings.NumberOfReplications = new List<int>() { 2, 4, 8 };
+            project.PowerCalculationSettings.NumberOfSimulatedDataSets = 100;
+            project.PowerCalculationSettings.SelectedAnalysisMethodTypesDifferenceTests = AnalysisMethodType.LogNormal | AnalysisMethodType.SquareRoot | AnalysisMethodType.OverdispersedPoisson | AnalysisMethodType.NegativeBinomial;
+            project.PowerCalculationSettings.SelectedAnalysisMethodTypesEquivalenceTests = AnalysisMethodType.LogNormal | AnalysisMethodType.SquareRoot | AnalysisMethodType.OverdispersedPoisson | AnalysisMethodType.NegativeBinomial;
+
+            return project;
+        }
+
         public static Project MockProject3() {
             var project = new Project() {
                 ProjectName = "MockProject3"
