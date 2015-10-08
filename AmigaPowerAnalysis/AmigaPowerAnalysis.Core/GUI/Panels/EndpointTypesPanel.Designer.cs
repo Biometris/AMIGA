@@ -58,6 +58,7 @@
             this.dataGridViewDefaultEndpointGroups.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewDefaultEndpointGroups.BackgroundColor = System.Drawing.Color.White;
             this.dataGridViewDefaultEndpointGroups.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewDefaultEndpointGroups.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
             this.dataGridViewDefaultEndpointGroups.Location = new System.Drawing.Point(0, 33);
             this.dataGridViewDefaultEndpointGroups.Name = "dataGridViewDefaultEndpointGroups";
             this.dataGridViewDefaultEndpointGroups.RowHeadersWidth = 24;
@@ -210,6 +211,7 @@
             this.dataGridViewProjectEndpointGroups.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewProjectEndpointGroups.BackgroundColor = System.Drawing.Color.White;
             this.dataGridViewProjectEndpointGroups.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewProjectEndpointGroups.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
             this.dataGridViewProjectEndpointGroups.Location = new System.Drawing.Point(0, 33);
             this.dataGridViewProjectEndpointGroups.Name = "dataGridViewProjectEndpointGroups";
             this.dataGridViewProjectEndpointGroups.RowHeadersWidth = 24;

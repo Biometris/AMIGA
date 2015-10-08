@@ -123,6 +123,11 @@ namespace AmigaPowerAnalysis.GUI {
             if (_endpointTypes.Count > 0) {
                 var endpointsBindingSouce = new BindingSource(_endpointTypes, null);
                 dataGridViewDefaultEndpointGroups.DataSource = endpointsBindingSouce;
+
+                //var combo = this.dataGridViewDefaultEndpointGroups.Rows[0].Cells["DistributionType"] as DataGridViewComboBoxCell;
+                //foreach (var row in dataGridViewDefaultEndpointGroups) {
+                //    combo.DataSource = Enum.GetValues(DistributionFactory.AvailableDistributionTypes(Measurement));
+                //}
                 dataGridViewDefaultEndpointGroups.Update();
             } else {
                 dataGridViewDefaultEndpointGroups.DataSource = null;
