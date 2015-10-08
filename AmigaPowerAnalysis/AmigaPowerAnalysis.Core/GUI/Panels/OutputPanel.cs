@@ -57,7 +57,7 @@ namespace AmigaPowerAnalysis.GUI {
             column = new DataGridViewTextBoxColumn();
             column.DataPropertyName = "IsCurrentOutput";
             column.Name = "IsCurrentOutput";
-            column.HeaderText = "Default output";
+            column.HeaderText = "Current output";
             column.ReadOnly = true;
             dataGridViewAvailableOutputs.Columns.Add(column);
 
