@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using System.Drawing;
 
 namespace AmigaPowerAnalysis.GUI {
     public partial class MainWindow : Form {
@@ -36,7 +37,7 @@ namespace AmigaPowerAnalysis.GUI {
         #region Events
 
         private void MainWindow_Load(object sender, EventArgs e) {
-            if (Settings.Default.WindowLocation != null) {
+            if (Settings.Default.WindowLocation != null && isOnScreen(Settings.Default.WindowLocation)) {
                 this.Location = Settings.Default.WindowLocation;
             }
             if (Settings.Default.WindowSize != null) {
@@ -351,6 +352,15 @@ namespace AmigaPowerAnalysis.GUI {
                 Directory.CreateDirectory(filesPath);
             }
             return filesPath;
+        }
+
+        private static bool isOnScreen(Point location) {
+            foreach (var screen in Screen.AllScreens) {
+                if (screen.WorkingArea.Contains(location)) {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }
