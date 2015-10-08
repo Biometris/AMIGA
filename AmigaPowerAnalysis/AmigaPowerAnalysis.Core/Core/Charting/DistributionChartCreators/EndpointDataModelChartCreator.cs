@@ -5,6 +5,7 @@ using OxyPlot;
 using OxyPlot.Annotations;
 using OxyPlot.Axes;
 using System;
+using Biometris.Statistics;
 
 namespace AmigaPowerAnalysis.Core.Charting.DistributionChartCreators {
 
@@ -110,9 +111,14 @@ namespace AmigaPowerAnalysis.Core.Charting.DistributionChartCreators {
                 plotModel.Annotations.Add(loncAnnotation);
             }
 
-            var axis = plotModel.Axes.First(a => a.Position == AxisPosition.Bottom);
-            axis.Minimum = LowerBound;
-            axis.Maximum = UpperBound;
+            _horizontalAxis.Minimum = LowerBound;
+            _horizontalAxis.Maximum = UpperBound;
+
+            if (Endpoint.Measurement == MeasurementType.Count) {
+                var step = GriddingFunctions.GetSmartInterval(LowerBound, UpperBound, 9, 1);
+                _horizontalAxis.MinorStep = step;
+                _horizontalAxis.MajorStep = step;
+            }
 
             return plotModel;
         }

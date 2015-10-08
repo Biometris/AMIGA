@@ -102,6 +102,7 @@ namespace AmigaPowerAnalysis.Core.Charting.DistributionChartCreators {
             if (distribution is IDiscreteDistribution) {
                 s = Math.Ceiling(s);
                 ub = Math.Ceiling(ub);
+                lb = Math.Floor(lb);
             }
             var bins = HistogramBinUtilities.MakeHistogramBins(samples, (int)((ub - lb) / s), lb, ub);
             bins.ForEach(b => b.Frequency = ((b.Frequency / b.Width) / numberOfSamples));
