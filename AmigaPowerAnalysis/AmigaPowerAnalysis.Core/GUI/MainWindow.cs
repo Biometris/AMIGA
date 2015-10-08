@@ -309,8 +309,11 @@ namespace AmigaPowerAnalysis.GUI {
             }
             var runSimulationDialog = new RunPowerAnalysisDialog(_project, _currentProjectFilename);
             runSimulationDialog.ShowDialog();
-            this.saveProject();
-            this.updateTabs();
+            if (runSimulationDialog.RunComplete) {
+                this.saveProject();
+                this.updateTabs();
+                this.navigateToResults();
+            }
         }
 
         private void openSettingsDialog() {

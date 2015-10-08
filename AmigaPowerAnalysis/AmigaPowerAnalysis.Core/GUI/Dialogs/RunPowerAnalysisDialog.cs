@@ -15,12 +15,19 @@ namespace AmigaPowerAnalysis.GUI {
 
         private Project _project;
         private string _projectFilename;
+        private bool _runComplete;
         private CancellationTokenSource _cancellationTokenSource;
 
         public RunPowerAnalysisDialog(Project project, string projectFilename) {
             _project = project;
             _projectFilename = projectFilename;
             InitializeComponent();
+        }
+
+        public bool RunComplete {
+            get {
+                return _runComplete;
+            }
         }
 
         private async void RunSimulationDialog_Load(object sender, EventArgs e) {
@@ -81,6 +88,7 @@ namespace AmigaPowerAnalysis.GUI {
             resultPowerAnalysis.ToXmlFile(filesPath + ".xml");
             _project.PrimaryOutput = runId;
             _project.AnalysisResults.Add(resultPowerAnalysis);
+            _runComplete = true;
         }
 
         private void buttonCancel_Click(object sender, EventArgs e) {
