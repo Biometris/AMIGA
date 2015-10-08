@@ -25,6 +25,9 @@
         private void InitializeComponent() {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AnalysisResultsPerComparisonPanel));
             this.splitContainerComparisons = new System.Windows.Forms.SplitContainer();
+            this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
+            this.labelOutputNameLabel = new System.Windows.Forms.Label();
+            this.labelOutputName = new System.Windows.Forms.Label();
             this.dataGridViewComparisons = new System.Windows.Forms.DataGridView();
             this.tabControlEndpointResult = new System.Windows.Forms.TabControl();
             this.tabPageDifferenceTest = new System.Windows.Forms.TabPage();
@@ -43,13 +46,11 @@
             this.webBrowserFullReport = new System.Windows.Forms.WebBrowser();
             this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.toolStripButtonExportPdf = new System.Windows.Forms.ToolStripButton();
-            this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
-            this.labelOutputNameLabel = new System.Windows.Forms.Label();
-            this.labelOutputName = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerComparisons)).BeginInit();
             this.splitContainerComparisons.Panel1.SuspendLayout();
             this.splitContainerComparisons.Panel2.SuspendLayout();
             this.splitContainerComparisons.SuspendLayout();
+            this.flowLayoutPanel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewComparisons)).BeginInit();
             this.tabControlEndpointResult.SuspendLayout();
             this.tabPageDifferenceTest.SuspendLayout();
@@ -59,7 +60,6 @@
             this.tabPageSettings.SuspendLayout();
             this.tabPageFullReport.SuspendLayout();
             this.toolStrip.SuspendLayout();
-            this.flowLayoutPanel3.SuspendLayout();
             this.SuspendLayout();
             // 
             // splitContainerComparisons
@@ -82,6 +82,37 @@
             this.splitContainerComparisons.Size = new System.Drawing.Size(848, 477);
             this.splitContainerComparisons.SplitterDistance = 283;
             this.splitContainerComparisons.TabIndex = 9;
+            // 
+            // flowLayoutPanel3
+            // 
+            this.flowLayoutPanel3.AutoSize = true;
+            this.flowLayoutPanel3.Controls.Add(this.labelOutputNameLabel);
+            this.flowLayoutPanel3.Controls.Add(this.labelOutputName);
+            this.flowLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Top;
+            this.flowLayoutPanel3.Location = new System.Drawing.Point(0, 0);
+            this.flowLayoutPanel3.Name = "flowLayoutPanel3";
+            this.flowLayoutPanel3.Padding = new System.Windows.Forms.Padding(0, 3, 0, 3);
+            this.flowLayoutPanel3.Size = new System.Drawing.Size(283, 19);
+            this.flowLayoutPanel3.TabIndex = 13;
+            // 
+            // labelOutputNameLabel
+            // 
+            this.labelOutputNameLabel.AutoSize = true;
+            this.labelOutputNameLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelOutputNameLabel.Location = new System.Drawing.Point(3, 3);
+            this.labelOutputNameLabel.Name = "labelOutputNameLabel";
+            this.labelOutputNameLabel.Size = new System.Drawing.Size(49, 13);
+            this.labelOutputNameLabel.TabIndex = 11;
+            this.labelOutputNameLabel.Text = "Output:";
+            // 
+            // labelOutputName
+            // 
+            this.labelOutputName.AutoSize = true;
+            this.labelOutputName.Location = new System.Drawing.Point(58, 3);
+            this.labelOutputName.Name = "labelOutputName";
+            this.labelOutputName.Size = new System.Drawing.Size(66, 13);
+            this.labelOutputName.TabIndex = 10;
+            this.labelOutputName.Text = "output name";
             // 
             // dataGridViewComparisons
             // 
@@ -310,37 +341,6 @@
             this.toolStripButtonExportPdf.ToolTipText = "Export pdf";
             this.toolStripButtonExportPdf.Click += new System.EventHandler(this.toolStripButtonExportPdf_Click);
             // 
-            // flowLayoutPanel3
-            // 
-            this.flowLayoutPanel3.AutoSize = true;
-            this.flowLayoutPanel3.Controls.Add(this.labelOutputNameLabel);
-            this.flowLayoutPanel3.Controls.Add(this.labelOutputName);
-            this.flowLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Top;
-            this.flowLayoutPanel3.Location = new System.Drawing.Point(0, 0);
-            this.flowLayoutPanel3.Name = "flowLayoutPanel3";
-            this.flowLayoutPanel3.Padding = new System.Windows.Forms.Padding(0, 3, 0, 3);
-            this.flowLayoutPanel3.Size = new System.Drawing.Size(283, 19);
-            this.flowLayoutPanel3.TabIndex = 13;
-            // 
-            // labelOutputNameLabel
-            // 
-            this.labelOutputNameLabel.AutoSize = true;
-            this.labelOutputNameLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelOutputNameLabel.Location = new System.Drawing.Point(3, 3);
-            this.labelOutputNameLabel.Name = "labelOutputNameLabel";
-            this.labelOutputNameLabel.Size = new System.Drawing.Size(45, 13);
-            this.labelOutputNameLabel.TabIndex = 11;
-            this.labelOutputNameLabel.Text = "Ouput:";
-            // 
-            // labelOutputName
-            // 
-            this.labelOutputName.AutoSize = true;
-            this.labelOutputName.Location = new System.Drawing.Point(54, 3);
-            this.labelOutputName.Name = "labelOutputName";
-            this.labelOutputName.Size = new System.Drawing.Size(66, 13);
-            this.labelOutputName.TabIndex = 10;
-            this.labelOutputName.Text = "output name";
-            // 
             // AnalysisResultsPerComparisonPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -356,6 +356,8 @@
             this.splitContainerComparisons.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerComparisons)).EndInit();
             this.splitContainerComparisons.ResumeLayout(false);
+            this.flowLayoutPanel3.ResumeLayout(false);
+            this.flowLayoutPanel3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewComparisons)).EndInit();
             this.tabControlEndpointResult.ResumeLayout(false);
             this.tabPageDifferenceTest.ResumeLayout(false);
@@ -371,8 +373,6 @@
             this.tabPageFullReport.PerformLayout();
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
-            this.flowLayoutPanel3.ResumeLayout(false);
-            this.flowLayoutPanel3.PerformLayout();
             this.ResumeLayout(false);
 
         }
