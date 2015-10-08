@@ -61,7 +61,7 @@ namespace AmigaPowerAnalysis.GUI {
             dataGridViewDefaultEndpointGroups.Columns.Add(column);
 
             var combo = new DataGridViewComboBoxColumn();
-            combo.DataSource = Enum.GetValues(typeof(MeasurementType));
+            combo.DataSource = new MeasurementType[] { MeasurementType.Count, MeasurementType.Nonnegative, MeasurementType.Continuous };
             combo.DataPropertyName = "Measurement";
             combo.ValueType = typeof(MeasurementType);
             combo.HeaderText = "Measurement type";
@@ -123,7 +123,6 @@ namespace AmigaPowerAnalysis.GUI {
             if (_endpointTypes.Count > 0) {
                 var endpointsBindingSouce = new BindingSource(_endpointTypes, null);
                 dataGridViewDefaultEndpointGroups.DataSource = endpointsBindingSouce;
-
                 //var combo = this.dataGridViewDefaultEndpointGroups.Rows[0].Cells["DistributionType"] as DataGridViewComboBoxCell;
                 //foreach (var row in dataGridViewDefaultEndpointGroups) {
                 //    combo.DataSource = Enum.GetValues(DistributionFactory.AvailableDistributionTypes(Measurement));
@@ -144,7 +143,7 @@ namespace AmigaPowerAnalysis.GUI {
             dataGridViewProjectEndpointGroups.Columns.Add(column);
 
             var combo = new DataGridViewComboBoxColumn();
-            combo.DataSource = Enum.GetValues(typeof(MeasurementType));
+            combo.DataSource = new MeasurementType[] { MeasurementType.Count, MeasurementType.Nonnegative, MeasurementType.Continuous };
             combo.DataPropertyName = "Measurement";
             combo.ValueType = typeof(MeasurementType);
             combo.HeaderText = "Measurement type";

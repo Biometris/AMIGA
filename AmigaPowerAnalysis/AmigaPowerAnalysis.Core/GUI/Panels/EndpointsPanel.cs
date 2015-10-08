@@ -55,7 +55,7 @@ namespace AmigaPowerAnalysis.GUI {
             dataGridViewEndpoints.Columns.Add(combo);
 
             combo = new DataGridViewComboBoxColumn();
-            combo.DataSource = Enum.GetValues(typeof(MeasurementType));
+            combo.DataSource = new MeasurementType[] { MeasurementType.Count, MeasurementType.Nonnegative, MeasurementType.Continuous };
             combo.DataPropertyName = "Measurement";
             combo.ValueType = typeof(MeasurementType);
             combo.HeaderText = "Measurement type";
