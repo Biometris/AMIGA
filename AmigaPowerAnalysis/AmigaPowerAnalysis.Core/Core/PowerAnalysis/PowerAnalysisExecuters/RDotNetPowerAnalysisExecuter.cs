@@ -262,14 +262,14 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
 
         private List<EffectCSD> createCsdEvaluationGrid(double locLower, double locUpper, double overallMean, int numberOfEvaluations, MeasurementType measurementType) {
             double transformedLocLower, transformedLocUpper;
-            if (measurementType == MeasurementType.Continuous) {
-                transformedLocLower = locLower;
-                transformedLocUpper = locUpper;
-            }
-            else {
+            //if (measurementType == MeasurementType.Continuous) {
+            //    transformedLocLower = locLower;
+            //    transformedLocUpper = locUpper;
+            //}
+            //else {
                 transformedLocLower = Math.Log(locLower);
                 transformedLocUpper = Math.Log(locUpper);
-            }
+            //}
             var evaluationGrid = new List<EffectCSD>();
             var csdGrid = GriddingFunctions.Arange(0D, 1D, numberOfEvaluations + 2);
             if (!double.IsNaN(locLower)) {
@@ -294,12 +294,12 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                     .Skip(1));
             }
 
-            if (measurementType == MeasurementType.Continuous) {
-                evaluationGrid.ForEach(r => r.Effect = r.TransformedEfffect);
-            }
-            else {
+            //if (measurementType == MeasurementType.Continuous) {
+            //    evaluationGrid.ForEach(r => r.Effect = r.TransformedEfffect);
+            //}
+            //else {
                 evaluationGrid.ForEach(r => r.Effect = Math.Exp(r.TransformedEfffect));
-            }
+            //}
             return evaluationGrid;
         }
     }
