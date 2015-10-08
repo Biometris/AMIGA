@@ -135,8 +135,10 @@ namespace AmigaPowerAnalysis.Core {
         public double LocLower {
             get { return _locLower; }
             set {
-                 _locLower = value;
-                validateMeasurementParameters();
+                if (!double.IsNaN(_locUpper)) {
+                     _locLower = value;
+                    validateMeasurementParameters();
+                }
             }
         }
 
@@ -146,8 +148,10 @@ namespace AmigaPowerAnalysis.Core {
         public double LocUpper {
             get { return _locUpper; }
             set {
-                _locUpper = value;
-                validateMeasurementParameters();
+                if (!double.IsNaN(_locLower)) {
+                    _locUpper = value;
+                    validateMeasurementParameters();
+                }
             }
         }
 
@@ -449,16 +453,20 @@ namespace AmigaPowerAnalysis.Core {
                 _locUpper = _locLower;
                 _locLower = tmp;
             }
+            if (_locLower <= 0) {
+                _locLower = 0.01;
+            } else if (_locLower >= 1) {
+                _locLower = 0.5;
+            }
+            if (_locUpper <= _locLower) {
+                _locUpper = _locLower + 0.01;
+            } else if (_locUpper <= 1) {
+                _locUpper = 2;
+            }
             switch (_measurement) {
                 case MeasurementType.Count:
                     if (_muComparator <= 0) {
                         _muComparator = 0.01;
-                    }
-                    if (_locLower <= 0) {
-                        _locLower = 0.01;
-                    }
-                    if (_locUpper <= _locLower) {
-                        _locUpper = _locLower + 0.01;
                     }
                     break;
                 case MeasurementType.Fraction:
@@ -468,29 +476,11 @@ namespace AmigaPowerAnalysis.Core {
                     if (_muComparator >= 1) {
                         _muComparator = 0.99;
                     }
-                    if (_locLower <= 0) {
-                        _locLower = 0.01;
-                    }
-                    if (_locLower >= 1) {
-                        _locLower = 0.99;
-                    }
-                    if (_locUpper <= 0) {
-                        _locUpper = 0.011;
-                    }
-                    if (_locUpper >= 1) {
-                        _locUpper = 0.999;
-                    }
                     _excessZeroes = false;
                     break;
                 case MeasurementType.Nonnegative:
                     if (_muComparator <= 0) {
                         _muComparator = 0.01;
-                    }
-                    if (_locLower <= 0) {
-                        _locLower = 0.01;
-                    }
-                    if (_locUpper <= _locLower) {
-                        _locUpper = _locLower + 0.01;
                     }
                     _excessZeroes = false;
                     break;

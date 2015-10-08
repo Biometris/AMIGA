@@ -21,8 +21,8 @@ namespace AmigaPowerAnalysis.Core {
     public sealed class PowerCalculationSettings {
 
         public PowerCalculationSettings() {
-            SelectedAnalysisMethodTypesDifferenceTests = AnalysisMethodType.LogNormal;
-            SelectedAnalysisMethodTypesEquivalenceTests = AnalysisMethodType.OverdispersedPoisson;
+            SelectedAnalysisMethodTypesDifferenceTests = AnalysisMethodType.LogNormal | AnalysisMethodType.LogPlusM | AnalysisMethodType.Normal;
+            SelectedAnalysisMethodTypesEquivalenceTests = AnalysisMethodType.OverdispersedPoisson | AnalysisMethodType.LogPlusM | AnalysisMethodType.Normal;
             SignificanceLevel = 0.05;
             NumberOfRatios = 3;
             NumberOfReplications = new List<int> { 5, 10, 20, 40, 60 };
