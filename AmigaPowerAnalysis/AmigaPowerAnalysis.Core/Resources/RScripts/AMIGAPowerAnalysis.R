@@ -255,7 +255,7 @@ readSettings <- function(settingsFile) {
     if (list$MeasurementType != "Continuous") {
       list$TransformLocLower <- log(list$LocLower)
     } else {
-      list$TransformLocLower <- list$LocLower
+      list$TransformLocLower <- list$LocLower*list$OverallMean - list$OverallMean
     }
   }
   if (is.na(list$LocUpper)) {
@@ -265,7 +265,7 @@ readSettings <- function(settingsFile) {
     if (list$MeasurementType != "Continuous") {
       list$TransformLocUpper <- log(list$LocUpper)
     } else {
-      list$TransformLocUpper <- list$LocUpper
+      list$TransformLocUpper = list$LocUpper*list$OverallMean - list$OverallMean
     }
   }
 

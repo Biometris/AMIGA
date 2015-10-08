@@ -531,14 +531,15 @@ lylesPowerAnalysis <- function(data, settings, modelSettings, blocks, effect, de
 # Does exact power analysis for the normal and lognormal distribution
 exactPowerAnalysis <- function(data, settings, modelSettings, blocks, effect, debugSettings) {
   if (settings$MeasurementType == "Continuous") {
-    # Normal: Nothing
-    doDiff = settings$DoNOdiff 
-    doEqui = settings$DoNOdiff 
+    # Normal: calculate effect on the normal additive scale; Transformed LOC are already on that scale
+    doDiff <- settings$DoNOdiff 
+    doEqui <- settings$DoNOequi
+    effect <- settings$OverallMean * exp(effect) - settings$OverallMean
     distribution = "Normal" 
   } else if (settings$MeasurementType == "Nonnegative") {
     # LogNormal: use mean on transformed scale; not that settings$dispersion is already on transformed scale
     doDiff = settings$DoLOdiff 
-    doEqui = settings$DoLOdiff 
+    doEqui = settings$DoLOequi
     settings$OverallMean <- log(settings$OverallMean) - settings$dispersion/2
     distribution = "LogPlusM" 
   }
