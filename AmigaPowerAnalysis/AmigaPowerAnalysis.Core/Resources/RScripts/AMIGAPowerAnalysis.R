@@ -97,7 +97,7 @@ ropoisson <- function(n, mean, dispersion=NaN, power=NaN,
     sigma2 <- log(dispersion+1)
     sample <- exp(rnorm(n, lambda, sqrt(sigma2)))
     sample <- rpois(n, sample)
-  } else if (type == "PowerLaw") {
+  } else if ((type == "PowerLaw") && (TRUE)) { # Powerlaw by negative binomial
     if (min(dispersion) <= 0) {
       stop("The dispersion parameter must be larger than 0 for the PowerLaw distribution.", call. = FALSE)
     }
@@ -113,6 +113,7 @@ ropoisson <- function(n, mean, dispersion=NaN, power=NaN,
     a <- mean/s
     sample <- rgamma(n, shape=a, scale=s)
     sample <- rpois(n, sample)
+  } else if ((type == "PowerLaw") && (FALSE)) { # Powerlaw by overdispersed Poisson
   }
   # Add excess Zero
   if (excessZero > 0.0) {
@@ -197,7 +198,7 @@ ropoissonDispersion <- function(mean, CV, power,
     dispersion <- (CV/100) * (CV/100) - 1/mean
   } else if (type == "PoissonLogNormal") {
     dispersion <- (CV/100) * (CV/100) - 1/mean
-  } else if (type == "PowerLaw") {
+  } else if (type == "PowerLaw") {  # The value of alpha in the variance function
     dispersion <- (CV/100) * (CV/100) * mean^(2-power)
   } else if (type == "Normal") {
     dispersion <- ((CV/100) * mean)^2
@@ -221,7 +222,28 @@ readDataFile <- function(dataFile) {
       data[[modifiers[[i]]]] = as.factor(data[[modifiers[[i]]]])
     } 
   }
-  return(data)
+  # Sub dataframe: First check that essential columns are present
+  if (is.element("Comparison", colnames)) {
+    colComparison <- max(grep("Comparison", colnames))
+  } else {
+    stop("The DataFile must contain a column 'Comparison'.", call. = FALSE)
+  }
+  if (is.element("Constant", colnames)) {
+    colConstant <- max(grep("Constant", colnames))
+  } else {
+    stop("The DataFile must contain a column 'Constant'.", call. = FALSE)
+  }
+  if (is.element("Test", colnames)) {
+    colTest <- max(grep("Test", colnames))
+  } else {
+    stop("The DataFile must contain a column 'Test'.", call. = FALSE)
+  }
+  if (((colComparison+1) != colConstant) || ((colConstant+1) != colTest)) {
+    stop("The DataFile must contain the sequence of columns Comparison, Constant and Test.", call. = FALSE)
+  }
+  # Return columns from Test onwards
+  ncolnames = length(colnames)
+  return(data[rep(colConstant:ncolnames)])
 }
 
 ######################################################################################################################
@@ -1161,3 +1183,5 @@ createEvaluationGrid <- function(LocLower, LocUpper, NumberOfEvaluations) {
   } 
   return(list(csd=csd, effect=effect))
 }
+
+
