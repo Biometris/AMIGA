@@ -35,12 +35,6 @@ namespace AmigaPowerAnalysis.Core.Charting.DistributionChartCreators {
             if (histogramTypes.HasFlag(Endpoint.DistributionType)) {
                 DistributionChartPreferenceType = DistributionChartPreferenceType.Histogram;
             }
-            //if (double.IsNaN(LowerBound) && _distribution.SupportMin() == double.NegativeInfinity && !double.IsNaN(Endpoint.LocLower)) {
-            //    LowerBound = MeasurementFactory.ComputeLimit(_distribution.Mean(), 1.5 * Endpoint.LocLower, _distribution.SupportType());
-            //}
-            //if (double.IsNaN(UpperBound) && _distribution.SupportMax() == double.PositiveInfinity && !double.IsNaN(Endpoint.LocUpper)) {
-            //    UpperBound = MeasurementFactory.ComputeLimit(_distribution.Mean(), 1.5 * Endpoint.LocUpper, _distribution.SupportType());
-            //}
 
             var plotModel = base.Create();
 
@@ -85,7 +79,6 @@ namespace AmigaPowerAnalysis.Core.Charting.DistributionChartCreators {
                     };
                     plotModel.Annotations.Add(locLowerRegionAnnotation);
                 }
-
                 if (!double.IsNaN(Endpoint.LocUpper)) {
                     var locUpperAnnotation = new RectangleAnnotation() {
                         MinimumX = MeasurementFactory.ComputeLimit(_distribution.Mean(), Endpoint.LocUpper, _distribution.SupportType()),

@@ -43,9 +43,13 @@ namespace AmigaPowerAnalysis.Core.Charting.DistributionChartCreators {
             }
 
             if (_distribution.SupportType() == MeasurementType.Count) {
-                _horizontalAxis.MinorStep = Math.Ceiling(_horizontalAxis.MinorStep);
-                //_horizontalAxis.MinorStep = 1; gebruik binsize
+                //_horizontalAxis.MinorStep = Math.Max(1, _horizontalAxis.ActualMinorStep);
+                //_horizontalAxis.MajorStep = Math.Max(1, _horizontalAxis.ActualMajorStep);
+                //_horizontalAxis.Maximum = 1;
             }
+            //plotModel.Axes.Clear();
+            //plotModel.Axes.Add(_horizontalAxis);
+            //plotModel.Axes.Add(_verticalAxis);
 
             return plotModel;
         }

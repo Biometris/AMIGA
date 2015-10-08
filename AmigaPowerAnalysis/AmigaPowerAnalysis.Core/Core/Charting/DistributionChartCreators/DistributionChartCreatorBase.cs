@@ -21,6 +21,7 @@ namespace AmigaPowerAnalysis.Core.Charting.DistributionChartCreators {
         public DistributionChartPreferenceType DistributionChartPreferenceType { get; set; }
 
         protected LinearAxis _horizontalAxis;
+        protected LinearAxis _verticalAxis;
 
         public virtual PlotModel Create() {
             var plotModel = new PlotModel() {
@@ -35,13 +36,14 @@ namespace AmigaPowerAnalysis.Core.Charting.DistributionChartCreators {
             };
             plotModel.Axes.Add(_horizontalAxis);
 
-            var verticalAxis = new LinearAxis() {
+            _verticalAxis = new LinearAxis() {
                 MajorGridlineStyle = LineStyle.Solid,
                 MinorGridlineStyle = LineStyle.Dot,
                 AbsoluteMinimum = 0,
                 Minimum = 0,
+                MaximumPadding = 0.1,
             };
-            plotModel.Axes.Add(verticalAxis);
+            plotModel.Axes.Add(_verticalAxis);
 
             return plotModel;
         }
