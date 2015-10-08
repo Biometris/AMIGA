@@ -7,37 +7,59 @@ namespace AmigaPowerAnalysis.Core.DataAnalysis {
     public sealed class AnalysisDataTemplateGenerator {
 
         internal class SimpleFactorLevel {
-            public int IsVarietyFactorLevel { get; set; }
+            public int VarietyFactorLevelType { get; set; }
             public string Factor { get; set; }
             public string Level { get; set; }
         }
 
-        ///// <summary>
-        ///// Comparer class for sorting rows.
-        ///// </summary>
-        //internal class SimpleFactorLevelComparer : IComparer<IEnumerable<SimpleFactorLevel>> {
-        //    public int Compare(IEnumerable<SimpleFactorLevel> x, IEnumerable<SimpleFactorLevel> y) {
-        //        var thisFactors = x.OrderBy(r => !r.IsVarietyFactor).ThenBy(r => r.Factor).ToList();
-        //        var otherFactors = y.OrderBy(r => !r.IsVarietyFactor).ThenBy(r => r.Factor).ToList();
-        //        int i = 0;
-        //        while (i < thisFactors.Count && i < otherFactors.Count) {
-        //            var compareFactors = thisFactors[i].Factor.CompareTo(otherFactors[i].Factor);
-        //            if (compareFactors != 0) {
-        //                return compareFactors;
-        //            }
-        //            var compareLevelTypes = thisFactors[i].VarietyLevelType.CompareTo(otherFactors[i].VarietyLevelType);
-        //            if (compareLevelTypes != 0) {
-        //                return compareLevelTypes;
-        //            }
-        //            var compareLevels = thisFactors[i].Level.CompareTo(otherFactors[i].Level);
-        //            if (compareLevels != 0) {
-        //                return compareLevels;
-        //            }
-        //            i++;
-        //        }
-        //        return thisFactors.Count.CompareTo(thisFactors.Count);
-        //    }
-        //}
+        /// <summary>
+        /// Comparer class for sorting rows.
+        /// </summary>
+        internal class SimpleFactorLevelComparer : IComparer<IEnumerable<SimpleFactorLevel>> {
+            public int Compare(IEnumerable<SimpleFactorLevel> x, IEnumerable<SimpleFactorLevel> y) {
+                var thisFactors = x.OrderBy(r => r.VarietyFactorLevelType).ThenBy(r => r.Factor).ToList();
+                var otherFactors = y.OrderBy(r => r.VarietyFactorLevelType).ThenBy(r => r.Factor).ToList();
+                int i = 0;
+                while (i < thisFactors.Count && i < otherFactors.Count) {
+                    var compareLevelTypes = thisFactors[i].VarietyFactorLevelType.CompareTo(otherFactors[i].VarietyFactorLevelType);
+                    if (compareLevelTypes != 0) {
+                        return compareLevelTypes;
+                    }
+                    var compareFactors = thisFactors[i].Factor.CompareTo(otherFactors[i].Factor);
+                    if (compareFactors != 0) {
+                        return compareFactors;
+                    }
+                    var compareLevels = thisFactors[i].Level.CompareTo(otherFactors[i].Level);
+                    if (compareLevels != 0) {
+                        return compareLevels;
+                    }
+                    i++;
+                }
+                return thisFactors.Count.CompareTo(thisFactors.Count);
+            }
+
+            public static int CompareStatic(IEnumerable<SimpleFactorLevel> x, IEnumerable<SimpleFactorLevel> y) {
+                var thisFactors = x.OrderBy(r => r.VarietyFactorLevelType).ThenBy(r => r.Factor).ToList();
+                var otherFactors = y.OrderBy(r => r.VarietyFactorLevelType).ThenBy(r => r.Factor).ToList();
+                int i = 0;
+                while (i < thisFactors.Count && i < otherFactors.Count) {
+                    var compareLevelTypes = thisFactors[i].VarietyFactorLevelType.CompareTo(otherFactors[i].VarietyFactorLevelType);
+                    if (compareLevelTypes != 0) {
+                        return compareLevelTypes;
+                    }
+                    var compareFactors = thisFactors[i].Factor.CompareTo(otherFactors[i].Factor);
+                    if (compareFactors != 0) {
+                        return compareFactors;
+                    }
+                    var compareLevels = thisFactors[i].Level.CompareTo(otherFactors[i].Level);
+                    if (compareLevels != 0) {
+                        return compareLevels;
+                    }
+                    i++;
+                }
+                return thisFactors.Count.CompareTo(thisFactors.Count);
+            }
+        }
 
         /// <summary>
         /// Writes the analysis data template to a csv file.
@@ -73,11 +95,10 @@ namespace AmigaPowerAnalysis.Core.DataAnalysis {
                     InputRecord = ir,
                     Levels = r.InputPowerAnalysis.Factors
                         .Zip(ir.FactorLevels, (f, fl) => new SimpleFactorLevel() {
-                            IsVarietyFactorLevel = (f == "Variety") ? 1 + 1 * Convert.ToInt32(fl == "Comparator") + 2 * Convert.ToInt32(fl == "Test") : 0,
+                            VarietyFactorLevelType = (f == "Variety") ? 1 + 1 * Convert.ToInt32(fl == "Comparator") + 2 * Convert.ToInt32(fl == "Test") : 0,
                             Factor = f,
                             Level = fl,
-                        })
-                        .ToDictionary(fl => fl.Factor, fl => fl)
+                        }).ToList()
                 }).ToList()
             });
 
@@ -85,8 +106,8 @@ namespace AmigaPowerAnalysis.Core.DataAnalysis {
                 .Select((r, i) => new {
                         MainPlot = i + 1,
                         SubPlot = 1,
-                        Variety = r.Levels["Variety"].Level,
-                        FactorLevels = factors.Select(f => r.Levels[f].Level).ToList(),
+                        Variety = r.Levels.First(l => l.Factor == "Variety").Level,
+                        FactorLevels = factors.Select(f => r.Levels.First(l => l.Factor == f).Level).ToList(),
                         Frequency = r.InputRecord.Frequency,
                     })
                 .SelectMany(r => Enumerable.Repeat(r, r.Frequency)
@@ -119,10 +140,20 @@ namespace AmigaPowerAnalysis.Core.DataAnalysis {
                 .ThenBy(r => r.SubPlot)
                 .ToList();
 
+            var contrastRecords = formattedComparisons.First().FormattedRecords
+                .Select((r, i) => new AnalysisDataTemplateContrastRecord() {
+                    Variety = r.Levels.First(l => l.Factor == "Variety").Level,
+                    FactorLevels = factors.Select(f => r.Levels.First(l => l.Factor == f).Level).ToList(),
+                    ContrastsPerEndpoint = formattedComparisons.Select(ep => ep.FormattedRecords.First(fr => SimpleFactorLevelComparer.CompareStatic(r.Levels,fr.Levels) == 0).InputRecord.Comparison).ToList()
+                })
+                .OrderBy(r => r.Variety)
+                .ToList();
+
             var analysisDataTemplate = new AnalysisDataTemplate() {
                 Endpoints = primaryComparisons.Select(e => e.Endpoint).ToList(),
                 Factors = factors,
                 AnalysisDataTemplateRecords = records,
+                AnalysisDataTemplateContrastRecords = contrastRecords,
             };
 
             return analysisDataTemplate;
