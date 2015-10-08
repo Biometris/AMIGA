@@ -50,6 +50,7 @@ namespace AmigaPowerAnalysis.GUI {
 
         public void Activate() {
             updateDataGridComparisons();
+            updateAnalysisOutputPanel();
             updatePlotTypeRadioButtons();
             if (_resultPowerAnalysis.GetPrimaryComparisons().Count() > 0) {
                 splitContainerComparisons.Visible = true;
