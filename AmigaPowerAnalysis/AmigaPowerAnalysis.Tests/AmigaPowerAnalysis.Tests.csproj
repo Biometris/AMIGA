@@ -58,6 +58,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Core\Charting\DistributionChartCreators\EndpointDataModelChartCreatorTests.cs" />
     <Compile Include="Core\Charting\DistributionChartCreators\DistributionChartCreatorTests.cs" />
     <Compile Include="Core\Data\EndpointFactorSettingsDTOTests.cs" />
     <Compile Include="Core\Data\ProjectDTOTests.cs" />

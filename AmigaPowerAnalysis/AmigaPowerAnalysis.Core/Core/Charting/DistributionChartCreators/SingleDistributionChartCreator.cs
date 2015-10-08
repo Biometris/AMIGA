@@ -1,4 +1,6 @@
-﻿using Biometris.Statistics.Distributions;
+﻿using System;
+using Biometris.Statistics.Distributions;
+using Biometris.Statistics.Measurements;
 using OxyPlot;
 using OxyPlot.Annotations;
 using OxyPlot.Axes;
@@ -38,6 +40,11 @@ namespace AmigaPowerAnalysis.Core.Charting.DistributionChartCreators {
             if (DistributionChartPreferenceType == DistributionChartPreferenceType.DistributionFunction || DistributionChartPreferenceType == DistributionChartPreferenceType.Both) {
                 var series = seriesCreator.Create(DistributionSeriesType.LineSeries);
                 plotModel.Series.Add(series);
+            }
+
+            if (_distribution.SupportType() == MeasurementType.Count) {
+                _horizontalAxis.MinorStep = Math.Ceiling(_horizontalAxis.MinorStep);
+                //_horizontalAxis.MinorStep = 1; gebruik binsize
             }
 
             return plotModel;

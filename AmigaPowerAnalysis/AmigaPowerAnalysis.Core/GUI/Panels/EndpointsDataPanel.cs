@@ -178,8 +178,7 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void updateEndpointDistributionChart() {
             if (_currentEndpoint != null) {
-                var distribution = DistributionFactory.CreateDistribution(_currentEndpoint.DistributionType, _currentEndpoint.MuComparator, _currentEndpoint.CvComparator, _currentEndpoint.PowerLawPower);
-                var chartCreator = new SingleDistributionModelChartCreator(distribution, _currentEndpoint.LocLower, _currentEndpoint.LocUpper) {
+                var chartCreator = new EndpointDataModelChartCreator(_currentEndpoint) {
                     DistributionChartPreferenceType = DistributionChartPreferenceType.Histogram
                 };
                 distributionChartPlotView.Model = chartCreator.Create();

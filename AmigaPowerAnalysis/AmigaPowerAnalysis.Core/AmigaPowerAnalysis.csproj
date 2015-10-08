@@ -99,7 +99,7 @@
     <Compile Include="Core\Charting\AnalysisResultsChartCreators\PowerVersusRatioChartCreator.cs" />
     <Compile Include="Core\Charting\AnalysisResultsChartCreators\PowerVersusReplicatesRatioChartCreator.cs" />
     <Compile Include="Core\Charting\DistributionChartCreators\DistributionChartCreatorBase.cs" />
-    <Compile Include="Core\Charting\DistributionChartCreators\SingleDistributionModelChartCreator.cs" />
+    <Compile Include="Core\Charting\DistributionChartCreators\EndpointDataModelChartCreator.cs" />
     <Compile Include="Core\Charting\DistributionChartCreators\SingleDistributionChartCreator.cs" />
     <Compile Include="Core\Charting\DistributionChartCreators\DistributionSeriesCreator.cs" />
     <Compile Include="Core\Charting\DistributionChartCreators\MultiDistributionChartCreator.cs" />

@@ -20,18 +20,20 @@ namespace AmigaPowerAnalysis.Core.Charting.DistributionChartCreators {
         public double Step { get; set; }
         public DistributionChartPreferenceType DistributionChartPreferenceType { get; set; }
 
+        protected LinearAxis _horizontalAxis;
+
         public virtual PlotModel Create() {
             var plotModel = new PlotModel() {
                 TitleFontSize = 11,
                 DefaultFontSize = 11,
             };
 
-            var horizontalAxis = new LinearAxis() {
+            _horizontalAxis = new LinearAxis() {
                 Position = AxisPosition.Bottom,
                 MajorGridlineStyle = LineStyle.Solid,
                 MinorGridlineStyle = LineStyle.Dot,
             };
-            plotModel.Axes.Add(horizontalAxis);
+            plotModel.Axes.Add(_horizontalAxis);
 
             var verticalAxis = new LinearAxis() {
                 MajorGridlineStyle = LineStyle.Solid,

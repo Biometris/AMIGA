@@ -78,7 +78,8 @@ namespace Biometris.Statistics.Measurements {
         /// <returns></returns>
         public static double ComputeLimit(double mean, double loc, MeasurementType measurementType) {
             var transformedMean = Link(mean, measurementType);
-            var transformedLoc = (measurementType != MeasurementType.Continuous) ? Math.Log(loc) : loc;
+            //var transformedLoc = (measurementType != MeasurementType.Continuous) ? Math.Log(loc) : loc;
+            var transformedLoc = Math.Log(loc);
             return InverseLink(transformedMean + transformedLoc, measurementType);
         }
 
