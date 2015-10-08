@@ -135,8 +135,8 @@ namespace AmigaPowerAnalysis.Core {
         public double LocLower {
             get { return _locLower; }
             set {
-                if (!double.IsNaN(_locUpper)) {
-                     _locLower = value;
+                if (!double.IsNaN(value) || !double.IsNaN(_locUpper)) {
+                    _locLower = value;
                     validateMeasurementParameters();
                 }
             }
@@ -148,7 +148,7 @@ namespace AmigaPowerAnalysis.Core {
         public double LocUpper {
             get { return _locUpper; }
             set {
-                if (!double.IsNaN(_locLower)) {
+                if (!double.IsNaN(value) || !double.IsNaN(_locLower)) {
                     _locUpper = value;
                     validateMeasurementParameters();
                 }
@@ -252,18 +252,6 @@ namespace AmigaPowerAnalysis.Core {
             get { return _cvForBlocks; }
             set { _cvForBlocks = value; }
         }
-        
-        /// <summary>
-        /// Gets/sets the factor settings for this endpoint.
-        /// </summary>
-        public List<EndpointFactorSettings> FactorSettings {
-            get {
-                return _factors;
-            }
-            //set {
-            //    _factors = value;
-            //}
-        }
 
         /// <summary>
         /// Returns the variety factor.
@@ -271,6 +259,15 @@ namespace AmigaPowerAnalysis.Core {
         public VarietyFactor VarietyFactor {
             get { return _varietyFactor; }
             set { _varietyFactor = value; }
+        }
+
+        /// <summary>
+        /// Gets/sets the factor settings for this endpoint.
+        /// </summary>
+        public List<EndpointFactorSettings> FactorSettings {
+            get {
+                return _factors;
+            }
         }
 
         /// <summary>
