@@ -1,7 +1,7 @@
-﻿using System.Linq;
-using AmigaPowerAnalysis.Core.PowerAnalysis;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using AmigaPowerAnalysis.Core.PowerAnalysis;
 
 namespace AmigaPowerAnalysis.Core.DataAnalysis {
     public sealed class AnalysisDataTemplateGenerator {
@@ -87,7 +87,7 @@ namespace AmigaPowerAnalysis.Core.DataAnalysis {
 
         public AnalysisDataTemplate CreateAnalysisDataTemplate(ResultPowerAnalysis _resultPowerAnalysis, int replicates) {
             var primaryComparisons = _resultPowerAnalysis.GetPrimaryComparisons();
-            var factors = primaryComparisons.First().InputPowerAnalysis.Factors.Where(f => f != "Variety").ToList();
+            var factors = primaryComparisons.First().InputPowerAnalysis.Factors.Where(f => f != "Variety").OrderBy(f => f).ToList();
             var formattedComparisons = primaryComparisons.Select(r => new {
                 Comparison = r,
                 FormattedRecords = r.InputPowerAnalysis.InputRecords.Select(ir => new {
@@ -146,7 +146,6 @@ namespace AmigaPowerAnalysis.Core.DataAnalysis {
                     FactorLevels = factors.Select(f => r.Levels.First(l => l.Factor == f).Level).ToList(),
                     ContrastsPerEndpoint = formattedComparisons.Select(ep => ep.FormattedRecords.First(fr => SimpleFactorLevelComparer.CompareStatic(r.Levels,fr.Levels) == 0).InputRecord.Comparison).ToList()
                 })
-                .OrderBy(r => r.Variety)
                 .ToList();
 
             var analysisDataTemplate = new AnalysisDataTemplate() {

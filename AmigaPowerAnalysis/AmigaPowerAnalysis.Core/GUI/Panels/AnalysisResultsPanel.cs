@@ -222,7 +222,7 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void toolStripButtonExportPdf_Click(object sender, EventArgs e) {
-            var title = "Report power analysis";
+            var title = "Report " + _currentOutputName;
             var saveFileDialog = new SaveFileDialog();
             saveFileDialog.DefaultExt = ".pdf";
             saveFileDialog.Filter = "PDF|*.pdf";
@@ -243,6 +243,8 @@ namespace AmigaPowerAnalysis.GUI {
         private void buttonGenerateDataTemplate_Click(object sender, EventArgs e) {
             var saveFileDialog = new SaveFileDialog() {
                 Filter = "csv files (*.csv)|*.csv|All files (*.*)|*.*",
+                FileName = "Template " + _project.ProjectName + ".csv",
+                InitialDirectory = CurrentOutputFilesPath,
                 FilterIndex = 1,
                 RestoreDirectory = true,
                 OverwritePrompt = true

@@ -94,7 +94,7 @@ namespace AmigaPowerAnalysis.Core.DataAnalysis {
                     line.Add(factor.ToString());
                 }
                 foreach (var contrast in record.ContrastsPerEndpoint) {
-                    line.Add(string.Format("{0}", contrast));
+                    line.Add(string.Format("{0}", (int)contrast));
                 }
                 stringBuilder.AppendLine(string.Join(separator, line));
             }
