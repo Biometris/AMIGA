@@ -38,6 +38,8 @@ namespace AmigaPowerAnalysis.Core {
             if (MyEndpointTypes == null) {
                 MyEndpointTypes = DefaultEndpointTypes();
             }
+            // Remove all fraction types until fractions are implemented.
+            MyEndpointTypes.RemoveAll(ept => ept.Measurement == MeasurementType.Fraction);
         }
 
         public static void StoreMyEndpointTypes() {

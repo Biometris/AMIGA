@@ -52,7 +52,9 @@ namespace AmigaPowerAnalysis.Core.Data {
         #endregion
 
         public static Project FromDTO(ProjectDTO dto) {
-            var endpointGroups = dto.EndpointGroups.Select(r => EndpointGroupDTO.FromDTO(r)).ToList();
+            var endpointGroups = dto.EndpointGroups.Select(r => EndpointGroupDTO.FromDTO(r))
+                .Where(ept => ept.Measurement != MeasurementType.Fraction) // don't load fraction types until implemented
+                .ToList();
             var endpoints = dto.Endpoints.Select(r => EndpointDTO.FromDTO(r, endpointGroups)).ToList();
             var factors = dto.Factors.Select(r => FactorDTO.FromDTO(r)).ToList();
             var factorLevels = dto.FactorLevels.Select(r => FactorLevelDTO.FromDTO(r, factors)).ToList();
