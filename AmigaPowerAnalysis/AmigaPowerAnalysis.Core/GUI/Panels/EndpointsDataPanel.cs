@@ -137,30 +137,38 @@ namespace AmigaPowerAnalysis.GUI {
                 if (_project.Endpoints[i].DistributionType != DistributionType.PowerLaw) {
                     dataGridViewEndpoints.Rows[i].Cells["PowerLawPower"].ReadOnly = true;
                     dataGridViewEndpoints.Rows[i].Cells["PowerLawPower"].Style.BackColor = Color.LightGray;
+                    dataGridViewEndpoints.Rows[i].Cells["PowerLawPower"].Style.ForeColor = Color.LightGray;
                 } else {
                     dataGridViewEndpoints.Rows[i].Cells["PowerLawPower"].ReadOnly = false;
                     dataGridViewEndpoints.Rows[i].Cells["PowerLawPower"].Style.BackColor = Color.White;
+                    dataGridViewEndpoints.Rows[i].Cells["PowerLawPower"].Style.ForeColor = Color.Black;
                 }
                 if (_project.Endpoints[i].DistributionType == DistributionType.Poisson) {
                     dataGridViewEndpoints.Rows[i].Cells["CvComparator"].ReadOnly = true;
                     dataGridViewEndpoints.Rows[i].Cells["CvComparator"].Style.BackColor = Color.LightGray;
+                    dataGridViewEndpoints.Rows[i].Cells["CvComparator"].Style.ForeColor = Color.LightGray;
                 } else {
                     dataGridViewEndpoints.Rows[i].Cells["CvComparator"].ReadOnly = false;
                     dataGridViewEndpoints.Rows[i].Cells["CvComparator"].Style.BackColor = Color.White;
+                    dataGridViewEndpoints.Rows[i].Cells["CvComparator"].Style.ForeColor = Color.Black;
                 }
                 if (_project.Endpoints[i].Measurement == MeasurementType.Count) {
                     dataGridViewEndpoints.Rows[i].Cells["ExcessZeroes"].ReadOnly = false;
                     dataGridViewEndpoints.Rows[i].Cells["ExcessZeroes"].Style.BackColor = Color.White;
+                    dataGridViewEndpoints.Rows[i].Cells["ExcessZeroes"].Style.ForeColor = Color.Black;
                 } else {
                     dataGridViewEndpoints.Rows[i].Cells["ExcessZeroes"].ReadOnly = true;
                     dataGridViewEndpoints.Rows[i].Cells["ExcessZeroes"].Style.BackColor = Color.LightGray;
+                    dataGridViewEndpoints.Rows[i].Cells["ExcessZeroes"].Style.ForeColor = Color.LightGray;
                 }
                 if (_project.Endpoints[i].ExcessZeroes) {
                     dataGridViewEndpoints.Rows[i].Cells["ExcessZeroesPercentage"].ReadOnly = false;
                     dataGridViewEndpoints.Rows[i].Cells["ExcessZeroesPercentage"].Style.BackColor = Color.White;
+                    dataGridViewEndpoints.Rows[i].Cells["ExcessZeroesPercentage"].Style.ForeColor = Color.Black;
                 } else {
                     dataGridViewEndpoints.Rows[i].Cells["ExcessZeroesPercentage"].ReadOnly = true;
                     dataGridViewEndpoints.Rows[i].Cells["ExcessZeroesPercentage"].Style.BackColor = Color.LightGray;
+                    dataGridViewEndpoints.Rows[i].Cells["ExcessZeroesPercentage"].Style.ForeColor = Color.LightGray;
                 }
                 var measurementType = _project.Endpoints[i].Measurement;
                 var datagridCellComboBox = (DataGridViewComboBoxCell)dataGridViewEndpoints.Rows[i].Cells["DistributionType"];

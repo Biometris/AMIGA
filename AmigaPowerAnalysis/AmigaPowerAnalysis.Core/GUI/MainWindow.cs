@@ -127,11 +127,15 @@ namespace AmigaPowerAnalysis.GUI {
         private void onVisibilitySettingsChanged(object sender, EventArgs e) {
             updateTabs();
             if (e != null && e is TabVisibilityChangedEventArgs && ((TabVisibilityChangedEventArgs)e).NavigateToResults) {
-                var analysisResultsPerEndpointPanel = _selectionForms.Where(s => s is AnalysisResultsPerComparisonPanel).First() as AnalysisResultsPerComparisonPanel;
-                var selectedTab = this.tabControl.TabPages.Cast<TabPage>().FirstOrDefault(tp => tp.Name == analysisResultsPerEndpointPanel.Name);
-                if (selectedTab != null) {
-                    this.tabControl.SelectTab(selectedTab);
-                }
+                navigateToResults();
+            }
+        }
+
+        private void navigateToResults() {
+            var analysisResultsPerEndpointPanel = _selectionForms.Where(s => s is AnalysisResultsPerComparisonPanel).First() as AnalysisResultsPerComparisonPanel;
+            var selectedTab = this.tabControl.TabPages.Cast<TabPage>().FirstOrDefault(tp => tp.Name == analysisResultsPerEndpointPanel.Name);
+            if (selectedTab != null) {
+                this.tabControl.SelectTab(selectedTab);
             }
         }
 
