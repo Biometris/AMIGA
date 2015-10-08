@@ -73,7 +73,7 @@ namespace Biometris.Statistics.Distributions {
         }
 
         public override string Description() {
-            return string.Format("Poisson Log-Normal (Mu = {0}, Omega = {1})", Mu, Omega);
+            return string.Format("Poisson Log-Normal (Mu = {0:G3}, Omega = {1:G3})", Mu, Omega);
         }
 
         public static PoissonLogNormalDistribution FromMeanCv(double mu, double cv) {

@@ -66,7 +66,7 @@ namespace Biometris.Statistics.Distributions {
         }
         
         public override string Description() {
-            return string.Format("Poisson (Lambda = {0})", Lambda);
+            return string.Format("Poisson (Lambda = {0:G3})", Lambda);
         }
     }
 }

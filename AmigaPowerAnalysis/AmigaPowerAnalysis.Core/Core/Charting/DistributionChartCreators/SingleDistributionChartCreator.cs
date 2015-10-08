@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Linq;
 using Biometris.Statistics.Distributions;
 using Biometris.Statistics.Measurements;
 using OxyPlot;
 using OxyPlot.Annotations;
 using OxyPlot.Axes;
+using OxyPlot.Series;
 
 namespace AmigaPowerAnalysis.Core.Charting.DistributionChartCreators {
 
@@ -36,20 +38,15 @@ namespace AmigaPowerAnalysis.Core.Charting.DistributionChartCreators {
             if (DistributionChartPreferenceType == DistributionChartPreferenceType.Histogram || DistributionChartPreferenceType == DistributionChartPreferenceType.Both) {
                 var histogram = seriesCreator.Create(DistributionSeriesType.Histogram);
                 plotModel.Series.Add(histogram);
+                _horizontalAxis.Minimum = ((HistogramSeries)histogram).Items.Min(r => r.XMinValue);
+                _horizontalAxis.Maximum = ((HistogramSeries)histogram).Items.Max(r => r.XMaxValue);
             }
             if (DistributionChartPreferenceType == DistributionChartPreferenceType.DistributionFunction || DistributionChartPreferenceType == DistributionChartPreferenceType.Both) {
                 var series = seriesCreator.Create(DistributionSeriesType.LineSeries);
                 plotModel.Series.Add(series);
+                _horizontalAxis.Minimum = ((LineSeries)series).Points.Min(r => r.X);
+                _horizontalAxis.Maximum = ((LineSeries)series).Points.Max(r => r.X);
             }
-
-            if (_distribution.SupportType() == MeasurementType.Count) {
-                //_horizontalAxis.MinorStep = Math.Max(1, _horizontalAxis.ActualMinorStep);
-                //_horizontalAxis.MajorStep = Math.Max(1, _horizontalAxis.ActualMajorStep);
-                //_horizontalAxis.Maximum = 1;
-            }
-            //plotModel.Axes.Clear();
-            //plotModel.Axes.Add(_horizontalAxis);
-            //plotModel.Axes.Add(_verticalAxis);
 
             return plotModel;
         }

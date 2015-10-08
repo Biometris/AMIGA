@@ -80,7 +80,8 @@ namespace Biometris.Statistics.Measurements {
             var transformedMean = Link(mean, measurementType);
             //var transformedLoc = (measurementType != MeasurementType.Continuous) ? Math.Log(loc) : loc;
             var transformedLoc = Math.Log(loc);
-            return InverseLink(transformedMean + transformedLoc, measurementType);
+            var limit = InverseLink(transformedMean + transformedLoc, measurementType);
+            return limit;
         }
 
         public static double ComputeFixCurrentModifier(IEnumerable<double> modifiers, IEnumerable<double> weights, double mean, int index, MeasurementType measurementType) {

@@ -103,7 +103,7 @@ namespace Biometris.Statistics.Distributions {
         }
 
         public override string Description() {
-            return string.Format("Overdispersed Poisson (Lambda = {0}, Omega = {1})", Mu, Omega);
+            return string.Format("Overdispersed Poisson (Lambda = {0:G3}, Omega = {1:G3})", Mu, Omega);
         }
 
         public static OverdispersedPoissonDistribution FromMeanCv(double mu, double cv) {

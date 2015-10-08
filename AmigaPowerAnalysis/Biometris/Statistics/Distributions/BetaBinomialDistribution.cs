@@ -68,7 +68,7 @@ namespace Biometris.Statistics.Distributions {
         }
         
         public override string Description() {
-            return string.Format("Beta-Binomial (Alpa = {0}, Beta = {1}, N = {2})", Alpha, Beta, N);
+            return string.Format("Beta-Binomial (Alpa = {0:G3}, Beta = {1:G3}, N = {2})", Alpha, Beta, N);
         }
     }
 }

@@ -89,6 +89,7 @@ namespace AmigaPowerAnalysis.Core.Charting.DistributionChartCreators {
         private static Series createHistogramSeries(IDistribution distribution, double lowerBound, double upperBound, double step, int numberOfSamples) {
             var bins = createApproximateDensityHistogramBins(distribution, lowerBound, upperBound, step, numberOfSamples);
             var series = new HistogramSeries() {
+                Title = "Approximate distribution " + distribution.Description(),
                 Items = bins
             };
             return series;
@@ -96,8 +97,8 @@ namespace AmigaPowerAnalysis.Core.Charting.DistributionChartCreators {
 
         private static List<HistogramBin> createApproximateDensityHistogramBins(IDistribution distribution, double lowerBound, double upperBound, double step, int numberOfSamples) {
             var samples = distribution.Draw(numberOfSamples);
-            var lb = !double.IsNaN(lowerBound) ? lowerBound : samples.Min();
-            var ub = !double.IsNaN(upperBound) ? upperBound : samples.Max();
+            var lb = samples.Min();
+            var ub = samples.Max();
             var s = double.IsNaN(step) ? GriddingFunctions.GetSmartInterval(lb, ub, 60, computeStep(distribution, lb, ub)) : step;
             if (distribution is IDiscreteDistribution) {
                 s = Math.Ceiling(s);

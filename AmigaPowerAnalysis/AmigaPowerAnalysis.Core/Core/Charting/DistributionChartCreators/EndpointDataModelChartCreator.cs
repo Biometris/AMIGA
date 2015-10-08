@@ -25,16 +25,22 @@ namespace AmigaPowerAnalysis.Core.Charting.DistributionChartCreators {
                 return null;
             }
 
-            if (Endpoint.Measurement == MeasurementType.Continuous) {
-                LowerBound = _distribution.Mean() - 3 * Math.Sqrt(_distribution.Variance());
-                UpperBound = _distribution.Mean() + 3 * Math.Sqrt(_distribution.Variance());
-            } else {
-                LowerBound = 0;
-                UpperBound = MeasurementFactory.ComputeLimit(_distribution.Mean(), 1.5 * Endpoint.LocUpper, _distribution.SupportType());
-            }
-            var histogramTypes = DistributionType.PoissonLogNormal | DistributionType.PowerLaw | DistributionType.OverdispersedPoisson;
+            var histogramTypes = DistributionType.PoissonLogNormal | DistributionType.PowerLaw | DistributionType.OverdispersedPoisson | DistributionType.NegativeBinomial;
+            var locLower = MeasurementFactory.ComputeLimit(_distribution.Mean(), Endpoint.LocLower, _distribution.SupportType());
+            var locUpper = MeasurementFactory.ComputeLimit(_distribution.Mean(), Endpoint.LocUpper, _distribution.SupportType());
             if (histogramTypes.HasFlag(Endpoint.DistributionType)) {
                 DistributionChartPreferenceType = DistributionChartPreferenceType.Histogram;
+            } else if (Endpoint.Measurement == MeasurementType.Count) {
+                LowerBound = Math.Floor(Math.Min(0.9 * locLower, distribution.Mean() - 2 * Math.Sqrt(distribution.Variance())));
+                LowerBound = LowerBound < 0 ? 0 : LowerBound;
+                UpperBound = Math.Ceiling(Math.Max(1.1 * locUpper, distribution.Mean() + 3 * Math.Sqrt(distribution.Variance())));
+            } else if (Endpoint.Measurement == MeasurementType.Nonnegative) {
+                LowerBound = Math.Min(0.9 * locLower, distribution.Mean() - 2 * Math.Sqrt(distribution.Variance()));
+                LowerBound = LowerBound < 0 ? 0 : LowerBound;
+                UpperBound = Math.Max(1.1 * locUpper, distribution.Mean() + 3 * Math.Sqrt(distribution.Variance()));
+            } else if (Endpoint.Measurement == MeasurementType.Continuous) {
+                LowerBound = Math.Floor(Math.Min(0.9 * locLower, distribution.Mean() - 2 * Math.Sqrt(distribution.Variance())));
+                UpperBound = Math.Ceiling(Math.Max(1.1 * locUpper, distribution.Mean() + 2 * Math.Sqrt(distribution.Variance())));
             }
 
             var plotModel = base.Create();
@@ -51,47 +57,28 @@ namespace AmigaPowerAnalysis.Core.Charting.DistributionChartCreators {
             if (!double.IsNaN(Endpoint.LocLower)) {
                 var locLowerLineAnnotation = new LineAnnotation() {
                     Type = LineAnnotationType.Vertical,
-                    X = MeasurementFactory.ComputeLimit(_distribution.Mean(), Endpoint.LocLower, _distribution.SupportType()),
+                    X = locLower,
                     Color = OxyColors.OrangeRed,
                     StrokeThickness = 2,
                     LineStyle = LineStyle.Dash
                 };
                 plotModel.Annotations.Add(locLowerLineAnnotation);
+                _horizontalAxis.Minimum = Math.Min(_horizontalAxis.Minimum, Math.Floor(0.9 * locLower));
             }
 
             if (!double.IsNaN(Endpoint.LocUpper)) {
                 var locUpperLineAnnotation = new LineAnnotation() {
                     Type = LineAnnotationType.Vertical,
-                    X = MeasurementFactory.ComputeLimit(_distribution.Mean(), Endpoint.LocUpper, _distribution.SupportType()),
+                    X = locUpper,
                     Color = OxyColors.OrangeRed,
                     StrokeThickness = 2,
                     LineStyle = LineStyle.Dash
                 };
                 plotModel.Annotations.Add(locUpperLineAnnotation);
+                _horizontalAxis.Maximum = Math.Max(_horizontalAxis.Maximum, Math.Ceiling(1.1 * locUpper));
             }
 
-            var printOutsideRegion = false;
-            if (printOutsideRegion) {
-                if (!double.IsNaN(Endpoint.LocLower)) {
-                    var locLowerRegionAnnotation = new RectangleAnnotation() {
-                        //MinimumX = 0,
-                        MaximumX = MeasurementFactory.ComputeLimit(_distribution.Mean(), Endpoint.LocLower, _distribution.SupportType()),
-                        Fill = OxyColor.FromArgb(99, 255, 0, 0)
-                    };
-                    plotModel.Annotations.Add(locLowerRegionAnnotation);
-                }
-                if (!double.IsNaN(Endpoint.LocUpper)) {
-                    var locUpperAnnotation = new RectangleAnnotation() {
-                        MinimumX = MeasurementFactory.ComputeLimit(_distribution.Mean(), Endpoint.LocUpper, _distribution.SupportType()),
-                        //MaximumX = _distribution.SupportMax(),
-                        Fill = OxyColor.FromArgb(99, 255, 0, 0)
-                    };
-                    plotModel.Annotations.Add(locUpperAnnotation);
-                }
-            }
-
-            var printLoncRegion = true;
-            if (printLoncRegion && (!double.IsNaN(Endpoint.LocUpper) || !double.IsNaN(Endpoint.LocLower))) {
+            if (!double.IsNaN(Endpoint.LocUpper) || !double.IsNaN(Endpoint.LocLower)) {
                 double loncLowerBound, loncUpperBound;
                 if (!double.IsNaN(Endpoint.LocLower)) {
                     loncLowerBound = MeasurementFactory.ComputeLimit(_distribution.Mean(), Endpoint.LocLower, _distribution.SupportType());
@@ -109,15 +96,6 @@ namespace AmigaPowerAnalysis.Core.Charting.DistributionChartCreators {
                     Fill = OxyColor.FromArgb(70, 204, 229, 255)
                 };
                 plotModel.Annotations.Add(loncAnnotation);
-            }
-
-            _horizontalAxis.Minimum = LowerBound;
-            _horizontalAxis.Maximum = UpperBound;
-
-            if (Endpoint.Measurement == MeasurementType.Count) {
-                var step = GriddingFunctions.GetSmartInterval(LowerBound, UpperBound, 9, 1);
-                _horizontalAxis.MinorStep = step;
-                _horizontalAxis.MajorStep = step;
             }
 
             return plotModel;

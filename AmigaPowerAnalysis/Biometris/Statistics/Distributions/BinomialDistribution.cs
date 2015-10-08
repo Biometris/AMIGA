@@ -60,7 +60,7 @@ namespace Biometris.Statistics.Distributions {
         }
 
         public override string Description() {
-            return string.Format("Binomial (P = {0}, N = {1})", P, N);
+            return string.Format("Binomial (P = {0:G3}, N = {1})", P, N);
         }
     }
 }

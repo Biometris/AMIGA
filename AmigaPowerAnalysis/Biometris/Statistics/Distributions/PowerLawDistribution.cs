@@ -70,7 +70,7 @@ namespace Biometris.Statistics.Distributions {
         }
 
         public override string Description() {
-            return string.Format("Power Law");
+            return string.Format("Power Law (Mu = {0:G3}, Omega = {1:G3}, P = {2:G3})", Mu, Omega, Power);
         }
 
         public static PowerLawDistribution FromMeanCv(double mu, double cv, double power) {

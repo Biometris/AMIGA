@@ -80,7 +80,7 @@ namespace Biometris.Statistics.Distributions {
 
         public override string Description() {
             var omega = Math.Pow(CV(), 2) - 1 / Mean();
-            return string.Format("Negative Binomial (Mu = {0}, Omega = {1})", Mean(), omega);
+            return string.Format("Negative Binomial (Mu = {0:G3}, Omega = {1:G3})", Mean(), omega);
         }
 
         public static NegativeBinomialDistribution FromMeanCv(double mu, double cv) {

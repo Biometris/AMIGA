@@ -58,7 +58,7 @@ namespace Biometris.Statistics.Distributions {
         }
 
         public override string Description() {
-            return string.Format("Normal (Mu = {0}, Sigma = {1})", Mu, Sigma);
+            return string.Format("Normal (Mu = {0:G3}, Sigma = {1:G3})", Mu, Sigma);
         }
 
         public static double Draw(double mu, double sigma) {

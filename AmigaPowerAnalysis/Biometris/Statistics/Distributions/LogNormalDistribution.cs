@@ -59,7 +59,7 @@ namespace Biometris.Statistics.Distributions {
         }
 
         public override string Description() {
-            return string.Format("Log-Normal (Mu = {0}, Sigma = {1})", Mu, Sigma);
+            return string.Format("Log-Normal (Mu = {0:G3}, Sigma = {1:G3})", Mu, Sigma);
         }
 
         public static LogNormalDistribution FromMeanCv(double mean, double cv) {
