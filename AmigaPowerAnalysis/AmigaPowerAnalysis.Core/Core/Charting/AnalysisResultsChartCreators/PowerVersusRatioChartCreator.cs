@@ -28,16 +28,16 @@ namespace AmigaPowerAnalysis.Core.Charting.AnalysisResultsChartCreators {
         public static PlotModel Create(List<OutputPowerAnalysisRecord> powerAnalysisOutputRecords, TestType testType, AnalysisMethodType analysisMethodType, MeasurementType measurementType, List<int> blockSizes) {
             var model = AnalysisResultsChartCreatorBase.CreatePlotModel(testType, analysisMethodType);
             Axis horizontalAxis = null;
-            if (measurementType == MeasurementType.Continuous) {
-                horizontalAxis = new LinearAxis() {
-                    Title = "Diff",
-                    MajorGridlineStyle = LineStyle.Solid,
-                    MinorGridlineStyle = LineStyle.Dot,
-                    Position = AxisPosition.Bottom,
-                    AbsoluteMaximum = powerAnalysisOutputRecords.Max(r => r.Effect),
-                    AbsoluteMinimum = powerAnalysisOutputRecords.Min(r => r.Effect),
-                };
-            } else {
+            //if (measurementType == MeasurementType.Continuous) {
+            //    horizontalAxis = new LinearAxis() {
+            //        Title = "Diff",
+            //        MajorGridlineStyle = LineStyle.Solid,
+            //        MinorGridlineStyle = LineStyle.Dot,
+            //        Position = AxisPosition.Bottom,
+            //        AbsoluteMaximum = powerAnalysisOutputRecords.Max(r => r.Effect),
+            //        AbsoluteMinimum = powerAnalysisOutputRecords.Min(r => r.Effect),
+            //    };
+            //} else {
                 horizontalAxis = new LogarithmicAxis() {
                     Title = "Ratio",
                     MajorGridlineStyle = LineStyle.Solid,
@@ -46,7 +46,7 @@ namespace AmigaPowerAnalysis.Core.Charting.AnalysisResultsChartCreators {
                     AbsoluteMaximum = powerAnalysisOutputRecords.Max(r => r.Effect),
                     AbsoluteMinimum = powerAnalysisOutputRecords.Min(r => r.Effect),
                 };
-            }
+            //}
             model.Axes.Add(horizontalAxis);
             if (powerAnalysisOutputRecords != null) {
                 for (int i = 0; i < blockSizes.Count(); ++i) {
