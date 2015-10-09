@@ -117,13 +117,13 @@ namespace AmigaPowerAnalysis.GUI {
                 var endpointsBindingSouce = new BindingSource(_endpointTypes, null);
                 dataGridViewDefaultEndpointGroups.DataSource = endpointsBindingSouce;
                 dataGridViewDefaultEndpointGroups.Update();
-                for (int i = 0; i < dataGridViewDefaultEndpointGroups.RowCount; ++i) {
-                    var combo = this.dataGridViewDefaultEndpointGroups.Rows[i].Cells["DistributionType"] as DataGridViewComboBoxCell;
-                    var measurement = MeasurementType.Count;
-                    var source = DistributionFactory.AvailableDistributionTypes(measurement).GetFlags().Cast<DistributionType>().ToList();
-                    combo.DataSource = source;
-                }
-                dataGridViewDefaultEndpointGroups.Update();
+                //for (int i = 0; i < dataGridViewDefaultEndpointGroups.RowCount; ++i) {
+                //    var combo = this.dataGridViewDefaultEndpointGroups.Rows[i].Cells["DistributionType"] as DataGridViewComboBoxCell;
+                //    var measurement = MeasurementType.Count;
+                //    var source = DistributionFactory.AvailableDistributionTypes(measurement).GetFlags().Cast<DistributionType>().ToList();
+                //    combo.DataSource = source;
+                //}
+                //dataGridViewDefaultEndpointGroups.Update();
             } else {
                 dataGridViewDefaultEndpointGroups.DataSource = null;
                 dataGridViewDefaultEndpointGroups.Update();
