@@ -49,6 +49,8 @@
             this.buttonGenerateDataTemplate = new System.Windows.Forms.Button();
             this.textBoxNumberOfReplicates = new System.Windows.Forms.TextBox();
             this.labelNumberOfReplicates = new System.Windows.Forms.Label();
+            this.buttonExportAnalysisScripts = new System.Windows.Forms.Button();
+            this.textBoxTabDescription = new System.Windows.Forms.RichTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerComparisons)).BeginInit();
             this.splitContainerComparisons.Panel1.SuspendLayout();
             this.splitContainerComparisons.Panel2.SuspendLayout();
@@ -327,6 +329,7 @@
             // 
             // tabPageAnalysisTemplate
             // 
+            this.tabPageAnalysisTemplate.Controls.Add(this.textBoxTabDescription);
             this.tabPageAnalysisTemplate.Controls.Add(this.flowLayoutPanelReport);
             this.tabPageAnalysisTemplate.Location = new System.Drawing.Point(4, 22);
             this.tabPageAnalysisTemplate.Name = "tabPageAnalysisTemplate";
@@ -337,6 +340,7 @@
             // 
             // flowLayoutPanelReport
             // 
+            this.flowLayoutPanelReport.Controls.Add(this.buttonExportAnalysisScripts);
             this.flowLayoutPanelReport.Controls.Add(this.buttonGenerateDataTemplate);
             this.flowLayoutPanelReport.Controls.Add(this.textBoxNumberOfReplicates);
             this.flowLayoutPanelReport.Controls.Add(this.labelNumberOfReplicates);
@@ -350,7 +354,7 @@
             // buttonGenerateDataTemplate
             // 
             this.buttonGenerateDataTemplate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonGenerateDataTemplate.Location = new System.Drawing.Point(407, 3);
+            this.buttonGenerateDataTemplate.Location = new System.Drawing.Point(258, 3);
             this.buttonGenerateDataTemplate.Name = "buttonGenerateDataTemplate";
             this.buttonGenerateDataTemplate.Size = new System.Drawing.Size(143, 23);
             this.buttonGenerateDataTemplate.TabIndex = 0;
@@ -360,7 +364,7 @@
             // 
             // textBoxNumberOfReplicates
             // 
-            this.textBoxNumberOfReplicates.Location = new System.Drawing.Point(359, 3);
+            this.textBoxNumberOfReplicates.Location = new System.Drawing.Point(210, 3);
             this.textBoxNumberOfReplicates.Name = "textBoxNumberOfReplicates";
             this.textBoxNumberOfReplicates.Size = new System.Drawing.Size(42, 20);
             this.textBoxNumberOfReplicates.TabIndex = 11;
@@ -369,12 +373,39 @@
             // labelNumberOfReplicates
             // 
             this.labelNumberOfReplicates.AutoSize = true;
-            this.labelNumberOfReplicates.Location = new System.Drawing.Point(246, 8);
+            this.labelNumberOfReplicates.Location = new System.Drawing.Point(97, 8);
             this.labelNumberOfReplicates.Margin = new System.Windows.Forms.Padding(3, 8, 3, 0);
             this.labelNumberOfReplicates.Name = "labelNumberOfReplicates";
             this.labelNumberOfReplicates.Size = new System.Drawing.Size(107, 13);
             this.labelNumberOfReplicates.TabIndex = 10;
             this.labelNumberOfReplicates.Text = "Number of replicates:";
+            // 
+            // buttonExportAnalysisScripts
+            // 
+            this.buttonExportAnalysisScripts.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonExportAnalysisScripts.Location = new System.Drawing.Point(407, 3);
+            this.buttonExportAnalysisScripts.Name = "buttonExportAnalysisScripts";
+            this.buttonExportAnalysisScripts.Size = new System.Drawing.Size(143, 23);
+            this.buttonExportAnalysisScripts.TabIndex = 12;
+            this.buttonExportAnalysisScripts.Text = "Export analysis script";
+            this.buttonExportAnalysisScripts.UseVisualStyleBackColor = true;
+            this.buttonExportAnalysisScripts.Click += new System.EventHandler(this.buttonExportAnalysisScripts_Click);
+            // 
+            // textBoxTabDescription
+            // 
+            this.textBoxTabDescription.BackColor = System.Drawing.SystemColors.Window;
+            this.textBoxTabDescription.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBoxTabDescription.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.textBoxTabDescription.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textBoxTabDescription.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxTabDescription.Location = new System.Drawing.Point(0, 29);
+            this.textBoxTabDescription.Name = "textBoxTabDescription";
+            this.textBoxTabDescription.ReadOnly = true;
+            this.textBoxTabDescription.Size = new System.Drawing.Size(553, 422);
+            this.textBoxTabDescription.TabIndex = 20;
+            this.textBoxTabDescription.TabStop = false;
+            this.textBoxTabDescription.Text = "This tab allows you to export a data template and analysis scripts for analysis o" +
+    "f the experiment defined in this output.";
             // 
             // AnalysisResultsPanel
             // 
@@ -441,5 +472,7 @@
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel3;
         private System.Windows.Forms.Label labelOutputNameLabel;
         private System.Windows.Forms.Label labelOutputName;
+        private System.Windows.Forms.Button buttonExportAnalysisScripts;
+        private System.Windows.Forms.RichTextBox textBoxTabDescription;
     }
 }

@@ -270,6 +270,10 @@ namespace AmigaPowerAnalysis.GUI {
             }
         }
 
+        private void buttonExportAnalysisScripts_Click(object sender, EventArgs e) {
+            this.showError("Feature not implemented", "This feature is not yet implemented!");
+        }
+
         private void showError(string title, string message) {
             MessageBox.Show(
                     message,
