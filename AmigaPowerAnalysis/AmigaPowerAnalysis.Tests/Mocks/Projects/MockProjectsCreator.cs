@@ -11,11 +11,11 @@ using Biometris.Statistics.Measurements;
 namespace AmigaPowerAnalysis.Tests.Mocks.Projects {
     public static class MockProjectsCreator {
 
-        private static EndpointType PEndpoint = new EndpointType("Endpoint (P)", true, MeasurementType.Count, 0, 0.5, 2, 100, 40, DistributionType.Poisson, 1.7);
-        private static EndpointType OPEndpoint = new EndpointType("Endpoint (OP)", true, MeasurementType.Count, 0, 0.5, 2, 100, 40, DistributionType.OverdispersedPoisson, 1.7);
-        private static EndpointType NBEndpoint = new EndpointType("Endpoint (NB)", true, MeasurementType.Count, 0, 0.5, 2, 100, 40, DistributionType.NegativeBinomial, 1.7);
-        private static EndpointType PLNEndpoint = new EndpointType("Endpoint (PLN)", true, MeasurementType.Count, 0, 0.5, 2, 100, 40, DistributionType.PoissonLogNormal, 1.7);
-        private static EndpointType PLEndpoint = new EndpointType("Endpoint (PL)", true, MeasurementType.Count, 0, 0.5, 2, 100, 40, DistributionType.PowerLaw, 1.7);
+        private static EndpointType PEndpoint = new EndpointType("Endpoint (P)", MeasurementType.Count, 0.5, 2, 100, 40, DistributionType.Poisson, 1.7);
+        private static EndpointType OPEndpoint = new EndpointType("Endpoint (OP)", MeasurementType.Count, 0.5, 2, 100, 40, DistributionType.OverdispersedPoisson, 1.7);
+        private static EndpointType NBEndpoint = new EndpointType("Endpoint (NB)", MeasurementType.Count, 0.5, 2, 100, 40, DistributionType.NegativeBinomial, 1.7);
+        private static EndpointType PLNEndpoint = new EndpointType("Endpoint (PLN)", MeasurementType.Count, 0.5, 2, 100, 40, DistributionType.PoissonLogNormal, 1.7);
+        private static EndpointType PLEndpoint = new EndpointType("Endpoint (PL)", MeasurementType.Count, 0.5, 2, 100, 40, DistributionType.PowerLaw, 1.7);
 
         public static Project MockSimpleOP() {
             var project = new Project() {

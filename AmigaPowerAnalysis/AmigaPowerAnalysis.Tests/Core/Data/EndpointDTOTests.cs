@@ -18,10 +18,10 @@ namespace AmigaPowerAnalysis.Tests.Core {
         private static DTODataFileReader _fileReader = new DTODataFileReader();
 
         private static List<EndpointType> _mockEndpointGroups = new List<EndpointType>() {
-            new EndpointType("Count", true, MeasurementType.Count, 0, 0.5, 1.5, 80, 50, DistributionType.OverdispersedPoisson, 0),
-            new EndpointType("Fraction", true, MeasurementType.Fraction, 0, 0.6, 1.6, 90, 40, DistributionType.BinomialLogitNormal, 0),
-            new EndpointType("Nonnegative", true, MeasurementType.Nonnegative, 0, double.NaN, 1.8, 100, 30, DistributionType.LogNormal, 0),
-            new EndpointType("Continuous", true, MeasurementType.Continuous, 100, 0.8, double.NaN, 110, 20, DistributionType.Normal, 0),
+            new EndpointType("Count", MeasurementType.Count, 0.5, 1.5, 80, 50, DistributionType.OverdispersedPoisson, 0),
+            new EndpointType("Fraction", MeasurementType.Fraction, 0.6, 1.6, 90, 40, DistributionType.BinomialLogitNormal, 0),
+            new EndpointType("Nonnegative", MeasurementType.Nonnegative, double.NaN, 1.8, 100, 30, DistributionType.LogNormal, 0),
+            new EndpointType("Continuous", MeasurementType.Continuous, 0.8, double.NaN, 110, 20, DistributionType.Normal, 0),
         };
 
         [TestMethod]

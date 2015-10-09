@@ -15,7 +15,7 @@ namespace AmigaPowerAnalysis.Tests.Core {
 
         private static string _testPath = Path.Combine(Properties.Settings.Default.TestPath, "ChartCreation");
 
-        private static EndpointType _mockEndpointGroup = new EndpointType("Count", true, MeasurementType.Count, 0, 0.5, 1.5, 80, 50, DistributionType.OverdispersedPoisson, 0);
+        private static EndpointType _mockEndpointGroup = new EndpointType("Count", MeasurementType.Count, 0.5, 1.5, 80, 50, DistributionType.OverdispersedPoisson, 0);
 
         [AssemblyInitialize()]
         public static void AssemblyInit(TestContext context) {
