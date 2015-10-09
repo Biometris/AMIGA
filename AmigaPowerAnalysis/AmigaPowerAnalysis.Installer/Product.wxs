@@ -2,7 +2,7 @@
 <?define ProductVersion = "!(bind.FileVersion.MainExe)" ?>
 <?define ProductUpgradeCode = "{DE4FBCF5-135D-4A27-9D4B-8246CEDF13D2}"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-  <Product Id="*" Name="AmigaPowerAnalysis" Manufacturer="Wageningen UR" Language="1033"
+  <Product Id="*" Name="Amiga Power Analysis" Manufacturer="Wageningen UR" Language="1033"
            Version="$(var.ProductVersion)" UpgradeCode="$(var.ProductUpgradeCode)">
     <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
