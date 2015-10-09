@@ -80,7 +80,7 @@ namespace AmigaPowerAnalysis.GUI {
             combo.DataSource = Enum.GetValues(typeof(DistributionType));
             combo.DataPropertyName = "DistributionType";
             combo.ValueType = typeof(DistributionType);
-            combo.HeaderText = "DistributionType";
+            combo.HeaderText = "Distribution";
             combo.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
             dataGridViewDefaultEndpointGroups.Columns.Add(combo);
 
@@ -147,20 +147,6 @@ namespace AmigaPowerAnalysis.GUI {
             dataGridViewProjectEndpointGroups.Columns.Add(combo);
 
             column = new DataGridViewTextBoxColumn();
-            column.DataPropertyName = "MuComparator";
-            column.Name = "MuComparator";
-            column.HeaderText = "Mean";
-            column.ValueType = typeof(double);
-            dataGridViewProjectEndpointGroups.Columns.Add(column);
-
-            column = new DataGridViewTextBoxColumn();
-            column.DataPropertyName = "CvComparator";
-            column.Name = "CvComparator";
-            column.HeaderText = "CV";
-            column.ValueType = typeof(double);
-            dataGridViewProjectEndpointGroups.Columns.Add(column);
-
-            column = new DataGridViewTextBoxColumn();
             column.DataPropertyName = "LocLower";
             column.Name = "LocLower";
             column.ValueType = typeof(double);
@@ -176,16 +162,30 @@ namespace AmigaPowerAnalysis.GUI {
             combo.DataSource = Enum.GetValues(typeof(DistributionType));
             combo.DataPropertyName = "DistributionType";
             combo.ValueType = typeof(DistributionType);
-            combo.HeaderText = "DistributionType";
+            combo.HeaderText = "Distribution";
             combo.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
             dataGridViewProjectEndpointGroups.Columns.Add(combo);
 
             column = new DataGridViewTextBoxColumn();
-            column.DataPropertyName = "BinomialTotal";
-            column.Name = "BinomialTotal";
-            column.HeaderText = "Binomial total";
-            column.ValueType = typeof(int);
+            column.DataPropertyName = "MuComparator";
+            column.Name = "MuComparator";
+            column.HeaderText = "Mean";
+            column.ValueType = typeof(double);
             dataGridViewProjectEndpointGroups.Columns.Add(column);
+
+            column = new DataGridViewTextBoxColumn();
+            column.DataPropertyName = "CvComparator";
+            column.Name = "CvComparator";
+            column.HeaderText = "CV";
+            column.ValueType = typeof(double);
+            dataGridViewProjectEndpointGroups.Columns.Add(column);
+
+            //column = new DataGridViewTextBoxColumn();
+            //column.DataPropertyName = "BinomialTotal";
+            //column.Name = "BinomialTotal";
+            //column.HeaderText = "Binomial total";
+            //column.ValueType = typeof(int);
+            //dataGridViewProjectEndpointGroups.Columns.Add(column);
 
             column = new DataGridViewTextBoxColumn();
             column.DataPropertyName = "PowerLawPower";
