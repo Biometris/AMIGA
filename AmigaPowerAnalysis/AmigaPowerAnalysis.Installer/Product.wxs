@@ -42,8 +42,6 @@
       <Directory Id="ProgramFilesFolder">
         <Directory Id="INSTALLFOLDER" Name="AmigaPowerAnalysis">
           <Directory Id="Resources" Name="Resources">
-            <Directory Id="WkHtmlToPdf" Name="WkHtmlToPdf">
-            </Directory>
           </Directory>
         </Directory>
       </Directory>
@@ -140,7 +138,7 @@
   </Fragment>
 
   <Fragment>
-    <ComponentGroup Id="ManualGroup" Directory="Manual">
+    <ComponentGroup Id="ManualGroup" Directory="INSTALLFOLDER">
       <Component Guid="{3B4D0D4C-16AF-4C91-BF07-675EBE8F83E0}">
         <File Source="..\AmigaPowerAnalysis.Core\bin\Release\Manual\User Manual.pdf" KeyPath="yes" />
       </Component>
