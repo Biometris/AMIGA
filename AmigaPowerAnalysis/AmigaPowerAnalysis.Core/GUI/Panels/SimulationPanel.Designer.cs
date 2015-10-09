@@ -152,8 +152,7 @@
             this.labelNumberOfRatios.Name = "labelNumberOfRatios";
             this.labelNumberOfRatios.Size = new System.Drawing.Size(524, 13);
             this.labelNumberOfRatios.TabIndex = 2;
-            this.labelNumberOfRatios.Text = "Number of evaluation points between no-difference and each limit of concern for w" +
-    "hich to calculate the power";
+            this.labelNumberOfRatios.Text = "Number of levels between no-difference and each LoC for which to calculate the power";
             // 
             // textBoxSignificanceLevel
             // 
