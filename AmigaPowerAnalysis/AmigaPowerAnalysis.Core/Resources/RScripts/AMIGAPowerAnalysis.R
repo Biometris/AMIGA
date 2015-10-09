@@ -97,7 +97,7 @@ ropoisson <- function(n, mean, dispersion=NaN, power=NaN,
     sigma2 <- log(dispersion+1)
     sample <- exp(rnorm(n, lambda, sqrt(sigma2)))
     sample <- rpois(n, sample)
-  } else if ((type == "PowerLaw") && (TRUE)) { # Powerlaw by negative binomial
+  } else if (type == "PowerLaw") { # Powerlaw by negative binomial
     if (min(dispersion) <= 0) {
       stop("The dispersion parameter must be larger than 0 for the PowerLaw distribution.", call. = FALSE)
     }
@@ -105,15 +105,14 @@ ropoisson <- function(n, mean, dispersion=NaN, power=NaN,
       stop("The power parameter must be interval [1,2].", call. = FALSE)
     }
     dispNegbin = (dispersion*mean^power - mean)/(mean*mean)
-    if (min(dispNegbin) <= 0) {
-      stop("For some parameters of the PowerLaw distribution the calculated dispersion parameter of the negative binomial distribution is not positive.", call. = FALSE)
+    if (min(dispNegbin) <= 0) { # use Poisson as limiting distribution
+      sample <- rpois(n, mean)
+    } else { # Use negative binomial distribution
+      s <- dispNegbin*mean
+      a <- mean/s
+      sample <- rgamma(n, shape=a, scale=s)
+      sample <- rpois(n, sample)
     }
-    # Use negative binomial
-    s <- dispNegbin*mean
-    a <- mean/s
-    sample <- rgamma(n, shape=a, scale=s)
-    sample <- rpois(n, sample)
-  } else if ((type == "PowerLaw") && (FALSE)) { # Powerlaw by overdispersed Poisson
   }
   # Add excess Zero
   if (excessZero > 0.0) {
