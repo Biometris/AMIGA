@@ -26,7 +26,7 @@ namespace AmigaPowerAnalysis.GUI {
         public AnalysisResultsPanel(Project project) {
             InitializeComponent();
             Name = "Combined results";
-            Description = "The power analysis is based on the minimum power across the primary comparisons, in terms of Concern Standardized Differences (CSD, equals 1 at the Limit of Concern ).\r\nSelect primary comparisons. Choose method of analysis if more have been investigated.\r\n\r\nPower is shown for difference tests (upper graphs) and equivalence tests (lower graphs), both as a function of the number of replicates (left) and the Concern Standardized Difference (right).\r\nNote: Number of plots in design is Number of replicates times Number of plots per block";
+            Description = "The power analysis is based on the minimum power across the primary comparisons, in terms of Concern Standardized Differences (CSD, equals 1 at the Limit of Concern).\r\nSelect primary comparisons. Choose method of analysis for diffeence and equivalence tests if more have been investigated.\r\n\r\nPower is shown for difference tests and equivalence tests, as a function of the CSD or the number of replicates.";
             _project = project;
             _currentPlotType = AnalysisPlotType.ConcernStandardizedDifference;
             dataGridViewComparisons.AutoGenerateColumns = false;
