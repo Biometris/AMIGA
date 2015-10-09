@@ -59,11 +59,12 @@
             this.dataGridViewDefaultEndpointGroups.BackgroundColor = System.Drawing.Color.White;
             this.dataGridViewDefaultEndpointGroups.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewDefaultEndpointGroups.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
-            this.dataGridViewDefaultEndpointGroups.Location = new System.Drawing.Point(0, 33);
+            this.dataGridViewDefaultEndpointGroups.Location = new System.Drawing.Point(0, 29);
+            this.dataGridViewDefaultEndpointGroups.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
             this.dataGridViewDefaultEndpointGroups.Name = "dataGridViewDefaultEndpointGroups";
             this.dataGridViewDefaultEndpointGroups.RowHeadersWidth = 24;
             this.dataGridViewDefaultEndpointGroups.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            this.dataGridViewDefaultEndpointGroups.Size = new System.Drawing.Size(848, 172);
+            this.dataGridViewDefaultEndpointGroups.Size = new System.Drawing.Size(858, 181);
             this.dataGridViewDefaultEndpointGroups.TabIndex = 2;
             this.dataGridViewDefaultEndpointGroups.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.dataGridViewEndpointTypes_CellValidating);
             this.dataGridViewDefaultEndpointGroups.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dataGridViewEndpointTypes_DataError);
@@ -71,7 +72,7 @@
             // addDefaultEndpointGroupButton
             // 
             this.addDefaultEndpointGroupButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.addDefaultEndpointGroupButton.Location = new System.Drawing.Point(575, 0);
+            this.addDefaultEndpointGroupButton.Location = new System.Drawing.Point(585, -1);
             this.addDefaultEndpointGroupButton.Name = "addDefaultEndpointGroupButton";
             this.addDefaultEndpointGroupButton.Size = new System.Drawing.Size(112, 27);
             this.addDefaultEndpointGroupButton.TabIndex = 3;
@@ -82,7 +83,7 @@
             // buttonDeleteDefaultEndpointGroup
             // 
             this.buttonDeleteDefaultEndpointGroup.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonDeleteDefaultEndpointGroup.Location = new System.Drawing.Point(693, 0);
+            this.buttonDeleteDefaultEndpointGroup.Location = new System.Drawing.Point(703, -1);
             this.buttonDeleteDefaultEndpointGroup.Name = "buttonDeleteDefaultEndpointGroup";
             this.buttonDeleteDefaultEndpointGroup.Size = new System.Drawing.Size(155, 27);
             this.buttonDeleteDefaultEndpointGroup.TabIndex = 4;
@@ -93,10 +94,10 @@
             // labelMyEndpointGroups
             // 
             this.labelMyEndpointGroups.AutoSize = true;
-            this.labelMyEndpointGroups.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelMyEndpointGroups.Font = new System.Drawing.Font("MS Reference Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelMyEndpointGroups.Location = new System.Drawing.Point(3, 7);
             this.labelMyEndpointGroups.Name = "labelMyEndpointGroups";
-            this.labelMyEndpointGroups.Size = new System.Drawing.Size(122, 13);
+            this.labelMyEndpointGroups.Size = new System.Drawing.Size(182, 19);
             this.labelMyEndpointGroups.TabIndex = 5;
             this.labelMyEndpointGroups.Text = "My endpoint groups:";
             // 
@@ -105,7 +106,7 @@
             this.splitContainer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.splitContainer.Location = new System.Drawing.Point(13, 13);
+            this.splitContainer.Location = new System.Drawing.Point(8, 8);
             this.splitContainer.Name = "splitContainer";
             this.splitContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -116,8 +117,8 @@
             // splitContainer.Panel2
             // 
             this.splitContainer.Panel2.Controls.Add(this.panelProjectEndpointGroups);
-            this.splitContainer.Size = new System.Drawing.Size(848, 477);
-            this.splitContainer.SplitterDistance = 238;
+            this.splitContainer.Size = new System.Drawing.Size(858, 487);
+            this.splitContainer.SplitterDistance = 242;
             this.splitContainer.TabIndex = 6;
             // 
             // panelMyEndpointGroups
@@ -131,14 +132,14 @@
             this.panelMyEndpointGroups.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelMyEndpointGroups.Location = new System.Drawing.Point(0, 0);
             this.panelMyEndpointGroups.Name = "panelMyEndpointGroups";
-            this.panelMyEndpointGroups.Size = new System.Drawing.Size(848, 238);
+            this.panelMyEndpointGroups.Size = new System.Drawing.Size(858, 242);
             this.panelMyEndpointGroups.TabIndex = 0;
             // 
             // buttonAddToDefault
             // 
             this.buttonAddToDefault.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.buttonAddToDefault.Image = ((System.Drawing.Image)(resources.GetObject("buttonAddToDefault.Image")));
-            this.buttonAddToDefault.Location = new System.Drawing.Point(38, 211);
+            this.buttonAddToDefault.Location = new System.Drawing.Point(38, 215);
             this.buttonAddToDefault.Name = "buttonAddToDefault";
             this.buttonAddToDefault.Size = new System.Drawing.Size(32, 27);
             this.buttonAddToDefault.TabIndex = 7;
@@ -149,7 +150,7 @@
             // 
             this.buttonAddToProject.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.buttonAddToProject.Image = ((System.Drawing.Image)(resources.GetObject("buttonAddToProject.Image")));
-            this.buttonAddToProject.Location = new System.Drawing.Point(0, 211);
+            this.buttonAddToProject.Location = new System.Drawing.Point(0, 215);
             this.buttonAddToProject.Name = "buttonAddToProject";
             this.buttonAddToProject.Size = new System.Drawing.Size(32, 27);
             this.buttonAddToProject.TabIndex = 6;
@@ -165,13 +166,13 @@
             this.panelProjectEndpointGroups.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelProjectEndpointGroups.Location = new System.Drawing.Point(0, 0);
             this.panelProjectEndpointGroups.Name = "panelProjectEndpointGroups";
-            this.panelProjectEndpointGroups.Size = new System.Drawing.Size(848, 235);
+            this.panelProjectEndpointGroups.Size = new System.Drawing.Size(858, 241);
             this.panelProjectEndpointGroups.TabIndex = 0;
             // 
             // buttonRemoveProjectEndpoint
             // 
             this.buttonRemoveProjectEndpoint.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonRemoveProjectEndpoint.Location = new System.Drawing.Point(693, 0);
+            this.buttonRemoveProjectEndpoint.Location = new System.Drawing.Point(703, -1);
             this.buttonRemoveProjectEndpoint.Name = "buttonRemoveProjectEndpoint";
             this.buttonRemoveProjectEndpoint.Size = new System.Drawing.Size(155, 27);
             this.buttonRemoveProjectEndpoint.TabIndex = 9;
@@ -182,7 +183,7 @@
             // buttonAddProjectEndpoint
             // 
             this.buttonAddProjectEndpoint.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonAddProjectEndpoint.Location = new System.Drawing.Point(575, 0);
+            this.buttonAddProjectEndpoint.Location = new System.Drawing.Point(585, -1);
             this.buttonAddProjectEndpoint.Name = "buttonAddProjectEndpoint";
             this.buttonAddProjectEndpoint.Size = new System.Drawing.Size(112, 27);
             this.buttonAddProjectEndpoint.TabIndex = 8;
@@ -193,10 +194,10 @@
             // labelProjectEndpointGroups
             // 
             this.labelProjectEndpointGroups.AutoSize = true;
-            this.labelProjectEndpointGroups.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelProjectEndpointGroups.Font = new System.Drawing.Font("MS Reference Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelProjectEndpointGroups.Location = new System.Drawing.Point(3, 7);
             this.labelProjectEndpointGroups.Name = "labelProjectEndpointGroups";
-            this.labelProjectEndpointGroups.Size = new System.Drawing.Size(190, 13);
+            this.labelProjectEndpointGroups.Size = new System.Drawing.Size(287, 19);
             this.labelProjectEndpointGroups.TabIndex = 7;
             this.labelProjectEndpointGroups.Text = "Current project endpoint groups:";
             // 
@@ -212,11 +213,11 @@
             this.dataGridViewProjectEndpointGroups.BackgroundColor = System.Drawing.Color.White;
             this.dataGridViewProjectEndpointGroups.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewProjectEndpointGroups.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
-            this.dataGridViewProjectEndpointGroups.Location = new System.Drawing.Point(0, 33);
+            this.dataGridViewProjectEndpointGroups.Location = new System.Drawing.Point(0, 31);
             this.dataGridViewProjectEndpointGroups.Name = "dataGridViewProjectEndpointGroups";
             this.dataGridViewProjectEndpointGroups.RowHeadersWidth = 24;
             this.dataGridViewProjectEndpointGroups.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            this.dataGridViewProjectEndpointGroups.Size = new System.Drawing.Size(848, 199);
+            this.dataGridViewProjectEndpointGroups.Size = new System.Drawing.Size(858, 207);
             this.dataGridViewProjectEndpointGroups.TabIndex = 6;
             // 
             // EndpointTypesPanel
@@ -226,7 +227,7 @@
             this.BackColor = System.Drawing.SystemColors.Window;
             this.Controls.Add(this.splitContainer);
             this.Name = "EndpointTypesPanel";
-            this.Padding = new System.Windows.Forms.Padding(10);
+            this.Padding = new System.Windows.Forms.Padding(5);
             this.Size = new System.Drawing.Size(874, 503);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewDefaultEndpointGroups)).EndInit();
             this.splitContainer.Panel1.ResumeLayout(false);

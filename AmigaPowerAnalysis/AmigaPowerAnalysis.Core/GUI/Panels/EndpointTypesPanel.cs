@@ -69,20 +69,6 @@ namespace AmigaPowerAnalysis.GUI {
             dataGridViewDefaultEndpointGroups.Columns.Add(combo);
 
             column = new DataGridViewTextBoxColumn();
-            column.DataPropertyName = "MuComparator";
-            column.Name = "MuComparator";
-            column.HeaderText = "Mean";
-            column.ValueType = typeof(double);
-            dataGridViewDefaultEndpointGroups.Columns.Add(column);
-
-            column = new DataGridViewTextBoxColumn();
-            column.DataPropertyName = "CvComparator";
-            column.Name = "CvComparator";
-            column.HeaderText = "CV";
-            column.ValueType = typeof(double);
-            dataGridViewDefaultEndpointGroups.Columns.Add(column);
-
-            column = new DataGridViewTextBoxColumn();
             column.DataPropertyName = "LocLower";
             column.Name = "LocLower";
             column.ValueType = typeof(double);
@@ -103,11 +89,25 @@ namespace AmigaPowerAnalysis.GUI {
             dataGridViewDefaultEndpointGroups.Columns.Add(combo);
 
             column = new DataGridViewTextBoxColumn();
-            column.DataPropertyName = "BinomialTotal";
-            column.Name = "BinomialTotal";
-            column.HeaderText = "Binomial total";
-            column.ValueType = typeof(int);
+            column.DataPropertyName = "MuComparator";
+            column.Name = "MuComparator";
+            column.HeaderText = "Mean";
+            column.ValueType = typeof(double);
             dataGridViewDefaultEndpointGroups.Columns.Add(column);
+
+            column = new DataGridViewTextBoxColumn();
+            column.DataPropertyName = "CvComparator";
+            column.Name = "CvComparator";
+            column.HeaderText = "CV";
+            column.ValueType = typeof(double);
+            dataGridViewDefaultEndpointGroups.Columns.Add(column);
+
+            //column = new DataGridViewTextBoxColumn();
+            //column.DataPropertyName = "BinomialTotal";
+            //column.Name = "BinomialTotal";
+            //column.HeaderText = "Binomial total";
+            //column.ValueType = typeof(int);
+            //dataGridViewDefaultEndpointGroups.Columns.Add(column);
 
             column = new DataGridViewTextBoxColumn();
             column.DataPropertyName = "PowerLawPower";
