@@ -210,6 +210,7 @@ namespace AmigaPowerAnalysis.GUI {
                 this.dataGridViewEndpoints.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewEndpoints_CellValueChanged);
             }
             updateEditableColumns();
+            dataGridViewEndpoints.Refresh();
             updateEndpointDistributionChart();
         }
 
