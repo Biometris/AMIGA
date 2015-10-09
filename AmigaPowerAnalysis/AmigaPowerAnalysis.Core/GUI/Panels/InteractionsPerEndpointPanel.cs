@@ -18,7 +18,7 @@ namespace AmigaPowerAnalysis.GUI {
             InitializeComponent();
             _project = project;
             Name = "Define comparison per endpoint";
-            Description = "The Test-CMP comparison may be restricted to a subset of levels of additional factors for the Test and/or for the CMP. Indicate per endpoint any factors for which this is relevant, and uncheck the levels to be excluded.";
+            Description = "The Test-Comparator comparison may be restricted to a subset of levels of additional factors for the Test and/or for the Comparator. Indicate per endpoint any factors for which this is relevant, and uncheck the levels to be excluded.";
             createDataGridInteractions();
         }
 
