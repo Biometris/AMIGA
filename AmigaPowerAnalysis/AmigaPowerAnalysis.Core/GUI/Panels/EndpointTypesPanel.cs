@@ -43,12 +43,8 @@ namespace AmigaPowerAnalysis.GUI {
         public void updateVisibilities() {
             if (_project != null && _project.EndpointTypes.Count > 0) {
                 splitContainer.Panel2.Show();
-                buttonAddToProject.Visible = true;
-                buttonAddToDefault.Visible = true;
             } else {
                 splitContainer.Panel2.Hide();
-                buttonAddToProject.Visible = false;
-                buttonAddToDefault.Visible = false;
             }
         }
 
