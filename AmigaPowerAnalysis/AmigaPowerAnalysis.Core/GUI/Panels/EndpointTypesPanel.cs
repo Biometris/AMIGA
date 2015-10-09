@@ -117,13 +117,6 @@ namespace AmigaPowerAnalysis.GUI {
                 var endpointsBindingSouce = new BindingSource(_endpointTypes, null);
                 dataGridViewDefaultEndpointGroups.DataSource = endpointsBindingSouce;
                 dataGridViewDefaultEndpointGroups.Update();
-                //for (int i = 0; i < dataGridViewDefaultEndpointGroups.RowCount; ++i) {
-                //    var combo = this.dataGridViewDefaultEndpointGroups.Rows[i].Cells["DistributionType"] as DataGridViewComboBoxCell;
-                //    var measurement = MeasurementType.Count;
-                //    var source = DistributionFactory.AvailableDistributionTypes(measurement).GetFlags().Cast<DistributionType>().ToList();
-                //    combo.DataSource = source;
-                //}
-                //dataGridViewDefaultEndpointGroups.Update();
             } else {
                 dataGridViewDefaultEndpointGroups.DataSource = null;
                 dataGridViewDefaultEndpointGroups.Update();
@@ -297,6 +290,24 @@ namespace AmigaPowerAnalysis.GUI {
         private void dataGridViewEndpointTypes_CellValidating(object sender, DataGridViewCellValidatingEventArgs e) {
             if (dataGridViewDefaultEndpointGroups.Columns[e.ColumnIndex].Name == "Name") {
 
+            }
+        }
+
+        private void dataGridViewDefaultEndpointGroups_CellClick(object sender, DataGridViewCellEventArgs e) {
+            if (dataGridViewDefaultEndpointGroups.Columns[e.ColumnIndex].Name == "DistributionType") {
+                var measurement = _endpointTypes[dataGridViewDefaultEndpointGroups.CurrentRow.Index].Measurement;
+                var combo = this.dataGridViewDefaultEndpointGroups.Rows[e.RowIndex].Cells["DistributionType"] as DataGridViewComboBoxCell;
+                var source = DistributionFactory.AvailableDistributionTypes(measurement).GetFlags().Cast<DistributionType>().ToList();
+                combo.DataSource = source;
+            }
+        }
+
+        private void dataGridViewProjectEndpointGroups_CellContentClick(object sender, DataGridViewCellEventArgs e) {
+            if (dataGridViewProjectEndpointGroups.Columns[e.ColumnIndex].Name == "DistributionType") {
+                var measurement = _endpointTypes[dataGridViewProjectEndpointGroups.CurrentRow.Index].Measurement;
+                var combo = this.dataGridViewProjectEndpointGroups.Rows[e.RowIndex].Cells["DistributionType"] as DataGridViewComboBoxCell;
+                var source = DistributionFactory.AvailableDistributionTypes(measurement).GetFlags().Cast<DistributionType>().ToList();
+                combo.DataSource = source;
             }
         }
 
