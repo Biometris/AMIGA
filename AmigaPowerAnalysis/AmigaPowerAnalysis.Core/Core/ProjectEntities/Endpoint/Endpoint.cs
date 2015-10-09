@@ -374,7 +374,7 @@ namespace AmigaPowerAnalysis.Core {
 
         public void SetModifier(ModifierFactorLevelCombination modifier, double value = double.NaN) {
             int index = (modifier != null) ? Modifiers.IndexOf(modifier) : -1;
-            if (index > 0) {
+            if (index >= 0) {
                 var weights = Modifiers.Select(m => m.Frequency).ToList();
                 var newModifiers = Modifiers.Select(m => m.ModifierFactor).ToList();
                 newModifiers[index] = double.IsNaN(value) ? newModifiers[index] : value;

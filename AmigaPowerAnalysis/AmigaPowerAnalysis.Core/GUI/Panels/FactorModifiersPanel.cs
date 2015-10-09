@@ -107,7 +107,6 @@ namespace AmigaPowerAnalysis.GUI {
                     var row = dataGridViewFactorModifiers.Rows[i];
                     var index = (int)row.Cells["_index"].Value;
                     var modifier = _currentFactorModifiers[index];
-                    row.Cells["_index"].Value = i;
                     row.Cells["Modifier"].Value = Math.Round(modifier.ModifierFactor, 2);
                     row.Cells["Frequency"].Value = Math.Round(modifier.Frequency, 2);
                     row.Cells["Modified mean"].Value = Math.Round(MeasurementFactory.Modify(_currentEndpoint.MuComparator, modifier.ModifierFactor, _currentEndpoint.Measurement), 2);
@@ -133,7 +132,7 @@ namespace AmigaPowerAnalysis.GUI {
             if (_currentEndpoint != null) {
                 if (editedCell.ColumnIndex == dataGridViewFactorModifiers.Columns["Modifier"].Index) {
                     var index = (int)dataGridViewFactorModifiers.Rows[e.RowIndex].Cells["_index"].Value;
-                    var modifier = _currentEndpoint.Modifiers[index];
+                    var modifier = _currentFactorModifiers[index];
                     _currentEndpoint.SetModifier(modifier, (double)editedCell.Value);
                     updateDataGridFactorModifierValues();
                 }
