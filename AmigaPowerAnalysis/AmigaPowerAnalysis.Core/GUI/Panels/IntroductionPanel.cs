@@ -9,7 +9,7 @@ namespace AmigaPowerAnalysis.GUI {
         public IntroductionPanel() {
             InitializeComponent();
             Name = "Introduction";
-            Description = "Welcome to APA, the Amiga Power Analysis tool for environmental risk assessment (ERA) using field trials.\r\nYou can calculate the necessary replication for assessing differences and equivalences between a test and a comparator plant variety under different data models for count and continuous data.\r\nAPA allows to specify the experimental design, additional factors in the experiment, and the method of statistical analysis that will be used.\r\nNote: The current implementation requires that the statistical system R is available (http://www.r-project.org/).\r\n\r\nStart by opening an existing file or creating a new file (File menu).";
+            Description = "Welcome to APA, the Amiga Power Analysis tool for environmental risk assessment (ERA) using field trials.\r\nYou can calculate the necessary replication for assessing differences and equivalences between a test and a comparator plant variety under different data models for count and continuous data.\r\nAPA allows to specify the experimental design, additional factors in the experiment, and the method of statistical analysis that will be used.\r\nNote: The current implementation requires that the statistical system R is available (http://www.r-project.org/).\r\n\r\nStart by opening an existing or creating a new XML file (File menu).";
         }
 
         public event EventHandler TabVisibilitiesChanged;
