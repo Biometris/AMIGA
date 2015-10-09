@@ -149,12 +149,19 @@ namespace AmigaPowerAnalysis.GUI {
             var plotType = _currentPlotType;
             var records = _resultPowerAnalysis.GetAggregateOutputRecords().ToList();
             var primaryComparisons = _resultPowerAnalysis.GetPrimaryComparisons().ToList();
-            if (plotType == AnalysisPlotType.Replicates) {
-                plotViewDifference.Model = PowerVersusReplicatesCsdChartCreator.Create(records, TestType.Difference);
-                plotViewEquivalence.Model = PowerVersusReplicatesCsdChartCreator.Create(records, TestType.Equivalence);
-            } else if (plotType == AnalysisPlotType.ConcernStandardizedDifference) {
-                plotViewDifference.Model = PowerVersusCsdChartCreator.Create(records, TestType.Difference, _resultPowerAnalysis.ComparisonPowerAnalysisResults.First().InputPowerAnalysis.NumberOfReplications);
-                plotViewEquivalence.Model = PowerVersusCsdChartCreator.Create(records, TestType.Equivalence, _resultPowerAnalysis.ComparisonPowerAnalysisResults.First().InputPowerAnalysis.NumberOfReplications);
+            if (primaryComparisons.Count > 0) {
+                if (plotType == AnalysisPlotType.Replicates) {
+                    plotViewDifference.Model = PowerVersusReplicatesCsdChartCreator.Create(records, TestType.Difference);
+                    plotViewEquivalence.Model = PowerVersusReplicatesCsdChartCreator.Create(records, TestType.Equivalence);
+                } else if (plotType == AnalysisPlotType.ConcernStandardizedDifference) {
+                    plotViewDifference.Model = PowerVersusCsdChartCreator.Create(records, TestType.Difference, _resultPowerAnalysis.ComparisonPowerAnalysisResults.First().InputPowerAnalysis.NumberOfReplications);
+                    plotViewEquivalence.Model = PowerVersusCsdChartCreator.Create(records, TestType.Equivalence, _resultPowerAnalysis.ComparisonPowerAnalysisResults.First().InputPowerAnalysis.NumberOfReplications);
+                }
+            } else {
+                plotViewDifference.Model = null;
+                plotViewEquivalence.Model = null;
+                plotViewDifference.Model = null;
+                plotViewEquivalence.Model = null;
             }
         }
 
