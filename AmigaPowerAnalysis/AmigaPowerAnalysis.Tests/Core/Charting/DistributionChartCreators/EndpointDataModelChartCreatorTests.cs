@@ -25,51 +25,43 @@ namespace AmigaPowerAnalysis.Tests.Core {
         }
 
         [TestMethod]
+        [TestCategory("UnitTests")]
         public void EndpointDataModelChartCreator_NormalTest() {
-            createChart(MeasurementType.Count, 0.5, 2, DistributionType.Normal, 2, 100, 1.7);
+            createChart(MeasurementType.Continuous, 0.5, double.NaN, DistributionType.Normal, 10, 2, 1.7);
         }
 
         [TestMethod]
+        [TestCategory("UnitTests")]
         public void EndpointDataModelChartCreator_LogNormalTest() {
             createChart(MeasurementType.Count, 0.5, 2, DistributionType.LogNormal, 2, 100, 1.7);
         }
 
         [TestMethod]
+        [TestCategory("UnitTests")]
         public void EndpointDataModelChartCreator_PoissonTest() {
             createChart(MeasurementType.Count, double.NaN, 2, DistributionType.Poisson, 10, 2, 1.7);
         }
 
         [TestMethod]
+        [TestCategory("UnitTests")]
         public void EndpointDataModelChartCreator_OverdispersedPoissonTest() {
             createChart(MeasurementType.Count, 0.5, 2, DistributionType.OverdispersedPoisson, 2, 100, 1.7);
         }
 
         [TestMethod]
+        [TestCategory("UnitTests")]
         public void EndpointDataModelChartCreator_PoissonLogNormalTest() {
             createChart(MeasurementType.Count, 0.5, 2, DistributionType.PoissonLogNormal, 2, 100, 1.7);
         }
 
         [TestMethod]
+        [TestCategory("UnitTests")]
         public void EndpointDataModelChartCreator_PowerLawTest() {
             createChart(MeasurementType.Count, 0.5, 2, DistributionType.PowerLaw, 2, 100, 1.7);
         }
 
-        private static void createChart(MeasurementType measurementType, double locLower, double locUpper, DistributionType distributiontype, double mu, double cv, double power) {
-            var id = string.Format("{0}_{1}_{2}_{3}_{4}_{5}_{6}", measurementType, locLower, locUpper, distributiontype, mu, cv, power);
-            var endpoint = new Endpoint("Endpoint", _mockEndpointGroup) {
-                Measurement = measurementType,
-                LocLower = locLower,
-                LocUpper = locUpper,
-                MuComparator = mu,
-                CvComparator = cv,
-                PowerLawPower = power,
-                DistributionType = distributiontype,
-            };
-            var chartCreator = new EndpointDataModelChartCreator(endpoint);
-            chartCreator.SaveToFile(Path.Combine(_testPath, id + ".png"));
-        }
-
         [TestMethod]
+        [TestCategory("UnitTests")]
         public void EndpointDataModelChartCreator_TestMultiple() {
             var measurements = new List<MeasurementType>() { MeasurementType.Count, MeasurementType.Continuous, MeasurementType.Nonnegative };
             foreach (var measurement in measurements) {
@@ -92,6 +84,21 @@ namespace AmigaPowerAnalysis.Tests.Core {
                     createChart(measurement, 0.99, 1.01, distribution, 10, 2, 1.7);
                 }
             }
+        }
+
+        private static void createChart(MeasurementType measurementType, double locLower, double locUpper, DistributionType distributiontype, double mu, double cv, double power) {
+            var id = string.Format("{0}_{1}_{2}_{3}_{4}_{5}_{6}", measurementType, locLower, locUpper, distributiontype, mu, cv, power);
+            var endpoint = new Endpoint("Endpoint", _mockEndpointGroup) {
+                Measurement = measurementType,
+                LocLower = locLower,
+                LocUpper = locUpper,
+                MuComparator = mu,
+                CvComparator = cv,
+                PowerLawPower = power,
+                DistributionType = distributiontype,
+            };
+            var chartCreator = new EndpointDataModelChartCreator(endpoint);
+            chartCreator.SaveToFile(Path.Combine(_testPath, id + ".png"));
         }
     }
 }

@@ -35,12 +35,29 @@ namespace AmigaPowerAnalysis.Core.Charting.DistributionChartCreators {
                 LowerBound = LowerBound < 0 ? 0 : LowerBound;
                 UpperBound = Math.Ceiling(Math.Max(1.1 * locUpper, distribution.Mean() + 3 * Math.Sqrt(distribution.Variance())));
             } else if (Endpoint.Measurement == MeasurementType.Nonnegative) {
-                LowerBound = Math.Min(0.9 * locLower, distribution.Mean() - 2 * Math.Sqrt(distribution.Variance()));
+                if (!double.IsNaN(locLower)) {
+                    LowerBound = Math.Min(0.9 * locLower, distribution.Mean() - 2 * Math.Sqrt(distribution.Variance()));
+                } else {
+                    LowerBound = distribution.Mean() - 2 * Math.Sqrt(distribution.Variance());
+                }
                 LowerBound = LowerBound < 0 ? 0 : LowerBound;
-                UpperBound = Math.Max(1.1 * locUpper, distribution.Mean() + 3 * Math.Sqrt(distribution.Variance()));
+                if (!double.IsNaN(locUpper)) {
+                    UpperBound = Math.Max(1.1 * locUpper, distribution.Mean() + 3 * Math.Sqrt(distribution.Variance()));
+                } else {
+                    UpperBound = distribution.Mean() + 3 * Math.Sqrt(distribution.Variance());
+                }
             } else if (Endpoint.Measurement == MeasurementType.Continuous) {
-                LowerBound = Math.Floor(Math.Min(0.9 * locLower, distribution.Mean() - 2 * Math.Sqrt(distribution.Variance())));
-                UpperBound = Math.Ceiling(Math.Max(1.1 * locUpper, distribution.Mean() + 2 * Math.Sqrt(distribution.Variance())));
+                var sigma = Math.Sqrt(distribution.Variance());
+                if (!double.IsNaN(locLower)) {
+                    LowerBound = Math.Min(locLower - 0.5 * sigma, distribution.Mean() - 3 * Math.Sqrt(distribution.Variance()));
+                } else {
+                    LowerBound = distribution.Mean() - 3 * sigma;
+                }
+                if (!double.IsNaN(locUpper)) {
+                    UpperBound = Math.Max(locUpper + 0.5 * sigma, distribution.Mean() + 3 * sigma);
+                } else {
+                    UpperBound = distribution.Mean() + 3 * sigma;
+                }
             }
 
             var plotModel = base.Create();
@@ -63,7 +80,7 @@ namespace AmigaPowerAnalysis.Core.Charting.DistributionChartCreators {
                     LineStyle = LineStyle.Dash
                 };
                 plotModel.Annotations.Add(locLowerLineAnnotation);
-                _horizontalAxis.Minimum = Math.Min(_horizontalAxis.Minimum, Math.Floor(0.9 * locLower));
+                _horizontalAxis.Minimum = (_horizontalAxis.Minimum > locLower) ? Math.Min(_horizontalAxis.Minimum, Math.Floor(0.9 * locLower)) : _horizontalAxis.Minimum;
             }
 
             if (!double.IsNaN(Endpoint.LocUpper)) {
@@ -75,7 +92,7 @@ namespace AmigaPowerAnalysis.Core.Charting.DistributionChartCreators {
                     LineStyle = LineStyle.Dash
                 };
                 plotModel.Annotations.Add(locUpperLineAnnotation);
-                _horizontalAxis.Maximum = Math.Max(_horizontalAxis.Maximum, Math.Ceiling(1.1 * locUpper));
+                _horizontalAxis.Maximum = (_horizontalAxis.Maximum < locUpper) ? Math.Max(_horizontalAxis.Maximum, Math.Ceiling(1.1 * locUpper)) : _horizontalAxis.Maximum;
             }
 
             if (!double.IsNaN(Endpoint.LocUpper) || !double.IsNaN(Endpoint.LocLower)) {
