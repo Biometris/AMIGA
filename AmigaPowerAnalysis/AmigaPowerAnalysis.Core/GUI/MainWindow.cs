@@ -1,12 +1,13 @@
-﻿using AmigaPowerAnalysis.Core;
-using AmigaPowerAnalysis.GUI.Wrappers;
-using AmigaPowerAnalysis.Properties;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using System.Drawing;
+using AmigaPowerAnalysis.Core;
+using AmigaPowerAnalysis.GUI.Wrappers;
+using AmigaPowerAnalysis.Properties;
 
 namespace AmigaPowerAnalysis.GUI {
     public partial class MainWindow : Form {
@@ -107,6 +108,10 @@ namespace AmigaPowerAnalysis.GUI {
         private void toolstripAbout_Click(object sender, EventArgs e) {
             var aboutDialog = new AboutForm();
             aboutDialog.ShowDialog();
+        }
+
+        private void userManualToolStripMenuItem_Click(object sender, EventArgs e) {
+            Process.Start(Path.Combine("Manual", "User Manual.pdf"));
         }
 
         private void goToolStripMenuItem_Click(object sender, EventArgs e) {

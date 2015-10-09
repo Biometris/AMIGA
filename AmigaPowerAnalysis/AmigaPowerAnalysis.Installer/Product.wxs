@@ -137,4 +137,12 @@
       </Component>
     </ComponentGroup>
   </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="PowerAnalysisScriptsGroup" Directory="Manual">
+      <Component Guid="{3B4D0D4C-16AF-4C91-BF07-675EBE8F83E0}">
+        <File Source="..\AmigaPowerAnalysis.Core\bin\Release\Manual\User Manual.pdf" KeyPath="yes" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
 </Wix>
