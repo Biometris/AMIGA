@@ -129,8 +129,8 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             stringBuilder.AppendLine(string.Format("<h2>Design</h2>"));
             stringBuilder.AppendLine("<table>");
             stringBuilder.AppendLine(format("Experimental design type", inputPowerAnalysis.ExperimentalDesignType.GetShortName()));
-            stringBuilder.AppendLine(format("Number of interactions", inputPowerAnalysis.NumberOfInteractions));
-            stringBuilder.AppendLine(format("Number of modifiers", inputPowerAnalysis.NumberOfModifiers));
+            //stringBuilder.AppendLine(format("Number of interactions", inputPowerAnalysis.NumberOfInteractions));
+            //stringBuilder.AppendLine(format("Number of modifiers", inputPowerAnalysis.NumberOfModifiers));
             stringBuilder.AppendLine(format("CV for blocks (%)", inputPowerAnalysis.CvForBlocks));
             stringBuilder.AppendLine("</table>");
 
