@@ -439,7 +439,11 @@ gammaLyles <- function(data, settings, modelSettings, nreps, effect, multiplyWei
   }
 
   # Scale non-centrality parameters
-  scale = nreps/multiplyWeight/modelSettings$blocks/(estDispersion^2)
+  if (FALSE) { # scale with estimated CV
+    scale = nreps/multiplyWeight/modelSettings$blocks/(estDispersion^2)
+  } else {    # scale with set CV
+    scale = nreps/multiplyWeight/modelSettings$blocks/((settings$CVComparator/100)^2)
+  }
   ncDiff = ncDiff * sqrt(scale)
   ncEqui$Low = ncEqui$Low * sqrt(scale)
   ncEqui$Upp = ncEqui$Upp * sqrt(scale)
