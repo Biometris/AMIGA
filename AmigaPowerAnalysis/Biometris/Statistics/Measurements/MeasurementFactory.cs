@@ -77,11 +77,15 @@ namespace Biometris.Statistics.Measurements {
         /// <param name="measurementType"></param>
         /// <returns></returns>
         public static double ComputeLimit(double mean, double loc, MeasurementType measurementType) {
-            var transformedMean = Link(mean, measurementType);
-            //var transformedLoc = (measurementType != MeasurementType.Continuous) ? Math.Log(loc) : loc;
-            var transformedLoc = Math.Log(loc);
-            var limit = InverseLink(transformedMean + transformedLoc, measurementType);
-            return limit;
+            if (measurementType != MeasurementType.Continuous) {
+                var transformedMean = Link(mean, measurementType);
+                //var transformedLoc = (measurementType != MeasurementType.Continuous) ? Math.Log(loc) : loc;
+                var transformedLoc = Math.Log(loc);
+                var limit = InverseLink(transformedMean + transformedLoc, measurementType);
+                return limit;
+            } else {
+                return mean * loc;
+            }
         }
 
         public static double ComputeFixCurrentModifier(IEnumerable<double> modifiers, IEnumerable<double> weights, double mean, int index, MeasurementType measurementType) {

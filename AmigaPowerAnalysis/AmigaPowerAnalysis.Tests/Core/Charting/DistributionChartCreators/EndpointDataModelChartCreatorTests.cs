@@ -27,7 +27,7 @@ namespace AmigaPowerAnalysis.Tests.Core {
         [TestMethod]
         [TestCategory("UnitTests")]
         public void EndpointDataModelChartCreator_NormalTest() {
-            createChart(MeasurementType.Continuous, 0.5, double.NaN, DistributionType.Normal, 10, 2, 1.7);
+            createChart(MeasurementType.Continuous, 0.5, 2, DistributionType.Normal, 10, 2, 1.7);
         }
 
         [TestMethod]
