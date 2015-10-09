@@ -23,6 +23,7 @@
     <Feature Id="ProductFeature" Title="AmigaPowerAnalysis" Level="1" Display="expand" ConfigurableDirectory='INSTALLFOLDER'>
       <ComponentGroupRef Id="ApplicationComponentGroup" />
       <ComponentGroupRef Id="PowerAnalysisScriptsGroup" />
+      <ComponentGroupRef Id="ManualGroup" />
       <ComponentRef Id="ProgramMenuSubFolderComponent"/>
       <ComponentRef Id="DesktopShortcutComponent"/>
     </Feature>
@@ -139,7 +140,7 @@
   </Fragment>
 
   <Fragment>
-    <ComponentGroup Id="PowerAnalysisScriptsGroup" Directory="Manual">
+    <ComponentGroup Id="ManualGroup" Directory="Manual">
       <Component Guid="{3B4D0D4C-16AF-4C91-BF07-675EBE8F83E0}">
         <File Source="..\AmigaPowerAnalysis.Core\bin\Release\Manual\User Manual.pdf" KeyPath="yes" />
       </Component>
