@@ -1062,7 +1062,7 @@ monteCarloPowerAnalysis <- function(data, settings, modelSettings, blocks, effec
   }
   # LogNormal for Nonnegative data (simulated bij LogNormal) can be done exactly
   if ((settings$DoLOdiff) || (settings$DoLOequi)) {
-    if (DEBUG) cat(paste("GM ", "exact calculation", "\n"))
+    if (DEBUG) cat(paste("LO ", "exact calculation", "\n"))
     resultsLogNormal <- exactPowerAnalysisHelper(data, settings, modelSettings, blocks, effect)
   }
 

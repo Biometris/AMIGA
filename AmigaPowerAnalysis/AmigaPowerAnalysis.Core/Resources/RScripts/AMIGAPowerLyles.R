@@ -48,9 +48,17 @@ createSyntheticData <- function(simulatedData, settings, multiplyWeight) {
   nUniqueMu = length(uniqueMu)
   
   # The number of random draws depends on the size of the dataset (=nUnique)
-  maxTotalDraws <- 4000000
-  maxNdraws <- settings$NumberOfSimulationsLylesMethod
-  minNdraws <- 10000
+  if (settings$MeasurementType == "Count") {
+    maxNdraws <- settings$NumberOfSimulationsLylesMethod
+    maxTotalDraws <- 4000000
+    minNdraws <- 4000
+  } else if (settings$MeasurementType == "Nonnegative") {
+    maxNdraws <- ceiling(settings$NumberOfSimulationsLylesMethod/10)
+    maxTotalDraws <- 1000000
+    minNdraws <- 1000
+  } else {
+    stop(paste("MeasurementType", settings$MeasurementType, "in function createSyntheticData() is not implemented.", call. = FALSE))
+  }
   nRandomDraws = ceiling(maxTotalDraws/nUniqueMu)
   if (nRandomDraws > maxNdraws) {
     nRandomDraws = maxNdraws
@@ -63,11 +71,18 @@ createSyntheticData <- function(simulatedData, settings, multiplyWeight) {
   ResponseTmp <- c()
   WeightTmp   <- c()
   for (i in 1:nUniqueMu) {
-    simulate <- ropoisson(nRandomDraws, uniqueMu[i], settings$dispersion, settings$PowerLawPower, settings$Distribution, settings$ExcessZeroesPercentage)
-    table <- as.data.frame(table(simulate))
-    nsamplerow[i] <- nrow(table)
-    ResponseTmp <- c(ResponseTmp, as.numeric(levels(table[["simulate"]])))
-    WeightTmp   <- c(WeightTmp, table[["Freq"]]/nRandomDraws)
+    if (settings$MeasurementType == "Count") {
+      simulate <- ropoisson(nRandomDraws, uniqueMu[i], settings$dispersion, settings$PowerLawPower, settings$Distribution, settings$ExcessZeroesPercentage)
+      table <- as.data.frame(table(simulate))
+      nsamplerow[i] <- nrow(table)
+      ResponseTmp <- c(ResponseTmp, as.numeric(levels(table[["simulate"]])))
+      WeightTmp   <- c(WeightTmp, table[["Freq"]]/nRandomDraws)
+    } else if (settings$MeasurementType == "Nonnegative") {
+      response <- rnonnegative(nRandomDraws, uniqueMu[i], settings$CVComparator, settings$Distribution)
+      nsamplerow[i] <- nRandomDraws
+      ResponseTmp <- c(ResponseTmp, response)
+      WeightTmp   <- c(WeightTmp, 1/nRandomDraws + 0*response)
+    }
   }
   UnitTmp <- rep(c(1:nUniqueMu), nsamplerow)
 
@@ -85,7 +100,10 @@ createSyntheticData <- function(simulatedData, settings, multiplyWeight) {
   syntheticData <- untable(simulatedData, num=nsamplerow)
   syntheticData[["Response"]] <- Response
   syntheticData[["Weight"]]   <- multiplyWeight*Weight
-  row.names(syntheticData) <- paste0(rep(row.names(simulatedData), nsamplerow), "-", Response)
+  if (settings$MeasurementType == "Count") {
+    row.names(syntheticData) <- paste0(rep(row.names(simulatedData), nsamplerow), "-", Response)
+  }
+  #print(syntheticData)
   return(syntheticData)
 }
 
@@ -292,7 +310,7 @@ negativeBinomialLyles <- function(data, settings, modelSettings, nreps, effect, 
   } else {
     df = nreps*(modelSettings$ndata-1) - modelDf + modelSettings$blocks 
   }
-  # Note that the standard error must be corrected               
+  # Note that the standard error must be corrected to fix the value of the dispersion 
   correction <- summary(glmH1)$dispersion
   estiEffect <- as.numeric(glmH1$coef[2])
   seEffect <- sqrt(vcov(glmH1)[2,2]/correction) 
@@ -343,6 +361,89 @@ negativeBinomialLyles <- function(data, settings, modelSettings, nreps, effect, 
   ncEqui$Low = ncEqui$Low * sqrt(scale)
   ncEqui$Upp = ncEqui$Upp * sqrt(scale)
   power = calculatePowerFromNc(nreps, effect, df, ncDiff, ncEqui, settings, settings$DoNBdiff, settings$DoNBequi)
+  return(power)
+}
+
+######################################################################################################################
+gammaLyles <- function(data, settings, modelSettings, nreps, effect, multiplyWeight) {
+
+  # Define non-centrality parameters
+  ncDiff = NaN
+  ncEqui = list(Low=NaN, Upp=NaN)
+
+  # Estimate dispersion parameter (which is the constant Coefficient of Variation) by means of sqrt(Variance)/Mean
+  Means <- tapply(data[["Weight"]] * data[["Response"]], data[["Row"]], sum)/multiplyWeight
+  expanded2 <- (data[["Response"]] - Means[data[["Row"]]])^2
+  Variances <- tapply(data[["Weight"]] * expanded2, data[["Row"]], sum)/multiplyWeight
+  estDispersion = mean(sqrt(Variances)/Means)
+
+  # Fit full model and determine degrees of freedom
+  glmH1 <- glm(as.formula(modelSettings$formulaH1), family=Gamma(link=log), data=data, weight=Weight, etastart=Lp)
+  modelDf = nrow(data) - glmH1$df.residual
+  if (settings$ExperimentalDesignType == "CompletelyRandomized") {
+    df = nreps*modelSettings$ndata - modelDf
+  } else {
+    df = nreps*(modelSettings$ndata-1) - modelDf + modelSettings$blocks 
+  }
+
+  # Note that the standard error must be corrected to fix the value of the dispersion 
+  correction <- summary(glmH1)$dispersion
+  estiEffect <- as.numeric(glmH1$coef[2])
+  seEffect <- sqrt(vcov(glmH1)[2,2]/correction) 
+  if (settings$UseWaldTest) {  
+    # Results based on Wald tests
+    if (settings$DoGMdiff) {
+      ncDiff = estiEffect/seEffect
+    }
+    if (settings$DoGMequi) {
+      ncEqui <- waldEquiNoncentral(estiEffect, seEffect, settings$TestType, settings$TransformLocLower, settings$TransformLocUpper)
+    }
+    if (FALSE) {
+      cat(paste0("estiEffect: ", estiEffect, "\n"))
+      cat(paste0("seEffect: ", seEffect, "\n"))
+      cat(paste0("ncDiff: ", ncDiff, "\n"))
+      cat(paste0("ncEqui$Low: ", ncEqui$Low, "\n"))
+      cat(paste0("ncEqui$Upp: ", ncEqui$Upp, "\n"))
+    }
+    
+  } else {
+    # LR: fit alternative models
+    data[["Lp"]] <- glmH1$linear.predictor
+    if (settings$DoGMdiff) {
+      # Difference test
+      glmH0 <- glm(modelSettings$formulaH0, family=Gamma(link=log), data=data, weight=Weight, etastart=Lp)
+      ncDiff <- deviance(glmH0) - deviance(glmH1)
+      ncDiff[ncDiff<0] = 0
+      ncDiff = sign(estiEffect)*sqrt(ncDiff)
+    }
+    if (settings$DoGMequi) {
+      if ((settings$TestType == "twosided") || (settings$TestType == "left")) {
+        # Lower equivalence limit 
+        glmH0low <- glm(modelSettings$formulaH0_low, family=Gamma(link=log), data=data, weight=Weight, etastart=Lp)
+        ncEqui$Low <- deviance(glmH0low) - deviance(glmH1)
+        ncEqui$Low[ncEqui$Low<0] = 0
+        ncEqui$Low <- sqrt(ncEqui$Low)
+      } else {
+        ncEqui$Low = NA
+      }
+      if ((settings$TestType == "twosided") || (settings$TestType == "right")) {
+        # Upper equivalence limit 
+        glmH0upp <- glm(modelSettings$formulaH0_upp, family=Gamma(link=log), data=data, weight=Weight, etastart=Lp)
+        ncEqui$Upp <- deviance(glmH0upp) - deviance(glmH1)
+        ncEqui$Upp[ncEqui$Upp<0] = 0
+        ncEqui$Upp <- sqrt(ncEqui$Upp)
+      } else {
+        ncEqui$Upp = NA
+      }
+    }
+  }
+
+  # Scale non-centrality parameters
+  scale = nreps/multiplyWeight/modelSettings$blocks/(estDispersion^2)
+  ncDiff = ncDiff * sqrt(scale)
+  ncEqui$Low = ncEqui$Low * sqrt(scale)
+  ncEqui$Upp = ncEqui$Upp * sqrt(scale)
+  power = calculatePowerFromNc(nreps, effect, df, ncDiff, ncEqui, settings, settings$DoGMdiff, settings$DoGMequi)
   return(power)
 }
 
@@ -519,6 +620,23 @@ lylesPowerAnalysis <- function(data, settings, modelSettings, blocks, effect, de
     if (settings$DoNBequi) pValues$Equi[,"NegativeBinomial"] <- powerNB[["powerEqui"]]
     pValues$Extra[,"Df"] <- powerNB[["df"]]
   }
+  if ((settings$DoLOdiff) || (settings$DoLOequi)) {
+    # powerLO is a matrix rather than a dataframe
+    if (DEBUG) cat(paste("\nLyles LO exact calculation", "---------------------------------------------------------\n"))
+    powerLO <- exactPowerAnalysisHelper(data, settings, modelSettings, nreps, effect)
+    if (DEBUG) print(powerLO, digits=3)
+    if (settings$DoLOdiff) pValues$Diff[,"LogPlusM"] <- powerLO[,"powerDiff"]
+    if (settings$DoLOequi) pValues$Equi[,"LogPlusM"] <- powerLO[,"powerEqui"]
+    pValues$Extra[,"Df"] <- powerLO[,"Df"]
+  }
+  if ((settings$DoGMdiff) || (settings$DoGMequi)) {
+    if (DEBUG) cat(paste("\nLyles GM", "---------------------------------------------------------\n"))
+    powerGM <- gammaLyles(synData, settings, modelSettings, nreps, effect, multiplyWeight)
+    if (DEBUG) print(powerGM, digits=3)
+    if (settings$DoGMdiff) pValues$Diff[,"Gamma"] <- powerGM[["powerDiff"]]
+    if (settings$DoGMequi) pValues$Equi[,"Gamma"] <- powerGM[["powerEqui"]]
+    pValues$Extra[,"Df"] <- powerGM[["df"]]
+  }
 
   if ((FALSE) || (DEBUG)) {
     # Print raw pValues
@@ -529,6 +647,7 @@ lylesPowerAnalysis <- function(data, settings, modelSettings, blocks, effect, de
 
 ######################################################################################################################
 # Does exact power analysis for the normal and lognormal distribution
+# Note that effect is always multiplicative on the log-scale
 exactPowerAnalysis <- function(data, settings, modelSettings, blocks, effect, debugSettings) {
   if (settings$MeasurementType == "Continuous") {
     # Normal: calculate effect on the normal additive scale; Transformed LOC are already on that scale
@@ -568,7 +687,7 @@ exactPowerAnalysis <- function(data, settings, modelSettings, blocks, effect, de
 # Helper for exact power analysis; always returns power for Difference AND equivalence test
 exactPowerAnalysisHelper <- function(data, settings, modelSettings, nreps, effect) {
   # Define output structure
-  results <- matrix(nrow=length(nreps), ncol=3, dimnames=list(nreps, c("Df", "powerDiff", "powerEqui")))
+  results <- matrix(nrow=length(nreps), ncol=6, dimnames=list(nreps, c("Df", "powerDiff", "powerEqui", "ncDiff", "ncEquiLow", "ncEquiUpp")))
 
   # Fit model to obtain degrees of freedom by using a dummy dataset
   tmpBlocks <- 2
@@ -591,6 +710,9 @@ exactPowerAnalysisHelper <- function(data, settings, modelSettings, nreps, effec
   power <- calculatePowerFromNc(nreps, effect, df, ncDiff, ncEqui, settings, TRUE, TRUE)
   results[,"powerDiff"] <- power[["powerDiff"]]
   results[,"powerEqui"] <- power[["powerEqui"]]
+  results[,"ncDiff"]    <- ncDiff
+  results[,"ncEquiLow"] <- ncEqui$Low
+  results[,"ncEquiUpp"] <- ncEqui$Upp
   return(results)
 }
 
