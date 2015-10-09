@@ -1,11 +1,17 @@
 ﻿using Biometris.Statistics.Distributions;
 using Biometris.Statistics.Measurements;
+using Biometris.ExtensionMethods;
 using System.Runtime.Serialization;
+using System;
+using System.Linq;
 
 namespace AmigaPowerAnalysis.Core {
 
     [DataContract]
     public sealed class EndpointType {
+
+        private DistributionType _distributionType;
+        private MeasurementType _measurementType;
 
         public EndpointType() {
             Measurement = MeasurementType.Count;
@@ -35,6 +41,46 @@ namespace AmigaPowerAnalysis.Core {
         public string Name { get; set; }
 
         /// <summary>
+        /// Type of measurement (count, fraction, nonnegative).
+        /// </summary>
+        [DataMember]
+        public MeasurementType Measurement {
+            get {
+                return _measurementType;
+            }
+            set {
+                _measurementType = value;
+                validateDistribution();
+            }
+        }
+
+        /// <summary>
+        /// Lower Limit of Concern.
+        /// </summary>
+        [DataMember]
+        public double LocLower { get; set; }
+
+        /// <summary>
+        /// Upper Limit of Concern.
+        /// </summary>
+        [DataMember]
+        public double LocUpper { get; set; }
+
+        /// <summary>
+        /// The distribution type of this endpoint.
+        /// </summary>
+        [DataMember]
+        public DistributionType DistributionType {
+            get {
+                return _distributionType;
+            }
+            set {
+                _distributionType = value;
+                validateDistribution();
+            }
+        }
+
+        /// <summary>
         /// The Mu of the comparator.
         /// </summary>
         [DataMember]
@@ -45,12 +91,6 @@ namespace AmigaPowerAnalysis.Core {
         /// </summary>
         [DataMember]
         public double CvComparator { get; set; }
-
-        /// <summary>
-        /// The distribution type of this endpoint.
-        /// </summary>
-        [DataMember]
-        public DistributionType DistributionType { get; set; }
 
         /// <summary>
         /// Binomial total for fraction distributions.
@@ -64,23 +104,49 @@ namespace AmigaPowerAnalysis.Core {
         [DataMember]
         public double PowerLawPower { get; set; }
 
-        /// <summary>
-        /// Type of measurement (count, fraction, nonnegative).
-        /// </summary>
-        [DataMember]
-        public MeasurementType Measurement { get; set; }
-
-        /// <summary>
-        /// Lower Limit of Concern.
-        /// </summary>
-        [DataMember]
-        public double LocLower { get; set; }
-
-        /// <summary>
-        /// Upper Limit of Concern.
-        /// </summary>
-        [DataMember]
-        public double LocUpper { get; set; }
+        private void validateDistribution() {
+            // Update distribution type
+            var availableDistributionTypes = DistributionFactory.AvailableDistributionTypes(Measurement);
+            if (DistributionType == 0 || (availableDistributionTypes & DistributionType) != DistributionType) {
+                DistributionType = (DistributionType)availableDistributionTypes.GetFlags().First();
+            }
+            switch (DistributionType) {
+                case DistributionType.Poisson:
+                    break;
+                case DistributionType.OverdispersedPoisson:
+                    if (CvComparator <= 100 * Math.Sqrt(1 / MuComparator)) {
+                        CvComparator = Math.Ceiling((Math.Sqrt(1 / MuComparator) + 1e-2) * 100);
+                    }
+                    break;
+                case DistributionType.NegativeBinomial:
+                    if (CvComparator <= 100 * Math.Sqrt(1 / MuComparator)) {
+                        CvComparator = Math.Ceiling((Math.Sqrt(1 / MuComparator) + 1e-2) * 100);
+                    }
+                    break;
+                case DistributionType.PoissonLogNormal:
+                    if (CvComparator <= 100 * Math.Sqrt(1 / MuComparator)) {
+                        CvComparator = Math.Ceiling((Math.Sqrt(1 / MuComparator) + 1e-2) * 100);
+                    }
+                    break;
+                case DistributionType.PowerLaw:
+                    if (CvComparator <= 100 / Math.Sqrt(MuComparator)) {
+                        CvComparator = Math.Ceiling((1 / Math.Sqrt(MuComparator) + 1e-2) * 100);
+                    }
+                    break;
+                case DistributionType.Binomial:
+                    break;
+                case DistributionType.BetaBinomial:
+                    break;
+                case DistributionType.BinomialLogitNormal:
+                    break;
+                case DistributionType.LogNormal:
+                    break;
+                case DistributionType.Normal:
+                    break;
+                default:
+                    break;
+            }
+        }
 
         public EndpointType Clone() {
             return (EndpointType)this.MemberwiseClone();

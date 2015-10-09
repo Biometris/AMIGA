@@ -153,6 +153,7 @@ namespace AmigaPowerAnalysis.GUI {
 
             combo = new DataGridViewComboBoxColumn();
             combo.DataSource = Enum.GetValues(typeof(DistributionType));
+            combo.Name = "DistributionType";
             combo.DataPropertyName = "DistributionType";
             combo.ValueType = typeof(DistributionType);
             combo.HeaderText = "Distribution";
@@ -302,7 +303,7 @@ namespace AmigaPowerAnalysis.GUI {
             }
         }
 
-        private void dataGridViewProjectEndpointGroups_CellContentClick(object sender, DataGridViewCellEventArgs e) {
+        private void dataGridViewProjectEndpointGroups_CellClick(object sender, DataGridViewCellEventArgs e) {
             if (dataGridViewProjectEndpointGroups.Columns[e.ColumnIndex].Name == "DistributionType") {
                 var measurement = _endpointTypes[dataGridViewProjectEndpointGroups.CurrentRow.Index].Measurement;
                 var combo = this.dataGridViewProjectEndpointGroups.Rows[e.RowIndex].Cells["DistributionType"] as DataGridViewComboBoxCell;
@@ -322,6 +323,14 @@ namespace AmigaPowerAnalysis.GUI {
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error,
                     MessageBoxDefaultButton.Button1);
+        }
+
+        private void dataGridViewDefaultEndpointGroups_CellValueChanged(object sender, DataGridViewCellEventArgs e) {
+            updateDataGridViewDefaultEndpointGroups();
+        }
+
+        private void dataGridViewProjectEndpointGroups_CellValueChanged(object sender, DataGridViewCellEventArgs e) {
+            updateDataGridViewProjectEndpointGroups();
         }
     }
 }

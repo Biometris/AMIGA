@@ -70,6 +70,7 @@
             this.dataGridViewDefaultEndpointGroups.TabIndex = 2;
             this.dataGridViewDefaultEndpointGroups.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewDefaultEndpointGroups_CellClick);
             this.dataGridViewDefaultEndpointGroups.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.dataGridViewEndpointTypes_CellValidating);
+            this.dataGridViewDefaultEndpointGroups.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewDefaultEndpointGroups_CellValueChanged);
             this.dataGridViewDefaultEndpointGroups.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dataGridViewEndpointTypes_DataError);
             // 
             // addDefaultEndpointGroupButton
@@ -172,7 +173,8 @@
             this.dataGridViewProjectEndpointGroups.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dataGridViewProjectEndpointGroups.Size = new System.Drawing.Size(858, 219);
             this.dataGridViewProjectEndpointGroups.TabIndex = 6;
-            this.dataGridViewProjectEndpointGroups.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewProjectEndpointGroups_CellContentClick);
+            this.dataGridViewProjectEndpointGroups.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewProjectEndpointGroups_CellClick);
+            this.dataGridViewProjectEndpointGroups.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewProjectEndpointGroups_CellValueChanged);
             // 
             // panel2
             // 
