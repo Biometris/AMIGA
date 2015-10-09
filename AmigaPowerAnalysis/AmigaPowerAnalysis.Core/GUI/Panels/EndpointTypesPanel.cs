@@ -5,11 +5,7 @@ using System.Windows.Forms;
 using AmigaPowerAnalysis.Core;
 using Biometris.Statistics.Distributions;
 using Biometris.Statistics.Measurements;
-
-// TODO Binomial totals greyed out for non fractions
-// TODO Binomial totals must be positive
-// TODO LOC=NaN should be displayed as empty textbox; also empty textbox store as to NaN. Possibly better to use null
-// TODO LOC must be positive
+using Biometris.ExtensionMethods;
 
 namespace AmigaPowerAnalysis.GUI {
     public partial class EndpointTypesPanel : UserControl, ISelectionForm {
@@ -77,7 +73,8 @@ namespace AmigaPowerAnalysis.GUI {
             dataGridViewDefaultEndpointGroups.Columns.Add(column);
 
             combo = new DataGridViewComboBoxColumn();
-            combo.DataSource = Enum.GetValues(typeof(DistributionType));
+            combo.DataSource = Enum.GetValues(typeof(DistributionType)).Cast<DistributionType>().ToList();
+            combo.Name = "DistributionType";
             combo.DataPropertyName = "DistributionType";
             combo.ValueType = typeof(DistributionType);
             combo.HeaderText = "Distribution";
@@ -119,10 +116,13 @@ namespace AmigaPowerAnalysis.GUI {
             if (_endpointTypes.Count > 0) {
                 var endpointsBindingSouce = new BindingSource(_endpointTypes, null);
                 dataGridViewDefaultEndpointGroups.DataSource = endpointsBindingSouce;
-                //var combo = this.dataGridViewDefaultEndpointGroups.Rows[0].Cells["DistributionType"] as DataGridViewComboBoxCell;
-                //foreach (var row in dataGridViewDefaultEndpointGroups) {
-                //    combo.DataSource = Enum.GetValues(DistributionFactory.AvailableDistributionTypes(Measurement));
-                //}
+                dataGridViewDefaultEndpointGroups.Update();
+                for (int i = 0; i < dataGridViewDefaultEndpointGroups.RowCount; ++i) {
+                    var combo = this.dataGridViewDefaultEndpointGroups.Rows[i].Cells["DistributionType"] as DataGridViewComboBoxCell;
+                    var measurement = MeasurementType.Count;
+                    var source = DistributionFactory.AvailableDistributionTypes(measurement).GetFlags().Cast<DistributionType>().ToList();
+                    combo.DataSource = source;
+                }
                 dataGridViewDefaultEndpointGroups.Update();
             } else {
                 dataGridViewDefaultEndpointGroups.DataSource = null;
