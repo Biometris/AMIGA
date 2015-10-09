@@ -15,7 +15,7 @@ namespace AmigaPowerAnalysis.GUI {
         public SimulationPanel(Project project) {
             InitializeComponent();
             Name = "Analysis";
-            Description = "Specify how to perform the power analysis and which methods of analysis are to be compared. In simple cases (continuous and non-negative with log(x+m) method) a direct calculation is made. For other cases results can be based on Simulation, but it is advised first to use the Approximate method (Lyles) because it is much faster.\r\n\r\nFor count data it is suggested to use the log(N+1) method for the difference tests and the Log-linear model with overdispersion for the equivalence tests.\r\nFor non-negative data it is suggested to use the log(x+m) method for the difference tests and the Gamma model for the equivalence tests. (Note: Approximate method not yet available for gamma)";
+            Description = "Specify how to perform the power analysis and which methods of analysis are to be compared. In simple cases (continuous and non-negative with log(x+m) method) a direct calculation is made.\r\nFor other cases results can be based on Simulation and Likelihood-ratio tests, but it is advised first to use the Approximate method (Lyles method) and Wald tests because it is much faster.\r\n\r\nFor count data it is suggested to use the log(N+1) method for the difference tests and the Log-linear model with overdispersion for the equivalence tests.\r\nFor non-negative data it is suggested to use the log(x+m) method for the difference tests and the Gamma model for the equivalence tests. (Note: Approximate method not yet available for gamma)";
             _project = project;
         }
 

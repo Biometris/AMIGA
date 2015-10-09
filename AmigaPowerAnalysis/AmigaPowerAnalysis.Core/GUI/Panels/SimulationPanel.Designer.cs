@@ -90,7 +90,6 @@
             this.groupBoxAnalysisMethodsContinuousEquivalence.SuspendLayout();
             this.groupBoxAnalysisFractionsMethodsEquivalence.SuspendLayout();
             this.groupBoxCountsSettings.SuspendLayout();
-            this.panel2.SuspendLayout();
             this.panel1.SuspendLayout();
             this.flowLayoutPanel2.SuspendLayout();
             this.panelOptionsForCounts.SuspendLayout();
@@ -150,9 +149,10 @@
             this.labelNumberOfRatios.AutoSize = true;
             this.labelNumberOfRatios.Location = new System.Drawing.Point(20, 49);
             this.labelNumberOfRatios.Name = "labelNumberOfRatios";
-            this.labelNumberOfRatios.Size = new System.Drawing.Size(524, 13);
+            this.labelNumberOfRatios.Size = new System.Drawing.Size(419, 13);
             this.labelNumberOfRatios.TabIndex = 2;
-            this.labelNumberOfRatios.Text = "Number of levels between no-difference and each LoC for which to calculate the power";
+            this.labelNumberOfRatios.Text = "Number of levels between no-difference and each LoC for which to calculate the po" +
+    "wer";
             // 
             // textBoxSignificanceLevel
             // 
@@ -620,6 +620,8 @@
             this.groupBoxCountsSettings.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBoxCountsSettings.AutoSize = true;
+            this.groupBoxCountsSettings.Controls.Add(this.radioButtonApproximate);
+            this.groupBoxCountsSettings.Controls.Add(this.radioButtonSimulate);
             this.groupBoxCountsSettings.Controls.Add(this.panel2);
             this.groupBoxCountsSettings.Controls.Add(this.panel1);
             this.groupBoxCountsSettings.Controls.Add(this.labelMethodForPowerCalculation);
@@ -641,17 +643,15 @@
             // 
             this.panel2.AutoSize = true;
             this.panel2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.panel2.Controls.Add(this.radioButtonSimulate);
-            this.panel2.Controls.Add(this.radioButtonApproximate);
             this.panel2.Location = new System.Drawing.Point(553, 27);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(165, 23);
+            this.panel2.Size = new System.Drawing.Size(0, 0);
             this.panel2.TabIndex = 17;
             // 
             // radioButtonSimulate
             // 
             this.radioButtonSimulate.AutoSize = true;
-            this.radioButtonSimulate.Location = new System.Drawing.Point(3, 3);
+            this.radioButtonSimulate.Location = new System.Drawing.Point(642, 28);
             this.radioButtonSimulate.Name = "radioButtonSimulate";
             this.radioButtonSimulate.Size = new System.Drawing.Size(65, 17);
             this.radioButtonSimulate.TabIndex = 14;
@@ -663,7 +663,7 @@
             // radioButtonApproximate
             // 
             this.radioButtonApproximate.AutoSize = true;
-            this.radioButtonApproximate.Location = new System.Drawing.Point(79, 3);
+            this.radioButtonApproximate.Location = new System.Drawing.Point(553, 28);
             this.radioButtonApproximate.Name = "radioButtonApproximate";
             this.radioButtonApproximate.Size = new System.Drawing.Size(83, 17);
             this.radioButtonApproximate.TabIndex = 15;
@@ -680,7 +680,7 @@
             this.panel1.Controls.Add(this.radioButtonUseLogLikelihoodRatioTest);
             this.panel1.Location = new System.Drawing.Point(553, 54);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(215, 23);
+            this.panel1.Size = new System.Drawing.Size(225, 23);
             this.panel1.TabIndex = 16;
             // 
             // radioButtonUseWaldTest
@@ -698,7 +698,7 @@
             // radioButtonUseLogLikelihoodRatioTest
             // 
             this.radioButtonUseLogLikelihoodRatioTest.AutoSize = true;
-            this.radioButtonUseLogLikelihoodRatioTest.Location = new System.Drawing.Point(79, 3);
+            this.radioButtonUseLogLikelihoodRatioTest.Location = new System.Drawing.Point(89, 3);
             this.radioButtonUseLogLikelihoodRatioTest.Name = "radioButtonUseLogLikelihoodRatioTest";
             this.radioButtonUseLogLikelihoodRatioTest.Size = new System.Drawing.Size(133, 17);
             this.radioButtonUseLogLikelihoodRatioTest.TabIndex = 15;
@@ -789,8 +789,6 @@
             this.groupBoxAnalysisFractionsMethodsEquivalence.PerformLayout();
             this.groupBoxCountsSettings.ResumeLayout(false);
             this.groupBoxCountsSettings.PerformLayout();
-            this.panel2.ResumeLayout(false);
-            this.panel2.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.flowLayoutPanel2.ResumeLayout(false);
