@@ -703,7 +703,7 @@
             this.radioButtonUseLogLikelihoodRatioTest.Size = new System.Drawing.Size(133, 17);
             this.radioButtonUseLogLikelihoodRatioTest.TabIndex = 15;
             this.radioButtonUseLogLikelihoodRatioTest.TabStop = true;
-            this.radioButtonUseLogLikelihoodRatioTest.Text = "Log-likelihood ratio test";
+            this.radioButtonUseLogLikelihoodRatioTest.Text = "Likelihood ratio test";
             this.radioButtonUseLogLikelihoodRatioTest.UseVisualStyleBackColor = true;
             this.radioButtonUseLogLikelihoodRatioTest.CheckedChanged += new System.EventHandler(this.radioButtonUseLogLikelihoodRatioTest_CheckedChanged);
             // 
