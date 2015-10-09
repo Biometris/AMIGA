@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?define ProductVersion = "1.0.1.0"?>
+<?define ProductVersion = "!(bind.FileVersion.MainExe)" ?>
 <?define ProductUpgradeCode = "{DE4FBCF5-135D-4A27-9D4B-8246CEDF13D2}"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
   <Product Id="*" Name="AmigaPowerAnalysis" Manufacturer="Wageningen UR" Language="1033"
@@ -23,7 +23,6 @@
     <Feature Id="ProductFeature" Title="AmigaPowerAnalysis" Level="1" Display="expand" ConfigurableDirectory='INSTALLFOLDER'>
       <ComponentGroupRef Id="ApplicationComponentGroup" />
       <ComponentGroupRef Id="PowerAnalysisScriptsGroup" />
-      <ComponentGroupRef Id="WkHtmlToPdfGroup" />
       <ComponentRef Id="ProgramMenuSubFolderComponent"/>
       <ComponentRef Id="DesktopShortcutComponent"/>
     </Feature>
@@ -81,7 +80,19 @@
   <Fragment>
     <ComponentGroup Id="ApplicationComponentGroup" Directory="INSTALLFOLDER">
       <Component Guid="{B7149209-2DD9-421D-998F-531412A53B6C}">
-        <File Source="..\AmigaPowerAnalysis.Core\bin\Release\AmigaPowerAnalysis.exe" KeyPath="yes" />
+        <File Id="MainExe" Source="..\AmigaPowerAnalysis.Core\bin\Release\AmigaPowerAnalysis.exe" KeyPath="yes" />
+      </Component>
+      <Component Guid="{3FBB0E65-B43D-4C52-AE7D-5F8C20FA6616}">
+        <File Source="..\AmigaPowerAnalysis.Core\bin\Release\Biometris.dll" KeyPath="yes" />
+      </Component>
+      <Component Guid="{1727779B-BD44-476C-AAE3-4F36AF41CCC4}">
+        <File Source="..\AmigaPowerAnalysis.Core\bin\Release\DynamicInterop.dll" KeyPath="yes" />
+      </Component>
+      <Component Guid="{3F36344F-55A8-4BA4-B935-ADEC2F0877F8}">
+        <File Source="..\AmigaPowerAnalysis.Core\bin\Release\MathNet.Numerics.dll" KeyPath="yes" />
+      </Component>
+      <Component Guid="{D4CE65E3-D88A-4A7D-861A-14FA24723A04}">
+        <File Source="..\AmigaPowerAnalysis.Core\bin\Release\OpenHtmlToPdf.dll" KeyPath="yes" />
       </Component>
       <Component Guid="{5E1C1A2C-F3F5-4D69-B14F-F0C5F93E8683}">
         <File Source="..\AmigaPowerAnalysis.Core\bin\Release\OxyPlot.dll" KeyPath="yes" />
@@ -89,36 +100,40 @@
       <Component Guid="{83ECBA92-89F6-4054-9F00-9948D9FF2303}">
         <File Source="..\AmigaPowerAnalysis.Core\bin\Release\OxyPlot.WindowsForms.dll" KeyPath="yes" />
       </Component>
+      <Component Guid="{8D658C8F-0678-4122-B533-95B6D1B01619}">
+        <File Source="..\AmigaPowerAnalysis.Core\bin\Release\OxyPlot.Wpf.dll" KeyPath="yes" />
+      </Component>
+      <Component Guid="{81794B9E-14AA-4E47-BD65-301C99A415EB}">
+        <File Source="..\AmigaPowerAnalysis.Core\bin\Release\OxyPlot.Xps.dll" KeyPath="yes" />
+      </Component>
+      <Component Guid="{6A98CBCD-0D8D-4C10-9C6F-5707F5DCCA5C}">
+        <File Source="..\AmigaPowerAnalysis.Core\bin\Release\RDotNet.dll" KeyPath="yes" />
+      </Component>
+      <Component Guid="{6D7CDA95-941E-4000-89C0-7C5BBC6B3224}">
+        <File Source="..\AmigaPowerAnalysis.Core\bin\Release\RDotNet.NativeLibrary.dll" KeyPath="yes" />
+      </Component>
     </ComponentGroup>
   </Fragment>
 
   <Fragment>
     <ComponentGroup Id="PowerAnalysisScriptsGroup" Directory="Resources">
+      <Component Guid="{74BC5A04-A99E-4CBD-ABF6-DA5A643B8C04}">
+        <File Source="..\AmigaPowerAnalysis.Core\bin\Release\Resources\RScripts\AmigaPowerAnalysis.R" KeyPath="yes" />
+      </Component>
+      <Component Guid="{AC83FDDC-4A7C-4A29-9671-C558D578C6BA}">
+        <File Source="..\AmigaPowerAnalysis.Core\bin\Release\Resources\RScripts\AMIGAPowerLyles.R" KeyPath="yes" />
+      </Component>
       <Component Guid="{C7F7EB39-302B-49C5-B10C-A7ACC4DED51A}">
-        <File Source="..\AmigaPowerAnalysis.Core\bin\Release\Resources\AmigaPowerAnalysis.gen" KeyPath="yes" />
+        <File Source="..\AmigaPowerAnalysis.Core\bin\Release\Resources\GenstatScripts\AmigaPowerAnalysis.gen" KeyPath="yes" />
       </Component>
       <Component Guid="{FB2AAB26-0208-41CB-B7A5-11A9266FEC74}">
-        <File Source="..\AmigaPowerAnalysis.Core\bin\Release\Resources\Lyles.pro" KeyPath="yes" />
+        <File Source="..\AmigaPowerAnalysis.Core\bin\Release\Resources\GenstatScripts\AmigaPowerValidation-Simulate.pro" KeyPath="yes" />
       </Component>
-    </ComponentGroup>
-  </Fragment>
-
-  <Fragment>
-    <ComponentGroup Id="WkHtmlToPdfGroup" Directory="WkHtmlToPdf">
-      <Component Guid="{7FFE1027-1E4E-4182-ABF2-598C6D50D98D}">
-        <File Source="..\AmigaPowerAnalysis.Core\bin\Release\Resources\WkHtmlToPdf\libeay32.dll" KeyPath="yes" />
+      <Component Guid="{A70B4855-9FBF-42A3-859C-EA3577DF52C0}">
+        <File Source="..\AmigaPowerAnalysis.Core\bin\Release\Resources\GenstatScripts\AmigaPowerValidation-Simulate.gen" KeyPath="yes" />
       </Component>
-      <Component Guid="{4E8DFA84-C5BE-4ADE-BED6-733A2595A3D6}">
-        <File Source="..\AmigaPowerAnalysis.Core\bin\Release\Resources\WkHtmlToPdf\libgcc_s_dw2-1.dll" KeyPath="yes" />
-      </Component>
-      <Component Guid="{DFB00079-B3BA-4587-B8A9-A7B117BA0B54}">
-        <File Source="..\AmigaPowerAnalysis.Core\bin\Release\Resources\WkHtmlToPdf\mingwm10.dll" KeyPath="yes" />
-      </Component>
-      <Component Guid="{1A34629C-E1C7-4F28-BFC6-70C2A0E3941C}">
-        <File Source="..\AmigaPowerAnalysis.Core\bin\Release\Resources\WkHtmlToPdf\ssleay32.dll" KeyPath="yes" />
-      </Component>
-      <Component Guid="{E5ED8366-CDD2-477A-B946-62D6CFDD09DB}">
-        <File Source="..\AmigaPowerAnalysis.Core\bin\Release\Resources\WkHtmlToPdf\wkhtmltopdf.exe" KeyPath="yes" />
+      <Component Guid="{4AABD865-7579-4F79-8A89-60C1CD7BAC9C}">
+        <File Source="..\AmigaPowerAnalysis.Core\bin\Release\Resources\GenstatScripts\Lyles.pro" KeyPath="yes" />
       </Component>
     </ComponentGroup>
   </Fragment>
