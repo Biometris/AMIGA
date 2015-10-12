@@ -43,9 +43,9 @@
       <Directory Id="ProgramFilesFolder">
         <Directory Id="INSTALLFOLDER" Name="AmigaPowerAnalysis">
           <Directory Id="Resources" Name="Resources">
-            <Directory Id="RScripts" Name="Resources">
+            <Directory Id="RScripts" Name="RScripts">
             </Directory>
-            <Directory Id="GenstatScripts" Name="Resources">
+            <Directory Id="GenstatScripts" Name="GenstatScripts">
             </Directory>
           </Directory>
         </Directory>
