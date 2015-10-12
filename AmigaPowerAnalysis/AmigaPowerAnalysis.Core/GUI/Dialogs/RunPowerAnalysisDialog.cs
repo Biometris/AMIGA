@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using AmigaPowerAnalysis.Core;
 using AmigaPowerAnalysis.Core.PowerAnalysis;
-using Biometris.ProgressReporting;
-using Biometris.ExtensionMethods;
 using Biometris.ApplicationUtilities;
+using Biometris.ExtensionMethods;
+using Biometris.ProgressReporting;
 using Biometris.R.REngines;
 
 namespace AmigaPowerAnalysis.GUI {
