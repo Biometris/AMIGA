@@ -80,6 +80,9 @@ namespace Biometris.Statistics.Histograms {
             var weightsSum = weights.Sum();
             var weightsNormalized = weights.Select(c => c / weightsSum * weightsCount).ToList();
 
+            if (numberOfBins <= 0) {
+                return new List<HistogramBin>();
+            }
             var bins = new List<HistogramBin>(numberOfBins);
             if (maxBound == minBound) {
                 maxBound = maxBound * 1.1;
