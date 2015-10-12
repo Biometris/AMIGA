@@ -356,8 +356,9 @@
             this.textBoxTabDescription.Size = new System.Drawing.Size(553, 422);
             this.textBoxTabDescription.TabIndex = 20;
             this.textBoxTabDescription.TabStop = false;
-            this.textBoxTabDescription.Text = "This tab allows you to export a data template and analysis scripts for analysis o" +
-    "f the experiment defined in this output.";
+            this.textBoxTabDescription.Text = "\r\nThis tab allows you to export a data template and analysis scripts for analysis o" +
+    "f an experiment conforming to the design specified.\r\nFirst specify the number of replicates that you want to use in the experiment.\r\n\r\nThe button Export data template will generate two CSV files:\r\n1. A template to enter the actual observations from the experiment, and\r\n2. A help file specifying the comparison to be analysed.\r\n\r\n[not yet implemented:] The button Export analysis script will generate a text file containing an R script that can analyse the datafile (when completed)";
+            
             // 
             // flowLayoutPanelReport
             // 
