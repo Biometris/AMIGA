@@ -18,11 +18,12 @@
       <UpgradeVersion Minimum="$(var.ProductVersion)" OnlyDetect="yes" Property="NEWERVERSIONDETECTED"/>
       <UpgradeVersion Minimum="0.0.0" Maximum="$(var.ProductVersion)" IncludeMinimum="yes" IncludeMaximum="no" Property="OLDERVERSIONBEINGUPGRADED"/>
     </Upgrade>
-    <!--<Condition Message="A newer version of this software is already installed.">NOT NEWERVERSIONDETECTED</Condition>-->
+    <Condition Message="A newer version of this software is already installed.">NOT NEWERVERSIONDETECTED</Condition>
 
     <Feature Id="ProductFeature" Title="AmigaPowerAnalysis" Level="1" Display="expand" ConfigurableDirectory='INSTALLFOLDER'>
       <ComponentGroupRef Id="ApplicationComponentGroup" />
-      <ComponentGroupRef Id="PowerAnalysisScriptsGroup" />
+      <ComponentGroupRef Id="PowerAnalysisRScriptsGroup" />
+      <ComponentGroupRef Id="PowerAnalysisGenstatScriptsGroup" />
       <ComponentGroupRef Id="ManualGroup" />
       <ComponentRef Id="ProgramMenuSubFolderComponent"/>
       <ComponentRef Id="DesktopShortcutComponent"/>
@@ -42,6 +43,10 @@
       <Directory Id="ProgramFilesFolder">
         <Directory Id="INSTALLFOLDER" Name="AmigaPowerAnalysis">
           <Directory Id="Resources" Name="Resources">
+            <Directory Id="RScripts" Name="Resources">
+            </Directory>
+            <Directory Id="GenstatScripts" Name="Resources">
+            </Directory>
           </Directory>
         </Directory>
       </Directory>
@@ -115,13 +120,18 @@
   </Fragment>
 
   <Fragment>
-    <ComponentGroup Id="PowerAnalysisScriptsGroup" Directory="Resources">
+    <ComponentGroup Id="PowerAnalysisRScriptsGroup" Directory="RScripts">
       <Component Guid="{74BC5A04-A99E-4CBD-ABF6-DA5A643B8C04}">
         <File Source="..\AmigaPowerAnalysis.Core\bin\Release\Resources\RScripts\AmigaPowerAnalysis.R" KeyPath="yes" />
       </Component>
       <Component Guid="{AC83FDDC-4A7C-4A29-9671-C558D578C6BA}">
         <File Source="..\AmigaPowerAnalysis.Core\bin\Release\Resources\RScripts\AMIGAPowerLyles.R" KeyPath="yes" />
       </Component>
+    </ComponentGroup>
+  </Fragment>
+  
+  <Fragment>
+    <ComponentGroup Id="PowerAnalysisGenstatScriptsGroup" Directory="GenstatScripts">
       <Component Guid="{C7F7EB39-302B-49C5-B10C-A7ACC4DED51A}">
         <File Source="..\AmigaPowerAnalysis.Core\bin\Release\Resources\GenstatScripts\AmigaPowerAnalysis.gen" KeyPath="yes" />
       </Component>
