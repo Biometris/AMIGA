@@ -532,6 +532,9 @@ namespace AmigaPowerAnalysis.Core {
                 default:
                     break;
             }
+            if (double.IsInfinity(CvComparator)) {
+                CvComparator = 100;
+            }
         }
 
         /// <summary>
