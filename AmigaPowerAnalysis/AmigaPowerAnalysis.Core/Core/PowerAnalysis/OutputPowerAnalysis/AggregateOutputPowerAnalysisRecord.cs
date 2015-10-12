@@ -3,6 +3,13 @@ using AmigaPowerAnalysis.Core.DataAnalysis.AnalysisModels;
 
 namespace AmigaPowerAnalysis.Core.PowerAnalysis {
 
+    public enum PowerAggregationType {
+        [Display(Name = "Aggregate comparisons using minimum of all powers", ShortName = "Minimum")]
+        AggregateMinimum,
+        [Display(Name = "Aggregate comparisons using mean of all powers", ShortName = "Mean.")]
+        AggregateMean,
+    }
+
     public sealed class AggregateOutputPowerAnalysisRecord {
 
         public AggregateOutputPowerAnalysisRecord() {

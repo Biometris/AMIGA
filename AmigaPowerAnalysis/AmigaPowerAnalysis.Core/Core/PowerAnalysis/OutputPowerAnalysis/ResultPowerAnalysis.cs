@@ -31,6 +31,11 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
         public List<OutputPowerAnalysis> ComparisonPowerAnalysisResults { get; set; }
 
         /// <summary>
+        /// The aggregation type that is to be usedfor combining multiple outputs in a csd.
+        /// </summary>
+        public PowerAggregationType PowerAggregationType { get; set; }
+
+        /// <summary>
         /// Returns the primary comparisons of this analysis result.
         /// </summary>
         public IEnumerable<OutputPowerAnalysis> GetPrimaryComparisons() {
@@ -40,7 +45,20 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
         /// <summary>
         /// Returns the aggregate power analysis records of the primary comparisons.
         /// </summary>
-        public IEnumerable<AggregateOutputPowerAnalysisRecord> GetAggregateOutputRecords() {
+        public IEnumerable<AggregateOutputPowerAnalysisRecord> GetAggregateOutputRecords(PowerAggregationType powerAggregationType) {
+            Func<IEnumerable<double>, double> aggregate;
+            switch (powerAggregationType) {
+                case PowerAggregationType.AggregateMinimum:
+                    aggregate = s => s.Min();
+                    break;
+                case PowerAggregationType.AggregateMean:
+                    aggregate = s => s.Average();
+                    break;
+                default:
+                    aggregate = s => s.Min();
+                    break;
+            }
+
             var records = GetPrimaryComparisons()
                 .SelectMany(c => c.OutputRecords, (c, o) => new AggregateOutputPowerAnalysisRecord() {
                     ConcernStandardizedDifference = o.ConcernStandardizedDifference,
@@ -52,8 +70,8 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                 .Select(g => new AggregateOutputPowerAnalysisRecord() {
                     ConcernStandardizedDifference = g.Key.LevelOfConcern,
                     NumberOfReplications = g.Key.NumberOfReplicates,
-                    PowerDifference = g.Min(r => r.PowerDifference),
-                    PowerEquivalence = g.Min(r => r.PowerEquivalence),
+                    PowerDifference = aggregate(g.Select(r => r.PowerDifference)),
+                    PowerEquivalence = aggregate(g.Select(r => r.PowerEquivalence)),
                 })
                 .ToList();
             return records;

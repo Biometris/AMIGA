@@ -57,6 +57,8 @@ namespace AmigaPowerAnalysis.GUI {
             } else {
                 splitContainerComparisons.Visible = false;
             }
+            radioButtonAggregateMin.Checked = _resultPowerAnalysis.PowerAggregationType == PowerAggregationType.AggregateMinimum;
+            radioButtonAggregateMean.Checked = _resultPowerAnalysis.PowerAggregationType == PowerAggregationType.AggregateMean;
         }
 
         public bool IsVisible() {
@@ -147,7 +149,7 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void updateAnalysisCharts() {
             var plotType = _currentPlotType;
-            var records = _resultPowerAnalysis.GetAggregateOutputRecords().ToList();
+            var records = _resultPowerAnalysis.GetAggregateOutputRecords(_resultPowerAnalysis.PowerAggregationType).ToList();
             var primaryComparisons = _resultPowerAnalysis.GetPrimaryComparisons().ToList();
             if (primaryComparisons.Count > 0) {
                 if (plotType == AnalysisPlotType.Replicates) {
@@ -183,6 +185,17 @@ namespace AmigaPowerAnalysis.GUI {
             radioButtonCsdEquivalence.Checked = _currentPlotType == AnalysisPlotType.ConcernStandardizedDifference;
             radioButtonReplicatesDifference.Checked = _currentPlotType == AnalysisPlotType.Replicates;
             radioButtonReplicatesEquivalence.Checked = _currentPlotType == AnalysisPlotType.Replicates;
+        }
+
+
+        private void radioButtonAggregateMin_CheckedChanged(object sender, EventArgs e) {
+            _resultPowerAnalysis.PowerAggregationType = PowerAggregationType.AggregateMinimum;
+            updateAnalysisOutputPanel();
+        }
+
+        private void radioButtonAggregateMean_CheckedChanged(object sender, EventArgs e) {
+            _resultPowerAnalysis.PowerAggregationType = PowerAggregationType.AggregateMean;
+            updateAnalysisOutputPanel();
         }
 
         private void dataGridViewComparisons_CellValueChanged(object sender, DataGridViewCellEventArgs e) {

@@ -24,7 +24,7 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             html += generateOutputOverviewHtml(_resultPowerAnalysis, _outputName);
 
             var primaryComparisonOutputs = _resultPowerAnalysis.GetPrimaryComparisons();
-            html += generatePrimaryComparisonsSummary(primaryComparisonOutputs);
+            html += generatePrimaryComparisonsSummary(primaryComparisonOutputs, _resultPowerAnalysis.PowerAggregationType);
 
             var firstInputSettings = primaryComparisonOutputs.First().InputPowerAnalysis;
             var analysisMethodTypesDifferenceTests = firstInputSettings.SelectedAnalysisMethodTypesDifferenceTests.GetFlags().Cast<AnalysisMethodType>().ToList();
@@ -33,7 +33,7 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             html += generateDesignOverviewHtml(firstInputSettings);
             html += generateAnalysisSettingsHtml(firstInputSettings);
 
-            var records = _resultPowerAnalysis.GetAggregateOutputRecords();
+            var records = _resultPowerAnalysis.GetAggregateOutputRecords(_resultPowerAnalysis.PowerAggregationType);
             html += generateComparisonsOutputHtml(records, firstInputSettings.NumberOfReplications);
             html += generateComparisonsChartHtml(records, firstInputSettings.NumberOfReplications, _filesPath, imagesAsPng);
 
@@ -51,9 +51,10 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             return format(html);
         }
 
-        private static string generatePrimaryComparisonsSummary(IEnumerable<OutputPowerAnalysis> comparisonOutputs) {
+        private static string generatePrimaryComparisonsSummary(IEnumerable<OutputPowerAnalysis> comparisonOutputs, PowerAggregationType powerAggregationType) {
             var stringBuilder = new StringBuilder();
             stringBuilder.AppendLine(string.Format("<h1>Summary primary comparisons</h1>"));
+            stringBuilder.AppendLine(string.Format("<p>{0}.<p>", powerAggregationType.GetDisplayName()));
             stringBuilder.AppendLine("<table>");
             stringBuilder.AppendLine("<tr>");
             stringBuilder.AppendLine("<th>Comparison</th>");
