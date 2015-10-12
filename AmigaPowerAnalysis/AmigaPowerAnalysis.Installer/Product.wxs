@@ -98,34 +98,34 @@
         <File Id="MainExe" Source="..\AmigaPowerAnalysis.Core\bin\Release\AmigaPowerAnalysis.exe" KeyPath="yes" />
       </Component>
       <Component Guid="{3FBB0E65-B43D-4C52-AE7D-5F8C20FA6616}">
-        <File Source="..\AmigaPowerAnalysis.Core\bin\Release\Biometris.dll" KeyPath="yes" />
+        <File Source="..\AmigaPowerAnalysis.Core\bin\$(var.Platform)\Release\Biometris.dll" KeyPath="yes" />
       </Component>
       <Component Guid="{1727779B-BD44-476C-AAE3-4F36AF41CCC4}">
-        <File Source="..\AmigaPowerAnalysis.Core\bin\Release\DynamicInterop.dll" KeyPath="yes" />
+        <File Source="..\AmigaPowerAnalysis.Core\bin\$(var.Platform)\Release\DynamicInterop.dll" KeyPath="yes" />
       </Component>
       <Component Guid="{3F36344F-55A8-4BA4-B935-ADEC2F0877F8}">
-        <File Source="..\AmigaPowerAnalysis.Core\bin\Release\MathNet.Numerics.dll" KeyPath="yes" />
+        <File Source="..\AmigaPowerAnalysis.Core\bin\$(var.Platform)\Release\MathNet.Numerics.dll" KeyPath="yes" />
       </Component>
       <Component Guid="{D4CE65E3-D88A-4A7D-861A-14FA24723A04}">
-        <File Source="..\AmigaPowerAnalysis.Core\bin\Release\OpenHtmlToPdf.dll" KeyPath="yes" />
+        <File Source="..\AmigaPowerAnalysis.Core\bin\$(var.Platform)\Release\OpenHtmlToPdf.dll" KeyPath="yes" />
       </Component>
       <Component Guid="{5E1C1A2C-F3F5-4D69-B14F-F0C5F93E8683}">
-        <File Source="..\AmigaPowerAnalysis.Core\bin\Release\OxyPlot.dll" KeyPath="yes" />
+        <File Source="..\AmigaPowerAnalysis.Core\bin\$(var.Platform)\Release\OxyPlot.dll" KeyPath="yes" />
       </Component>
       <Component Guid="{83ECBA92-89F6-4054-9F00-9948D9FF2303}">
-        <File Source="..\AmigaPowerAnalysis.Core\bin\Release\OxyPlot.WindowsForms.dll" KeyPath="yes" />
+        <File Source="..\AmigaPowerAnalysis.Core\bin\$(var.Platform)\Release\OxyPlot.WindowsForms.dll" KeyPath="yes" />
       </Component>
       <Component Guid="{8D658C8F-0678-4122-B533-95B6D1B01619}">
-        <File Source="..\AmigaPowerAnalysis.Core\bin\Release\OxyPlot.Wpf.dll" KeyPath="yes" />
+        <File Source="..\AmigaPowerAnalysis.Core\bin\$(var.Platform)\Release\OxyPlot.Wpf.dll" KeyPath="yes" />
       </Component>
       <Component Guid="{81794B9E-14AA-4E47-BD65-301C99A415EB}">
-        <File Source="..\AmigaPowerAnalysis.Core\bin\Release\OxyPlot.Xps.dll" KeyPath="yes" />
+        <File Source="..\AmigaPowerAnalysis.Core\bin\$(var.Platform)\Release\OxyPlot.Xps.dll" KeyPath="yes" />
       </Component>
       <Component Guid="{6A98CBCD-0D8D-4C10-9C6F-5707F5DCCA5C}">
-        <File Source="..\AmigaPowerAnalysis.Core\bin\Release\RDotNet.dll" KeyPath="yes" />
+        <File Source="..\AmigaPowerAnalysis.Core\bin\$(var.Platform)\Release\RDotNet.dll" KeyPath="yes" />
       </Component>
       <Component Guid="{6D7CDA95-941E-4000-89C0-7C5BBC6B3224}">
-        <File Source="..\AmigaPowerAnalysis.Core\bin\Release\RDotNet.NativeLibrary.dll" KeyPath="yes" />
+        <File Source="..\AmigaPowerAnalysis.Core\bin\$(var.Platform)\Release\RDotNet.NativeLibrary.dll" KeyPath="yes" />
       </Component>
     </ComponentGroup>
   </Fragment>
@@ -133,10 +133,10 @@
   <Fragment>
     <ComponentGroup Id="PowerAnalysisRScriptsGroup" Directory="RScripts">
       <Component Guid="{74BC5A04-A99E-4CBD-ABF6-DA5A643B8C04}">
-        <File Source="..\AmigaPowerAnalysis.Core\bin\Release\Resources\RScripts\AmigaPowerAnalysis.R" KeyPath="yes" />
+        <File Source="..\AmigaPowerAnalysis.Core\bin\$(var.Platform)\Release\Resources\RScripts\AmigaPowerAnalysis.R" KeyPath="yes" />
       </Component>
       <Component Guid="{AC83FDDC-4A7C-4A29-9671-C558D578C6BA}">
-        <File Source="..\AmigaPowerAnalysis.Core\bin\Release\Resources\RScripts\AMIGAPowerLyles.R" KeyPath="yes" />
+        <File Source="..\AmigaPowerAnalysis.Core\bin\$(var.Platform)\Release\Resources\RScripts\AMIGAPowerLyles.R" KeyPath="yes" />
       </Component>
     </ComponentGroup>
   </Fragment>
@@ -144,16 +144,16 @@
   <Fragment>
     <ComponentGroup Id="PowerAnalysisGenstatScriptsGroup" Directory="GenstatScripts">
       <Component Guid="{C7F7EB39-302B-49C5-B10C-A7ACC4DED51A}">
-        <File Source="..\AmigaPowerAnalysis.Core\bin\Release\Resources\GenstatScripts\AmigaPowerAnalysis.gen" KeyPath="yes" />
+        <File Source="..\AmigaPowerAnalysis.Core\bin\$(var.Platform)\Release\Resources\GenstatScripts\AmigaPowerAnalysis.gen" KeyPath="yes" />
       </Component>
       <Component Guid="{FB2AAB26-0208-41CB-B7A5-11A9266FEC74}">
-        <File Source="..\AmigaPowerAnalysis.Core\bin\Release\Resources\GenstatScripts\AmigaPowerValidation-Simulate.pro" KeyPath="yes" />
+        <File Source="..\AmigaPowerAnalysis.Core\bin\$(var.Platform)\Release\Resources\GenstatScripts\AmigaPowerValidation-Simulate.pro" KeyPath="yes" />
       </Component>
       <Component Guid="{A70B4855-9FBF-42A3-859C-EA3577DF52C0}">
-        <File Source="..\AmigaPowerAnalysis.Core\bin\Release\Resources\GenstatScripts\AmigaPowerValidation-Simulate.gen" KeyPath="yes" />
+        <File Source="..\AmigaPowerAnalysis.Core\bin\$(var.Platform)\Release\Resources\GenstatScripts\AmigaPowerValidation-Simulate.gen" KeyPath="yes" />
       </Component>
       <Component Guid="{4AABD865-7579-4F79-8A89-60C1CD7BAC9C}">
-        <File Source="..\AmigaPowerAnalysis.Core\bin\Release\Resources\GenstatScripts\Lyles.pro" KeyPath="yes" />
+        <File Source="..\AmigaPowerAnalysis.Core\bin\$(var.Platform)\Release\Resources\GenstatScripts\Lyles.pro" KeyPath="yes" />
       </Component>
     </ComponentGroup>
   </Fragment>
