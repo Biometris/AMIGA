@@ -33,8 +33,8 @@ namespace AmigaPowerAnalysis.Core.DataAnalysis {
 
             var headers = new List<string>();
             headers.Add("Block");
-            headers.Add("MainPlot");
-            headers.Add("SubPlot");
+            headers.Add("Plot");
+            //headers.Add("SubPlot");
             headers.Add("FrequencyReplicate");
             headers.Add("Variety");
             foreach (var factor in Factors) {
@@ -52,7 +52,7 @@ namespace AmigaPowerAnalysis.Core.DataAnalysis {
                 var line = new List<string>();
                 line.Add(record.Block.ToString());
                 line.Add(record.MainPlot.ToString());
-                line.Add(record.SubPlot.ToString());
+                //line.Add(record.SubPlot.ToString());
                 line.Add(record.FrequencyReplicate.ToString());
                 line.Add(record.Variety.ToString());
                 foreach (var factor in record.FactorLevels) {

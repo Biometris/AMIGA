@@ -35,8 +35,8 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             stringBuilder.AppendLine("</table>");
 
             var headers = new List<string>();
-            headers.Add("MainPlot");
-            headers.Add("SubPlot");
+            headers.Add("Plot");
+            //headers.Add("SubPlot");
             foreach (var factor in inputPowerAnalysis.Factors) {
                 headers.Add(factor);
             }
@@ -48,7 +48,7 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             foreach (var record in inputPowerAnalysis.InputRecords) {
                 var line = new List<string>();
                 line.Add(record.MainPlot.ToString());
-                line.Add(record.SubPlot.ToString());
+                //line.Add(record.SubPlot.ToString());
                 foreach (var factor in record.FactorLevels) {
                     line.Add(factor.ToString());
                 }
@@ -135,8 +135,8 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             stringBuilder.AppendLine("</table>");
 
             var headers = new List<string>();
-            headers.Add("MainPlot");
-            headers.Add("SubPlot");
+            headers.Add("Plot");
+            //headers.Add("SubPlot");
             foreach (var factor in inputPowerAnalysis.Factors) {
                 headers.Add(factor);
             }
@@ -150,7 +150,7 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             foreach (var record in inputPowerAnalysis.InputRecords) {
                 var line = new List<string>();
                 line.Add(record.MainPlot.ToString());
-                line.Add(record.SubPlot.ToString());
+                //line.Add(record.SubPlot.ToString());
                 foreach (var factor in record.FactorLevels) {
                     line.Add(factor.ToString());
                 }
@@ -167,8 +167,8 @@ namespace AmigaPowerAnalysis.Core.Reporting {
         protected static string generateComparisonInputDataHtml(InputPowerAnalysis inputPowerAnalysis) {
             var stringBuilder = new StringBuilder();
             var headers = new List<string>();
-            headers.Add("MainPlot");
-            headers.Add("SubPlot");
+            headers.Add("Plot");
+            //headers.Add("SubPlot");
             foreach (var factor in inputPowerAnalysis.Factors) {
                 headers.Add(factor);
             }
@@ -182,7 +182,7 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             foreach (var record in inputPowerAnalysis.InputRecords) {
                 var line = new List<string>();
                 line.Add(record.MainPlot.ToString());
-                line.Add(record.SubPlot.ToString());
+                //line.Add(record.SubPlot.ToString());
                 foreach (var factor in record.FactorLevels) {
                     line.Add(factor.ToString());
                 }
