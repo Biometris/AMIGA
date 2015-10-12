@@ -25,7 +25,7 @@
         private void InitializeComponent() {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AnalysisResultsPerComparisonPanel));
             this.splitContainerComparisons = new System.Windows.Forms.SplitContainer();
-            this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
+            this.flowLayoutPanelOutputName = new System.Windows.Forms.FlowLayoutPanel();
             this.labelOutputNameLabel = new System.Windows.Forms.Label();
             this.labelOutputName = new System.Windows.Forms.Label();
             this.dataGridViewComparisons = new System.Windows.Forms.DataGridView();
@@ -50,7 +50,7 @@
             this.splitContainerComparisons.Panel1.SuspendLayout();
             this.splitContainerComparisons.Panel2.SuspendLayout();
             this.splitContainerComparisons.SuspendLayout();
-            this.flowLayoutPanel3.SuspendLayout();
+            this.flowLayoutPanelOutputName.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewComparisons)).BeginInit();
             this.tabControlEndpointResult.SuspendLayout();
             this.tabPageDifferenceTest.SuspendLayout();
@@ -64,42 +64,39 @@
             // 
             // splitContainerComparisons
             // 
-            this.splitContainerComparisons.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.splitContainerComparisons.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainerComparisons.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
-            this.splitContainerComparisons.Location = new System.Drawing.Point(13, 13);
+            this.splitContainerComparisons.Location = new System.Drawing.Point(10, 39);
             this.splitContainerComparisons.Name = "splitContainerComparisons";
             // 
             // splitContainerComparisons.Panel1
             // 
-            this.splitContainerComparisons.Panel1.Controls.Add(this.flowLayoutPanel3);
             this.splitContainerComparisons.Panel1.Controls.Add(this.dataGridViewComparisons);
             // 
             // splitContainerComparisons.Panel2
             // 
             this.splitContainerComparisons.Panel2.Controls.Add(this.tabControlEndpointResult);
-            this.splitContainerComparisons.Size = new System.Drawing.Size(848, 477);
+            this.splitContainerComparisons.Size = new System.Drawing.Size(854, 454);
             this.splitContainerComparisons.SplitterDistance = 283;
             this.splitContainerComparisons.TabIndex = 9;
             // 
-            // flowLayoutPanel3
+            // flowLayoutPanelOutputName
             // 
-            this.flowLayoutPanel3.AutoSize = true;
-            this.flowLayoutPanel3.Controls.Add(this.labelOutputNameLabel);
-            this.flowLayoutPanel3.Controls.Add(this.labelOutputName);
-            this.flowLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Top;
-            this.flowLayoutPanel3.Location = new System.Drawing.Point(0, 0);
-            this.flowLayoutPanel3.Name = "flowLayoutPanel3";
-            this.flowLayoutPanel3.Padding = new System.Windows.Forms.Padding(0, 3, 0, 3);
-            this.flowLayoutPanel3.Size = new System.Drawing.Size(283, 19);
-            this.flowLayoutPanel3.TabIndex = 13;
+            this.flowLayoutPanelOutputName.AutoSize = true;
+            this.flowLayoutPanelOutputName.Controls.Add(this.labelOutputNameLabel);
+            this.flowLayoutPanelOutputName.Controls.Add(this.labelOutputName);
+            this.flowLayoutPanelOutputName.Dock = System.Windows.Forms.DockStyle.Top;
+            this.flowLayoutPanelOutputName.Location = new System.Drawing.Point(10, 10);
+            this.flowLayoutPanelOutputName.Name = "flowLayoutPanelOutputName";
+            this.flowLayoutPanelOutputName.Padding = new System.Windows.Forms.Padding(0, 8, 0, 8);
+            this.flowLayoutPanelOutputName.Size = new System.Drawing.Size(854, 29);
+            this.flowLayoutPanelOutputName.TabIndex = 13;
             // 
             // labelOutputNameLabel
             // 
             this.labelOutputNameLabel.AutoSize = true;
             this.labelOutputNameLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelOutputNameLabel.Location = new System.Drawing.Point(3, 3);
+            this.labelOutputNameLabel.Location = new System.Drawing.Point(3, 8);
             this.labelOutputNameLabel.Name = "labelOutputNameLabel";
             this.labelOutputNameLabel.Size = new System.Drawing.Size(49, 13);
             this.labelOutputNameLabel.TabIndex = 11;
@@ -108,7 +105,7 @@
             // labelOutputName
             // 
             this.labelOutputName.AutoSize = true;
-            this.labelOutputName.Location = new System.Drawing.Point(58, 3);
+            this.labelOutputName.Location = new System.Drawing.Point(58, 8);
             this.labelOutputName.Name = "labelOutputName";
             this.labelOutputName.Size = new System.Drawing.Size(66, 13);
             this.labelOutputName.TabIndex = 10;
@@ -131,7 +128,7 @@
             this.dataGridViewComparisons.RowHeadersWidth = 24;
             this.dataGridViewComparisons.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dataGridViewComparisons.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewComparisons.Size = new System.Drawing.Size(283, 477);
+            this.dataGridViewComparisons.Size = new System.Drawing.Size(283, 454);
             this.dataGridViewComparisons.TabIndex = 3;
             this.dataGridViewComparisons.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewComparisons_CellValueChanged);
             this.dataGridViewComparisons.SelectionChanged += new System.EventHandler(this.dataGridViewComparisons_SelectionChanged);
@@ -146,7 +143,7 @@
             this.tabControlEndpointResult.Location = new System.Drawing.Point(0, 0);
             this.tabControlEndpointResult.Name = "tabControlEndpointResult";
             this.tabControlEndpointResult.SelectedIndex = 0;
-            this.tabControlEndpointResult.Size = new System.Drawing.Size(561, 477);
+            this.tabControlEndpointResult.Size = new System.Drawing.Size(567, 454);
             this.tabControlEndpointResult.TabIndex = 10;
             this.tabControlEndpointResult.SelectedIndexChanged += new System.EventHandler(this.tabControlEndpointResult_SelectedIndexChanged);
             // 
@@ -157,7 +154,7 @@
             this.tabPageDifferenceTest.Location = new System.Drawing.Point(4, 22);
             this.tabPageDifferenceTest.Name = "tabPageDifferenceTest";
             this.tabPageDifferenceTest.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageDifferenceTest.Size = new System.Drawing.Size(553, 451);
+            this.tabPageDifferenceTest.Size = new System.Drawing.Size(559, 428);
             this.tabPageDifferenceTest.TabIndex = 0;
             this.tabPageDifferenceTest.Text = "Chart difference test";
             this.tabPageDifferenceTest.UseVisualStyleBackColor = true;
@@ -171,13 +168,13 @@
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 3);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(547, 23);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(553, 23);
             this.flowLayoutPanel1.TabIndex = 17;
             // 
             // radioButtonReplicatesDifference
             // 
             this.radioButtonReplicatesDifference.AutoSize = true;
-            this.radioButtonReplicatesDifference.Location = new System.Drawing.Point(407, 3);
+            this.radioButtonReplicatesDifference.Location = new System.Drawing.Point(413, 3);
             this.radioButtonReplicatesDifference.Name = "radioButtonReplicatesDifference";
             this.radioButtonReplicatesDifference.Size = new System.Drawing.Size(137, 17);
             this.radioButtonReplicatesDifference.TabIndex = 9;
@@ -189,7 +186,7 @@
             // radioButtonRatioDifference
             // 
             this.radioButtonRatioDifference.AutoSize = true;
-            this.radioButtonRatioDifference.Location = new System.Drawing.Point(289, 3);
+            this.radioButtonRatioDifference.Location = new System.Drawing.Point(295, 3);
             this.radioButtonRatioDifference.Name = "radioButtonRatioDifference";
             this.radioButtonRatioDifference.Size = new System.Drawing.Size(112, 17);
             this.radioButtonRatioDifference.TabIndex = 8;
@@ -205,7 +202,7 @@
             this.plotViewDifference.Location = new System.Drawing.Point(3, 3);
             this.plotViewDifference.Name = "plotViewDifference";
             this.plotViewDifference.PanCursor = System.Windows.Forms.Cursors.Hand;
-            this.plotViewDifference.Size = new System.Drawing.Size(547, 445);
+            this.plotViewDifference.Size = new System.Drawing.Size(553, 422);
             this.plotViewDifference.TabIndex = 4;
             this.plotViewDifference.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
             this.plotViewDifference.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
@@ -347,17 +344,17 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.Controls.Add(this.splitContainerComparisons);
+            this.Controls.Add(this.flowLayoutPanelOutputName);
             this.Margin = new System.Windows.Forms.Padding(0);
             this.Name = "AnalysisResultsPerComparisonPanel";
             this.Padding = new System.Windows.Forms.Padding(10);
             this.Size = new System.Drawing.Size(874, 503);
             this.splitContainerComparisons.Panel1.ResumeLayout(false);
-            this.splitContainerComparisons.Panel1.PerformLayout();
             this.splitContainerComparisons.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerComparisons)).EndInit();
             this.splitContainerComparisons.ResumeLayout(false);
-            this.flowLayoutPanel3.ResumeLayout(false);
-            this.flowLayoutPanel3.PerformLayout();
+            this.flowLayoutPanelOutputName.ResumeLayout(false);
+            this.flowLayoutPanelOutputName.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewComparisons)).EndInit();
             this.tabControlEndpointResult.ResumeLayout(false);
             this.tabPageDifferenceTest.ResumeLayout(false);
@@ -374,6 +371,7 @@
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -398,7 +396,7 @@
         private System.Windows.Forms.WebBrowser webBrowserFullReport;
         private System.Windows.Forms.ToolStrip toolStrip;
         private System.Windows.Forms.ToolStripButton toolStripButtonExportPdf;
-        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel3;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanelOutputName;
         private System.Windows.Forms.Label labelOutputNameLabel;
         private System.Windows.Forms.Label labelOutputName;
     }
