@@ -38,8 +38,10 @@ namespace AmigaPowerAnalysis.Core.Charting.DistributionChartCreators {
             if (DistributionChartPreferenceType == DistributionChartPreferenceType.Histogram || DistributionChartPreferenceType == DistributionChartPreferenceType.Both) {
                 var histogram = seriesCreator.Create(DistributionSeriesType.Histogram);
                 plotModel.Series.Add(histogram);
-                _horizontalAxis.Minimum = ((HistogramSeries)histogram).Items.Min(r => r.XMinValue);
-                _horizontalAxis.Maximum = ((HistogramSeries)histogram).Items.Max(r => r.XMaxValue);
+                if (((HistogramSeries)histogram).Items.Count > 0) {
+                    _horizontalAxis.Minimum = ((HistogramSeries)histogram).Items.Min(r => r.XMinValue);
+                    _horizontalAxis.Maximum = ((HistogramSeries)histogram).Items.Max(r => r.XMaxValue);
+                }
             }
             if (DistributionChartPreferenceType == DistributionChartPreferenceType.DistributionFunction || DistributionChartPreferenceType == DistributionChartPreferenceType.Both) {
                 var series = seriesCreator.Create(DistributionSeriesType.LineSeries);
