@@ -24,16 +24,16 @@ namespace AmigaPowerAnalysis.Core.Charting.AnalysisResultsChartCreators {
 
         public static PlotModel Create(IEnumerable<AggregateOutputPowerAnalysisRecord> aggregatePowerAnalysisRecords, TestType testType, List<int> blockSizes) {
             var model = AggregateAnalysisResultsChartCreatorBase.CreatePlotModel(testType);
-            var horizontalAxis = new LinearAxis() {
-                Title = "Concern Standardized Difference",
-                MajorGridlineStyle = LineStyle.Solid,
-                MinorGridlineStyle = LineStyle.Dot,
-                Position = AxisPosition.Bottom,
-                AbsoluteMaximum = aggregatePowerAnalysisRecords.Max(r => r.ConcernStandardizedDifference),
-                AbsoluteMinimum = aggregatePowerAnalysisRecords.Min(r => r.ConcernStandardizedDifference),
-            };
-            model.Axes.Add(horizontalAxis);
-            if (aggregatePowerAnalysisRecords != null) {
+            if (aggregatePowerAnalysisRecords != null && aggregatePowerAnalysisRecords.Count() > 0) {
+                var horizontalAxis = new LinearAxis() {
+                    Title = "Concern Standardized Difference",
+                    MajorGridlineStyle = LineStyle.Solid,
+                    MinorGridlineStyle = LineStyle.Dot,
+                    Position = AxisPosition.Bottom,
+                    AbsoluteMaximum = aggregatePowerAnalysisRecords.Max(r => r.ConcernStandardizedDifference),
+                    AbsoluteMinimum = aggregatePowerAnalysisRecords.Min(r => r.ConcernStandardizedDifference),
+                };
+                model.Axes.Add(horizontalAxis);
                 for (int i = 0; i < blockSizes.Count(); ++i) {
                     var replicateGroup = aggregatePowerAnalysisRecords
                         .Where(r => r.NumberOfReplications == blockSizes[i]);

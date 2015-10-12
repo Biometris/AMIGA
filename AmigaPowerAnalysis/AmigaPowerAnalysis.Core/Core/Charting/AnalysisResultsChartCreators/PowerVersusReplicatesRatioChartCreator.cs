@@ -21,17 +21,17 @@ namespace AmigaPowerAnalysis.Core.Charting.AnalysisResultsChartCreators {
 
         public static PlotModel Create(List<OutputPowerAnalysisRecord> powerAnalysisOutputRecords, TestType testType, AnalysisMethodType analysisMethodType) {
             var model = AnalysisResultsChartCreatorBase.CreatePlotModel(testType, analysisMethodType);
-            var horizontalAxis = new LogarithmicAxis() {
-                Title = "Replicates",
-                Base = 2,
-                MajorGridlineStyle = LineStyle.Solid,
-                MinorGridlineStyle = LineStyle.Dot,
-                Position = AxisPosition.Bottom,
-                AbsoluteMaximum = powerAnalysisOutputRecords.Max(r => r.NumberOfReplications),
-                AbsoluteMinimum = powerAnalysisOutputRecords.Min(r => r.NumberOfReplications),
-            };
-            model.Axes.Add(horizontalAxis);
-            if (powerAnalysisOutputRecords != null) {
+            if (powerAnalysisOutputRecords != null && powerAnalysisOutputRecords.Count > 0) {
+                var horizontalAxis = new LogarithmicAxis() {
+                    Title = "Replicates",
+                    Base = 2,
+                    MajorGridlineStyle = LineStyle.Solid,
+                    MinorGridlineStyle = LineStyle.Dot,
+                    Position = AxisPosition.Bottom,
+                    AbsoluteMaximum = powerAnalysisOutputRecords.Max(r => r.NumberOfReplications),
+                    AbsoluteMinimum = powerAnalysisOutputRecords.Min(r => r.NumberOfReplications),
+                };
+                model.Axes.Add(horizontalAxis);
                 var ratioGroups = powerAnalysisOutputRecords.GroupBy(r => r.Effect).Where(g => !double.IsNaN(g.Key));
                 for (int i = 0; i < ratioGroups.Count(); ++i) {
                     var ratioGroup = ratioGroups.ElementAt(i);

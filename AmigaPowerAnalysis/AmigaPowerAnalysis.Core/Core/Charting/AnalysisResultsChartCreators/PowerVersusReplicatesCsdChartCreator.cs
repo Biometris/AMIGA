@@ -20,17 +20,17 @@ namespace AmigaPowerAnalysis.Core.Charting.AnalysisResultsChartCreators {
 
         public static PlotModel Create(IEnumerable<AggregateOutputPowerAnalysisRecord> aggregatePowerAnalysisRecords, TestType testType) {
             var model = AggregateAnalysisResultsChartCreatorBase.CreatePlotModel(testType);
-            var horizontalAxis = new LogarithmicAxis() {
-                Title = "Replicates",
-                Base = 2,
-                MajorGridlineStyle = LineStyle.Solid,
-                MinorGridlineStyle = LineStyle.Dot,
-                Position = AxisPosition.Bottom,
-                AbsoluteMaximum = aggregatePowerAnalysisRecords.Max(r => r.NumberOfReplications),
-                AbsoluteMinimum = aggregatePowerAnalysisRecords.Min(r => r.NumberOfReplications),
-            };
-            model.Axes.Add(horizontalAxis);
-            if (aggregatePowerAnalysisRecords != null) {
+            if (aggregatePowerAnalysisRecords != null && aggregatePowerAnalysisRecords.Count() > 0) {
+                var horizontalAxis = new LogarithmicAxis() {
+                    Title = "Replicates",
+                    Base = 2,
+                    MajorGridlineStyle = LineStyle.Solid,
+                    MinorGridlineStyle = LineStyle.Dot,
+                    Position = AxisPosition.Bottom,
+                    AbsoluteMaximum = aggregatePowerAnalysisRecords.Max(r => r.NumberOfReplications),
+                    AbsoluteMinimum = aggregatePowerAnalysisRecords.Min(r => r.NumberOfReplications),
+                };
+                model.Axes.Add(horizontalAxis);
                 var csdGroups = aggregatePowerAnalysisRecords.GroupBy(r => r.ConcernStandardizedDifference).Where(g => !double.IsNaN(g.Key));
                 for (int i = 0; i < csdGroups.Count(); ++i) {
                     var csdGroup = csdGroups.ElementAt(i);
