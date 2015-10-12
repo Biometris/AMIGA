@@ -45,7 +45,7 @@
     <OutputPath>bin\Release\</OutputPath>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Resources\amiga_icon.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\Icons\AMIGA-Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
@@ -453,6 +453,10 @@
     <Content Include="Resources\GenstatScripts\AmigaPowerValidation-Simulate.pro">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\Icons\AMIGA-Icon-16x16.png" />
+    <Content Include="Resources\Icons\AMIGA-Icon-32x32.png" />
+    <Content Include="Resources\Icons\AMIGA-Icon-96x96.png" />
+    <Content Include="Resources\Icons\AMIGA-Icon.ico" />
     <EmbeddedResource Include="Resources\RScripts\ROutputTableDefinition.xml" />
     <EmbeddedResource Include="Resources\TableDefinitions.xml">
       <SubType>Designer</SubType>

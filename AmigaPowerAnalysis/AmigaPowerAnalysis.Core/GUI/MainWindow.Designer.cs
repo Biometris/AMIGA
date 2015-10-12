@@ -36,8 +36,8 @@
             this.toolstripEndpointTypes = new System.Windows.Forms.ToolStripMenuItem();
             this.goToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolstripAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.userManualToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolstripAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
@@ -149,19 +149,19 @@
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.helpToolStripMenuItem.Text = "Help";
             // 
-            // toolstripAbout
-            // 
-            this.toolstripAbout.Name = "toolstripAbout";
-            this.toolstripAbout.Size = new System.Drawing.Size(152, 22);
-            this.toolstripAbout.Text = "About";
-            this.toolstripAbout.Click += new System.EventHandler(this.toolstripAbout_Click);
-            // 
             // userManualToolStripMenuItem
             // 
             this.userManualToolStripMenuItem.Name = "userManualToolStripMenuItem";
-            this.userManualToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.userManualToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
             this.userManualToolStripMenuItem.Text = "User manual";
             this.userManualToolStripMenuItem.Click += new System.EventHandler(this.userManualToolStripMenuItem_Click);
+            // 
+            // toolstripAbout
+            // 
+            this.toolstripAbout.Name = "toolstripAbout";
+            this.toolstripAbout.Size = new System.Drawing.Size(140, 22);
+            this.toolstripAbout.Text = "About";
+            this.toolstripAbout.Click += new System.EventHandler(this.toolstripAbout_Click);
             // 
             // tabControl
             // 
