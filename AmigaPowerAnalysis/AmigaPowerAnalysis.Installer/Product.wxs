@@ -95,7 +95,7 @@
   <Fragment>
     <ComponentGroup Id="ApplicationComponentGroup" Directory="INSTALLFOLDER">
       <Component Guid="{B7149209-2DD9-421D-998F-531412A53B6C}">
-        <File Id="MainExe" Source="..\AmigaPowerAnalysis.Core\bin\Release\AmigaPowerAnalysis.exe" KeyPath="yes" />
+        <File Id="MainExe" Source="..\AmigaPowerAnalysis.Core\bin\$(var.Platform)\Release\AmigaPowerAnalysis.exe" KeyPath="yes" />
       </Component>
       <Component Guid="{3FBB0E65-B43D-4C52-AE7D-5F8C20FA6616}">
         <File Source="..\AmigaPowerAnalysis.Core\bin\$(var.Platform)\Release\Biometris.dll" KeyPath="yes" />
@@ -161,7 +161,7 @@
   <Fragment>
     <ComponentGroup Id="ManualGroup" Directory="Manual">
       <Component Guid="{3B4D0D4C-16AF-4C91-BF07-675EBE8F83E0}">
-        <File Source="..\AmigaPowerAnalysis.Core\bin\Release\Manual\User Manual.pdf" KeyPath="yes" />
+        <File Source="..\AmigaPowerAnalysis.Core\bin\$(var.Platform)\Release\Manual\User Manual.pdf" KeyPath="yes" />
       </Component>
     </ComponentGroup>
   </Fragment>
