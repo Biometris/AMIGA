@@ -57,8 +57,11 @@ namespace AmigaPowerAnalysis.GUI {
             } else {
                 splitContainerComparisons.Visible = false;
             }
-            radioButtonAggregateMin.Checked = _resultPowerAnalysis.PowerAggregationType == PowerAggregationType.AggregateMinimum;
-            radioButtonAggregateMean.Checked = _resultPowerAnalysis.PowerAggregationType == PowerAggregationType.AggregateMean;
+            if (_resultPowerAnalysis.PowerAggregationType == PowerAggregationType.AggregateMinimum) {
+                radioButtonAggregateMin.Checked = true;
+            } else {
+                radioButtonAggregateMean.Checked = true;
+            }
         }
 
         public bool IsVisible() {
