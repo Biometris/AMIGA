@@ -130,6 +130,8 @@
             this.dataGridViewComparisons.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridViewComparisons.Size = new System.Drawing.Size(283, 454);
             this.dataGridViewComparisons.TabIndex = 3;
+            this.dataGridViewComparisons.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.dataGridViewComparisons_CellBeginEdit);
+            this.dataGridViewComparisons.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewComparisons_CellClick);
             this.dataGridViewComparisons.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewComparisons_CellValueChanged);
             this.dataGridViewComparisons.SelectionChanged += new System.EventHandler(this.dataGridViewComparisons_SelectionChanged);
             // 

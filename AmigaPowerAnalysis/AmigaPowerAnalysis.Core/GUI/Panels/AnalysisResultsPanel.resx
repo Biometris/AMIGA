@@ -749,4 +749,15 @@
         EiRLAAAAAElFTkSuQmCC
 </value>
   </data>
+  <data name="textBoxTabDescription.Text" xml:space="preserve">
+    <value>
+This tab allows you to export a data template and analysis scripts for analysis of an experiment conforming to the design specified.
+First specify the number of replicates that you want to use in the experiment.
+
+The button Export data template will generate two CSV files:
+1. A template to enter the actual observations from the experiment, and
+2. A help file specifying the comparison to be analysed.
+
+[not yet implemented:] The button Export analysis script will generate a text file containing an R script that can analyse the datafile (when completed)</value>
+  </data>
 </root>

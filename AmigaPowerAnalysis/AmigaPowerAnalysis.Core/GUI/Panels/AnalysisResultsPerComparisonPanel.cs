@@ -82,6 +82,7 @@ namespace AmigaPowerAnalysis.GUI {
 
             var combo = new DataGridViewComboBoxColumn();
             combo.DataSource = _availableAnalysisMethodTypesDifferenceTests;
+            combo.Name = "AnalysisMethodDifferenceTest";
             combo.DataPropertyName = "AnalysisMethodDifferenceTest";
             combo.ValueType = typeof(AnalysisMethodType);
             combo.HeaderText = "Difference test";
@@ -93,6 +94,7 @@ namespace AmigaPowerAnalysis.GUI {
 
             combo = new DataGridViewComboBoxColumn();
             combo.DataSource = _availableAnalysisMethodTypesEquivalenceTests;
+            combo.Name = "AnalysisMethodEquivalenceTest";
             combo.DataPropertyName = "AnalysisMethodEquivalenceTest";
             combo.ValueType = typeof(AnalysisMethodType);
             combo.HeaderText = "Equivalence test";
@@ -245,6 +247,27 @@ namespace AmigaPowerAnalysis.GUI {
                 reportGenerator.SaveAsPdf(filenamePdf);
                 Process.Start(filenamePdf);
             }
+        }
+
+        private void dataGridViewComparisons_CellClick(object sender, DataGridViewCellEventArgs e) {
+            if (dataGridViewComparisons.Columns[e.ColumnIndex].Name == "AnalysisMethodDifferenceTest") {
+                var measurement = _currentComparisonAnalysisResult.InputPowerAnalysis.MeasurementType;
+                var combo = dataGridViewComparisons.Rows[e.RowIndex].Cells["AnalysisMethodDifferenceTest"] as DataGridViewComboBoxCell;
+                var source = _currentComparisonAnalysisResult.InputPowerAnalysis.SelectedAnalysisMethodTypesDifferenceTests
+                    .GetFlags().Cast<AnalysisMethodType>().ToList();
+                combo.DataSource = source;
+            }
+            if (dataGridViewComparisons.Columns[e.ColumnIndex].Name == "AnalysisMethodEquivalenceTest") {
+                var measurement = _currentComparisonAnalysisResult.InputPowerAnalysis.MeasurementType;
+                var combo = dataGridViewComparisons.Rows[e.RowIndex].Cells["AnalysisMethodEquivalenceTest"] as DataGridViewComboBoxCell;
+                var source = _currentComparisonAnalysisResult.InputPowerAnalysis.SelectedAnalysisMethodTypesEquivalenceTests
+                    .GetFlags().Cast<AnalysisMethodType>().ToList();
+                combo.DataSource = source;
+            }
+        }
+
+        private void dataGridViewComparisons_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e) {
+
         }
     }
 }

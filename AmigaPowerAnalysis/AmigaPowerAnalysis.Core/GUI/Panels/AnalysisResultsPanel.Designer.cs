@@ -26,9 +26,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AnalysisResultsPanel));
             this.splitContainerComparisons = new System.Windows.Forms.SplitContainer();
             this.dataGridViewComparisons = new System.Windows.Forms.DataGridView();
-            this.topPanel = new System.Windows.Forms.FlowLayoutPanel();
-            this.labelOutputNameLabel = new System.Windows.Forms.Label();
-            this.labelOutputName = new System.Windows.Forms.Label();
             this.tabControlEndpointResult = new System.Windows.Forms.TabControl();
             this.tabPageDifferenceTest = new System.Windows.Forms.TabPage();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
@@ -51,6 +48,9 @@
             this.buttonGenerateDataTemplate = new System.Windows.Forms.Button();
             this.textBoxNumberOfReplicates = new System.Windows.Forms.TextBox();
             this.labelNumberOfReplicates = new System.Windows.Forms.Label();
+            this.topPanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.labelOutputNameLabel = new System.Windows.Forms.Label();
+            this.labelOutputName = new System.Windows.Forms.Label();
             this.labelAggregationMethod = new System.Windows.Forms.Label();
             this.radioButtonAggregateMin = new System.Windows.Forms.RadioButton();
             this.radioButtonAggregateMean = new System.Windows.Forms.RadioButton();
@@ -59,7 +59,6 @@
             this.splitContainerComparisons.Panel2.SuspendLayout();
             this.splitContainerComparisons.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewComparisons)).BeginInit();
-            this.topPanel.SuspendLayout();
             this.tabControlEndpointResult.SuspendLayout();
             this.tabPageDifferenceTest.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
@@ -69,6 +68,7 @@
             this.toolStrip.SuspendLayout();
             this.tabPageAnalysisTemplate.SuspendLayout();
             this.flowLayoutPanelReport.SuspendLayout();
+            this.topPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // splitContainerComparisons
@@ -108,45 +108,11 @@
             this.dataGridViewComparisons.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridViewComparisons.Size = new System.Drawing.Size(283, 454);
             this.dataGridViewComparisons.TabIndex = 3;
+            this.dataGridViewComparisons.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.dataGridViewComparisons_CellBeginEdit);
+            this.dataGridViewComparisons.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewComparisons_CellClick);
             this.dataGridViewComparisons.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewComparisons_CellValueChanged);
             this.dataGridViewComparisons.CurrentCellDirtyStateChanged += new System.EventHandler(this.dataGridViewComparisons_CurrentCellDirtyStateChanged);
             this.dataGridViewComparisons.Leave += new System.EventHandler(this.dataGridViewComparisons_Leave);
-            // 
-            // topPanel
-            // 
-            this.topPanel.AutoSize = true;
-            this.topPanel.Controls.Add(this.labelOutputNameLabel);
-            this.topPanel.Controls.Add(this.labelOutputName);
-            this.topPanel.Controls.Add(this.labelAggregationMethod);
-            this.topPanel.Controls.Add(this.radioButtonAggregateMin);
-            this.topPanel.Controls.Add(this.radioButtonAggregateMean);
-            this.topPanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.topPanel.Location = new System.Drawing.Point(10, 10);
-            this.topPanel.Name = "topPanel";
-            this.topPanel.Padding = new System.Windows.Forms.Padding(0, 3, 0, 3);
-            this.topPanel.Size = new System.Drawing.Size(854, 29);
-            this.topPanel.TabIndex = 12;
-            // 
-            // labelOutputNameLabel
-            // 
-            this.labelOutputNameLabel.AutoSize = true;
-            this.labelOutputNameLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelOutputNameLabel.Location = new System.Drawing.Point(3, 3);
-            this.labelOutputNameLabel.Name = "labelOutputNameLabel";
-            this.labelOutputNameLabel.Padding = new System.Windows.Forms.Padding(0, 5, 0, 0);
-            this.labelOutputNameLabel.Size = new System.Drawing.Size(49, 18);
-            this.labelOutputNameLabel.TabIndex = 11;
-            this.labelOutputNameLabel.Text = "Output:";
-            // 
-            // labelOutputName
-            // 
-            this.labelOutputName.AutoSize = true;
-            this.labelOutputName.Location = new System.Drawing.Point(58, 3);
-            this.labelOutputName.Name = "labelOutputName";
-            this.labelOutputName.Padding = new System.Windows.Forms.Padding(0, 5, 0, 0);
-            this.labelOutputName.Size = new System.Drawing.Size(66, 18);
-            this.labelOutputName.TabIndex = 10;
-            this.labelOutputName.Text = "output name";
             // 
             // tabControlEndpointResult
             // 
@@ -230,7 +196,7 @@
             this.tabPageEquivalenceTest.Location = new System.Drawing.Point(4, 22);
             this.tabPageEquivalenceTest.Name = "tabPageEquivalenceTest";
             this.tabPageEquivalenceTest.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageEquivalenceTest.Size = new System.Drawing.Size(553, 451);
+            this.tabPageEquivalenceTest.Size = new System.Drawing.Size(559, 428);
             this.tabPageEquivalenceTest.TabIndex = 1;
             this.tabPageEquivalenceTest.Text = "Chart equivalence test";
             this.tabPageEquivalenceTest.UseVisualStyleBackColor = true;
@@ -244,13 +210,13 @@
             this.flowLayoutPanel2.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
             this.flowLayoutPanel2.Location = new System.Drawing.Point(3, 3);
             this.flowLayoutPanel2.Name = "flowLayoutPanel2";
-            this.flowLayoutPanel2.Size = new System.Drawing.Size(547, 23);
+            this.flowLayoutPanel2.Size = new System.Drawing.Size(553, 23);
             this.flowLayoutPanel2.TabIndex = 18;
             // 
             // radioButtonReplicatesEquivalence
             // 
             this.radioButtonReplicatesEquivalence.AutoSize = true;
-            this.radioButtonReplicatesEquivalence.Location = new System.Drawing.Point(407, 3);
+            this.radioButtonReplicatesEquivalence.Location = new System.Drawing.Point(413, 3);
             this.radioButtonReplicatesEquivalence.Name = "radioButtonReplicatesEquivalence";
             this.radioButtonReplicatesEquivalence.Size = new System.Drawing.Size(137, 17);
             this.radioButtonReplicatesEquivalence.TabIndex = 11;
@@ -262,7 +228,7 @@
             // radioButtonCsdEquivalence
             // 
             this.radioButtonCsdEquivalence.AutoSize = true;
-            this.radioButtonCsdEquivalence.Location = new System.Drawing.Point(287, 3);
+            this.radioButtonCsdEquivalence.Location = new System.Drawing.Point(293, 3);
             this.radioButtonCsdEquivalence.Name = "radioButtonCsdEquivalence";
             this.radioButtonCsdEquivalence.Size = new System.Drawing.Size(114, 17);
             this.radioButtonCsdEquivalence.TabIndex = 10;
@@ -278,7 +244,7 @@
             this.plotViewEquivalence.Location = new System.Drawing.Point(3, 3);
             this.plotViewEquivalence.Name = "plotViewEquivalence";
             this.plotViewEquivalence.PanCursor = System.Windows.Forms.Cursors.Hand;
-            this.plotViewEquivalence.Size = new System.Drawing.Size(547, 445);
+            this.plotViewEquivalence.Size = new System.Drawing.Size(553, 422);
             this.plotViewEquivalence.TabIndex = 4;
             this.plotViewEquivalence.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
             this.plotViewEquivalence.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
@@ -290,7 +256,7 @@
             this.tabPageFullReport.Controls.Add(this.toolStrip);
             this.tabPageFullReport.Location = new System.Drawing.Point(4, 22);
             this.tabPageFullReport.Name = "tabPageFullReport";
-            this.tabPageFullReport.Size = new System.Drawing.Size(553, 451);
+            this.tabPageFullReport.Size = new System.Drawing.Size(559, 428);
             this.tabPageFullReport.TabIndex = 4;
             this.tabPageFullReport.Text = "Full report";
             this.tabPageFullReport.UseVisualStyleBackColor = true;
@@ -303,7 +269,7 @@
             this.webBrowserFullReport.Location = new System.Drawing.Point(0, 25);
             this.webBrowserFullReport.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowserFullReport.Name = "webBrowserFullReport";
-            this.webBrowserFullReport.Size = new System.Drawing.Size(553, 426);
+            this.webBrowserFullReport.Size = new System.Drawing.Size(559, 403);
             this.webBrowserFullReport.TabIndex = 2;
             // 
             // toolStrip
@@ -316,7 +282,7 @@
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Padding = new System.Windows.Forms.Padding(0);
-            this.toolStrip.Size = new System.Drawing.Size(553, 25);
+            this.toolStrip.Size = new System.Drawing.Size(559, 25);
             this.toolStrip.TabIndex = 3;
             this.toolStrip.Text = "toolStrip";
             // 
@@ -338,7 +304,7 @@
             this.tabPageAnalysisTemplate.Controls.Add(this.flowLayoutPanelReport);
             this.tabPageAnalysisTemplate.Location = new System.Drawing.Point(4, 22);
             this.tabPageAnalysisTemplate.Name = "tabPageAnalysisTemplate";
-            this.tabPageAnalysisTemplate.Size = new System.Drawing.Size(553, 451);
+            this.tabPageAnalysisTemplate.Size = new System.Drawing.Size(559, 428);
             this.tabPageAnalysisTemplate.TabIndex = 5;
             this.tabPageAnalysisTemplate.Text = "Analysis template";
             this.tabPageAnalysisTemplate.UseVisualStyleBackColor = true;
@@ -353,12 +319,10 @@
             this.textBoxTabDescription.Location = new System.Drawing.Point(0, 29);
             this.textBoxTabDescription.Name = "textBoxTabDescription";
             this.textBoxTabDescription.ReadOnly = true;
-            this.textBoxTabDescription.Size = new System.Drawing.Size(553, 422);
+            this.textBoxTabDescription.Size = new System.Drawing.Size(559, 399);
             this.textBoxTabDescription.TabIndex = 20;
             this.textBoxTabDescription.TabStop = false;
-            this.textBoxTabDescription.Text = "\r\nThis tab allows you to export a data template and analysis scripts for analysis o" +
-    "f an experiment conforming to the design specified.\r\nFirst specify the number of replicates that you want to use in the experiment.\r\n\r\nThe button Export data template will generate two CSV files:\r\n1. A template to enter the actual observations from the experiment, and\r\n2. A help file specifying the comparison to be analysed.\r\n\r\n[not yet implemented:] The button Export analysis script will generate a text file containing an R script that can analyse the datafile (when completed)";
-            
+            this.textBoxTabDescription.Text = resources.GetString("textBoxTabDescription.Text");
             // 
             // flowLayoutPanelReport
             // 
@@ -370,13 +334,13 @@
             this.flowLayoutPanelReport.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
             this.flowLayoutPanelReport.Location = new System.Drawing.Point(0, 0);
             this.flowLayoutPanelReport.Name = "flowLayoutPanelReport";
-            this.flowLayoutPanelReport.Size = new System.Drawing.Size(553, 29);
+            this.flowLayoutPanelReport.Size = new System.Drawing.Size(559, 29);
             this.flowLayoutPanelReport.TabIndex = 19;
             // 
             // buttonExportAnalysisScripts
             // 
             this.buttonExportAnalysisScripts.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonExportAnalysisScripts.Location = new System.Drawing.Point(407, 3);
+            this.buttonExportAnalysisScripts.Location = new System.Drawing.Point(413, 3);
             this.buttonExportAnalysisScripts.Name = "buttonExportAnalysisScripts";
             this.buttonExportAnalysisScripts.Size = new System.Drawing.Size(143, 23);
             this.buttonExportAnalysisScripts.TabIndex = 12;
@@ -387,7 +351,7 @@
             // buttonGenerateDataTemplate
             // 
             this.buttonGenerateDataTemplate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonGenerateDataTemplate.Location = new System.Drawing.Point(258, 3);
+            this.buttonGenerateDataTemplate.Location = new System.Drawing.Point(264, 3);
             this.buttonGenerateDataTemplate.Name = "buttonGenerateDataTemplate";
             this.buttonGenerateDataTemplate.Size = new System.Drawing.Size(143, 23);
             this.buttonGenerateDataTemplate.TabIndex = 0;
@@ -397,7 +361,7 @@
             // 
             // textBoxNumberOfReplicates
             // 
-            this.textBoxNumberOfReplicates.Location = new System.Drawing.Point(210, 3);
+            this.textBoxNumberOfReplicates.Location = new System.Drawing.Point(216, 3);
             this.textBoxNumberOfReplicates.Name = "textBoxNumberOfReplicates";
             this.textBoxNumberOfReplicates.Size = new System.Drawing.Size(42, 20);
             this.textBoxNumberOfReplicates.TabIndex = 11;
@@ -406,12 +370,48 @@
             // labelNumberOfReplicates
             // 
             this.labelNumberOfReplicates.AutoSize = true;
-            this.labelNumberOfReplicates.Location = new System.Drawing.Point(97, 8);
+            this.labelNumberOfReplicates.Location = new System.Drawing.Point(103, 8);
             this.labelNumberOfReplicates.Margin = new System.Windows.Forms.Padding(3, 8, 3, 0);
             this.labelNumberOfReplicates.Name = "labelNumberOfReplicates";
             this.labelNumberOfReplicates.Size = new System.Drawing.Size(107, 13);
             this.labelNumberOfReplicates.TabIndex = 10;
             this.labelNumberOfReplicates.Text = "Number of replicates:";
+            // 
+            // topPanel
+            // 
+            this.topPanel.AutoSize = true;
+            this.topPanel.Controls.Add(this.labelOutputNameLabel);
+            this.topPanel.Controls.Add(this.labelOutputName);
+            this.topPanel.Controls.Add(this.labelAggregationMethod);
+            this.topPanel.Controls.Add(this.radioButtonAggregateMin);
+            this.topPanel.Controls.Add(this.radioButtonAggregateMean);
+            this.topPanel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.topPanel.Location = new System.Drawing.Point(10, 10);
+            this.topPanel.Name = "topPanel";
+            this.topPanel.Padding = new System.Windows.Forms.Padding(0, 3, 0, 3);
+            this.topPanel.Size = new System.Drawing.Size(854, 29);
+            this.topPanel.TabIndex = 12;
+            // 
+            // labelOutputNameLabel
+            // 
+            this.labelOutputNameLabel.AutoSize = true;
+            this.labelOutputNameLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelOutputNameLabel.Location = new System.Drawing.Point(3, 3);
+            this.labelOutputNameLabel.Name = "labelOutputNameLabel";
+            this.labelOutputNameLabel.Padding = new System.Windows.Forms.Padding(0, 5, 0, 0);
+            this.labelOutputNameLabel.Size = new System.Drawing.Size(49, 18);
+            this.labelOutputNameLabel.TabIndex = 11;
+            this.labelOutputNameLabel.Text = "Output:";
+            // 
+            // labelOutputName
+            // 
+            this.labelOutputName.AutoSize = true;
+            this.labelOutputName.Location = new System.Drawing.Point(58, 3);
+            this.labelOutputName.Name = "labelOutputName";
+            this.labelOutputName.Padding = new System.Windows.Forms.Padding(0, 5, 0, 0);
+            this.labelOutputName.Size = new System.Drawing.Size(66, 18);
+            this.labelOutputName.TabIndex = 10;
+            this.labelOutputName.Text = "output name";
             // 
             // labelAggregationMethod
             // 
@@ -464,8 +464,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerComparisons)).EndInit();
             this.splitContainerComparisons.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewComparisons)).EndInit();
-            this.topPanel.ResumeLayout(false);
-            this.topPanel.PerformLayout();
             this.tabControlEndpointResult.ResumeLayout(false);
             this.tabPageDifferenceTest.ResumeLayout(false);
             this.tabPageDifferenceTest.PerformLayout();
@@ -482,6 +480,8 @@
             this.tabPageAnalysisTemplate.ResumeLayout(false);
             this.flowLayoutPanelReport.ResumeLayout(false);
             this.flowLayoutPanelReport.PerformLayout();
+            this.topPanel.ResumeLayout(false);
+            this.topPanel.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 

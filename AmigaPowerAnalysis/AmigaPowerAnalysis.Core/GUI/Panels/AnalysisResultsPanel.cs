@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using System.Collections.Generic;
 
 namespace AmigaPowerAnalysis.GUI {
     public partial class AnalysisResultsPanel : UserControl, ISelectionForm {
@@ -20,6 +21,8 @@ namespace AmigaPowerAnalysis.GUI {
         private string _currentOutputName;
         private ResultPowerAnalysis _resultPowerAnalysis;
         private AnalysisPlotType _currentPlotType;
+        private List<Enum> _availableAnalysisMethodTypesDifferenceTests;
+        private List<Enum> _availableAnalysisMethodTypesEquivalenceTests;
 
         #endregion
 
@@ -89,22 +92,24 @@ namespace AmigaPowerAnalysis.GUI {
             checkbox.HeaderText = "Primary";
             dataGridViewComparisons.Columns.Add(checkbox);
 
-            var _availableAnalysisMethodTypesDifferenceTests = _resultPowerAnalysis.ComparisonPowerAnalysisResults
+            _availableAnalysisMethodTypesDifferenceTests = _resultPowerAnalysis.ComparisonPowerAnalysisResults
                 .SelectMany(r => r.InputPowerAnalysis.SelectedAnalysisMethodTypesDifferenceTests.GetFlags()).Distinct().ToList();
 
             var combo = new DataGridViewComboBoxColumn();
             combo.DataSource = _availableAnalysisMethodTypesDifferenceTests;
+            combo.Name = "AnalysisMethodDifferenceTest";
             combo.DataPropertyName = "AnalysisMethodDifferenceTest";
             combo.ValueType = typeof(AnalysisMethodType);
             combo.HeaderText = "Difference test";
             combo.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
             dataGridViewComparisons.Columns.Add(combo);
 
-            var _availableAnalysisMethodTypesEquivalenceTests = _resultPowerAnalysis.ComparisonPowerAnalysisResults
+            _availableAnalysisMethodTypesEquivalenceTests = _resultPowerAnalysis.ComparisonPowerAnalysisResults
                 .SelectMany(r => r.InputPowerAnalysis.SelectedAnalysisMethodTypesEquivalenceTests.GetFlags()).Distinct().ToList();
 
             combo = new DataGridViewComboBoxColumn();
             combo.DataSource = _availableAnalysisMethodTypesEquivalenceTests;
+            combo.Name = "AnalysisMethodEquivalenceTest";
             combo.DataPropertyName = "AnalysisMethodEquivalenceTest";
             combo.ValueType = typeof(AnalysisMethodType);
             combo.HeaderText = "Equivalence test";
@@ -304,6 +309,28 @@ namespace AmigaPowerAnalysis.GUI {
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error,
                     MessageBoxDefaultButton.Button1);
+        }
+
+        private void dataGridViewComparisons_CellClick(object sender, DataGridViewCellEventArgs e) {
+
+        }
+
+        private void dataGridViewComparisons_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e) {
+            var currentComparisonAnalysisResult = _resultPowerAnalysis.ComparisonPowerAnalysisResults[e.RowIndex];
+            if (dataGridViewComparisons.Columns[e.ColumnIndex].Name == "AnalysisMethodDifferenceTest") {
+                var measurement = currentComparisonAnalysisResult.InputPowerAnalysis.MeasurementType;
+                var combo = dataGridViewComparisons.Rows[e.RowIndex].Cells["AnalysisMethodDifferenceTest"] as DataGridViewComboBoxCell;
+                var source = currentComparisonAnalysisResult.InputPowerAnalysis.SelectedAnalysisMethodTypesDifferenceTests
+                    .GetFlags().Cast<AnalysisMethodType>().ToList();
+                combo.DataSource = source;
+            }
+            if (dataGridViewComparisons.Columns[e.ColumnIndex].Name == "AnalysisMethodEquivalenceTest") {
+                var measurement = currentComparisonAnalysisResult.InputPowerAnalysis.MeasurementType;
+                var combo = dataGridViewComparisons.Rows[e.RowIndex].Cells["AnalysisMethodEquivalenceTest"] as DataGridViewComboBoxCell;
+                var source = currentComparisonAnalysisResult.InputPowerAnalysis.SelectedAnalysisMethodTypesEquivalenceTests
+                    .GetFlags().Cast<AnalysisMethodType>().ToList();
+                combo.DataSource = source;
+            }
         }
     }
 }
