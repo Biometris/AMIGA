@@ -57,6 +57,8 @@
             <Directory Id="GenstatScripts" Name="GenstatScripts">
             </Directory>
           </Directory>
+          <Directory Id="Manual" Name="Manual">
+          </Directory>
         </Directory>
       </Directory>
       <!-- Root of the programs menu folder -->
@@ -157,7 +159,7 @@
   </Fragment>
 
   <Fragment>
-    <ComponentGroup Id="ManualGroup" Directory="INSTALLFOLDER">
+    <ComponentGroup Id="ManualGroup" Directory="Manual">
       <Component Guid="{3B4D0D4C-16AF-4C91-BF07-675EBE8F83E0}">
         <File Source="..\AmigaPowerAnalysis.Core\bin\Release\Manual\User Manual.pdf" KeyPath="yes" />
       </Component>
