@@ -57,6 +57,8 @@ namespace AmigaPowerAnalysis.Core {
         [DataMember]
         private List<ResultPowerAnalysis> _analysisResults;
 
+        private ResultPowerAnalysis _primaryOutput;
+
         [DataMember]
         private string _primaryOutputFile;
 
@@ -180,7 +182,7 @@ namespace AmigaPowerAnalysis.Core {
         /// <summary>
         /// The primary output file of this project.
         /// </summary>
-        public string PrimaryOutput {
+        public string PrimaryOutputId {
             get { return _primaryOutputFile; }
             set { _primaryOutputFile = value; }
         }
@@ -387,40 +389,24 @@ namespace AmigaPowerAnalysis.Core {
         }
 
         /// <summary>
-        /// The power analysis results of this project.
-        /// </summary>
-        public List<ResultPowerAnalysis> AnalysisResults {
-            get {
-                if (_analysisResults == null) {
-                    _analysisResults = new List<ResultPowerAnalysis>();
-                }
-                return _analysisResults;
-            }
-            set {
-                _analysisResults = value;
-            }
-        }
-
-        /// <summary>
         /// Returns the primary output.
         /// </summary>
         /// <param name="currentProjectFilePath"></param>
         /// <returns></returns>
-        public bool PrimaryOutputExists(string currentProjectFilePath) {
-            return !string.IsNullOrEmpty(PrimaryOutput) && File.Exists(Path.Combine(currentProjectFilePath, PrimaryOutput + ".xml"));
-        }
-
-        /// <summary>
-        /// Returns the primary output.
-        /// </summary>
-        /// <param name="currentProjectFilePath"></param>
-        /// <returns></returns>
-        public ResultPowerAnalysis GetPrimaryOutput(string currentProjectFilePath) {
-            var filename = Path.Combine(currentProjectFilePath, PrimaryOutput + ".xml");
+        public void LoadPrimaryOutput(string currentProjectFilePath) {
+            var filename = Path.Combine(currentProjectFilePath, PrimaryOutputId + ".xml");
             if (File.Exists(filename)) {
-                return SerializationExtensions.FromXmlFile<ResultPowerAnalysis>(filename);
+                _primaryOutput = SerializationExtensions.FromXmlFile<ResultPowerAnalysis>(filename);
+            } else {
+                _primaryOutput = null;
             }
-            return null;
+        }
+
+        /// <summary>
+        /// The primary output of this project.
+        /// </summary>
+        public ResultPowerAnalysis PrimaryOutput {
+            get { return _primaryOutput; }
         }
 
         /// <summary>
@@ -428,7 +414,7 @@ namespace AmigaPowerAnalysis.Core {
         /// </summary>
         public bool HasOutput {
             get {
-                return AnalysisResults != null && AnalysisResults.Count > 0;
+                return _primaryOutput != null;
             }
         }
 
@@ -436,7 +422,7 @@ namespace AmigaPowerAnalysis.Core {
         /// Clears the project outputs.
         /// </summary>
         public void ClearProjectOutput() {
-            AnalysisResults.Clear();
+            _primaryOutput = null;
         }
     }
 }

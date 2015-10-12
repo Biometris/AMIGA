@@ -42,7 +42,7 @@ namespace AmigaPowerAnalysis.GUI {
         public string CurrentOutputFilesPath {
             get {
                 if (_resultPowerAnalysis.GetPrimaryComparisons().Count() > 0) {
-                    return Path.Combine(CurrentProjectFilesPath, _project.PrimaryOutput);
+                    return Path.Combine(CurrentProjectFilesPath, _project.PrimaryOutputId);
                 }
                 return null;
             }
@@ -59,14 +59,14 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         public bool IsVisible() {
-            return _project != null && CurrentProjectFilesPath != null && _project.PrimaryOutputExists(CurrentProjectFilesPath);
+            return _project != null && _project.HasOutput;
         }
 
         private void updateDataGridComparisons() {
             dataGridViewComparisons.Columns.Clear();
 
-            _currentOutputName = _project.PrimaryOutput;
-            _resultPowerAnalysis = _project.GetPrimaryOutput(CurrentProjectFilesPath);
+            _currentOutputName = _project.PrimaryOutputId;
+            _resultPowerAnalysis = _project.PrimaryOutput;
             labelOutputName.Text = _currentOutputName;
 
             var column = new DataGridViewTextBoxColumn();

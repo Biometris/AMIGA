@@ -55,8 +55,6 @@ namespace AmigaPowerAnalysis.GUI {
         private void updateDataGridComparisons() {
             dataGridViewComparisons.Columns.Clear();
 
-            _comparisonAnalysisResults = _project.AnalysisResults.First().ComparisonPowerAnalysisResults;
-
             var column = new DataGridViewTextBoxColumn();
             column.DataPropertyName = "Endpoint";
             column.Name = "Endpoint";

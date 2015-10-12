@@ -71,10 +71,23 @@ namespace AmigaPowerAnalysis.GUI {
             }
         }
 
-        private void buttonDeleteCurrentOutput_Click(object sender, EventArgs e) {
+        private void buttonLoadCurrentOutput_Click(object sender, EventArgs e) {
             if (dataGridViewAvailableOutputs.SelectedRows.Count == 1) {
                 var currentRowFileName = dataGridViewAvailableOutputs.Rows[dataGridViewAvailableOutputs.CurrentRow.Index].Cells["Name"].Value.ToString();
                 var output = _availableOutputs.First(r => r.Name == currentRowFileName);
+                _project.PrimaryOutputId = output.Name;
+                _project.LoadPrimaryOutput(CurrentProjectFilesPath);
+                fireTabVisibilitiesChanged(true);
+            }
+        }
+
+        private void buttonDeleteCurrentOutput_Click(object sender, EventArgs e) {
+            if (dataGridViewAvailableOutputs.SelectedRows.Count == 1) {
+                var currentRowOutputId = dataGridViewAvailableOutputs.Rows[dataGridViewAvailableOutputs.CurrentRow.Index].Cells["Name"].Value.ToString();
+                var output = _availableOutputs.First(r => r.Name == currentRowOutputId);
+                if (_project.PrimaryOutputId == currentRowOutputId) {
+                    _project.PrimaryOutputId = null;
+                }
                 try {
                     File.Delete(output.FilePath);
                     if (Directory.Exists(output.FolderPath)) {
@@ -83,19 +96,11 @@ namespace AmigaPowerAnalysis.GUI {
                 } catch (Exception ex) {
                     showError("Error deleting output", ex.Message);
                 }
+                _project.LoadPrimaryOutput(CurrentProjectFilesPath);
                 updateDataGridViewAvailableOutputs();
                 fireTabVisibilitiesChanged();
             } else {
                 showError("Invalid selection", "Please select one entire row in order to remove its corresponding endpoint.");
-            }
-        }
-
-        private void buttonLoadCurrentOutput_Click(object sender, EventArgs e) {
-            if (dataGridViewAvailableOutputs.SelectedRows.Count == 1) {
-                var currentRowFileName = dataGridViewAvailableOutputs.Rows[dataGridViewAvailableOutputs.CurrentRow.Index].Cells["Name"].Value.ToString();
-                var output = _availableOutputs.First(r => r.Name == currentRowFileName);
-                _project.PrimaryOutput = output.Name;
-                fireTabVisibilitiesChanged(true);
             }
         }
 
@@ -109,7 +114,7 @@ namespace AmigaPowerAnalysis.GUI {
                             FilePath = r,
                             ExecutionDateTime = output.OuputTimeStamp,
                         };
-                        record.IsPrimary = (record.Name == _project.PrimaryOutput);
+                        record.IsPrimary = (record.Name == _project.PrimaryOutputId);
                         return record;
                     }).ToList();
                 return availableOutputs;

@@ -3,6 +3,8 @@ using Biometris.ExtensionMethods;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Xml;
+using System.Threading;
+using System;
 
 namespace AmigaPowerAnalysis.Core {
     public static class ProjectManager {
@@ -52,6 +54,21 @@ namespace AmigaPowerAnalysis.Core {
         public static void SaveProjectXml(Project project, string filename) {
             var dto = ProjectDTO.ToDTO(project);
             dto.ToXmlFile(filename);
+            SaveCurrentProjectOutput(project, filename);
+        }
+
+        /// <summary>
+        /// Saves the current project output of the project.
+        /// </summary>
+        /// <param name="project"></param>
+        /// <param name="projectFileName"></param>
+        public static void SaveCurrentProjectOutput(Project project, string projectFileName) {
+            var projectPath = Path.GetDirectoryName(projectFileName);
+            var projectName = project.ProjectName;
+            var filesPath = Path.Combine(projectPath, projectName);
+            if (project.PrimaryOutput != null) {
+                project.PrimaryOutput.ToXmlFile(Path.Combine(filesPath, project.PrimaryOutputId + ".xml"));
+            }
         }
 
         /// <summary>
@@ -62,7 +79,8 @@ namespace AmigaPowerAnalysis.Core {
         public static Project LoadProjectXml(string filename) {
             var dto = SerializationExtensions.FromXmlFile<ProjectDTO>(filename);
             var project = ProjectDTO.FromDTO(dto);
-            project.ProjectName = Path.GetFileNameWithoutExtension(filename); 
+            project.ProjectName = Path.GetFileNameWithoutExtension(filename);
+            project.LoadPrimaryOutput(Path.Combine(Path.GetDirectoryName(filename), project.ProjectName));
             return project;
         }
     }

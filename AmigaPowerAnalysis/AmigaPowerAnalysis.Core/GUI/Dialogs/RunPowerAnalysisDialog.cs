@@ -91,8 +91,8 @@ namespace AmigaPowerAnalysis.GUI {
             resultPowerAnalysis.OuputTimeStamp = DateTime.Now;
             resultPowerAnalysis.Version = ApplicationUtils.GetApplicationVersion();
             resultPowerAnalysis.ToXmlFile(filesPath + ".xml");
-            _project.PrimaryOutput = runId;
-            _project.AnalysisResults.Add(resultPowerAnalysis);
+            _project.PrimaryOutputId = runId;
+            _project.LoadPrimaryOutput(Path.Combine(projectPath, projectName));
             _runComplete = true;
         }
 
