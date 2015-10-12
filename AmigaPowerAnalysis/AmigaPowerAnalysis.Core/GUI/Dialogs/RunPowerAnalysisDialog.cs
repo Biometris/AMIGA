@@ -9,6 +9,7 @@ using AmigaPowerAnalysis.Core.PowerAnalysis;
 using Biometris.ProgressReporting;
 using Biometris.ExtensionMethods;
 using Biometris.ApplicationUtilities;
+using Biometris.R.REngines;
 
 namespace AmigaPowerAnalysis.GUI {
     public partial class RunPowerAnalysisDialog : Form {
@@ -41,6 +42,10 @@ namespace AmigaPowerAnalysis.GUI {
                 }, _cancellationTokenSource.Token);
                 await runSimulation(progressReporter.ProgressReport);
             } catch (OperationCanceledException) {
+            } catch (RNotFoundException) {
+                showError("Cannot find R on this computer", string.Format("Cannot find R on this computer. Consult the user manual and follow the instructions on how to install R."));
+            } catch (RLoadLibraryException ex) {
+                showError("Failed to load R package", string.Format("Failed to load R package. {0} Consult the user manual and follow the instructions on how to install these packages manually.", ex.Message));
             } catch (Exception ex) {
                 showError("Power analysis error", string.Format("An error occurred while executing the power analysis simulation. Message: {0}", ex.Message));
             } finally {

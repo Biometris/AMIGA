@@ -2,7 +2,7 @@
 
 namespace AmigaPowerAnalysis.Core.DataAnalysis.AnalysisModels {
 
-    static class AnalysisModelFactory {
+    public static class AnalysisModelFactory {
 
         /// <summary>
         /// Analysis method types for count measurement types.

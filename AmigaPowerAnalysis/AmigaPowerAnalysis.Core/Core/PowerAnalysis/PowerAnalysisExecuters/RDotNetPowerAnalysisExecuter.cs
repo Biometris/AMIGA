@@ -61,6 +61,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                     rEngine.LoadLibrary("stringr");
                     rEngine.LoadLibrary("reshape");
                     rEngine.LoadLibrary("mvtnorm");
+
                     rEngine.EvaluateNoReturn("#========== Reading script and data");
                     foreach (var scriptFile in scriptFiles) {
                         var filePath = Path.Combine(scriptsDirectory, scriptFile).Replace("\\", "/");
@@ -100,7 +101,6 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                     }
 
                     var totalLoops = blockConfigurations.Count * effects.Count;
-
                     var counter = 0;
                     for (int i = 0; i < blockConfigurations.Count; ++i) {
                         var blocks = blockConfigurations[i];
@@ -155,11 +155,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                     Success = errorList.Count == 0,
                     Messages = errorList
                 };
-            }
-            catch (OperationCanceledException ex) {
-                throw ex;
-            }
-            catch (Exception ex) {
+            } catch (REvaluateException ex) {
                 logger.Log(string.Format("# Error: {0}", ex.Message));
                 return new OutputPowerAnalysis() {
                     InputPowerAnalysis = inputPowerAnalysis,

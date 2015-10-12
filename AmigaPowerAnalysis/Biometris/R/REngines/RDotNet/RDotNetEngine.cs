@@ -78,7 +78,8 @@ namespace Biometris.R.REngines {
                     REngine.SetEnvironmentVariables();
                     _rEngine = REngine.GetInstance();
                 } catch {
-                    throw new Exception("Cannot find R on this computer");
+                    _isRunning = false;
+                    throw new RNotFoundException("Cannot find R on this computer");
                 }
                 _rEngine.Evaluate("options(width=10000)");
             }
@@ -93,7 +94,9 @@ namespace Biometris.R.REngines {
                 try {
                     var cmd = "rm(list = ls())";
                     _rEngine.Evaluate(cmd);
-                } catch { }
+                } catch (Exception ex) {
+                    throw new REvaluateException(ex.Message);
+                }
             }
             _isRunning = false;
         }
@@ -413,7 +416,7 @@ namespace Biometris.R.REngines {
                 } catch {
                     var message = string.Format("R package {0} was not installed and could not be downloaded and installed from the cran website. Please install the package manually within R.", packageName);
                     Comment(message);
-                    throw new Exception(message);
+                    throw new RLoadLibraryException(message);
                 }
                 libLoaded = EvaluateBoolean(string.Format("require('{0}', lib.loc='{1}')", packageName, libraryPath));
                 if (libLoaded) {
@@ -421,7 +424,7 @@ namespace Biometris.R.REngines {
                 } else {
                     var message = string.Format("Tried to download and install R package {0} but it could NOT be loaded. Please install the R package manually from within R.", packageName);
                     Comment(message);
-                    throw new Exception(message);
+                    throw new RLoadLibraryException(message);
                 }
             } else {
                 Comment(string.Format("R package {0} is loaded successfully.", packageName));
@@ -431,7 +434,7 @@ namespace Biometris.R.REngines {
             if (minimalRequiredPackageVersion != null && installedPackageVersion < minimalRequiredPackageVersion) {
                 var msg = string.Format("Version of R package {0} (version {1}) is too old. Please install later version (>= {2}).", packageName, installedPackageVersion, minimalRequiredPackageVersion);
                 Comment(msg);
-                throw new Exception(msg);
+                throw new RLoadLibraryException(msg);
             }
             Comment(string.Format("Package version of R package {0}: {1}.", packageName, installedPackageVersion));
         }

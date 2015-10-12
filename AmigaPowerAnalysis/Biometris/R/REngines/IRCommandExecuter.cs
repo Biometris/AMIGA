@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 
 namespace Biometris.R.REngines {
+
     public interface IRCommandExecuter {
 
         /// <summary>

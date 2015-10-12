@@ -27,7 +27,7 @@ namespace AmigaPowerAnalysis.Core.DataAnalysis.AnalysisModels {
         Normal = 512,
     }
 
-    interface IAnalysisModel {
+    public interface IAnalysisModel {
         string RModelString();
     }
 }
