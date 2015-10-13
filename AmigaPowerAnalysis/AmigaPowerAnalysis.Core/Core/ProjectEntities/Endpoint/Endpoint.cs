@@ -482,6 +482,9 @@ namespace AmigaPowerAnalysis.Core {
                     _excessZeroes = false;
                     break;
                 case MeasurementType.Continuous:
+                    if (_muComparator == 0) {
+                        _muComparator = 0.01;
+                    }
                     _excessZeroes = false;
                     break;
                 default:

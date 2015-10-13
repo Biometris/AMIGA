@@ -1,10 +1,13 @@
 ﻿using Biometris.Statistics.Distributions;
 using Biometris.Statistics.Measurements;
 using System;
+using Biometris.ExtensionMethods;
+using System.Linq;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Windows.Forms;
+using AmigaPowerAnalysis.Core.Data;
 
 namespace AmigaPowerAnalysis.Core {
     public static class EndpointTypeProvider {
@@ -26,11 +29,8 @@ namespace AmigaPowerAnalysis.Core {
             var filename = Path.Combine(Application.LocalUserAppDataPath, "MyEndpointTypes.xml");
             if (File.Exists(filename)) {
                 try {
-                    var serializer = new DataContractSerializer(typeof(List<EndpointType>));
-                    using (var fileStream = new FileStream(filename, FileMode.Open)) {
-                        MyEndpointTypes = (List<EndpointType>)serializer.ReadObject(fileStream);
-                        fileStream.Close();
-                    }
+                    var dto = SerializationExtensions.FromXmlFile<List<EndpointGroupDTO>>(filename);
+                    MyEndpointTypes = dto.Select(r => EndpointGroupDTO.FromDTO(r)).ToList();
                 } catch (Exception ex) {
                     var msg = ex.Message;
                 }
@@ -44,11 +44,8 @@ namespace AmigaPowerAnalysis.Core {
 
         public static void StoreMyEndpointTypes() {
             var filename = Path.Combine(Application.LocalUserAppDataPath, "MyEndpointTypes.xml");
-            var serializer = new DataContractSerializer(typeof(List<EndpointType>), null, 0x7FFF, false, true, null);
-            using (var fileWriter = new FileStream(filename, FileMode.Create)) {
-                serializer.WriteObject(fileWriter, MyEndpointTypes);
-                fileWriter.Close();
-            }
+            var dto = MyEndpointTypes.Select(r => EndpointGroupDTO.ToDTO(r)).ToList();
+            dto.ToXmlFile(filename);
         }
 
         public static List<EndpointType> DefaultEndpointTypes() {

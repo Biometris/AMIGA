@@ -1,10 +1,8 @@
-﻿using AmigaPowerAnalysis.Core.Data;
-using Biometris.ExtensionMethods;
-using System.IO;
+﻿using System.IO;
 using System.Runtime.Serialization;
 using System.Xml;
-using System.Threading;
-using System;
+using AmigaPowerAnalysis.Core.Data;
+using Biometris.ExtensionMethods;
 
 namespace AmigaPowerAnalysis.Core {
     public static class ProjectManager {

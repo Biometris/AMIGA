@@ -10,8 +10,13 @@ namespace AmigaPowerAnalysis.Core {
     [DataContract]
     public sealed class EndpointType {
 
-        private DistributionType _distributionType;
         private MeasurementType _measurementType;
+
+        private double _locLower;
+
+        private double _locUpper;
+
+        private DistributionType _distributionType;
 
         public EndpointType() {
             Measurement = MeasurementType.Count;
@@ -58,7 +63,14 @@ namespace AmigaPowerAnalysis.Core {
         /// Lower Limit of Concern.
         /// </summary>
         [DataMember]
-        public double LocLower { get; set; }
+        public double LocLower {
+            get {
+                return _locLower;
+            }
+            set {
+                _locLower = value;
+            }
+        }
 
         /// <summary>
         /// Upper Limit of Concern.
