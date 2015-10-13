@@ -418,6 +418,9 @@
     </Compile>
     <None Include="app.config" />
     <None Include="Diagram\CoreDiagram.cd" />
+    <Content Include="Examples\README.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Manual\User Manual.docx" />
     <None Include="Manual\User Manual.pdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
