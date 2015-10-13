@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<?define ProductName = "Amiga Power Analysis" ?>
 <?define ProductVersion = "!(bind.FileVersion.MainExe)" ?>
 <?define ProductUpgradeCode = "{DE4FBCF5-135D-4A27-9D4B-8246CEDF13D2}"?>
 <?if $(var.Platform) = x64 ?>
@@ -11,7 +12,7 @@
 <?define PlatformProgramFilesFolder = "ProgramFilesFolder" ?>
 <?endif ?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-  <Product Id="*" Name="Amiga Power Analysis" Manufacturer="Wageningen UR" Language="1033"
+  <Product Id="*" Name="$(var.ProductName)" Manufacturer="Wageningen UR" Language="1033"
            Version="$(var.ProductVersion)" UpgradeCode="$(var.ProductUpgradeCode)">
     <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
@@ -29,7 +30,7 @@
     </Upgrade>
     <Condition Message="A newer version of this software is already installed.">NOT NEWERVERSIONDETECTED</Condition>
 
-    <Feature Id="ProductFeature" Title="AmigaPowerAnalysis" Level="1" Display="expand" ConfigurableDirectory='INSTALLFOLDER'>
+    <Feature Id="ProductFeature" Title="$(var.ProductName)" Level="1" Display="expand" ConfigurableDirectory='INSTALLFOLDER'>
       <ComponentGroupRef Id="ApplicationComponentGroup" />
       <ComponentGroupRef Id="PowerAnalysisRScriptsGroup" />
       <ComponentGroupRef Id="PowerAnalysisGenstatScriptsGroup" />
@@ -51,7 +52,7 @@
     <Directory Id="TARGETDIR" Name="SourceDir">
       <!-- Root of the application folder -->
       <Directory Id="$(var.PlatformProgramFilesFolder)">
-        <Directory Id="INSTALLFOLDER" Name="AmigaPowerAnalysis">
+        <Directory Id="INSTALLFOLDER" Name="$(var.ProductName)">
           <Directory Id="Resources" Name="Resources">
             <Directory Id="RScripts" Name="RScripts">
             </Directory>
@@ -66,7 +67,7 @@
       </Directory>
       <!-- Root of the programs menu folder -->
       <Directory Id="ProgramMenuFolder">
-        <Directory Id="ProgramMenuSubFolder" Name="AmigaPowerAnalysis"/>
+        <Directory Id="ProgramMenuSubFolder" Name="$(var.ProductName)"/>
       </Directory>
       <!-- Desktop folder -->
       <Directory Id="DesktopFolder" />
@@ -76,10 +77,10 @@
   <Fragment>
     <DirectoryRef Id="DesktopFolder">
       <Component Id="DesktopShortcutComponent" Guid="{562559F9-87C1-4618-9204-1F39583EE947}">
-        <Shortcut Id="DesktopShortcut" Name="AmigaPowerAnalysis" Description="AmigaPowerAnalysis" Target="[INSTALLFOLDER]AmigaPowerAnalysis.exe" WorkingDirectory="INSTALLFOLDER">
+        <Shortcut Id="DesktopShortcut" Name="$(var.ProductName)" Description="$(var.ProductName)" Target="[INSTALLFOLDER]AmigaPowerAnalysis.exe" WorkingDirectory="INSTALLFOLDER">
           <Icon Id="DesktopIcon" SourceFile="Resources\Logo.ico" />
         </Shortcut>
-        <RegistryValue Root="HKCU" Key="Software\Wageningen UR\AmigaPowerAnalysis" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
+        <RegistryValue Root="HKCU" Key="Software\Wageningen UR\$(var.ProductName)" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
         <RemoveFolder Id="DesktopFolder" On="uninstall"/>
       </Component>
     </DirectoryRef>
@@ -88,8 +89,8 @@
   <Fragment>
     <DirectoryRef Id="ProgramMenuSubFolder">
       <Component Id="ProgramMenuSubFolderComponent" Guid="{FF325E2E-9503-4C2C-9BE0-AD6A13A6DCD6}">
-        <Shortcut Id="ProgramMenuShortcut" Name="AmigaPowerAnalysis" Description="AmigaPowerAnalysis" Target="[INSTALLFOLDER]AmigaPowerAnalysis.exe" WorkingDirectory="INSTALLFOLDER" />
-        <RegistryValue Root="HKCU" Key="Software\Wageningen UR\AmigaPowerAnalysis" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
+        <Shortcut Id="ProgramMenuShortcut" Name="$(var.ProductName)" Description="$(var.ProductName)" Target="[INSTALLFOLDER]AmigaPowerAnalysis.exe" WorkingDirectory="INSTALLFOLDER" />
+        <RegistryValue Root="HKCU" Key="Software\Wageningen UR\$(var.ProductName)" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
         <RemoveFolder Id="ApplicationProgramsFolder" On="uninstall"/>
       </Component>
     </DirectoryRef>
