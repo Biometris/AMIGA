@@ -54,6 +54,7 @@ namespace AmigaPowerAnalysis.Core {
         public static void SaveProjectXml(Project project, string filename) {
             var dto = ProjectDTO.ToDTO(project);
             dto.ToXmlFile(filename);
+            project.ProjectName = Path.GetFileNameWithoutExtension(filename);
             SaveCurrentProjectOutput(project, filename);
         }
 
