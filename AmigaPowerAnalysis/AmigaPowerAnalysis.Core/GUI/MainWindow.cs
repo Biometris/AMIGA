@@ -351,7 +351,7 @@ namespace AmigaPowerAnalysis.GUI {
                     analysisResultsPerEndpointPanel.CurrentProjectFilesPath = filesPath;
                     outputPerPanel.CurrentProjectFilesPath = filesPath;
                 } else {
-                    this.Text = "Amiga Power Analysis";
+                    this.Text = "Amiga Power Analysis (Beta)";
                 }
             }
         }

@@ -5,6 +5,8 @@ using Biometris.ExtensionMethods;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System;
+using Biometris.Statistics.Measurements;
 
 namespace AmigaPowerAnalysis.Core.Reporting {
     public sealed class MultiComparisonReportGenerator : ComparisonReportGeneratorBase {
@@ -31,7 +33,7 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             var analysisMethodTypesEquivalenceTests = firstInputSettings.SelectedAnalysisMethodTypesEquivalenceTests.GetFlags().Cast<AnalysisMethodType>().ToList();
 
             html += generateDesignOverviewHtml(firstInputSettings);
-            html += generateAnalysisSettingsHtml(firstInputSettings);
+            html += generateComparisonsAnalysisSettingsHtml(primaryComparisonOutputs);
 
             var records = _resultPowerAnalysis.GetAggregateOutputRecords(_resultPowerAnalysis.PowerAggregationType);
             html += generateComparisonsOutputHtml(records, firstInputSettings.NumberOfReplications);
@@ -59,23 +61,64 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             stringBuilder.AppendLine("<tr>");
             stringBuilder.AppendLine("<th>Comparison</th>");
             stringBuilder.AppendLine("<th>Measurement</th>");
-            stringBuilder.AppendLine("<th>Mean comparator</th>");
-            stringBuilder.AppendLine("<th>CV</th>");
-            stringBuilder.AppendLine("<th>Primary</th>");
-            stringBuilder.AppendLine("<th>Difference</th>");
-            stringBuilder.AppendLine("<th>Equivalence</th>");
+            stringBuilder.AppendLine("<th>Overall mean</th>");
+            stringBuilder.AppendLine("<th>CV comparator (%)</th>");
+            //stringBuilder.AppendLine("<th>Primary</th>");
+            stringBuilder.AppendLine("<th>Difference test</th>");
+            stringBuilder.AppendLine("<th>Equivalence test</th>");
             stringBuilder.AppendLine("</tr>");
             foreach (var comparison in comparisonOutputs) {
                 stringBuilder.AppendLine(string.Format("<td>{0}</td>", comparison.InputPowerAnalysis.Endpoint));
                 stringBuilder.AppendLine(string.Format("<td>{0}</td>", comparison.InputPowerAnalysis.MeasurementType.GetDisplayName()));
                 stringBuilder.AppendLine(printNumericTableRecord(comparison.InputPowerAnalysis.OverallMean));
                 stringBuilder.AppendLine(printNumericTableRecord(comparison.InputPowerAnalysis.CvComparator));
-                stringBuilder.AppendLine(string.Format("<td>{0}</td>", comparison.IsPrimary ? "Yes" : "No"));
+                //stringBuilder.AppendLine(string.Format("<td>{0}</td>", comparison.IsPrimary ? "Yes" : "No"));
                 stringBuilder.AppendLine(string.Format("<td>{0}</td>", comparison.AnalysisMethodDifferenceTest.GetDisplayName()));
                 stringBuilder.AppendLine(string.Format("<td>{0}</td>", comparison.AnalysisMethodEquivalenceTest.GetDisplayName()));
                 stringBuilder.AppendLine("</tr>");
             }
             stringBuilder.AppendLine("</table>");
+            return stringBuilder.ToString();
+        }
+
+        protected static string generateComparisonsAnalysisSettingsHtml(IEnumerable<OutputPowerAnalysis> comparisonOutputs) {
+            var stringBuilder = new StringBuilder();
+            Func<string, object, string> format = (parameter, setting) => { return string.Format("<tr><td>{0}</td><td>{1}</td></tr>", parameter, setting); };
+
+            var firstInputSettings = comparisonOutputs.First().InputPowerAnalysis;
+            var measurementTypes = comparisonOutputs.Select(m => m.InputPowerAnalysis.MeasurementType).Distinct();
+
+            stringBuilder.AppendLine(string.Format("<h2>Power analysis settings</h2>"));
+            stringBuilder.AppendLine("<table>");
+            stringBuilder.AppendLine(format("Significance level", firstInputSettings.SignificanceLevel));
+            stringBuilder.AppendLine(format("Number of evaluation points", firstInputSettings.NumberOfRatios));
+            stringBuilder.AppendLine(format("Tested replications", string.Join(" ", firstInputSettings.NumberOfReplications.Select(r => r.ToString()).ToList())));
+            var analysisMethodsDifferenceTests = comparisonOutputs.Select(m => m.InputPowerAnalysis.SelectedAnalysisMethodTypesDifferenceTests).Distinct().ToList();
+            for (int i = 0; i < analysisMethodsDifferenceTests.Count(); ++i) {
+                if (i == 0) {
+                    stringBuilder.AppendLine(format("Analysis methods difference tests", analysisMethodsDifferenceTests.ElementAt(i).GetDisplayName()));
+                } else {
+                    stringBuilder.AppendLine(format(string.Empty, analysisMethodsDifferenceTests.ElementAt(i).GetDisplayName()));
+                }
+            }
+            var analysisMethodsEquivalenceTests = comparisonOutputs.Select(m => m.InputPowerAnalysis.SelectedAnalysisMethodTypesEquivalenceTests).Distinct().ToList();
+            for (int i = 0; i < analysisMethodsEquivalenceTests.Count(); ++i) {
+                if (i == 0) {
+                    stringBuilder.AppendLine(format("Analysis methods equivalence tests", analysisMethodsEquivalenceTests.ElementAt(i).GetDisplayName()));
+                } else {
+                    stringBuilder.AppendLine(format(string.Empty, analysisMethodsEquivalenceTests.ElementAt(i).GetDisplayName()));
+                }
+            }
+            if (measurementTypes.Contains(MeasurementType.Count)
+                || analysisMethodsDifferenceTests.Contains(AnalysisMethodType.Gamma)
+                || analysisMethodsEquivalenceTests.Contains(AnalysisMethodType.Gamma)) {
+                    stringBuilder.AppendLine(format("Use Wald test", firstInputSettings.UseWaldTest));
+                    stringBuilder.AppendLine(format("Power calculation method", firstInputSettings.PowerCalculationMethodType));
+                    stringBuilder.AppendLine(format("Number of simulated data sets", firstInputSettings.NumberOfSimulatedDataSets));
+                    stringBuilder.AppendLine(format("Seed random number generation", firstInputSettings.RandomNumberSeed));
+            }
+            stringBuilder.AppendLine("</table>");
+
             return stringBuilder.ToString();
         }
 

@@ -7,6 +7,7 @@ using AmigaPowerAnalysis.Core.DataAnalysis.AnalysisModels;
 using AmigaPowerAnalysis.Core.PowerAnalysis;
 using Biometris.ExtensionMethods;
 using Biometris.Statistics.Distributions;
+using Biometris.Statistics.Measurements;
 
 namespace AmigaPowerAnalysis.Core.Reporting {
     public abstract class ComparisonReportGeneratorBase : ReportGeneratorBase {
@@ -72,7 +73,7 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             var analysisMethodsDifferenceTests = AnalysisModelFactory.AnalysisMethodsForMeasurementType(inputPowerAnalysis.MeasurementType) & inputPowerAnalysis.SelectedAnalysisMethodTypesDifferenceTests;
             for (int i = 0; i < analysisMethodsDifferenceTests.GetFlags().Count(); ++i) {
                 if (i == 0) {
-                    stringBuilder.AppendLine(format("Analysis methods", analysisMethodsDifferenceTests.GetFlags().ElementAt(i).GetDisplayName()));
+                    stringBuilder.AppendLine(format("Analysis methods difference tests", analysisMethodsDifferenceTests.GetFlags().ElementAt(i).GetDisplayName()));
                 } else {
                     stringBuilder.AppendLine(format(string.Empty, analysisMethodsDifferenceTests.GetFlags().ElementAt(i).GetDisplayName()));
                 }
@@ -80,15 +81,19 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             var analysisMethodsEquivalenceTests = AnalysisModelFactory.AnalysisMethodsForMeasurementType(inputPowerAnalysis.MeasurementType) & inputPowerAnalysis.SelectedAnalysisMethodTypesEquivalenceTests;
             for (int i = 0; i < analysisMethodsEquivalenceTests.GetFlags().Count(); ++i) {
                 if (i == 0) {
-                    stringBuilder.AppendLine(format("Analysis methods", analysisMethodsEquivalenceTests.GetFlags().ElementAt(i).GetDisplayName()));
+                    stringBuilder.AppendLine(format("Analysis methods equivalence tests", analysisMethodsEquivalenceTests.GetFlags().ElementAt(i).GetDisplayName()));
                 } else {
                     stringBuilder.AppendLine(format(string.Empty, analysisMethodsEquivalenceTests.GetFlags().ElementAt(i).GetDisplayName()));
                 }
             }
-            stringBuilder.AppendLine(format("Use Wald test", inputPowerAnalysis.UseWaldTest));
-            stringBuilder.AppendLine(format("Power calculation method", inputPowerAnalysis.PowerCalculationMethodType));
-            stringBuilder.AppendLine(format("Number of simulated data sets", inputPowerAnalysis.NumberOfSimulatedDataSets));
-            stringBuilder.AppendLine(format("Seed random number generation", inputPowerAnalysis.RandomNumberSeed));
+            if (inputPowerAnalysis.MeasurementType == MeasurementType.Count
+                || analysisMethodsDifferenceTests.HasFlag(AnalysisMethodType.Gamma)
+                || analysisMethodsEquivalenceTests.HasFlag(AnalysisMethodType.Gamma)) {
+                stringBuilder.AppendLine(format("Use Wald test", inputPowerAnalysis.UseWaldTest));
+                stringBuilder.AppendLine(format("Power calculation method", inputPowerAnalysis.PowerCalculationMethodType));
+                stringBuilder.AppendLine(format("Number of simulated data sets", inputPowerAnalysis.NumberOfSimulatedDataSets));
+                stringBuilder.AppendLine(format("Seed random number generation", inputPowerAnalysis.RandomNumberSeed));
+            }
             stringBuilder.AppendLine("</table>");
 
             return stringBuilder.ToString();
