@@ -342,7 +342,7 @@ namespace AmigaPowerAnalysis.GUI {
             set {
                 _currentProjectFilename = value;
                 if (!string.IsNullOrEmpty(_currentProjectFilename)) {
-                    this.Text = "Amiga Power Analysis - " + Path.GetFileNameWithoutExtension(_currentProjectFilename);
+                    this.Text = "Amiga Power Analysis (Beta) - " + Path.GetFileNameWithoutExtension(_currentProjectFilename);
                     var analysisResultsPanel = _selectionForms.Where(s => s is AnalysisResultsPanel).First() as AnalysisResultsPanel;
                     var analysisResultsPerEndpointPanel = _selectionForms.Where(s => s is AnalysisResultsPerComparisonPanel).First() as AnalysisResultsPerComparisonPanel;
                     var outputPerPanel = _selectionForms.Where(s => s is OutputPanel).First() as OutputPanel;
