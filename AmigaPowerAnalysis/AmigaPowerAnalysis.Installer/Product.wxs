@@ -34,6 +34,7 @@
       <ComponentGroupRef Id="PowerAnalysisRScriptsGroup" />
       <ComponentGroupRef Id="PowerAnalysisGenstatScriptsGroup" />
       <ComponentGroupRef Id="ManualGroup" />
+      <ComponentGroupRef Id="ExamplesGroup" />
       <ComponentRef Id="ProgramMenuSubFolderComponent"/>
       <ComponentRef Id="DesktopShortcutComponent"/>
     </Feature>
@@ -58,6 +59,8 @@
             </Directory>
           </Directory>
           <Directory Id="Manual" Name="Manual">
+          </Directory>
+          <Directory Id="Examples" Name="Examples">
           </Directory>
         </Directory>
       </Directory>
@@ -162,6 +165,14 @@
     <ComponentGroup Id="ManualGroup" Directory="Manual">
       <Component Guid="{3B4D0D4C-16AF-4C91-BF07-675EBE8F83E0}">
         <File Source="..\AmigaPowerAnalysis.Core\bin\$(var.Platform)\Release\Manual\User Manual.pdf" KeyPath="yes" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="ExamplesGroup" Directory="Examples">
+      <Component Guid="{B0C1DBFD-FA06-4FCB-AB01-5CCA0B5F2ACE}">
+        <File Source="..\AmigaPowerAnalysis.Core\bin\$(var.Platform)\Release\Examples\README.md" KeyPath="yes" />
       </Component>
     </ComponentGroup>
   </Fragment>
