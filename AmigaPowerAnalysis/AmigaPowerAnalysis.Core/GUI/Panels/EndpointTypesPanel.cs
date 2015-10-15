@@ -326,11 +326,15 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void dataGridViewDefaultEndpointGroups_CellValueChanged(object sender, DataGridViewCellEventArgs e) {
-            updateDataGridViewDefaultEndpointGroups();
+            var combo = this.dataGridViewDefaultEndpointGroups.Rows[e.RowIndex].Cells["DistributionType"] as DataGridViewComboBoxCell;
+            combo.DataSource = Enum.GetValues(typeof(DistributionType));
+            dataGridViewDefaultEndpointGroups.Refresh();
         }
 
         private void dataGridViewProjectEndpointGroups_CellValueChanged(object sender, DataGridViewCellEventArgs e) {
-            updateDataGridViewProjectEndpointGroups();
+            var combo = this.dataGridViewProjectEndpointGroups.Rows[e.RowIndex].Cells["DistributionType"] as DataGridViewComboBoxCell;
+            combo.DataSource = Enum.GetValues(typeof(DistributionType));
+            dataGridViewProjectEndpointGroups.Refresh();
         }
     }
 }

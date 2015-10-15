@@ -18,6 +18,10 @@ namespace AmigaPowerAnalysis.Core {
 
         private DistributionType _distributionType;
 
+        private double _muComparator;
+
+        private double _cvComparator;
+
         public EndpointType() {
             Measurement = MeasurementType.Count;
             BinomialTotal = 10;
@@ -55,6 +59,7 @@ namespace AmigaPowerAnalysis.Core {
             }
             set {
                 _measurementType = value;
+                validateMeasurementParameters();
                 validateDistribution();
             }
         }
@@ -76,7 +81,14 @@ namespace AmigaPowerAnalysis.Core {
         /// Upper Limit of Concern.
         /// </summary>
         [DataMember]
-        public double LocUpper { get; set; }
+        public double LocUpper {
+            get {
+                return _locUpper;
+            }
+            set {
+                _locUpper = value;
+            }
+        }
 
         /// <summary>
         /// The distribution type of this endpoint.
@@ -96,13 +108,29 @@ namespace AmigaPowerAnalysis.Core {
         /// The Mu of the comparator.
         /// </summary>
         [DataMember]
-        public double MuComparator { get; set; }
+        public double MuComparator {
+            get {
+                return _muComparator;
+            }
+            set {
+                _muComparator = value;
+                validateMeasurementParameters();
+                validateDistribution();
+            }
+        }
 
         /// <summary>
         /// The CV of the comparator.
         /// </summary>
         [DataMember]
-        public double CvComparator { get; set; }
+        public double CvComparator {
+            get {
+                return _cvComparator;
+            }
+            set {
+                _cvComparator = value;
+            }
+        }
 
         /// <summary>
         /// Binomial total for fraction distributions.
@@ -116,13 +144,58 @@ namespace AmigaPowerAnalysis.Core {
         [DataMember]
         public double PowerLawPower { get; set; }
 
+        private void validateMeasurementParameters() {
+            if (_locLower > _locUpper) {
+                var tmp = _locUpper;
+                _locUpper = _locLower;
+                _locLower = tmp;
+            }
+            if (_locLower <= 0) {
+                _locLower = 0.01;
+            } else if (_locLower >= 1) {
+                _locLower = 0.5;
+            }
+            if (_locUpper <= _locLower) {
+                _locUpper = _locLower + 0.01;
+            } else if (_locUpper <= 1) {
+                _locUpper = 2;
+            }
+            switch (_measurementType) {
+                case MeasurementType.Count:
+                    if (_muComparator <= 0) {
+                        _muComparator = 0.01;
+                    }
+                    break;
+                case MeasurementType.Fraction:
+                    if (_muComparator <= 0) {
+                        _muComparator = 0.01;
+                    }
+                    if (_muComparator >= 1) {
+                        _muComparator = 0.99;
+                    }
+                    break;
+                case MeasurementType.Nonnegative:
+                    if (_muComparator <= 0) {
+                        _muComparator = 0.01;
+                    }
+                    break;
+                case MeasurementType.Continuous:
+                    if (_muComparator == 0) {
+                        _muComparator = 0.01;
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
         private void validateDistribution() {
             // Update distribution type
             var availableDistributionTypes = DistributionFactory.AvailableDistributionTypes(Measurement);
-            if (DistributionType == 0 || (availableDistributionTypes & DistributionType) != DistributionType) {
-                DistributionType = (DistributionType)availableDistributionTypes.GetFlags().First();
+            if (_distributionType == 0 || (availableDistributionTypes & _distributionType) != _distributionType) {
+                _distributionType = (DistributionType)availableDistributionTypes.GetFlags().First();
             }
-            switch (DistributionType) {
+            switch (_distributionType) {
                 case DistributionType.Poisson:
                     break;
                 case DistributionType.OverdispersedPoisson:
