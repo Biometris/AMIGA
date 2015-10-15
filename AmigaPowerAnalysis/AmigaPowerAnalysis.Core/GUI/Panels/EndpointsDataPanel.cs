@@ -118,7 +118,9 @@ namespace AmigaPowerAnalysis.GUI {
             dataGridViewEndpoints.Columns.Add(column);
 
             dataGridViewEndpoints.Columns["Name"].ReadOnly = true;
+            dataGridViewEndpoints.Columns["Name"].DefaultCellStyle.BackColor = Color.LightGray;
             dataGridViewEndpoints.Columns["Measurement"].ReadOnly = true;
+            dataGridViewEndpoints.Columns["Measurement"].DefaultCellStyle.BackColor = Color.LightGray;
             //dataGridViewEndpoints.Columns["ExcessZeroes"].ReadOnly = true;
             //dataGridViewEndpoints.Columns["ExcessZeroes"].DefaultCellStyle.BackColor = Color.LightGray;
             //dataGridViewEndpoints.Columns["RepeatedMeasures"].ReadOnly = true;
