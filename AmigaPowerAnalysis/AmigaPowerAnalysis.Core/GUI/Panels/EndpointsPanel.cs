@@ -83,7 +83,7 @@ namespace AmigaPowerAnalysis.GUI {
                 dataGridViewEndpoints.Update();
             }
 
-            this.dataGridViewEndpoints.EditingControlShowing += new DataGridViewEditingControlShowingEventHandler(dataGridViewEndpoints_EditingControlShowing);
+            //this.dataGridViewEndpoints.EditingControlShowing += new DataGridViewEditingControlShowingEventHandler(dataGridViewEndpoints_EditingControlShowing);
         }
 
         void dataGridViewEndpoints_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e) {
@@ -166,11 +166,11 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void showError(string title, string message) {
             MessageBox.Show(
-                    message,
-                    title,
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error,
-                    MessageBoxDefaultButton.Button1);
+                message,
+                title,
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error,
+                MessageBoxDefaultButton.Button1);
         }
 
         private void dataGridViewEndpoints_KeyDown(object sender, KeyEventArgs e) {
@@ -230,6 +230,7 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void dataGridViewEndpoints_CellValueChanged(object sender, DataGridViewCellEventArgs e) {
+            dataGridViewEndpoints.Refresh();
             fireTabVisibilitiesChanged();
         }
     }
