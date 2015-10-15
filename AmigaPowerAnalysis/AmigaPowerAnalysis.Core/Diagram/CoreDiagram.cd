@@ -14,7 +14,7 @@
       </Path>
     </AssociationLine>
     <TypeIdentifier>
-      <HashCode>IAEQIANgAcBAAEAIElACIAAAEACCQgQFAAAQggAAQCA=</HashCode>
+      <HashCode>IAEQMANgAcBAAEAIGlACMAAAEMDKQgQFAAAQhgACZCA=</HashCode>
       <FileName>Core\Project.cs</FileName>
     </TypeIdentifier>
     <ShowAsCollectionAssociation>
@@ -55,7 +55,7 @@
       </Path>
     </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AAABdEADQEgAAoQAAgSKIIRAFACCCAEBQAAQhiEAMoA=</HashCode>
+      <HashCode>BAABdEADQEgACIQAogSKKIRBFECCCIEBQAAQpiEAMgA=</HashCode>
       <FileName>Core\ProjectEntities\Endpoint\Endpoint.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -73,7 +73,7 @@
       <Compartment Name="Methods" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>AAAAIAAAIAIAAAAACACAAAQBAQEAQIgAEAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAIAAAIAIAAAAAiACAAAQBAQEAQIgAEAAAAAAAAAA=</HashCode>
       <FileName>Core\ProjectEntities\Factor\Factor.cs</FileName>
     </TypeIdentifier>
     <ShowAsCollectionAssociation>
@@ -86,8 +86,8 @@
       <Compartment Name="Methods" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>AAAAAABAAAAAACBAAAAAAAAAAAAAAAQAAAAAAAAAAAA=</HashCode>
-      <FileName>Core\ProjectEntities\Endpoint\EndpointFactor.cs</FileName>
+      <HashCode>AAAAAABAAAAAACBAgAAAAAAAAAAAAIQAAAAAAAAAAAA=</HashCode>
+      <FileName>Core\ProjectEntities\Endpoint\EndpointFactorSetting.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Property Name="Factor" />
@@ -99,7 +99,7 @@
       <Compartment Name="Methods" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>AAAAEAAAAAAAAAAAAAAIAAQABAACCAAAAAAQAgEAABA=</HashCode>
+      <HashCode>AAAAEEAAAAAAAAQAoAQIAAQBBAACCIAAAAAQBgEAMBA=</HashCode>
       <FileName>Core\ProjectEntities\Endpoint\EndpointType.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -110,7 +110,7 @@
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>AQAAAAAAAAAAAAAAAEAAAAAAACAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Core\ProjectEntities\Endpoint\Comparison.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -123,8 +123,8 @@
       <Compartment Name="Methods" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAEAAAAAAAgBAAQAAQAIAAAIIAAAAAAAAAAiA=</HashCode>
-      <FileName>Core\ProjectEntities\FactorLevel\FactorLevel.cs</FileName>
+      <HashCode>AAAAAAAAEAAAAAAAgBAAQAAQAIAAAIIAgAAAAAAAAiA=</HashCode>
+      <FileName>Core\ProjectEntities\Factor\FactorLevel.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
@@ -135,15 +135,15 @@
       <Compartment Name="Methods" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>AAAAAABAAAAAAAEAAEAAAAAAAAAAQAAkAAAAAgAACCA=</HashCode>
-      <FileName>Core\ProjectEntities\FactorLevelCombination\InteractionFactorLevelCombination.cs</FileName>
+      <HashCode>AAAAAABAAAAAAAEAAEAAAAAAAAAAQAAkAAAAAgAACAA=</HashCode>
+      <FileName>Core\ProjectEntities\Factor\InteractionFactorLevelCombination.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="AmigaPowerAnalysis.Core.FactorLevelCombination">
     <Position X="15.5" Y="6.25" Width="3" />
     <TypeIdentifier>
-      <HashCode>KAIAAAAAEAAAAAAAgAAAAAAAAAAAAIABAAAAAAAQAiA=</HashCode>
-      <FileName>Core\ProjectEntities\FactorLevelCombination\FactorLevelCombination.cs</FileName>
+      <HashCode>KAIAAABAEAAAAAQAgAAAAAAAAIAAAIABAAAAAAAQAiA=</HashCode>
+      <FileName>Core\ProjectEntities\Factor\FactorLevelCombination.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
@@ -160,7 +160,7 @@
     </InheritanceLine>
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAgAAAAAAAAAAAAAAACAAAAAAAAAAAAA=</HashCode>
-      <FileName>Core\ProjectEntities\FactorLevelCombination\ModifierFactorLevelCombination.cs</FileName>
+      <FileName>Core\ProjectEntities\Factor\ModifierFactorLevelCombination.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />
