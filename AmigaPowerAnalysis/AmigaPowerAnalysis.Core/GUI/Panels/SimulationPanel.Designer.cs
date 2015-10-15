@@ -652,7 +652,7 @@
             // radioButtonSimulate
             // 
             this.radioButtonSimulate.AutoSize = true;
-            this.radioButtonSimulate.Location = new System.Drawing.Point(3, 3);
+            this.radioButtonSimulate.Location = new System.Drawing.Point(92, 3);
             this.radioButtonSimulate.Name = "radioButtonSimulate";
             this.radioButtonSimulate.Size = new System.Drawing.Size(65, 17);
             this.radioButtonSimulate.TabIndex = 14;
@@ -664,7 +664,7 @@
             // radioButtonApproximate
             // 
             this.radioButtonApproximate.AutoSize = true;
-            this.radioButtonApproximate.Location = new System.Drawing.Point(74, 3);
+            this.radioButtonApproximate.Location = new System.Drawing.Point(3, 3);
             this.radioButtonApproximate.Name = "radioButtonApproximate";
             this.radioButtonApproximate.Size = new System.Drawing.Size(83, 17);
             this.radioButtonApproximate.TabIndex = 15;
@@ -690,7 +690,7 @@
             this.panel1.Controls.Add(this.radioButtonUseLogLikelihoodRatioTest);
             this.panel1.Location = new System.Drawing.Point(553, 54);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(193, 23);
+            this.panel1.Size = new System.Drawing.Size(198, 23);
             this.panel1.TabIndex = 16;
             // 
             // radioButtonUseWaldTest
@@ -708,7 +708,7 @@
             // radioButtonUseLogLikelihoodRatioTest
             // 
             this.radioButtonUseLogLikelihoodRatioTest.AutoSize = true;
-            this.radioButtonUseLogLikelihoodRatioTest.Location = new System.Drawing.Point(74, 3);
+            this.radioButtonUseLogLikelihoodRatioTest.Location = new System.Drawing.Point(79, 3);
             this.radioButtonUseLogLikelihoodRatioTest.Name = "radioButtonUseLogLikelihoodRatioTest";
             this.radioButtonUseLogLikelihoodRatioTest.Size = new System.Drawing.Size(116, 17);
             this.radioButtonUseLogLikelihoodRatioTest.TabIndex = 15;
