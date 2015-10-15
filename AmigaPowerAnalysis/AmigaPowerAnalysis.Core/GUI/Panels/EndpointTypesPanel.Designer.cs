@@ -39,6 +39,7 @@
             this.buttonAddToDefault = new System.Windows.Forms.Button();
             this.labelProjectEndpointGroups = new System.Windows.Forms.Label();
             this.buttonRemoveProjectEndpoint = new System.Windows.Forms.Button();
+            this.buttonResetToDefaults = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewDefaultEndpointGroups)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
@@ -138,6 +139,7 @@
             // panel1
             // 
             this.panel1.AutoSize = true;
+            this.panel1.Controls.Add(this.buttonResetToDefaults);
             this.panel1.Controls.Add(this.buttonDeleteDefaultEndpointGroup);
             this.panel1.Controls.Add(this.addDefaultEndpointGroupButton);
             this.panel1.Controls.Add(this.labelMyEndpointGroups);
@@ -244,6 +246,17 @@
             this.buttonRemoveProjectEndpoint.UseVisualStyleBackColor = true;
             this.buttonRemoveProjectEndpoint.Click += new System.EventHandler(this.buttonDeleteProjectEndpointGroup_Click);
             // 
+            // buttonResetToDefaults
+            // 
+            this.buttonResetToDefaults.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonResetToDefaults.Location = new System.Drawing.Point(447, 0);
+            this.buttonResetToDefaults.Name = "buttonResetToDefaults";
+            this.buttonResetToDefaults.Size = new System.Drawing.Size(133, 27);
+            this.buttonResetToDefaults.TabIndex = 6;
+            this.buttonResetToDefaults.Text = "Reset to default groups";
+            this.buttonResetToDefaults.UseVisualStyleBackColor = true;
+            this.buttonResetToDefaults.Click += new System.EventHandler(this.buttonResetToDefaults_Click);
+            // 
             // EndpointTypesPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -288,5 +301,6 @@
         private System.Windows.Forms.Button buttonAddProjectEndpoint;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Button buttonResetToDefaults;
     }
 }

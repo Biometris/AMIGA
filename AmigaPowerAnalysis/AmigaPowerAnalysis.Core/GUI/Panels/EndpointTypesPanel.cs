@@ -289,13 +289,13 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void dataGridViewEndpointTypes_CellValidating(object sender, DataGridViewCellValidatingEventArgs e) {
-            if (dataGridViewDefaultEndpointGroups.Columns[e.ColumnIndex].Name == "Name") {
+            if (e.ColumnIndex >= 0 && dataGridViewDefaultEndpointGroups.Columns[e.ColumnIndex].Name == "Name") {
 
             }
         }
 
         private void dataGridViewDefaultEndpointGroups_CellClick(object sender, DataGridViewCellEventArgs e) {
-            if (dataGridViewDefaultEndpointGroups.Columns[e.ColumnIndex].Name == "DistributionType") {
+            if (e.ColumnIndex >= 0 && dataGridViewDefaultEndpointGroups.Columns[e.ColumnIndex].Name == "DistributionType") {
                 var measurement = _endpointTypes[dataGridViewDefaultEndpointGroups.CurrentRow.Index].Measurement;
                 var combo = this.dataGridViewDefaultEndpointGroups.Rows[e.RowIndex].Cells["DistributionType"] as DataGridViewComboBoxCell;
                 var source = DistributionFactory.AvailableDistributionTypes(measurement).GetFlags().Cast<DistributionType>().ToList();
@@ -304,7 +304,7 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void dataGridViewProjectEndpointGroups_CellClick(object sender, DataGridViewCellEventArgs e) {
-            if (dataGridViewProjectEndpointGroups.Columns[e.ColumnIndex].Name == "DistributionType") {
+            if (e.ColumnIndex >= 0 && dataGridViewProjectEndpointGroups.Columns[e.ColumnIndex].Name == "DistributionType") {
                 var measurement = _endpointTypes[dataGridViewProjectEndpointGroups.CurrentRow.Index].Measurement;
                 var combo = this.dataGridViewProjectEndpointGroups.Rows[e.RowIndex].Cells["DistributionType"] as DataGridViewComboBoxCell;
                 var source = DistributionFactory.AvailableDistributionTypes(measurement).GetFlags().Cast<DistributionType>().ToList();
@@ -335,6 +335,15 @@ namespace AmigaPowerAnalysis.GUI {
             var combo = this.dataGridViewProjectEndpointGroups.Rows[e.RowIndex].Cells["DistributionType"] as DataGridViewComboBoxCell;
             combo.DataSource = Enum.GetValues(typeof(DistributionType));
             dataGridViewProjectEndpointGroups.Refresh();
+        }
+
+        private void buttonResetToDefaults_Click(object sender, EventArgs e) {
+            var confirmResult = MessageBox.Show("Are you sure to reset your endpoint groups to the default?", "Confirm reset endpoint groups!", MessageBoxButtons.YesNo);
+            if (confirmResult == DialogResult.Yes) {
+                EndpointTypeProvider.MyEndpointTypes = EndpointTypeProvider.DefaultEndpointTypes();
+                _endpointTypes = EndpointTypeProvider.MyEndpointTypes;
+                updateDataGridViewDefaultEndpointGroups();
+            }
         }
     }
 }

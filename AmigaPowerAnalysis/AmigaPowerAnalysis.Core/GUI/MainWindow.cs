@@ -45,14 +45,6 @@ namespace AmigaPowerAnalysis.GUI {
                 this.Size = Settings.Default.WindowSize;
             }
             EndpointTypeProvider.LoadMyEndpointTypes();
-            var currentGenstatPath = Properties.Settings.Default.GenstatPath;
-            if (string.IsNullOrEmpty(currentGenstatPath)) {
-                var defaultGenstatDirective = @"C:\Program Files\Gen16ed\Bin\GenBatch.exe";
-                if (File.Exists(defaultGenstatDirective)) {
-                    Properties.Settings.Default.GenstatPath = defaultGenstatDirective;
-                    Properties.Settings.Default.Save();
-                }
-            }
         }
 
         private void MainWindow_FormClosing(object sender, FormClosingEventArgs e) {
@@ -69,7 +61,6 @@ namespace AmigaPowerAnalysis.GUI {
                 Settings.Default.WindowSize = this.RestoreBounds.Size;
             }
             Settings.Default.Save();
-            EndpointTypeProvider.StoreMyEndpointTypes();
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e) {
@@ -99,6 +90,9 @@ namespace AmigaPowerAnalysis.GUI {
         private void toolstripEndpointTypes_Click(object sender, EventArgs e) {
             var endpointGroupsForm = new SelectionPanelForm(new EndpointTypesPanel(_project));
             endpointGroupsForm.ShowDialog();
+            if (endpointGroupsForm.DialogResult == System.Windows.Forms.DialogResult.OK) {
+                EndpointTypeProvider.StoreMyEndpointTypes();
+            }
             var endpointsPanel = _selectionForms.Where(s => s is EndpointsPanel).FirstOrDefault() as EndpointsPanel;
             if (endpointsPanel != null) {
                 endpointsPanel.UpdateForm();
