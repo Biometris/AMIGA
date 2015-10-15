@@ -68,8 +68,9 @@
             this.checkBoxAnalysisMethodBBNEquivalence = new System.Windows.Forms.CheckBox();
             this.checkBoxAnalysisMethodOBNEquivalence = new System.Windows.Forms.CheckBox();
             this.groupBoxCountsSettings = new System.Windows.Forms.GroupBox();
-            this.radioButtonApproximate = new System.Windows.Forms.RadioButton();
+            this.panel3 = new System.Windows.Forms.Panel();
             this.radioButtonSimulate = new System.Windows.Forms.RadioButton();
+            this.radioButtonApproximate = new System.Windows.Forms.RadioButton();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.radioButtonUseWaldTest = new System.Windows.Forms.RadioButton();
@@ -78,7 +79,6 @@
             this.flowLayoutPanel4 = new System.Windows.Forms.FlowLayoutPanel();
             this.panelOptionsForCounts = new System.Windows.Forms.Panel();
             this.panelOptions = new System.Windows.Forms.Panel();
-            this.panel3 = new System.Windows.Forms.Panel();
             this.groupBoxOptions.SuspendLayout();
             this.groupBoxAnalysisMethodsCountsDifference.SuspendLayout();
             this.groupBoxAnalysisFractionsMethodsDifference.SuspendLayout();
@@ -91,11 +91,11 @@
             this.groupBoxAnalysisMethodsContinuousEquivalence.SuspendLayout();
             this.groupBoxAnalysisFractionsMethodsEquivalence.SuspendLayout();
             this.groupBoxCountsSettings.SuspendLayout();
+            this.panel3.SuspendLayout();
             this.panel1.SuspendLayout();
             this.flowLayoutPanel2.SuspendLayout();
             this.panelOptionsForCounts.SuspendLayout();
             this.panelOptions.SuspendLayout();
-            this.panel3.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBoxOptions
@@ -640,17 +640,14 @@
             this.groupBoxCountsSettings.TabStop = false;
             this.groupBoxCountsSettings.Text = "Options for analysis of counts and non-negative with gamma distribution";
             // 
-            // radioButtonApproximate
+            // panel3
             // 
-            this.radioButtonApproximate.AutoSize = true;
-            this.radioButtonApproximate.Location = new System.Drawing.Point(74, 3);
-            this.radioButtonApproximate.Name = "radioButtonApproximate";
-            this.radioButtonApproximate.Size = new System.Drawing.Size(83, 17);
-            this.radioButtonApproximate.TabIndex = 15;
-            this.radioButtonApproximate.TabStop = true;
-            this.radioButtonApproximate.Text = "Approximate";
-            this.radioButtonApproximate.UseVisualStyleBackColor = true;
-            this.radioButtonApproximate.CheckedChanged += new System.EventHandler(this.radioButtonApproximate_CheckedChanged);
+            this.panel3.Controls.Add(this.radioButtonSimulate);
+            this.panel3.Controls.Add(this.radioButtonApproximate);
+            this.panel3.Location = new System.Drawing.Point(553, 24);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(192, 23);
+            this.panel3.TabIndex = 18;
             // 
             // radioButtonSimulate
             // 
@@ -663,6 +660,18 @@
             this.radioButtonSimulate.Text = "Simulate";
             this.radioButtonSimulate.UseVisualStyleBackColor = true;
             this.radioButtonSimulate.CheckedChanged += new System.EventHandler(this.radioButtonSimulate_CheckedChanged);
+            // 
+            // radioButtonApproximate
+            // 
+            this.radioButtonApproximate.AutoSize = true;
+            this.radioButtonApproximate.Location = new System.Drawing.Point(74, 3);
+            this.radioButtonApproximate.Name = "radioButtonApproximate";
+            this.radioButtonApproximate.Size = new System.Drawing.Size(83, 17);
+            this.radioButtonApproximate.TabIndex = 15;
+            this.radioButtonApproximate.TabStop = true;
+            this.radioButtonApproximate.Text = "Approximate";
+            this.radioButtonApproximate.UseVisualStyleBackColor = true;
+            this.radioButtonApproximate.CheckedChanged += new System.EventHandler(this.radioButtonApproximate_CheckedChanged);
             // 
             // panel2
             // 
@@ -681,7 +690,7 @@
             this.panel1.Controls.Add(this.radioButtonUseLogLikelihoodRatioTest);
             this.panel1.Location = new System.Drawing.Point(553, 54);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(208, 23);
+            this.panel1.Size = new System.Drawing.Size(193, 23);
             this.panel1.TabIndex = 16;
             // 
             // radioButtonUseWaldTest
@@ -699,7 +708,7 @@
             // radioButtonUseLogLikelihoodRatioTest
             // 
             this.radioButtonUseLogLikelihoodRatioTest.AutoSize = true;
-            this.radioButtonUseLogLikelihoodRatioTest.Location = new System.Drawing.Point(89, 3);
+            this.radioButtonUseLogLikelihoodRatioTest.Location = new System.Drawing.Point(74, 3);
             this.radioButtonUseLogLikelihoodRatioTest.Name = "radioButtonUseLogLikelihoodRatioTest";
             this.radioButtonUseLogLikelihoodRatioTest.Size = new System.Drawing.Size(116, 17);
             this.radioButtonUseLogLikelihoodRatioTest.TabIndex = 15;
@@ -749,15 +758,6 @@
             this.panelOptions.Size = new System.Drawing.Size(904, 114);
             this.panelOptions.TabIndex = 24;
             // 
-            // panel3
-            // 
-            this.panel3.Controls.Add(this.radioButtonSimulate);
-            this.panel3.Controls.Add(this.radioButtonApproximate);
-            this.panel3.Location = new System.Drawing.Point(553, 24);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(192, 23);
-            this.panel3.TabIndex = 18;
-            // 
             // SimulationPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -799,6 +799,8 @@
             this.groupBoxAnalysisFractionsMethodsEquivalence.PerformLayout();
             this.groupBoxCountsSettings.ResumeLayout(false);
             this.groupBoxCountsSettings.PerformLayout();
+            this.panel3.ResumeLayout(false);
+            this.panel3.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.flowLayoutPanel2.ResumeLayout(false);
@@ -806,8 +808,6 @@
             this.panelOptionsForCounts.PerformLayout();
             this.panelOptions.ResumeLayout(false);
             this.panelOptions.PerformLayout();
-            this.panel3.ResumeLayout(false);
-            this.panel3.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
