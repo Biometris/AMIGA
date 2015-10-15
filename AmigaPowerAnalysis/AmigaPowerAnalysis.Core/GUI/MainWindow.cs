@@ -90,9 +90,9 @@ namespace AmigaPowerAnalysis.GUI {
         private void toolstripEndpointTypes_Click(object sender, EventArgs e) {
             var endpointGroupsForm = new SelectionPanelForm(new EndpointTypesPanel(_project));
             endpointGroupsForm.ShowDialog();
-            if (endpointGroupsForm.DialogResult != System.Windows.Forms.DialogResult.Cancel) {
+            //if (endpointGroupsForm.DialogResult != System.Windows.Forms.DialogResult.Cancel) {
                 EndpointTypeProvider.StoreMyEndpointTypes();
-            }
+            //}
             var endpointsPanel = _selectionForms.Where(s => s is EndpointsPanel).FirstOrDefault() as EndpointsPanel;
             if (endpointsPanel != null) {
                 endpointsPanel.UpdateForm();
