@@ -116,7 +116,9 @@ namespace AmigaPowerAnalysis.GUI {
                         };
                         record.IsPrimary = (record.Name == _project.PrimaryOutputId);
                         return record;
-                    }).ToList();
+                    })
+                    .OrderByDescending(r => r.ExecutionDateTime)
+                    .ToList();
                 return availableOutputs;
             }
             return new List<OutputWrapper>();
