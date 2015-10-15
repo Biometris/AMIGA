@@ -250,14 +250,14 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void dataGridViewComparisons_CellClick(object sender, DataGridViewCellEventArgs e) {
-            if (dataGridViewComparisons.Columns[e.ColumnIndex].Name == "AnalysisMethodDifferenceTest") {
+            if (e.ColumnIndex >= 0 && e.RowIndex >= 0 && dataGridViewComparisons.Columns[e.ColumnIndex].Name == "AnalysisMethodDifferenceTest") {
                 var measurement = _currentComparisonAnalysisResult.InputPowerAnalysis.MeasurementType;
                 var combo = dataGridViewComparisons.Rows[e.RowIndex].Cells["AnalysisMethodDifferenceTest"] as DataGridViewComboBoxCell;
                 var source = _currentComparisonAnalysisResult.InputPowerAnalysis.SelectedAnalysisMethodTypesDifferenceTests
                     .GetFlags().Cast<AnalysisMethodType>().ToList();
                 combo.DataSource = source;
             }
-            if (dataGridViewComparisons.Columns[e.ColumnIndex].Name == "AnalysisMethodEquivalenceTest") {
+            if (e.ColumnIndex >= 0 && e.RowIndex >= 0 && dataGridViewComparisons.Columns[e.ColumnIndex].Name == "AnalysisMethodEquivalenceTest") {
                 var measurement = _currentComparisonAnalysisResult.InputPowerAnalysis.MeasurementType;
                 var combo = dataGridViewComparisons.Rows[e.RowIndex].Cells["AnalysisMethodEquivalenceTest"] as DataGridViewComboBoxCell;
                 var source = _currentComparisonAnalysisResult.InputPowerAnalysis.SelectedAnalysisMethodTypesEquivalenceTests
