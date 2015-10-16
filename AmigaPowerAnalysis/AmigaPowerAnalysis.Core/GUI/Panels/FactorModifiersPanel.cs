@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using AmigaPowerAnalysis.Core;
@@ -90,13 +91,16 @@ namespace AmigaPowerAnalysis.GUI {
                 dataGridViewFactorModifiers.Columns.Clear();
                 dataGridViewFactorModifiers.DataSource = dataTable;
                 for (int i = 0; i < modifierFactors.Count; ++i) {
-                    dataGridViewFactorModifiers.Columns[i].ReadOnly = true;
+                    dataGridViewFactorModifiers.Columns[modifierFactors[i].Name].ReadOnly = true;
+                    dataGridViewFactorModifiers.Columns[modifierFactors[i].Name].DefaultCellStyle.BackColor = Color.LightGray;
                 }
             } else {
                 _currentFactorModifiers = null;
             }
             dataGridViewFactorModifiers.Columns["Frequency"].ReadOnly = true;
+            dataGridViewFactorModifiers.Columns["Frequency"].DefaultCellStyle.BackColor = Color.LightGray;
             dataGridViewFactorModifiers.Columns["Modified mean"].ReadOnly = true;
+            dataGridViewFactorModifiers.Columns["Modified mean"].DefaultCellStyle.BackColor = Color.LightGray;
             dataGridViewFactorModifiers.Columns["_index"].Visible = false;
             dataGridViewFactorModifiers.Refresh();
         }
