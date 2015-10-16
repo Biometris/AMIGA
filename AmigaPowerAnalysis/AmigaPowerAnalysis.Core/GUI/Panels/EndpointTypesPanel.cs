@@ -22,7 +22,7 @@ namespace AmigaPowerAnalysis.GUI {
             InitializeComponent();
             _endpointTypes = EndpointTypeProvider.MyEndpointTypes;
             Name = "Endpoint groups";
-            Description = "This form allows you to modify your default endpoint groups.";
+            Description = "This form allows you to define your endpoint groups.\r\n\r\nEndpoints belong to a group. Changing the endpoint group in the Endpoints tab will set defaults for the Measurement type, Distribution, Limits of concern, the Mean and the CV of endpoints (easy for new endpoints, but be aware of this if you change the group for existing endpoints!). These defaults are specified on this page under Current project endpoint groups.\r\nYou can also maintain a more general collection of Endpoint groups (My endpoint groups).\r\nReset to default groups will reset My endpoint groups to 'factory' settings.";
             _project = project;
             createDataGridDefaultEndpointGroups();
             createDataGridProjectEndpointGroups();
