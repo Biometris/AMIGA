@@ -95,7 +95,7 @@ namespace Biometris.Test.UnitTests {
                 Assert.AreEqual(string.Empty, progressReport.CurrentActivity);
                 Assert.AreEqual(0, progressReport.Progress);
 
-                var numberOfStates = 500000;
+                var numberOfStates = 50;
                 var incrementAmount = 100D / numberOfStates;
                 for (int i = 0; i < numberOfStates; i++) {
                     var subState = progressReport.NewProgressState(100);
@@ -144,7 +144,7 @@ namespace Biometris.Test.UnitTests {
                 try {
                     var cancelSource = new CancellationTokenSource();
                     var progressReport = new ProgressReport(cancelSource.Token);
-                    var numberOfStates = 500000;
+                    var numberOfStates = 50;
                     var incrementAmount = 100D / numberOfStates;
                     for (int i = 0; i < numberOfStates; i++) {
                         var subState = progressReport.NewProgressState(100);

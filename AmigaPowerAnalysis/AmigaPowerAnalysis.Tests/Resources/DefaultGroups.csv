@@ -6,4 +6,3 @@ Soil physics,Nonnegative,0.5,NaN,LogNormal,100,0,0.4,0.02
 Weeds,Nonnegative,0.25,4,LogNormal,0,0,20,4
 Economics,Nonnegative,0.2,NaN,LogNormal,0,0,500,10
 Yield,Nonnegative,0.8,1.2,LogNormal,0,0,80,0.5
-

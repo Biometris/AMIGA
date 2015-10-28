@@ -116,10 +116,22 @@ namespace Biometris.ExtensionMethods {
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
-        public static byte[] GetByteArray(this string str) {
+        public static byte[] ToByteArray(this string str) {
             byte[] bytes = new byte[str.Length * sizeof(char)];
             System.Buffer.BlockCopy(str.ToCharArray(), 0, bytes, 0, bytes.Length);
             return bytes;
+        }
+
+        /// <summary>
+        /// An alternative ToString method for objects that formats the string
+        /// culture invariant (applicable, e.g., for doubles).
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public static string ToInvariantString(this object obj) {
+            return obj is IConvertible ? ((IConvertible)obj).ToString(CultureInfo.InvariantCulture)
+                : obj is IFormattable ? ((IFormattable)obj).ToString(null, CultureInfo.InvariantCulture)
+                : obj.ToString();
         }
     }
 }

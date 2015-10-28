@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using Biometris.ExtensionMethods;
 
 namespace Biometris.Persistence {
     public static class CsvWriter {
@@ -34,10 +37,11 @@ namespace Biometris.Persistence {
                 }
                 var x = properties[i].GetValue(o);
                 if (x != null) {
-                    line.Append(x.ToString());
+                    line.Append(x.ToInvariantString());
                 }
             }
             return line.ToString();
         }
+
     }
 }

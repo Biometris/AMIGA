@@ -111,7 +111,7 @@ namespace AmigaPowerAnalysis.Core {
         public static byte[] GetProjectFileCheckSum(string filename) {
             using (var md5 = MD5.Create()) {
                 var xml = File.ReadAllText(filename);
-                return md5.ComputeHash(xml.GetByteArray());
+                return md5.ComputeHash(xml.ToByteArray());
             }
         }
 
@@ -127,7 +127,7 @@ namespace AmigaPowerAnalysis.Core {
                 using (var md5 = MD5.Create()) {
                     serializer.Serialize(textWriter, dto);
                     var xml = textWriter.ToString();
-                    return md5.ComputeHash(xml.GetByteArray());
+                    return md5.ComputeHash(xml.ToByteArray());
                 }
             }
         }

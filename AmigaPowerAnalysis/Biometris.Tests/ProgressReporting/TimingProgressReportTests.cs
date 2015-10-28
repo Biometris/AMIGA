@@ -34,7 +34,7 @@ namespace Biometris.Test.UnitTests {
             for (int i = 0; i < numberOfStates; i++) {
                 var subState = progressReport.NewProgressState(100);
                 subState.Increment(string.Format("State {0}", i), incrementAmount);
-                Thread.Sleep(2000);
+                Thread.Sleep(10);
             }
             Assert.AreEqual(0, progressReport.Remaining.Ticks);
         }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
@@ -217,7 +218,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
         public string PrintSettings(Func<string, object, string> formatDelegate = null) {
             Func<string, object, string> format;
             if (formatDelegate == null) {
-                format = (parameter, setting) => { return string.Format("{0}\r\n {1} :", parameter, setting); };
+                format = (parameter, setting) => { return string.Format("{0}\r\n {1} :", parameter, setting.ToInvariantString()); };
             } else {
                 format = formatDelegate;
             }
@@ -291,7 +292,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                     line.Add(escape(level));
                 }
                 line.Add(record.Frequency.ToString());
-                line.Add(record.Mean.ToString());
+                line.Add(record.Mean.ToString(CultureInfo.InvariantCulture));
                 line.Add(record.Comparison.ToString());
                 stringBuilder.AppendLine(string.Join(separator, line));
             }
@@ -335,7 +336,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                 line.AddRange(DummyComparisonLevels.Select(l => l == record.ComparisonDummyFactorLevel ? "1" : "0"));
                 line.RemoveAt(line.Count - 1);
                 line.AddRange(record.ModifierLevels);
-                line.Add(record.Mean.ToString());
+                line.Add(record.Mean.ToInvariantString());
                 for (int i = 0; i < record.Frequency; ++i) {
                     stringBuilder.AppendLine(string.Join(separator, line));
                 }

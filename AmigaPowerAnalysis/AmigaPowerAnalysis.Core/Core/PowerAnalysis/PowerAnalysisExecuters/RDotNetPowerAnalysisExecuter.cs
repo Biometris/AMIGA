@@ -243,7 +243,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
 
         private static void createAnalysisSettingsFile(InputPowerAnalysis inputPowerAnalysis, string filename) {
             using (var file = new System.IO.StreamWriter(filename)) {
-                Func<string, object, string> formatDelegate = (parameter, setting) => { return string.Format("{0}, {1}", parameter, setting); };
+                Func<string, object, string> formatDelegate = (parameter, setting) => { return string.Format("{0}, {1}", parameter, setting.ToInvariantString()); };
                 file.WriteLine(inputPowerAnalysis.PrintSettings(formatDelegate));
                 file.Close();
             }

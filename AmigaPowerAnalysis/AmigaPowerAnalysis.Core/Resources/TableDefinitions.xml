@@ -151,13 +151,13 @@
           <string>PPowerLaw</string>
         </Aliases>
       </ColumnDefinition>
-      <ColumnDefinition IsRequired="true">
+      <ColumnDefinition IsRequired="false">
         <ColumnID>ExcessZeroes</ColumnID>
         <Aliases>
           <string>ExcessZeroes</string>
         </Aliases>
       </ColumnDefinition>
-      <ColumnDefinition IsRequired="true">
+      <ColumnDefinition IsRequired="false">
         <ColumnID>ExcessZeroesPercentage</ColumnID>
         <Aliases>
           <string>ExcessZeroesPercentage</string>
@@ -169,13 +169,13 @@
           <string>RepeatedMeasurements</string>
         </Aliases>
       </ColumnDefinition>
-      <ColumnDefinition IsRequired="true">
+      <ColumnDefinition IsRequired="false">
         <ColumnID>UseModifier</ColumnID>
         <Aliases>
           <string>UseModifier</string>
         </Aliases>
       </ColumnDefinition>
-      <ColumnDefinition IsRequired="true">
+      <ColumnDefinition IsRequired="false">
           <ColumnID>CvForBlocks</ColumnID>
           <Aliases>
             <string>CvForBlocks</string>
@@ -231,7 +231,7 @@
     </Aliases>
     <ColumnDefinitions>
       <ColumnDefinition IsRequired="true">
-        <ColumnID>FactorId</ColumnID>
+        <ColumnID>Factor</ColumnID>
         <Aliases>
           <string>FactorId</string>
           <string>FactorName</string>

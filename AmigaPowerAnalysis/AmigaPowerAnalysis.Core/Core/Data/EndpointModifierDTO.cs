@@ -1,4 +1,5 @@
 ﻿using Biometris.DataFileReader;
+using Biometris.ExtensionMethods;
 using Biometris.Statistics.Distributions;
 using Biometris.Statistics.Measurements;
 using System.Collections.Generic;
@@ -73,7 +74,7 @@ namespace AmigaPowerAnalysis.Core.Data {
                     var val = level.Labels.FirstOrDefault(r => r.Name == l);
                     return (val != null) ? val.RawValue : string.Empty;
                 });
-                lines.Add(level.Endpoint + separator + string.Join(separator, labels) + separator + string.Format("{0:G6}", level.ModifierFactor, CultureInfo.InvariantCulture));
+                lines.Add(level.Endpoint + separator + string.Join(separator, labels) + separator + level.ModifierFactor.ToInvariantString());
             }
             var stringBuilder = new StringBuilder();
             lines.ForEach(l => stringBuilder.AppendLine(l));

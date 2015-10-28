@@ -135,7 +135,6 @@
     <Compile Include="Core\Data\EndpointInteractionsDTOTests.cs" />
     <Compile Include="Core\Data\EndpointDTOTests.cs" />
     <Compile Include="Core\Data\EndpointGroupDTOTests.cs" />
-    <Compile Include="Core\Data\DTODataFileReaderTests.cs" />
     <Compile Include="Core\Data\DefaultInteractionsDTOTests.cs" />
     <Compile Include="Core\Data\FactorLevelDTOTests.cs" />
     <Compile Include="Core\Data\FactorDTOTests.cs" />
