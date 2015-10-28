@@ -1,6 +1,9 @@
 ﻿using System.IO;
+using System.Linq;
 using System.Runtime.Serialization;
+using System.Security.Cryptography;
 using System.Xml;
+using System.Xml.Serialization;
 using AmigaPowerAnalysis.Core.Data;
 using Biometris.ExtensionMethods;
 
@@ -81,6 +84,52 @@ namespace AmigaPowerAnalysis.Core {
             project.ProjectName = Path.GetFileNameWithoutExtension(filename);
             project.LoadPrimaryOutput(Path.Combine(Path.GetDirectoryName(filename), project.ProjectName));
             return project;
+        }
+
+        /// <summary>
+        /// Checks whether the project is changed by opening the base file that contains
+        /// the project and comparing the xml-checksums.
+        /// </summary>
+        /// <param name="project"></param>
+        /// <param name="filename"></param>
+        /// <returns></returns>
+        public static bool HasUnsavedChanges(Project project, string filename) {
+            if (!string.IsNullOrEmpty(filename)) {
+                var oldCheckSum = ProjectManager.GetProjectFileCheckSum(filename);
+                var newCheckSum = ProjectManager.GetProjectCheckSum(project);
+                return !oldCheckSum.SequenceEqual(newCheckSum);
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Returns an MD5 checksum of the file with the given filename. This method
+        /// assumes that this file contains an APA project.
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <returns></returns>
+        public static byte[] GetProjectFileCheckSum(string filename) {
+            using (var md5 = MD5.Create()) {
+                var xml = File.ReadAllText(filename);
+                return md5.ComputeHash(xml.GetByteArray());
+            }
+        }
+
+        /// <summary>
+        /// Returns an MD5 checksum of the APA project.
+        /// </summary>
+        /// <param name="project"></param>
+        /// <returns></returns>
+        public static byte[] GetProjectCheckSum(Project project) {
+            var dto = ProjectDTO.ToDTO(project);
+            var serializer = new XmlSerializer(typeof(ProjectDTO));
+            using(var textWriter = new StringWriter()) {
+                using (var md5 = MD5.Create()) {
+                    serializer.Serialize(textWriter, dto);
+                    var xml = textWriter.ToString();
+                    return md5.ComputeHash(xml.GetByteArray());
+                }
+            }
         }
     }
 }

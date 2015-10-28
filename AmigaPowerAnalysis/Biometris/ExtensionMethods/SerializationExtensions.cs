@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -45,7 +46,7 @@ namespace Biometris.ExtensionMethods {
         /// <param name="filename"></param>
         public static void ToXmlFile<T>(this T obj, string filename) {
             var serializer = new XmlSerializer(typeof(T));
-            using (var file = new StreamWriter(filename)) {
+            using (var file = new StreamWriter(filename, false, Encoding.GetEncoding("utf-16"))) {
                 serializer.Serialize(file, obj);
             }
         }

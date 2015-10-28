@@ -45,22 +45,21 @@ namespace AmigaPowerAnalysis.GUI {
                 this.Size = Settings.Default.WindowSize;
             }
             EndpointTypeProvider.LoadMyEndpointTypes();
+            updateWindowTitle();
         }
 
         private void MainWindow_FormClosing(object sender, FormClosingEventArgs e) {
-            if (_project != null) {
-                var confirmationBox = MessageBox.Show(@"Do you really want to quit? All unsaved changes will be lost.", @"Quit Amiga Power Analysis", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                if (confirmationBox != DialogResult.Yes) {
-                    e.Cancel = true;
+            if (confirmClose()) {
+                Settings.Default.WindowLocation = this.Location;
+                if (this.WindowState == FormWindowState.Normal) {
+                    Settings.Default.WindowSize = this.Size;
+                } else {
+                    Settings.Default.WindowSize = this.RestoreBounds.Size;
                 }
-            }
-            Settings.Default.WindowLocation = this.Location;
-            if (this.WindowState == FormWindowState.Normal) {
-                Settings.Default.WindowSize = this.Size;
+                Settings.Default.Save();
             } else {
-                Settings.Default.WindowSize = this.RestoreBounds.Size;
+                e.Cancel = true;
             }
-            Settings.Default.Save();
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e) {
@@ -233,6 +232,7 @@ namespace AmigaPowerAnalysis.GUI {
                 CurrentProjectFilename = currentProjectFilename;
 
                 updateTabs();
+                updateWindowTitle();
             } catch (Exception ex) {
                 showErrorMessage(ex);
                 closeProject();
@@ -252,22 +252,48 @@ namespace AmigaPowerAnalysis.GUI {
             }
         }
 
-        private void closeProject() {
-            _selectionForms.ForEach(s => s.TabVisibilitiesChanged -= onVisibilitySettingsChanged);
-            var simulationPanel = _selectionForms.FirstOrDefault(r => r is SimulationPanel) as SimulationPanel;
-            _selectionForms.ForEach(s => s.Dispose());
-            this.tabControl.TabPages.Clear();
-            if (simulationPanel != null) {
-                simulationPanel.RunButtonPressed -= onRunButtonPressed;
+        private bool confirmClose() {
+            if (_project != null && ProjectManager.HasUnsavedChanges(_project, _currentProjectFilename)) {
+                var saveChangesDialog = MessageBox.Show(@"There are unsaved changes. Do you want to save this project before closing? All unsaved changes will be lost.", @"Unsaved changes", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                if (saveChangesDialog == DialogResult.Yes) {
+                    saveProject();
+                } else if (saveChangesDialog == DialogResult.Cancel) {
+                    return false;
+                }
             }
-            _project = null;
-            _selectionForms.Clear();
-            _selectionForms.Add(new IntroductionPanel());
-            this.saveAsToolStripMenuItem.Enabled = false;
-            this.saveToolStripMenuItem.Enabled = false;
-            this.closeToolStripMenuItem.Enabled = false;
-            this.goToolStripMenuItem.Enabled = false;
-            updateTabs();
+            return true;
+        }
+
+        private void closeProject() {
+            if (confirmClose()) {
+                _selectionForms.ForEach(s => s.TabVisibilitiesChanged -= onVisibilitySettingsChanged);
+                var simulationPanel = _selectionForms.FirstOrDefault(r => r is SimulationPanel) as SimulationPanel;
+                _selectionForms.ForEach(s => s.Dispose());
+                this.tabControl.TabPages.Clear();
+                if (simulationPanel != null) {
+                    simulationPanel.RunButtonPressed -= onRunButtonPressed;
+                }
+                _project = null;
+                _selectionForms.Clear();
+                _selectionForms.Add(new IntroductionPanel());
+                this.saveAsToolStripMenuItem.Enabled = false;
+                this.saveToolStripMenuItem.Enabled = false;
+                this.closeToolStripMenuItem.Enabled = false;
+                this.goToolStripMenuItem.Enabled = false;
+
+                CurrentProjectFilename = string.Empty;
+
+                updateTabs();
+                updateWindowTitle();
+            }
+        }
+
+        private void updateWindowTitle() {
+            if (!string.IsNullOrEmpty(_currentProjectFilename)) {
+                this.Text = "Amiga Power Analysis (Beta) - " + Path.GetFileNameWithoutExtension(_currentProjectFilename);
+            } else {
+                this.Text = "Amiga Power Analysis (Beta)";
+            }
         }
 
         private void updateTabs() {
@@ -295,6 +321,15 @@ namespace AmigaPowerAnalysis.GUI {
             if (selectedTab != null) {
                 this.tabControl.SelectTab(selectedTab);
             }
+            if (!string.IsNullOrEmpty(_currentProjectFilename)) {
+                var analysisResultsPanel = _selectionForms.Where(s => s is AnalysisResultsPanel).First() as AnalysisResultsPanel;
+                var analysisResultsPerEndpointPanel = _selectionForms.Where(s => s is AnalysisResultsPerComparisonPanel).First() as AnalysisResultsPerComparisonPanel;
+                var outputPerPanel = _selectionForms.Where(s => s is OutputPanel).First() as OutputPanel;
+                var filesPath = getCurrentProjectFilesPath();
+                analysisResultsPanel.CurrentProjectFilesPath = filesPath;
+                analysisResultsPerEndpointPanel.CurrentProjectFilesPath = filesPath;
+                outputPerPanel.CurrentProjectFilesPath = filesPath;
+            }
         }
 
         private void runPowerAnalysis() {
@@ -309,7 +344,6 @@ namespace AmigaPowerAnalysis.GUI {
             var runSimulationDialog = new RunPowerAnalysisDialog(_project, _currentProjectFilename);
             runSimulationDialog.ShowDialog();
             if (runSimulationDialog.RunComplete) {
-                this.saveProject();
                 this.updateTabs();
                 this.navigateToResults();
             }
@@ -333,21 +367,7 @@ namespace AmigaPowerAnalysis.GUI {
 
         private string CurrentProjectFilename {
             get { return _currentProjectFilename; }
-            set {
-                _currentProjectFilename = value;
-                if (!string.IsNullOrEmpty(_currentProjectFilename)) {
-                    this.Text = "Amiga Power Analysis (Beta) - " + Path.GetFileNameWithoutExtension(_currentProjectFilename);
-                    var analysisResultsPanel = _selectionForms.Where(s => s is AnalysisResultsPanel).First() as AnalysisResultsPanel;
-                    var analysisResultsPerEndpointPanel = _selectionForms.Where(s => s is AnalysisResultsPerComparisonPanel).First() as AnalysisResultsPerComparisonPanel;
-                    var outputPerPanel = _selectionForms.Where(s => s is OutputPanel).First() as OutputPanel;
-                    var filesPath = getCurrentProjectFilesPath();
-                    analysisResultsPanel.CurrentProjectFilesPath = filesPath;
-                    analysisResultsPerEndpointPanel.CurrentProjectFilesPath = filesPath;
-                    outputPerPanel.CurrentProjectFilesPath = filesPath;
-                } else {
-                    this.Text = "Amiga Power Analysis (Beta)";
-                }
-            }
+            set { _currentProjectFilename = value; }
         }
 
         private string getCurrentProjectFilesPath() {

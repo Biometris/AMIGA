@@ -39,7 +39,7 @@ namespace Biometris.ExtensionMethods {
                                  )\s*                                 # trailing whitespace
                                  (?:(?=[,;\b])|$)                     # match must end with end of string or delim, where delim is , or ;";
 
-            Regex regx = new Regex(pattern, RegexOptions.IgnorePatternWhitespace | RegexOptions.Compiled);
+            var regx = new Regex(pattern, RegexOptions.IgnorePatternWhitespace | RegexOptions.Compiled);
 
             foreach (Match m in regx.Matches(s)) {
                 Group gpNum = m.Groups["num"];
@@ -109,6 +109,17 @@ namespace Biometris.ExtensionMethods {
                 return rawValue;
             }
             throw new Exception("Unknown conversion type");
+        }
+
+        /// <summary>
+        /// Gets a byte array from the string.
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static byte[] GetByteArray(this string str) {
+            byte[] bytes = new byte[str.Length * sizeof(char)];
+            System.Buffer.BlockCopy(str.ToCharArray(), 0, bytes, 0, bytes.Length);
+            return bytes;
         }
     }
 }
