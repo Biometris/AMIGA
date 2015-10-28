@@ -90,9 +90,15 @@ namespace AmigaPowerAnalysis.Core.Reporting {
                 || analysisMethodsDifferenceTests.HasFlag(AnalysisMethodType.Gamma)
                 || analysisMethodsEquivalenceTests.HasFlag(AnalysisMethodType.Gamma)) {
                 stringBuilder.AppendLine(format("Use Wald test", inputPowerAnalysis.UseWaldTest));
-                stringBuilder.AppendLine(format("Power calculation method", inputPowerAnalysis.PowerCalculationMethodType));
-                stringBuilder.AppendLine(format("Number of simulated data sets", inputPowerAnalysis.NumberOfSimulatedDataSets));
-                stringBuilder.AppendLine(format("Seed random number generation", inputPowerAnalysis.RandomNumberSeed));
+                if (inputPowerAnalysis.MeasurementType == MeasurementType.Continuous) {
+                    stringBuilder.AppendLine(format("Power calculation method", "Exact"));
+                } else {
+                    stringBuilder.AppendLine(format("Power calculation method", inputPowerAnalysis.PowerCalculationMethodType));
+                    if (inputPowerAnalysis.PowerCalculationMethodType == PowerCalculationMethod.Simulate) {
+                        stringBuilder.AppendLine(format("Number of simulated data sets", inputPowerAnalysis.NumberOfSimulatedDataSets));
+                    }
+                    stringBuilder.AppendLine(format("Seed random number generation", inputPowerAnalysis.RandomNumberSeed));
+                }
             }
             stringBuilder.AppendLine("</table>");
 

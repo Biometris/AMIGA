@@ -113,8 +113,10 @@ namespace AmigaPowerAnalysis.Core.Reporting {
                 || analysisMethodsDifferenceTests.Contains(AnalysisMethodType.Gamma)
                 || analysisMethodsEquivalenceTests.Contains(AnalysisMethodType.Gamma)) {
                     stringBuilder.AppendLine(format("Use Wald test", firstInputSettings.UseWaldTest));
-                    stringBuilder.AppendLine(format("Power calculation method", firstInputSettings.PowerCalculationMethodType));
-                    stringBuilder.AppendLine(format("Number of simulated data sets", firstInputSettings.NumberOfSimulatedDataSets));
+                    stringBuilder.AppendLine(format("Power calculation method for counts and non-negative with gamma", firstInputSettings.PowerCalculationMethodType));
+                    if (firstInputSettings.PowerCalculationMethodType == PowerCalculationMethod.Simulate) {
+                        stringBuilder.AppendLine(format("Number of simulated data sets", firstInputSettings.NumberOfSimulatedDataSets));
+                    }
                     stringBuilder.AppendLine(format("Seed random number generation", firstInputSettings.RandomNumberSeed));
             }
             stringBuilder.AppendLine("</table>");
