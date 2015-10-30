@@ -32,7 +32,8 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         public bool IsVisible() {
-            return true;
+            _availableOutputs = getAvailableOutputs(CurrentProjectFilesPath);
+            return _availableOutputs.Count > 0;
         }
 
         public event EventHandler TabVisibilitiesChanged;
