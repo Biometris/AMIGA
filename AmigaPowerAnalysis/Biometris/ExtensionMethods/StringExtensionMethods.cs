@@ -163,24 +163,24 @@ namespace Biometris.ExtensionMethods {
 
             int filenameIndex = elements.GetLength(0) - 1;
 
-            if (elements.GetLength(0) == 1) // pathname is just a root and filename
-            {
-                if (elements[0].Length > 5) // long enough to shorten
-                {
-                    // if path is a UNC path, root may be rather long
+            if (elements.GetLength(0) == 1) {
+                // Pathname is just a root and filename 
+                if (elements[0].Length > 5) {
+                    // Long enough to shorten
                     if (root.Length + 6 >= maxLength) {
+                        // If path is a UNC path, root may be rather long
                         return root + elements[0].Substring(0, 3) + "...";
                     } else {
                         return pathname.Substring(0, maxLength - 3) + "...";
                     }
                 }
-            } else if ((root.Length + 4 + elements[filenameIndex].Length) > maxLength) // pathname is just a root and filename
-            {
+            } else if ((root.Length + 4 + elements[filenameIndex].Length) > maxLength) {
+                // Pathname is just a root and filename
                 root += "...\\";
-
-                int len = elements[filenameIndex].Length;
-                if (len < 6)
+                var len = elements[filenameIndex].Length;
+                if (len < 6) {
                     return root + elements[filenameIndex];
+                }
 
                 if ((root.Length + 6) >= maxLength) {
                     len = 3;
@@ -191,45 +191,38 @@ namespace Biometris.ExtensionMethods {
             } else if (elements.GetLength(0) == 2) {
                 return root + "...\\" + elements[1];
             } else {
-                int len = 0;
-                int begin = 0;
-
+                var len = 0;
+                var begin = 0;
                 for (int i = 0; i < filenameIndex; i++) {
                     if (elements[i].Length > len) {
                         begin = i;
                         len = elements[i].Length;
                     }
                 }
-
-                int totalLength = pathname.Length - len + 3;
-                int end = begin + 1;
-
+                var totalLength = pathname.Length - len + 3;
+                var end = begin + 1;
                 while (totalLength > maxLength) {
-                    if (begin > 0)
+                    if (begin > 0) {
                         totalLength -= elements[--begin].Length - 1;
-
-                    if (totalLength <= maxLength)
+                    }
+                    if (totalLength <= maxLength) {
                         break;
-
-                    if (end < filenameIndex)
+                    }
+                    if (end < filenameIndex) {
                         totalLength -= elements[++end].Length - 1;
-
-                    if (begin == 0 && end == filenameIndex)
+                    }
+                    if (begin == 0 && end == filenameIndex) {
                         break;
+                    }
                 }
-
-                // assemble final string
-
+                // Assemble final string
                 for (int i = 0; i < begin; i++) {
                     root += elements[i] + '\\';
                 }
-
                 root += "...\\";
-
                 for (int i = end; i < filenameIndex; i++) {
                     root += elements[i] + '\\';
                 }
-
                 return root + elements[filenameIndex];
             }
             return pathname;
