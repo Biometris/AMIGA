@@ -206,12 +206,6 @@
     <Compile Include="GUI\Panels\AnalysisResultsPerComparisonPanel.Designer.cs">
       <DependentUpon>AnalysisResultsPerComparisonPanel.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\Panels\AnalysisTemplatePanel.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="GUI\Panels\AnalysisTemplatePanel.Designer.cs">
-      <DependentUpon>AnalysisTemplatePanel.cs</DependentUpon>
-    </Compile>
     <Compile Include="GUI\Panels\BlockModifiersPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -345,9 +339,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Panels\AnalysisResultsPerComparisonPanel.resx">
       <DependentUpon>AnalysisResultsPerComparisonPanel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Panels\AnalysisTemplatePanel.resx">
-      <DependentUpon>AnalysisTemplatePanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Panels\BlockModifiersPanel.resx">
       <DependentUpon>BlockModifiersPanel.cs</DependentUpon>
