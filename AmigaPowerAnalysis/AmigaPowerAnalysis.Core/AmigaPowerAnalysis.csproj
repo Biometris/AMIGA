@@ -230,12 +230,6 @@
     <Compile Include="GUI\Panels\OutputPanel.Designer.cs">
       <DependentUpon>OutputPanel.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\Panels\RunPanel.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="GUI\Panels\RunPanel.Designer.cs">
-      <DependentUpon>RunPanel.cs</DependentUpon>
-    </Compile>
     <Compile Include="GUI\Panels\EndpointTypesPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -351,9 +345,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Panels\OutputPanel.resx">
       <DependentUpon>OutputPanel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Panels\RunPanel.resx">
-      <DependentUpon>RunPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Panels\EndpointTypesPanel.resx">
       <DependentUpon>EndpointTypesPanel.cs</DependentUpon>
