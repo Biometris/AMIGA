@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Biometris.ExtensionMethods;
 
 namespace Biometris.ApplicationUtilities {
+
+    /// <summary>
+    /// Manager class for keeping track of the most recently opened files.
+    /// </summary>
     public sealed class MostRecentFilesManager {
 
         private string _settingsFile;
