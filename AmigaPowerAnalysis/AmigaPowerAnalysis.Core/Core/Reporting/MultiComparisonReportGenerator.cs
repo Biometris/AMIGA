@@ -81,7 +81,7 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             return stringBuilder.ToString();
         }
 
-        protected static string generateComparisonsAnalysisSettingsHtml(IEnumerable<OutputPowerAnalysis> comparisonOutputs) {
+        private static string generateComparisonsAnalysisSettingsHtml(IEnumerable<OutputPowerAnalysis> comparisonOutputs) {
             var stringBuilder = new StringBuilder();
             Func<string, object, string> format = (parameter, setting) => { return string.Format("<tr><td>{0}</td><td>{1}</td></tr>", parameter, setting); };
 

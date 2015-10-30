@@ -8,6 +8,8 @@ using System.Windows.Forms;
 using AmigaPowerAnalysis.Core;
 using AmigaPowerAnalysis.GUI.Wrappers;
 using AmigaPowerAnalysis.Properties;
+using Biometris.ApplicationUtilities;
+using Biometris.ExtensionMethods;
 
 namespace AmigaPowerAnalysis.GUI {
     public partial class MainWindow : Form {
@@ -19,6 +21,8 @@ namespace AmigaPowerAnalysis.GUI {
 
         private List<ISelectionForm> _selectionForms;
 
+        private MostRecentFilesManager _mostRecentFilesManager;
+
         #endregion
 
         public MainWindow() {
@@ -29,8 +33,11 @@ namespace AmigaPowerAnalysis.GUI {
         #region Initialization
 
         private void initialize() {
+            var mostRecentFilesPath = Path.Combine(Application.LocalUserAppDataPath, "MostRecentFiles.xml");
+            _mostRecentFilesManager = new MostRecentFilesManager(mostRecentFilesPath);
             _selectionForms = new List<ISelectionForm>();
-            this.closeProject();
+            updateRecentFilesMenu();
+            closeProject();
         }
 
         #endregion
@@ -49,7 +56,7 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void MainWindow_FormClosing(object sender, FormClosingEventArgs e) {
-            if (confirmClose()) {
+            if (confirmCloseDialog()) {
                 Settings.Default.WindowLocation = this.Location;
                 if (this.WindowState == FormWindowState.Normal) {
                     Settings.Default.WindowSize = this.Size;
@@ -57,6 +64,7 @@ namespace AmigaPowerAnalysis.GUI {
                     Settings.Default.WindowSize = this.RestoreBounds.Size;
                 }
                 Settings.Default.Save();
+                _mostRecentFilesManager.Save();
             } else {
                 e.Cancel = true;
             }
@@ -108,7 +116,7 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void goToolStripMenuItem_Click(object sender, EventArgs e) {
-            runPowerAnalysis();
+            runPowerAnalysisDialog();
         }
 
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e) {
@@ -138,7 +146,7 @@ namespace AmigaPowerAnalysis.GUI {
         }
 
         private void onRunButtonPressed(object sender, EventArgs e) {
-            runPowerAnalysis();
+            runPowerAnalysisDialog();
         }
 
         #endregion
@@ -154,48 +162,13 @@ namespace AmigaPowerAnalysis.GUI {
             }
         }
 
-        private void openProjectDialog() {
+        private void openProject(string filename) {
             try {
-                OpenFileDialog openFileDialog = new OpenFileDialog();
-                openFileDialog.Filter = "Amiga Power Analysis settings file (*.xml)|*.xml|All files (*.*)|*.*";
-                openFileDialog.FilterIndex = 1;
-                openFileDialog.RestoreDirectory = true;
-                openFileDialog.InitialDirectory = Properties.Settings.Default.LastOpenedDirectory;
-                if (openFileDialog.ShowDialog() == DialogResult.OK) {
-                    var filename = openFileDialog.FileName;
-                    Properties.Settings.Default.LastOpenedDirectory = Path.GetDirectoryName(filename);
-                    Properties.Settings.Default.Save();
-                    Project project;
-                    if (Path.GetExtension(filename) == ".apa") {
-                        project = ProjectManager.LoadProject(filename);
-                    } else {
-                        project = ProjectManager.LoadProjectXml(filename);
-                    }
-                    loadProject(project, filename);
-                }
-            } catch (Exception ex) {
-                showErrorMessage(ex);
-            }
-        }
-
-        private void saveAsDialog() {
-            try {
-                var saveFileDialog = new SaveFileDialog();
-                saveFileDialog.Filter = "Amiga Power Analysis xml files (*.xml)|*.xml|All files (*.*)|*.*";
-                saveFileDialog.FilterIndex = 1;
-                saveFileDialog.RestoreDirectory = true;
-                saveFileDialog.InitialDirectory = Properties.Settings.Default.LastOpenedDirectory;
-                if (saveFileDialog.ShowDialog() == DialogResult.OK) {
-                    var filename = saveFileDialog.FileName;
-                    Properties.Settings.Default.LastOpenedDirectory = Path.GetDirectoryName(filename);
-                    Properties.Settings.Default.Save();
-                    if (Path.GetExtension(filename) == ".apa") {
-                        ProjectManager.SaveProject(_project, saveFileDialog.FileName);
-                    } else {
-                        ProjectManager.SaveProjectXml(_project, saveFileDialog.FileName);
-                    }
-                    CurrentProjectFilename = saveFileDialog.FileName;
-                }
+                Project project;
+                project = ProjectManager.LoadProjectXml(filename);
+                loadProject(project, filename);
+                _mostRecentFilesManager.AddRecentFile(filename);
+                updateRecentFilesMenu();
             } catch (Exception ex) {
                 showErrorMessage(ex);
             }
@@ -228,12 +201,13 @@ namespace AmigaPowerAnalysis.GUI {
                 this.saveAsToolStripMenuItem.Enabled = true;
                 this.saveToolStripMenuItem.Enabled = true;
                 this.goToolStripMenuItem.Enabled = true;
-                
+
                 CurrentProjectFilename = currentProjectFilename;
 
                 updateTabs();
                 updateWindowTitle();
             } catch (Exception ex) {
+                CurrentProjectFilename = string.Empty;
                 showErrorMessage(ex);
                 closeProject();
                 return;
@@ -252,20 +226,8 @@ namespace AmigaPowerAnalysis.GUI {
             }
         }
 
-        private bool confirmClose() {
-            if (_project != null && ProjectManager.HasUnsavedChanges(_project, _currentProjectFilename)) {
-                var saveChangesDialog = MessageBox.Show(@"There are unsaved changes. Do you want to save this project before closing? All unsaved changes will be lost.", @"Unsaved changes", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
-                if (saveChangesDialog == DialogResult.Yes) {
-                    saveProject();
-                } else if (saveChangesDialog == DialogResult.Cancel) {
-                    return false;
-                }
-            }
-            return true;
-        }
-
         private void closeProject() {
-            if (confirmClose()) {
+            if (confirmCloseDialog()) {
                 _selectionForms.ForEach(s => s.TabVisibilitiesChanged -= onVisibilitySettingsChanged);
                 var simulationPanel = _selectionForms.FirstOrDefault(r => r is SimulationPanel) as SimulationPanel;
                 _selectionForms.ForEach(s => s.Dispose());
@@ -288,11 +250,32 @@ namespace AmigaPowerAnalysis.GUI {
             }
         }
 
+        #endregion
+
+        #region Update Routines
+
         private void updateWindowTitle() {
             if (!string.IsNullOrEmpty(_currentProjectFilename)) {
                 this.Text = "Amiga Power Analysis (Beta) - " + Path.GetFileNameWithoutExtension(_currentProjectFilename);
             } else {
                 this.Text = "Amiga Power Analysis (Beta)";
+            }
+        }
+
+        private void updateRecentFilesMenu() {
+            var clearRecentProjectsListsToolStripMenuItem = clearRecentProjectsListToolStripMenuItem;
+            var mostRecentFiles = _mostRecentFilesManager.GetMostRecentFiles();
+            var recentFileToolStripMenuItems = mostRecentFiles
+                .Select(r => new ToolStripMenuItem(r.FilePath.ShortenPathname(50), null, (sender, e) => openProject(r.FilePath)))
+                .ToList();
+            recentProjectsToolStripMenuItem.DropDownItems.Clear();
+            recentFileToolStripMenuItems.ForEach(r => recentProjectsToolStripMenuItem.DropDownItems.Add(r));
+            recentProjectsToolStripMenuItem.DropDownItems.Add(new ToolStripSeparator());
+            recentProjectsToolStripMenuItem.DropDownItems.Add(clearRecentProjectsListsToolStripMenuItem);
+            if (recentFileToolStripMenuItems.Count == 0) {
+                recentProjectsToolStripMenuItem.Visible = false;
+            } else {
+                recentProjectsToolStripMenuItem.Visible = true;
             }
         }
 
@@ -332,7 +315,62 @@ namespace AmigaPowerAnalysis.GUI {
             }
         }
 
-        private void runPowerAnalysis() {
+        #endregion
+
+        #region Dialogs
+
+        private void openProjectDialog() {
+            try {
+                OpenFileDialog openFileDialog = new OpenFileDialog();
+                openFileDialog.Filter = "Amiga Power Analysis settings file (*.xml)|*.xml|All files (*.*)|*.*";
+                openFileDialog.FilterIndex = 1;
+                openFileDialog.RestoreDirectory = true;
+                openFileDialog.InitialDirectory = Properties.Settings.Default.LastOpenedDirectory;
+                if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                    var filename = openFileDialog.FileName;
+                    Properties.Settings.Default.LastOpenedDirectory = Path.GetDirectoryName(filename);
+                    Properties.Settings.Default.Save();
+                    openProject(filename);
+                }
+            } catch (Exception ex) {
+                showErrorMessage(ex);
+            }
+        }
+
+        private void saveAsDialog() {
+            try {
+                var saveFileDialog = new SaveFileDialog();
+                saveFileDialog.Filter = "Amiga Power Analysis xml files (*.xml)|*.xml|All files (*.*)|*.*";
+                saveFileDialog.FilterIndex = 1;
+                saveFileDialog.RestoreDirectory = true;
+                saveFileDialog.InitialDirectory = Properties.Settings.Default.LastOpenedDirectory;
+                if (saveFileDialog.ShowDialog() == DialogResult.OK) {
+                    var filename = saveFileDialog.FileName;
+                    Properties.Settings.Default.LastOpenedDirectory = Path.GetDirectoryName(filename);
+                    Properties.Settings.Default.Save();
+                    ProjectManager.SaveProjectXml(_project, filename);
+                    CurrentProjectFilename = filename;
+                    _mostRecentFilesManager.AddRecentFile(filename);
+                    updateRecentFilesMenu();
+                }
+            } catch (Exception ex) {
+                showErrorMessage(ex);
+            }
+        }
+
+        private bool confirmCloseDialog() {
+            if (_project != null && ProjectManager.HasUnsavedChanges(_project, _currentProjectFilename)) {
+                var saveChangesDialog = MessageBox.Show(@"There are unsaved changes. Do you want to save this project before closing? All unsaved changes will be lost.", @"Unsaved changes", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                if (saveChangesDialog == DialogResult.Yes) {
+                    saveProject();
+                } else if (saveChangesDialog == DialogResult.Cancel) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private void runPowerAnalysisDialog() {
             if (string.IsNullOrEmpty(_currentProjectFilename)) {
                 MessageBox.Show("Please save the project first.",
                    "Save project first",
@@ -387,6 +425,11 @@ namespace AmigaPowerAnalysis.GUI {
                 }
             }
             return false;
+        }
+
+        private void clearRecentProjectsListToolStripMenuItem_Click(object sender, EventArgs e) {
+            _mostRecentFilesManager.Clear();
+            updateRecentFilesMenu();
         }
     }
 }

@@ -110,6 +110,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationUtilities\ApplicationUtils.cs" />
+    <Compile Include="ApplicationUtilities\RecentFile.cs" />
+    <Compile Include="ApplicationUtilities\MostRecentFilesManager.cs" />
     <Compile Include="Collections\MultiSetComparer.cs" />
     <Compile Include="ExtensionMethods\ObjectComparisonExtensions.cs" />
     <Compile Include="ExtensionMethods\SerializationExtensions.cs" />
