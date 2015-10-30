@@ -65,7 +65,7 @@ namespace Biometris.ApplicationUtilities {
             } else {
                 recentFile.DateLastOpened = DateTime.Now;
             }
-            _recentFiles = _recentFiles.OrderBy(r => r.DateLastOpened).Take(MaxFilesToKeep).ToList();
+            _recentFiles = _recentFiles.OrderByDescending(r => r.DateLastOpened).Take(MaxFilesToKeep).ToList();
         }
 
         /// <summary>
