@@ -285,7 +285,7 @@ namespace AmigaPowerAnalysis.GUI {
                         blocks = 2;
                     }
                     var generator = new AnalysisDataTemplateGenerator();
-                    var template = generator.CreateAnalysisDataTemplate(_resultPowerAnalysis, blocks);
+                    var template = generator.CreateAnalysisDataTemplate(_resultPowerAnalysis.GetPrimaryComparisons().Select(r => r.InputPowerAnalysis), blocks);
                     var filename = saveFileDialog.FileName;
                     AnalysisDataTemplateGenerator.AnalysisDataTemplateToCsv(template, filename);
                     var contrastsFileName = Path.Combine(Path.GetDirectoryName(filename), Path.GetFileNameWithoutExtension(filename) + "Contrasts.csv");
@@ -304,11 +304,11 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void showError(string title, string message) {
             MessageBox.Show(
-                    message,
-                    title,
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error,
-                    MessageBoxDefaultButton.Button1);
+                message,
+                title,
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error,
+                MessageBoxDefaultButton.Button1);
         }
 
         private void dataGridViewComparisons_CellClick(object sender, DataGridViewCellEventArgs e) {

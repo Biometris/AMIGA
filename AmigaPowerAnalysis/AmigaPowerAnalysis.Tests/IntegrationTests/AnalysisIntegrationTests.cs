@@ -10,6 +10,7 @@ using AmigaPowerAnalysis.Core.Reporting;
 using AmigaPowerAnalysis.Tests.Mocks.Projects;
 using Biometris.ProgressReporting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using AmigaPowerAnalysis.Core.DataAnalysis;
 
 namespace AmigaPowerAnalysis.Tests.IntegrationTests {
     [TestClass]
@@ -26,6 +27,12 @@ namespace AmigaPowerAnalysis.Tests.IntegrationTests {
                 directory.GetFiles().ToList().ForEach(f => f.Delete());
                 directory.GetDirectories().ToList().ForEach(f => f.Delete(true));
             }
+
+            var templateGenerator = new AnalysisDataTemplateGenerator();
+            var template = templateGenerator.CreateAnalysisDataTemplate(project, 1);
+            var templateContrastsFilename = Path.Combine(filesPath, "TemplateContrasts.csv");
+            AnalysisDataTemplateGenerator.AnalysisDataTemplateContrastsToCsv(template, templateContrastsFilename);
+
             var endpoints = project.Endpoints;
             var resultPowerAnalysis = new ResultPowerAnalysis();
             for (int i = 0; i < endpoints.Count(); ++i) {
@@ -45,6 +52,7 @@ namespace AmigaPowerAnalysis.Tests.IntegrationTests {
             }
             var multiComparisonReportGenerator = new MultiComparisonReportGenerator(resultPowerAnalysis, projectId, filesPath);
             multiComparisonReportGenerator.SaveAsPdf(Path.Combine(filesPath, "Report.pdf"));
+
             runValidationGenstat(0, filesPath);
         }
 
@@ -126,7 +134,7 @@ namespace AmigaPowerAnalysis.Tests.IntegrationTests {
         [TestMethod]
         [TestCategory("IntegrationTests")]
         public void FullProjectIntegrationTests_MockProject3OP() {
-            runProject(MockProjectsCreator.MockProject3(), "ValidationProject3_OP");
+            runProject(MockProjectsCreator.MockProject3_OP(), "ValidationProject3_OP");
         }
     }
 }

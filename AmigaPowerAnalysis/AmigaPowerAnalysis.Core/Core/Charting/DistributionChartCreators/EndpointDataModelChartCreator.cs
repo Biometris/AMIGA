@@ -77,7 +77,8 @@ namespace AmigaPowerAnalysis.Core.Charting.DistributionChartCreators {
                     X = locLower,
                     Color = OxyColors.OrangeRed,
                     StrokeThickness = 2,
-                    LineStyle = LineStyle.Dash
+                    LineStyle = LineStyle.Dash,
+                    //Text = "Lower Loc",
                 };
                 plotModel.Annotations.Add(locLowerLineAnnotation);
                 _horizontalAxis.Minimum = (_horizontalAxis.Minimum > locLower) ? Math.Min(_horizontalAxis.Minimum, Math.Floor(0.9 * locLower)) : _horizontalAxis.Minimum;
@@ -89,7 +90,8 @@ namespace AmigaPowerAnalysis.Core.Charting.DistributionChartCreators {
                     X = locUpper,
                     Color = OxyColors.OrangeRed,
                     StrokeThickness = 2,
-                    LineStyle = LineStyle.Dash
+                    LineStyle = LineStyle.Dash,
+                    //Text = "Upper Loc",
                 };
                 plotModel.Annotations.Add(locUpperLineAnnotation);
                 _horizontalAxis.Maximum = (_horizontalAxis.Maximum < locUpper) ? Math.Max(_horizontalAxis.Maximum, Math.Ceiling(1.1 * locUpper)) : _horizontalAxis.Maximum;

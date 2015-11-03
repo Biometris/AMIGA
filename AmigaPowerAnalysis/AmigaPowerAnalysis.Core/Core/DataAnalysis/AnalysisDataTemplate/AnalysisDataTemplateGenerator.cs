@@ -85,15 +85,28 @@ namespace AmigaPowerAnalysis.Core.DataAnalysis {
             }
         }
 
-        public AnalysisDataTemplate CreateAnalysisDataTemplate(ResultPowerAnalysis _resultPowerAnalysis, int replicates) {
-            var primaryComparisons = _resultPowerAnalysis.GetPrimaryComparisons();
-            var factors = primaryComparisons.First().InputPowerAnalysis.Factors.Where(f => f != "Variety").OrderBy(f => f).ToList();
-            var formattedComparisons = primaryComparisons.Select(r => new {
+        public AnalysisDataTemplate CreateAnalysisDataTemplate(Project project, int replicates) {
+            var comparisons = project.Endpoints.ToList();
+            var inputGenerator = new PowerAnalysisInputGenerator();
+            var comparisonInputs = new List<InputPowerAnalysis>();
+            var numberOfComparisons = comparisons.Count;
+            for (int i = 0; i < comparisons.Count; ++i) {
+                var inputPowerAnalysis = inputGenerator.CreateInputPowerAnalysis(comparisons.ElementAt(i), project.DesignSettings, project.PowerCalculationSettings, i, numberOfComparisons, project.UseBlockModifier, project.ProjectName);
+                comparisonInputs.Add(inputPowerAnalysis);
+            }
+            return CreateAnalysisDataTemplate(comparisonInputs, replicates);
+        }
+
+        public AnalysisDataTemplate CreateAnalysisDataTemplate(IEnumerable<InputPowerAnalysis> _powerAnalysisInputs, int replicates) {
+
+            var factors = _powerAnalysisInputs.First().Factors.Where(f => f != "Variety").OrderBy(f => f).ToList();
+
+            var formattedComparisons = _powerAnalysisInputs.Select(r => new {
                 Comparison = r,
-                FormattedRecords = r.InputPowerAnalysis.InputRecords.Select(ir => new {
-                    Comparison = r.InputPowerAnalysis,
+                FormattedRecords = r.InputRecords.Select(ir => new {
+                    Comparison = r,
                     InputRecord = ir,
-                    Levels = r.InputPowerAnalysis.Factors
+                    Levels = r.Factors
                         .Zip(ir.FactorLevels, (f, fl) => new SimpleFactorLevel() {
                             VarietyFactorLevelType = (f == "Variety") ? 1 + 1 * Convert.ToInt32(fl == "Comparator") + 2 * Convert.ToInt32(fl == "Test") : 0,
                             Factor = f,
@@ -108,6 +121,7 @@ namespace AmigaPowerAnalysis.Core.DataAnalysis {
                         SubPlot = 1,
                         Variety = r.Levels.First(l => l.Factor == "Variety").Level,
                         FactorLevels = factors.Select(f => r.Levels.First(l => l.Factor == f).Level).ToList(),
+                        ComparisonDummyFactorLevel = r.InputRecord.ComparisonDummyFactorLevel,
                         Frequency = r.InputRecord.Frequency,
                     })
                 .SelectMany(r => Enumerable.Repeat(r, r.Frequency)
@@ -149,68 +163,8 @@ namespace AmigaPowerAnalysis.Core.DataAnalysis {
                 .ToList();
 
             var analysisDataTemplate = new AnalysisDataTemplate() {
-                Endpoints = primaryComparisons.Select(e => e.Endpoint).ToList(),
+                Endpoints = _powerAnalysisInputs.Select(e => e.Endpoint).ToList(),
                 Factors = factors,
-                AnalysisDataTemplateRecords = records,
-                AnalysisDataTemplateContrastRecords = contrastRecords,
-            };
-
-            return analysisDataTemplate;
-        }
-
-        public AnalysisDataTemplate CreateAnalysisDataTemplate(Project project, int replicates) {
-            var factorLevelCombinations = FactorLevelCombinationsCreator.GenerateInteractionCombinations(project.Factors);
-            var records = factorLevelCombinations
-                .Select((r, i) => new {
-                    MainPlot = i + 1,
-                    SubPlot = 1,
-                    Variety = r.Levels.First(f => f.Parent.IsVarietyFactor).Label,
-                    FactorLevels = r.Levels.Where(f => !f.Parent.IsVarietyFactor).Select(fl => fl.Label).ToList(),
-                    Frequency = r.Levels.Select(fl => fl.Frequency).Aggregate((n1, n2) => n1 * n2),
-                })
-                .SelectMany(r => Enumerable.Repeat(r, r.Frequency)
-                    .Select((rep, i) => new {
-                        MainPlot = rep.MainPlot,
-                        SubPlot = rep.SubPlot,
-                        Variety = rep.Variety,
-                        FactorLevels = rep.FactorLevels,
-                        FrequencyReplicate = i + 1
-                    }))
-                .SelectMany(r => Enumerable.Repeat(r, replicates)
-                    .Select((rep, i) => new {
-                        MainPlot = rep.MainPlot,
-                        SubPlot = rep.SubPlot,
-                        Variety = rep.Variety,
-                        FactorLevels = rep.FactorLevels,
-                        FrequencyReplicate = rep.FrequencyReplicate,
-                        Block = i + 1
-                    }))
-                .Select(r => new AnalysisDataTemplateRecord() {
-                    MainPlot = r.MainPlot,
-                    SubPlot = r.SubPlot,
-                    Variety = r.Variety,
-                    FactorLevels = r.FactorLevels,
-                    FrequencyReplicate = r.FrequencyReplicate,
-                    Block = r.Block
-                })
-                .OrderBy(r => r.Block)
-                .ThenBy(r => r.MainPlot)
-                .ThenBy(r => r.SubPlot)
-                .ToList();
-
-            var endpoints = project.Endpoints.ToList();
-            var contrastRecords = factorLevelCombinations
-                .Select((r, i) => new AnalysisDataTemplateContrastRecord() {
-                    Variety = r.Levels.First(f => f.Parent.IsVarietyFactor).Label,
-                    FactorLevels = r.Levels.Where(f => !f.Parent.IsVarietyFactor).Select(fl => fl.Label).ToList(),
-                    ContrastsPerEndpoint  = endpoints.Select(ep => ep.GetComparisonType(r)).ToList()
-                })
-                .OrderBy(r => r.Variety)
-                .ToList();
-
-            var analysisDataTemplate = new AnalysisDataTemplate() {
-                Endpoints = endpoints.Select(e => e.Name).ToList(),
-                Factors = project.Factors.Where(f => !f.IsVarietyFactor).Select(f => f.Name).ToList(),
                 AnalysisDataTemplateRecords = records,
                 AnalysisDataTemplateContrastRecords = contrastRecords,
             };
