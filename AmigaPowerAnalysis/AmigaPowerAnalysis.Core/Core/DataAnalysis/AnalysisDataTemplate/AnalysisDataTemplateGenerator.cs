@@ -97,6 +97,18 @@ namespace AmigaPowerAnalysis.Core.DataAnalysis {
             return CreateAnalysisDataTemplate(comparisonInputs, replicates);
         }
 
+        private static int computeConstrast(InputPowerAnalysis inputPowerAnalysis, InputPowerAnalysisRecord inputPowerAnalysisRecord) {
+            if (inputPowerAnalysisRecord.Comparison == ComparisonType.Exclude) {
+                return inputPowerAnalysis.DummyComparisonLevels.IndexOf(inputPowerAnalysisRecord.ComparisonDummyFactorLevel);
+            } else if (inputPowerAnalysisRecord.Comparison == ComparisonType.IncludeComparator) {
+                return -1;
+            } else if (inputPowerAnalysisRecord.Comparison == ComparisonType.IncludeTest) {
+                return -2;
+            }
+            // We should not get here
+            return 0;
+        }
+
         public AnalysisDataTemplate CreateAnalysisDataTemplate(IEnumerable<InputPowerAnalysis> _powerAnalysisInputs, int replicates) {
 
             var factors = _powerAnalysisInputs.First().Factors.Where(f => f != "Variety").OrderBy(f => f).ToList();
@@ -111,7 +123,8 @@ namespace AmigaPowerAnalysis.Core.DataAnalysis {
                             VarietyFactorLevelType = (f == "Variety") ? 1 + 1 * Convert.ToInt32(fl == "Comparator") + 2 * Convert.ToInt32(fl == "Test") : 0,
                             Factor = f,
                             Level = fl,
-                        }).ToList()
+                        }).ToList(),
+                    Contrast = computeConstrast(r, ir),
                 }).ToList()
             });
 
@@ -121,7 +134,6 @@ namespace AmigaPowerAnalysis.Core.DataAnalysis {
                         SubPlot = 1,
                         Variety = r.Levels.First(l => l.Factor == "Variety").Level,
                         FactorLevels = factors.Select(f => r.Levels.First(l => l.Factor == f).Level).ToList(),
-                        ComparisonDummyFactorLevel = r.InputRecord.ComparisonDummyFactorLevel,
                         Frequency = r.InputRecord.Frequency,
                     })
                 .SelectMany(r => Enumerable.Repeat(r, r.Frequency)
@@ -158,7 +170,8 @@ namespace AmigaPowerAnalysis.Core.DataAnalysis {
                 .Select((r, i) => new AnalysisDataTemplateContrastRecord() {
                     Variety = r.Levels.First(l => l.Factor == "Variety").Level,
                     FactorLevels = factors.Select(f => r.Levels.First(l => l.Factor == f).Level).ToList(),
-                    ContrastsPerEndpoint = formattedComparisons.Select(ep => ep.FormattedRecords.First(fr => SimpleFactorLevelComparer.CompareStatic(r.Levels,fr.Levels) == 0).InputRecord.Comparison).ToList()
+                    ContrastsPerEndpoint = formattedComparisons
+                        .Select(ep => ep.FormattedRecords.First(fr => SimpleFactorLevelComparer.CompareStatic(r.Levels,fr.Levels) == 0).Contrast).ToList()
                 })
                 .ToList();
 

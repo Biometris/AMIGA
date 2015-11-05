@@ -21,6 +21,6 @@ namespace AmigaPowerAnalysis.Core.DataAnalysis {
         /// <summary>
         /// The contrasts per endpoint.
         /// </summary>
-        public List<ComparisonType> ContrastsPerEndpoint { get; set; }
+        public List<int> ContrastsPerEndpoint { get; set; }
     }
 }

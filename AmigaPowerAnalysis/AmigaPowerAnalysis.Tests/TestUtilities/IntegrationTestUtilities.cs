@@ -3,22 +3,24 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using Biometris.ExtensionMethods;
 using AmigaPowerAnalysis.Core;
+using AmigaPowerAnalysis.Core.DataAnalysis;
 using AmigaPowerAnalysis.Core.PowerAnalysis;
 using AmigaPowerAnalysis.Core.Reporting;
-using AmigaPowerAnalysis.Tests.Mocks.Projects;
+using Biometris.ExtensionMethods;
 using Biometris.ProgressReporting;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using AmigaPowerAnalysis.Core.DataAnalysis;
 
-namespace AmigaPowerAnalysis.Tests.IntegrationTests {
-    [TestClass]
-    public class AnalysisIntegrationTests {
+namespace AmigaPowerAnalysis.Tests.TestUtilities {
+    public static class IntegrationTestUtilities {
 
         private static string _testPath = Path.Combine(Properties.Settings.Default.TestPath);
 
-        private static void runProject(Project project, string projectId) {
+        public static void RunProject(string filename) {
+            var project = ProjectManager.LoadProjectXml(filename);
+            RunProject(project, project.ProjectName);
+        }
+
+        public static void RunProject(Project project, string projectId) {
             var filesPath = Path.Combine(_testPath, projectId);
             if (!Directory.Exists(filesPath)) {
                 Directory.CreateDirectory(filesPath);
@@ -52,11 +54,11 @@ namespace AmigaPowerAnalysis.Tests.IntegrationTests {
             }
             var multiComparisonReportGenerator = new MultiComparisonReportGenerator(resultPowerAnalysis, projectId, filesPath);
             multiComparisonReportGenerator.SaveAsPdf(Path.Combine(filesPath, "Report.pdf"));
-
-            runValidationGenstat(0, filesPath);
         }
 
-        private static void runValidationGenstat(int comparisonId, string filesPath) {
+        public static void RunValidationGenstat(string projectId, int comparisonId = 0) {
+            var filesPath = Path.Combine(_testPath, projectId);
+
             var genstatPath = Properties.Settings.Default.GenstatPath;
             if (string.IsNullOrEmpty(genstatPath) || !File.Exists(genstatPath)) {
                 throw new Exception("The GenStat executable GenBatch.exe cannot be found. Please go to options -> settings to specify this path.");
@@ -87,54 +89,6 @@ namespace AmigaPowerAnalysis.Tests.IntegrationTests {
                 Trace.WriteLine(error);
                 exeProcess.WaitForExit();
             }
-        }
-
-        [TestMethod]
-        [TestCategory("IntegrationTests")]
-        public void FullProjectIntegrationTests_MockSimpleOP() {
-            runProject(MockProjectsCreator.MockSimpleOP(), "Simple_OP");
-        }
-
-        [TestMethod]
-        [TestCategory("IntegrationTests")]
-        public void FullProjectIntegrationTests_MockSimpleOPLyles() {
-            runProject(MockProjectsCreator.MockSimpleOPLyles(), "SimpleOPLyles");
-        }
-
-        [TestMethod]
-        [TestCategory("IntegrationTests")]
-        public void FullProjectIntegrationTests_MockSimple() {
-            runProject(MockProjectsCreator.MockSimple(), "Simple");
-        }
-
-        [TestMethod]
-        [TestCategory("IntegrationTests")]
-        public void FullProjectIntegrationTests_MockSimpleLyles() {
-            runProject(MockProjectsCreator.MockSimpleLyles(), "SimpleLyles");
-        }
-
-        [TestMethod]
-        [TestCategory("IntegrationTests")]
-        public void FullProjectIntegrationTests_MockProject1() {
-            runProject(MockProjectsCreator.MockProject1(), "ValidationProject1");
-        }
-
-        [TestMethod]
-        [TestCategory("IntegrationTests")]
-        public void FullProjectIntegrationTests_MockProject2() {
-            runProject(MockProjectsCreator.MockProject2(), "ValidationProject2");
-        }
-
-        [TestMethod]
-        [TestCategory("IntegrationTests")]
-        public void FullProjectIntegrationTests_MockProject3() {
-            runProject(MockProjectsCreator.MockProject3(), "ValidationProject3");
-        }
-
-        [TestMethod]
-        [TestCategory("IntegrationTests")]
-        public void FullProjectIntegrationTests_MockProject3OP() {
-            runProject(MockProjectsCreator.MockProject3_OP(), "ValidationProject3_OP");
         }
     }
 }
