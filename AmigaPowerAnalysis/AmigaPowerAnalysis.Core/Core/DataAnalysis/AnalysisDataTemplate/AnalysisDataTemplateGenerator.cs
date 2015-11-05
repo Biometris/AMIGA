@@ -100,12 +100,10 @@ namespace AmigaPowerAnalysis.Core.DataAnalysis {
         private static int computeConstrast(InputPowerAnalysis inputPowerAnalysis, InputPowerAnalysisRecord inputPowerAnalysisRecord) {
             if (inputPowerAnalysisRecord.Comparison == ComparisonType.Exclude) {
                 return inputPowerAnalysis.DummyComparisonLevels.IndexOf(inputPowerAnalysisRecord.ComparisonDummyFactorLevel);
-            } else if (inputPowerAnalysisRecord.Comparison == ComparisonType.IncludeComparator) {
-                return -1;
             } else if (inputPowerAnalysisRecord.Comparison == ComparisonType.IncludeTest) {
-                return -2;
+                return -1;
             }
-            // We should not get here
+            // Should be comparator
             return 0;
         }
 
