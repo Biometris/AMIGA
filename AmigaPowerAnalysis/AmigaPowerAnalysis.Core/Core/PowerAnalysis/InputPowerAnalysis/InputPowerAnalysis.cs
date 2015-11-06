@@ -227,7 +227,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
 
             stringBuilder.AppendLine(format("ComparisonId", ComparisonId));
             stringBuilder.AppendLine(format("ProjectName", ProjectName));
-            stringBuilder.AppendLine(format("NumberOfComparisons", NumberOfComparisons));
+            //stringBuilder.AppendLine(format("NumberOfComparisons", NumberOfComparisons));
             stringBuilder.AppendLine(format("Endpoint", Endpoint));
             stringBuilder.AppendLine(format("LocLower", LocLower));
             stringBuilder.AppendLine(format("LocUpper", LocUpper));
@@ -238,8 +238,8 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             stringBuilder.AppendLine(format("OverallMean", OverallMean));
             stringBuilder.AppendLine(format("CVComparator", CvComparator));
             stringBuilder.AppendLine(format("CVBlocks", CvForBlocks));
-            stringBuilder.AppendLine(format("NumberOfInteractions", NumberOfInteractions));
-            stringBuilder.AppendLine(format("NumberOfModifiers", NumberOfModifiers));
+            //stringBuilder.AppendLine(format("NumberOfInteractions", NumberOfInteractions));
+            //stringBuilder.AppendLine(format("NumberOfModifiers", NumberOfModifiers));
             stringBuilder.AppendLine(format("SignificanceLevel", SignificanceLevel));
             stringBuilder.AppendLine(format("NumberOfEvaluationPoints", NumberOfRatios));
             stringBuilder.AppendLine(format("NumberOfReplications", string.Join(" ", NumberOfReplications.Select(r => r.ToString()).ToList())));
