@@ -35,6 +35,11 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
         public List<string> FactorLevels { get; set; }
 
         /// <summary>
+        /// The comparison contrast level of this record.
+        /// </summary>
+        public int ComparisonContrastLevel { get; set; }
+
+        /// <summary>
         /// The dummy comparison level of this record.
         /// </summary>
         public string ComparisonDummyFactorLevel { get; set; }

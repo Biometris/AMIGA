@@ -24,6 +24,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                 ProjectName = projectName,
                 NumberOfComparisons = totalNumberOfComparisons,
                 Factors = endpoint.InteractionFactors.Concat(endpoint.NonInteractionFactors).Select(f => f.Name).ToList(),
+                ModifierFactors = endpoint.NonInteractionFactors.Select(m => m.Name).ToList(),
                 DummyComparisonLevels = comparisonLevels.Select(m => m.Label).ToList(),
                 DummyModifierLevels = modifierLevels.Select(m => m.Label).ToList(),
                 Endpoint = endpoint.Name,
@@ -88,6 +89,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                 .Select(r => new InputPowerAnalysisRecord() {
                     MainPlot = r.MainPlot,
                     SubPlot = r.SubPlot,
+                    ComparisonContrastLevel = r.ComparisonDummyFactorLevel.Contrast,
                     ComparisonDummyFactorLevel = r.ComparisonDummyFactorLevel.Label,
                     ModifierDummyFactorLevel = r.ModifierDummyFactorLevel.Label,
                     Comparison = r.Comparison,
@@ -104,6 +106,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
         public List<ComparisonDummyFactorLevel> CreateComparisonDummyFactorLevels(Endpoint endpoint) {
             var comparisonLevelTest = new ComparisonDummyFactorLevel() {
                 Label = "Test",
+                Contrast = -1,
                 ComparisonType = ComparisonType.IncludeTest,
                 FactorLevelCombinations = endpoint.Interactions
                     .Where(i => i.ComparisonType == ComparisonType.IncludeTest)
@@ -113,12 +116,14 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                 .Where(vi => vi.ComparisonType == ComparisonType.Exclude)
                 .Select((vi, index) => new ComparisonDummyFactorLevel() {
                     Label = string.Format("Dummy{0}", index),
+                    Contrast = index + 1,
                     ComparisonType = ComparisonType.Exclude,
                     FactorLevelCombinations = new List<InteractionFactorLevelCombination>() { vi }
                 });
             var comparisonLevelComparator = new ComparisonDummyFactorLevel() {
                 Label = "REF",
                 ComparisonType = ComparisonType.IncludeComparator,
+                Contrast = 0,
                 FactorLevelCombinations = endpoint.Interactions
                     .Where(i => i.ComparisonType == ComparisonType.IncludeComparator)
                     .ToList(),

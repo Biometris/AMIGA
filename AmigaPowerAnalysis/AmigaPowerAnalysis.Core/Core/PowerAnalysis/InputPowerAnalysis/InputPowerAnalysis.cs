@@ -54,6 +54,11 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
         public List<string> Factors { get; set; }
 
         /// <summary>
+        /// The modifier factors.
+        /// </summary>
+        public List<string> ModifierFactors { get; set; }
+
+        /// <summary>
         /// The comparison dummy factor levels.
         /// </summary>
         [DataMember]
@@ -245,6 +250,9 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             stringBuilder.AppendLine(format("NumberOfReplications", string.Join(" ", NumberOfReplications.Select(r => r.ToString()).ToList())));
             stringBuilder.AppendLine(format("ExperimentalDesignType", ExperimentalDesignType));
             stringBuilder.AppendLine(format("PowerCalculationMethod", PowerCalculationMethodType));
+            if (ModifierFactors != null && ModifierFactors.Count > 0) {
+                stringBuilder.AppendLine(format("ModifierModel", string.Join("*", ModifierFactors)));
+            }
             stringBuilder.AppendLine(format("UseWaldTest", UseWaldTest));
             stringBuilder.AppendLine(format("NumberOfSimulationsLylesMethod", NumberOfSimulationsLylesMethod));
             stringBuilder.AppendLine(format("IsOutputSimulatedData", IsOutputSimulatedData));
@@ -297,6 +305,37 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                 stringBuilder.AppendLine(string.Join(separator, line));
             }
 
+            return stringBuilder.ToString();
+        }
+
+        public string PrintContrasts() {
+            Func<string, string> escape = (str) => { return string.Format("\"{0}\"", str); };
+
+            var stringBuilder = new StringBuilder();
+            var separator = ",";
+            var headers = new List<string>();
+            var showLevels = true;
+            if (showLevels) {
+                foreach (var factor in Factors) {
+                    headers.Add(escape(factor));
+                }
+            }
+            headers.Add("Contrast");
+            headers.Add("Mean");
+            stringBuilder.AppendLine(string.Join(separator, headers));
+            foreach (var record in InputRecords) {
+                var line = new List<string>();
+                if (showLevels) {
+                    foreach (var level in record.FactorLevels) {
+                        line.Add(escape(level));
+                    }
+                }
+                line.Add(string.Format("{0}", record.ComparisonContrastLevel));
+                line.Add(record.Mean.ToInvariantString());
+                for (int i = 0; i < record.Frequency; ++i) {
+                    stringBuilder.AppendLine(string.Join(separator, line));
+                }
+            }
             return stringBuilder.ToString();
         }
 

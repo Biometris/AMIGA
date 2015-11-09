@@ -39,13 +39,15 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             var scriptsDirectory = string.Format(@"{0}\Resources\RScripts", applicationDirectory);
             var scriptFiles = new List<string>() { "AMIGAPowerAnalysis.R", "AMIGAPowerLyles.R" };
 
+            var oldComparisonInputFilename = Path.Combine(_tempPath, string.Format("{0}-Contrasts.csv", inputPowerAnalysis.ComparisonId));
             var comparisonInputFilename = Path.Combine(_tempPath, string.Format("{0}-Input.csv", inputPowerAnalysis.ComparisonId));
             var comparisonSettingsFilename = Path.Combine(_tempPath, string.Format("{0}-Settings.csv", inputPowerAnalysis.ComparisonId));
             var comparisonOutputFilename = Path.Combine(_tempPath, string.Format("{0}-Output.csv", inputPowerAnalysis.ComparisonId));
             var comparisonLogFilename = Path.Combine(_tempPath, string.Format("{0}-Log.log", inputPowerAnalysis.ComparisonId));
 
             var inputGenerator = new PowerAnalysisInputGenerator();
-            createAnalysisInputFile(inputPowerAnalysis, comparisonInputFilename);
+            createOldAnalysisInputFile(inputPowerAnalysis, comparisonInputFilename);
+            createAnalysisInputFile(inputPowerAnalysis, oldComparisonInputFilename);
             createAnalysisSettingsFile(inputPowerAnalysis, comparisonSettingsFilename);
 
             var logger = new FileLogger(comparisonLogFilename);
@@ -249,9 +251,16 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             }
         }
 
-        private static void createAnalysisInputFile(InputPowerAnalysis inputPowerAnalysis, string filename) {
+        private static void createOldAnalysisInputFile(InputPowerAnalysis inputPowerAnalysis, string filename) {
             using (var file = new System.IO.StreamWriter(filename)) {
                 file.WriteLine(inputPowerAnalysis.PrintPartialAnalysisDesignMatrix());
+                file.Close();
+            }
+        }
+
+        private static void createAnalysisInputFile(InputPowerAnalysis inputPowerAnalysis, string filename) {
+            using (var file = new System.IO.StreamWriter(filename)) {
+                file.WriteLine(inputPowerAnalysis.PrintContrasts());
                 file.Close();
             }
         }
