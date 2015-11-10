@@ -1,13 +1,9 @@
-﻿using Biometris.DataFileReader;
-using Biometris.ExtensionMethods;
-using Biometris.Statistics.Distributions;
-using Biometris.Statistics.Measurements;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
-using System.Globalization;
 using System.Xml.Serialization;
+using Biometris.ExtensionMethods;
 
 namespace AmigaPowerAnalysis.Core.Data {
     public sealed class EndpointModifierDTO {

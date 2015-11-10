@@ -1,6 +1,5 @@
-﻿using AmigaPowerAnalysis.Core.DataAnalysis.AnalysisModels;
-using System.Collections.Generic;
-using System.Runtime.Serialization;
+﻿using System.Collections.Generic;
+using AmigaPowerAnalysis.Core.DataAnalysis.AnalysisModels;
 
 namespace AmigaPowerAnalysis.Core.Data {
 

@@ -1,9 +1,5 @@
-﻿using Biometris.Statistics.Distributions;
-using Biometris.Statistics.Measurements;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Xml.Serialization;
 using Biometris.DataFileReader;
-using System.Xml.Serialization;
 
 namespace AmigaPowerAnalysis.Core.Data {
     public sealed class LevelDTO : IDynamicPropertyValue {

@@ -1,6 +1,4 @@
-﻿using Biometris.Statistics.Distributions;
-using Biometris.Statistics.Measurements;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace AmigaPowerAnalysis.Core.Data {

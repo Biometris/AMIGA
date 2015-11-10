@@ -1,8 +1,7 @@
-﻿using Biometris.Statistics.Distributions;
-using Biometris.Statistics.Measurements;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
+using Biometris.Statistics.Measurements;
 
 namespace AmigaPowerAnalysis.Core.Data {
     public sealed class ProjectDTO {

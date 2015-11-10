@@ -1,8 +1,4 @@
-﻿using Biometris.Statistics.Distributions;
-using Biometris.Statistics.Measurements;
-using System.Collections.Generic;
-
-namespace AmigaPowerAnalysis.Core.Data {
+﻿namespace AmigaPowerAnalysis.Core.Data {
     public sealed class FactorDTO {
 
         #region Properties
