@@ -214,35 +214,30 @@ readDataFile <- function(dataFile) {
   # Read data
   data <- read.csv(dataFile)
   colnames <- colnames(data)
-  # Redefine Mod columns to factors
-  modifiers = grep("Mod", colnames)
-  if (length(modifiers) > 0) {
-    for (i in 1:length(modifiers)) {
-      data[[modifiers[[i]]]] = as.factor(data[[modifiers[[i]]]])
-    } 
+  ncols    <- length(colnames)
+
+  # Last three columns must be Contrast and Mean
+  if (colnames[ncols-1] != 'Contrast') {
+    stop("The last but one column of the DataFile must be named 'Contrast'.", call. = FALSE)
   }
-  # Sub dataframe: First check that essential columns are present
-  if (is.element("Comparison", colnames)) {
-    colComparison <- max(grep("Comparison", colnames))
-  } else {
-    stop("The DataFile must contain a column 'Comparison'.", call. = FALSE)
+  if (colnames[ncols] != 'Mean') {
+    stop("The last column of the DataFile must be named 'Mean'.", call. = FALSE)
   }
-  if (is.element("Constant", colnames)) {
-    colConstant <- max(grep("Constant", colnames))
-  } else {
-    stop("The DataFile must contain a column 'Constant'.", call. = FALSE)
+
+  # Redefine experimental columns to factors 
+  for (i in 1:(ncols-2)) {
+    data[[i]] = as.factor(data[[i]])
   }
-  if (is.element("Test", colnames)) {
-    colTest <- max(grep("Test", colnames))
-  } else {
-    stop("The DataFile must contain a column 'Test'.", call. = FALSE)
-  }
-  if (((colComparison+1) != colConstant) || ((colConstant+1) != colTest)) {
-    stop("The DataFile must contain the sequence of columns Comparison, Constant and Test.", call. = FALSE)
-  }
-  # Return columns from Test onwards
-  ncolnames = length(colnames)
-  return(data[rep(colConstant:ncolnames)])
+
+  # Add the the following columns: Test, Modifier, Block, LowOffset, UppOffset
+  data[["Test"]] <- as.numeric(data[["Contrast"]] == -1)
+  tmpModifier <- data[["Contrast"]]
+  tmpModifier[tmpModifier<1] <- max(data[["Contrast"]]) + 1
+  data[["Modifier"]] <- as.factor(tmpModifier)
+  data[["Block"]] <- as.factor(1 + 0*data[[ncols]])
+  data[["LowOffset"]] <- 0*data[[ncols]]
+  data[["UppOffset"]] <- 0*data[[ncols]]
+  return(data)
 }
 
 ######################################################################################################################
@@ -250,7 +245,7 @@ readSettings <- function(settingsFile) {
   settings <- read.csv(settingsFile, header=FALSE, as.is=TRUE, strip.white=TRUE, na.strings=c("NA","NaN"))
   list = as.list(setNames(nm=settings$V1))
   for (i in 1:nrow(settings)) {
-    if (settings$V1[i] != "Endpoint") {
+    if ((settings$V1[i] != "Endpoint") && (settings$V1[i] != "ProjectName")) {
       element <- unlist(strsplit(settings$V2[i], " "))
     } else {
       element <- settings$V2[i]
@@ -336,28 +331,46 @@ createModelSettings <- function(data, settings) {
   modelSettings <- list()
   modelSettings$ndata = nrow(data)
   colnames <- colnames(data)
+  ncols <- length(colnames)
+  print(colnames)
 
-  # Create dataframe for prediction; only use Test column and Dummy columns
+  # Create dataframe for prediction; only use Test variate and Modifier factor
   # This implies that the mean is taken over blocks and also over modifiers (if any)
-  predictors = grep("Test", gsub("Dummy", "Test", colnames))
-  modelSettings$preddata <- head(data[predictors], 2)
-  modelSettings$preddata[,] <- 0
-  modelSettings$preddata[1] <- c(0,1)
+  posTest     = match("Test", colnames)
+  posModifier = match("Modifier", colnames)
+  nModifier   = nlevels(data[['Modifier']])
+  if (nModifier > 1) {
+    predictors = c(posTest, posModifier)
+    modelSettings$preddata <- head(data[predictors], 2)
+    modelSettings$preddata[1] <- c(0,1)
+    modelSettings$preddata[2] <- as.factor(nModifier)
+  } else {
+    predictors = ncols - 1
+    modelSettings$preddata <- head(data[posTest], 2)
+    modelSettings$preddata[1] <- c(0,1)
+  }
 
-  # Model formulas for H0 and H1; Note that the Test column is used to test the comparison
-  nterms <- grep("Mean", colnames) - 1
-  nameH1 <- colnames[c(2:nterms)]
+  # Model formulas for H1; Note that the Test column is used to test the comparison
+  nameH1 <- c("Test")
+  if (nModifier > 1) {
+    nameH1 <- c(nameH1, "Modifier")
+  }
+  if (length(settings$ModifierModel) > 0) {
+    nameH1 <- c(nameH1, settings$ModifierModel)
+  }
   if (settings$ExperimentalDesignType != "CompletelyRandomized") {
     nameH1 <- c(nameH1, "Block") # Add blocking effect
   }
 
   # Define models to fit
-  modelSettings$formulaH1 <- as.formula(paste0("Response ~ ", paste0(nameH1, collapse=" + ")))
+  modelH1 <- paste0("Response ~ ", paste0(nameH1, collapse=" + "))
+  modelSettings$formulaH1 <- as.formula(modelH1)
   modelSettings$formulaH0 <- update(modelSettings$formulaH1, ~ . - Test)
   modelSettings$formulaH0_low <- update(modelSettings$formulaH0, ~ . + offset(LowOffset))
   modelSettings$formulaH0_upp <- update(modelSettings$formulaH0, ~ . + offset(UppOffset))
+
   # Due to an apparent bug in the LSMEANS package formulaH1 is saved as a string and fitted by using as.formula()
-  modelSettings$formulaH1 <- paste0("Response ~ ", paste0(nameH1, collapse=" + "))
+  modelSettings$formulaH1 <- modelH1
 
   # Additional settings
   modelSettings$smallGCI = 0.0001       # Bound on back-transformed values for the LOG-transform
@@ -387,36 +400,6 @@ createSimulationSettings <- function(settings) {
 }
 
 ######################################################################################################################
-createSimulatedDataOld <- function(data, settings, blocks, effect) {
-  setupSimulatedData <- data
-  
-  # Expand dataset; add Row and Block factor
-  setupSimulatedData <- data[rep(row.names(data), blocks + 0*data[[1]]),]
-  setupSimulatedData[["Row"]] <- as.factor(c(1:(blocks*nrow(data))))
-  setupSimulatedData[["Block"]] <- as.factor(rep(1:blocks, nrow(data)))
-  
-  # Add several additional columns to the dataframe
-  setupSimulatedData["TransformedMean"] <- linkFunction(data["Mean"], settings$MeasurementType)
-  
-  # Apply blocking Effect on the transformed scale; use Blom scores
-  if (settings$ExperimentalDesignType == "CompletelyRandomized") {
-    setupSimulatedData["BlockEffect"] <- 0
-  } else {
-    blockeff = settings$sigBlock * qnorm(((1:blocks) - 0.375)/ (blocks + 0.25))
-    setupSimulatedData["BlockEffect"] <- blockeff[setupSimulatedData[["Block"]]]
-  }
-  setupSimulatedData["LowOffset"] <- setupSimulatedData["Test"] * settings$TransformLocLower
-  setupSimulatedData["UppOffset"] <- setupSimulatedData["Test"] * settings$TransformLocUpper
-  
-  # Add extra columns which are used to simulate and fit data
-  setupSimulatedData["TransformedEffect"] <- setupSimulatedData["TransformedMean"] + setupSimulatedData["BlockEffect"] + (setupSimulatedData["Test"] == 1) * effect
-  setupSimulatedData["Effect"] <- inverseLinkFunction(setupSimulatedData["TransformedEffect"], settings$MeasurementType)
-  setupSimulatedData["Response"]          <- setupSimulatedData["Test"] * NaN
-  setupSimulatedData["Lp"]          <- setupSimulatedData["Test"] * NaN
-  return(setupSimulatedData)
-}
-
-######################################################################################################################
 createSimulatedData <- function(data, settings, blocks, effect) {
 
   # Expand dataset and modify rownames
@@ -427,26 +410,29 @@ createSimulatedData <- function(data, settings, blocks, effect) {
   rownames <- paste0(str_pad(f2, 1+log10(blocks+0.001), side="left", "0"), "-", str_pad(f1, 1+log10(ndata+0.001), side="left", "0"))
   row.names(setupSimulatedData) <- rownames
 
-  # add Row and Block factors
-  setupSimulatedData[["Row"]] <- as.factor(c(1:(blocks*ndata)))
+  # Modify Block, LowOffset and UppOffset columns
   setupSimulatedData[["Block"]] <- as.factor(rep(1:blocks, each=ndata))
-  
-  # Add several additional columns to the dataframe
-  transformedMean <- linkFunction(setupSimulatedData["Mean"], settings$MeasurementType)
-  
-  # Apply blocking Effect on the transformed scale; use Blom scores
-  if (settings$ExperimentalDesignType == "CompletelyRandomized") {
-    blockEffect <- 0
-  } else {
-    blomScores <- settings$sigBlock * qnorm(((1:blocks) - 0.375)/ (blocks + 0.25))
-    blockEffect <- blomScores[setupSimulatedData[["Block"]]]
-  }
   setupSimulatedData["LowOffset"] <- setupSimulatedData["Test"] * settings$TransformLocLower
   setupSimulatedData["UppOffset"] <- setupSimulatedData["Test"] * settings$TransformLocUpper
   
+  # Add Row factor; this is for the calculation of tables of Means/Variance for Lyles
+  setupSimulatedData[["Row"]] <- as.factor(c(1:(blocks*ndata)))
+
+  # Create linear predictor starting with the backtransformed Mean
+  lp <- linkFunction(setupSimulatedData["Mean"], settings$MeasurementType)
+  
+  # Apply blocking effect on the transformed scale; use Blom scores
+  if (settings$ExperimentalDesignType != "CompletelyRandomized") {
+    blomScores <- settings$sigBlock * qnorm(((1:blocks) - 0.375)/ (blocks + 0.25))
+    lp <- lp + blomScores[setupSimulatedData[["Block"]]]
+  }
+
+  # Apply test effect on the transformed scale
+  lp <- lp + (setupSimulatedData["Test"] == 1) * effect
+  
   # Add extra columns which are used to simulate and fit data
-  setupSimulatedData["Lp"] <- transformedMean + blockEffect + (setupSimulatedData["Test"] == 1) * effect
-  setupSimulatedData["Effect"] <- inverseLinkFunction(setupSimulatedData["Lp"], settings$MeasurementType)
+  setupSimulatedData["Lp"]       <- lp
+  setupSimulatedData["Effect"]   <- inverseLinkFunction(lp, settings$MeasurementType)
   setupSimulatedData["Response"]    <- setupSimulatedData["Test"] * NaN
   if (FALSE) {
     cat(paste0("\neffect: ", effect, "\n"))
@@ -532,7 +518,7 @@ logNormalAnalysis <- function(data, settings, modelSettings, debugSettings) {
     pvalues$Diff <- waldDiffPvalue(estiEffect, seEffect, resDF, settings$TestType)
   }
 
-  if ((settings$NumberOfSimulationsGCI > 0) && (settings$DoLNequi)) {
+  if (FALSE || ((settings$NumberOfSimulationsGCI > 0) && (settings$DoLNequi))) {
     # Obtain predicted means for CMP/Test and corresponding VCOV
     lsmeans <- lsmeans(lmH1, "Test", at=modelSettings$preddata)
     meanCMP <- summary(lsmeans)$lsmean[1]
@@ -1182,5 +1168,3 @@ createEvaluationGrid <- function(LocLower, LocUpper, NumberOfEvaluations) {
   } 
   return(list(csd=csd, effect=effect))
 }
-
-

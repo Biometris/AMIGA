@@ -39,15 +39,15 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             var scriptsDirectory = string.Format(@"{0}\Resources\RScripts", applicationDirectory);
             var scriptFiles = new List<string>() { "AMIGAPowerAnalysis.R", "AMIGAPowerLyles.R" };
 
-            var oldComparisonInputFilename = Path.Combine(_tempPath, string.Format("{0}-Contrasts.csv", inputPowerAnalysis.ComparisonId));
+            //var oldComparisonInputFilename = Path.Combine(_tempPath, string.Format("{0}-Contrasts.csv", inputPowerAnalysis.ComparisonId));
             var comparisonInputFilename = Path.Combine(_tempPath, string.Format("{0}-Input.csv", inputPowerAnalysis.ComparisonId));
             var comparisonSettingsFilename = Path.Combine(_tempPath, string.Format("{0}-Settings.csv", inputPowerAnalysis.ComparisonId));
             var comparisonOutputFilename = Path.Combine(_tempPath, string.Format("{0}-Output.csv", inputPowerAnalysis.ComparisonId));
             var comparisonLogFilename = Path.Combine(_tempPath, string.Format("{0}-Log.log", inputPowerAnalysis.ComparisonId));
 
             var inputGenerator = new PowerAnalysisInputGenerator();
-            createOldAnalysisInputFile(inputPowerAnalysis, comparisonInputFilename);
-            createAnalysisInputFile(inputPowerAnalysis, oldComparisonInputFilename);
+            //createOldAnalysisInputFile(inputPowerAnalysis, oldComparisonInputFilename);
+            createAnalysisInputFile(inputPowerAnalysis, comparisonInputFilename);
             createAnalysisSettingsFile(inputPowerAnalysis, comparisonSettingsFilename);
 
             var logger = new FileLogger(comparisonLogFilename);
