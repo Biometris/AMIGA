@@ -283,6 +283,15 @@ namespace AmigaPowerAnalysis.GUI {
             var currentTabName = this.tabControl.SelectedTab != null ? this.tabControl.SelectedTab.Name : null;
             var visibleForms = _selectionForms.Where(f => f.IsVisible()).ToList();
             var visibleTabCount = 0;
+            if (!string.IsNullOrEmpty(_currentProjectFilename)) {
+                var analysisResultsPanel = _selectionForms.Where(s => s is AnalysisResultsPanel).First() as AnalysisResultsPanel;
+                var analysisResultsPerEndpointPanel = _selectionForms.Where(s => s is AnalysisResultsPerComparisonPanel).First() as AnalysisResultsPerComparisonPanel;
+                var outputPerPanel = _selectionForms.Where(s => s is OutputPanel).First() as OutputPanel;
+                var filesPath = getCurrentProjectFilesPath();
+                analysisResultsPanel.CurrentProjectFilesPath = filesPath;
+                analysisResultsPerEndpointPanel.CurrentProjectFilesPath = filesPath;
+                outputPerPanel.CurrentProjectFilesPath = filesPath;
+            }
             foreach (var selectionForm in _selectionForms) {
                 var currentTab = this.tabControl.TabPages.Cast<TabPage>().FirstOrDefault(tp => tp.Name == selectionForm.Name);
                 if (currentTab == null && selectionForm.IsVisible()) {
@@ -303,15 +312,6 @@ namespace AmigaPowerAnalysis.GUI {
             var selectedTab = this.tabControl.TabPages.Cast<TabPage>().FirstOrDefault(tp => tp.Name == currentTabName);
             if (selectedTab != null) {
                 this.tabControl.SelectTab(selectedTab);
-            }
-            if (!string.IsNullOrEmpty(_currentProjectFilename)) {
-                var analysisResultsPanel = _selectionForms.Where(s => s is AnalysisResultsPanel).First() as AnalysisResultsPanel;
-                var analysisResultsPerEndpointPanel = _selectionForms.Where(s => s is AnalysisResultsPerComparisonPanel).First() as AnalysisResultsPerComparisonPanel;
-                var outputPerPanel = _selectionForms.Where(s => s is OutputPanel).First() as OutputPanel;
-                var filesPath = getCurrentProjectFilesPath();
-                analysisResultsPanel.CurrentProjectFilesPath = filesPath;
-                analysisResultsPerEndpointPanel.CurrentProjectFilesPath = filesPath;
-                outputPerPanel.CurrentProjectFilesPath = filesPath;
             }
         }
 
