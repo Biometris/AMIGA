@@ -229,11 +229,11 @@ readDataFile <- function(dataFile) {
     data[[i]] = as.factor(data[[i]])
   }
 
-  # Add the the following columns: Test, Modifier, Block, LowOffset, UppOffset
+  # Add the the following columns: Test, Additional, Block, LowOffset, UppOffset
   data[["Test"]] <- as.numeric(data[["Contrast"]] == -1)
-  tmpModifier <- data[["Contrast"]]
-  tmpModifier[tmpModifier<1] <- max(data[["Contrast"]]) + 1
-  data[["Modifier"]] <- as.factor(tmpModifier)
+  tmpAdditional <- data[["Contrast"]]
+  tmpAdditional[tmpAdditional<1] <- max(data[["Contrast"]]) + 1
+  data[["Additional"]] <- as.factor(tmpAdditional)
   data[["Block"]] <- as.factor(1 + 0*data[[ncols]])
   data[["LowOffset"]] <- 0*data[[ncols]]
   data[["UppOffset"]] <- 0*data[[ncols]]
@@ -334,16 +334,16 @@ createModelSettings <- function(data, settings) {
   ncols <- length(colnames)
   print(colnames)
 
-  # Create dataframe for prediction; only use Test variate and Modifier factor
+  # Create dataframe for prediction; only use Test variate and Additional factor
   # This implies that the mean is taken over blocks and also over modifiers (if any)
   posTest     = match("Test", colnames)
-  posModifier = match("Modifier", colnames)
-  nModifier   = nlevels(data[['Modifier']])
-  if (nModifier > 1) {
-    predictors = c(posTest, posModifier)
+  posAdditional = match("Additional", colnames)
+  nAdditional   = nlevels(data[['Additional']])
+  if (nAdditional > 1) {
+    predictors = c(posTest, posAdditional)
     modelSettings$preddata <- head(data[predictors], 2)
     modelSettings$preddata[1] <- c(0,1)
-    modelSettings$preddata[2] <- as.factor(nModifier)
+    modelSettings$preddata[2] <- as.factor(nAdditional)
   } else {
     predictors = ncols - 1
     modelSettings$preddata <- head(data[posTest], 2)
@@ -352,8 +352,8 @@ createModelSettings <- function(data, settings) {
 
   # Model formulas for H1; Note that the Test column is used to test the comparison
   nameH1 <- c("Test")
-  if (nModifier > 1) {
-    nameH1 <- c(nameH1, "Modifier")
+  if (nAdditional > 1) {
+    nameH1 <- c(nameH1, "Additional")
   }
   if (length(settings$ModifierModel) > 0) {
     nameH1 <- c(nameH1, settings$ModifierModel)
