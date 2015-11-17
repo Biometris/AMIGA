@@ -342,7 +342,7 @@
             this.buttonGenerateDataTemplate.Name = "buttonGenerateDataTemplate";
             this.buttonGenerateDataTemplate.Size = new System.Drawing.Size(143, 23);
             this.buttonGenerateDataTemplate.TabIndex = 0;
-            this.buttonGenerateDataTemplate.Text = "Export data template";
+            this.buttonGenerateDataTemplate.Text = "Export analysis template";
             this.buttonGenerateDataTemplate.UseVisualStyleBackColor = true;
             this.buttonGenerateDataTemplate.Click += new System.EventHandler(this.buttonGenerateDataTemplate_Click);
             // 
