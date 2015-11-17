@@ -125,11 +125,11 @@
 This tab allows you to export a data template and analysis scripts for analysis of an experiment conforming to the design specified.
 First specify the number of replicates that you want to use in the experiment.
 
-The button Export data template will generate two CSV files:
-1. A template to enter the actual observations from the experiment, and
-2. A help file specifying the comparison to be analysed.
-
-[not yet implemented:] The button Export analysis script will generate a text file containing an R script that can analyse the datafile (when completed)</value>
+The button Export analysis template will generate the following files:
+1. A data template (.csv file format) to enter the actual observations from the experiment, and
+2. A additional csv file specifying the contrasts of the comparison(s) (used by the analysis scripts).
+3. A main analysis script file (in R) to run the analysis for a correctly filled data template csv file.
+4. Additional R script files that are needed for running the analysis script.</value>
   </data>
   <metadata name="toolStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
