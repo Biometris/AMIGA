@@ -1,21 +1,20 @@
-# Read data; redefine factors and define endpoints 
-data <- read.csv(file.path(dir,dataFile))
-data <- data[, !(names(data) %in% "FrequencyReplicate")]
-nFactors <- length(factors)+2
-elemFactors <- seq(1, nFactors)
-elemEndpoint <- seq(nFactors+1, ncol(data))
-for (i in elemFactors) {
-  data[,i] <- as.factor(data[,i])
-}
+# Read data and redefine factors
+data <- readDataFrame(globalSettings, endpoints)
+head(data, n=20)
 
-# read Contrast file; create extra columns in dataFrame; create modelTerms
-contrast <- read.csv(file.path(dir,templateContrastFile))
-contrastPlot <- as.factor(seq(1:length(contrast[[1]])))
+# read contrast file
+contrast <- read.csv(globalSettings$contrastFile)
+
+# loop over endpoints
+for (endpoint in endpoints) {
+  print(endpoint$name)
+}
+q()
 
 # loop over different endpoints
 nEndpoint <- length(elemEndpoint)
 dataNames <- names(data)
-for (i in 1:nEndpoint) {
+for (iEndpoint in endpoint) {
   # Define current settings
   settings <- list(
     Design=design, 
