@@ -44,7 +44,6 @@
             this.tabPageAnalysisTemplate = new System.Windows.Forms.TabPage();
             this.textBoxTabDescription = new System.Windows.Forms.RichTextBox();
             this.flowLayoutPanelReport = new System.Windows.Forms.FlowLayoutPanel();
-            this.buttonExportAnalysisScripts = new System.Windows.Forms.Button();
             this.buttonGenerateDataTemplate = new System.Windows.Forms.Button();
             this.textBoxNumberOfReplicates = new System.Windows.Forms.TextBox();
             this.labelNumberOfReplicates = new System.Windows.Forms.Label();
@@ -326,7 +325,6 @@
             // 
             // flowLayoutPanelReport
             // 
-            this.flowLayoutPanelReport.Controls.Add(this.buttonExportAnalysisScripts);
             this.flowLayoutPanelReport.Controls.Add(this.buttonGenerateDataTemplate);
             this.flowLayoutPanelReport.Controls.Add(this.textBoxNumberOfReplicates);
             this.flowLayoutPanelReport.Controls.Add(this.labelNumberOfReplicates);
@@ -337,21 +335,10 @@
             this.flowLayoutPanelReport.Size = new System.Drawing.Size(559, 29);
             this.flowLayoutPanelReport.TabIndex = 19;
             // 
-            // buttonExportAnalysisScripts
-            // 
-            this.buttonExportAnalysisScripts.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonExportAnalysisScripts.Location = new System.Drawing.Point(413, 3);
-            this.buttonExportAnalysisScripts.Name = "buttonExportAnalysisScripts";
-            this.buttonExportAnalysisScripts.Size = new System.Drawing.Size(143, 23);
-            this.buttonExportAnalysisScripts.TabIndex = 12;
-            this.buttonExportAnalysisScripts.Text = "Export analysis script";
-            this.buttonExportAnalysisScripts.UseVisualStyleBackColor = true;
-            this.buttonExportAnalysisScripts.Click += new System.EventHandler(this.buttonExportAnalysisScripts_Click);
-            // 
             // buttonGenerateDataTemplate
             // 
             this.buttonGenerateDataTemplate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonGenerateDataTemplate.Location = new System.Drawing.Point(264, 3);
+            this.buttonGenerateDataTemplate.Location = new System.Drawing.Point(413, 3);
             this.buttonGenerateDataTemplate.Name = "buttonGenerateDataTemplate";
             this.buttonGenerateDataTemplate.Size = new System.Drawing.Size(143, 23);
             this.buttonGenerateDataTemplate.TabIndex = 0;
@@ -361,7 +348,7 @@
             // 
             // textBoxNumberOfReplicates
             // 
-            this.textBoxNumberOfReplicates.Location = new System.Drawing.Point(216, 3);
+            this.textBoxNumberOfReplicates.Location = new System.Drawing.Point(365, 3);
             this.textBoxNumberOfReplicates.Name = "textBoxNumberOfReplicates";
             this.textBoxNumberOfReplicates.Size = new System.Drawing.Size(42, 20);
             this.textBoxNumberOfReplicates.TabIndex = 11;
@@ -370,7 +357,7 @@
             // labelNumberOfReplicates
             // 
             this.labelNumberOfReplicates.AutoSize = true;
-            this.labelNumberOfReplicates.Location = new System.Drawing.Point(103, 8);
+            this.labelNumberOfReplicates.Location = new System.Drawing.Point(252, 8);
             this.labelNumberOfReplicates.Margin = new System.Windows.Forms.Padding(3, 8, 3, 0);
             this.labelNumberOfReplicates.Name = "labelNumberOfReplicates";
             this.labelNumberOfReplicates.Size = new System.Drawing.Size(107, 13);
@@ -514,7 +501,6 @@
         private System.Windows.Forms.FlowLayoutPanel topPanel;
         private System.Windows.Forms.Label labelOutputNameLabel;
         private System.Windows.Forms.Label labelOutputName;
-        private System.Windows.Forms.Button buttonExportAnalysisScripts;
         private System.Windows.Forms.RichTextBox textBoxTabDescription;
         private System.Windows.Forms.Label labelAggregationMethod;
         private System.Windows.Forms.RadioButton radioButtonAggregateMin;

@@ -293,17 +293,13 @@ namespace AmigaPowerAnalysis.GUI {
 
                     var scriptFileName = Path.Combine(Path.GetDirectoryName(filename), Path.GetFileNameWithoutExtension(filename) + "Analysis.R");
                     var scriptGenerator = new AnalysisRScriptGenerator();
-                    scriptGenerator.Generate(_resultPowerAnalysis.GetPrimaryComparisons().Select(r => r.InputPowerAnalysis), scriptFileName);
+                    scriptGenerator.Generate(_resultPowerAnalysis.GetPrimaryComparisons(), scriptFileName, Path.GetFileName(filename), Path.GetFileNameWithoutExtension(filename) + "Contrasts.csv");
 
                     System.Diagnostics.Process.Start(Path.GetDirectoryName(filename));
                 } catch (Exception ex) {
                     this.showError("Error while exporting data template", ex.Message);
                 }
             }
-        }
-
-        private void buttonExportAnalysisScripts_Click(object sender, EventArgs e) {
-            this.showError("Feature not implemented", "This feature is not yet implemented!");
         }
 
         private void showError(string title, string message) {
