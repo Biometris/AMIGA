@@ -284,14 +284,18 @@ namespace AmigaPowerAnalysis.GUI {
                     if (!Int32.TryParse(this.textBoxNumberOfReplicates.Text, out blocks)) {
                         blocks = 2;
                     }
-                    var generator = new AnalysisDataTemplateGenerator();
-                    var template = generator.CreateAnalysisDataTemplate(_resultPowerAnalysis.GetPrimaryComparisons().Select(r => r.InputPowerAnalysis), blocks);
+                    var dataTemplateGenerator = new AnalysisDataTemplateGenerator();
+                    var template = dataTemplateGenerator.CreateAnalysisDataTemplate(_resultPowerAnalysis.GetPrimaryComparisons().Select(r => r.InputPowerAnalysis), blocks);
                     var filename = saveFileDialog.FileName;
                     AnalysisDataTemplateGenerator.AnalysisDataTemplateToCsv(template, filename);
                     var contrastsFileName = Path.Combine(Path.GetDirectoryName(filename), Path.GetFileNameWithoutExtension(filename) + "Contrasts.csv");
                     AnalysisDataTemplateGenerator.AnalysisDataTemplateContrastsToCsv(template, contrastsFileName);
-                    System.Diagnostics.Process.Start(filename);
-                    System.Diagnostics.Process.Start(contrastsFileName);
+
+                    var scriptFileName = Path.Combine(Path.GetDirectoryName(filename), Path.GetFileNameWithoutExtension(filename) + "Analysis.R");
+                    var scriptGenerator = new AnalysisRScriptGenerator();
+                    scriptGenerator.Generate(_resultPowerAnalysis.GetPrimaryComparisons().Select(r => r.InputPowerAnalysis), scriptFileName);
+
+                    System.Diagnostics.Process.Start(Path.GetDirectoryName(filename));
                 } catch (Exception ex) {
                     this.showError("Error while exporting data template", ex.Message);
                 }
