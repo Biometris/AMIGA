@@ -432,6 +432,9 @@
     <None Include="Resources\RScripts\AMIGAPowerLyles.R">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Resources\RScripts\AMIGAPowerAnalysisTemplate.R">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\FieldTrial.jpg" />

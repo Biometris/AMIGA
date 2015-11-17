@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
+using System.Text;
 using AmigaPowerAnalysis.Core.DataAnalysis.AnalysisModels;
 using AmigaPowerAnalysis.Core.PowerAnalysis;
 
@@ -22,7 +23,7 @@ namespace AmigaPowerAnalysis.Core.DataAnalysis {
         /// </summary>
         /// <param name="endpoint"></param>
         /// <returns></returns>
-        public string Generate(InputPowerAnalysis inputPowerAnalysis, AnalysisMethodType analysisMethodType) {
+        public string Generate(IEnumerable<InputPowerAnalysis> _powerAnalysisInputs) {
             var modelString = string.Empty;
             var stringBuilder = new StringBuilder();
             var analysisModel = AnalysisModelFactory.CreateAnalysisModel(analysisMethodType);
