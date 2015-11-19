@@ -193,6 +193,7 @@ namespace AmigaPowerAnalysis.Core {
         /// <param name="endpoint"></param>
         public void AddEndpoint(Endpoint endpoint) {
             Endpoints.Add(endpoint);
+            endpoint.UseModifier = UseFactorModifiers;
             if (endpoint.EndpointType != null && !_endpointTypes.Contains(endpoint.EndpointType)) {
                 _endpointTypes.Add(endpoint.EndpointType);
             }
