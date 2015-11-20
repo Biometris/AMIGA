@@ -96,7 +96,10 @@ namespace AmigaPowerAnalysis.Core {
         /// </summary>
         public List<Endpoint> Endpoints {
             get { return _endpoints; }
-            set { _endpoints = value; }
+            set {
+                _endpoints = value;
+                this.UpdateEndpointFactors();
+            }
         }
 
         /// <summary>

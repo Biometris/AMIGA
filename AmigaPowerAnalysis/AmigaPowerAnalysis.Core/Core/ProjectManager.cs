@@ -18,36 +18,6 @@ namespace AmigaPowerAnalysis.Core {
         }
 
         /// <summary>
-        /// Stores the project in a file with the specified name.
-        /// </summary>
-        /// <param name="project"></param>
-        /// <param name="filename"></param>
-        public static void SaveProject(Project project, string filename) {
-            project.ProjectName = Path.GetFileNameWithoutExtension(filename);
-            var settings = new XmlWriterSettings() { Indent = true };
-            var serializer = new DataContractSerializer(typeof(Project), null, 0x7FFF, false, true, null);
-            using (var fileWriter = XmlWriter.Create(filename, settings)) {
-                serializer.WriteObject(fileWriter, project);
-                fileWriter.Close();
-            }
-        }
-
-        /// <summary>
-        /// Tries to load a project file from the given file name.
-        /// </summary>
-        /// <param name="filename"></param>
-        /// <returns></returns>
-        public static Project LoadProject(string filename) {
-            var serializer = new DataContractSerializer(typeof(Project));
-            using (var fileStream = new FileStream(filename, FileMode.Open)) {
-                var project = (Project)serializer.ReadObject(fileStream);
-                fileStream.Close();
-                project.ProjectName = Path.GetFileNameWithoutExtension(filename);
-                return project;
-            }
-        }
-
-        /// <summary>
         /// Stores the project in an xml file with the specified name.
         /// </summary>
         /// <param name="project"></param>

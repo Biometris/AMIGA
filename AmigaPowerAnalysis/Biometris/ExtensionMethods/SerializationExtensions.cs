@@ -46,7 +46,7 @@ namespace Biometris.ExtensionMethods {
         /// <param name="filename"></param>
         public static void ToXmlFile<T>(this T obj, string filename) {
             var serializer = new XmlSerializer(typeof(T));
-            using (var file = new StreamWriter(filename, false, Encoding.GetEncoding("utf-16"))) {
+            using (var file = new StreamWriter(filename, false, Encoding.Unicode)) {
                 serializer.Serialize(file, obj);
             }
         }

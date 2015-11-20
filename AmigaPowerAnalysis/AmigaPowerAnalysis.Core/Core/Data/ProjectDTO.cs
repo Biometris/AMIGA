@@ -57,12 +57,14 @@ namespace AmigaPowerAnalysis.Core.Data {
             var endpoints = dto.Endpoints.Select(r => EndpointDTO.FromDTO(r, endpointGroups)).ToList();
             var factors = dto.Factors.Select(r => FactorDTO.FromDTO(r)).ToList();
             var factorLevels = dto.FactorLevels.Select(r => FactorLevelDTO.FromDTO(r, factors)).ToList();
+            var designSettings = DesignSettingsDTO.FromDTO(dto.DesignSettings);
+            var powerCalculationSettings = PowerCalculationSettingsDTO.FromDTO(dto.PowerCalculationSettings);
             var project = new Project() {
                 EndpointTypes = endpointGroups,
                 Endpoints = endpoints,
                 Factors = factors,
-                DesignSettings = DesignSettingsDTO.FromDTO(dto.DesignSettings),
-                PowerCalculationSettings = PowerCalculationSettingsDTO.FromDTO(dto.PowerCalculationSettings),
+                DesignSettings = designSettings,
+                PowerCalculationSettings = powerCalculationSettings,
                 UseFactorModifiers = dto.UseFactorModifiers,
                 UseBlockModifier = dto.UseBlockModifier,
                 CVForBlocks = dto.CVForBlocks,

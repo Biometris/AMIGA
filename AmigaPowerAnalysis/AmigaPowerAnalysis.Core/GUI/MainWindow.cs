@@ -216,11 +216,7 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void saveProject() {
             if (!string.IsNullOrEmpty(_currentProjectFilename)) {
-                if (Path.GetExtension(_currentProjectFilename) == ".apa") {
-                    ProjectManager.SaveProject(_project, _currentProjectFilename);
-                } else {
-                    ProjectManager.SaveProjectXml(_project, _currentProjectFilename);
-                }
+                ProjectManager.SaveProjectXml(_project, _currentProjectFilename);
             } else {
                 saveAsDialog();
             }

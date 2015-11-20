@@ -4,6 +4,7 @@ using AmigaPowerAnalysis.Tests.Mocks.Projects;
 using Biometris.ExtensionMethods;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
+using AmigaPowerAnalysis.Core;
 
 namespace AmigaPowerAnalysis.Tests.Core {
     [TestClass]
@@ -24,11 +25,15 @@ namespace AmigaPowerAnalysis.Tests.Core {
 
         [TestMethod]
         [TestCategory("UnitTests")]
-        public void ProjectDTO_TestImportXls() {
+        public void ProjectDTO_TestExcelImport1() {
             var filename = Path.Combine("Resources", "ExcelImportData1.xlsx");
             var outputFileReader = new DTODataFileReader(filename);
             var endpointGroups = outputFileReader.ReadGroups();
             var endpoints = outputFileReader.ReadEndpoints(endpointGroups);
+            var project = new Project();
+            project.EndpointTypes = endpointGroups;
+            project.Endpoints = endpoints;
+            ProjectManager.SaveProjectXml(project, Path.Combine(_testPath, "TestExcelImport1.xml"));
         }
     }
 }
