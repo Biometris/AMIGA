@@ -14,8 +14,8 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
 
         public List<OutputPowerAnalysisRecord> Read(string filename) {
             var tableDefinition = getTableDefinition();
-            var csvFileReader = new CsvFileReader();
-            var records = csvFileReader.ReadDataSet<OutputPowerAnalysisRecord>(filename, tableDefinition);
+            var csvFileReader = new CsvFileReader(filename);
+            var records = csvFileReader.ReadDataSet<OutputPowerAnalysisRecord>(tableDefinition);
             return records;
         }
     }

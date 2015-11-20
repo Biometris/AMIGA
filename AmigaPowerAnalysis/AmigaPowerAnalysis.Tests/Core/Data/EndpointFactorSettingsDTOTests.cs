@@ -1,12 +1,12 @@
-﻿using AmigaPowerAnalysis.Core;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using AmigaPowerAnalysis.Core;
 using AmigaPowerAnalysis.Core.Data;
 using AmigaPowerAnalysis.Core.DataReaders;
 using Biometris.ExtensionMethods;
 using Biometris.Persistence;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 
 namespace AmigaPowerAnalysis.Tests.Core {
 
@@ -14,8 +14,6 @@ namespace AmigaPowerAnalysis.Tests.Core {
     public class EndpointFactorSettingsDTOTests {
 
         private static string _testPath = Path.Combine(Properties.Settings.Default.TestPath);
-
-        private static DTODataFileReader _fileReader = new DTODataFileReader();
 
         private static List<EndpointType> _endpointGroups = EndpointTypeProvider.DefaultEndpointTypes();
 
@@ -58,11 +56,12 @@ namespace AmigaPowerAnalysis.Tests.Core {
         [TestCategory("UnitTests")]
         public void EndpointFactorSettingsDTOTests_TestSingle() {
             var filename = Path.Combine(_testPath, "SingleEndpointFactorSetting.csv");
+            var fileReader = new DTODataFileReader(filename);
             var endpoint = getEndpoints().First();
             var originals = endpoint.FactorSettings.Take(1).ToList();
             var dtos = endpoint.FactorSettings.Select(r => EndpointFactorSettingDTO.ToDTO(r, endpoint)).Take(1).ToList();
             CsvWriter.WriteToCsvFile(filename, ",", dtos);
-            var records = _fileReader.ReadEndpointFactorSettings(filename, _factors, _endpoints);
+            var records = fileReader.ReadEndpointFactorSettings(_factors, _endpoints);
             Assert.IsTrue(ObjectComparisonExtensions.PublicInstancePropertiesEqual(originals.Single(), records.Single()));
             Assert.AreEqual(originals.Single(), records.Single());
         }
@@ -71,11 +70,12 @@ namespace AmigaPowerAnalysis.Tests.Core {
         [TestCategory("UnitTests")]
         public void EndpointFactorSettingsDTOTests_TestMultiple() {
             var filename = Path.Combine(_testPath, "MultipleEndpointFactorSettings.csv");
+            var fileReader = new DTODataFileReader(filename);
             var endpoints = getEndpoints();
             var originals = endpoints.SelectMany(ep => ep.FactorSettings).ToList();
             var dtos = endpoints.SelectMany(ep => ep.FactorSettings.Select(r => EndpointFactorSettingDTO.ToDTO(r, ep))).ToList();
             CsvWriter.WriteToCsvFile(filename, ",", dtos);
-            var records = _fileReader.ReadEndpointFactorSettings(filename, _factors, _endpoints);
+            var records = fileReader.ReadEndpointFactorSettings(_factors, _endpoints);
             Assert.AreEqual(records.Count, originals.Count);
             foreach (var original in originals) {
                 Assert.IsTrue(records.Contains(original));

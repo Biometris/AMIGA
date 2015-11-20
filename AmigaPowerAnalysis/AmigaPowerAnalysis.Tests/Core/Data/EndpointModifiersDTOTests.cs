@@ -1,11 +1,11 @@
-﻿using AmigaPowerAnalysis.Core;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using AmigaPowerAnalysis.Core;
 using AmigaPowerAnalysis.Core.Data;
 using AmigaPowerAnalysis.Core.DataReaders;
 using Biometris.ExtensionMethods;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 
 namespace AmigaPowerAnalysis.Tests.Core {
 
@@ -13,8 +13,6 @@ namespace AmigaPowerAnalysis.Tests.Core {
     public class EndpointModifiersDTOTests {
 
         private static string _testPath = Path.Combine(Properties.Settings.Default.TestPath);
-
-        private static DTODataFileReader _fileReader = new DTODataFileReader();
 
         private static List<EndpointType> _endpointGroups = EndpointTypeProvider.DefaultEndpointTypes();
 
@@ -61,7 +59,8 @@ namespace AmigaPowerAnalysis.Tests.Core {
             var originals = endpoint.Modifiers.Take(1).ToList();
             var dtos = endpoint.Modifiers.Select(r => EndpointModifierDTO.ToDTO(r, endpoint)).Take(1).ToList();
             EndpointModifierDTO.WriteToCsvFile(dtos, filename);
-            var records = _fileReader.ReadEndpointModifiers(filename, _factors, _endpoints);
+            var fileReader = new DTODataFileReader(filename);
+            var records = fileReader.ReadEndpointModifiers(_factors, _endpoints);
             Assert.IsTrue(ObjectComparisonExtensions.PublicInstancePropertiesEqual(originals.Single(), records.Single()));
             Assert.AreEqual(originals.Single(), records.Single());
         }
@@ -74,7 +73,8 @@ namespace AmigaPowerAnalysis.Tests.Core {
             var originals = endpoints.SelectMany(ep => ep.Modifiers).ToList();
             var dtos = endpoints.SelectMany(ep => ep.Modifiers.Select(r => EndpointModifierDTO.ToDTO(r, ep))).ToList();
             EndpointModifierDTO.WriteToCsvFile(dtos, filename);
-            var records = _fileReader.ReadEndpointModifiers(filename, _factors, _endpoints);
+            var fileReader = new DTODataFileReader(filename);
+            var records = fileReader.ReadEndpointModifiers(_factors, _endpoints);
             Assert.AreEqual(records.Count, originals.Count);
             foreach (var original in originals) {
                 Assert.IsTrue(records.Contains(original));

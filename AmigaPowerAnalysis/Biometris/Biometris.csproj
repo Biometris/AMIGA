@@ -113,6 +113,10 @@
     <Compile Include="ApplicationUtilities\RecentFile.cs" />
     <Compile Include="ApplicationUtilities\MostRecentFilesManager.cs" />
     <Compile Include="Collections\MultiSetComparer.cs" />
+    <Compile Include="DataFileReading\ExcelFileReader.cs" />
+    <Compile Include="DataFileReading\PropertyMapping\IdentityPropertyMapper.cs" />
+    <Compile Include="DataFileReading\PropertyMapping\IPropertyMapper.cs" />
+    <Compile Include="DataFileReading\PropertyMapping\ReferencePropertyMapper.cs" />
     <Compile Include="ExtensionMethods\ObjectComparisonExtensions.cs" />
     <Compile Include="ExtensionMethods\SerializationExtensions.cs" />
     <Compile Include="Numerics\BMath.cs" />

@@ -1,21 +1,19 @@
-﻿using AmigaPowerAnalysis.Core;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using AmigaPowerAnalysis.Core;
 using AmigaPowerAnalysis.Core.Data;
 using AmigaPowerAnalysis.Core.DataReaders;
 using Biometris.Persistence;
 using Biometris.Statistics.Distributions;
 using Biometris.Statistics.Measurements;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 
 namespace AmigaPowerAnalysis.Tests.Core {
     [TestClass]
     public class EndpointDTOTests {
 
         private static string _testPath = Path.Combine(Properties.Settings.Default.TestPath);
-
-        private static DTODataFileReader _fileReader = new DTODataFileReader();
 
         private static List<EndpointType> _mockEndpointGroups = new List<EndpointType>() {
             new EndpointType("Count", MeasurementType.Count, 0.5, 1.5, 80, 50, DistributionType.OverdispersedPoisson, 0),
@@ -33,8 +31,8 @@ namespace AmigaPowerAnalysis.Tests.Core {
             };
             var originalEndpointsDTO = original.Select(r => EndpointDTO.ToDTO(r));
             CsvWriter.WriteToCsvFile(filename, ",", originalEndpointsDTO);
-            var outputFileReader = new DTODataFileReader();
-            var record = outputFileReader.ReadEndpoints(filename, _mockEndpointGroups);
+            var outputFileReader = new DTODataFileReader(filename);
+            var record = outputFileReader.ReadEndpoints(_mockEndpointGroups);
             Assert.AreEqual(original.Single(), record.Single());
         }
 
@@ -46,8 +44,8 @@ namespace AmigaPowerAnalysis.Tests.Core {
             var originals = _mockEndpointGroups.Select(r => new Endpoint("EP_" + r.Name, r)).ToList();
             var originalEndpointDTOs = originals.Select(r => EndpointDTO.ToDTO(r));
             CsvWriter.WriteToCsvFile(filename, ",", originalEndpointDTOs);
-            var outputFileReader = new DTODataFileReader();
-            var records = outputFileReader.ReadEndpoints(filename, _mockEndpointGroups);
+            var outputFileReader = new DTODataFileReader(filename);
+            var records = outputFileReader.ReadEndpoints(_mockEndpointGroups);
             Assert.AreEqual(records.Count, originals.Count);
             foreach (var original in originals) {
                 Assert.IsTrue(records.Contains(original));

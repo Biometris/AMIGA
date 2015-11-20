@@ -14,8 +14,6 @@ namespace AmigaPowerAnalysis.Tests.Core {
 
         private static string _testPath = Path.Combine(Properties.Settings.Default.TestPath);
 
-        private static DTODataFileReader _fileReader = new DTODataFileReader();
-
         [TestMethod]
         [TestCategory("UnitTests")]
         public void FactorDTO_TestSingle() {
@@ -29,7 +27,8 @@ namespace AmigaPowerAnalysis.Tests.Core {
             };
             var dtoOriginals = originals.Select(r => FactorDTO.ToDTO(r)).ToList();
             CsvWriter.WriteToCsvFile(filename, ",", dtoOriginals);
-            var records = _fileReader.ReadFactors(filename);
+            var fileReader = new DTODataFileReader(filename);
+            var records = fileReader.ReadFactors();
             Assert.IsTrue(ObjectComparisonExtensions.PublicInstancePropertiesEqual(originals.Single(), records.Single()));
             Assert.AreEqual(originals.Single(), records.Single());
         }
@@ -43,7 +42,8 @@ namespace AmigaPowerAnalysis.Tests.Core {
             };
             var dtoOriginals = originals.Select(r => FactorDTO.ToDTO(r)).ToList();
             CsvWriter.WriteToCsvFile(filename, ",", dtoOriginals);
-            var records = _fileReader.ReadFactors(filename);
+            var fileReader = new DTODataFileReader(filename);
+            var records = fileReader.ReadFactors();
             Assert.IsTrue(ObjectComparisonExtensions.PublicInstancePropertiesEqual(originals.Single(), records.Single()));
             Assert.AreEqual(originals.Single(), records.Single());
         }
@@ -60,7 +60,8 @@ namespace AmigaPowerAnalysis.Tests.Core {
             };
             var dtoOriginals = originals.Select(r => FactorDTO.ToDTO(r)).ToList();
             CsvWriter.WriteToCsvFile(filename, ",", dtoOriginals);
-            var records = _fileReader.ReadFactors(filename);
+            var fileReader = new DTODataFileReader(filename);
+            var records = fileReader.ReadFactors();
             Assert.AreEqual(records.Count, originals.Count);
             foreach (var original in originals) {
                 Assert.IsTrue(records.Contains(original));

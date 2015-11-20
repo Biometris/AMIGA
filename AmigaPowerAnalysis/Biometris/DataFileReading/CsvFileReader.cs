@@ -9,24 +9,27 @@ using Biometris.ExtensionMethods;
 namespace Biometris.DataFileReader {
     public sealed class CsvFileReader : IDataFileReader {
 
+        private string _filename;
+
         public char Delimiter { get; set; }
         public int PrimaryHeaderRow { get; set; }
         public int SecondaryHeaderRow { get; set; }
         public int FirstDataRow { get; set; }
 
-        public CsvFileReader() {
+        public CsvFileReader(string filename) {
             Delimiter = ',';
             PrimaryHeaderRow = 0;
             SecondaryHeaderRow = -1;
             FirstDataRow = 1;
+            _filename = filename;
         }
 
-        public List<T> ReadDataSet<T>(string filename, TableDefinition tableDefinition)
+        public List<T> ReadDataSet<T>(TableDefinition tableDefinition)
             where T : new() {
             try {
                 var data = new List<T>();
                 List<ColumnMapping> columnMappings = null;
-                using (var fileStream = new FileStream(filename, FileMode.Open, FileAccess.Read)) {
+                using (var fileStream = new FileStream(_filename, FileMode.Open, FileAccess.Read)) {
                     using (var streamReader = new StreamReader(fileStream)) {
                         var primaryHeaderNames = new List<string>();
                         var secondaryHeaderNames = new List<string>();
@@ -67,7 +70,7 @@ namespace Biometris.DataFileReader {
                 }
                 return data;
             } catch (Exception ex) {
-                var msg = string.Format("Error while reading data file {0}. {1}", filename, ex.Message);
+                var msg = string.Format("Error while reading data file {0}. {1}", _filename, ex.Message);
                 throw new Exception(msg);
             }
         }

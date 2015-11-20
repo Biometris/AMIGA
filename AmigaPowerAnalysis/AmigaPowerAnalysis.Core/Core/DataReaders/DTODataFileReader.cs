@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using AmigaPowerAnalysis.Core.Data;
@@ -8,60 +9,65 @@ namespace AmigaPowerAnalysis.Core.DataReaders {
     public sealed class DTODataFileReader {
 
         private TableDefinitionCollection _tableDefinitions;
+        private IDataFileReader _dataFileReader;
 
-        public List<EndpointType> ReadGroups(string filename) {
-            var reader = new CsvFileReader();
+        public DTODataFileReader(string filename) {
+            if (Path.GetExtension(filename) == ".csv") {
+                _dataFileReader = new CsvFileReader(filename);
+            } else if (Path.GetExtension(filename) == ".xlsx") {
+                _dataFileReader = new ExcelFileReader(filename);
+            }
+        }
+
+        public DTODataFileReader(IDataFileReader dataFileReader) {
+            _dataFileReader = dataFileReader;
+        }
+
+        public List<EndpointType> ReadGroups() {
             var tableDefinition = tableDefinitions.GetTableDefinition("EndpointGroups");
-            var records = reader.ReadDataSet<EndpointGroupDTO>(filename, tableDefinition);
+            var records = _dataFileReader.ReadDataSet<EndpointGroupDTO>(tableDefinition);
             return records.Select(r => EndpointGroupDTO.FromDTO(r)).ToList();
         }
 
-        public List<Endpoint> ReadEndpoints(string filename, IEnumerable<EndpointType> groups) {
-            var reader = new CsvFileReader();
+        public List<Endpoint> ReadEndpoints(IEnumerable<EndpointType> groups) {
             var tableDefinition = tableDefinitions.GetTableDefinition("Endpoints");
-            var records = reader.ReadDataSet<EndpointDTO>(filename, tableDefinition);
+            var records = _dataFileReader.ReadDataSet<EndpointDTO>(tableDefinition);
             return records.Select(r => EndpointDTO.FromDTO(r, groups)).ToList();
         }
 
-        public List<IFactor> ReadFactors(string filename) {
-            var reader = new CsvFileReader();
+        public List<IFactor> ReadFactors() {
             var tableDefinition = tableDefinitions.GetTableDefinition("Factors");
-            var records = reader.ReadDataSet<FactorDTO>(filename, tableDefinition);
+            var records = _dataFileReader.ReadDataSet<FactorDTO>(tableDefinition);
             return records.Select(r => FactorDTO.FromDTO(r)).ToList();
         }
 
-        public List<FactorLevel> ReadFactorLevels(string filename, IEnumerable<IFactor> factors) {
-            var reader = new CsvFileReader();
+        public List<FactorLevel> ReadFactorLevels(IEnumerable<IFactor> factors) {
             var tableDefinition = tableDefinitions.GetTableDefinition("FactorLevels");
-            var records = reader.ReadDataSet<FactorLevelDTO>(filename, tableDefinition);
+            var records = _dataFileReader.ReadDataSet<FactorLevelDTO>(tableDefinition);
             return records.Select(r => FactorLevelDTO.FromDTO(r, factors)).ToList();
         }
 
-        public List<InteractionFactorLevelCombination> ReadDefaultInteractions(string filename, IEnumerable<IFactor> factors) {
-            var reader = new CsvFileReader();
+        public List<InteractionFactorLevelCombination> ReadDefaultInteractions(IEnumerable<IFactor> factors) {
             var tableDefinition = tableDefinitions.GetTableDefinition("DefaultInteractions");
-            var records = reader.ReadDataSet<DefaultInteractionDTO>(filename, tableDefinition);
+            var records = _dataFileReader.ReadDataSet<DefaultInteractionDTO>(tableDefinition);
             return records.Select(r => DefaultInteractionDTO.FromDTO(r, factors)).ToList();
         }
 
-        public List<EndpointFactorSettings> ReadEndpointFactorSettings(string filename, IEnumerable<IFactor> factors, IEnumerable<Endpoint> endpoints) {
-            var reader = new CsvFileReader();
+        public List<EndpointFactorSettings> ReadEndpointFactorSettings(IEnumerable<IFactor> factors, IEnumerable<Endpoint> endpoints) {
             var tableDefinition = tableDefinitions.GetTableDefinition("EndpointFactorSettings");
-            var records = reader.ReadDataSet<EndpointFactorSettingDTO>(filename, tableDefinition);
+            var records = _dataFileReader.ReadDataSet<EndpointFactorSettingDTO>(tableDefinition);
             return records.Select(r => EndpointFactorSettingDTO.FromDTO(r, factors, endpoints)).ToList();
         }
 
-        public List<InteractionFactorLevelCombination> ReadEndpointInteractions(string filename, IEnumerable<IFactor> factors, IEnumerable<Endpoint> endpoints) {
-            var reader = new CsvFileReader();
+        public List<InteractionFactorLevelCombination> ReadEndpointInteractions(IEnumerable<IFactor> factors, IEnumerable<Endpoint> endpoints) {
             var tableDefinition = tableDefinitions.GetTableDefinition("EndpointInteractions");
-            var records = reader.ReadDataSet<EndpointInteractionDTO>(filename, tableDefinition);
+            var records = _dataFileReader.ReadDataSet<EndpointInteractionDTO>(tableDefinition);
             return records.Select(r => EndpointInteractionDTO.FromDTO(r, factors, endpoints)).ToList();
         }
 
-        public List<ModifierFactorLevelCombination> ReadEndpointModifiers(string filename, IEnumerable<IFactor> factors, IEnumerable<Endpoint> endpoints) {
-            var reader = new CsvFileReader();
+        public List<ModifierFactorLevelCombination> ReadEndpointModifiers(IEnumerable<IFactor> factors, IEnumerable<Endpoint> endpoints) {
             var tableDefinition = tableDefinitions.GetTableDefinition("EndpointModifiers");
-            var records = reader.ReadDataSet<EndpointModifierDTO>(filename, tableDefinition);
+            var records = _dataFileReader.ReadDataSet<EndpointModifierDTO>(tableDefinition);
             return records.Select(r => EndpointModifierDTO.FromDTO(r, factors, endpoints)).ToList();
         }
 

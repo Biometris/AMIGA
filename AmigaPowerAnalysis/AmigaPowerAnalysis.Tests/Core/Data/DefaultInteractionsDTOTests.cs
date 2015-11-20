@@ -1,11 +1,11 @@
-﻿using AmigaPowerAnalysis.Core;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using AmigaPowerAnalysis.Core;
 using AmigaPowerAnalysis.Core.Data;
 using AmigaPowerAnalysis.Core.DataReaders;
 using Biometris.ExtensionMethods;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 
 namespace AmigaPowerAnalysis.Tests.Core {
 
@@ -13,8 +13,6 @@ namespace AmigaPowerAnalysis.Tests.Core {
     public class DefaultInteractionsDTOTests {
 
         private static string _testPath = Path.Combine(Properties.Settings.Default.TestPath);
-
-        private static DTODataFileReader _fileReader = new DTODataFileReader();
 
         private static List<IFactor> _factors = new List<IFactor>() { 
             VarietyFactor.CreateVarietyFactor(),
@@ -40,7 +38,8 @@ namespace AmigaPowerAnalysis.Tests.Core {
             var originals = getInteractions().Take(1).ToList();
             var dtos = originals.Select(r => DefaultInteractionDTO.ToDTO(r));
             DefaultInteractionDTO.WriteToCsvFile(dtos, filename);
-            var records = _fileReader.ReadDefaultInteractions(filename, _factors);
+            var fileReader = new DTODataFileReader(filename);
+            var records = fileReader.ReadDefaultInteractions(_factors);
             Assert.IsTrue(ObjectComparisonExtensions.PublicInstancePropertiesEqual(originals.Single(), records.Single()));
             Assert.AreEqual(originals.Single(), records.Single());
         }
@@ -53,7 +52,8 @@ namespace AmigaPowerAnalysis.Tests.Core {
             var originals = getInteractions().ToList();
             var dtos = originals.Select(r => DefaultInteractionDTO.ToDTO(r));
             DefaultInteractionDTO.WriteToCsvFile(dtos, filename);
-            var records = _fileReader.ReadDefaultInteractions(filename, _factors);
+            var fileReader = new DTODataFileReader(filename);
+            var records = fileReader.ReadDefaultInteractions(_factors);
             Assert.AreEqual(records.Count, originals.Count);
             foreach (var original in originals) {
                 Assert.IsTrue(records.Contains(original));

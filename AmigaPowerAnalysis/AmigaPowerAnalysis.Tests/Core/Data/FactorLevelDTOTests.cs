@@ -14,8 +14,6 @@ namespace AmigaPowerAnalysis.Tests.Core {
 
         private static string _testPath = Path.Combine(Properties.Settings.Default.TestPath);
 
-        private static DTODataFileReader _fileReader = new DTODataFileReader();
-
         private static List<IFactor> _factors = new List<IFactor>() { 
             VarietyFactor.CreateVarietyFactor(),
             new Factor("F", 3, false),
@@ -30,7 +28,8 @@ namespace AmigaPowerAnalysis.Tests.Core {
             var originals = _factors.SelectMany(r => r.FactorLevels).Take(1).ToList();
             var dtoOriginals = originals.Select(r => FactorLevelDTO.ToDTO(r)).ToList();
             CsvWriter.WriteToCsvFile(filename, ",", dtoOriginals);
-            var records = _fileReader.ReadFactorLevels(filename, _factors);
+            var fileReader = new DTODataFileReader(filename);
+            var records = fileReader.ReadFactorLevels(_factors);
             Assert.IsTrue(ObjectComparisonExtensions.PublicInstancePropertiesEqual(originals.Single(), records.Single()));
             Assert.AreEqual(originals.Single(), records.Single());
         }
@@ -42,7 +41,8 @@ namespace AmigaPowerAnalysis.Tests.Core {
             var originals = _factors.SelectMany(r => r.FactorLevels).ToList();
             var dtoOriginals = originals.Select(r => FactorLevelDTO.ToDTO(r)).ToList();
             CsvWriter.WriteToCsvFile(filename, ",", dtoOriginals);
-            var records = _fileReader.ReadFactorLevels(filename, _factors);
+            var fileReader = new DTODataFileReader(filename);
+            var records = fileReader.ReadFactorLevels(_factors);
             Assert.AreEqual(records.Count, originals.Count);
             foreach (var original in originals) {
                 Assert.IsTrue(records.Contains(original));

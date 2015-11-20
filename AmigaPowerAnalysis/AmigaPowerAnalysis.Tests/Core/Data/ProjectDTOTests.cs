@@ -11,8 +11,6 @@ namespace AmigaPowerAnalysis.Tests.Core {
 
         private static string _testPath = Path.Combine(Properties.Settings.Default.TestPath);
 
-        private static DTODataFileReader _fileReader = new DTODataFileReader();
-
         [TestMethod]
         [TestCategory("UnitTests")]
         public void ProjectDTO_TestSimple() {
@@ -22,6 +20,15 @@ namespace AmigaPowerAnalysis.Tests.Core {
             dto.ToXmlFile(filename);
             var restoredDto = SerializationExtensions.FromXmlFile<ProjectDTO>(filename);
             var restored = ProjectDTO.FromDTO(restoredDto);
+        }
+
+        [TestMethod]
+        [TestCategory("UnitTests")]
+        public void ProjectDTO_TestImportXls() {
+            var filename = Path.Combine("Resources", "ExcelImportData1.xlsx");
+            var outputFileReader = new DTODataFileReader(filename);
+            var endpointGroups = outputFileReader.ReadGroups();
+            var endpoints = outputFileReader.ReadEndpoints(endpointGroups);
         }
     }
 }
