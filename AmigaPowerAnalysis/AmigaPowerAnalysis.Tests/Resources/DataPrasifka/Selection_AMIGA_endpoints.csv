@@ -1,0 +1,10 @@
+"EndpointID","Group","MeasurementType","LocLower","LocUpper","DistributionType","Mean","CV"
+"Sapbeetles","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",15.892470927765,113.362895275326
+"Ants","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",410.054154995331,111.607763718819
+"Generalcollembolaallfamilies","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",2560.8976156074,132.428222559712
+"Springtailsentomobryids","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",2279.10644257703,113.982506719839
+"Crickets","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",142.34548849843,128.359134787198
+"Spiders","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",265.76837078226,111.544450744042
+"Centipedes","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",109.331155088298,149.81007221958
+"Wolfspiders","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",247.86418607834,119.098285308008
+"Groundbeetles","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",145.087361005008,104.461402285158

@@ -145,6 +145,7 @@
     <Compile Include="Core\PowerAnalysis\RDotNetPowerAnalysisExecuterTests.cs" />
     <Compile Include="Core\ProjectEntities\FactoLevelCombinationTests.cs" />
     <Compile Include="Core\ProjectEntities\FactorTests.cs" />
+    <Compile Include="IntegrationTests\DataPrasifkaIntegrationTests.cs" />
     <Compile Include="IntegrationTests\TechDocIntegrationTests.cs" />
     <Compile Include="IntegrationTests\MockProjectsIntegrationTests.cs" />
     <Compile Include="Mocks\Projects\MockProjectsCreator.cs" />
@@ -162,6 +163,17 @@
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Resources\DataPrasifka\AMIGA_endpoints.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\DataPrasifka\AMIGA_groups.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\DataPrasifka\ExtractAMIGA.r" />
+    <None Include="Resources\DataPrasifka\ExtractAMIGA.xlsx" />
+    <None Include="Resources\DataPrasifka\Selection_AMIGA_endpoints.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Resources\DefaultGroups.csv" />
     <None Include="Resources\EndpointDataFileReader_Tests1.csv">
@@ -188,6 +200,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Content Include="Resources\TechDoc\TechDoc.xml" />
     <Content Include="Resources\TechDoc\TechDoc1.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

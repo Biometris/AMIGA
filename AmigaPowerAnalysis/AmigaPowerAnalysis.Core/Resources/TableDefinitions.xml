@@ -42,13 +42,13 @@
           <string>DistributionType</string>
         </Aliases>
       </ColumnDefinition>
-      <ColumnDefinition IsRequired="true">
+      <ColumnDefinition IsRequired="false">
         <ColumnID>BinomialTotal</ColumnID>
         <Aliases>
           <string>BinomialTotal</string>
         </Aliases>
       </ColumnDefinition>
-      <ColumnDefinition IsRequired="true">
+      <ColumnDefinition IsRequired="false">
         <ColumnID>PowerLawPower</ColumnID>
         <Aliases>
           <string>PowerLawPower</string>
@@ -139,13 +139,13 @@
           <string>CvComparator</string>
         </Aliases>
       </ColumnDefinition>
-      <ColumnDefinition IsRequired="true">
+      <ColumnDefinition IsRequired="false">
         <ColumnID>BinomialTotal</ColumnID>
         <Aliases>
           <string>BinomialTotal</string>
         </Aliases>
       </ColumnDefinition>
-      <ColumnDefinition IsRequired="true">
+      <ColumnDefinition IsRequired="false">
         <ColumnID>PowerLawPower</ColumnID>
         <Aliases>
           <string>PPowerLaw</string>
