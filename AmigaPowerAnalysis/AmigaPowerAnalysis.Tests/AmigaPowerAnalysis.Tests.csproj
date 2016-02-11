@@ -167,7 +167,7 @@
     <None Include="Resources\DataPrasifka\AMIGA_endpoints.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Resources\DataPrasifka\AMIGA_extract_single_trial_data.r" />
+    <None Include="Resources\DataPrasifka\AMIGA_extract_endpoints_data_models.r" />
     <None Include="Resources\DataPrasifka\AMIGA_groups.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
