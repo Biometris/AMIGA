@@ -128,7 +128,7 @@ endpoints <- endpoints[substring(endpoints, 1, 2) != "NA"]
 
 endpoints_amiga <- AMIGA_extract_endpoints_data_models(endpoints, 8, 4)
 write.csv(na.omit(endpoints_amiga), file = file.path("AMIGA_endpoints.csv", fsep = "\\"), row.names=FALSE)
-write.csv(subset(endpoints_amiga, is.na(endpoints_amiga$CV_between_blocks) || is.na(endpoints_amiga$CV_within_blocks)), file = file.path("AMIGA_endpoints_failed.csv", fsep = "\\"), row.names=FALSE)
+write.csv(subset(endpoints_amiga, is.na(endpoints_amiga$CV)), file = file.path("AMIGA_endpoints_failed.csv", fsep = "\\"), row.names=FALSE)
 
 selected_endpoints <- c(
   "General.collembola.all.families",
