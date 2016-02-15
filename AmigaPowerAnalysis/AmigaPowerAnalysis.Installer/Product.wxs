@@ -2,6 +2,8 @@
 <?define ProductName = "Amiga Power Analysis" ?>
 <?define ProductVersion = "!(bind.FileVersion.MainExe)" ?>
 <?define ProductUpgradeCode = "{DE4FBCF5-135D-4A27-9D4B-8246CEDF13D2}"?>
+<?define MainExe = "AmigaPowerAnalysis.exe"?>
+<?define ProductDocument = "xapa"?>
 <?if $(var.Platform) = x64 ?>
 <?define bitness = "(64 bit)" ?>
 <?define Win64 = "yes" ?>
@@ -28,7 +30,7 @@
       <UpgradeVersion Minimum="$(var.ProductVersion)" OnlyDetect="yes" Property="NEWERVERSIONDETECTED"/>
       <UpgradeVersion Minimum="0.0.0.0" Maximum="$(var.ProductVersion)" IncludeMinimum="yes" IncludeMaximum="no" Property="OLDERVERSIONBEINGUPGRADED"/>
     </Upgrade>
-    <Condition Message="A newer version of this software is already installed.">NOT NEWERVERSIONDETECTED</Condition>
+    <!--<Condition Message="A newer version of this software is already installed.">NOT NEWERVERSIONDETECTED</Condition>-->
 
     <Feature Id="ProductFeature" Title="$(var.ProductName)" Level="1" Display="expand" ConfigurableDirectory='INSTALLFOLDER'>
       <ComponentGroupRef Id="ApplicationComponentGroup" />
@@ -77,7 +79,7 @@
   <Fragment>
     <DirectoryRef Id="DesktopFolder">
       <Component Id="DesktopShortcutComponent" Guid="{562559F9-87C1-4618-9204-1F39583EE947}">
-        <Shortcut Id="DesktopShortcut" Name="$(var.ProductName)" Description="$(var.ProductName)" Target="[INSTALLFOLDER]AmigaPowerAnalysis.exe" WorkingDirectory="INSTALLFOLDER">
+        <Shortcut Id="DesktopShortcut" Name="$(var.ProductName)" Description="$(var.ProductName)" Target="[INSTALLFOLDER]$(var.MainExe)" WorkingDirectory="INSTALLFOLDER">
           <Icon Id="DesktopIcon" SourceFile="Resources\Logo.ico" />
         </Shortcut>
         <RegistryValue Root="HKCU" Key="Software\Wageningen UR\$(var.ProductName)" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
@@ -89,7 +91,7 @@
   <Fragment>
     <DirectoryRef Id="ProgramMenuSubFolder">
       <Component Id="ProgramMenuSubFolderComponent" Guid="{FF325E2E-9503-4C2C-9BE0-AD6A13A6DCD6}">
-        <Shortcut Id="ProgramMenuShortcut" Name="$(var.ProductName)" Description="$(var.ProductName)" Target="[INSTALLFOLDER]AmigaPowerAnalysis.exe" WorkingDirectory="INSTALLFOLDER" />
+        <Shortcut Id="ProgramMenuShortcut" Name="$(var.ProductName)" Description="$(var.ProductName)" Target="[INSTALLFOLDER]$(var.MainExe)" WorkingDirectory="INSTALLFOLDER" />
         <RegistryValue Root="HKCU" Key="Software\Wageningen UR\$(var.ProductName)" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
         <RemoveFolder Id="ApplicationProgramsFolder" On="uninstall"/>
       </Component>
@@ -99,7 +101,30 @@
   <Fragment>
     <ComponentGroup Id="ApplicationComponentGroup" Directory="INSTALLFOLDER">
       <Component Guid="{B7149209-2DD9-421D-998F-531412A53B6C}">
-        <File Id="MainExe" Source="..\AmigaPowerAnalysis.Core\bin\$(var.Platform)\Release\AmigaPowerAnalysis.exe" KeyPath="yes" />
+
+        <File Id="MainExe" Source="..\AmigaPowerAnalysis.Core\bin\$(var.Platform)\Release\$(var.MainExe)" KeyPath="yes" />
+
+        <!-- Capabilities keys for Vista/7 "Set Program Access and Defaults" -->
+        <RegistryValue Root="HKLM" Key="SOFTWARE\$(var.ProductName)\Capabilities" Name="ApplicationIcon" Value="[APPLICATIONFOLDER]$(var.MainExe),0" Type="string" />
+        <RegistryValue Root="HKLM" Key="SOFTWARE\$(var.ProductName)\Capabilities" Name="ApplicationName" Value="$(var.ProductName)" Type="string" />
+        <RegistryValue Root="HKLM" Key="SOFTWARE\$(var.ProductName)\Capabilities\DefaultIcon" Value="[APPLICATIONFOLDER]$(var.MainExe),1" Type="string" />
+        <RegistryValue Root="HKLM" Key="SOFTWARE\$(var.ProductName)\Capabilities\FileAssociations" Name="$(var.ProductDocument)" Value="$(var.ProductName).Document" Type="string" />
+        <RegistryValue Root="HKLM" Key="SOFTWARE\$(var.ProductName)\Capabilities\MIMEAssociations" Name="application/$(var.ProductDocument)" Value="$(var.ProductDocument)" Type="string" />
+        <RegistryValue Root="HKLM" Key="SOFTWARE\$(var.ProductName)\Capabilities\shell\Open\command" Value="&quot;[APPLICATIONFOLDER]$(var.MainExe) &quot; &quot;%1&quot;" Type="string" />
+        <RegistryValue Root="HKLM" Key="SOFTWARE\RegisteredApplications" Name="$(var.ProductName)" Value="SOFTWARE\$(var.ProductName)\Capabilities" Type="string" />
+
+        <!-- App Paths to support Start,Run -->
+        <RegistryValue Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\$(var.MainExe)" Value="[APPLICATIONFOLDER]$(var.MainExe)" Type="string" />
+        <RegistryValue Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\$(var.MainExe)" Name="Path" Value="[APPLICATIONFOLDER]" Type="string" />
+
+        <!-- Register file extension association -->
+        <RegistryValue Root="HKLM" Key="SOFTWARE\Classes\$(var.ProductName) Document" Name="FriendlyTypeName" Value="$(var.ProductName) project file" Type="string" />
+        <ProgId Id="$(var.ProductName) Document" Description="$(var.ProductName) project file" Advertise="no">
+          <Extension Id="$(var.ProductDocument)" ContentType="application/$(var.ProductDocument)">
+            <Verb Id="open" Command="Open with $(var.ProductName)" TargetFile="MainExe" Argument='"%1"' />
+          </Extension>
+        </ProgId>
+
       </Component>
       <Component Guid="{3FBB0E65-B43D-4C52-AE7D-5F8C20FA6616}">
         <File Source="..\AmigaPowerAnalysis.Core\bin\$(var.Platform)\Release\Biometris.dll" KeyPath="yes" />
