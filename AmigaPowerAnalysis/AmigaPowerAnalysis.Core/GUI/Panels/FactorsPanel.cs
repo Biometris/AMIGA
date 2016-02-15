@@ -74,12 +74,12 @@ namespace AmigaPowerAnalysis.GUI {
                 if (_currentFactor.IsVarietyFactor && dataGridViewFactorLevels.Rows.Count >= 2) {
                     dataGridViewFactorLevels.Rows[0].Cells[0].ReadOnly = true;
                     dataGridViewFactorLevels.Rows[0].Cells[0].Style.BackColor = Color.LightGray;
-                    dataGridViewFactorLevels.Rows[0].Cells[1].ReadOnly = true;
-                    dataGridViewFactorLevels.Rows[0].Cells[1].Style.BackColor = Color.LightGray;
+                    //dataGridViewFactorLevels.Rows[0].Cells[1].ReadOnly = true;
+                    //dataGridViewFactorLevels.Rows[0].Cells[1].Style.BackColor = Color.LightGray;
                     dataGridViewFactorLevels.Rows[1].Cells[0].ReadOnly = true;
                     dataGridViewFactorLevels.Rows[1].Cells[0].Style.BackColor = Color.LightGray;
-                    dataGridViewFactorLevels.Rows[1].Cells[1].ReadOnly = true;
-                    dataGridViewFactorLevels.Rows[1].Cells[1].Style.BackColor = Color.LightGray;
+                    //dataGridViewFactorLevels.Rows[1].Cells[1].ReadOnly = true;
+                    //dataGridViewFactorLevels.Rows[1].Cells[1].Style.BackColor = Color.LightGray;
                 }
             }
         }

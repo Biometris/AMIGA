@@ -31,7 +31,7 @@ namespace AmigaPowerAnalysis.Tests.IntegrationTests {
             var project = new Project();
             project.EndpointTypes = endpointGroups;
             project.Endpoints = endpoints;
-            ProjectManager.SaveProjectXml(project, Path.Combine(_testOutputPath, "Prasifka.xml"));
+            ProjectManager.SaveProjectXml(project, Path.Combine(_testOutputPath, "Prasifka.xapa"));
         }
 
         [TestMethod]
@@ -44,7 +44,7 @@ namespace AmigaPowerAnalysis.Tests.IntegrationTests {
             var project = new Project();
             project.EndpointTypes = endpointGroups;
             project.Endpoints = endpoints;
-            ProjectManager.SaveProjectXml(project, Path.Combine(_testOutputPath, "Prasifka_selection.xml"));
+            ProjectManager.SaveProjectXml(project, Path.Combine(_testOutputPath, "Prasifka_selection.xapa"));
         }
     }
 }

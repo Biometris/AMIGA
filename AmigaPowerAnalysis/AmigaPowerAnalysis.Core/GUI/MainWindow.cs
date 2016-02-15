@@ -25,9 +25,16 @@ namespace AmigaPowerAnalysis.GUI {
 
         #endregion
 
-        public MainWindow() {
+        /// <summary>
+        /// Initializes a new window. If filename is specified, 
+        /// </summary>
+        /// <param name="filename"></param>
+        public MainWindow(string filename = null) {
             InitializeComponent();
             initialize();
+            if (!string.IsNullOrEmpty(filename)) {
+                openProject(filename);
+            }
         }
 
         #region Initialization
@@ -164,6 +171,9 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void openProject(string filename) {
             try {
+                if (!File.Exists(filename)) {
+                    throw new Exception(string.Format("Cannot open file {0}: file not found.", filename));
+                }
                 Project project;
                 project = ProjectManager.LoadProjectXml(filename);
                 loadProject(project, filename);
@@ -252,9 +262,9 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void updateWindowTitle() {
             if (!string.IsNullOrEmpty(_currentProjectFilename)) {
-                this.Text = "Amiga Power Analysis (Beta) - " + Path.GetFileNameWithoutExtension(_currentProjectFilename);
+                this.Text = "Amiga Power Analysis - " + Path.GetFileNameWithoutExtension(_currentProjectFilename);
             } else {
-                this.Text = "Amiga Power Analysis (Beta)";
+                this.Text = "Amiga Power Analysis";
             }
         }
 
@@ -318,7 +328,7 @@ namespace AmigaPowerAnalysis.GUI {
         private void openProjectDialog() {
             try {
                 OpenFileDialog openFileDialog = new OpenFileDialog();
-                openFileDialog.Filter = "Amiga Power Analysis settings file (*.xml)|*.xml|All files (*.*)|*.*";
+                openFileDialog.Filter = "Amiga Power Analysis settings files (*.xapa)|*.xapa|XML settings files (*.xml)|*.xml|All files (*.*)|*.*";
                 openFileDialog.FilterIndex = 1;
                 openFileDialog.RestoreDirectory = true;
                 openFileDialog.InitialDirectory = Properties.Settings.Default.LastOpenedDirectory;
@@ -336,7 +346,7 @@ namespace AmigaPowerAnalysis.GUI {
         private void saveAsDialog() {
             try {
                 var saveFileDialog = new SaveFileDialog();
-                saveFileDialog.Filter = "Amiga Power Analysis xml files (*.xml)|*.xml|All files (*.*)|*.*";
+                saveFileDialog.Filter = "Amiga Power Analysis settings files (*.xapa)|*.xapa|Amiga Power Analysis xml files (*.xml)|*.xml|All files (*.*)|*.*";
                 saveFileDialog.FilterIndex = 1;
                 saveFileDialog.RestoreDirectory = true;
                 saveFileDialog.InitialDirectory = Properties.Settings.Default.LastOpenedDirectory;
