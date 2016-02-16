@@ -15,12 +15,12 @@ namespace AmigaPowerAnalysis.Tests.TestUtilities {
 
         private static string _testPath = Path.Combine(Properties.Settings.Default.TestPath);
 
-        public static void RunProject(string filename) {
+        public static ResultPowerAnalysis RunProject(string filename) {
             var project = ProjectManager.LoadProjectXml(filename);
-            RunProject(project, project.ProjectName);
+            return RunProject(project, project.ProjectName);
         }
 
-        public static void RunProject(Project project, string projectId) {
+        public static ResultPowerAnalysis RunProject(Project project, string projectId) {
             var filesPath = Path.Combine(_testPath, projectId);
             if (!Directory.Exists(filesPath)) {
                 Directory.CreateDirectory(filesPath);
@@ -54,6 +54,8 @@ namespace AmigaPowerAnalysis.Tests.TestUtilities {
             }
             var multiComparisonReportGenerator = new MultiComparisonReportGenerator(resultPowerAnalysis, projectId, filesPath);
             multiComparisonReportGenerator.SaveAsPdf(Path.Combine(filesPath, "Report.pdf"));
+
+            return resultPowerAnalysis;
         }
 
         public static void RunValidationGenstat(string projectId, int comparisonId = 0) {

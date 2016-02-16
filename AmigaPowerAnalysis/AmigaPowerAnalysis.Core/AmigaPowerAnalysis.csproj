@@ -177,6 +177,7 @@
     <Compile Include="Core\ProjectEntities\Factor\FactorLevelCombinationsCreator.cs" />
     <Compile Include="Core\PowerAnalysis\InputPowerAnalysis\InputPowerAnalysisRecord.cs" />
     <Compile Include="Core\ProjectEntities\Settings\PowerCalculationSettings.cs" />
+    <Compile Include="Core\Reporting\PrasifkaDataReportGenerator.cs" />
     <Compile Include="Core\Reporting\MultiComparisonReportGenerator.cs" />
     <Compile Include="Core\Reporting\ComparisonReportGeneratorBase.cs" />
     <Compile Include="Core\Reporting\ComparisonSettingsGenerator.cs" />

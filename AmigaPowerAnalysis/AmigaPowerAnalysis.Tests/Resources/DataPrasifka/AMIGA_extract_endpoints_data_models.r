@@ -79,6 +79,7 @@ AMIGA_extract_endpoints_data_models <- function (endpoints, anticipated_number_o
       dispersion <- fit_summary$dispersion
       CV_within_blocks <- 100 * sqrt(endpoint_mean * dispersion) / endpoint_mean
       print(summary(fit))
+      print(dispersion)
       print(CV_within_blocks)
     }
     sink()
@@ -91,10 +92,13 @@ AMIGA_extract_endpoints_data_models <- function (endpoints, anticipated_number_o
       CV_between_blocks <- NA
     } else {
       fit_summary <- summary(fit)
-      dispersion <- fit_summary$dispersion
-      sigma <- as.numeric(VarCorr(fit)[1,2]);
-      CV_between_blocks <- 100 * sqrt(exp(sigma * sigma - 1))
+      dispersion <- as.numeric(VarCorr(fit)[2,1])
+      sigma <- as.numeric(VarCorr(fit)[1,2])
+      CV_between_blocks <- 100 * sqrt(exp(sigma * sigma) - 1)
+      CV_within_blocks <- 100 * sqrt(endpoint_mean * dispersion) / endpoint_mean
       print(summary(fit))
+      print(dispersion)
+      print(CV_within_blocks)
       print(CV_between_blocks)
     }
     sink()
@@ -146,5 +150,3 @@ selected_endpoints <- c(
 endpoints_amiga <- AMIGA_extract_endpoints_data_models(selected_endpoints, 8, 4)
 write.csv(na.omit(endpoints_amiga), file = file.path("Selection_AMIGA_endpoints.csv", fsep = "\\"), row.names=FALSE)
 write.csv(subset(endpoints_amiga, is.na(endpoints_amiga$CV_between_blocks) || is.na(endpoints_amiga$CV_within_blocks)), file = file.path("Selection_AMIGA_endpoints_failed.csv", fsep = "\\"), row.names=FALSE)
-
-
