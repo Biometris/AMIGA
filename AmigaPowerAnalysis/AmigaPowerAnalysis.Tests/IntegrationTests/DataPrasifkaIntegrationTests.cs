@@ -51,7 +51,7 @@ namespace AmigaPowerAnalysis.Tests.IntegrationTests {
             var resultPowerAnalysis = SerializationExtensions.FromXmlFile<ResultPowerAnalysis>(Path.Combine(filesPath, "Output.xml"));
             var reportGenerator = new PrasifkaDataReportGenerator(resultPowerAnalysis, projectName, filesPath);
             reportGenerator.SaveAsHtml(Path.Combine(filesPath, "Summary_Prasifka.html"));
-            reportGenerator.SaveAsPdf(Path.Combine(filesPath, "Summary_Prasifka.pdf"));
+            //reportGenerator.SaveAsPdf(Path.Combine(filesPath, "Summary_Prasifka.pdf"));
         }
 
         [TestMethod]

@@ -17,25 +17,26 @@ namespace AmigaPowerAnalysis.Core.Charting.DataSummaryChartCreators {
         private IEnumerable<OutputPowerAnalysis> _resultPowerAnalysis;
         private TestType _testType;
         private int _replicates;
+        private bool _isLogarithmicAxis;
 
-        public MeanCvPowerScatterChartCreator(IEnumerable<OutputPowerAnalysis> resultPowerAnalysis, TestType testType, int replicates) {
+        public MeanCvPowerScatterChartCreator(IEnumerable<OutputPowerAnalysis> resultPowerAnalysis, TestType testType, int replicates, bool isLogarithmicAxis) {
             _testType = testType;
             _resultPowerAnalysis = resultPowerAnalysis;
             _replicates = replicates;
+            _isLogarithmicAxis = isLogarithmicAxis;
         }
 
         public override PlotModel Create() {
-            return Create(_resultPowerAnalysis, _testType, _replicates);
+            return Create(_resultPowerAnalysis, _testType, _replicates, _isLogarithmicAxis);
         }
 
-        public static PlotModel Create(IEnumerable<OutputPowerAnalysis> resultPowerAnalysis, TestType testType, int replicates) {
+        public static PlotModel Create(IEnumerable<OutputPowerAnalysis> resultPowerAnalysis, TestType testType, int replicates, bool isLogarithmicAxis) {
             var plotModel = new PlotModel() {
                 PlotAreaBorderThickness = new OxyThickness(1,0,0,1)
             };
 
             var verticalAxis = new LinearAxis() {
                 Title = "CV",
-                AxisDistance = 1,
                 MajorGridlineStyle = LineStyle.None,
                 MinorGridlineStyle = LineStyle.None,
                 Minimum = 0,
@@ -43,15 +44,25 @@ namespace AmigaPowerAnalysis.Core.Charting.DataSummaryChartCreators {
             };
             plotModel.Axes.Add(verticalAxis);
 
-            var horizontalAxis = new LinearAxis() {
-                Title = "Mean",
-                Position = AxisPosition.Bottom,
-                AxisDistance = 1,
-                MajorGridlineStyle = LineStyle.None,
-                MinorGridlineStyle = LineStyle.None,
-                MaximumPadding = 0.1
-            };
-            plotModel.Axes.Add(horizontalAxis);
+            if (isLogarithmicAxis) {
+                var horizontalAxis = new LogarithmicAxis() {
+                    Title = "log(Mean)",
+                    Position = AxisPosition.Bottom,
+                    MajorGridlineStyle = LineStyle.None,
+                    MinorGridlineStyle = LineStyle.None,
+                    MaximumPadding = 0.1
+                };
+                plotModel.Axes.Add(horizontalAxis);
+            } else {
+                var horizontalAxis = new LinearAxis() {
+                    Title = "Mean",
+                    Position = AxisPosition.Bottom,
+                    MajorGridlineStyle = LineStyle.None,
+                    MinorGridlineStyle = LineStyle.None,
+                    MaximumPadding = 0.1
+                };
+                plotModel.Axes.Add(horizontalAxis);
+            }
 
             var linearColorAxis = new LinearColorAxis();
             linearColorAxis.Maximum = 1;

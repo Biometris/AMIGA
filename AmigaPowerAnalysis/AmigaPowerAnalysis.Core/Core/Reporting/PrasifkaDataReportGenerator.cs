@@ -48,13 +48,13 @@ namespace AmigaPowerAnalysis.Core.Reporting {
 
                 stringBuilder.Append("<td>");
                 var imageFilename = string.Format("Endpoints_Scatter_Mean_Cv_Repl_Diff_{0}.png", replicateLevel);
-                var chart = MeanCvPowerScatterChartCreator.Create(comparisonOutputs, TestType.Difference, replicateLevel);
+                var chart = MeanCvPowerScatterChartCreator.Create(comparisonOutputs, TestType.Difference, replicateLevel, true);
                 includeChart(chart, 400, 300, imagePath, imageFilename, stringBuilder, chartCreationMethod);
                 stringBuilder.Append("</td>");
 
                 stringBuilder.Append("<td>");
                 imageFilename = string.Format("Endpoints_Scatter_Mean_Cv_Repl_Equiv_{0}.png", replicateLevel);
-                chart = MeanCvPowerScatterChartCreator.Create(comparisonOutputs, TestType.Equivalence, replicateLevel);
+                chart = MeanCvPowerScatterChartCreator.Create(comparisonOutputs, TestType.Equivalence, replicateLevel, true);
                 includeChart(chart, 400, 300, imagePath, imageFilename, stringBuilder, chartCreationMethod);
                 stringBuilder.Append("</td>");
 
