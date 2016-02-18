@@ -5,6 +5,7 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
+using System;
 
 namespace AmigaPowerAnalysis.Core.Reporting {
     public abstract class ReportGeneratorBase {
@@ -32,7 +33,8 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             if (imagesAsPng) {
                 includeChartAsPng(plotModel, width, height, filePath, imageFileName, stringBuilder);
             } else {
-                includeChartAsSvg(plotModel, width, height, filePath, imageFileName, stringBuilder);
+                includeChartAsInlinePng(plotModel, width, height, filePath, imageFileName, stringBuilder);
+                //includeChartAsSvg(plotModel, width, height, filePath, imageFileName, stringBuilder);
             }
         }
 
@@ -46,6 +48,16 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             PngExporter.Export(plotModel, fullImagePath, width, height);
             //stringBuilder.Append("<img src=\"" + relativeImagePath + "\" />");
             stringBuilder.Append("<img src=\"" + fullImagePath + "\" />");
+        }
+
+        protected static void includeChartAsInlinePng(PlotModel chart, int width, int height, string filePath, string chartId, StringBuilder stringBuilder) {
+            using (var stream = new MemoryStream()) {
+                var scale = 3;
+                OxyPlot.Wpf.PngExporter.Export(chart, stream, scale * width, scale * height, OxyColors.White, scale * 96);
+                var imageBytes = stream.ToArray();
+                var base64String = Convert.ToBase64String(imageBytes);
+                stringBuilder.Append("<img width=\"" + width + "\" height=\"" + height + "\" src=\"" + string.Format("data:image/png;base64,{0}", base64String) + "\" />");
+            }
         }
 
         protected static void includeChartAsSvg(PlotModel chart, int width, int height, string filePath, string chartId, StringBuilder stringBuilder) {

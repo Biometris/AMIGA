@@ -16,7 +16,7 @@ namespace AmigaPowerAnalysis.Core.Charting.AnalysisResultsChartCreators {
         ConcernStandardizedDifference,
     }
 
-    public abstract class AggregateAnalysisResultsChartCreatorBase : IChartCreator {
+    public abstract class AggregateAnalysisResultsChartCreatorBase : ChartCreatorBase {
 
         public TestType TestType { get; set; }
         public List<AggregateOutputPowerAnalysisRecord> AggregatePowerAnalysisRecords { get; set; }
@@ -26,7 +26,7 @@ namespace AmigaPowerAnalysis.Core.Charting.AnalysisResultsChartCreators {
             AggregatePowerAnalysisRecords = aggregatePowerAnalysisRecords;
         }
 
-        public virtual PlotModel Create() {
+        public override PlotModel Create() {
             return CreatePlotModel(TestType);
         }
 
@@ -62,14 +62,6 @@ namespace AmigaPowerAnalysis.Core.Charting.AnalysisResultsChartCreators {
             };
             plotModel.Annotations.Add(lineAnnotation);
             return plotModel;
-        }
-
-        public void SaveToFile(string filename, int width = 600, int height = 300) {
-            var plot = Create();
-            if(string.IsNullOrEmpty(Path.GetExtension(filename))) {
-                filename += ".png";
-            }
-            PngExporter.Export(plot, filename, width, height);
         }
     }
 }

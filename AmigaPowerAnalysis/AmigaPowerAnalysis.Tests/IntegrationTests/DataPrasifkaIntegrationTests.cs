@@ -1,11 +1,13 @@
 ﻿using System.IO;
 using System.Linq;
+using Biometris.ExtensionMethods;
 using AmigaPowerAnalysis.Core;
 using AmigaPowerAnalysis.Core.DataReaders;
 using AmigaPowerAnalysis.Core.Reporting;
 using AmigaPowerAnalysis.Tests.Mocks.Projects;
 using AmigaPowerAnalysis.Tests.TestUtilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using AmigaPowerAnalysis.Core.PowerAnalysis;
 
 namespace AmigaPowerAnalysis.Tests.IntegrationTests {
     [TestClass]
@@ -36,9 +38,17 @@ namespace AmigaPowerAnalysis.Tests.IntegrationTests {
             var projectFileName = Path.Combine(_testOutputPath, "Prasifka.xapa");
             ProjectManager.SaveProjectXml(project, Path.Combine(_testOutputPath, "Prasifka.xapa"));
             var resultPowerAnalysis = IntegrationTestUtilities.RunProject(projectFileName);
-
             var filesPath = Path.Combine(_testOutputPath, project.ProjectName);
-            var multiComparisonReportGenerator = new PrasifkaDataReportGenerator(resultPowerAnalysis, project.ProjectName, _testOutputPath);
+            resultPowerAnalysis.ToXmlFile(Path.Combine(filesPath, "Output.xml"));
+        }
+
+        [TestMethod]
+        [TestCategory("IntegrationTests")]
+        public void DataPrasifkaIntegrationTests_AnalyseProjectAll() {
+            var projectName = "Prasifka";
+            var filesPath = Path.Combine(_testOutputPath, projectName);
+            var resultPowerAnalysis = SerializationExtensions.FromXmlFile<ResultPowerAnalysis>(Path.Combine(filesPath, "Output.xml"));
+            var multiComparisonReportGenerator = new PrasifkaDataReportGenerator(resultPowerAnalysis, projectName, _testOutputPath);
             multiComparisonReportGenerator.SaveAsPdf(Path.Combine(filesPath, "Sumary_Prasifka.pdf"));
         }
 
@@ -48,16 +58,24 @@ namespace AmigaPowerAnalysis.Tests.IntegrationTests {
             var groupsFileReader = new DTODataFileReader(Path.Combine(_dataPath, "AMIGA_groups.csv"));
             var endpointGroups = groupsFileReader.ReadGroups();
             var endpointsFileReader = new DTODataFileReader(Path.Combine(_dataPath, "Selection_AMIGA_endpoints.csv"));
-            var endpoints = endpointsFileReader.ReadEndpoints(endpointGroups).Take(1).ToList();
+            var endpoints = endpointsFileReader.ReadEndpoints(endpointGroups).ToList();
             var project = new Project();
             project.EndpointTypes = endpointGroups;
             project.Endpoints = endpoints;
             var projectFileName = Path.Combine(_testOutputPath, "Prasifka_selection.xapa");
             ProjectManager.SaveProjectXml(project, projectFileName);
             var resultPowerAnalysis = IntegrationTestUtilities.RunProject(projectFileName);
-
             var filesPath = Path.Combine(_testOutputPath, project.ProjectName);
-            var multiComparisonReportGenerator = new PrasifkaDataReportGenerator(resultPowerAnalysis, project.ProjectName, _testOutputPath);
+            resultPowerAnalysis.ToXmlFile(Path.Combine(filesPath, "Output.xml"));
+        }
+
+        [TestMethod]
+        [TestCategory("IntegrationTests")]
+        public void DataPrasifkaIntegrationTests_AnalyseProjectSelection() {
+            var projectName = "Prasifka_selection";
+            var filesPath = Path.Combine(_testOutputPath, projectName);
+            var resultPowerAnalysis = SerializationExtensions.FromXmlFile<ResultPowerAnalysis>(Path.Combine(filesPath, "Output.xml"));
+            var multiComparisonReportGenerator = new PrasifkaDataReportGenerator(resultPowerAnalysis, projectName, _testOutputPath);
             multiComparisonReportGenerator.SaveAsPdf(Path.Combine(filesPath, "Sumary_Prasifka.pdf"));
         }
     }

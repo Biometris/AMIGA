@@ -10,7 +10,7 @@ using OxyPlot.WindowsForms;
 
 namespace AmigaPowerAnalysis.Core.Charting.AnalysisResultsChartCreators {
 
-    public abstract class AnalysisResultsChartCreatorBase : IChartCreator {
+    public abstract class AnalysisResultsChartCreatorBase : ChartCreatorBase {
 
         public TestType TestType { get; set; }
         public AnalysisMethodType AnalysisMethodType { get; set; }
@@ -22,7 +22,7 @@ namespace AmigaPowerAnalysis.Core.Charting.AnalysisResultsChartCreators {
             PowerAnalysisOutputRecords = powerAnalysisOutputRecords;
         }
 
-        public virtual PlotModel Create() {
+        public override PlotModel Create() {
             return CreatePlotModel(TestType, AnalysisMethodType);
         }
 
@@ -58,14 +58,6 @@ namespace AmigaPowerAnalysis.Core.Charting.AnalysisResultsChartCreators {
             };
             plotModel.Annotations.Add(lineAnnotation);
             return plotModel;
-        }
-
-        public void SaveToFile(string filename, int width = 600, int height = 300) {
-            var plot = Create();
-            if(string.IsNullOrEmpty(Path.GetExtension(filename))) {
-                filename += ".png";
-            }
-            PngExporter.Export(plot, filename, width, height);
         }
     }
 }
