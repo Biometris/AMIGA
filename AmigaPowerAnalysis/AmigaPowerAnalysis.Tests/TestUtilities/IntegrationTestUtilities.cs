@@ -52,6 +52,9 @@ namespace AmigaPowerAnalysis.Tests.TestUtilities {
                 var singleComparisonReportGenerator = new SingleComparisonReportGenerator(resultPowerAnalysis, comparisonOutput, projectId, filesPath);
                 singleComparisonReportGenerator.SaveAsPdf(filenamePdf);
             }
+
+            resultPowerAnalysis.ToXmlFile(Path.Combine(filesPath, "Output.xml"));
+
             var multiComparisonReportGenerator = new MultiComparisonReportGenerator(resultPowerAnalysis, projectId, filesPath);
             multiComparisonReportGenerator.SaveAsPdf(Path.Combine(filesPath, "Report.pdf"));
 

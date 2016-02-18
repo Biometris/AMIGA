@@ -8,17 +8,29 @@ using System.Text.RegularExpressions;
 using System;
 
 namespace AmigaPowerAnalysis.Core.Reporting {
+
+    public enum ChartCreationMethod {
+        ExternalPng,
+        InlinePng,
+        InlineSvg
+    }
+
     public abstract class ReportGeneratorBase {
 
-        public abstract string Generate(bool imagesAsPng);
+        public abstract string Generate(ChartCreationMethod chartCreationMethod);
 
         public void SaveAsPdf(string fileName) {
-            var html = Generate(false);
+            var html = Generate(ChartCreationMethod.ExternalPng);
             var pdf = Pdf
                 .From(html)
                 .OfSize(PaperSize.A4)
                 .Content();
             File.WriteAllBytes(fileName, pdf);
+        }
+
+        public void SaveAsHtml(string fileName) {
+            var html = Generate(ChartCreationMethod.ExternalPng);
+            File.WriteAllText(fileName, html);
         }
 
         protected static string format(string htmlContent) {
@@ -29,12 +41,19 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             }
         }
 
-        protected static void includeChart(PlotModel plotModel, int width, int height, string filePath, string imageFileName, StringBuilder stringBuilder, bool imagesAsPng) {
-            if (imagesAsPng) {
-                includeChartAsPng(plotModel, width, height, filePath, imageFileName, stringBuilder);
-            } else {
-                includeChartAsInlinePng(plotModel, width, height, filePath, imageFileName, stringBuilder);
-                //includeChartAsSvg(plotModel, width, height, filePath, imageFileName, stringBuilder);
+        protected static void includeChart(PlotModel plotModel, int width, int height, string filePath, string imageFileName, StringBuilder stringBuilder, ChartCreationMethod chartCreationMethod) {
+            switch (chartCreationMethod) {
+                case ChartCreationMethod.ExternalPng:
+                    includeChartAsPng(plotModel, width, height, filePath, imageFileName, stringBuilder);
+                    break;
+                case ChartCreationMethod.InlinePng:
+                    includeChartAsInlinePng(plotModel, width, height, stringBuilder);
+                    break;
+                case ChartCreationMethod.InlineSvg:
+                    includeChartAsSvg(plotModel, width, height, stringBuilder);
+                    break;
+                default:
+                    break;
             }
         }
 
@@ -47,26 +66,26 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             }
             PngExporter.Export(plotModel, fullImagePath, width, height);
             //stringBuilder.Append("<img src=\"" + relativeImagePath + "\" />");
-            stringBuilder.Append("<img src=\"" + fullImagePath + "\" />");
+            stringBuilder.Append("<img src=\"" + Path.GetFullPath(fullImagePath) + "\" />");
         }
 
-        protected static void includeChartAsInlinePng(PlotModel chart, int width, int height, string filePath, string chartId, StringBuilder stringBuilder) {
-            using (var stream = new MemoryStream()) {
-                var scale = 3;
-                OxyPlot.Wpf.PngExporter.Export(chart, stream, scale * width, scale * height, OxyColors.White, scale * 96);
-                var imageBytes = stream.ToArray();
-                var base64String = Convert.ToBase64String(imageBytes);
-                stringBuilder.Append("<img width=\"" + width + "\" height=\"" + height + "\" src=\"" + string.Format("data:image/png;base64,{0}", base64String) + "\" />");
-            }
-        }
-
-        protected static void includeChartAsSvg(PlotModel chart, int width, int height, string filePath, string chartId, StringBuilder stringBuilder) {
+        protected static void includeChartAsSvg(PlotModel chart, int width, int height, StringBuilder stringBuilder) {
             var svgString = OxyPlot.SvgExporter.ExportToString(chart, width, height, false);
             var xmlDeclarationRegEx = new Regex(@"<\?xml.*?\?>\r\n");
             svgString = xmlDeclarationRegEx.Replace(svgString, string.Empty);
             var xmlDoctypeRegEx = new Regex(@"<\!DOCTYPE.*?\>\r\n");
             svgString = xmlDoctypeRegEx.Replace(svgString, string.Empty);
             stringBuilder.Append(svgString);
+        }
+
+        protected static void includeChartAsInlinePng(PlotModel chart, int width, int height, StringBuilder stringBuilder) {
+            using (var stream = new MemoryStream()) {
+                var scale = 4;
+                OxyPlot.Wpf.PngExporter.Export(chart, stream, scale * width, scale * height, OxyColors.White, scale * 96);
+                var imageBytes = stream.ToArray();
+                var base64String = Convert.ToBase64String(imageBytes);
+                stringBuilder.Append("<img width=\"" + width + "\" height=\"" + height + "\" src=\"" + string.Format("data:image/png;base64,{0}", base64String) + "\" />");
+            }
         }
     }
 }

@@ -223,7 +223,7 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             return stringBuilder.ToString();
         }
 
-        protected static string generateComparisonChartsHtml(OutputPowerAnalysis comparisonOutput, string imagePath, bool imagesAsPng) {
+        protected static string generateComparisonChartsHtml(OutputPowerAnalysis comparisonOutput, string imagePath, ChartCreationMethod chartCreationMethod) {
             var stringBuilder = new StringBuilder();
             var fileBaseId = comparisonOutput.InputPowerAnalysis.ComparisonId + "_" + comparisonOutput.InputPowerAnalysis.Endpoint;
             string imageFilename;
@@ -242,13 +242,13 @@ namespace AmigaPowerAnalysis.Core.Reporting {
                 imageFilename = fileBaseId + "_" + analysisMethodType.ToString() + "_Replicates_Difference.png";
                 var plotDifferenceReplicates = PowerVersusReplicatesRatioChartCreator.Create(comparisonOutput.OutputRecords, TestType.Difference, analysisMethodType);
                 stringBuilder.Append("<td>");
-                includeChart(plotDifferenceReplicates, 400, 300, imagePath, imageFilename, stringBuilder, imagesAsPng);
+                includeChart(plotDifferenceReplicates, 400, 300, imagePath, imageFilename, stringBuilder, chartCreationMethod);
                 stringBuilder.Append("</td>");
 
                 imageFilename = fileBaseId + "_" + analysisMethodType.ToString() + "_Ratio_Difference.png";
                 var plotDifferenceLogRatio = PowerVersusRatioChartCreator.Create(comparisonOutput.OutputRecords, TestType.Difference, analysisMethodType, comparisonOutput.InputPowerAnalysis.MeasurementType, comparisonOutput.InputPowerAnalysis.NumberOfReplications);
                 stringBuilder.Append("<td>");
-                includeChart(plotDifferenceLogRatio, 400, 300, imagePath, imageFilename, stringBuilder, imagesAsPng);
+                includeChart(plotDifferenceLogRatio, 400, 300, imagePath, imageFilename, stringBuilder, chartCreationMethod);
                 stringBuilder.Append("</td>");
 
                 stringBuilder.Append("</tr>");
@@ -268,13 +268,13 @@ namespace AmigaPowerAnalysis.Core.Reporting {
                 imageFilename = fileBaseId + "_" + analysisMethodType.ToString() + "_Replicates_Equivalence.png";
                 var plotEquivalenceReplicates = PowerVersusReplicatesRatioChartCreator.Create(comparisonOutput.OutputRecords, TestType.Equivalence, analysisMethodType);
                 stringBuilder.Append("<td>");
-                includeChart(plotEquivalenceReplicates, 400, 300, imagePath, imageFilename, stringBuilder, imagesAsPng);
+                includeChart(plotEquivalenceReplicates, 400, 300, imagePath, imageFilename, stringBuilder, chartCreationMethod);
                 stringBuilder.Append("</td>");
 
                 imageFilename = fileBaseId + "_" + analysisMethodType.ToString() + "_Ratio_Equivalence.png";
                 var plotEquivalenceLogRatio = PowerVersusRatioChartCreator.Create(comparisonOutput.OutputRecords, TestType.Equivalence, analysisMethodType, comparisonOutput.InputPowerAnalysis.MeasurementType, comparisonOutput.InputPowerAnalysis.NumberOfReplications);
                 stringBuilder.Append("<td>");
-                includeChart(plotEquivalenceLogRatio, 400, 300, imagePath, imageFilename, stringBuilder, imagesAsPng);
+                includeChart(plotEquivalenceLogRatio, 400, 300, imagePath, imageFilename, stringBuilder, chartCreationMethod);
                 stringBuilder.Append("</td>");
 
                 stringBuilder.Append("</tr>");

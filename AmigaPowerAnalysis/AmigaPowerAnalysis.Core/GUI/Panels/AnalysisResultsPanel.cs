@@ -182,7 +182,7 @@ namespace AmigaPowerAnalysis.GUI {
                 }
                 var doc = webBrowserFullReport.Document.OpenNew(true);
                 var reportGenerator = new MultiComparisonReportGenerator(_resultPowerAnalysis, _currentOutputName, CurrentOutputFilesPath);
-                var html = reportGenerator.Generate(true);
+                var html = reportGenerator.Generate(ChartCreationMethod.ExternalPng);
                 doc.Write(html);
                 doc.Title = "Full report";
             }

@@ -21,7 +21,7 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             _filesPath = tempPath;
         }
 
-        public override string Generate(bool imagesAsPng) {
+        public override string Generate(ChartCreationMethod chartCreationMethod) {
             var html = "";
             html += generateOutputOverviewHtml(_resultPowerAnalysis, _outputName);
 
@@ -37,7 +37,7 @@ namespace AmigaPowerAnalysis.Core.Reporting {
 
             var records = _resultPowerAnalysis.GetAggregateOutputRecords(_resultPowerAnalysis.PowerAggregationType);
             html += generateComparisonsOutputHtml(records, firstInputSettings.NumberOfReplications);
-            html += generateComparisonsChartHtml(records, firstInputSettings.NumberOfReplications, _filesPath, imagesAsPng);
+            html += generateComparisonsChartHtml(records, firstInputSettings.NumberOfReplications, _filesPath, chartCreationMethod);
 
             html += "<h1>Results per primary comparison</h1>";
             foreach (var comparisonOutput in primaryComparisonOutputs) {
@@ -48,7 +48,7 @@ namespace AmigaPowerAnalysis.Core.Reporting {
                 //html += generateComparisonInputDataHtml(comparison.OutputPowerAnalysis.InputPowerAnalysis);
                 html += generateComparisonOutputHtml(comparisonOutput.OutputRecords, comparisonOutput.InputPowerAnalysis.NumberOfReplications, analysisMethodTypesDifferenceTests, TestType.Difference);
                 html += generateComparisonOutputHtml(comparisonOutput.OutputRecords, comparisonOutput.InputPowerAnalysis.NumberOfReplications, analysisMethodTypesEquivalenceTests, TestType.Equivalence);
-                html += generateComparisonChartsHtml(comparisonOutput, _filesPath, imagesAsPng);
+                html += generateComparisonChartsHtml(comparisonOutput, _filesPath, chartCreationMethod);
             }
             return format(html);
         }
@@ -147,7 +147,7 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             return stringBuilder.ToString();
         }
 
-        private static string generateComparisonsChartHtml(IEnumerable<AggregateOutputPowerAnalysisRecord> records, List<int> blockSizes, string tempPath, bool imagesAsPng) {
+        private static string generateComparisonsChartHtml(IEnumerable<AggregateOutputPowerAnalysisRecord> records, List<int> blockSizes, string tempPath, ChartCreationMethod chartCreationMethod) {
             var stringBuilder = new StringBuilder();
             stringBuilder.AppendLine("<h2>Charts joint power analysis primary comparisons</h2>");
 
@@ -161,13 +161,13 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             imageFilename = fileBaseId + "_Replicates_Difference.png";
             var plotDifferenceReplicates = PowerVersusReplicatesCsdChartCreator.Create(records, TestType.Difference);
             stringBuilder.Append("<td>");
-            includeChart(plotDifferenceReplicates, 400, 300, tempPath, imageFilename, stringBuilder, imagesAsPng);
+            includeChart(plotDifferenceReplicates, 400, 300, tempPath, imageFilename, stringBuilder, chartCreationMethod);
             stringBuilder.Append("</td>");
 
             imageFilename = fileBaseId + "_LevelOfConcern_Difference.png";
             var plotDifferenceLogRatio = PowerVersusCsdChartCreator.Create(records, TestType.Difference, blockSizes);
             stringBuilder.Append("<td>");
-            includeChart(plotDifferenceLogRatio, 400, 300, tempPath, imageFilename, stringBuilder, imagesAsPng);
+            includeChart(plotDifferenceLogRatio, 400, 300, tempPath, imageFilename, stringBuilder, chartCreationMethod);
             stringBuilder.Append("</td>");
 
             stringBuilder.Append("</tr>");
@@ -180,13 +180,13 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             imageFilename = fileBaseId + "_Replicates_Equivalence.png";
             var plotEquivalenceReplicates = PowerVersusReplicatesCsdChartCreator.Create(records, TestType.Equivalence);
             stringBuilder.Append("<td>");
-            includeChart(plotEquivalenceReplicates, 400, 300, tempPath, imageFilename, stringBuilder, imagesAsPng);
+            includeChart(plotEquivalenceReplicates, 400, 300, tempPath, imageFilename, stringBuilder, chartCreationMethod);
             stringBuilder.Append("</td>");
 
             imageFilename = fileBaseId + "_LevelOfConcern_Equivalence.png";
             var plotEquivalenceLogRatio = PowerVersusCsdChartCreator.Create(records, TestType.Equivalence, blockSizes);
             stringBuilder.Append("<td>");
-            includeChart(plotEquivalenceLogRatio, 400, 300, tempPath, imageFilename, stringBuilder, imagesAsPng);
+            includeChart(plotEquivalenceLogRatio, 400, 300, tempPath, imageFilename, stringBuilder, chartCreationMethod);
             stringBuilder.Append("</td>");
 
             stringBuilder.Append("</tr>");

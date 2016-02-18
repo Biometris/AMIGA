@@ -18,7 +18,7 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             _filesPath = filesPath;
         }
 
-        public override string Generate(bool imagesAsPng) {
+        public override string Generate(ChartCreationMethod chartCreationMethod) {
             var html = string.Empty;
             html += generateOutputOverviewHtml(_resultPowerAnalysis, _outputName);
             html += generateComparisonMessagesHtml(_comparisonOutput);
@@ -30,7 +30,7 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             var selectedAnalysisMethodsEquivalenceTests = _comparisonOutput.InputPowerAnalysis.SelectedAnalysisMethodTypesEquivalenceTests.GetFlags().Cast<AnalysisMethodType>().ToList();
             html += generateComparisonOutputHtml(_comparisonOutput.OutputRecords, _comparisonOutput.InputPowerAnalysis.NumberOfReplications, selectedAnalysisMethodsDifferenceTests, TestType.Difference);
             html += generateComparisonOutputHtml(_comparisonOutput.OutputRecords, _comparisonOutput.InputPowerAnalysis.NumberOfReplications, selectedAnalysisMethodsEquivalenceTests, TestType.Equivalence);
-            html += generateComparisonChartsHtml(_comparisonOutput, _filesPath, imagesAsPng);
+            html += generateComparisonChartsHtml(_comparisonOutput, _filesPath, chartCreationMethod);
             return format(html);
         }
     }

@@ -20,7 +20,7 @@ namespace AmigaPowerAnalysis.GUI {
             InitializeComponent();
             _reportGenerator = reportGenerator;
             _title = reportTitle.Replace(" ", "_");
-            _html = _reportGenerator.Generate(true);
+            _html = _reportGenerator.Generate(ChartCreationMethod.ExternalPng);
             _projectPath = projectPath;
             _tempDir = Path.GetTempPath();
 

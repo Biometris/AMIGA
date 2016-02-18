@@ -10,8 +10,8 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             _outputPowerAnalysis = outputPowerAnalysis;
             _filesPath = tempPath;
         }
-        
-        public override string Generate(bool imagesAsPng) {
+
+        public override string Generate(ChartCreationMethod chartCreationMethod) {
             var html = string.Empty;
             html += generateEndpointInfoHtml(_outputPowerAnalysis.InputPowerAnalysis);
             html += generateComparisonSettingsHtml(_outputPowerAnalysis.InputPowerAnalysis);

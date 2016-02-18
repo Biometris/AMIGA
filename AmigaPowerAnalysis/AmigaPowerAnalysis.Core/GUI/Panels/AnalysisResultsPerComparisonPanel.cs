@@ -162,7 +162,7 @@ namespace AmigaPowerAnalysis.GUI {
                 }
                 var doc = webBrowserSettingsReport.Document.OpenNew(true);
                 var reportGenerator = new ComparisonSettingsGenerator(_currentComparisonAnalysisResult, CurrentOutputFilesPath);
-                var html = reportGenerator.Generate(true);
+                var html = reportGenerator.Generate(ChartCreationMethod.ExternalPng);
                 doc.Write(html);
                 doc.Title = "Settings report";
             }
@@ -175,7 +175,7 @@ namespace AmigaPowerAnalysis.GUI {
                 }
                 var doc = webBrowserFullReport.Document.OpenNew(true);
                 var reportGenerator = new SingleComparisonReportGenerator(_resultPowerAnalysis, _currentComparisonAnalysisResult, _currentOutputName, CurrentOutputFilesPath);
-                var html = reportGenerator.Generate(true);
+                var html = reportGenerator.Generate(ChartCreationMethod.ExternalPng);
                 doc.Write(html);
                 doc.Title = "Full report";
             }
