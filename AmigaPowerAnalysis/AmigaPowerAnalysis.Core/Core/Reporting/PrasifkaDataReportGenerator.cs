@@ -34,33 +34,45 @@ namespace AmigaPowerAnalysis.Core.Reporting {
         private static string generateMeanCvScatterPlots(IEnumerable<OutputPowerAnalysis> comparisonOutputs, string imagePath, ChartCreationMethod chartCreationMethod) {
             var stringBuilder = new StringBuilder();
             stringBuilder.AppendLine(string.Format("<h1>Mean - CV - Power</h1>"));
-            stringBuilder.AppendLine("<table>");
-            stringBuilder.AppendLine("<tr>");
-            stringBuilder.AppendLine("<th>Replicate</th>");
-            stringBuilder.AppendLine("<th>Difference test</th>");
-            stringBuilder.AppendLine("<th>Equivalence test</th>");
-            foreach (var replicateLevel in comparisonOutputs.First().InputPowerAnalysis.NumberOfReplications) {
-                stringBuilder.AppendLine("</tr>");
 
-                stringBuilder.Append("<td>");
-                stringBuilder.Append(string.Format("{0}", replicateLevel));
-                stringBuilder.Append("</td>");
+            var effects = comparisonOutputs.SelectMany(r => r.OutputRecords)
+                .Select(r => r.Effect)
+                .Where(r => !double.IsNaN(r))
+                .Distinct()
+                .ToList();
 
-                stringBuilder.Append("<td>");
-                var imageFilename = string.Format("Endpoints_Scatter_Mean_Cv_Repl_Diff_{0}.png", replicateLevel);
-                var chart = MeanCvPowerScatterChartCreator.Create(comparisonOutputs, TestType.Difference, replicateLevel, true);
-                includeChart(chart, 400, 300, imagePath, imageFilename, stringBuilder, chartCreationMethod);
-                stringBuilder.Append("</td>");
+            foreach (var effect in effects) {
 
-                stringBuilder.Append("<td>");
-                imageFilename = string.Format("Endpoints_Scatter_Mean_Cv_Repl_Equiv_{0}.png", replicateLevel);
-                chart = MeanCvPowerScatterChartCreator.Create(comparisonOutputs, TestType.Equivalence, replicateLevel, true);
-                includeChart(chart, 400, 300, imagePath, imageFilename, stringBuilder, chartCreationMethod);
-                stringBuilder.Append("</td>");
+                stringBuilder.Append("<h2>");
+                stringBuilder.Append(string.Format("Effect size: {0:G2}", effect));
+                stringBuilder.Append("</h2>");
 
-                stringBuilder.AppendLine("</tr>");
+                stringBuilder.AppendLine("<table>");
+                stringBuilder.AppendLine("<tr>");
+                stringBuilder.AppendLine("<th>Difference test</th>");
+                stringBuilder.AppendLine("<th>Equivalence test</th>");
+
+                foreach (var replicateLevel in comparisonOutputs.First().InputPowerAnalysis.NumberOfReplications) {
+
+                    stringBuilder.AppendLine("</tr>");
+
+                    var effectString = string.Format("{0:G2}", effect).Replace('.', '_');
+                    stringBuilder.Append("<td>");
+                    var imageFilename = string.Format("Scatter_Mean_Cv_Eff_{0}_Repl_{1}_Diff.png", effectString, replicateLevel);
+                    var chart = MeanCvPowerScatterChartCreator.Create(comparisonOutputs, TestType.Difference, replicateLevel, effect, true);
+                    includeChart(chart, 400, 300, imagePath, imageFilename, stringBuilder, chartCreationMethod);
+                    stringBuilder.Append("</td>");
+
+                    stringBuilder.Append("<td>");
+                    imageFilename = string.Format("Scatter_Mean_Cv_Eff_{0}_Repl_{1}_Equiv.png", effectString, replicateLevel);
+                    chart = MeanCvPowerScatterChartCreator.Create(comparisonOutputs, TestType.Equivalence, replicateLevel, effect, true);
+                    includeChart(chart, 400, 300, imagePath, imageFilename, stringBuilder, chartCreationMethod);
+                    stringBuilder.Append("</td>");
+
+                    stringBuilder.AppendLine("</tr>");
+                }
+                stringBuilder.AppendLine("</table>");
             }
-            stringBuilder.AppendLine("</table>");
             return stringBuilder.ToString();
         }
 

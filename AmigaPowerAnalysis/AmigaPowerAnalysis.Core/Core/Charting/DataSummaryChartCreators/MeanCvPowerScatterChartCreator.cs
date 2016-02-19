@@ -17,21 +17,25 @@ namespace AmigaPowerAnalysis.Core.Charting.DataSummaryChartCreators {
         private IEnumerable<OutputPowerAnalysis> _resultPowerAnalysis;
         private TestType _testType;
         private int _replicates;
+        private double _effect;
         private bool _isLogarithmicAxis;
 
-        public MeanCvPowerScatterChartCreator(IEnumerable<OutputPowerAnalysis> resultPowerAnalysis, TestType testType, int replicates, bool isLogarithmicAxis) {
+        public MeanCvPowerScatterChartCreator(IEnumerable<OutputPowerAnalysis> resultPowerAnalysis, TestType testType, double effect, int replicates, bool isLogarithmicAxis) {
             _testType = testType;
             _resultPowerAnalysis = resultPowerAnalysis;
             _replicates = replicates;
+            _effect = effect;
             _isLogarithmicAxis = isLogarithmicAxis;
         }
 
         public override PlotModel Create() {
-            return Create(_resultPowerAnalysis, _testType, _replicates, _isLogarithmicAxis);
+            return Create(_resultPowerAnalysis, _testType, _replicates, _effect, _isLogarithmicAxis);
         }
 
-        public static PlotModel Create(IEnumerable<OutputPowerAnalysis> resultPowerAnalysis, TestType testType, int replicates, bool isLogarithmicAxis) {
+        public static PlotModel Create(IEnumerable<OutputPowerAnalysis> resultPowerAnalysis, TestType testType, int replicates, double effect, bool isLogarithmicAxis) {
             var plotModel = new PlotModel() {
+                Title = string.Format("Replicates = {0}, Effect = {1:G2}", replicates, effect),
+                TitleFontSize = 11,
                 PlotAreaBorderThickness = new OxyThickness(1,0,0,1)
             };
 
@@ -46,7 +50,7 @@ namespace AmigaPowerAnalysis.Core.Charting.DataSummaryChartCreators {
 
             if (isLogarithmicAxis) {
                 var horizontalAxis = new LogarithmicAxis() {
-                    Title = "log(Mean)",
+                    Title = "Mean",
                     Position = AxisPosition.Bottom,
                     MajorGridlineStyle = LineStyle.None,
                     MinorGridlineStyle = LineStyle.None,
@@ -77,11 +81,19 @@ namespace AmigaPowerAnalysis.Core.Charting.DataSummaryChartCreators {
                 MarkerSize = 4
             };
             if (testType == TestType.Difference) {
-                scatterSeries.Points.AddRange(resultPowerAnalysis
-                    .Select(r => new ScatterPoint(r.InputPowerAnalysis.OverallMean, r.InputPowerAnalysis.CvComparator, double.NaN, r.OutputRecords.First(l => l.NumberOfReplications == replicates).GetPower(testType, r.AnalysisMethodDifferenceTest))));
+                var scatterPoints = resultPowerAnalysis.Select(r => new {
+                    Mean = r.InputPowerAnalysis.OverallMean,
+                    Cv = r.InputPowerAnalysis.CvComparator,
+                    Power = r.OutputRecords.First(l => l.NumberOfReplications == replicates && l.Effect == effect).GetPower(testType, r.AnalysisMethodDifferenceTest)
+                });
+                scatterSeries.Points.AddRange(scatterPoints.Select(r => new ScatterPoint(r.Mean, r.Cv, double.NaN, r.Power)));
             } else {
-                scatterSeries.Points.AddRange(resultPowerAnalysis
-                    .Select(r => new ScatterPoint(r.InputPowerAnalysis.OverallMean, r.InputPowerAnalysis.CvComparator, double.NaN, r.OutputRecords.First(l => l.NumberOfReplications == replicates).GetPower(testType, r.AnalysisMethodEquivalenceTest))));
+                var scatterPoints = resultPowerAnalysis.Select(r => new {
+                    Mean = r.InputPowerAnalysis.OverallMean,
+                    Cv = r.InputPowerAnalysis.CvComparator,
+                    Power = r.OutputRecords.First(l => l.NumberOfReplications == replicates && l.Effect == effect).GetPower(testType, r.AnalysisMethodEquivalenceTest)
+                });
+                scatterSeries.Points.AddRange(scatterPoints.Select(r => new ScatterPoint(r.Mean, r.Cv, double.NaN, r.Power)));
             }
 
             plotModel.Series.Add(scatterSeries);
