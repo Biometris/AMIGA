@@ -29,55 +29,89 @@ namespace AmigaPowerAnalysis.Tests.IntegrationTests {
 
         [TestMethod]
         [TestCategory("IntegrationTests")]
-        public void DataPrasifkaIntegrationTests_CreateProjectAll() {
+        public void DataPrasifkaIntegrationTests_CreatePrasifkaScenario1() {
+            var projectName = "PrasifkaScenario1";
             var groupsFileReader = new DTODataFileReader(Path.Combine(_dataPath, "AMIGA_groups.csv"));
             var endpointGroups = groupsFileReader.ReadGroups();
             var endpointsFileReader = new DTODataFileReader(Path.Combine(_dataPath, "AMIGA_endpoints.csv"));
             var endpoints = endpointsFileReader.ReadEndpoints(endpointGroups);
+
             var project = new Project();
-            project.PowerCalculationSettings.NumberOfReplications = new List<int>() { 5, 10 };
+            project.PowerCalculationSettings.NumberOfReplications = new List<int>() {2, 4, 8, 16, 32, 64, 128 };
             project.EndpointTypes = endpointGroups;
             project.Endpoints = endpoints;
-            var projectFileName = Path.Combine(_testOutputPath, "Prasifka.xapa");
-            ProjectManager.SaveProjectXml(project, Path.Combine(_testOutputPath, "Prasifka.xapa"));
-            var resultPowerAnalysis = IntegrationTestUtilities.RunProject(projectFileName);
-        }
-
-        [TestMethod]
-        [TestCategory("IntegrationTests")]
-        public void DataPrasifkaIntegrationTests_AnalyseProjectAll() {
-            var projectName = "Prasifka";
-            var filesPath = Path.Combine(_testOutputPath, projectName);
-            var resultPowerAnalysis = SerializationExtensions.FromXmlFile<ResultPowerAnalysis>(Path.Combine(filesPath, "Output.xml"));
-            var reportGenerator = new PrasifkaDataReportGenerator(resultPowerAnalysis, projectName, filesPath);
-            reportGenerator.SaveAsHtml(Path.Combine(filesPath, "Summary_Prasifka.html"));
-            //reportGenerator.SaveAsPdf(Path.Combine(filesPath, "Summary_Prasifka.pdf"));
-        }
-
-        [TestMethod]
-        [TestCategory("IntegrationTests")]
-        public void DataPrasifkaIntegrationTests_CreateProjectSelection() {
-            var groupsFileReader = new DTODataFileReader(Path.Combine(_dataPath, "AMIGA_groups.csv"));
-            var endpointGroups = groupsFileReader.ReadGroups();
-            var endpointsFileReader = new DTODataFileReader(Path.Combine(_dataPath, "Selection_AMIGA_endpoints.csv"));
-            var endpoints = endpointsFileReader.ReadEndpoints(endpointGroups).ToList();
-            var project = new Project();
-            project.EndpointTypes = endpointGroups;
-            project.Endpoints = endpoints;
-            var projectFileName = Path.Combine(_testOutputPath, "Prasifka_selection.xapa");
+            var projectFileName = Path.Combine(_testOutputPath, projectName + ".xapa");
             ProjectManager.SaveProjectXml(project, projectFileName);
             var resultPowerAnalysis = IntegrationTestUtilities.RunProject(projectFileName);
         }
 
         [TestMethod]
         [TestCategory("IntegrationTests")]
-        public void DataPrasifkaIntegrationTests_AnalyseProjectSelection() {
-            var projectName = "Prasifka_selection";
+        public void DataPrasifkaIntegrationTests_CreatePrasifkaScenario1Selection() {
+            var projectName = "PrasifkaScenario1Selection";
+            var groupsFileReader = new DTODataFileReader(Path.Combine(_dataPath, "AMIGA_groups.csv"));
+            var endpointGroups = groupsFileReader.ReadGroups();
+            var endpointsFileReader = new DTODataFileReader(Path.Combine(_dataPath, "Selection_AMIGA_endpoints.csv"));
+            var endpoints = endpointsFileReader.ReadEndpoints(endpointGroups).ToList();
+
+            var project = new Project();
+            project.PowerCalculationSettings.NumberOfReplications = new List<int>() { 2, 4, 8, 16, 32, 64, 128 };
+            project.EndpointTypes = endpointGroups;
+            project.Endpoints = endpoints;
+            var projectFileName = Path.Combine(_testOutputPath, projectName + ".xapa");
+            ProjectManager.SaveProjectXml(project, projectFileName);
+            var resultPowerAnalysis = IntegrationTestUtilities.RunProject(projectFileName);
+        }
+
+        [TestMethod]
+        [TestCategory("IntegrationTests")]
+        public void DataPrasifkaIntegrationTests_CreatePrasifkaScenario2Selection() {
+            var projectName = "PrasifkaScenario2Selection";
+            var groupsFileReader = new DTODataFileReader(Path.Combine(_dataPath, "AMIGA_groups.csv"));
+            var endpointGroups = groupsFileReader.ReadGroups();
+            var endpointsFileReader = new DTODataFileReader(Path.Combine(_dataPath, "Selection_AMIGA_endpoints.csv"));
+            var endpoints = endpointsFileReader.ReadEndpoints(endpointGroups).ToList();
+
+            var project = new Project();
+            project.PowerCalculationSettings.NumberOfReplications = new List<int>() { 2, 4, 8, 16, 32, 64, 128 };
+            project.EndpointTypes = endpointGroups;
+            project.Endpoints = endpoints;
+            foreach (var level in project.VarietyFactor.FactorLevels) {
+                level.Frequency = 4;
+            }
+            project.DesignSettings.ExperimentalDesignType = ExperimentalDesignType.RandomizedCompleteBlocks;
+            var projectFileName = Path.Combine(_testOutputPath, projectName + ".xapa");
+            ProjectManager.SaveProjectXml(project, projectFileName);
+            var resultPowerAnalysis = IntegrationTestUtilities.RunProject(projectFileName);
+        }
+
+        [TestMethod]
+        [TestCategory("IntegrationTests")]
+        public void DataPrasifkaIntegrationTests_AnalysePrasifkaScenario1() {
+            var projectName = "PrasifkaScenario1";
+            analyseProject(projectName);
+        }
+
+        [TestMethod]
+        [TestCategory("IntegrationTests")]
+        public void DataPrasifkaIntegrationTests_AnalysePrasifkaScenario1Selection() {
+            var projectName = "PrasifkaScenario1Selection";
+            analyseProject(projectName);
+        }
+
+        [TestMethod]
+        [TestCategory("IntegrationTests")]
+        public void DataPrasifkaIntegrationTests_AnalysePrasifkaScenario2Selection() {
+            var projectName = "PrasifkaScenario2Selection";
+            analyseProject(projectName);
+        }
+
+        private static void analyseProject(string projectName) {
             var filesPath = Path.Combine(_testOutputPath, projectName);
             var resultPowerAnalysis = SerializationExtensions.FromXmlFile<ResultPowerAnalysis>(Path.Combine(filesPath, "Output.xml"));
             var reportGenerator = new PrasifkaDataReportGenerator(resultPowerAnalysis, projectName, filesPath);
             reportGenerator.SaveAsHtml(Path.Combine(filesPath, "Summary_Prasifka.html"));
-            reportGenerator.SaveAsPdf(Path.Combine(filesPath, "Summary_Prasifka.pdf"));
+            //reportGenerator.SaveAsPdf(Path.Combine(filesPath, "Summary_Prasifka.pdf"));
         }
     }
 }

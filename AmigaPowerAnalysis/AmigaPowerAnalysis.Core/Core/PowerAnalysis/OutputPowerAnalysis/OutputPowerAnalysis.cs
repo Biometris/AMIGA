@@ -89,5 +89,6 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                 return (InputPowerAnalysis != null) ? InputPowerAnalysis.Endpoint : string.Empty;
             }
         }
+
     }
 }

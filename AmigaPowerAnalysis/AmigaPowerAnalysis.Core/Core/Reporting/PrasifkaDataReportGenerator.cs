@@ -6,6 +6,7 @@ using System.Text;
 using System.Collections.Generic;
 using AmigaPowerAnalysis.Core.Charting.AnalysisResultsChartCreators;
 using AmigaPowerAnalysis.Core.Charting.DataSummaryChartCreators;
+using System;
 
 namespace AmigaPowerAnalysis.Core.Reporting {
     public sealed class PrasifkaDataReportGenerator : ComparisonReportGeneratorBase {
@@ -25,12 +26,17 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             html += generateOutputOverviewHtml(_resultPowerAnalysis, _outputName);
 
             var primaryComparisonOutputs = _resultPowerAnalysis.GetPrimaryComparisons();
+            html += generateReplicatesVersusAnalysableEndpointsLineChartCreator(primaryComparisonOutputs, _filesPath, chartCreationMethod);
+            html += generateMeanCvPowerScatterPlots(primaryComparisonOutputs, _filesPath, chartCreationMethod);
+            //html += generateMeanCvScatterPlots(primaryComparisonOutputs, _filesPath, chartCreationMethod);
             html += generatePrimaryComparisonsSummary(primaryComparisonOutputs, _filesPath, chartCreationMethod);
-            html += generateMeanCvScatterPlots(primaryComparisonOutputs, _filesPath, chartCreationMethod);
 
             return format(html);
         }
 
+        #region Obsolete
+
+        [Obsolete]
         private static string generateMeanCvScatterPlots(IEnumerable<OutputPowerAnalysis> comparisonOutputs, string imagePath, ChartCreationMethod chartCreationMethod) {
             var stringBuilder = new StringBuilder();
             stringBuilder.AppendLine(string.Format("<h1>Mean - CV - Power</h1>"));
@@ -73,6 +79,76 @@ namespace AmigaPowerAnalysis.Core.Reporting {
                 }
                 stringBuilder.AppendLine("</table>");
             }
+            return stringBuilder.ToString();
+        }
+
+        #endregion
+
+        private static string generateReplicatesVersusAnalysableEndpointsLineChartCreator(IEnumerable<OutputPowerAnalysis> comparisonOutputs, string imagePath, ChartCreationMethod chartCreationMethod) {
+            var stringBuilder = new StringBuilder();
+            stringBuilder.AppendLine(string.Format("<h1>Analysable endpoints per replicate level</h1>"));
+
+            var power = 0.8;
+
+            var imageFilename = string.Format("AnalysableEndpointsVersusReplicates_Power_{0}.png", power);
+            var chart = ReplicatesVersusAnalysableEndpointsLineChartCreator.Create(comparisonOutputs, power);
+            includeChart(chart, 400, 300, imagePath, imageFilename, stringBuilder, chartCreationMethod);
+            stringBuilder.Append("</td>");
+
+            return stringBuilder.ToString();
+        }
+
+        private static string generateMeanCvPowerScatterPlots(IEnumerable<OutputPowerAnalysis> comparisonOutputs, string imagePath, ChartCreationMethod chartCreationMethod) {
+            var stringBuilder = new StringBuilder();
+            stringBuilder.AppendLine(string.Format("<h1>Mean - CV - Power</h1>"));
+
+            var effects = comparisonOutputs.SelectMany(r => r.OutputRecords)
+                .Select(r => r.Effect)
+                .Where(r => !double.IsNaN(r))
+                .Distinct()
+                .ToList();
+
+            stringBuilder.AppendLine("<table>");
+            stringBuilder.AppendLine("<tr>");
+            stringBuilder.AppendLine("<th>Difference test lower LoC</th>");
+            stringBuilder.AppendLine("<th>Equivalence test no-difference</th>");
+            stringBuilder.AppendLine("<th>Difference test upper LoC</th>");
+
+            foreach (var replicateLevel in comparisonOutputs.First().InputPowerAnalysis.NumberOfReplications) {
+
+                stringBuilder.AppendLine("</tr>");
+
+                var effect = effects.First();
+                var effectString = string.Format("{0:G2}", effect).Replace('.', '_');
+
+                stringBuilder.Append("<td>");
+                var imageFilename = string.Format("Scatter_Mean_Cv_Power_Eff_{0}_Repl_{1}_Diff.png", effectString, replicateLevel);
+                var chart = MeanCvPowerScatterChartCreator.Create(comparisonOutputs, TestType.Difference, replicateLevel, effect, true);
+                includeChart(chart, 400, 300, imagePath, imageFilename, stringBuilder, chartCreationMethod);
+                stringBuilder.Append("</td>");
+
+                effect = effects[effects.Count/ 2];
+                effectString = string.Format("{0:G2}", effect).Replace('.', '_');
+
+                stringBuilder.Append("<td>");
+                imageFilename = string.Format("Scatter_Mean_Cv_Power_Eff_{0}_Repl_{1}_Equiv.png", effectString, replicateLevel);
+                chart = MeanCvPowerScatterChartCreator.Create(comparisonOutputs, TestType.Equivalence, replicateLevel, effect, true);
+                includeChart(chart, 400, 300, imagePath, imageFilename, stringBuilder, chartCreationMethod);
+                stringBuilder.Append("</td>");
+
+                effect = effects.Last();
+                effectString = string.Format("{0:G2}", effect).Replace('.', '_');
+
+                stringBuilder.Append("<td>");
+                imageFilename = string.Format("Scatter_Mean_Cv_Power_Eff_{0}_Repl_{1}_Diff.png", effectString, replicateLevel);
+                chart = MeanCvPowerScatterChartCreator.Create(comparisonOutputs, TestType.Difference, replicateLevel, effect, true);
+                includeChart(chart, 400, 300, imagePath, imageFilename, stringBuilder, chartCreationMethod);
+                stringBuilder.Append("</td>");
+
+                stringBuilder.AppendLine("</tr>");
+            }
+            stringBuilder.AppendLine("</table>");
+
             return stringBuilder.ToString();
         }
 
