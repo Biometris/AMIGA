@@ -1,28 +1,18 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Collections.Generic;
-using System.IO;
 using AmigaPowerAnalysis.Core;
 using AmigaPowerAnalysis.Core.Charting.DistributionChartCreators;
+using AmigaPowerAnalysis.Tests.TestUtilities;
+using Biometris.ExtensionMethods;
 using Biometris.Statistics.Distributions;
 using Biometris.Statistics.Measurements;
-using Biometris.ExtensionMethods;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace AmigaPowerAnalysis.Tests.Core {
     [TestClass]
     public class EndpointDataModelChartCreatorTests {
 
-        private static string _testPath = Path.Combine(Properties.Settings.Default.TestPath, "ChartCreation");
-
         private static EndpointType _mockEndpointGroup = new EndpointType("Count", MeasurementType.Count, 0.5, 1.5, 80, 50, DistributionType.OverdispersedPoisson, 0);
-
-        [AssemblyInitialize()]
-        public static void AssemblyInit(TestContext context) {
-            if (!Directory.Exists(_testPath)) {
-               Directory.CreateDirectory(_testPath);
-            }
-        }
 
         [TestMethod]
         [TestCategory("UnitTests")]
@@ -86,7 +76,7 @@ namespace AmigaPowerAnalysis.Tests.Core {
             }
         }
 
-        private static void createChart(MeasurementType measurementType, double locLower, double locUpper, DistributionType distributiontype, double mu, double cv, double power) {
+        private void createChart(MeasurementType measurementType, double locLower, double locUpper, DistributionType distributiontype, double mu, double cv, double power) {
             var id = string.Format("{0}_{1}_{2}_{3}_{4}_{5}_{6}", measurementType, locLower, locUpper, distributiontype, mu, cv, power);
             var endpoint = new Endpoint("Endpoint", _mockEndpointGroup) {
                 Measurement = measurementType,
@@ -98,7 +88,7 @@ namespace AmigaPowerAnalysis.Tests.Core {
                 DistributionType = distributiontype,
             };
             var chartCreator = new EndpointDataModelChartCreator(endpoint);
-            chartCreator.SaveToFile(Path.Combine(_testPath, id + ".png"));
+            this.SaveChart(chartCreator, id + ".png");
         }
     }
 }

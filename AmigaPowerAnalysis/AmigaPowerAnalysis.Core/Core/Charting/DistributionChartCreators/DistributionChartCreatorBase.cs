@@ -13,7 +13,7 @@ namespace AmigaPowerAnalysis.Core.Charting.DistributionChartCreators {
         Both
     };
 
-    public abstract class DistributionChartCreatorBase : IChartCreator {
+    public abstract class DistributionChartCreatorBase : ChartCreatorBase {
 
         public double LowerBound { get; set; }
         public double UpperBound { get; set; }
@@ -23,7 +23,7 @@ namespace AmigaPowerAnalysis.Core.Charting.DistributionChartCreators {
         protected LinearAxis _horizontalAxis;
         protected LinearAxis _verticalAxis;
 
-        public virtual PlotModel Create() {
+        public override PlotModel Create() {
             var plotModel = new PlotModel() {
                 TitleFontSize = 11,
                 DefaultFontSize = 11,

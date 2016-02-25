@@ -127,24 +127,25 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Core\Charting\DistributionChartCreators\EndpointDataModelChartCreatorTests.cs" />
-    <Compile Include="Core\Charting\DistributionChartCreators\DistributionChartCreatorTests.cs" />
-    <Compile Include="Core\Data\EndpointFactorSettingsDTOTests.cs" />
-    <Compile Include="Core\Data\ProjectDTOTests.cs" />
-    <Compile Include="Core\Data\EndpointModifiersDTOTests.cs" />
-    <Compile Include="Core\Data\EndpointInteractionsDTOTests.cs" />
-    <Compile Include="Core\Data\EndpointDTOTests.cs" />
-    <Compile Include="Core\Data\EndpointGroupDTOTests.cs" />
-    <Compile Include="Core\Data\DefaultInteractionsDTOTests.cs" />
-    <Compile Include="Core\Data\FactorLevelDTOTests.cs" />
-    <Compile Include="Core\Data\FactorDTOTests.cs" />
-    <Compile Include="Core\Persistence\SerializationTests.cs" />
-    <Compile Include="Core\PowerAnalysis\AnalysisDataTemplateGeneratorTests.cs" />
-    <Compile Include="Core\PowerAnalysis\OutputPowerAnalysisFileReaderTests.cs" />
-    <Compile Include="Core\PowerAnalysis\PowerAnalysisInputGeneratorTests.cs" />
-    <Compile Include="Core\PowerAnalysis\RDotNetPowerAnalysisExecuterTests.cs" />
-    <Compile Include="Core\ProjectEntities\FactoLevelCombinationTests.cs" />
-    <Compile Include="Core\ProjectEntities\FactorTests.cs" />
+    <Compile Include="Helpers\ChartingUtilities.cs" />
+    <Compile Include="UnitTests\Core\Charting\DistributionChartCreators\EndpointDataModelChartCreatorTests.cs" />
+    <Compile Include="UnitTests\Core\Charting\DistributionChartCreators\DistributionChartCreatorTests.cs" />
+    <Compile Include="UnitTests\Core\Data\EndpointFactorSettingsDTOTests.cs" />
+    <Compile Include="UnitTests\Core\Data\ProjectDTOTests.cs" />
+    <Compile Include="UnitTests\Core\Data\EndpointModifiersDTOTests.cs" />
+    <Compile Include="UnitTests\Core\Data\EndpointInteractionsDTOTests.cs" />
+    <Compile Include="UnitTests\Core\Data\EndpointDTOTests.cs" />
+    <Compile Include="UnitTests\Core\Data\EndpointGroupDTOTests.cs" />
+    <Compile Include="UnitTests\Core\Data\DefaultInteractionsDTOTests.cs" />
+    <Compile Include="UnitTests\Core\Data\FactorLevelDTOTests.cs" />
+    <Compile Include="UnitTests\Core\Data\FactorDTOTests.cs" />
+    <Compile Include="UnitTests\Core\Persistence\SerializationTests.cs" />
+    <Compile Include="UnitTests\Core\PowerAnalysis\AnalysisDataTemplateGeneratorTests.cs" />
+    <Compile Include="UnitTests\Core\PowerAnalysis\OutputPowerAnalysisFileReaderTests.cs" />
+    <Compile Include="UnitTests\Core\PowerAnalysis\PowerAnalysisInputGeneratorTests.cs" />
+    <Compile Include="UnitTests\Core\PowerAnalysis\RDotNetPowerAnalysisExecuterTests.cs" />
+    <Compile Include="UnitTests\Core\ProjectEntities\FactoLevelCombinationTests.cs" />
+    <Compile Include="UnitTests\Core\ProjectEntities\FactorTests.cs" />
     <Compile Include="IntegrationTests\DataPrasifkaIntegrationTests.cs" />
     <Compile Include="IntegrationTests\TechDocIntegrationTests.cs" />
     <Compile Include="IntegrationTests\MockProjectsIntegrationTests.cs" />
@@ -155,7 +156,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="TestUtilities\IntegrationTestUtilities.cs" />
+    <Compile Include="Helpers\IntegrationTestUtilities.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
