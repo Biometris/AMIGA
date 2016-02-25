@@ -18,8 +18,7 @@ AMIGA_extract_endpoints_data_models <- function (endpoints, anticipated_number_o
   endpoints_amiga$DistributionType <- "OverdispersedPoisson"
   endpoints_amiga$Mean <- NaN
   endpoints_amiga$CV <- NaN
-  endpoints_amiga$CV_within_blocks <- NaN
-  endpoints_amiga$CV_between_blocks <- NaN
+  endpoints_amiga$CvBlocks <- NaN
   endpoints_amiga$CV_naive <- NaN
   endpoints_amiga$site_year_combinations_with_data <- NaN
   endpoints_amiga$sites_with_data <- NaN 
@@ -107,9 +106,8 @@ AMIGA_extract_endpoints_data_models <- function (endpoints, anticipated_number_o
     endpoints_amiga$EndpointID[i] <- gsub("[.]","",endpoints[i])
     endpoints_amiga$Mean[i] <-  signif(endpoint_mean, digits = 4)
     endpoints_amiga$CV_naive[i] <- signif(endpoint_cv, digits = 4)
-    endpoints_amiga$CV_within_blocks[i] <- signif(CV_within_blocks, digits = 4)
-    endpoints_amiga$CV_between_blocks[i] <- signif(CV_between_blocks, digits = 4)
-    endpoints_amiga$CV[i] <- endpoints_amiga$CV_within_blocks[i]
+    endpoints_amiga$CvBlocks[i] <- signif(CV_between_blocks, digits = 4)
+    endpoints_amiga$CV[i] <- signif(CV_within_blocks, digits = 4)
     
     endpoint_summary_per_site_location_with_data <- subset(endpoint_summary_per_site_location, !is.na(endpoint_summary_per_site_location$mean))
     endpoints_amiga$site_year_combinations_with_data[i] <- nrow(endpoint_summary_per_site_location_with_data)
@@ -149,4 +147,4 @@ selected_endpoints <- c(
 
 endpoints_amiga <- AMIGA_extract_endpoints_data_models(selected_endpoints, 8, 4)
 write.csv(na.omit(endpoints_amiga), file = file.path("Selection_AMIGA_endpoints.csv", fsep = "\\"), row.names=FALSE)
-write.csv(subset(endpoints_amiga, is.na(endpoints_amiga$CV_between_blocks) || is.na(endpoints_amiga$CV_within_blocks)), file = file.path("Selection_AMIGA_endpoints_failed.csv", fsep = "\\"), row.names=FALSE)
+write.csv(subset(endpoints_amiga, is.na(endpoints_amiga$CvBlocks) || is.na(endpoints_amiga$CV)), file = file.path("Selection_AMIGA_endpoints_failed.csv", fsep = "\\"), row.names=FALSE)
