@@ -20,12 +20,13 @@ AMIGA_extract_endpoints_data_models <- function (endpoints, anticipated_number_o
   endpoints_amiga$CV <- NaN
   endpoints_amiga$CvBlocks <- NaN
   endpoints_amiga$CV_naive <- NaN
+  endpoints_amiga$CV_within_blocks_old <- NaN
   endpoints_amiga$site_year_combinations_with_data <- NaN
   endpoints_amiga$sites_with_data <- NaN 
   endpoints_amiga$years_with_data <- NaN
   
   anticipated_effort_per_block <- anticipated_number_of_periods * anticipated_number_of_samples_per_plot
-  
+
   # Initialize data frame for plot totals
   data_plot_totals <- data.table(data)
   
@@ -72,14 +73,14 @@ AMIGA_extract_endpoints_data_models <- function (endpoints, anticipated_number_o
     sink(file.path("Outputs", paste(endpoints[i], "_glm_within_location_year_variation.txt", sep=""), fsep = "\\"))
     if (is.null(fit)) {
       print("GLM fit for extracting the within location/year variation failed")
-      CV_within_blocks <- NA
+      CV_within_blocks_old <- NA
     } else {
       fit_summary <- summary(fit)
       dispersion <- fit_summary$dispersion
-      CV_within_blocks <- 100 * sqrt(endpoint_mean * dispersion) / endpoint_mean
+      CV_within_blocks_old <- 100 * sqrt(endpoint_mean * dispersion) / endpoint_mean
       print(summary(fit))
       print(dispersion)
-      print(CV_within_blocks)
+      print(CV_within_blocks_old)
     }
     sink()
     
@@ -103,15 +104,16 @@ AMIGA_extract_endpoints_data_models <- function (endpoints, anticipated_number_o
     sink()
     options(warn=0)
 	
-    endpoints_amiga$EndpointID[i] <- gsub("[.]","",endpoints[i])
+    endpoints_amiga$EndpointID[i] <- gsub("[.]"," ",endpoints[i])
     endpoints_amiga$Mean[i] <-  signif(endpoint_mean, digits = 4)
-    endpoints_amiga$CV_naive[i] <- signif(endpoint_cv, digits = 4)
-    endpoints_amiga$CvBlocks[i] <- signif(CV_between_blocks, digits = 4)
     endpoints_amiga$CV[i] <- signif(CV_within_blocks, digits = 4)
+    endpoints_amiga$CvBlocks[i] <- signif(CV_between_blocks, digits = 4)
+    endpoints_amiga$CV_naive[i] <- signif(endpoint_cv, digits = 4)
+    endpoints_amiga$CV_within_blocks_old[i] <- signif(CV_within_blocks_old, digits = 4)
     
     endpoint_summary_per_site_location_with_data <- subset(endpoint_summary_per_site_location, !is.na(endpoint_summary_per_site_location$mean))
     endpoints_amiga$site_year_combinations_with_data[i] <- nrow(endpoint_summary_per_site_location_with_data)
-    endpoints_amiga$years_with_data[i] <- length(unique(endpoint_summary_per_site_location_with_data$Site))
+    endpoints_amiga$years_with_data[i] <- length(unique(endpoint_summary_per_site_location_with_data$Year))
     endpoints_amiga$sites_with_data[i] <- length(unique(endpoint_summary_per_site_location_with_data$Site))
     
     write.csv(endpoint_plot_totals, file = file.path("Outputs", paste(endpoints[i], "_plot_totals.csv", sep=""), fsep = "\\")) 
