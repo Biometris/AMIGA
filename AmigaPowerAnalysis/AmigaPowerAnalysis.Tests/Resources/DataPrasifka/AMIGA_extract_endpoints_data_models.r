@@ -128,23 +128,6 @@ data[, 'Year'] <- as.factor(data[, 'Year'])
 endpoints <- colnames(data)[-(1:10)]
 endpoints <- endpoints[substring(endpoints, 1, 2) != "NA"]
 
-endpoints_amiga <- AMIGA_extract_endpoints_data_models(endpoints, 8, 4)
+endpoints_amiga <- AMIGA_extract_endpoints_data_models(endpoints, 6, 4)
 write.csv(na.omit(endpoints_amiga), file = file.path("AMIGA_endpoints.csv", fsep = "\\"), row.names=FALSE)
 write.csv(subset(endpoints_amiga, is.na(endpoints_amiga$CV)), file = file.path("AMIGA_endpoints_failed.csv", fsep = "\\"), row.names=FALSE)
-
-selected_endpoints <- c(
-  "General.collembola.all.families",
-  "Springtails.entomobryids",
-  "Sap.beetles",
-  "Crickets",
-  "Ants",
-  "Spiders",
-  "Wolf.spiders",
-  "Centipedes",
-  "Ground.beetles",
-  "Rove.beetles"
-)
-
-endpoints_amiga <- AMIGA_extract_endpoints_data_models(selected_endpoints, 8, 4)
-write.csv(na.omit(endpoints_amiga), file = file.path("Selection_AMIGA_endpoints.csv", fsep = "\\"), row.names=FALSE)
-write.csv(subset(endpoints_amiga, is.na(endpoints_amiga$CvBlocks) || is.na(endpoints_amiga$CV)), file = file.path("Selection_AMIGA_endpoints_failed.csv", fsep = "\\"), row.names=FALSE)

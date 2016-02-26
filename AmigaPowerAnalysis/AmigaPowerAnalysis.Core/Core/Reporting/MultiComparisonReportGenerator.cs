@@ -9,11 +9,11 @@ using System;
 using Biometris.Statistics.Measurements;
 
 namespace AmigaPowerAnalysis.Core.Reporting {
-    public sealed class MultiComparisonReportGenerator : ComparisonReportGeneratorBase {
+    public class MultiComparisonReportGenerator : ComparisonReportGeneratorBase {
 
-        private ResultPowerAnalysis _resultPowerAnalysis;
-        private string _filesPath;
-        private string _outputName;
+        protected ResultPowerAnalysis _resultPowerAnalysis;
+        protected string _filesPath;
+        protected string _outputName;
 
         public MultiComparisonReportGenerator(ResultPowerAnalysis resultPowerAnalysis, string outputName, string tempPath) {
             _resultPowerAnalysis = resultPowerAnalysis;
@@ -26,7 +26,7 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             html += generateOutputOverviewHtml(_resultPowerAnalysis, _outputName);
 
             var primaryComparisonOutputs = _resultPowerAnalysis.GetPrimaryComparisons();
-            html += generatePrimaryComparisonsSummary(primaryComparisonOutputs, _resultPowerAnalysis.PowerAggregationType);
+            html += generatePrimaryComparisonsSummary(primaryComparisonOutputs);
 
             var firstInputSettings = primaryComparisonOutputs.First().InputPowerAnalysis;
             var analysisMethodTypesDifferenceTests = firstInputSettings.SelectedAnalysisMethodTypesDifferenceTests.GetFlags().Cast<AnalysisMethodType>().ToList();
@@ -36,7 +36,7 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             html += generateComparisonsAnalysisSettingsHtml(primaryComparisonOutputs);
 
             var records = _resultPowerAnalysis.GetAggregateOutputRecords(_resultPowerAnalysis.PowerAggregationType);
-            html += generateComparisonsOutputHtml(records, firstInputSettings.NumberOfReplications);
+            html += generateComparisonsOutputHtml(records, firstInputSettings.NumberOfReplications, _resultPowerAnalysis.PowerAggregationType);
             html += generateComparisonsChartHtml(records, firstInputSettings.NumberOfReplications, _filesPath, chartCreationMethod);
 
             html += "<h1>Results per primary comparison</h1>";
@@ -53,10 +53,9 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             return format(html);
         }
 
-        private static string generatePrimaryComparisonsSummary(IEnumerable<OutputPowerAnalysis> comparisonOutputs, PowerAggregationType powerAggregationType) {
+        protected static string generatePrimaryComparisonsSummary(IEnumerable<OutputPowerAnalysis> comparisonOutputs) {
             var stringBuilder = new StringBuilder();
             stringBuilder.AppendLine(string.Format("<h1>Summary primary comparisons</h1>"));
-            stringBuilder.AppendLine(string.Format("<p>{0}.<p>", powerAggregationType.GetDisplayName()));
             stringBuilder.AppendLine("<table>");
             stringBuilder.AppendLine("<tr>");
             stringBuilder.AppendLine("<th>Comparison</th>");
@@ -81,7 +80,7 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             return stringBuilder.ToString();
         }
 
-        private static string generateComparisonsAnalysisSettingsHtml(IEnumerable<OutputPowerAnalysis> comparisonOutputs) {
+        protected static string generateComparisonsAnalysisSettingsHtml(IEnumerable<OutputPowerAnalysis> comparisonOutputs) {
             var stringBuilder = new StringBuilder();
             Func<string, object, string> format = (parameter, setting) => { return string.Format("<tr><td>{0}</td><td>{1}</td></tr>", parameter, setting); };
 
@@ -124,9 +123,10 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             return stringBuilder.ToString();
         }
 
-        private static string generateComparisonsOutputHtml(IEnumerable<AggregateOutputPowerAnalysisRecord> records, List<int> blockSizes) {
+        private static string generateComparisonsOutputHtml(IEnumerable<AggregateOutputPowerAnalysisRecord> records, List<int> blockSizes, PowerAggregationType powerAggregationType) {
             var stringBuilder = new StringBuilder();
             stringBuilder.Append(string.Format("<h2>Combined results power analysis</h2>"));
+            stringBuilder.AppendLine(string.Format("<p>{0}.<p>", powerAggregationType.GetDisplayName()));
             stringBuilder.Append("<table>");
             stringBuilder.Append("<tr>");
             stringBuilder.Append("<th>CSD</th>");

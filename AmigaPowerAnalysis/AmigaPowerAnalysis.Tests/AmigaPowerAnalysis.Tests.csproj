@@ -173,9 +173,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Resources\DataPrasifka\ExtractAMIGA.xlsx" />
-    <None Include="Resources\DataPrasifka\Selection_AMIGA_endpoints.csv">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="Resources\DefaultGroups.csv" />
     <None Include="Resources\EndpointDataFileReader_Tests1.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

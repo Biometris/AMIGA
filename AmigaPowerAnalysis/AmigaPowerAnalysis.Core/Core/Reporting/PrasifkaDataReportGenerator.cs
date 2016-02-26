@@ -9,16 +9,10 @@ using AmigaPowerAnalysis.Core.Charting.DataSummaryChartCreators;
 using System;
 
 namespace AmigaPowerAnalysis.Core.Reporting {
-    public sealed class PrasifkaDataReportGenerator : ComparisonReportGeneratorBase {
+    public sealed class PrasifkaDataReportGenerator : MultiComparisonReportGenerator {
 
-        private ResultPowerAnalysis _resultPowerAnalysis;
-        private string _filesPath;
-        private string _outputName;
-
-        public PrasifkaDataReportGenerator(ResultPowerAnalysis resultPowerAnalysis, string outputName, string filesPath) {
-            _resultPowerAnalysis = resultPowerAnalysis;
-            _outputName = outputName;
-            _filesPath = filesPath;
+        public PrasifkaDataReportGenerator(ResultPowerAnalysis resultPowerAnalysis, string outputName, string filesPath)
+            : base(resultPowerAnalysis, outputName, filesPath) {
         }
 
         public override string Generate(ChartCreationMethod chartCreationMethod) {
@@ -26,10 +20,16 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             html += generateOutputOverviewHtml(_resultPowerAnalysis, _outputName);
 
             var primaryComparisonOutputs = _resultPowerAnalysis.GetPrimaryComparisons();
+
+            var firstInputSettings = primaryComparisonOutputs.First().InputPowerAnalysis;
+            html += generateDesignOverviewHtml(firstInputSettings);
+            html += generateComparisonsAnalysisSettingsHtml(primaryComparisonOutputs);
+
             html += generateReplicatesVersusAnalysableEndpointsLineChartCreator(primaryComparisonOutputs, _filesPath, chartCreationMethod);
             html += generateMeanCvPowerScatterPlots(primaryComparisonOutputs, _filesPath, chartCreationMethod);
+            html += generatePrimaryComparisonsSummary(primaryComparisonOutputs);
             //html += generateMeanCvScatterPlots(primaryComparisonOutputs, _filesPath, chartCreationMethod);
-            html += generatePrimaryComparisonsSummary(primaryComparisonOutputs, _filesPath, chartCreationMethod);
+            //html += generatePrimaryComparisonsAnalysisSummary(primaryComparisonOutputs, _filesPath, chartCreationMethod);
 
             return format(html);
         }
@@ -124,7 +124,7 @@ namespace AmigaPowerAnalysis.Core.Reporting {
                 stringBuilder.Append("<td>");
                 var imageFilename = string.Format("Scatter_Mean_Cv_Power_Eff_{0}_Repl_{1}_Diff.png", effectString, replicateLevel);
                 var chart = MeanCvPowerScatterChartCreator.Create(comparisonOutputs, TestType.Difference, replicateLevel, effect, true);
-                includeChart(chart, 400, 300, imagePath, imageFilename, stringBuilder, chartCreationMethod);
+                includeChart(chart, 350, 250, imagePath, imageFilename, stringBuilder, chartCreationMethod);
                 stringBuilder.Append("</td>");
 
                 effect = effects[effects.Count/ 2];
@@ -133,7 +133,7 @@ namespace AmigaPowerAnalysis.Core.Reporting {
                 stringBuilder.Append("<td>");
                 imageFilename = string.Format("Scatter_Mean_Cv_Power_Eff_{0}_Repl_{1}_Equiv.png", effectString, replicateLevel);
                 chart = MeanCvPowerScatterChartCreator.Create(comparisonOutputs, TestType.Equivalence, replicateLevel, effect, true);
-                includeChart(chart, 400, 300, imagePath, imageFilename, stringBuilder, chartCreationMethod);
+                includeChart(chart, 350, 250, imagePath, imageFilename, stringBuilder, chartCreationMethod);
                 stringBuilder.Append("</td>");
 
                 effect = effects.Last();
@@ -142,7 +142,7 @@ namespace AmigaPowerAnalysis.Core.Reporting {
                 stringBuilder.Append("<td>");
                 imageFilename = string.Format("Scatter_Mean_Cv_Power_Eff_{0}_Repl_{1}_Diff.png", effectString, replicateLevel);
                 chart = MeanCvPowerScatterChartCreator.Create(comparisonOutputs, TestType.Difference, replicateLevel, effect, true);
-                includeChart(chart, 400, 300, imagePath, imageFilename, stringBuilder, chartCreationMethod);
+                includeChart(chart, 350, 250, imagePath, imageFilename, stringBuilder, chartCreationMethod);
                 stringBuilder.Append("</td>");
 
                 stringBuilder.AppendLine("</tr>");
@@ -152,7 +152,7 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             return stringBuilder.ToString();
         }
 
-        private static string generatePrimaryComparisonsSummary(IEnumerable<OutputPowerAnalysis> comparisonOutputs, string imagePath, ChartCreationMethod chartCreationMethod) {
+        private static string generatePrimaryComparisonsAnalysisSummary(IEnumerable<OutputPowerAnalysis> comparisonOutputs, string imagePath, ChartCreationMethod chartCreationMethod) {
             var stringBuilder = new StringBuilder();
             stringBuilder.AppendLine(string.Format("<h1>Charts difference and equivalence tests</h1>"));
             stringBuilder.AppendLine("<table>");
@@ -175,13 +175,13 @@ namespace AmigaPowerAnalysis.Core.Reporting {
                 imageFilename = fileBaseId + "_" + comparison.AnalysisMethodDifferenceTest.ToString() + "_Replicates_Difference.png";
                 var plotDifferenceReplicates = PowerVersusReplicatesRatioChartCreator.Create(comparison.OutputRecords, TestType.Difference, comparison.AnalysisMethodDifferenceTest);
                 stringBuilder.Append("<td>");
-                includeChart(plotDifferenceReplicates, 400, 300, imagePath, imageFilename, stringBuilder, chartCreationMethod);
+                includeChart(plotDifferenceReplicates, 350, 250, imagePath, imageFilename, stringBuilder, chartCreationMethod);
                 stringBuilder.Append("</td>");
 
                 imageFilename = fileBaseId + "_" + comparison.AnalysisMethodEquivalenceTest.ToString() + "_Ratio_Difference.png";
                 var plotDifferenceLogRatio = PowerVersusReplicatesRatioChartCreator.Create(comparison.OutputRecords, TestType.Equivalence, comparison.AnalysisMethodEquivalenceTest);
                 stringBuilder.Append("<td>");
-                includeChart(plotDifferenceLogRatio, 400, 300, imagePath, imageFilename, stringBuilder, chartCreationMethod);
+                includeChart(plotDifferenceLogRatio, 350, 250, imagePath, imageFilename, stringBuilder, chartCreationMethod);
                 stringBuilder.Append("</td>");
 
                 stringBuilder.AppendLine("</tr>");

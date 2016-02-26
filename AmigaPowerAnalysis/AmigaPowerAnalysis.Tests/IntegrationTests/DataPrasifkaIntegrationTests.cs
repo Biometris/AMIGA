@@ -1,15 +1,13 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Collections;
-using Biometris.ExtensionMethods;
 using AmigaPowerAnalysis.Core;
 using AmigaPowerAnalysis.Core.DataReaders;
-using AmigaPowerAnalysis.Core.Reporting;
-using AmigaPowerAnalysis.Tests.Mocks.Projects;
-using AmigaPowerAnalysis.Tests.TestUtilities;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using AmigaPowerAnalysis.Core.PowerAnalysis;
-using System.Collections.Generic;
+using AmigaPowerAnalysis.Core.Reporting;
+using AmigaPowerAnalysis.Tests.TestUtilities;
+using Biometris.ExtensionMethods;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace AmigaPowerAnalysis.Tests.IntegrationTests {
     [TestClass]
@@ -35,11 +33,7 @@ namespace AmigaPowerAnalysis.Tests.IntegrationTests {
             var endpointGroups = groupsFileReader.ReadGroups();
             var endpointsFileReader = new DTODataFileReader(Path.Combine(_dataPath, "AMIGA_endpoints.csv"));
             var endpoints = endpointsFileReader.ReadEndpoints(endpointGroups);
-
-            var project = new Project();
-            project.PowerCalculationSettings.NumberOfReplications = new List<int>() {2, 4, 8, 16, 32, 64, 128 };
-            project.EndpointTypes = endpointGroups;
-            project.Endpoints = endpoints;
+            var project = createProjectScenario1(endpointGroups, endpoints);
             var projectFileName = Path.Combine(_testOutputPath, projectName + ".xapa");
             ProjectManager.SaveProjectXml(project, projectFileName);
             var resultPowerAnalysis = IntegrationTestUtilities.RunProject(projectFileName);
@@ -51,13 +45,23 @@ namespace AmigaPowerAnalysis.Tests.IntegrationTests {
             var projectName = "PrasifkaScenario1Selection";
             var groupsFileReader = new DTODataFileReader(Path.Combine(_dataPath, "AMIGA_groups.csv"));
             var endpointGroups = groupsFileReader.ReadGroups();
-            var endpointsFileReader = new DTODataFileReader(Path.Combine(_dataPath, "Selection_AMIGA_endpoints.csv"));
-            var endpoints = endpointsFileReader.ReadEndpoints(endpointGroups).ToList();
+            var endpointsFileReader = new DTODataFileReader(Path.Combine(_dataPath, "AMIGA_endpoints.csv"));
+            var endpoints = endpointsFileReader.ReadEndpoints(endpointGroups).Take(10).ToList();
+            var project = createProjectScenario1(endpointGroups, endpoints);
+            var projectFileName = Path.Combine(_testOutputPath, projectName + ".xapa");
+            ProjectManager.SaveProjectXml(project, projectFileName);
+            var resultPowerAnalysis = IntegrationTestUtilities.RunProject(projectFileName);
+        }
 
-            var project = new Project();
-            project.PowerCalculationSettings.NumberOfReplications = new List<int>() { 2, 4, 8, 16, 32, 64, 128 };
-            project.EndpointTypes = endpointGroups;
-            project.Endpoints = endpoints;
+        [TestMethod]
+        [TestCategory("IntegrationTests")]
+        public void DataPrasifkaIntegrationTests_CreatePrasifkaScenario2() {
+            var projectName = "PrasifkaScenario2";
+            var groupsFileReader = new DTODataFileReader(Path.Combine(_dataPath, "AMIGA_groups.csv"));
+            var endpointGroups = groupsFileReader.ReadGroups();
+            var endpointsFileReader = new DTODataFileReader(Path.Combine(_dataPath, "AMIGA_endpoints.csv"));
+            var endpoints = endpointsFileReader.ReadEndpoints(endpointGroups).ToList();
+            var project = createProjectScenario2(endpointGroups, endpoints);
             var projectFileName = Path.Combine(_testOutputPath, projectName + ".xapa");
             ProjectManager.SaveProjectXml(project, projectFileName);
             var resultPowerAnalysis = IntegrationTestUtilities.RunProject(projectFileName);
@@ -69,20 +73,31 @@ namespace AmigaPowerAnalysis.Tests.IntegrationTests {
             var projectName = "PrasifkaScenario2Selection";
             var groupsFileReader = new DTODataFileReader(Path.Combine(_dataPath, "AMIGA_groups.csv"));
             var endpointGroups = groupsFileReader.ReadGroups();
-            var endpointsFileReader = new DTODataFileReader(Path.Combine(_dataPath, "Selection_AMIGA_endpoints.csv"));
-            var endpoints = endpointsFileReader.ReadEndpoints(endpointGroups).ToList();
-
-            var project = new Project();
-            project.PowerCalculationSettings.NumberOfReplications = new List<int>() { 2, 4, 8, 16, 32, 64, 128 };
-            project.EndpointTypes = endpointGroups;
-            project.Endpoints = endpoints;
-            foreach (var level in project.VarietyFactor.FactorLevels) {
-                level.Frequency = 4;
-            }
-            project.DesignSettings.ExperimentalDesignType = ExperimentalDesignType.RandomizedCompleteBlocks;
+            var endpointsFileReader = new DTODataFileReader(Path.Combine(_dataPath, "AMIGA_endpoints.csv"));
+            var endpoints = endpointsFileReader.ReadEndpoints(endpointGroups).Take(10).ToList();
+            var project = createProjectScenario2(endpointGroups, endpoints);
             var projectFileName = Path.Combine(_testOutputPath, projectName + ".xapa");
             ProjectManager.SaveProjectXml(project, projectFileName);
             var resultPowerAnalysis = IntegrationTestUtilities.RunProject(projectFileName);
+        }
+
+        private static Project createProjectScenario1(List<EndpointType> endpointGroups, List<Endpoint> endpoints) {
+            var project = new Project();
+            project.PowerCalculationSettings.NumberOfReplications = new List<int>() { 2, 4, 8, 16, 32, 64 };
+            project.PowerCalculationSettings.NumberOfRatios = 2;
+            project.EndpointTypes = endpointGroups;
+            project.Endpoints = endpoints;
+            return project;
+        }
+
+        private static Project createProjectScenario2(List<EndpointType> endpointGroups, List<Endpoint> endpoints) {
+            var project = createProjectScenario1(endpointGroups, endpoints);
+            project.DesignSettings.ExperimentalDesignType = ExperimentalDesignType.RandomizedCompleteBlocks;
+            project.UseBlockModifier = true;
+            foreach (var level in project.VarietyFactor.FactorLevels) {
+                level.Frequency = 4;
+            }
+            return project;
         }
 
         [TestMethod]
@@ -101,6 +116,13 @@ namespace AmigaPowerAnalysis.Tests.IntegrationTests {
 
         [TestMethod]
         [TestCategory("IntegrationTests")]
+        public void DataPrasifkaIntegrationTests_AnalysePrasifkaScenario2() {
+            var projectName = "PrasifkaScenario2";
+            analyseProject(projectName);
+        }
+
+        [TestMethod]
+        [TestCategory("IntegrationTests")]
         public void DataPrasifkaIntegrationTests_AnalysePrasifkaScenario2Selection() {
             var projectName = "PrasifkaScenario2Selection";
             analyseProject(projectName);
@@ -111,7 +133,7 @@ namespace AmigaPowerAnalysis.Tests.IntegrationTests {
             var resultPowerAnalysis = SerializationExtensions.FromXmlFile<ResultPowerAnalysis>(Path.Combine(filesPath, "Output.xml"));
             var reportGenerator = new PrasifkaDataReportGenerator(resultPowerAnalysis, projectName, filesPath);
             reportGenerator.SaveAsHtml(Path.Combine(filesPath, "Summary_Prasifka.html"));
-            //reportGenerator.SaveAsPdf(Path.Combine(filesPath, "Summary_Prasifka.pdf"));
+            reportGenerator.SaveAsPdf(Path.Combine(filesPath, "Summary_Prasifka.pdf"));
         }
     }
 }
