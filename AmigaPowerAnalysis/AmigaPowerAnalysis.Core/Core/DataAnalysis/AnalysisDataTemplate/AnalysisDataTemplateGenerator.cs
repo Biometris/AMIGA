@@ -128,28 +128,35 @@ namespace AmigaPowerAnalysis.Core.DataAnalysis {
 
             var records = formattedComparisons.First().FormattedRecords
                 .Select((r, i) => new {
-                        MainPlot = i + 1,
-                        SubPlot = 1,
-                        Variety = r.Levels.First(l => l.Factor == "Variety").Level,
-                        FactorLevels = factors.Select(f => r.Levels.First(l => l.Factor == f).Level).ToList(),
-                        Frequency = r.InputRecord.Frequency,
-                    })
+                    MainPlot = i + 1,
+                    SubPlot = 1,
+                    Variety = r.Levels.First(l => l.Factor == "Variety").Level,
+                    FactorLevels = factors.Select(f => r.Levels.First(l => l.Factor == f).Level).ToList(),
+                    Frequency = r.InputRecord.Frequency,
+                })
                 .SelectMany(r => Enumerable.Repeat(r, r.Frequency)
                     .Select((rep, i) => new {
                         MainPlot = rep.MainPlot,
                         SubPlot = rep.SubPlot,
                         Variety = rep.Variety,
                         FactorLevels = rep.FactorLevels,
-                        FrequencyReplicate = i + 1
+                        Frequency = rep.Frequency,
                     }))
+                .Select((r, i) => new {
+                    MainPlot = i + 1,
+                    SubPlot = r.SubPlot,
+                    Variety = r.Variety,
+                    FactorLevels = r.FactorLevels,
+                    FrequencyReplicate = r.Frequency
+                })
                 .SelectMany(r => Enumerable.Repeat(r, replicates)
                     .Select((rep, i) => new {
-                            MainPlot = rep.MainPlot,
-                            SubPlot = rep.SubPlot,
-                            Variety = rep.Variety,
-                            FactorLevels = rep.FactorLevels,
-                            FrequencyReplicate = rep.FrequencyReplicate,
-                            Block = i + 1
+                        MainPlot = rep.MainPlot,
+                        SubPlot = rep.SubPlot,
+                        Variety = rep.Variety,
+                        FactorLevels = rep.FactorLevels,
+                        FrequencyReplicate = rep.FrequencyReplicate,
+                        Block = i + 1
                     }))
                 .Select(r => new AnalysisDataTemplateRecord() {
                     MainPlot = r.MainPlot,
