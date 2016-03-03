@@ -1,6 +1,32 @@
-﻿using Biometris.Statistics.Measurements;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using Biometris.Statistics.Measurements;
 
 namespace AmigaPowerAnalysis.Core.DataAnalysis.AnalysisModels {
+
+    [Flags]
+    public enum AnalysisMethodType : int {
+        [Display(Name = "Log-Normal", ShortName = "LN")]
+        LogNormal = 1,
+        [Display(Name = "Square root", ShortName = "SQ")]
+        SquareRoot = 2,
+        [Display(Name = "Overdispersed Poisson", ShortName = "OP")]
+        OverdispersedPoisson = 4,
+        [Display(Name = "Negative binomial", ShortName = "NBN")]
+        NegativeBinomial = 8,
+        [Display(Name = "Empirical logit transformation", ShortName = "ELT")]
+        EmpiricalLogit = 16,
+        [Display(Name = "Overdispersed binomial", ShortName = "OBN")]
+        OverdispersedBinomial = 32,
+        [Display(Name = "Betabinomial", ShortName = "BBN")]
+        Betabinomial = 64,
+        [Display(Name = "Log(x+m) transformation", ShortName = "L(x+m)")]
+        LogPlusM = 128,
+        [Display(Name = "Gamma with log link", ShortName = "Gamma log-link")]
+        Gamma = 256,
+        [Display(Name = "Normal", ShortName = "Normal")]
+        Normal = 512,
+    }
 
     public static class AnalysisModelFactory {
 
@@ -29,27 +55,6 @@ namespace AmigaPowerAnalysis.Core.DataAnalysis.AnalysisModels {
         /// Analysis method types for continuous measurement types.
         /// </summary>
         public static readonly AnalysisMethodType ContinuousAnalysisMethods = AnalysisMethodType.Normal;
-
-        /// <summary>
-        /// Decides which class to instantiate.
-        /// </summary>
-        public static IAnalysisModel CreateAnalysisModel(AnalysisMethodType analysisMethodType) {
-            switch (analysisMethodType) {
-                case AnalysisMethodType.LogNormal:
-                case AnalysisMethodType.SquareRoot:
-                case AnalysisMethodType.OverdispersedPoisson:
-                    return new OverDispersedPoissonModel();
-                case AnalysisMethodType.NegativeBinomial:
-                case AnalysisMethodType.EmpiricalLogit:
-                case AnalysisMethodType.OverdispersedBinomial:
-                case AnalysisMethodType.Betabinomial:
-                case AnalysisMethodType.LogPlusM:
-                case AnalysisMethodType.Gamma:
-                case AnalysisMethodType.Normal:
-                default:
-                    return new NormalModel();
-            }
-        }
 
         /// <summary>
         /// Decides which class to instantiate.

@@ -132,9 +132,6 @@
     <Compile Include="Core\DataAnalysis\AnalysisDataTemplate\AnalysisDataTemplate.cs" />
     <Compile Include="Core\DataAnalysis\AnalysisDataTemplate\AnalysisDataTemplateContrastRecord.cs" />
     <Compile Include="Core\DataAnalysis\AnalysisModels\AnalysisModelFactory.cs" />
-    <Compile Include="Core\DataAnalysis\AnalysisModels\NormalModel.cs" />
-    <Compile Include="Core\DataAnalysis\AnalysisModels\OverDispersedPoissonModel.cs" />
-    <Compile Include="Core\DataAnalysis\AnalysisModels\IAnalysisModel.cs" />
     <Compile Include="Core\DataAnalysis\AnalysisScriptGenerators\AnalysisRScriptGenerator.cs" />
     <Compile Include="Core\DataReaders\DTODataFileReader.cs" />
     <Compile Include="Core\Data\PowerCalculationSettingsDTO.cs" />
