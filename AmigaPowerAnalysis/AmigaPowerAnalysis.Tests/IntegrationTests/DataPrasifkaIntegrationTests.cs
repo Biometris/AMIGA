@@ -81,25 +81,6 @@ namespace AmigaPowerAnalysis.Tests.IntegrationTests {
             var resultPowerAnalysis = IntegrationTestUtilities.RunProject(projectFileName);
         }
 
-        private static Project createProjectScenario1(List<EndpointType> endpointGroups, List<Endpoint> endpoints) {
-            var project = new Project();
-            project.PowerCalculationSettings.NumberOfReplications = new List<int>() { 2, 4, 8, 16, 32, 64 };
-            project.PowerCalculationSettings.NumberOfRatios = 2;
-            project.EndpointTypes = endpointGroups;
-            project.Endpoints = endpoints;
-            return project;
-        }
-
-        private static Project createProjectScenario2(List<EndpointType> endpointGroups, List<Endpoint> endpoints) {
-            var project = createProjectScenario1(endpointGroups, endpoints);
-            project.DesignSettings.ExperimentalDesignType = ExperimentalDesignType.RandomizedCompleteBlocks;
-            project.UseBlockModifier = true;
-            foreach (var level in project.VarietyFactor.FactorLevels) {
-                level.Frequency = 4;
-            }
-            return project;
-        }
-
         [TestMethod]
         [TestCategory("IntegrationTests")]
         public void DataPrasifkaIntegrationTests_AnalysePrasifkaScenario1() {
@@ -128,12 +109,31 @@ namespace AmigaPowerAnalysis.Tests.IntegrationTests {
             analyseProject(projectName);
         }
 
+        private static Project createProjectScenario1(List<EndpointType> endpointGroups, List<Endpoint> endpoints) {
+            var project = new Project();
+            project.PowerCalculationSettings.NumberOfReplications = new List<int>() { 2, 4, 8, 16, 32, 64 };
+            project.PowerCalculationSettings.NumberOfRatios = 3;
+            project.EndpointTypes = endpointGroups;
+            project.Endpoints = endpoints;
+            return project;
+        }
+
+        private static Project createProjectScenario2(List<EndpointType> endpointGroups, List<Endpoint> endpoints) {
+            var project = createProjectScenario1(endpointGroups, endpoints);
+            project.DesignSettings.ExperimentalDesignType = ExperimentalDesignType.RandomizedCompleteBlocks;
+            project.UseBlockModifier = true;
+            foreach (var level in project.VarietyFactor.FactorLevels) {
+                level.Frequency = 4;
+            }
+            return project;
+        }
+
         private static void analyseProject(string projectName) {
             var filesPath = Path.Combine(_testOutputPath, projectName);
             var resultPowerAnalysis = SerializationExtensions.FromXmlFile<ResultPowerAnalysis>(Path.Combine(filesPath, "Output.xml"));
             var reportGenerator = new PrasifkaDataReportGenerator(resultPowerAnalysis, projectName, filesPath);
             reportGenerator.SaveAsHtml(Path.Combine(filesPath, "Summary_Prasifka.html"));
-            reportGenerator.SaveAsPdf(Path.Combine(filesPath, "Summary_Prasifka.pdf"));
+            //reportGenerator.SaveAsPdf(Path.Combine(filesPath, "Summary_Prasifka.pdf"));
         }
     }
 }
