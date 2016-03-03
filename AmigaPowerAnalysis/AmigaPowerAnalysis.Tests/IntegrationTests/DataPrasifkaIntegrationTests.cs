@@ -111,7 +111,7 @@ namespace AmigaPowerAnalysis.Tests.IntegrationTests {
 
         private static Project createProjectScenario1(List<EndpointType> endpointGroups, List<Endpoint> endpoints) {
             var project = new Project();
-            project.PowerCalculationSettings.NumberOfReplications = new List<int>() { 2, 4, 8, 16, 32, 64 };
+            project.PowerCalculationSettings.NumberOfReplications = new List<int>() { 2, 4, 8, 16, 32, 64, 128 };
             project.PowerCalculationSettings.NumberOfRatios = 3;
             project.EndpointTypes = endpointGroups;
             project.Endpoints = endpoints;
@@ -120,11 +120,11 @@ namespace AmigaPowerAnalysis.Tests.IntegrationTests {
 
         private static Project createProjectScenario2(List<EndpointType> endpointGroups, List<Endpoint> endpoints) {
             var project = createProjectScenario1(endpointGroups, endpoints);
-            project.DesignSettings.ExperimentalDesignType = ExperimentalDesignType.RandomizedCompleteBlocks;
-            project.UseBlockModifier = true;
             foreach (var level in project.VarietyFactor.FactorLevels) {
                 level.Frequency = 4;
             }
+            project.DesignSettings.ExperimentalDesignType = ExperimentalDesignType.RandomizedCompleteBlocks;
+            project.UseBlockModifier = true;
             return project;
         }
 

@@ -86,12 +86,8 @@ namespace AmigaPowerAnalysis.Core.Charting.DataSummaryChartCreators {
                 new {
                     Replicates = replicates,
                     AnalysableEndpoints = resultPowerAnalysis.Where(r => {
-                        if (!double.IsNaN(r.InputPowerAnalysis.LocUpper)) {
-                            var record = r.OutputRecords.First(o => o.NumberOfReplications == replicates && o.ConcernStandardizedDifference == 0D);
-                            return record.GetPower(TestType.Equivalence, r.AnalysisMethodEquivalenceTest) > power;
-                        } else {
-                            return false;
-                        }
+                        var record = r.OutputRecords.First(o => o.NumberOfReplications == replicates && o.ConcernStandardizedDifference == 0D);
+                        return record.GetPower(TestType.Equivalence, r.AnalysisMethodEquivalenceTest) > power;
                     }).Count()
                 });
             lineSeriesEquivalence.Points.AddRange(pointsEquivalence.Select(r => new DataPoint(r.Replicates, r.AnalysableEndpoints)));
