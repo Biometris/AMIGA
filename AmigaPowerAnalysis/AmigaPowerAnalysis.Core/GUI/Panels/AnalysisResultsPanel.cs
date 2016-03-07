@@ -272,7 +272,7 @@ namespace AmigaPowerAnalysis.GUI {
         private void buttonGenerateDataTemplate_Click(object sender, EventArgs e) {
             var saveFileDialog = new SaveFileDialog() {
                 Filter = "csv files (*.csv)|*.csv|All files (*.*)|*.*",
-                FileName = "Template " + _project.ProjectName + ".csv",
+                FileName = "Template-" + _project.ProjectName + ".csv",
                 InitialDirectory = CurrentOutputFilesPath,
                 FilterIndex = 1,
                 RestoreDirectory = true,

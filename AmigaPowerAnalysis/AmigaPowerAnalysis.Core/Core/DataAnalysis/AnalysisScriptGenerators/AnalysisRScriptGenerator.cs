@@ -16,11 +16,11 @@ namespace AmigaPowerAnalysis.Core.DataAnalysis {
         /// <param name="filename">The name of the file to which the settings are written.</param>
         public void Generate(IEnumerable<OutputPowerAnalysis> powerAnalysisInputs, string filename, string filenameTemplate, string filenameTemplateContrasts) {
             using (var file = new System.IO.StreamWriter(filename)) {
-                var script = create(powerAnalysisInputs, filenameTemplate, filenameTemplateContrasts);
+                var script = create(powerAnalysisInputs, Path.GetDirectoryName(filename), filenameTemplate, filenameTemplateContrasts);
                 file.WriteLine(script);
                 file.Close();
             }
-            var scriptFile = Path.Combine(Path.GetDirectoryName(filename), "Functions.R");
+            var scriptFile = Path.Combine(Path.GetDirectoryName(filename), "AMIGAPowerAnalysisFunctions.R");
             using (var file = new System.IO.StreamWriter(scriptFile)) {
                 var script = File.ReadAllText(@"Resources\RScripts\AMIGAPowerAnalysisFunctions.R");
                 file.WriteLine(script);
@@ -33,34 +33,44 @@ namespace AmigaPowerAnalysis.Core.DataAnalysis {
         /// </summary>
         /// <param name="endpoint"></param>
         /// <returns></returns>
-        private string create(IEnumerable<OutputPowerAnalysis> powerAnalysisInputs, string filenameTemplate, string filenameTemplateContrasts) {
+        private string create(IEnumerable<OutputPowerAnalysis> powerAnalysisInputs, string filenameDirectory, string filenameTemplate, string filenameTemplateContrasts) {
             var stringBuilder = new StringBuilder();
             stringBuilder.AppendLine(string.Format("#========== Import packages and functions"));
             stringBuilder.AppendLine("require(MASS)");
             stringBuilder.AppendLine("require(lsmeans)");
-            stringBuilder.AppendLine("source(\"Functions.R\")");
+            stringBuilder.AppendLine("source(\"AMIGAPowerAnalysisFunctions.R\")");
             stringBuilder.AppendLine();
 
-            stringBuilder.AppendLine(string.Format("#========== Global settings"));
-            stringBuilder.AppendLine("globalSettings <- list(");
+            stringBuilder.AppendLine(string.Format("#========== Project settings"));
+            stringBuilder.AppendLine("settings <- list(");
+            stringBuilder.AppendLine(string.Format("  dataDirectory     = \"{0}\",", filenameDirectory.Replace("\\","/")));
             stringBuilder.AppendLine(string.Format("  dataFile          = \"{0}\",", filenameTemplate));
             stringBuilder.AppendLine(string.Format("  contrastFile      = \"{0}\",", filenameTemplateContrasts));
             stringBuilder.AppendLine(string.Format("  factors           = c({0}),", string.Join(",", powerAnalysisInputs.First().InputPowerAnalysis.Factors.Select(f => string.Format("\"{0}\"", f)))));
             stringBuilder.AppendLine(string.Format("  design            = \"{0}\",", powerAnalysisInputs.First().InputPowerAnalysis.ExperimentalDesignType));
-            stringBuilder.AppendLine(string.Format("  significanceLevel = {0}", powerAnalysisInputs.First().InputPowerAnalysis.SignificanceLevel.ToInvariantString()));
+            stringBuilder.AppendLine(string.Format("  significanceLevel = {0},", powerAnalysisInputs.First().InputPowerAnalysis.SignificanceLevel.ToInvariantString()));
+            stringBuilder.AppendLine(string.Format("  testMethodSummary = \"Wald\""));
             stringBuilder.AppendLine(")");
             stringBuilder.AppendLine();
 
             stringBuilder.AppendLine(string.Format("#========== Endpoint settings"));
+            stringBuilder.AppendLine(string.Format("#  1) endpoint name;"));
+            stringBuilder.AppendLine(string.Format("#  2) overall mean;"));
+            stringBuilder.AppendLine(string.Format("#  3) locLower;"));
+            stringBuilder.AppendLine(string.Format("#  4) locUpper;"));
+            stringBuilder.AppendLine(string.Format("#  5) model for modifiers;"));
+            stringBuilder.AppendLine(string.Format("#  6) analysis for difference test;"));
+            stringBuilder.AppendLine(string.Format("#  7) analysis for equivalence test;"));
             stringBuilder.AppendLine(string.Format("endpoints <- list()"));
 
             for (int i = 0; i < powerAnalysisInputs.Count(); i++) {
                 var endpoint = powerAnalysisInputs.ElementAt(i).InputPowerAnalysis;
-                string modifier = "NULL";
+                string modifier = "-";
                 if (endpoint.ModifierFactors.Count > 0) {
-                    modifier = string.Join("*", endpoint.ModifierFactors.Select(m => string.Format("\"{0}\"", m)));
+                    modifier = string.Join("*", endpoint.ModifierFactors.Select(m => string.Format("{0}", m)));
+                    //modifier = string.Format("\"{0}\"", modifier);
                 }
-                stringBuilder.AppendLine(string.Format("endpoints[[{0}]] <- DefineEndpoint(\"{1}\", {2}, {3}, {4}, {5}, \"{6}\", \"{7}\")",
+                stringBuilder.AppendLine(string.Format("endpoints[[{0}]] <- DefineEndpoint(\"{1}\", {2}, {3}, {4}, \"{5}\", \"{6}\", \"{7}\")",
                     i + 1, endpoint.Endpoint.Replace(" ", "_"), endpoint.OverallMean, endpoint.LocLower.ToInvariantString(), endpoint.LocUpper.ToInvariantString(),
                     modifier, endpoint.SelectedAnalysisMethodTypesDifferenceTests, endpoint.SelectedAnalysisMethodTypesEquivalenceTests));
             }

@@ -819,13 +819,13 @@ gammaAnalysis <- function(data, settings, modelSettings, debugSettings) {
 # Returns the pvalue for the CGI equivalence test
 cgiEquiPvalue <- function(ratio, locLower, locUpper, testType) {
   if (testType == "twosided") {
-    pLowerCGI = mean(ratio < locLower)  # If this is smaller than alfa: reject H0: esti < LocLower
-    pUpperCGI = mean(ratio > locUpper)  # If this is smaller than alfa: reject H0: esti > LocUpper
+    pLowerCGI = mean(ratio < locLower, na.rm=TRUE)  # If this is smaller than alfa: reject H0: esti < LocLower
+    pUpperCGI = mean(ratio > locUpper, na.rm=TRUE)  # If this is smaller than alfa: reject H0: esti > LocUpper
     return(max(pLowerCGI, pUpperCGI))   # Both one-sided hypothesis must be rejected
   } else if (testType == "left") {
-    return(mean(ratio < locLower))      # If this is smaller than alfa: reject H0: esti < LocLower
+    return(mean(ratio < locLower, na.rm=TRUE))      # If this is smaller than alfa: reject H0: esti < LocLower
   } else { # right
-    return(mean(ratio > locUpper))      # If this is smaller than alfa: reject H0: esti > LocUpper
+    return(mean(ratio > locUpper, na.rm=TRUE))      # If this is smaller than alfa: reject H0: esti > LocUpper
   }
 }
 
