@@ -20,7 +20,7 @@ namespace AmigaPowerAnalysis.Core.Charting {
         }
 
         public void SaveToFile(string filename) {
-            SaveToFile(filename, 600, 300);
+            SaveToFile(filename, 600, 350);
         }
     }
 }

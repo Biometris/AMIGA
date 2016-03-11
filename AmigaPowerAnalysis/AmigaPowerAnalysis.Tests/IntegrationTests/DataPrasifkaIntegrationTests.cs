@@ -1,11 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using AmigaPowerAnalysis.Core;
+using AmigaPowerAnalysis.Core.Charting.DataSummaryChartCreators;
+using AmigaPowerAnalysis.Core.Data;
 using AmigaPowerAnalysis.Core.DataReaders;
 using AmigaPowerAnalysis.Core.PowerAnalysis;
 using AmigaPowerAnalysis.Core.Reporting;
 using AmigaPowerAnalysis.Tests.TestUtilities;
+using Biometris.DataFileReader;
 using Biometris.ExtensionMethods;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -134,6 +138,19 @@ namespace AmigaPowerAnalysis.Tests.IntegrationTests {
             var reportGenerator = new PrasifkaDataReportGenerator(resultPowerAnalysis, projectName, filesPath);
             reportGenerator.SaveAsHtml(Path.Combine(filesPath, "Summary_Prasifka.html"));
             //reportGenerator.SaveAsPdf(Path.Combine(filesPath, "Summary_Prasifka.pdf"));
+        }
+
+        [TestMethod]
+        [TestCategory("IntegrationTests")]
+        public void CreateMeanCVChart() {
+            using (var stream = Assembly.Load("AmigaPowerAnalysis").GetManifestResourceStream("AmigaPowerAnalysis.Resources.TableDefinitions.xml")) {
+                var tableDefinitions = TableDefinitionCollection.FromXml(stream);
+                var _dataFileReader = new CsvFileReader(Path.Combine(_dataPath, "AMIGA_endpoints.csv"));
+                var tableDefinition = tableDefinitions.GetTableDefinition("Endpoints");
+                var records = _dataFileReader.ReadDataSet<EndpointDTO>(tableDefinition);
+                var chartCreator = new MeanCvScatterChartCreator(records);
+                this.SaveChart(chartCreator, "Prasifka_Mean_versus_CV");
+            }
         }
     }
 }

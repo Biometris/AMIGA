@@ -54,8 +54,8 @@ namespace AmigaPowerAnalysis.Core.Charting.DataSummaryChartCreators {
                 var horizontalAxis = new LogarithmicAxis() {
                     Title = "Mean",
                     Position = AxisPosition.Bottom,
-                    MajorGridlineStyle = LineStyle.None,
-                    MinorGridlineStyle = LineStyle.None,
+                    MajorGridlineStyle = LineStyle.Dot,
+                    MinorGridlineStyle = LineStyle.Dot,
                     MaximumPadding = 0.1
                 };
                 plotModel.Axes.Add(horizontalAxis);
@@ -63,8 +63,8 @@ namespace AmigaPowerAnalysis.Core.Charting.DataSummaryChartCreators {
                 var horizontalAxis = new LinearAxis() {
                     Title = "Mean",
                     Position = AxisPosition.Bottom,
-                    MajorGridlineStyle = LineStyle.None,
-                    MinorGridlineStyle = LineStyle.None,
+                    MajorGridlineStyle = LineStyle.Dot,
+                    MinorGridlineStyle = LineStyle.Dot,
                     MaximumPadding = 0.1
                 };
                 plotModel.Axes.Add(horizontalAxis);
