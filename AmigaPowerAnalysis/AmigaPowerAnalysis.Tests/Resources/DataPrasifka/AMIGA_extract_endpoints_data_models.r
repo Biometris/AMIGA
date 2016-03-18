@@ -16,14 +16,14 @@ AMIGA_extract_endpoints_data_models <- function (endpoints, anticipated_number_o
   endpoints_amiga$LocLower <- 0.5
   endpoints_amiga$LocUpper <- 2.0
   endpoints_amiga$DistributionType <- "OverdispersedPoisson"
-  endpoints_amiga$Mean <- NaN
-  endpoints_amiga$CV <- NaN
-  endpoints_amiga$CvBlocks <- NaN
-  endpoints_amiga$CV_naive <- NaN
-  endpoints_amiga$CV_within_blocks_old <- NaN
-  endpoints_amiga$site_year_combinations_with_data <- NaN
-  endpoints_amiga$sites_with_data <- NaN 
-  endpoints_amiga$years_with_data <- NaN
+  endpoints_amiga$Mean <- NA
+  endpoints_amiga$CV <- NA
+  endpoints_amiga$CvBlocks <- NA
+  endpoints_amiga$CV_naive <- NA
+  endpoints_amiga$CV_within_blocks_old <- NA
+  endpoints_amiga$site_year_combinations_with_data <- NA
+  endpoints_amiga$sites_with_data <- NA 
+  endpoints_amiga$years_with_data <- NA
   
   anticipated_effort_per_block <- anticipated_number_of_periods * anticipated_number_of_samples_per_plot
 
@@ -73,7 +73,6 @@ AMIGA_extract_endpoints_data_models <- function (endpoints, anticipated_number_o
     sink(file.path("Outputs", paste(endpoints[i], "_glm_within_location_year_variation.txt", sep=""), fsep = "\\"))
     if (is.null(fit)) {
       print("GLM fit for extracting the within location/year variation failed")
-      CV_within_blocks_old <- NA
     } else {
       fit_summary <- summary(fit)
       dispersion <- fit_summary$dispersion
@@ -89,7 +88,6 @@ AMIGA_extract_endpoints_data_models <- function (endpoints, anticipated_number_o
     sink(file.path("Outputs", paste(endpoints[i], "_glmm_between_location_year_variation.txt", sep=""), fsep = "\\"))
     if (is.null(fit)) {
       print("GLMM fit for extracting the between location/year variation failed")
-      CV_between_blocks <- NA
     } else {
       fit_summary <- summary(fit)
       dispersion <- as.numeric(VarCorr(fit)[2,1])
@@ -133,3 +131,21 @@ endpoints <- endpoints[substring(endpoints, 1, 2) != "NA"]
 endpoints_amiga <- AMIGA_extract_endpoints_data_models(endpoints, 6, 4)
 write.csv(na.omit(endpoints_amiga), file = file.path("AMIGA_endpoints.csv", fsep = "\\"), row.names=FALSE)
 write.csv(subset(endpoints_amiga, is.na(endpoints_amiga$CV)), file = file.path("AMIGA_endpoints_failed.csv", fsep = "\\"), row.names=FALSE)
+
+selected_endpoints <- c(
+  "General.collembola.all.families",
+  "Springtails.entomobryids",
+  "Sap.beetles",
+  "Crickets",
+  "Ants",
+  "Spiders",
+  "Wolf.spiders",
+  "Centipedes",
+  "Ground.beetles",
+  "Rove.beetles"
+)
+
+endpoints_amiga <- AMIGA_extract_endpoints_data_models(selected_endpoints, 6, 4)
+write.csv(na.omit(endpoints_amiga), file = file.path("AMIGA_endpoints_selection.csv", fsep = "\\"), row.names=FALSE)
+write.csv(subset(endpoints_amiga, is.na(endpoints_amiga$CV)), file = file.path("AMIGA_endpoints_selection_failed.csv", fsep = "\\"), row.names=FALSE)
+
