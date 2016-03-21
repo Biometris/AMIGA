@@ -35,9 +35,10 @@ namespace AmigaPowerAnalysis.Core.Charting.DataSummaryChartCreators {
 
             var verticalAxis = new LinearAxis() {
                 Title = "Analysable endpoints",
-                MajorGridlineStyle = LineStyle.None,
-                MinorGridlineStyle = LineStyle.None,
+                MajorGridlineStyle = LineStyle.Dot,
+                MinorGridlineStyle = LineStyle.Dot,
                 Minimum = 0,
+                Maximum = resultPowerAnalysis.Count() + 4,
                 MaximumPadding = 0.1
             };
             plotModel.Axes.Add(verticalAxis);
@@ -45,8 +46,8 @@ namespace AmigaPowerAnalysis.Core.Charting.DataSummaryChartCreators {
             var horizontalAxis = new LinearAxis() {
                 Title = "Replicates",
                 Position = AxisPosition.Bottom,
-                MajorGridlineStyle = LineStyle.None,
-                MinorGridlineStyle = LineStyle.None,
+                MajorGridlineStyle = LineStyle.Dot,
+                MinorGridlineStyle = LineStyle.Dot,
                 MaximumPadding = 0.1
             };
             plotModel.Axes.Add(horizontalAxis);
@@ -116,6 +117,14 @@ namespace AmigaPowerAnalysis.Core.Charting.DataSummaryChartCreators {
             lineSeriesDifferenceLocUpper.Points.AddRange(pointsDifferenceTestUpperLoc.Select(r => new DataPoint(r.Replicates, r.AnalysableEndpoints)));
 
             plotModel.Series.Add(lineSeriesDifferenceLocUpper);
+
+            var lineAnnotation = new LineAnnotation() {
+                Type = LineAnnotationType.Horizontal,
+                Y = resultPowerAnalysis.Count(),
+                Color = OxyColors.Black,
+                MaximumX = 400
+            };
+            plotModel.Annotations.Add(lineAnnotation);
 
             return plotModel;
         }

@@ -43,8 +43,8 @@ namespace AmigaPowerAnalysis.Core.Charting.DataSummaryChartCreators {
 
             var verticalAxis = new LinearAxis() {
                 Title = "CV",
-                MajorGridlineStyle = LineStyle.None,
-                MinorGridlineStyle = LineStyle.None,
+                MajorGridlineStyle = LineStyle.Dot,
+                MinorGridlineStyle = LineStyle.Dot,
                 Minimum = 0,
                 MaximumPadding = 0.1
             };

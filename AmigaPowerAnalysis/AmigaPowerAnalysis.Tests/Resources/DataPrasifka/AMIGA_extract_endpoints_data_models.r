@@ -17,6 +17,7 @@ AMIGA_extract_endpoints_data_models <- function (endpoints, anticipated_number_o
   endpoints_amiga$LocUpper <- 2.0
   endpoints_amiga$DistributionType <- "OverdispersedPoisson"
   endpoints_amiga$Mean <- NA
+  endpoints_amiga$Mean_naive <- NA
   endpoints_amiga$CV <- NA
   endpoints_amiga$CvBlocks <- NA
   endpoints_amiga$CV_naive <- NA
@@ -33,26 +34,28 @@ AMIGA_extract_endpoints_data_models <- function (endpoints, anticipated_number_o
   # Filter records with DAP < 0
   data_plot_totals <- data_plot_totals[data_plot_totals$DAP > 0,]
   
-  # Do not multiply by number of traps: take the mean per sample; as it is now
-  # data_plot_totals[, (endpoints) := lapply(.SD, function(x) x * data_plot_totals[['Traps']]), .SDcols = endpoints]
+  # Multiply by number of traps: records represent the mean counts per trap
+  data_plot_totals[, (endpoints) := lapply(.SD, function(x) x * data_plot_totals[['Traps']]), .SDcols = endpoints]
   
   for (i in 1:length(endpoints)) {
-    
+
     # Combine counts over all counting days
     endpoint_plot_totals <- ddply(
       data_plot_totals,
-      c("Site","Year","Replicate"),
+      c("Site","Year","Replicate","Traps"),
       .fun = function(x, col) {
         c(
           plot_total = sum(x[[col]]),
-          plot_periods = length(x[[col]]),        
-          period_average = sum(x[[col]]) / length(x[[col]]),
-          correction_anticipated_effort_per_block = anticipated_effort_per_block * mean(x[[col]]),
-          rounded_correction_anticipated_effort_per_block = round(anticipated_effort_per_block * mean(x[[col]]))
+          plot_periods = length(x[[col]])
         )
       },
       endpoints[i])
-    endpoint_plot_totals$Site.Year <- paste(endpoint_plot_totals$Site,endpoint_plot_totals$Year)
+    endpoint_plot_totals$SiteYear <- paste(endpoint_plot_totals$Site,endpoint_plot_totals$Year)
+    endpoint_plot_totals$effort <- endpoint_plot_totals$Traps * endpoint_plot_totals$plot_periods
+    endpoint_plot_totals$anticipated_effort <- anticipated_effort_per_block
+    endpoint_plot_totals$anticipated_effort_correction_factor <- endpoint_plot_totals$effort / anticipated_effort_per_block
+    endpoint_plot_totals$corrected_plot_totals <- endpoint_plot_totals$plot_total / endpoint_plot_totals$anticipated_effort_correction_factor
+    endpoint_plot_totals$rounded_corrected_plot_totals = round(endpoint_plot_totals$corrected_plot_totals)
     
     endpoint_summary_per_site_location <- ddply(
       endpoint_plot_totals,
@@ -65,18 +68,19 @@ AMIGA_extract_endpoints_data_models <- function (endpoints, anticipated_number_o
       cv = sd(plot_total) / mean(plot_total)
     )
     
-    measurements <- na.omit(endpoint_plot_totals$correction_anticipated_effort_per_block)
-    endpoint_mean <- mean(measurements)
-    endpoint_cv <- sd(measurements) / endpoint_mean * 100
+    measurements <- na.omit(endpoint_plot_totals$corrected_plot_totals)
+    endpoint_mean_naive <- mean(measurements)
+    endpoint_cv <- sd(measurements) / endpoint_mean_naive * 100
     
-    fit <- tryCatch(glm(rounded_correction_anticipated_effort_per_block ~ 1 + Site*Year, data=endpoint_plot_totals, family=quasipoisson()), error=function(e) NULL)
+    fit <- tryCatch(glm(plot_total ~ 1 + Site*Year, offset=log(anticipated_effort_correction_factor), data=endpoint_plot_totals, family=quasipoisson()), error=function(e) NULL)
     sink(file.path("Outputs", paste(endpoints[i], "_glm_within_location_year_variation.txt", sep=""), fsep = "\\"))
     if (is.null(fit)) {
       print("GLM fit for extracting the within location/year variation failed")
+      CV_within_blocks_old <- NA
     } else {
       fit_summary <- summary(fit)
       dispersion <- fit_summary$dispersion
-      CV_within_blocks_old <- 100 * sqrt(endpoint_mean * dispersion) / endpoint_mean
+      CV_within_blocks_old <- 100 * sqrt(endpoint_mean_naive * dispersion) / endpoint_mean_naive
       print(summary(fit))
       print(dispersion)
       print(CV_within_blocks_old)
@@ -84,16 +88,20 @@ AMIGA_extract_endpoints_data_models <- function (endpoints, anticipated_number_o
     sink()
     
     options(warn=1)
-    fit <- tryCatch(glmmPQL(rounded_correction_anticipated_effort_per_block ~ 1, random = ~1|Site.Year, data=endpoint_plot_totals, family=quasipoisson()), error=function(e) NULL)
+    fit <- tryCatch(glmmPQL(plot_total ~ 1 + offset(log(anticipated_effort_correction_factor)), random = ~1|SiteYear, data=endpoint_plot_totals, family=quasipoisson()), error=function(e) NULL)
     sink(file.path("Outputs", paste(endpoints[i], "_glmm_between_location_year_variation.txt", sep=""), fsep = "\\"))
     if (is.null(fit)) {
       print("GLMM fit for extracting the between location/year variation failed")
+      endpoint_mean <- NA
+      CV_within_blocks <- NA
+      CV_between_blocks <- NA
     } else {
       fit_summary <- summary(fit)
       dispersion <- as.numeric(VarCorr(fit)[2,1])
       sigma <- as.numeric(VarCorr(fit)[1,2])
-      CV_between_blocks <- 100 * sqrt(exp(sigma * sigma) - 1)
+      endpoint_mean <- exp(as.numeric(fit$coefficients$fixed) + (sigma * sigma) / 2)
       CV_within_blocks <- 100 * sqrt(endpoint_mean * dispersion) / endpoint_mean
+      CV_between_blocks <- 100 * sqrt(exp(sigma * sigma) - 1)
       print(summary(fit))
       print(dispersion)
       print(CV_within_blocks)
@@ -104,6 +112,7 @@ AMIGA_extract_endpoints_data_models <- function (endpoints, anticipated_number_o
 	
     endpoints_amiga$EndpointID[i] <- gsub("[.]"," ",endpoints[i])
     endpoints_amiga$Mean[i] <-  signif(endpoint_mean, digits = 4)
+    endpoints_amiga$Mean_naive[i] <-  signif(endpoint_mean_naive, digits = 4)
     endpoints_amiga$CV[i] <- signif(CV_within_blocks, digits = 4)
     endpoints_amiga$CvBlocks[i] <- signif(CV_between_blocks, digits = 4)
     endpoints_amiga$CV_naive[i] <- signif(endpoint_cv, digits = 4)
