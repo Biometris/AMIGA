@@ -1,98 +1,98 @@
-EndpointID,Group,MeasurementType,LocLower,LocUpper,DistributionType,Mean,Mean_naive,CV,CvBlocks,CV_naive,CV_within_blocks_old,site_year_combinations_with_data,sites_with_data,years_with_data
-Aphids,Herbivores,COUNT,0.5,2,OverdispersedPoisson,15.87,17.12,61.27,114.5,121.2,60.05,7,3,3
-Leafhoppers,Herbivores,COUNT,0.5,2,OverdispersedPoisson,3.241,3.201,173.4,0.01172,119.5,144.7,7,3,3
-Plant hoppers,Herbivores,COUNT,0.5,2,OverdispersedPoisson,0.8463,0.4447,69.67,452.8,164.5,90.8,7,3,3
-Froghoppers,Herbivores,COUNT,0.5,2,OverdispersedPoisson,0.4175,0.3376,192.4,89.35,200.1,190.4,7,3,3
-Minute Pirate bug ,Herbivores,COUNT,0.5,2,OverdispersedPoisson,0.1166,0.1169,357.6,0.01423,283.9,167.1,7,3,3
-Minute pirate bug nymphs,Herbivores,COUNT,0.5,2,OverdispersedPoisson,1,1,324,0.01463,282.8,173.2,4,2,2
-Mirid plant bugs,Herbivores,COUNT,0.5,2,OverdispersedPoisson,0.7253,0.5643,171,74.92,169.8,191.4,7,3,3
-Predaceous stink bugs,Herbivores,COUNT,0.5,2,OverdispersedPoisson,0.5242,0.442,160.4,80.71,149.6,182.2,7,3,3
-Misc  plant bugs,Herbivores,COUNT,0.5,2,OverdispersedPoisson,4.37,3.264,80.08,699.1,189.6,97.17,7,3,3
-Lacewing larvae,Herbivores,COUNT,0.5,2,OverdispersedPoisson,1.268,1.366,123,208.5,188.4,128.7,7,3,3
-Sap beetles,Herbivores,COUNT,0.5,2,OverdispersedPoisson,4.814,4.964,53.08,62.87,80.03,53.78,7,3,3
-Sap beetle larvae,Herbivores,COUNT,0.5,2,OverdispersedPoisson,0.3206,0.25,97.03,163.1,138,100,4,2,2
-Minute fungus beetles,Herbivores,COUNT,0.5,2,OverdispersedPoisson,0.4047,0.3407,202.1,51.15,167.3,199.8,7,3,3
-Shining mold beetles ,Herbivores,COUNT,0.5,2,OverdispersedPoisson,5.68,4.389,445.5,0.02991,352.2,294.5,7,3,3
-Hairy fungus beetles,Herbivores,COUNT,0.5,2,OverdispersedPoisson,1.576,1.342,98.21,440.2,194.2,109.4,7,3,3
-Minute brown ,Herbivores,COUNT,0.5,2,OverdispersedPoisson,0.7242,0.4786,100.7,451,206.1,126.9,7,3,3
-Antlike flower,Herbivores,COUNT,0.5,2,OverdispersedPoisson,16.3,9.37,63.74,306.1,124.9,83.79,7,3,3
-Short winged mold beetles ,Herbivores,COUNT,0.5,2,OverdispersedPoisson,0.5276,0.2912,75.61,1470,291.5,107.5,7,3,3
-Flea beetles,Herbivores,COUNT,0.5,2,OverdispersedPoisson,1.953,1.972,79.72,85.28,102.5,77.9,7,3,3
-Click beetles,Herbivores,COUNT,0.5,2,OverdispersedPoisson,10.51,9.472,83.2,197.3,155.7,87.48,7,3,3
-Weevils,Herbivores,COUNT,0.5,2,OverdispersedPoisson,0.6193,0.8388,436,0.02598,266.3,132.4,7,3,3
-Japanese beetles,Herbivores,COUNT,0.5,2,OverdispersedPoisson,47.51,43.97,87.75,112.4,147.4,91.32,9,3,4
-Rove beetles,Herbivores,COUNT,0.5,2,OverdispersedPoisson,0.1071,0.1111,421.9,0.02685,346.4,173.2,6,2,3
-Ladybird beetle larvae,Herbivores,COUNT,0.5,2,OverdispersedPoisson,1.986,1.917,89.3,31.31,84.05,74.07,4,2,2
-Soldier beetle larvae,Herbivores,COUNT,0.5,2,OverdispersedPoisson,0.9135,0.6667,83.4,207.1,141.4,89.44,4,2,2
-Lightening bugs,Herbivores,COUNT,0.5,2,OverdispersedPoisson,0.3354,0.2797,165.3,0.003615,133.3,173,7,3,3
-Tiger beetles Cicinindelinae,Herbivores,COUNT,0.5,2,OverdispersedPoisson,1.016,1.174,93.89,294.8,199.2,91.28,7,3,3
-Beetle larvae morph 1,Herbivores,COUNT,0.5,2,OverdispersedPoisson,0.2343,0.1904,142,179.3,173.5,152,7,3,3
-Beetle larvae morph 3,Herbivores,COUNT,0.5,2,OverdispersedPoisson,0.3669,0.2664,141.4,402.5,241.7,181.6,7,3,3
-Scarab larvae,Herbivores,COUNT,0.5,2,OverdispersedPoisson,0.08333,0.08333,324,0.01332,282.8,173.2,4,2,2
-Scarabs misc,Herbivores,COUNT,0.5,2,OverdispersedPoisson,1.15,1.352,197.2,0.006646,136.6,116.6,7,3,3
-Misc  beetles,Herbivores,COUNT,0.5,2,OverdispersedPoisson,4.616,3.69,196.8,147.7,276.9,228,7,3,3
-Ants,Herbivores,COUNT,0.5,2,OverdispersedPoisson,131,120,108.2,66.77,104.9,104.1,7,3,3
-Fairyflies  Mymaridae,Herbivores,COUNT,0.5,2,OverdispersedPoisson,0.4039,0.3135,104.4,177.3,145.9,112.2,7,3,3
-Eulophid wasps,Herbivores,COUNT,0.5,2,OverdispersedPoisson,7.225,2.395,17.9,20040,220.9,32.55,7,3,3
-Encyrtid wasps,Herbivores,COUNT,0.5,2,OverdispersedPoisson,1.236,0.8402,89.27,296.4,202.5,107.2,7,3,3
-Gall wasps Cynipidae,Herbivores,COUNT,0.5,2,OverdispersedPoisson,0.1346,0.1649,336.5,0.00931,220.2,208.4,7,3,3
-Scelionid wasps,Herbivores,COUNT,0.5,2,OverdispersedPoisson,4.207,3.89,61.32,358.5,174.1,65.1,7,3,3
-Ceraphronid wasps,Herbivores,COUNT,0.5,2,OverdispersedPoisson,0.1087,0.06417,260.3,248,412.3,353.1,7,3,3
-Braconid wasps,Herbivores,COUNT,0.5,2,OverdispersedPoisson,0.3212,0.2267,125.8,206.2,174.7,139.5,7,3,3
-Ichneumonid wasps,Herbivores,COUNT,0.5,2,OverdispersedPoisson,0.1136,0.06118,85.58,2772,282.3,130.4,7,3,3
-Broad mites,Herbivores,COUNT,0.5,2,OverdispersedPoisson,28.99,13.03,28.66,3636,268.1,45.51,7,3,3
-Oribatid mites,Herbivores,COUNT,0.5,2,OverdispersedPoisson,44.59,40.96,128.5,90.61,141.1,136.8,9,3,4
-Predaceous mites,Herbivores,COUNT,0.5,2,OverdispersedPoisson,30.05,23.43,48.88,241.5,112.5,55.2,7,3,3
-Grass Frit flies,Herbivores,COUNT,0.5,2,OverdispersedPoisson,3.237,2.141,71.73,518.6,212.9,91.08,7,3,3
-Dark winged fungus gnats,Herbivores,COUNT,0.5,2,OverdispersedPoisson,18.12,7.955,20.52,523.2,102,29.66,7,3,3
-Humpbacked flies Phoridae,Herbivores,COUNT,0.5,2,OverdispersedPoisson,4.097,2.73,78.29,678.8,159.5,100,7,3,3
-Gall midges Cecidomyiidae,Herbivores,COUNT,0.5,2,OverdispersedPoisson,0.2524,0.2183,154.5,200.4,217,165.5,7,3,3
-Pomace flies Drosophilidae,Herbivores,COUNT,0.5,2,OverdispersedPoisson,0.1685,0.1658,273.3,0.018,193.5,214.3,7,3,3
-Leaf miner Agromyzidae,Herbivores,COUNT,0.5,2,OverdispersedPoisson,0.0551,0.04727,373.8,0.01041,295.8,296.6,7,3,3
-Midges Chironomidae,Herbivores,COUNT,0.5,2,OverdispersedPoisson,0.09077,0.05647,152.8,778.5,307.9,216.4,7,3,3
-Tachinid flies,Herbivores,COUNT,0.5,2,OverdispersedPoisson,0.9379,0.8743,114,348.6,217.5,121,7,3,3
-Long legged flies,Herbivores,COUNT,0.5,2,OverdispersedPoisson,1.334,0.8794,104.3,219,176.4,122.9,7,3,3
-Misc flies,Herbivores,COUNT,0.5,2,OverdispersedPoisson,162.9,23.68,7.568,32950,161.9,20.57,7,3,3
-Muscid flies Muscidae,Herbivores,COUNT,0.5,2,OverdispersedPoisson,26.76,8.887,28.75,1019,176.4,47.92,7,3,3
-Mycetophilidae,Herbivores,COUNT,0.5,2,OverdispersedPoisson,0.8593,0.3333,49.88,2034,213.8,86.6,4,2,2
-General collembola all families,Herbivores,COUNT,0.5,2,OverdispersedPoisson,706.7,804.2,51.27,121.1,124.9,47.98,9,3,4
-Springtails globular,Herbivores,COUNT,0.5,2,OverdispersedPoisson,16.2,14.62,96.85,133.8,132.6,100.8,9,3,4
-Springtails entomobryids,Herbivores,COUNT,0.5,2,OverdispersedPoisson,710.4,712.7,51.17,152.9,107.3,50.21,7,3,3
-Springtails isotomids,Herbivores,COUNT,0.5,2,OverdispersedPoisson,132.8,158.3,44.84,472.8,193.5,41.36,7,3,3
-Springtails hypogastrurids,Herbivores,COUNT,0.5,2,OverdispersedPoisson,95.98,57.98,94.7,514,249.4,1100,7,3,3
-Psocids,Herbivores,COUNT,0.5,2,OverdispersedPoisson,1.157,0.7977,192.5,356.6,318.4,251.9,7,3,3
-Phytophagous thrips,Herbivores,COUNT,0.5,2,OverdispersedPoisson,2.141,1.922,59.35,119,84.22,67.13,7,3,3
-Predaceous thrips,Herbivores,COUNT,0.5,2,OverdispersedPoisson,0.2142,0.1593,243.3,102.3,240.4,251.6,7,3,3
-Grasshoppers,Herbivores,COUNT,0.5,2,OverdispersedPoisson,0.6387,0.4255,100.6,252.4,197.5,115.8,7,3,3
-Crickets,Herbivores,COUNT,0.5,2,OverdispersedPoisson,41.79,43.02,52.22,191.9,124.2,50.52,7,3,3
-Spiders,Herbivores,COUNT,0.5,2,OverdispersedPoisson,76.62,76.32,37.44,301.1,110.8,37.07,9,3,4
-Spiders general,Herbivores,COUNT,0.5,2,OverdispersedPoisson,6.441,5.678,48.09,110.6,82.75,45.69,6,2,3
-Daddy long legs,Herbivores,COUNT,0.5,2,OverdispersedPoisson,3.368,2.706,113.3,317.4,176.6,128.5,7,3,3
-Centipedes,Herbivores,COUNT,0.5,2,OverdispersedPoisson,33.73,29.58,50.26,596.1,144.2,54.62,9,3,4
-Millipedes,Herbivores,COUNT,0.5,2,OverdispersedPoisson,15.02,14.81,112.4,146.9,156.3,117.9,9,3,4
-Crab spiders,Herbivores,COUNT,0.5,2,OverdispersedPoisson,1.475,1.312,87.92,183.5,111.3,91.14,7,3,3
-Wolf spiders,Herbivores,COUNT,0.5,2,OverdispersedPoisson,85.77,70.75,35.42,597.6,119.6,39.25,9,3,4
-Spiderlings,Herbivores,COUNT,0.5,2,OverdispersedPoisson,77.79,72.65,102.5,93.97,107.7,100.6,7,3,3
-Sowbugs,Herbivores,COUNT,0.5,2,OverdispersedPoisson,28.07,23.51,144.3,133.7,166.2,158.4,7,3,3
-Ground beetles Pterostichus spp ,Herbivores,COUNT,0.5,2,OverdispersedPoisson,15.68,15.66,77.05,74.51,101.1,76.75,9,3,4
-Ground beetles Harpalus spp ,Herbivores,COUNT,0.5,2,OverdispersedPoisson,8.955,5.383,44.04,672.7,115.4,56.53,9,3,4
-Ground beetles Stenolophus spp ,Herbivores,COUNT,0.5,2,OverdispersedPoisson,2.142,1.831,136.8,81.79,136.5,143.9,7,3,3
-Ground beetles Scarites spp ,Herbivores,COUNT,0.5,2,OverdispersedPoisson,2.611,2.543,94.07,84.18,107.5,93.57,7,3,3
-Ground beetles Clivina spp ,Herbivores,COUNT,0.5,2,OverdispersedPoisson,0.3507,0.2989,216.9,0.004029,152.4,241,7,3,3
-Ground beetles Bembideon spp ,Herbivores,COUNT,0.5,2,OverdispersedPoisson,2.699,1.518,60.03,421.5,189.4,77.7,6,3,3
-Ground beetle larvae,Herbivores,COUNT,0.5,2,OverdispersedPoisson,17.43,18.49,122.5,362.9,244.1,129.2,9,3,4
-Ground beetles misc  spp ,Herbivores,COUNT,0.5,2,OverdispersedPoisson,37.8,2.941,11.35,44650,242.7,135.2,7,3,3
-Ground beetles,Herbivores,COUNT,0.5,2,OverdispersedPoisson,43.4,44.47,51.46,79.8,77.28,50.22,7,3,3
-Dingy cutworm,Herbivores,COUNT,0.5,2,OverdispersedPoisson,0.25,0.25,324,0.01549,282.8,173.2,4,2,2
-European corn borer larvae,Herbivores,COUNT,0.5,2,OverdispersedPoisson,0.08333,0.08333,324,0.01332,282.8,173.2,4,2,2
-Corn earworm larvae,Herbivores,COUNT,0.5,2,OverdispersedPoisson,0.08053,0.09512,354.2,0.01026,237.4,207.1,7,3,3
-Misc  lepidopteran larvae,Herbivores,COUNT,0.5,2,OverdispersedPoisson,0.2768,0.2348,229.6,42.52,195.6,207.5,7,3,3
-Nematodes,Herbivores,COUNT,0.5,2,OverdispersedPoisson,0.08333,0.08333,324,0.01332,282.8,173.2,4,2,2
-Checkered Beetle   Cleridae,Herbivores,COUNT,0.5,2,OverdispersedPoisson,0.08333,0.08333,324,0.01332,282.8,173.2,4,2,2
-WCRW adults,Herbivores,COUNT,0.5,2,OverdispersedPoisson,2.083,2.083,132.1,0.0027,115.3,128.8,4,2,2
-NCRW adults,Herbivores,COUNT,0.5,2,OverdispersedPoisson,0.08333,0.08333,324,0.01332,282.8,173.2,4,2,2
-Scorpion Flies,Herbivores,COUNT,0.5,2,OverdispersedPoisson,0.1667,0.1667,324,0.01607,282.8,173.2,4,2,2
-ticks,Herbivores,COUNT,0.5,2,OverdispersedPoisson,0.08333,0.08333,324,0.01332,282.8,173.2,4,2,2
-Misc leaf beetles,Herbivores,COUNT,0.5,2,OverdispersedPoisson,0.02649,0.03922,732.6,0.02178,412.3,159.7,7,3,3
-Pteromalidae,Herbivores,COUNT,0.5,2,OverdispersedPoisson,0.02649,0.03922,732.6,0.02174,412.3,159.7,7,3,3
-Cuckoo wasps,Herbivores,COUNT,0.5,2,OverdispersedPoisson,0.08333,0.08333,324,0.01332,282.8,173.2,4,2,2
+"EndpointID","Group","MeasurementType","LocLower","LocUpper","DistributionType","Mean","Mean_naive","CV","CvBlocks","CV_naive","CV_within_blocks_old","site_year_combinations_with_data","sites_with_data","years_with_data"
+"Aphids","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",15.87,17.12,61.27,114.5,121.2,60.05,7,3,3
+"Leafhoppers","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",3.241,3.201,173.4,0.01172,119.5,144.7,7,3,3
+"Plant hoppers","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",0.8463,0.4447,69.67,452.8,164.5,90.8,7,3,3
+"Froghoppers","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",0.4175,0.3376,192.4,89.35,200.1,190.4,7,3,3
+"Minute Pirate bug ","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",0.1166,0.1169,357.6,0.01423,283.9,167.1,7,3,3
+"Minute pirate bug nymphs","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",1,1,324,0.01463,282.8,173.2,4,2,2
+"Mirid plant bugs","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",0.7253,0.5643,171,74.92,169.8,191.4,7,3,3
+"Predaceous stink bugs","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",0.5242,0.442,160.4,80.71,149.6,182.2,7,3,3
+"Misc  plant bugs","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",4.37,3.264,80.08,699.1,189.6,97.17,7,3,3
+"Lacewing larvae","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",1.268,1.366,123,208.5,188.4,128.7,7,3,3
+"Sap beetles","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",4.814,4.964,53.08,62.87,80.03,53.78,7,3,3
+"Sap beetle larvae","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",0.3206,0.25,97.03,163.1,138,100,4,2,2
+"Minute fungus beetles","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",0.4047,0.3407,202.1,51.15,167.3,199.8,7,3,3
+"Shining mold beetles ","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",5.68,4.389,445.5,0.02991,352.2,294.5,7,3,3
+"Hairy fungus beetles","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",1.576,1.342,98.21,440.2,194.2,109.4,7,3,3
+"Minute brown ","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",0.7242,0.4786,100.7,451,206.1,126.9,7,3,3
+"Antlike flower","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",16.3,9.37,63.74,306.1,124.9,83.79,7,3,3
+"Short winged mold beetles ","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",0.5276,0.2912,75.61,1470,291.5,107.5,7,3,3
+"Flea beetles","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",1.953,1.972,79.72,85.28,102.5,77.9,7,3,3
+"Click beetles","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",10.51,9.472,83.2,197.3,155.7,87.48,7,3,3
+"Weevils","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",0.6193,0.8388,436,0.02598,266.3,132.4,7,3,3
+"Japanese beetles","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",47.51,43.97,87.75,112.4,147.4,91.32,9,3,4
+"Rove beetles","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",0.1071,0.1111,421.9,0.02685,346.4,173.2,6,2,3
+"Ladybird beetle larvae","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",1.986,1.917,89.3,31.31,84.05,74.07,4,2,2
+"Soldier beetle larvae","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",0.9135,0.6667,83.4,207.1,141.4,89.44,4,2,2
+"Lightening bugs","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",0.3354,0.2797,165.3,0.003615,133.3,173,7,3,3
+"Tiger beetles Cicinindelinae","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",1.016,1.174,93.89,294.8,199.2,91.28,7,3,3
+"Beetle larvae morph 1","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",0.2343,0.1904,142,179.3,173.5,152,7,3,3
+"Beetle larvae morph 3","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",0.3669,0.2664,141.4,402.5,241.7,181.6,7,3,3
+"Scarab larvae","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",0.08333,0.08333,324,0.01332,282.8,173.2,4,2,2
+"Scarabs misc","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",1.15,1.352,197.2,0.006646,136.6,116.6,7,3,3
+"Misc  beetles","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",4.616,3.69,196.8,147.7,276.9,228,7,3,3
+"Ants","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",131,120,108.2,66.77,104.9,104.1,7,3,3
+"Fairyflies  Mymaridae","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",0.4039,0.3135,104.4,177.3,145.9,112.2,7,3,3
+"Eulophid wasps","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",7.225,2.395,17.9,20040,220.9,32.55,7,3,3
+"Encyrtid wasps","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",1.236,0.8402,89.27,296.4,202.5,107.2,7,3,3
+"Gall wasps Cynipidae","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",0.1346,0.1649,336.5,0.00931,220.2,208.4,7,3,3
+"Scelionid wasps","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",4.207,3.89,61.32,358.5,174.1,65.1,7,3,3
+"Ceraphronid wasps","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",0.1087,0.06417,260.3,248,412.3,353.1,7,3,3
+"Braconid wasps","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",0.3212,0.2267,125.8,206.2,174.7,139.5,7,3,3
+"Ichneumonid wasps","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",0.1136,0.06118,85.58,2772,282.3,130.4,7,3,3
+"Broad mites","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",28.99,13.03,28.66,3636,268.1,45.51,7,3,3
+"Oribatid mites","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",44.59,40.96,128.5,90.61,141.1,136.8,9,3,4
+"Predaceous mites","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",30.05,23.43,48.88,241.5,112.5,55.2,7,3,3
+"Grass Frit flies","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",3.237,2.141,71.73,518.6,212.9,91.08,7,3,3
+"Dark winged fungus gnats","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",18.12,7.955,20.52,523.2,102,29.66,7,3,3
+"Humpbacked flies Phoridae","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",4.097,2.73,78.29,678.8,159.5,100,7,3,3
+"Gall midges Cecidomyiidae","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",0.2524,0.2183,154.5,200.4,217,165.5,7,3,3
+"Pomace flies Drosophilidae","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",0.1685,0.1658,273.3,0.018,193.5,214.3,7,3,3
+"Leaf miner Agromyzidae","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",0.0551,0.04727,373.8,0.01041,295.8,296.6,7,3,3
+"Midges Chironomidae","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",0.09077,0.05647,152.8,778.5,307.9,216.4,7,3,3
+"Tachinid flies","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",0.9379,0.8743,114,348.6,217.5,121,7,3,3
+"Long legged flies","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",1.334,0.8794,104.3,219,176.4,122.9,7,3,3
+"Misc flies","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",162.9,23.68,7.568,32950,161.9,20.57,7,3,3
+"Muscid flies Muscidae","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",26.76,8.887,28.75,1019,176.4,47.92,7,3,3
+"Mycetophilidae","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",0.8593,0.3333,49.88,2034,213.8,86.6,4,2,2
+"General collembola all families","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",706.7,804.2,51.27,121.1,124.9,47.98,9,3,4
+"Springtails globular","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",16.2,14.62,96.85,133.8,132.6,100.8,9,3,4
+"Springtails entomobryids","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",710.4,712.7,51.17,152.9,107.3,50.21,7,3,3
+"Springtails isotomids","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",132.8,158.3,44.84,472.8,193.5,41.36,7,3,3
+"Springtails hypogastrurids","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",95.98,57.98,94.7,514,249.4,1100,7,3,3
+"Psocids","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",1.157,0.7977,192.5,356.6,318.4,251.9,7,3,3
+"Phytophagous thrips","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",2.141,1.922,59.35,119,84.22,67.13,7,3,3
+"Predaceous thrips","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",0.2142,0.1593,243.3,102.3,240.4,251.6,7,3,3
+"Grasshoppers","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",0.6387,0.4255,100.6,252.4,197.5,115.8,7,3,3
+"Crickets","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",41.79,43.02,52.22,191.9,124.2,50.52,7,3,3
+"Spiders","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",76.62,76.32,37.44,301.1,110.8,37.07,9,3,4
+"Spiders general","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",6.441,5.678,48.09,110.6,82.75,45.69,6,2,3
+"Daddy long legs","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",3.368,2.706,113.3,317.4,176.6,128.5,7,3,3
+"Centipedes","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",33.73,29.58,50.26,596.1,144.2,54.62,9,3,4
+"Millipedes","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",15.02,14.81,112.4,146.9,156.3,117.9,9,3,4
+"Crab spiders","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",1.475,1.312,87.92,183.5,111.3,91.14,7,3,3
+"Wolf spiders","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",85.77,70.75,35.42,597.6,119.6,39.25,9,3,4
+"Spiderlings","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",77.79,72.65,102.5,93.97,107.7,100.6,7,3,3
+"Sowbugs","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",28.07,23.51,144.3,133.7,166.2,158.4,7,3,3
+"Ground beetles Pterostichus spp ","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",15.68,15.66,77.05,74.51,101.1,76.75,9,3,4
+"Ground beetles Harpalus spp ","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",8.955,5.383,44.04,672.7,115.4,56.53,9,3,4
+"Ground beetles Stenolophus spp ","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",2.142,1.831,136.8,81.79,136.5,143.9,7,3,3
+"Ground beetles Scarites spp ","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",2.611,2.543,94.07,84.18,107.5,93.57,7,3,3
+"Ground beetles Clivina spp ","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",0.3507,0.2989,216.9,0.004029,152.4,241,7,3,3
+"Ground beetles Bembideon spp ","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",2.699,1.518,60.03,421.5,189.4,77.7,6,3,3
+"Ground beetle larvae","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",17.43,18.49,122.5,362.9,244.1,129.2,9,3,4
+"Ground beetles misc  spp ","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",37.8,2.941,11.35,44650,242.7,135.2,7,3,3
+"Ground beetles","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",43.4,44.47,51.46,79.8,77.28,50.22,7,3,3
+"Dingy cutworm","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",0.25,0.25,324,0.01549,282.8,173.2,4,2,2
+"European corn borer larvae","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",0.08333,0.08333,324,0.01332,282.8,173.2,4,2,2
+"Corn earworm larvae","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",0.08053,0.09512,354.2,0.01026,237.4,207.1,7,3,3
+"Misc  lepidopteran larvae","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",0.2768,0.2348,229.6,42.52,195.6,207.5,7,3,3
+"Nematodes","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",0.08333,0.08333,324,0.01332,282.8,173.2,4,2,2
+"Checkered Beetle   Cleridae","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",0.08333,0.08333,324,0.01332,282.8,173.2,4,2,2
+"WCRW adults","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",2.083,2.083,132.1,0.0027,115.3,128.8,4,2,2
+"NCRW adults","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",0.08333,0.08333,324,0.01332,282.8,173.2,4,2,2
+"Scorpion Flies","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",0.1667,0.1667,324,0.01607,282.8,173.2,4,2,2
+"ticks","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",0.08333,0.08333,324,0.01332,282.8,173.2,4,2,2
+"Misc leaf beetles","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",0.02649,0.03922,732.6,0.02178,412.3,159.7,7,3,3
+"Pteromalidae","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",0.02649,0.03922,732.6,0.02174,412.3,159.7,7,3,3
+"Cuckoo wasps","Herbivores","COUNT",0.5,2,"OverdispersedPoisson",0.08333,0.08333,324,0.01332,282.8,173.2,4,2,2

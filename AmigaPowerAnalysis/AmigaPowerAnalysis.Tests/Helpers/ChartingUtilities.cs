@@ -19,12 +19,14 @@ namespace AmigaPowerAnalysis.Tests.TestUtilities {
 
         private static string _testPath = Path.Combine(Properties.Settings.Default.TestPath, "ChartCreation");
 
-        public static void SaveChart<T>(this T testClass, IChartCreator chartCreator, string filename) {
+        public static string SaveChart<T>(this T testClass, IChartCreator chartCreator, string filename) {
             var outputPath = Path.Combine(_testPath, typeof(T).Name);
             if (!Directory.Exists(outputPath)) {
                 Directory.CreateDirectory(outputPath);
             }
-            chartCreator.SaveToFile(Path.Combine(outputPath, filename));
+            var fullFilePath = Path.Combine(outputPath, filename);
+            chartCreator.SaveToFile(fullFilePath);
+            return Path.GetFullPath(fullFilePath);
         }
     }
 }

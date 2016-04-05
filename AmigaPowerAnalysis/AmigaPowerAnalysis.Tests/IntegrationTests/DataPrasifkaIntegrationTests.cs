@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -28,6 +29,38 @@ namespace AmigaPowerAnalysis.Tests.IntegrationTests {
                 return testPath;
             }
         }
+
+        #region Helper methods
+
+        private static Project createProjectScenario1(List<EndpointType> endpointGroups, List<Endpoint> endpoints) {
+            var project = new Project();
+            project.PowerCalculationSettings.NumberOfReplications = new List<int>() { 8, 16, 32, 64, 128, 256 };
+            project.PowerCalculationSettings.NumberOfRatios = 3;
+            project.EndpointTypes = endpointGroups;
+            project.Endpoints = endpoints;
+            return project;
+        }
+
+        private static Project createProjectScenario2(List<EndpointType> endpointGroups, List<Endpoint> endpoints) {
+            var project = createProjectScenario1(endpointGroups, endpoints);
+            project.PowerCalculationSettings.NumberOfReplications = new List<int>() { 2, 4, 8, 16, 32, 64 };
+            foreach (var level in project.VarietyFactor.FactorLevels) {
+                level.Frequency = 4;
+            }
+            project.DesignSettings.ExperimentalDesignType = ExperimentalDesignType.RandomizedCompleteBlocks;
+            project.UseBlockModifier = true;
+            return project;
+        }
+
+        private static void analyseProject(string projectName) {
+            var filesPath = Path.Combine(_testOutputPath, projectName);
+            var resultPowerAnalysis = SerializationExtensions.FromXmlFile<ResultPowerAnalysis>(Path.Combine(filesPath, "Output.xml"));
+            var reportGenerator = new PrasifkaDataReportGenerator(resultPowerAnalysis, projectName, filesPath);
+            reportGenerator.SaveAsHtml(Path.Combine(filesPath, "Summary_Prasifka.html"));
+            //reportGenerator.SaveAsPdf(Path.Combine(filesPath, "Summary_Prasifka.pdf"));
+        }
+
+        #endregion
 
         [TestMethod]
         [TestCategory("IntegrationTests")]
@@ -113,43 +146,17 @@ namespace AmigaPowerAnalysis.Tests.IntegrationTests {
             analyseProject(projectName);
         }
 
-        private static Project createProjectScenario1(List<EndpointType> endpointGroups, List<Endpoint> endpoints) {
-            var project = new Project();
-            project.PowerCalculationSettings.NumberOfReplications = new List<int>() { 2, 4, 8, 16, 32, 64, 128 };
-            project.PowerCalculationSettings.NumberOfRatios = 3;
-            project.EndpointTypes = endpointGroups;
-            project.Endpoints = endpoints;
-            return project;
-        }
-
-        private static Project createProjectScenario2(List<EndpointType> endpointGroups, List<Endpoint> endpoints) {
-            var project = createProjectScenario1(endpointGroups, endpoints);
-            foreach (var level in project.VarietyFactor.FactorLevels) {
-                level.Frequency = 4;
-            }
-            project.DesignSettings.ExperimentalDesignType = ExperimentalDesignType.RandomizedCompleteBlocks;
-            project.UseBlockModifier = true;
-            return project;
-        }
-
-        private static void analyseProject(string projectName) {
-            var filesPath = Path.Combine(_testOutputPath, projectName);
-            var resultPowerAnalysis = SerializationExtensions.FromXmlFile<ResultPowerAnalysis>(Path.Combine(filesPath, "Output.xml"));
-            var reportGenerator = new PrasifkaDataReportGenerator(resultPowerAnalysis, projectName, filesPath);
-            reportGenerator.SaveAsHtml(Path.Combine(filesPath, "Summary_Prasifka.html"));
-            //reportGenerator.SaveAsPdf(Path.Combine(filesPath, "Summary_Prasifka.pdf"));
-        }
-
         [TestMethod]
         [TestCategory("IntegrationTests")]
-        public void CreateMeanCVChart() {
+        public void DataPrasifkaIntegrationTests_CreateMeanCVChart() {
             using (var stream = Assembly.Load("AmigaPowerAnalysis").GetManifestResourceStream("AmigaPowerAnalysis.Resources.TableDefinitions.xml")) {
                 var tableDefinitions = TableDefinitionCollection.FromXml(stream);
                 var _dataFileReader = new CsvFileReader(Path.Combine(_dataPath, "AMIGA_endpoints.csv"));
                 var tableDefinition = tableDefinitions.GetTableDefinition("Endpoints");
                 var records = _dataFileReader.ReadDataSet<EndpointDTO>(tableDefinition);
                 var chartCreator = new MeanCvScatterChartCreator(records);
-                this.SaveChart(chartCreator, "Prasifka_Mean_versus_CV");
+                var filename = this.SaveChart(chartCreator, "Prasifka_Mean_versus_CV.png");
+                Process.Start(filename);
             }
         }
     }
