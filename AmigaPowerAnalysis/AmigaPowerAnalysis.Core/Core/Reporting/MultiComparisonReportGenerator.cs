@@ -129,7 +129,7 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             stringBuilder.AppendLine(string.Format("<p>{0}.<p>", powerAggregationType.GetDisplayName()));
             stringBuilder.Append("<table>");
             stringBuilder.Append("<tr>");
-            stringBuilder.Append("<th>CSD</th>");
+            stringBuilder.Append("<th>LoCSD</th>");
             stringBuilder.Append("<th>Replicates</th>");
             stringBuilder.Append(string.Format("<th>{0}</th>", TestType.Difference.GetDisplayName()));
             stringBuilder.Append(string.Format("<th>{0}</th>", TestType.Equivalence.GetDisplayName()));

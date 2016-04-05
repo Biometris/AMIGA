@@ -166,12 +166,12 @@
             // radioButtonCsdDifference
             // 
             this.radioButtonCsdDifference.AutoSize = true;
-            this.radioButtonCsdDifference.Location = new System.Drawing.Point(293, 3);
+            this.radioButtonCsdDifference.Location = new System.Drawing.Point(281, 3);
             this.radioButtonCsdDifference.Name = "radioButtonCsdDifference";
-            this.radioButtonCsdDifference.Size = new System.Drawing.Size(114, 17);
+            this.radioButtonCsdDifference.Size = new System.Drawing.Size(126, 17);
             this.radioButtonCsdDifference.TabIndex = 8;
             this.radioButtonCsdDifference.TabStop = true;
-            this.radioButtonCsdDifference.Text = "Power versus CSD";
+            this.radioButtonCsdDifference.Text = "Power versus LoCSD";
             this.radioButtonCsdDifference.UseVisualStyleBackColor = true;
             this.radioButtonCsdDifference.CheckedChanged += new System.EventHandler(this.radioButtonCsdDifference_CheckedChanged);
             // 
@@ -227,12 +227,12 @@
             // radioButtonCsdEquivalence
             // 
             this.radioButtonCsdEquivalence.AutoSize = true;
-            this.radioButtonCsdEquivalence.Location = new System.Drawing.Point(293, 3);
+            this.radioButtonCsdEquivalence.Location = new System.Drawing.Point(281, 3);
             this.radioButtonCsdEquivalence.Name = "radioButtonCsdEquivalence";
-            this.radioButtonCsdEquivalence.Size = new System.Drawing.Size(114, 17);
+            this.radioButtonCsdEquivalence.Size = new System.Drawing.Size(126, 17);
             this.radioButtonCsdEquivalence.TabIndex = 10;
             this.radioButtonCsdEquivalence.TabStop = true;
-            this.radioButtonCsdEquivalence.Text = "Power versus CSD";
+            this.radioButtonCsdEquivalence.Text = "Power versus LoCSD";
             this.radioButtonCsdEquivalence.UseVisualStyleBackColor = true;
             this.radioButtonCsdEquivalence.CheckedChanged += new System.EventHandler(this.radioButtonCsdEquivalence_CheckedChanged);
             // 
