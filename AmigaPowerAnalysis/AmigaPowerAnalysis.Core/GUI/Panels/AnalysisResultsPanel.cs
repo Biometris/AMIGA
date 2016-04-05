@@ -29,7 +29,7 @@ namespace AmigaPowerAnalysis.GUI {
         public AnalysisResultsPanel(Project project) {
             InitializeComponent();
             Name = "Combined results";
-            Description = "The power analysis is based on the minimum or mean power across the primary comparisons, in terms of Concern Standardized Differences (CSD, equals 1 at the Limit of Concern).\r\nSelect primary comparisons. Choose method of analysis for diffeence and equivalence tests if more have been investigated.\r\n\r\nPower is shown for difference tests and equivalence tests, as a function of the CSD or the number of replicates.\r\nFinally, APA can export a data template and [not yet implemented] an R script for the analysis of the experiment.";
+            Description = "The power analysis is based on the minimum or mean power across the primary comparisons, in terms of LoC Standardized Differences (LoCSD, equals 1 at the Limit of Concern).\r\nSelect primary comparisons. Choose method of analysis for diffeence and equivalence tests if more have been investigated.\r\n\r\nPower is shown for difference tests and equivalence tests, as a function of the LoCSD or the number of replicates.\r\nFinally, APA can export a data template and [not yet implemented] an R script for the analysis of the experiment.";
             _project = project;
             _currentPlotType = AnalysisPlotType.ConcernStandardizedDifference;
             dataGridViewComparisons.AutoGenerateColumns = false;
