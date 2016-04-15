@@ -408,17 +408,18 @@ namespace Biometris.R.REngines {
         public void LoadLibrary(string packageName, Version minimalRequiredPackageVersion = null) {
             Comment(string.Format("require('{0}')", packageName));
             var libraryPath = this.EvaluateCharacterVector(".libPaths()").First();
-            var libLoaded = EvaluateBoolean(string.Format("require('{0}', lib.loc='{1}')", packageName, libraryPath));
+            var cmd = string.Format("require('{0}', lib.loc='{1}')", packageName, libraryPath);
+            var libLoaded = require(packageName, libraryPath);
             if (!libLoaded) {
                 try {
                     Comment(string.Format("Package {0} not found in R. Now trying to download and install it from cran.rVersions-project.org", packageName));
                     EvaluateNoReturn(string.Format("install.packages('{0}', repos='http://cran.r-project.org/', lib='{1}')", packageName, libraryPath));
-                } catch {
+                } catch (Exception ex) {
                     var message = string.Format("R package {0} was not installed and could not be downloaded and installed from the cran website. Please install the package manually within R.", packageName);
                     Comment(message);
-                    throw new RLoadLibraryException(message);
+                    throw new RLoadLibraryException(message, ex);
                 }
-                libLoaded = EvaluateBoolean(string.Format("require('{0}', lib.loc='{1}')", packageName, libraryPath));
+                libLoaded = require(packageName, libraryPath);
                 if (libLoaded) {
                     Comment(string.Format("R package {0} is installed and loaded successfully.", packageName));
                 } else {
@@ -437,6 +438,14 @@ namespace Biometris.R.REngines {
                 throw new RLoadLibraryException(msg);
             }
             Comment(string.Format("Package version of R package {0}: {1}.", packageName, installedPackageVersion));
+        }
+
+        private bool require(string packageName, string libraryPath) {
+            var libLoaded = EvaluateBoolean(string.Format("require('{0}')", packageName));
+            if (!libLoaded) {
+                libLoaded = EvaluateBoolean(string.Format("require('{0}', lib.loc='{1}')", packageName, libraryPath));
+            }
+            return libLoaded;
         }
 
         #endregion
