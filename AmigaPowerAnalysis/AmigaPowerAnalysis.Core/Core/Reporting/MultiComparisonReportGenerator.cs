@@ -92,7 +92,7 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             stringBuilder.AppendLine(format("Significance level", firstInputSettings.SignificanceLevel));
             stringBuilder.AppendLine(format("Number of evaluation points", firstInputSettings.NumberOfRatios));
             stringBuilder.AppendLine(format("Tested replications", string.Join(" ", firstInputSettings.NumberOfReplications.Select(r => r.ToString()).ToList())));
-            var analysisMethodsDifferenceTests = comparisonOutputs.Select(m => m.InputPowerAnalysis.SelectedAnalysisMethodTypesDifferenceTests).Distinct().ToList();
+            var analysisMethodsDifferenceTests = comparisonOutputs.SelectMany(m => m.InputPowerAnalysis.SelectedAnalysisMethodTypesDifferenceTests.GetFlags().Cast<AnalysisMethodType>()).Distinct().ToList();
             for (int i = 0; i < analysisMethodsDifferenceTests.Count(); ++i) {
                 if (i == 0) {
                     stringBuilder.AppendLine(format("Analysis methods difference tests", analysisMethodsDifferenceTests.ElementAt(i).GetDisplayName()));
@@ -100,7 +100,7 @@ namespace AmigaPowerAnalysis.Core.Reporting {
                     stringBuilder.AppendLine(format(string.Empty, analysisMethodsDifferenceTests.ElementAt(i).GetDisplayName()));
                 }
             }
-            var analysisMethodsEquivalenceTests = comparisonOutputs.Select(m => m.InputPowerAnalysis.SelectedAnalysisMethodTypesEquivalenceTests).Distinct().ToList();
+            var analysisMethodsEquivalenceTests = comparisonOutputs.SelectMany(m => m.InputPowerAnalysis.SelectedAnalysisMethodTypesEquivalenceTests.GetFlags().Cast<AnalysisMethodType>()).Distinct().ToList();
             for (int i = 0; i < analysisMethodsEquivalenceTests.Count(); ++i) {
                 if (i == 0) {
                     stringBuilder.AppendLine(format("Analysis methods equivalence tests", analysisMethodsEquivalenceTests.ElementAt(i).GetDisplayName()));
