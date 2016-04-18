@@ -64,15 +64,16 @@ namespace AmigaPowerAnalysis.Core.DataAnalysis {
             stringBuilder.AppendLine(string.Format("endpoints <- list()"));
 
             for (int i = 0; i < powerAnalysisInputs.Count(); i++) {
-                var endpoint = powerAnalysisInputs.ElementAt(i).InputPowerAnalysis;
+                var output = powerAnalysisInputs.ElementAt(i);
+                var input = powerAnalysisInputs.ElementAt(i).InputPowerAnalysis;
                 string modifier = "-";
-                if (endpoint.ModifierFactors.Count > 0) {
-                    modifier = string.Join("*", endpoint.ModifierFactors.Select(m => string.Format("{0}", m)));
+                if (input.ModifierFactors.Count > 0) {
+                    modifier = string.Join("*", input.ModifierFactors.Select(m => string.Format("{0}", m)));
                     //modifier = string.Format("\"{0}\"", modifier);
                 }
                 stringBuilder.AppendLine(string.Format("endpoints[[{0}]] <- DefineEndpoint(\"{1}\", {2}, {3}, {4}, \"{5}\", \"{6}\", \"{7}\")",
-                    i + 1, endpoint.Endpoint.Replace(" ", "_"), endpoint.OverallMean, endpoint.LocLower.ToInvariantString(), endpoint.LocUpper.ToInvariantString(),
-                    modifier, endpoint.SelectedAnalysisMethodTypesDifferenceTests, endpoint.SelectedAnalysisMethodTypesEquivalenceTests));
+                    i + 1, input.Endpoint.Replace(" ", "_"), input.OverallMean, input.LocLower.ToInvariantString(), input.LocUpper.ToInvariantString(),
+                    modifier, output.AnalysisMethodDifferenceTest, output.AnalysisMethodEquivalenceTest));
             }
             stringBuilder.AppendLine();
             stringBuilder.AppendLine(string.Format("#========== Analysis script"));
