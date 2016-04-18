@@ -111,7 +111,7 @@ namespace Biometris.ExtensionMethods {
         /// <param name="value"></param>
         /// <returns></returns>
         public static DisplayAttribute GetDisplayAttribute(this Enum value) {
-            FieldInfo fi = value.GetType().GetField(value.ToString());
+            var fi = value.GetType().GetField(value.ToString());
             var attributes = (DisplayAttribute[])fi.GetCustomAttributes(typeof(DisplayAttribute), false);
             if (attributes.Length > 0) {
                 return attributes[0];
