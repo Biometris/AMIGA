@@ -17,7 +17,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             PowerEquivalence = double.NaN;
         }
 
-        [Display(Name = "LoC standardized difference", ShortName = "LoCSD")]
+        [Display(Name = "Concern quotient", ShortName = "CQ")]
         public double ConcernStandardizedDifference { get; set; }
 
         [Display(Name = "Replicates")]

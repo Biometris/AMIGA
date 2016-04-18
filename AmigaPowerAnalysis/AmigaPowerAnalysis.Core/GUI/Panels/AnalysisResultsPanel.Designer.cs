@@ -171,7 +171,7 @@
             this.radioButtonCsdDifference.Size = new System.Drawing.Size(126, 17);
             this.radioButtonCsdDifference.TabIndex = 8;
             this.radioButtonCsdDifference.TabStop = true;
-            this.radioButtonCsdDifference.Text = "Power versus LoCSD";
+            this.radioButtonCsdDifference.Text = "Power versus CQ";
             this.radioButtonCsdDifference.UseVisualStyleBackColor = true;
             this.radioButtonCsdDifference.CheckedChanged += new System.EventHandler(this.radioButtonCsdDifference_CheckedChanged);
             // 
@@ -232,7 +232,7 @@
             this.radioButtonCsdEquivalence.Size = new System.Drawing.Size(126, 17);
             this.radioButtonCsdEquivalence.TabIndex = 10;
             this.radioButtonCsdEquivalence.TabStop = true;
-            this.radioButtonCsdEquivalence.Text = "Power versus LoCSD";
+            this.radioButtonCsdEquivalence.Text = "Power versus CQ";
             this.radioButtonCsdEquivalence.UseVisualStyleBackColor = true;
             this.radioButtonCsdEquivalence.CheckedChanged += new System.EventHandler(this.radioButtonCsdEquivalence_CheckedChanged);
             // 

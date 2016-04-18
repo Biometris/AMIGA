@@ -37,7 +37,7 @@ namespace AmigaPowerAnalysis.Core.Charting.AnalysisResultsChartCreators {
                     var series = new LineSeries() {
                         MarkerType = (MarkerType)(i % 7 + 1),
                     };
-                    series.Title = string.Format("LoCSD {0:0.##}", csdGroup.Key);
+                    series.Title = string.Format("CQ {0:0.##}", csdGroup.Key);
                     series.Points.AddRange(csdGroup.Select(g => new DataPoint() {
                         X = g.NumberOfReplications,
                         Y = g.GetPower(testType),

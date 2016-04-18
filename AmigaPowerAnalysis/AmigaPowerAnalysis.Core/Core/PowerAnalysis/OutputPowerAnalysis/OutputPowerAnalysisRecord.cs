@@ -29,7 +29,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
         [Display(Name = "Log(ratio)")]
         public double TransformedEffect { get; set; }
 
-        [Display(Name = "LoC standardized difference", ShortName = "LoCSD")]
+        [Display(Name = "Concern quotient", ShortName = "CQ")]
         public double ConcernStandardizedDifference { get; set; }
 
         [Display(Name = "Replicates")]

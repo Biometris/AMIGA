@@ -26,7 +26,7 @@ namespace AmigaPowerAnalysis.Core.Charting.AnalysisResultsChartCreators {
             var model = AggregateAnalysisResultsChartCreatorBase.CreatePlotModel(testType);
             if (aggregatePowerAnalysisRecords != null && aggregatePowerAnalysisRecords.Count() > 0) {
                 var horizontalAxis = new LinearAxis() {
-                    Title = "LoC standardized difference",
+                    Title = "Concern quotient",
                     MajorGridlineStyle = LineStyle.Solid,
                     MinorGridlineStyle = LineStyle.Dot,
                     Position = AxisPosition.Bottom,
