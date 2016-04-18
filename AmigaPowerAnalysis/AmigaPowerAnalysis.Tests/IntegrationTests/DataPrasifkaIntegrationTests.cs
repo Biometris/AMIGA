@@ -32,17 +32,43 @@ namespace AmigaPowerAnalysis.Tests.IntegrationTests {
 
         #region Helper methods
 
-        private static Project createProjectScenario1(List<EndpointType> endpointGroups, List<Endpoint> endpoints) {
+        private List<EndpointType> readEndpointGroups() {
+            var groupsFileReader = new DTODataFileReader(Path.Combine(_dataPath, "AMIGA_groups.csv"));
+            var endpointGroups = groupsFileReader.ReadGroups();
+            return endpointGroups;
+        }
+
+        private List<Endpoint> readEndpoints(List<EndpointType> endpointGroups, int limit = -1) {
+            var endpointsFileReader = new DTODataFileReader(Path.Combine(_dataPath, "AMIGA_endpoints.csv"));
+            var endpoints = endpointsFileReader.ReadEndpoints(endpointGroups);
+            if (limit >= 0) {
+                return endpoints.Take(limit).ToList();
+            }
+            return endpoints;
+        }
+
+        private static Project createProjectBase(List<EndpointType> endpointGroups, List<Endpoint> endpoints) {
             var project = new Project();
-            project.PowerCalculationSettings.NumberOfReplications = new List<int>() { 8, 16, 32, 64, 128, 256 };
             project.PowerCalculationSettings.NumberOfRatios = 3;
             project.EndpointTypes = endpointGroups;
             project.Endpoints = endpoints;
+
+            var spraying = new Factor("Spraying");
+            spraying.AddFactorLevel(new FactorLevel("Default"));
+            spraying.AddFactorLevel(new FactorLevel("None"));
+            project.AddFactor(spraying);
+
+            return project;
+        }
+
+        private static Project createProjectScenario1(List<EndpointType> endpointGroups, List<Endpoint> endpoints) {
+            var project = createProjectBase(endpointGroups, endpoints);
+            project.PowerCalculationSettings.NumberOfReplications = new List<int>() { 8, 16, 32, 64, 128, 256 };
             return project;
         }
 
         private static Project createProjectScenario2(List<EndpointType> endpointGroups, List<Endpoint> endpoints) {
-            var project = createProjectScenario1(endpointGroups, endpoints);
+            var project = createProjectBase(endpointGroups, endpoints);
             project.PowerCalculationSettings.NumberOfReplications = new List<int>() { 2, 4, 8, 16, 32, 64 };
             foreach (var level in project.VarietyFactor.FactorLevels) {
                 level.Frequency = 4;
@@ -66,10 +92,8 @@ namespace AmigaPowerAnalysis.Tests.IntegrationTests {
         [TestCategory("IntegrationTests")]
         public void DataPrasifkaIntegrationTests_CreatePrasifkaScenario1() {
             var projectName = "PrasifkaScenario1";
-            var groupsFileReader = new DTODataFileReader(Path.Combine(_dataPath, "AMIGA_groups.csv"));
-            var endpointGroups = groupsFileReader.ReadGroups();
-            var endpointsFileReader = new DTODataFileReader(Path.Combine(_dataPath, "AMIGA_endpoints.csv"));
-            var endpoints = endpointsFileReader.ReadEndpoints(endpointGroups);
+            var endpointGroups = readEndpointGroups();
+            var endpoints = readEndpoints(endpointGroups);
             var project = createProjectScenario1(endpointGroups, endpoints);
             var projectFileName = Path.Combine(_testOutputPath, projectName + ".xapa");
             ProjectManager.SaveProjectXml(project, projectFileName);
@@ -80,10 +104,8 @@ namespace AmigaPowerAnalysis.Tests.IntegrationTests {
         [TestCategory("IntegrationTests")]
         public void DataPrasifkaIntegrationTests_CreatePrasifkaScenario1Selection() {
             var projectName = "PrasifkaScenario1Selection";
-            var groupsFileReader = new DTODataFileReader(Path.Combine(_dataPath, "AMIGA_groups.csv"));
-            var endpointGroups = groupsFileReader.ReadGroups();
-            var endpointsFileReader = new DTODataFileReader(Path.Combine(_dataPath, "AMIGA_endpoints.csv"));
-            var endpoints = endpointsFileReader.ReadEndpoints(endpointGroups).Take(10).ToList();
+            var endpointGroups = readEndpointGroups();
+            var endpoints = readEndpoints(endpointGroups, 10);
             var project = createProjectScenario1(endpointGroups, endpoints);
             var projectFileName = Path.Combine(_testOutputPath, projectName + ".xapa");
             ProjectManager.SaveProjectXml(project, projectFileName);
@@ -94,10 +116,8 @@ namespace AmigaPowerAnalysis.Tests.IntegrationTests {
         [TestCategory("IntegrationTests")]
         public void DataPrasifkaIntegrationTests_CreatePrasifkaScenario2() {
             var projectName = "PrasifkaScenario2";
-            var groupsFileReader = new DTODataFileReader(Path.Combine(_dataPath, "AMIGA_groups.csv"));
-            var endpointGroups = groupsFileReader.ReadGroups();
-            var endpointsFileReader = new DTODataFileReader(Path.Combine(_dataPath, "AMIGA_endpoints.csv"));
-            var endpoints = endpointsFileReader.ReadEndpoints(endpointGroups).ToList();
+            var endpointGroups = readEndpointGroups();
+            var endpoints = readEndpoints(endpointGroups);
             var project = createProjectScenario2(endpointGroups, endpoints);
             var projectFileName = Path.Combine(_testOutputPath, projectName + ".xapa");
             ProjectManager.SaveProjectXml(project, projectFileName);
@@ -108,10 +128,8 @@ namespace AmigaPowerAnalysis.Tests.IntegrationTests {
         [TestCategory("IntegrationTests")]
         public void DataPrasifkaIntegrationTests_CreatePrasifkaScenario2Selection() {
             var projectName = "PrasifkaScenario2Selection";
-            var groupsFileReader = new DTODataFileReader(Path.Combine(_dataPath, "AMIGA_groups.csv"));
-            var endpointGroups = groupsFileReader.ReadGroups();
-            var endpointsFileReader = new DTODataFileReader(Path.Combine(_dataPath, "AMIGA_endpoints.csv"));
-            var endpoints = endpointsFileReader.ReadEndpoints(endpointGroups).Take(10).ToList();
+            var endpointGroups = readEndpointGroups();
+            var endpoints = readEndpoints(endpointGroups, 10);
             var project = createProjectScenario2(endpointGroups, endpoints);
             var projectFileName = Path.Combine(_testOutputPath, projectName + ".xapa");
             ProjectManager.SaveProjectXml(project, projectFileName);
