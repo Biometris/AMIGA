@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AmigaPowerAnalysis.Core.DataAnalysis.AnalysisModels;
 using AmigaPowerAnalysis.Core.PowerAnalysis;
@@ -22,14 +23,16 @@ namespace AmigaPowerAnalysis.Core.Charting.AnalysisResultsChartCreators {
         public static PlotModel Create(List<OutputPowerAnalysisRecord> powerAnalysisOutputRecords, TestType testType, AnalysisMethodType analysisMethodType) {
             var model = AnalysisResultsChartCreatorBase.CreatePlotModel(testType, analysisMethodType);
             if (powerAnalysisOutputRecords != null && powerAnalysisOutputRecords.Count > 0) {
+                var maxReplications = powerAnalysisOutputRecords.Max(r => r.NumberOfReplications);
+                var minReplications = powerAnalysisOutputRecords.Min(r => r.NumberOfReplications);
                 var horizontalAxis = new LogarithmicAxis() {
                     Title = "Replicates",
                     Base = 2,
                     MajorGridlineStyle = LineStyle.Solid,
                     MinorGridlineStyle = LineStyle.Dot,
                     Position = AxisPosition.Bottom,
-                    AbsoluteMaximum = powerAnalysisOutputRecords.Max(r => r.NumberOfReplications),
-                    AbsoluteMinimum = powerAnalysisOutputRecords.Min(r => r.NumberOfReplications),
+                    AbsoluteMinimum = (minReplications != maxReplications) ? minReplications : Math.Ceiling(minReplications / 2d),
+                    AbsoluteMaximum = (minReplications != maxReplications) ? maxReplications : Math.Ceiling(maxReplications * 2d),
                 };
                 model.Axes.Add(horizontalAxis);
                 var ratioGroups = powerAnalysisOutputRecords.GroupBy(r => r.Effect).Where(g => !double.IsNaN(g.Key));
