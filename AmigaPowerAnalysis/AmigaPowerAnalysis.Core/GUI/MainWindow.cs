@@ -400,7 +400,7 @@ namespace AmigaPowerAnalysis.GUI {
 
         private void showErrorMessage(Exception ex) {
             MessageBox.Show(
-                "An error occurred while opening the project. An invalid project file may have been provided or the project file may be corrupted.",
+                string.Format("An error occurred while opening the project. An invalid project file may have been provided or the project file may be corrupted. Error message: {0}", ex.Message),
                 "Error opening project.",
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Error,
