@@ -219,7 +219,7 @@ namespace AmigaPowerAnalysis.GUI {
             } catch (Exception ex) {
                 CurrentProjectFilename = string.Empty;
                 showErrorMessage(ex);
-                closeProject();
+                closeProject(true);
                 return;
             }
         }
@@ -232,8 +232,8 @@ namespace AmigaPowerAnalysis.GUI {
             }
         }
 
-        private void closeProject() {
-            if (confirmCloseDialog()) {
+        private void closeProject(bool autoConfirm = false) {
+            if (autoConfirm || confirmCloseDialog()) {
                 _selectionForms.ForEach(s => s.TabVisibilitiesChanged -= onVisibilitySettingsChanged);
                 var simulationPanel = _selectionForms.FirstOrDefault(r => r is SimulationPanel) as SimulationPanel;
                 _selectionForms.ForEach(s => s.Dispose());
