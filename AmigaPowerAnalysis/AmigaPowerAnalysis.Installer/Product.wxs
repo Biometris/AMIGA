@@ -198,7 +198,7 @@
   <Fragment>
     <ComponentGroup Id="ExamplesGroup" Directory="Examples">
       <Component Guid="{B0C1DBFD-FA06-4FCB-AB01-5CCA0B5F2ACE}">
-        <File Source="..\AmigaPowerAnalysis.Core\bin\$(var.Platform)\Release\Examples\README.md" KeyPath="yes" />
+        <File Source="..\AmigaPowerAnalysis.Core\bin\$(var.Platform)\Release\Examples\Arthropods.xapa" KeyPath="yes" />
       </Component>
     </ComponentGroup>
   </Fragment>
