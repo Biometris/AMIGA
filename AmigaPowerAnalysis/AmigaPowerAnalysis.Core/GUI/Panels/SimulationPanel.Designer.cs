@@ -646,13 +646,13 @@
             this.panel3.Controls.Add(this.radioButtonApproximate);
             this.panel3.Location = new System.Drawing.Point(553, 24);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(192, 23);
+            this.panel3.Size = new System.Drawing.Size(302, 23);
             this.panel3.TabIndex = 18;
             // 
             // radioButtonSimulate
             // 
             this.radioButtonSimulate.AutoSize = true;
-            this.radioButtonSimulate.Location = new System.Drawing.Point(92, 3);
+            this.radioButtonSimulate.Location = new System.Drawing.Point(141, 3);
             this.radioButtonSimulate.Name = "radioButtonSimulate";
             this.radioButtonSimulate.Size = new System.Drawing.Size(65, 17);
             this.radioButtonSimulate.TabIndex = 14;
@@ -666,10 +666,10 @@
             this.radioButtonApproximate.AutoSize = true;
             this.radioButtonApproximate.Location = new System.Drawing.Point(3, 3);
             this.radioButtonApproximate.Name = "radioButtonApproximate";
-            this.radioButtonApproximate.Size = new System.Drawing.Size(83, 17);
+            this.radioButtonApproximate.Size = new System.Drawing.Size(132, 17);
             this.radioButtonApproximate.TabIndex = 15;
             this.radioButtonApproximate.TabStop = true;
-            this.radioButtonApproximate.Text = "Approximate";
+            this.radioButtonApproximate.Text = "Approximate if possible";
             this.radioButtonApproximate.UseVisualStyleBackColor = true;
             this.radioButtonApproximate.CheckedChanged += new System.EventHandler(this.radioButtonApproximate_CheckedChanged);
             // 
