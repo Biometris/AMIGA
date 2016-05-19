@@ -16,7 +16,7 @@ namespace Biometris.R.REngines {
         /// <summary>
         /// Constructor.
         /// </summary>
-        public LoggingRDotNetEngine(ILogger logger = null) : base() {
+        public LoggingRDotNetEngine(ILogger logger = null, string libraryPath = null) : base(libraryPath) {
             _commandLogger = logger;
         }
 

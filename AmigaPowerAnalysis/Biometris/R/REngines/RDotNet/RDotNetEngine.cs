@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using RDotNet;
 using System.IO;
+using Biometris.ApplicationUtilities;
 
 namespace Biometris.R.REngines {
     public class RDotNetEngine : IRCommandExecuter, IDisposable {
@@ -21,9 +22,15 @@ namespace Biometris.R.REngines {
         private static REngine _rEngine = null;
 
         /// <summary>
+        /// Holds the path containing the additional R packages.
+        /// </summary>
+        private string _libraryPath;
+
+        /// <summary>
         /// Constructor.
         /// </summary>
-        public RDotNetEngine() {
+        public RDotNetEngine(string libraryPath = null) {
+            _libraryPath = libraryPath;
             start();
         }
 
@@ -406,25 +413,29 @@ namespace Biometris.R.REngines {
         /// <param name="packageName">The R package name.</param>
         /// <param name="minimalRequiredPackageVersion">The minimally required version.</param>
         public void LoadLibrary(string packageName, Version minimalRequiredPackageVersion = null) {
-            Comment(string.Format("require('{0}')", packageName));
-            var libraryPath = this.EvaluateCharacterVector(".libPaths()").First();
-            var cmd = string.Format("require('{0}', lib.loc='{1}')", packageName, libraryPath);
-            var libLoaded = require(packageName, libraryPath);
+            if (string.IsNullOrEmpty(_libraryPath)) {
+                _libraryPath = this.EvaluateCharacterVector(".libPaths()").First();
+            }
+            var libLoaded = EvaluateBoolean(string.Format("require('{0}', lib.loc='{1}')", packageName, _libraryPath));
             if (!libLoaded) {
                 try {
                     Comment(string.Format("Package {0} not found in R. Now trying to download and install it from cran.rVersions-project.org", packageName));
-                    EvaluateNoReturn(string.Format("install.packages('{0}', repos='http://cran.r-project.org/', lib='{1}')", packageName, libraryPath));
+                    EvaluateNoReturn(string.Format("install.packages('{0}', repos='http://cran.r-project.org/', lib='{1}')", packageName, _libraryPath));
                 } catch (Exception ex) {
                     var message = string.Format("R package {0} was not installed and could not be downloaded and installed from the cran website. Please install the package manually within R.", packageName);
                     Comment(message);
                     throw new RLoadLibraryException(message, ex);
                 }
-                libLoaded = require(packageName, libraryPath);
+                libLoaded = EvaluateBoolean(string.Format("require('{0}', lib.loc='{1}')", packageName, _libraryPath));
                 if (libLoaded) {
                     Comment(string.Format("R package {0} is installed and loaded successfully.", packageName));
                 } else {
+                    var error = GetErrorMessage();
                     var message = string.Format("Tried to download and install R package {0} but it could NOT be loaded. Please install the R package manually from within R.", packageName);
                     Comment(message);
+                    if (!string.IsNullOrEmpty(error)) {
+                        Comment(string.Format("Message: {0}", error));
+                    }
                     throw new RLoadLibraryException(message);
                 }
             } else {
@@ -438,14 +449,6 @@ namespace Biometris.R.REngines {
                 throw new RLoadLibraryException(msg);
             }
             Comment(string.Format("Package version of R package {0}: {1}.", packageName, installedPackageVersion));
-        }
-
-        private bool require(string packageName, string libraryPath) {
-            var libLoaded = EvaluateBoolean(string.Format("require('{0}')", packageName));
-            if (!libLoaded) {
-                libLoaded = EvaluateBoolean(string.Format("require('{0}', lib.loc='{1}')", packageName, libraryPath));
-            }
-            return libLoaded;
         }
 
         #endregion
