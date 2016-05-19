@@ -14,6 +14,15 @@ namespace AmigaPowerAnalysis.Tests.TestUtilities {
     public static class IntegrationTestUtilities {
 
         private static string _testPath = Path.Combine(Properties.Settings.Default.TestPath);
+        private static string _rLibraryPath {
+            get {
+                var libraryPath = Path.Combine(_testPath, "RLibs");
+                if (!Directory.Exists(libraryPath)) {
+                    Directory.CreateDirectory(libraryPath);
+                }
+                return libraryPath;
+            }
+        }
 
         public static ResultPowerAnalysis RunProject(string filename) {
             var project = ProjectManager.LoadProjectXml(filename);
@@ -41,7 +50,7 @@ namespace AmigaPowerAnalysis.Tests.TestUtilities {
                 var inputGenerator = new PowerAnalysisInputGenerator();
                 var inputPowerAnalysis = inputGenerator.CreateInputPowerAnalysis(endpoints[i], project.DesignSettings, project.PowerCalculationSettings, i, endpoints.Count, project.UseBlockModifier, project.ProjectName);
                 var progressReport = new ProgressReport();
-                var rDotNetExecuter = new RDotNetPowerAnalysisExecuter(filesPath);
+                var rDotNetExecuter = new RDotNetPowerAnalysisExecuter(filesPath, _rLibraryPath);
                 var comparisonOutput = rDotNetExecuter.Run(inputPowerAnalysis, progressReport.NewProgressState(100));
                 resultPowerAnalysis.ComparisonPowerAnalysisResults.Add(comparisonOutput);
 

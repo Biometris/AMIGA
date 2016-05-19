@@ -15,6 +15,17 @@ namespace AmigaPowerAnalysis.Tests.Core {
     [TestClass]
     public class RDotNetPowerAnalysisExecuterTests {
 
+        private static string _testPath = Path.Combine(Properties.Settings.Default.TestPath);
+        private static string _rLibraryPath {
+            get {
+                var libraryPath = Path.Combine(_testPath, "RLibs");
+                if (!Directory.Exists(libraryPath)) {
+                    Directory.CreateDirectory(libraryPath);
+                }
+                return libraryPath;
+            }
+        }
+
         [TestMethod]
         public void RDotNetPowerAnalysisExecuter_TestRunAnalysis1() {
             var project = MockProjectsCreator.MockProject1();
@@ -30,7 +41,7 @@ namespace AmigaPowerAnalysis.Tests.Core {
             //CsvWriter.WriteToCsvFile(Path.Combine(testPath, "OutputScript.csv"), ",", outputScript.OutputRecords);
 
             var progressReport = new ProgressReport();
-            var rDotNetExecuter = new RDotNetPowerAnalysisExecuter(testPath);
+            var rDotNetExecuter = new RDotNetPowerAnalysisExecuter(_testPath, _rLibraryPath);
             var output = rDotNetExecuter.Run(inputPowerAnalysis, progressReport.NewProgressState(100));
             CsvWriter.WriteToCsvFile(Path.Combine(testPath, "OutputRDotNet.csv"), ",", output.OutputRecords);
 
