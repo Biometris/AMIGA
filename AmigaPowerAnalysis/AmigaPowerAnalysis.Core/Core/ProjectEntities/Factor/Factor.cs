@@ -23,13 +23,17 @@ namespace AmigaPowerAnalysis.Core {
 
         #endregion
 
-        public Factor() {
+        public Factor(bool isInteractionWithVariety = false) {
             _factorLevels = new List<FactorLevel>();
             ExperimentUnitType = ExperimentUnitType.SubPlot;
-            IsInteractionWithVariety = false;
+            IsInteractionWithVariety = isInteractionWithVariety;
         }
 
         public Factor(string name) : this() {
+            Name = name;
+        }
+
+        public Factor(string name, bool isInteractionWithVariety) : this(isInteractionWithVariety) {
             Name = name;
         }
 
