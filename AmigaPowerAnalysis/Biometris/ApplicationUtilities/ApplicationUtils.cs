@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
@@ -18,6 +19,19 @@ namespace Biometris.ApplicationUtilities {
                 Directory.CreateDirectory(tempdir);
             }
             return tempdir;
+        }
+
+        /// <summary>
+        /// Determines the application's temp path, creates it if it doesn't exist
+        /// and returns it.
+        /// </summary>
+        /// <returns></returns>
+        public static string GetApplicationDataPath() {
+            var appDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), Application.ProductName);
+            if (!Directory.Exists(appDir)) {
+                Directory.CreateDirectory(appDir);
+            }
+            return appDir;
         }
 
         /// <summary>

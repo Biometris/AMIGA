@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using AmigaPowerAnalysis.Core.DataAnalysis.AnalysisModels;
+using Biometris.ApplicationUtilities;
 using Biometris.ExtensionMethods;
 using Biometris.Logger;
 using Biometris.Persistence;
@@ -23,9 +23,15 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
         }
 
         private string _tempPath;
+        private string _libraryPath;
 
-        public RDotNetPowerAnalysisExecuter(string tempPath) {
+        public RDotNetPowerAnalysisExecuter(string tempPath, string libraryPath = null) {
             _tempPath = Path.GetFullPath(tempPath.Substring(0, tempPath.Length));
+            if (string.IsNullOrEmpty(libraryPath)) {
+                _libraryPath = ApplicationUtils.GetApplicationDataPath();
+            } else {
+                _libraryPath = libraryPath;
+            }
         }
 
         public override OutputPowerAnalysis Run(InputPowerAnalysis inputPowerAnalysis, ProgressState progressState) {
@@ -55,7 +61,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             var outputResults = new List<OutputPowerAnalysisRecord>();
             try {
                 var errorList = new List<string>();
-                using (var rEngine = new LoggingRDotNetEngine(logger)) {
+                using (var rEngine = new LoggingRDotNetEngine(logger, _libraryPath)) {
                     progressState.Update(string.Format("Analysis of endpoint: {0}, initializing R...", inputPowerAnalysis.Endpoint));
 
                     rEngine.LoadLibrary("MASS");
@@ -83,22 +89,19 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
                         // For Continuous data (Normal distribution) the power can be calculated for all reps simultaneously
                         blockConfigurations = maxList;
                         doExactCalculation = true;
-                    }
-                    else if ((inputPowerAnalysis.MeasurementType == MeasurementType.Nonnegative) &&
+                    } else if ((inputPowerAnalysis.MeasurementType == MeasurementType.Nonnegative) &&
                         ((inputPowerAnalysis.SelectedAnalysisMethodTypesDifferenceTests == AnalysisMethodType.LogPlusM) || (inputPowerAnalysis.SelectedAnalysisMethodTypesDifferenceTests == 0)) &&
                         ((inputPowerAnalysis.SelectedAnalysisMethodTypesEquivalenceTests == AnalysisMethodType.LogPlusM) || (inputPowerAnalysis.SelectedAnalysisMethodTypesEquivalenceTests == 0))) {
                         // For Nonnegative data (LogNormal distribution) and analysis methods LogPlusM: the power can be calculated for all reps simultaneously
                         blockConfigurations = maxList;
                         doExactCalculation = true;
-                    }
-                    else if ((inputPowerAnalysis.PowerCalculationMethodType == PowerCalculationMethod.Approximate) &&
+                    } else if ((inputPowerAnalysis.PowerCalculationMethodType == PowerCalculationMethod.Approximate) &&
                             ((inputPowerAnalysis.ExperimentalDesignType == ExperimentalDesignType.CompletelyRandomized) || (inputPowerAnalysis.CvForBlocks == 0D))) {
                         // For Counts and Nonnegative data 
                         // For Approximate Method and no blocks (or zero CVblock) the power can be calculated for all reps simultaneously
                         blockConfigurations = maxList;
                         doApproximateLyles = true;
-                    }
-                    else {
+                    } else {
                         blockConfigurations = inputPowerAnalysis.NumberOfReplications;
                     }
 
