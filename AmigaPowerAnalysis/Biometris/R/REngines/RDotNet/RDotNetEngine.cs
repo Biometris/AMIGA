@@ -30,7 +30,9 @@ namespace Biometris.R.REngines {
         /// Constructor.
         /// </summary>
         public RDotNetEngine(string libraryPath = null) {
-            _libraryPath = libraryPath;
+            if (!string.IsNullOrEmpty(libraryPath)) {
+                _libraryPath = Path.GetFullPath(libraryPath).Replace(@"\", "/");
+            }
             start();
         }
 
