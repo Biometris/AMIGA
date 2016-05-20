@@ -25,14 +25,85 @@ namespace AmigaPowerAnalysis.Core.Reporting {
             html += generateDesignOverviewHtml(firstInputSettings);
             html += generateComparisonsAnalysisSettingsHtml(primaryComparisonOutputs);
 
+            html += generatePrimaryComparisonsSummary(primaryComparisonOutputs);
+            html += generateEndpointsPowerSummaryTable(primaryComparisonOutputs, TestType.Difference);
+            html += generateEndpointsPowerSummaryTable(primaryComparisonOutputs, TestType.Equivalence);
+
+            //html += generateComparisonsChartHtml(_resultPowerAnalysis, firstInputSettings.NumberOfReplications, _filesPath, chartCreationMethod, PowerAggregationType.AggregateMean);
+            html += generateComparisonsChartHtml(_resultPowerAnalysis, firstInputSettings.NumberOfReplications, _filesPath, chartCreationMethod, PowerAggregationType.AggregateMinimum);
+
             html += generateReplicatesVersusAnalysableEndpointsLineChart(primaryComparisonOutputs, _filesPath, chartCreationMethod);
+            html += generatePlotsVersusAnalysableEndpointsLineChart(primaryComparisonOutputs, _filesPath, chartCreationMethod);
             html += generateReplicatesVersusAnalysableEndpointsTable(primaryComparisonOutputs, _filesPath, chartCreationMethod);
             html += generateMeanCvPowerScatterPlots(primaryComparisonOutputs, _filesPath, chartCreationMethod);
-            html += generatePrimaryComparisonsSummary(primaryComparisonOutputs);
             //html += generateMeanCvScatterPlots(primaryComparisonOutputs, _filesPath, chartCreationMethod);
             //html += generatePrimaryComparisonsAnalysisSummary(primaryComparisonOutputs, _filesPath, chartCreationMethod);
 
             return format(html);
+        }
+
+        protected static string generateEndpointsPowerSummaryTable(IEnumerable<OutputPowerAnalysis> comparisonOutputs, TestType testType) {
+            var stringBuilder = new StringBuilder();
+            stringBuilder.AppendLine(string.Format("<h1>Power {0} at CQ={1}</h1>", testType.GetDisplayName().ToLower(), testType == TestType.Equivalence ? 0 : 1));
+            stringBuilder.AppendLine("<table>");
+            stringBuilder.AppendLine("<tr>");
+            stringBuilder.AppendLine("<th>Endpoint</th>");
+            stringBuilder.AppendLine("<th>Overall mean</th>");
+            stringBuilder.AppendLine("<th>CV comparator (%)</th>");
+            var replicateLevels = comparisonOutputs.First().InputPowerAnalysis.NumberOfReplications;
+            foreach (var replicates in replicateLevels) {
+                stringBuilder.AppendLine(string.Format("<th>{0}</th>", replicates));
+            }
+            stringBuilder.AppendLine("</tr>");
+
+            var outputs = comparisonOutputs.OrderBy(r => r.InputPowerAnalysis.OverallMean).ToList();
+            foreach (var comparison in outputs) {
+                stringBuilder.AppendLine(string.Format("<td>{0}</td>", comparison.InputPowerAnalysis.Endpoint));
+                stringBuilder.AppendLine(printNumericTableRecord(comparison.InputPowerAnalysis.OverallMean));
+                stringBuilder.AppendLine(printNumericTableRecord(comparison.InputPowerAnalysis.CvComparator));
+
+                if (testType == TestType.Difference) {
+
+                    var records = new List<OutputPowerAnalysisRecord>();
+                    if (!double.IsNaN(comparison.InputPowerAnalysis.LocLower)) {
+                        var effect = comparison.OutputRecords.Select(o => o.Effect).Min();
+                        var powerDifferencesLocLower = comparison.OutputRecords
+                            .Where(o => o.Effect == effect)
+                            .OrderBy(r => r.NumberOfReplications);
+                        records.AddRange(powerDifferencesLocLower);
+                    }
+
+                    if (!double.IsNaN(comparison.InputPowerAnalysis.LocUpper)) {
+                        var effect = comparison.OutputRecords.Select(o => o.Effect).Max();
+                        var powerDifferencesLocUpper = comparison.OutputRecords
+                            .Where(o => o.Effect == effect)
+                            .OrderBy(r => r.NumberOfReplications);
+                        records.AddRange(powerDifferencesLocUpper);
+                    }
+
+                    foreach (var replicates in replicateLevels) {
+                        var power = records.Where(r => r.NumberOfReplications == replicates)
+                            .Min(r => r.GetPower(TestType.Difference, comparison.AnalysisMethodDifferenceTest));
+                        var cellClass = power >= 0.8 ? "success" : "warning";
+                        stringBuilder.AppendLine(string.Format("<td class=\"{0}\">{1:G2}</td>", cellClass, power));
+                    }
+                }
+
+                if (testType == TestType.Equivalence) {
+                    var powerEquivalence = comparison.OutputRecords
+                    .Where(o => o.ConcernStandardizedDifference == 0D)
+                    .OrderBy(r => r.NumberOfReplications);
+                    foreach (var record in powerEquivalence) {
+                        var power = record.GetPower(TestType.Equivalence, comparison.AnalysisMethodEquivalenceTest);
+                        var cellClass = power >= 0.8 ? "success" : "warning";
+                        stringBuilder.AppendLine(string.Format("<th class=\"{0}\">{1:G2}</th>", cellClass, power));
+                    }
+                }
+
+                stringBuilder.AppendLine("</tr>");
+            }
+            stringBuilder.AppendLine("</table>");
+            return stringBuilder.ToString();
         }
 
         #region Obsolete
@@ -100,6 +171,21 @@ namespace AmigaPowerAnalysis.Core.Reporting {
 
             return stringBuilder.ToString();
         }
+
+        private static string generatePlotsVersusAnalysableEndpointsLineChart(IEnumerable<OutputPowerAnalysis> comparisonOutputs, string imagePath, ChartCreationMethod chartCreationMethod) {
+            var stringBuilder = new StringBuilder();
+            stringBuilder.AppendLine(string.Format("<h1>Analysable endpoints versus number of plots</h1>"));
+
+            var power = 0.8;
+
+            var imageFilename = string.Format("AnalysableEndpointsVersusPlots_Power_{0}.png", power);
+            var chart = PlotsVersusAnalysableEndpointsLineChartCreator.Create(comparisonOutputs, power);
+            includeChart(chart, 400, 300, imagePath, imageFilename, stringBuilder, chartCreationMethod);
+            stringBuilder.Append("</td>");
+
+            return stringBuilder.ToString();
+        }
+
 
         private static string generateReplicatesVersusAnalysableEndpointsTable(IEnumerable<OutputPowerAnalysis> comparisonOutputs, string imagePath, ChartCreationMethod chartCreationMethod) {
             var stringBuilder = new StringBuilder();
@@ -253,6 +339,52 @@ namespace AmigaPowerAnalysis.Core.Reporting {
                 stringBuilder.AppendLine("</tr>");
             }
             stringBuilder.AppendLine("</table>");
+            return stringBuilder.ToString();
+        }
+
+
+        private static string generateComparisonsChartHtml(ResultPowerAnalysis resultPowerAnalysis, List<int> blockSizes, string tempPath, ChartCreationMethod chartCreationMethod, PowerAggregationType powerAggregationType) {
+            var records = resultPowerAnalysis.GetAggregateOutputRecords(powerAggregationType);
+
+            var stringBuilder = new StringBuilder();
+            stringBuilder.AppendLine(string.Format("<h2>Charts joint power analysis primary comparisons (aggregation method: {0})</h2>", powerAggregationType.GetShortName().ToLower()));
+
+            var fileBaseId = "Aggregate_";
+            string imageFilename;
+
+            stringBuilder.Append("<table>");
+            stringBuilder.Append("<tr>");
+
+            imageFilename = fileBaseId + "_Replicates_Difference.png";
+            var plotDifferenceReplicates = PowerVersusReplicatesCsdChartCreator.Create(records, TestType.Difference);
+            stringBuilder.Append("<td>");
+            includeChart(plotDifferenceReplicates, 400, 300, tempPath, imageFilename, stringBuilder, chartCreationMethod);
+            stringBuilder.Append("</td>");
+
+            imageFilename = fileBaseId + "_LevelOfConcern_Difference.png";
+            var plotDifferenceLogRatio = PowerVersusCsdChartCreator.Create(records, TestType.Difference, blockSizes);
+            stringBuilder.Append("<td>");
+            includeChart(plotDifferenceLogRatio, 400, 300, tempPath, imageFilename, stringBuilder, chartCreationMethod);
+            stringBuilder.Append("</td>");
+
+            stringBuilder.Append("</tr>");
+            stringBuilder.Append("<tr>");
+
+            imageFilename = fileBaseId + "_Replicates_Equivalence.png";
+            var plotEquivalenceReplicates = PowerVersusReplicatesCsdChartCreator.Create(records, TestType.Equivalence);
+            stringBuilder.Append("<td>");
+            includeChart(plotEquivalenceReplicates, 400, 300, tempPath, imageFilename, stringBuilder, chartCreationMethod);
+            stringBuilder.Append("</td>");
+
+            imageFilename = fileBaseId + "_LevelOfConcern_Equivalence.png";
+            var plotEquivalenceLogRatio = PowerVersusCsdChartCreator.Create(records, TestType.Equivalence, blockSizes);
+            stringBuilder.Append("<td>");
+            includeChart(plotEquivalenceLogRatio, 400, 300, tempPath, imageFilename, stringBuilder, chartCreationMethod);
+            stringBuilder.Append("</td>");
+
+            stringBuilder.Append("</tr>");
+            stringBuilder.Append("</table>");
+
             return stringBuilder.ToString();
         }
     }

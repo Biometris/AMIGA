@@ -50,13 +50,22 @@ namespace AmigaPowerAnalysis.Tests.IntegrationTests {
         private static Project createProjectBase(List<EndpointType> endpointGroups, List<Endpoint> endpoints) {
             var project = new Project();
             project.PowerCalculationSettings.NumberOfRatios = 3;
+            project.PowerCalculationSettings.PowerCalculationMethod = PowerCalculationMethod.Simulate;
             project.EndpointTypes = endpointGroups;
             project.Endpoints = endpoints;
 
-            var spraying = new Factor("Spraying");
-            spraying.AddFactorLevel(new FactorLevel("Default"));
-            spraying.AddFactorLevel(new FactorLevel("None"));
+            var spraying = new Factor("Spraying", true);
+            var defaultSpraying = new FactorLevel("Default");
+            var noSpraying = new FactorLevel("None");
+            spraying.AddFactorLevel(defaultSpraying);
+            spraying.AddFactorLevel(noSpraying);
             project.AddFactor(spraying);
+
+            var comparatorLevel = project.VarietyFactor.FactorLevels.First(r => r.VarietyLevelType == VarietyLevelType.Comparator);
+            var interactionLevel = project.DefaultInteractionFactorLevelCombinations
+                .First(r => r.Levels.Contains(comparatorLevel) && r.Levels.Contains(noSpraying));
+            interactionLevel.IsComparisonLevel = false;
+            project.UpdateEndpointFactorLevels();
 
             return project;
         }
@@ -97,7 +106,7 @@ namespace AmigaPowerAnalysis.Tests.IntegrationTests {
             var project = createProjectScenario1(endpointGroups, endpoints);
             var projectFileName = Path.Combine(_testOutputPath, projectName + ".xapa");
             ProjectManager.SaveProjectXml(project, projectFileName);
-            var resultPowerAnalysis = IntegrationTestUtilities.RunProject(projectFileName);
+            var resultPowerAnalysis = IntegrationTestUtilities.RunProject(projectFileName, false);
         }
 
         [TestMethod]
@@ -105,7 +114,7 @@ namespace AmigaPowerAnalysis.Tests.IntegrationTests {
         public void DataPrasifkaIntegrationTests_CreatePrasifkaScenario1Selection() {
             var projectName = "PrasifkaScenario1Selection";
             var endpointGroups = readEndpointGroups();
-            var endpoints = readEndpoints(endpointGroups, 10);
+            var endpoints = readEndpoints(endpointGroups, 15);
             var project = createProjectScenario1(endpointGroups, endpoints);
             var projectFileName = Path.Combine(_testOutputPath, projectName + ".xapa");
             ProjectManager.SaveProjectXml(project, projectFileName);
@@ -121,7 +130,7 @@ namespace AmigaPowerAnalysis.Tests.IntegrationTests {
             var project = createProjectScenario2(endpointGroups, endpoints);
             var projectFileName = Path.Combine(_testOutputPath, projectName + ".xapa");
             ProjectManager.SaveProjectXml(project, projectFileName);
-            var resultPowerAnalysis = IntegrationTestUtilities.RunProject(projectFileName);
+            var resultPowerAnalysis = IntegrationTestUtilities.RunProject(projectFileName, false);
         }
 
         [TestMethod]
@@ -129,7 +138,7 @@ namespace AmigaPowerAnalysis.Tests.IntegrationTests {
         public void DataPrasifkaIntegrationTests_CreatePrasifkaScenario2Selection() {
             var projectName = "PrasifkaScenario2Selection";
             var endpointGroups = readEndpointGroups();
-            var endpoints = readEndpoints(endpointGroups, 10);
+            var endpoints = readEndpoints(endpointGroups, 15);
             var project = createProjectScenario2(endpointGroups, endpoints);
             var projectFileName = Path.Combine(_testOutputPath, projectName + ".xapa");
             ProjectManager.SaveProjectXml(project, projectFileName);
@@ -173,7 +182,7 @@ namespace AmigaPowerAnalysis.Tests.IntegrationTests {
                 var tableDefinition = tableDefinitions.GetTableDefinition("Endpoints");
                 var records = _dataFileReader.ReadDataSet<EndpointDTO>(tableDefinition);
                 var chartCreator = new MeanCvScatterChartCreator(records);
-                var filename = this.SaveChart(chartCreator, "Prasifka_Mean_versus_CV.png");
+                var filename = this.SaveChart(chartCreator, "Prasifka_Mean_versus_CV.png", 800, 400);
                 Process.Start(filename);
             }
         }

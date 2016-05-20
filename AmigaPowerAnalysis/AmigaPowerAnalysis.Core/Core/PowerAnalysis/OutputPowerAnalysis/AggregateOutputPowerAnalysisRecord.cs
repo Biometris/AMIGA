@@ -6,7 +6,7 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
     public enum PowerAggregationType {
         [Display(Name = "Aggregate comparisons using minimum of all powers", ShortName = "Minimum")]
         AggregateMinimum,
-        [Display(Name = "Aggregate comparisons using mean of all powers", ShortName = "Mean.")]
+        [Display(Name = "Aggregate comparisons using mean of all powers", ShortName = "Mean")]
         AggregateMean,
     }
 
