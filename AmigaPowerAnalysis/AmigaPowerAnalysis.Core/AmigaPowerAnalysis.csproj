@@ -116,6 +116,7 @@
     <Compile Include="Core\Charting\AnalysisResultsChartCreators\PowerVersusRatioChartCreator.cs" />
     <Compile Include="Core\Charting\AnalysisResultsChartCreators\PowerVersusReplicatesRatioChartCreator.cs" />
     <Compile Include="Core\Charting\ChartCreatorBase.cs" />
+    <Compile Include="Core\Charting\DataSummaryChartCreators\DtoMeanCvScatterChartCreator.cs" />
     <Compile Include="Core\Charting\DataSummaryChartCreators\MeanCvScatterChartCreator.cs" />
     <Compile Include="Core\Charting\DataSummaryChartCreators\PlotsVersusAnalysableEndpointsLineChartCreator.cs" />
     <Compile Include="Core\Charting\DataSummaryChartCreators\ReplicatesVersusAnalysableEndpointsLineChartCreator.cs" />

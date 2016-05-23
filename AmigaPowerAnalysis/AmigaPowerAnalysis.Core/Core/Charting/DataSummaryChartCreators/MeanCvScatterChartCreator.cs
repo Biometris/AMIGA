@@ -1,25 +1,18 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using AmigaPowerAnalysis.Core.Data;
-using AmigaPowerAnalysis.Core.DataAnalysis.AnalysisModels;
-using AmigaPowerAnalysis.Core.PowerAnalysis;
-using Biometris.ExtensionMethods;
 using Biometris.Statistics;
 using Biometris.Statistics.Distributions;
 using OxyPlot;
-using OxyPlot.Annotations;
 using OxyPlot.Axes;
 using OxyPlot.Series;
-using OxyPlot.WindowsForms;
 
 namespace AmigaPowerAnalysis.Core.Charting.DataSummaryChartCreators {
 
     public sealed class MeanCvScatterChartCreator : ChartCreatorBase {
 
-        private List<EndpointDTO> _endpoints;
+        private List<Endpoint> _endpoints;
 
-        public MeanCvScatterChartCreator(List<EndpointDTO> endpoints) {
+        public MeanCvScatterChartCreator(List<Endpoint> endpoints) {
             _endpoints = endpoints;
         }
 
@@ -27,11 +20,11 @@ namespace AmigaPowerAnalysis.Core.Charting.DataSummaryChartCreators {
             return Create(_endpoints);
         }
 
-        public static PlotModel Create(List<EndpointDTO> endpoints) {
+        public static PlotModel Create(List<Endpoint> endpoints) {
             var plotModel = new PlotModel() {
                 Title = string.Format("Mean versus CV of {0} endpoints", endpoints.Count),
                 TitleFontSize = 11,
-                PlotAreaBorderThickness = new OxyThickness(1,0,0,1)
+                PlotAreaBorderThickness = new OxyThickness(1, 0, 0, 1)
             };
 
             var verticalAxis = new LinearAxis() {
@@ -59,8 +52,8 @@ namespace AmigaPowerAnalysis.Core.Charting.DataSummaryChartCreators {
                 MarkerSize = 4
             };
             var scatterPoints = endpoints.Select(r => new {
-                Mean = r.Mean,
-                Cv = r.CV
+                Mean = r.MuComparator,
+                Cv = r.CvComparator
             });
             scatterSeries.Points.AddRange(scatterPoints.Select(r => new ScatterPoint(r.Mean, r.Cv)));
 
