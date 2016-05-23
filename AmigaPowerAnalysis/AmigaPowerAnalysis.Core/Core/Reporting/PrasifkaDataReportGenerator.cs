@@ -202,9 +202,9 @@ namespace AmigaPowerAnalysis.Core.Reporting {
 
             stringBuilder.AppendLine("<tr>");
             stringBuilder.AppendLine("<th>Replicates</th>");
-            stringBuilder.AppendLine("<th>Difference test Upper Loc</th>");
-            stringBuilder.AppendLine("<th>Equivalence test No difference</th>");
             stringBuilder.AppendLine("<th>Difference test Lower Loc</th>");
+            stringBuilder.AppendLine("<th>Equivalence test No difference</th>");
+            stringBuilder.AppendLine("<th>Difference test Upper Loc</th>");
             stringBuilder.AppendLine("</tr>");
 
             var replicateLevels = comparisonOutputs.First().InputPowerAnalysis.NumberOfReplications;
@@ -241,7 +241,7 @@ namespace AmigaPowerAnalysis.Core.Reporting {
                 }).Count();
                 stringBuilder.AppendLine(string.Format("<td>{0}</td>", analysableEndpointsDifferenceUpperLoc));
 
-                stringBuilder.AppendLine("<tr>");
+                stringBuilder.AppendLine("</tr>");
             }
 
             stringBuilder.AppendLine("</table>");

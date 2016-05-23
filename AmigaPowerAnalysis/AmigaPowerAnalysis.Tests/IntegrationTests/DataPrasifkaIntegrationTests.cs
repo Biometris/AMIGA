@@ -79,13 +79,15 @@ namespace AmigaPowerAnalysis.Tests.IntegrationTests {
 
         private static Project createProjectScenario1(List<EndpointType> endpointGroups, List<Endpoint> endpoints) {
             var project = createProjectBase(endpointGroups, endpoints);
-            project.PowerCalculationSettings.NumberOfReplications = new List<int>() { 8, 16, 32, 64, 128, 256 };
+            project.PowerCalculationSettings.NumberOfReplications = new List<int>() { 8, 16, 24, 32, 40, 48 };
+            //project.PowerCalculationSettings.NumberOfReplications = new List<int>() { 8, 16, 32, 64, 128, 256 };
             return project;
         }
 
         private static Project createProjectScenario2(List<EndpointType> endpointGroups, List<Endpoint> endpoints) {
             var project = createProjectBase(endpointGroups, endpoints);
-            project.PowerCalculationSettings.NumberOfReplications = new List<int>() { 2, 4, 8, 16, 32, 64 };
+            project.PowerCalculationSettings.NumberOfReplications = new List<int>() { 2, 4, 6, 8, 10, 12 };
+            //project.PowerCalculationSettings.NumberOfReplications = new List<int>() { 2, 4, 8, 16, 32, 64 };
             foreach (var level in project.VarietyFactor.FactorLevels) {
                 level.Frequency = 4;
             }
@@ -125,7 +127,7 @@ namespace AmigaPowerAnalysis.Tests.IntegrationTests {
             var project = createProjectScenario1(endpointGroups, endpoints);
             var projectFileName = Path.Combine(_testOutputPath, projectName + ".xapa");
             ProjectManager.SaveProjectXml(project, projectFileName);
-            var resultPowerAnalysis = IntegrationTestUtilities.RunProject(projectFileName);
+            var resultPowerAnalysis = IntegrationTestUtilities.RunProject(projectFileName, false);
         }
 
         [TestMethod]
@@ -149,7 +151,7 @@ namespace AmigaPowerAnalysis.Tests.IntegrationTests {
             var project = createProjectScenario2(endpointGroups, endpoints);
             var projectFileName = Path.Combine(_testOutputPath, projectName + ".xapa");
             ProjectManager.SaveProjectXml(project, projectFileName);
-            var resultPowerAnalysis = IntegrationTestUtilities.RunProject(projectFileName);
+            var resultPowerAnalysis = IntegrationTestUtilities.RunProject(projectFileName, false);
         }
 
         [TestMethod]
