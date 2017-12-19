@@ -28,7 +28,7 @@ scalar    upperLOC ; 2.0
 scalar    ngridLOC ; 5
 variate   nBlocks ; !(2,3,4)
 scalar    ndatasets ; 2
-scalar    ndatasets ; 200
+scalar    ndatasets ; 2
 scalar    nGCI ; 10000            " Number of draws for Gen. Conf. Interval "
 scalar    alfa ; 0.05
 scalar    limPowerDiff ; 2
@@ -58,8 +58,8 @@ variate   perc ; 100 * (!(0,1) + !(1,-1)*alfa/2)
 
 
 " Import Data from Simulation tool "
-text      file ; 'M:/My Documents/TechDoc-0.csv'
 text      file ; 'M:/My Documents/SmallMeans-0.csv'
+text      file ; 'M:/My Documents/TechDoc-0.csv'
 import    file ; isave=isave
 print     Comparison,Mean
 
@@ -279,8 +279,12 @@ for [ntimes=nloop ; index=ii]
       predict   [print=* ; pred=qpred[2]] qdum[] ; predval[]
       calculate (fLN, fSQ)$[kk] = (qesti[]$[2]/qse[]$[2])**2
       calculate (LNms,SQms)$[kk] = qdev1[]/df1
+
+      print qpred[]
+      print qesti[], qse[]
       " Equivalence testing by means of GCI "
       calculate effRep = (qdev1[1]/df1)/(se[1]*se[1])
+      print effRep
       equate    !p(qpred[1,2],effRep) ; !p(logGMO,logCMP,sqrGMO,sqrCMP,nGMO,nCMP)
       calculate GCIchi[1,2] = qdev1[1,2] / grchi(nGCI ; df1)
       calculate qlogGMO, qlogCMP, qsqrGMO, qsqrCMP = grnormal(nGCI ; \

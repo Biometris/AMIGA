@@ -28,36 +28,35 @@ for (i in 1:length(source)) {
 
 # Settings
 settings = read.csv(settingsfile, header=FALSE, as.is=TRUE, strip.white=TRUE)
-tel = 1
-ComparisonId              = as.numeric(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-NumberOfComparisons       = as.numeric(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-Endpoint                  = as.character( as.vector(settings[[2]][tel]))             ; tel = tel + 1
-LocLower                  = as.numeric(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-LocUpper                  = as.numeric(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-Distribution              = as.character( as.vector(settings[[2]][tel]))             ; tel = tel + 1
-PowerLawPower             = as.numeric(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-OverallMean               = as.numeric(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-CVComparator              = as.numeric(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-CVBlocks                  = as.numeric(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-NumberOfInteractions      = as.numeric(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-NumberOfModifiers         = as.numeric(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-SignificanceLevel         = as.numeric(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-NumberOfEvaluationpoints  = as.numeric(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-NumberOfReplications      = as.numeric(unlist(strsplit(settings[[2]][tel], " ")))    ; tel = tel + 1
-ExperimentalDesignType    = as.character( as.vector(settings[[2]][tel]))             ; tel = tel + 1
-PowerCalculationMethod    = as.character( as.vector(settings[[2]][tel]))             ; tel = tel + 1
-RandomNumberSeed          = as.numeric(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-NumberOfSimulatedDataSets = as.numeric(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-IsLogNormal               = as.logical(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-IsSquareRoot              = as.logical(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-IsOverdispersedPoisson    = as.logical(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-IsNegativeBinomial        = as.logical(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-IsEmpiricalLogit          = as.logical(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-IsOverdispersedBinomial   = as.logical(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-IsBetabinomial            = as.logical(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-IsLogPlusM                = as.logical(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-IsGamma                   = as.logical(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
-IsNormal                  = as.logical(   as.vector(settings[[2]][tel]))             ; tel = tel + 1
+ComparisonId              = readSettings(settings, "ComparisonId",              "numeric")
+NumberOfComparisons       = readSettings(settings, "NumberOfComparisons",       "numeric")
+Endpoint                  = readSettings(settings, "Endpoint",                  "character")
+LocLower                  = readSettings(settings, "LocLower",                  "numeric")
+LocUpper                  = readSettings(settings, "LocUpper",                  "numeric")
+Distribution              = readSettings(settings, "Distribution",              "character")
+PowerLawPower             = readSettings(settings, "PowerLawPower",             "numeric")
+OverallMean               = readSettings(settings, "OverallMean",               "numeric")
+CVComparator              = readSettings(settings, "CVComparator",              "numeric")
+CVBlocks                  = readSettings(settings, "CVBlocks",                  "numeric")
+NumberOfInteractions      = readSettings(settings, "NumberOfInteractions",      "numeric")
+NumberOfModifiers         = readSettings(settings, "NumberOfModifiers",         "numeric")
+SignificanceLevel         = readSettings(settings, "SignificanceLevel",         "numeric")
+NumberOfEvaluationPoints  = readSettings(settings, "NumberOfEvaluationPoints",  "numeric")
+NumberOfReplications      = readSettings(settings, "NumberOfReplications",      "numeric")
+ExperimentalDesignType    = readSettings(settings, "ExperimentalDesignType",    "character")
+PowerCalculationMethod    = readSettings(settings, "PowerCalculationMethod",    "character")
+RandomNumberSeed          = readSettings(settings, "RandomNumberSeed",          "numeric")
+NumberOfSimulatedDataSets = readSettings(settings, "NumberOfSimulatedDataSets", "numeric")
+IsLogNormal               = readSettings(settings, "LogNormal",                 "logical")
+IsSquareRoot              = readSettings(settings, "SquareRoot",                "logical")
+IsOverdispersedPoisson    = readSettings(settings, "OverdispersedPoisson",      "logical")
+IsNegativeBinomial        = readSettings(settings, "NegativeBinomial",          "logical")
+IsEmpiricalLogit          = readSettings(settings, "EmpiricalLogit",            "logical")
+IsOverdispersedBinomial   = readSettings(settings, "OverdispersedBinomial",     "logical")
+IsBetabinomial            = readSettings(settings, "Betabinomial",              "logical")
+IsLogPlusM                = readSettings(settings, "LogPlusM",                  "logical")
+IsGamma                   = readSettings(settings, "Gamma",                     "logical")
+IsNormal                  = readSettings(settings, "Normal",                    "logical")
 
 # Additional settings
 nGCI = 100          # Number of draws for Generalized Confidence Interval   

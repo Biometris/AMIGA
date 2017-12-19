@@ -1,36 +1,135 @@
+# qlogis is logit function           
+# plogis is inverse of logit function
+
+# Returns a random sample from a binomial-type distribution
+# No error checking is performed
+# - The sample size n must be a positive integer
+# - The probability must be in the interval (0,1) and must be a scalar or a vector of length n
+# - The binomial totals nbinomial must be positive integer and must be a scalar or a vector of length n
+# - The dispersion parameter must be valid (see function robinomialDispersion) and must be a scalar or a vector of length n
 robinomial = function(n, probability, nbinomial, dispersion=NaN, 
       distribution=c("Binomial", "BetaBinomial", "BinomialLogitNormal")) {
-  stopifnot(n == as.integer(n), n >= 1)
-  stopifnot((probability > 0) && (probability < 1))
-  stopifnot(nbinomial == as.integer(nbinomial), nbinomial >= 1)
-  if ((length(probability) != 1) && (length(probability) != n)) {
-    stop("Error: the length of probability must equal 1 or the value of n.")
-  }
-  if ((length(nbinomial) != 1) && (length(nbinomial) != n)) {
-    stop("Error: the length of nbinomial must equal 1 or the value of n.")
-  }
-  if ((length(dispersion) != 1) && (length(dispersion) != n)) {
-    stop("Error: the length of dispersion must equal 1 or the value of n.")
-  }
   type = match.arg(distribution)
   if (type == "Binomial") {
     sample = rbinom(n, nbinomial, probability)
   } else if (type == "BetaBinomial") {
-    stopifnot(dispersion > 1)
-    phi = (dispersion-1)/(nbinomial-1)
-    alfa = probability*(1-phi)/phi
-    beta = (1-probability)*(1-phi)/phi
+    alfa = probability*(1-dispersion)/dispersion
+    beta = (1-probability)*(1-dispersion)/dispersion
     sample = rbeta(n, shape1=alfa, shape2=beta)
+    nMissing = length(which(is.na(sample)))
+    if (nMissing > 0) {
+      stop(cat("Missing values generated for BetaBinomial distribution. Parameters are too extreme.\n"), call.=TRUE)
+    }
     sample = rbinom(n, nbinomial, sample)
   } else if (type == "BinomialLogitNormal") {
-    stopifnot(dispersion > 0)
-    sample = plogis(rnorm(n, ownlogit(probability), sqrt(dispersion)))
+    sample = plogis(rnorm(n, qlogis(probability), sqrt(dispersion)))
     sample = rbinom(n, nbinomial, sample)
   }
   return(sample)
 }
 
-ownlogit = function(p) {
-  return(log(p/(1-p)))
+# Returns the two parameters of a binomial-type distribution from its mean and CV.
+# It is implicitly assumed that all arguments are scalars although vectors of equal length are allowed for Binomial and BetaBinomial
+# Vectors are not allowed for BinomialLogitNormal as this required Gauss-Hermite integration
+# Performs error checking, i.e. checks that the calculated dispersion parameter is valid
+robinomialDispersion = function(probability, nbinomial, CV, 
+      distribution=c("Binomial", "BetaBinomial", "BinomialLogitNormal"),
+      objectBinomialLogitNormal) {
+  type = match.arg(distribution)
+  if ((min(probability) <= 0) | (max(probability) >= 1)) {
+    stop(cat("Probability must be in the interval (0,1) for binomial-type distributions.\n"), call.=TRUE)
+    }
+  if (Reduce("|", nbinomial != as.integer(nbinomial)) | (min(nbinomial) < 1)) {
+    stop(cat("Nbinomial must be a positive integer for binomial-type distributions.\n"), call.=TRUE)
+    }
+  if (type != "Binomial") {
+    limitCV = 100*sqrt(nbinomial*probability*(1-probability))/(nbinomial*probability)
+    if (CV <= limitCV) {
+      line = cat("Coefficient of Variation must be larger than ", limitCV, " for probability=", probability, " and nbinomial=", nbinomial, " for ", type, " distribution.\n", 
+        "The provided value is CV=", CV, ".\n", sep="")
+      stop(line, call.=TRUE)
+    }
+  }
+  # Binomial
+  if (type == "Binomial") {
+    dispersion = NaN
+    return(list(probability=probability, dispersion=dispersion))
+  # BetaBinomial
+  } else if (type == "BetaBinomial") {
+    limitCV = 100*sqrt((1-probability)/probability)
+    if (CV >= limitCV) {
+      line = cat("Coefficient of Variation must be smaller than ", limitCV, " for probability=", probability, " and nbinomial=", nbinomial, " for ", type, " distribution.\n", 
+        "The provided value is CV=", CV, ".\n", sep="")
+      stop(line, call.=TRUE)
+    }
+    omega = (CV/100)**2 * nbinomial*probability/(1-probability)
+    dispersion = (omega-1)/(nbinomial-1)
+    return(list(probability=probability, dispersion=dispersion))
+  # BinomialLogitNormal
+  } else if (type == "BinomialLogitNormal") {
+    if ((length(probability) > 1) | (length(nbinomial) > 1) | (length(CV) > 1)) {
+      stop(cat("Vectors are not allowed for the BinomialLogitNormal distribution.\n"), call.=TRUE)
+      }
+    target  = c(probability, CV)
+    initial = c(probability, 1)
+    optim = optim(initial, BinomialLogitNormalOptimize2, target=target, object=objectBinomialLogitNormal)
+    if (optim$par[2] <= 0) {
+      stop(cat("The resulting dispersion parameter for the BinomialLogitNormal distribution is not positive.\n"), call.=TRUE)
+    }
+    if (optim$par[2] > 100) {
+      stop(cat("The resulting dispersion parameter (variance on the logit scale) for the BinomialLogitNormal distribution is larger than 100.\n"), call.=TRUE)
+    }
+    return(list(probability=optim$par[1], dispersion=optim$par[2]))
+  }
+}
+
+# returns the location parameter for the BinomialLogitNormal such that the marginal mean equals nbinomial*probability
+robinomialLogitNormal = function(probability, nbinomial, dispersion, objectBinomialLogitNormal) {
+  ntimes = length(probability)
+  returnvalue = rep(NaN, ntimes)
+  for (i in 1:ntimes) {
+    target  = c(probability[i])
+    initial = c(probability[i])
+    optim = optim(initial, BinomialLogitNormalOptimize1, target=target, sigma2=dispersion, object=objectBinomialLogitNormal, method="Brent", lower=0.0000001, upper=0.99999999)
+    returnvalue[i] = optim$par[1]
+  }
+  return(returnvalue)
+}
+
+BinomialLogitNormalCreate = function(nBinomial, nGaussHermite) {
+  # Create an object to calculate probabilities by numeric Gauss-Hermite integration
+  require("statmod")
+  gherm <- gauss.quad(nGaussHermite, kind="hermite")
+  x = seq(0,nBinomial)
+  xMat = matrix(rep(x, nGaussHermite), ncol=nGaussHermite, nrow=nBinomial+1)
+  nodesMat = matrix(rep(sqrt(2)*gherm$nodes, each=nBinomial+1), ncol=nGaussHermite, nrow=nBinomial+1)
+  weightMat = matrix(rep(gherm$weights/sqrt(pi), each=nBinomial+1), ncol=nGaussHermite, nrow=nBinomial+1)
+  list(nBinomial=nBinomial, x=x, xMat=xMat, nodesMat=nodesMat, weightMat=weightMat)
+}
+
+BinomialLogitNormalDistribution = function(parameter, object) {
+  # Calculates probabilities of the distribution 
+  # parameter is a two-dimensional vector with prob and sigma2
+  nodesMat = plogis(sqrt(parameter[2])*object$nodesMat + qlogis(parameter[1]))
+  pExact = rowSums( object$weightMat * dbinom(object$xMat, object$nBinomial, nodesMat) )
+}
+
+BinomialLogitNormalOptimize2 = function(parameter, target, object) {   
+  # Finding the parameters of the distribution by numerical optimization
+  # target is a two-dimensional vector with required Mean and required CV                 
+  # It is assumed that CV is large enough
+  pxx = BinomialLogitNormalDistribution(parameter, object)
+  iMean = sum(object$x*pxx)
+  iVariance = sum((object$x-iMean)^2 * pxx)
+  iCV = 100*sqrt(iVariance)/iMean
+  (iMean/object$nBinomial/target[1] - 1)^2 + (iCV/target[2] - 1)^2
+}
+
+BinomialLogitNormalOptimize1 = function(parameter, target, sigma2, object) {   
+  # Finding the probability parameter of the distribution by numerical optimization
+  # sigma2 is given and is assumed to be positive
+  pxx = BinomialLogitNormalDistribution(c(parameter[1], sigma2), object)
+  iMean = sum(object$x*pxx)/object$nBinomial
+  (iMean/target - 1)^2
 }
 

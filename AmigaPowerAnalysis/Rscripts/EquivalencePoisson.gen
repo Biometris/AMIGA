@@ -28,11 +28,15 @@ model     [dist=poisson] yy
 fit       [nomes=lev,res,disp] xx
 rkeep     esti=esti ; se=se ; dev=dev1 ; df=df1
 scalar    logratio, selogratio ; (esti,se)$[2]
-calculate leftWL,rightWL = exp(logratio + (-1,1)*ednormal(1-alfa/2)*selogratio)
+scalar    tval ; ednormal(1-alfa)
+calculate logLeftWL,logRightWL = logratio + (-1,1)*tval*selogratio
+calculate leftWL,rightWL = exp(logLeftWL,logRightWL)
 calculate ratio = exp(logratio)
-print     logratio, ratio, leftWL,rightWL
+print     logratio, ratio, tval
+print     logLeftWL,logRightWL, leftWL,rightWL
 
 " LR interval "
+qstopwatc [mode=start ; print=*]
 scalar    ngrid ; 1000
 calculate min,max = logratio + (-1,1)*ednormal(1-alfa/10)*selogratio
 fgrid     [min=min ; max=max ; ngrid=ngrid] grid
@@ -45,17 +49,19 @@ for [ntimes=ngrid ; index=ii]
   calculate savedev$[ii] = dev0
 endfor
 calculate savedev = savedev - dev1
-calculate edchi = edchi(1-alfa ; 1)
+calculate edchi = edchi(1-2*alfa ; 1)
 restrict  grid[], savedev ; grid[].gt.logratio
-interpola oldval=savedev ; oldint=grid[] ; newval=!(#edchi) ; newint=rightLogLR
+interpola oldval=savedev ; oldint=grid[] ; newval=!(#edchi) ; newint=logRightLR
 restrict  grid[], savedev
 restrict  grid[], savedev ; grid[].lt.logratio
-interpola oldval=savedev ; oldint=grid[] ; newval=!(#edchi) ; newint=leftLogLR
+interpola oldval=savedev ; oldint=grid[] ; newval=!(#edchi) ; newint=logLeftLR
 restrict  grid[], savedev
-calculate leftLR, rightLR = exp(leftLogLR, rightLogLR)
-print     leftLogLR, rightLogLR, leftLR, rightLR, leftWL,rightWL
+calculate leftLR, rightLR = exp(logLeftLR, logRightLR)
+print     logLeftLR, logRightLR, leftLR, rightLR
+qstopwatc [mode=stop ; print=output]
 
 " LR interval by means of FROOTFIND "
+qstopwatc [mode=start ; print=*]
 PROCEDURE '%FROOTFIND'
   OPTION    'FUNCTION', 'DATA' ; TYPE='scalar', 'pointer' ; \
             SET=yes ; DECLARED=yes ; PRESENT=yes
@@ -71,8 +77,9 @@ pointer   [values=yy, dev1, xx] data
 frootfind [print=moni,root ; data=data ; method=ridders] parameter=2(dummy) ; \
           value=edchi ; lower=min,logratio ; upper=logratio,max ; \
           root=RootLeft, RootRight
-print     leftLogLR, rightLogLR, RootLeft, RootRight ; deci=5
-
+print     logLeftLR, logRightLR, RootLeft, RootRight ; deci=5
+qstopwatc [mode=stop ; print=output]
+stop
 " Graph of profile likelihood "
 xaxis     1 ; lower=min ; upper=max ; title='Log(ratio)'
 yaxis     1 ; lower=-0.3 ; title='Profile likelihood'
@@ -86,38 +93,20 @@ dgraph    [win=1 ; key=0 ; title='Profile likelihood Poisson'] \
 
 " Set LOC to left and test "
 " Note: never reject when estimate is outside LOC interval "
-scalar    LOC ; leftLogLR-0.01
+scalar    LOC ; logLeftLR
 calculate offset = (xx.eq.1)*LOC
-model     [dist=poisson; offset=offset] yy
-terms     xx
-fit       [print=# ; nomes=lev,res,disp]
-rkeep     dev=dev0 ; df=df0
-add       [print=* ; nomes=lev,res,disp] xx   " This is the full model "
-rkeep     dev=dev1 ; df=df1 ; esti=esti2
-calculate estidiff = esti2$[2] + LOC  " This is the estimate of the logratio "
-print     estidiff, logratio
-calculate ChiTest = (estidiff.ge.LOC) * (dev0-dev1)
-calculate pChi = cuchi(ChiTest ; 1)/2
-calculate critValChi = edchi(1-alfa ; 1)
-print     pChi, ChiTest, critValChi
-
-" Set LOC to right and test "
-scalar    LOC ; rightLogLR
-calculate offset = (xx.eq.1)*LOC
-model     [dist=poisson; offset=offset] yy
+model     [dist=poisson ; offset=offset] yy
 fit       [print=* ; nomes=lev,res,disp]
 rkeep     dev=dev0 ; df=df0
-if 0
-    " Not necessary to fit this model because this has been fitted before "
-    add       [print=sum,esti ; nomes=lev,res,disp] xx
-    rkeep     dev=dev1 ; df=df1 ; esti=esti2
-    calculate devdiff = (esti2$[2].le.0) * (dev0-dev1)
-  else
-    calculate devdiff = (estidiff.le.LOC) * (dev0-dev1)
-endif
-calculate pChi = cuchi(ChiTest ; 1)/2
-calculate critValChi = edchi(1-alfa ; 1)
-print     pChi, ChiTest, critValChi
-dcrop     [sec=1 ; nomes=warning]
-stop
+calculate pDiffLeft = cuchi((dev0-dev1) ; 1)/2
+print     pDiffLeft
 
+" Set LOC to right and test "
+scalar    LOC ; logRightLR
+calculate offset = (xx.eq.1)*LOC
+model     [dist=poisson ; offset=offset] yy
+fit       [print=* ; nomes=lev,res,disp]
+rkeep     dev=dev0 ; df=df0
+calculate pDiffRight = cuchi((dev0-dev1) ; 1)/2
+print     pDiffRight
+stop
