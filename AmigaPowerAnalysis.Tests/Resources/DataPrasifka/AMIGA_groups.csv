@@ -1,0 +1,5 @@
+EndpointGroup,MeasurementType,LocLower,LocUpper,DistributionType,BinomialTotal,PowerLawPower,MuComparator,CvComparator
+Herbivores,Count,0.5,2,OverdispersedPoisson,0,0,50,100
+Saprovores,Count,0.5,2,PowerLaw,0,1.7,50,100
+Predators,Count,0.5,2,PoissonLogNormal,0,0,50,100
+Parasitoids,Count,0.5,2,Poisson,0,0,50,100

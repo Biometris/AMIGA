@@ -1,0 +1,15 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="AmigaPowerAnalysis.Tests.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="TestPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">..\..\..\TestOutput</Value>
+    </Setting>
+    <Setting Name="RPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\Program Files\R\R-3.1.1\bin\RScript.exe</Value>
+    </Setting>
+    <Setting Name="GenstatPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\Program Files\Gen17Ed\Bin\GenBatch.exe</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

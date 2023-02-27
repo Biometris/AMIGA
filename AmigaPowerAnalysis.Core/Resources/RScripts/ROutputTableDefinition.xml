@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ArrayOfTableDefinition xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <TableDefinition>
+    <TableID>RPowerAnalysisOutputTable</TableID>
+    <ColumnDefinitions>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>Effect</ColumnID>
+        <Aliases>
+          <string>Ratio</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>TransformedEffect</ColumnID>
+        <Aliases>
+          <string>LogRatio</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>ConcernStandardizedDifference</ColumnID>
+        <Aliases>
+          <string>CSD</string>
+          <string>LevelOfConcern</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>NumberOfReplications</ColumnID>
+        <Aliases>
+          <string>NumberOfReplicates</string>
+          <string>NumberReplicates</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition>
+        <ColumnID>PowerDifferenceLogNormal</ColumnID>
+        <Aliases>
+          <string>DiffLogNormal</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition>
+        <ColumnID>PowerDifferenceSquareRoot</ColumnID>
+        <Aliases>
+          <string>DiffSquareRoot</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition>
+        <ColumnID>PowerDifferenceOverdispersedPoisson</ColumnID>
+        <Aliases>
+          <string>DiffOverdispersedPoisson</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition>
+        <ColumnID>PowerDifferenceNegativeBinomial</ColumnID>
+        <Aliases>
+          <string>DiffNegativeBinomial</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition>
+        <ColumnID>PowerEquivalenceLogNormal</ColumnID>
+        <Aliases>
+          <string>EquiLogNormal</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition>
+        <ColumnID>PowerEquivalenceSquareRoot</ColumnID>
+        <Aliases>
+          <string>PowerEquivalenceLRSquareRoot</string>
+          <string>EquiSquareRoot</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition>
+        <ColumnID>PowerEquivalenceOverdispersedPoisson</ColumnID>
+        <Aliases>
+          <string>EquiOverdispersedPoisson</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition>
+        <ColumnID>PowerEquivalenceNegativeBinomial</ColumnID>
+        <Aliases>
+          <string>EquiNegativeBinomial</string>
+        </Aliases>
+      </ColumnDefinition>
+    </ColumnDefinitions>
+  </TableDefinition>
+</ArrayOfTableDefinition>

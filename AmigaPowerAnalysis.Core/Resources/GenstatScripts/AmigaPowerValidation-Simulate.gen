@@ -1,0 +1,139 @@
+" Directories to check
+  endpoint: number of endpoint;     negative number implies all
+  reps:     number of replication;  negative number implies all
+  effects:  number of effect;       negative number implies all
+  datasets: number of datasets;     negative number implies all
+"
+
+qstopwatc [mode=start ; print=*]
+" Attach procedure file "
+sfilename channel=1 ; filetype=input ; directory=thisdir
+txconstru [profile] thisdir, 'AmigaPowerValidation-Simulate.pro'
+scalar    channel ; *
+open      profile ; channel=channel ; filetype=input ; width=100
+input     [print=*] channel
+close     channel=channel ; filetype=input
+
+" Check whether this is called from R "
+enquire   channel=2 ; filetype=input ; open=open2 ; name=name2
+if (open2.eq.0)
+    " Call from GenStat/CRiSP"
+    text      maindir  ; 'D:\\Diverse Opdrachten\\AMIGA Power analysis\\'
+    concatena maindir, 'IntegrationTests\\'
+    variate   endpoint ; !(1)
+    variate   reps     ; !(1)
+    variate   effects  ; !(1)
+    variate   datasets ; !(-1,2)
+    text      dir[1] ; 'Simple'
+    \text      dir[2] ; 'Simple-LR'
+    \text      dir[3] ; 'SimpleBlock-Wald'
+    \text      dir[4] ; 'SimpleBlock-LR'
+  else
+    " Called from C#: loop over endpoint defined by input on channel 2 "
+    " Loop over all reps/effects/datasets "
+    text      maindir  ; ''
+    variate   reps     ; !(-1)
+    variate   effects  ; !(-1)
+    variate   datasets ; !(-1)
+    if 0
+      text      name2 ; 'D:\\Diverse Opdrachten\\AMIGA Power analysis\\'
+      concatena name2, 'TestData\\Simple\\Simple-Wald\\0-Settings.csv'
+    endif
+    sfilename [inputname=name2] surname=surname ; directory=dir[1]
+    concatena surname ; width=getposition(surname ; '-') - 1
+    read      [print=* ; channel=surname] endpoint
+    close     channel=surname
+    print     dir[1], endpoint ; decimals=0
+    variate   endpoint ; !(-1)
+endif
+
+" Additional settings "
+text      print ; !t(NB,PVALUES)
+text      print ; !t(PVALUES)
+scalar    test ; 0
+
+" Ensure that last character of directory is a slash (\) "
+for dd=dir[]
+  txconstru [dd] maindir, dd, '\\'
+  sreplace  [!t('\\\\') ; !t('\\')] dd
+endfor
+
+" Create cases for looping "
+calculate ndir = nvalues(dir)
+for [ntimes=ndir ; index=ii]
+  if (min(endpoint) .lt. 0)
+      dirlist   [print=* ; directory=dir[ii]] '*-Settings.csv' ; name=files
+      calculate nfiles = nvalues(files)
+      variate   iendpoint[ii] ; !(1...nfiles) - 1 ; deci=0
+    else
+      calculate nfiles = nvalues(endpoint)
+      variate   iendpoint[ii] ; !(#endpoint) ; deci=0
+  endif
+  text      [values=#nfiles(#dir[ii])] idir[ii]
+endfor
+text      allDir  ; !t(#idir)
+variate   allEndpoint ; !(#iendpoint) ; deci=0
+print     allDir, allEndpoint
+
+" Loop over All cases "
+calculate ndir = nvalues(allDir)
+for [ntimes=ndir ; index=ii]
+  text      iidir  ; allDir$[ii]
+  scalar    endp ; allEndpoint$[ii]
+  am2_get2  iidir ; iidir2
+  txconstru [caption] iidir2, '  Endpoint ', endp, ' ' ; deci=0
+  txpad     [padd='=' ; method=after] caption ; width=86
+  caption   caption ; style=meta
+  AM1_POWER [pr=#print ; test=test] iidir ; endp ; reps ; effects ; \
+            datasets ; maxDiff[ii]
+endfor
+
+" Get names of columns"
+calculate nmx, nmx1 = nvalues(maxDiff[1]) - (0,1)
+pointer   [nvalues=nmx1] extra
+getattrib [attribute=extra] maxDiff[1][1...nmx1] ; extra[]
+
+" Combine results "
+calculate nLength = nvalues(maxDiff[1][0])
+factor    [levels=allEndpoint ; val=#nLength(#allEndpoint)] Endpoint ; deci=0
+getattrib [attribute=suffixes] maxDiff[1] ; save=suffixes
+for ss=#suffixes[]
+  append    maxDiff[][ss]
+  if (ss.gt.0)
+    calculate mx[ss] = maximum(maxDiff[1][ss])
+  endif
+endfor
+calculate pos = getposition(maxDiff[1][0] ; '-')
+concatena [tReplication] maxDiff[1][0] ; width=pos-1
+concatena [tEffect]      maxDiff[1][0] ; skip=pos
+sreplace  ['r' ; ''] tReplication
+sreplace  ['e' ; ''] tEffect
+read      [channel=tReplication ; setn=yes] Replication
+read      [channel=tEffect ; setn=yes] Effect
+groups    [redefine=yes] Replication
+groups    [redefine=yes] Effect
+factor    [modify=yes] Replication, Effect ; deci=0
+for
+  print     Endpoint, Replication, Effect, maxDiff[1][1...nmx1] ; \
+            head='Endp', 'Rep', 'Eff',extra[][] ; field=5,4,4,8(-9) ; \
+            deci=*,*,*,8(1) ; skip=7(0),1,3(0)
+  print     'Global', mx[] ; head=*,extra[][] ; field=13,8(-9) ; \
+            deci=*,8(1) ; skip=5(0),1,3(0)
+endfor
+
+" Output to CSV in case output 2 is set"
+enquire   channel=2 ; filetype=output ; open=open2 ; name=name2
+if open2
+  close     channel=2 ; filetype=output ; delete=yes
+  export    [outfile=name2 ; method=overwrite] mx[] ; columns=extra[][]
+  " Also export the full set "
+  sreplace  ['.csv' ; 'Full.csv'] name2 ; fullname2
+  export    [outfile=fullname2 ; method=overwrite] \
+            Endpoint, Replication, Effect, maxDiff[1][1...nmx1] ; \
+            columns='Endpoint!', 'Replication!', 'Effect!',extra[][]
+endif
+
+" Timing "
+qstopwatc [mode=stop ; print=output]
+
+stop

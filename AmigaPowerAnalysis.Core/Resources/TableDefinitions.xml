@@ -1,0 +1,376 @@
+﻿<?xml version="1.0"?>
+<ArrayOfTableDefinition>
+  <TableDefinition>
+    <TableID>EndpointGroups</TableID>
+    <Aliases>
+      <string>EndpointGroup</string>
+      <string>EndpointGroups</string>
+    </Aliases>
+    <ColumnDefinitions>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>Group</ColumnID>
+        <Aliases>
+          <string>EndpointGroup</string>
+          <string>EndpointType</string>
+          <string>GroupID</string>
+          <string>Group</string>
+          <string>Type</string>
+          <string>ID</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>MeasurementType</ColumnID>
+        <Aliases>
+          <string>MeasurementType</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>LocLower</ColumnID>
+        <Aliases>
+          <string>LocLower</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>LocUpper</ColumnID>
+        <Aliases>
+          <string>LocUpper</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>DistributionType</ColumnID>
+        <Aliases>
+          <string>DistributionType</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition IsRequired="false">
+        <ColumnID>BinomialTotal</ColumnID>
+        <Aliases>
+          <string>BinomialTotal</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition IsRequired="false">
+        <ColumnID>PowerLawPower</ColumnID>
+        <Aliases>
+          <string>PowerLawPower</string>
+          <string>PPowerLaw</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>MuComparator</ColumnID>
+        <Aliases>
+          <string>Mean</string>
+          <string>Mu</string>
+          <string>MeanComparator</string>
+          <string>MuComparator</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>CvComparator</ColumnID>
+        <Aliases>
+          <string>CV</string>
+          <string>CvComparator</string>
+        </Aliases>
+      </ColumnDefinition>
+    </ColumnDefinitions>
+  </TableDefinition>
+
+  <TableDefinition>
+    <TableID>Endpoints</TableID>
+    <Aliases>
+      <string>Endpoint</string>
+      <string>Endpoints</string>
+    </Aliases>
+    <ColumnDefinitions>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>Endpoint</ColumnID>
+        <Aliases>
+          <string>Endpoint</string>
+          <string>EndpointID</string>
+          <string>Name</string>
+          <string>ID</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>Group</ColumnID>
+        <Aliases>
+          <string>EndpointGroup</string>
+          <string>EndpointType</string>
+          <string>Group</string>
+          <string>Type</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>MeasurementType</ColumnID>
+        <Aliases>
+          <string>MeasurementType</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>LocLower</ColumnID>
+        <Aliases>
+          <string>LocLower</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>LocUpper</ColumnID>
+        <Aliases>
+          <string>LocUpper</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>DistributionType</ColumnID>
+        <Aliases>
+          <string>DistributionType</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>Mean</ColumnID>
+        <Aliases>
+          <string>Mean</string>
+          <string>MeanComparator</string>
+          <string>Mu</string>
+          <string>MuComparator</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>CV</ColumnID>
+        <Aliases>
+          <string>CV</string>
+          <string>CvComparator</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition IsRequired="false">
+        <ColumnID>BinomialTotal</ColumnID>
+        <Aliases>
+          <string>BinomialTotal</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition IsRequired="false">
+        <ColumnID>PowerLawPower</ColumnID>
+        <Aliases>
+          <string>PPowerLaw</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition IsRequired="false">
+        <ColumnID>ExcessZeroes</ColumnID>
+        <Aliases>
+          <string>ExcessZeroes</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition IsRequired="false">
+        <ColumnID>ExcessZeroesPercentage</ColumnID>
+        <Aliases>
+          <string>ExcessZeroesPercentage</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition IsRequired="false">
+        <ColumnID>RepeatedMeasurements</ColumnID>
+        <Aliases>
+          <string>RepeatedMeasurements</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition IsRequired="false">
+        <ColumnID>UseModifier</ColumnID>
+        <Aliases>
+          <string>UseModifier</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition IsRequired="false">
+          <ColumnID>CvForBlocks</ColumnID>
+          <Aliases>
+            <string>CvForBlocks</string>
+            <string>CvBlocks</string>
+          </Aliases>
+        </ColumnDefinition>
+    </ColumnDefinitions>
+  </TableDefinition>
+
+  <TableDefinition>
+    <TableID>Factors</TableID>
+    <Aliases>
+      <string>Factor</string>
+      <string>Factors</string>
+    </Aliases>
+    <ColumnDefinitions>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>Name</ColumnID>
+        <Aliases>
+          <string>Factor</string>
+          <string>FactorID</string>
+          <string>Name</string>
+          <string>ID</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>IsVarietyFactor</ColumnID>
+        <Aliases>
+          <string>IsVariety</string>
+          <string>IsVarietyFactor</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>IsInteractionWithVariety</ColumnID>
+        <Aliases>
+          <string>IsInteractionWithVariety</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>ExperimentUnitType</ColumnID>
+        <Aliases>
+          <string>ExperimentUnitType</string>
+        </Aliases>
+      </ColumnDefinition>
+    </ColumnDefinitions>
+  </TableDefinition>
+
+  <TableDefinition>
+    <TableID>FactorLevels</TableID>
+    <Aliases>
+      <string>FactorLevel</string>
+      <string>FactorLevels</string>
+    </Aliases>
+    <ColumnDefinitions>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>Factor</ColumnID>
+        <Aliases>
+          <string>FactorId</string>
+          <string>FactorName</string>
+          <string>Factor</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>Label</ColumnID>
+        <Aliases>
+          <string>Label</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>Frequency</ColumnID>
+        <Aliases>
+          <string>Frequency</string>
+        </Aliases>
+      </ColumnDefinition>
+    </ColumnDefinitions>
+  </TableDefinition>
+
+  <TableDefinition>
+    <TableID>EndpointFactorSettings</TableID>
+    <Aliases>
+      <string>EndpointFactorSettings</string>
+    </Aliases>
+    <ColumnDefinitions>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>Endpoint</ColumnID>
+        <Aliases>
+          <string>Endpoint</string>
+          <string>EndpointId</string>
+          <string>EndpointName</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>Factor</ColumnID>
+        <Aliases>
+          <string>Factor</string>
+          <string>FactorId</string>
+          <string>FactorName</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>IsComparisonFactor</ColumnID>
+        <Aliases>
+          <string>IsComparisonFactor</string>
+        </Aliases>
+      </ColumnDefinition>
+    </ColumnDefinitions>
+  </TableDefinition>
+
+  <TableDefinition>
+    <TableID>DefaultInteractions</TableID>
+    <Aliases>
+      <string>DefaultInteractions</string>
+      <string>DefaultInteractionFactorLevelCombinations</string>
+    </Aliases>
+    <ColumnDefinitions>
+      <ColumnDefinition IsDynamic="true">
+        <ColumnID>Labels</ColumnID>
+        <Aliases>
+          <string>Labels</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>IsComparisonLevel</ColumnID>
+        <Aliases>
+          <string>IsComparisonLevel</string>
+        </Aliases>
+      </ColumnDefinition>
+    </ColumnDefinitions>
+  </TableDefinition>
+
+  <TableDefinition>
+    <TableID>EndpointInteractions</TableID>
+    <Aliases>
+      <string>EndpointInteractions</string>
+      <string>EndpointInteractionFactorLevelCombinations</string>
+    </Aliases>
+    <ColumnDefinitions>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>Endpoint</ColumnID>
+        <Aliases>
+          <string>Endpoint</string>
+          <string>EndpointId</string>
+          <string>EndpointName</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition IsDynamic="true">
+        <ColumnID>Labels</ColumnID>
+        <Aliases>
+          <string>Labels</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>IsComparisonLevel</ColumnID>
+        <Aliases>
+          <string>IsComparisonLevel</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>Mean</ColumnID>
+        <Aliases>
+          <string>Mean</string>
+          <string>Mu</string>
+        </Aliases>
+      </ColumnDefinition>
+    </ColumnDefinitions>
+  </TableDefinition>
+
+  <TableDefinition>
+    <TableID>EndpointModifiers</TableID>
+    <Aliases>
+      <string>EndpointModifiers</string>
+      <string>EndpointModifierFactorLevelCombinations</string>
+    </Aliases>
+    <ColumnDefinitions>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>Endpoint</ColumnID>
+        <Aliases>
+          <string>Endpoint</string>
+          <string>EndpointId</string>
+          <string>EndpointName</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition IsDynamic="true">
+        <ColumnID>Labels</ColumnID>
+        <Aliases>
+          <string>Labels</string>
+        </Aliases>
+      </ColumnDefinition>
+      <ColumnDefinition IsRequired="true">
+        <ColumnID>ModifierFactor</ColumnID>
+        <Aliases>
+          <string>ModifierFactor</string>
+        </Aliases>
+      </ColumnDefinition>
+    </ColumnDefinitions>
+  </TableDefinition>
+
+</ArrayOfTableDefinition>

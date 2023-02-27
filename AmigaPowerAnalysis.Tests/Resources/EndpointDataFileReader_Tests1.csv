@@ -1,0 +1,6 @@
+EndpointID,EndpointGroup,MeasurementType,LocLower,LocUpper,DistributionType,BinomialTotal,PowerLawPower,Mean,CV,RepeatedMeasurements,ExcessZeroes
+Endpoint 1,Non-Target insects counts,Fraction,0.02,0.999,PowerLaw,0,0,0.5,90,FALSE,0
+Endpoint 2,Non-Target insects counts,Count,0.05,2,NegativeBinomial,0,0,10,100,FALSE,0
+Endpoint 4,Non-Target insects counts,Count,0.02,2,PowerLaw,0,1.7,10,100,FALSE,0
+Endpoint 3,Non-Target insects counts,Count,0.02,2,PowerLaw,0,1.7,10,100,FALSE,0
+Endpoint 5,Non-Target insects counts,Count,0.01,2,PowerLaw,0,1.7,10,100,FALSE,0
