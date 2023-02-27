@@ -32,6 +32,8 @@
             this.buttonBrowseExecutableR = new System.Windows.Forms.Button();
             this.textBoxPathR = new System.Windows.Forms.TextBox();
             this.labelPathR = new System.Windows.Forms.Label();
+            this.textBoxPathRHome = new System.Windows.Forms.TextBox();
+            this.labelPathRHome = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // labelPathGenstat
@@ -63,7 +65,7 @@
             // 
             // buttonOk
             // 
-            this.buttonOk.Location = new System.Drawing.Point(552, 97);
+            this.buttonOk.Location = new System.Drawing.Point(552, 123);
             this.buttonOk.Name = "buttonOk";
             this.buttonOk.Size = new System.Drawing.Size(75, 28);
             this.buttonOk.TabIndex = 3;
@@ -73,7 +75,7 @@
             // 
             // buttonCancel
             // 
-            this.buttonCancel.Location = new System.Drawing.Point(471, 97);
+            this.buttonCancel.Location = new System.Drawing.Point(471, 123);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 28);
             this.buttonCancel.TabIndex = 4;
@@ -108,12 +110,31 @@
             this.labelPathR.TabIndex = 5;
             this.labelPathR.Text = "Path RScript executable";
             // 
+            // textBoxPathRHome
+            // 
+            this.textBoxPathRHome.Enabled = false;
+            this.textBoxPathRHome.Location = new System.Drawing.Point(147, 97);
+            this.textBoxPathRHome.Name = "textBoxPathRHome";
+            this.textBoxPathRHome.Size = new System.Drawing.Size(399, 20);
+            this.textBoxPathRHome.TabIndex = 9;
+            // 
+            // labelPathRHome
+            // 
+            this.labelPathRHome.AutoSize = true;
+            this.labelPathRHome.Location = new System.Drawing.Point(12, 100);
+            this.labelPathRHome.Name = "labelPathRHome";
+            this.labelPathRHome.Size = new System.Drawing.Size(40, 13);
+            this.labelPathRHome.TabIndex = 8;
+            this.labelPathRHome.Text = "Path R";
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.ClientSize = new System.Drawing.Size(639, 139);
+            this.ClientSize = new System.Drawing.Size(639, 160);
+            this.Controls.Add(this.textBoxPathRHome);
+            this.Controls.Add(this.labelPathRHome);
             this.Controls.Add(this.buttonBrowseExecutableR);
             this.Controls.Add(this.textBoxPathR);
             this.Controls.Add(this.labelPathR);
@@ -141,5 +162,7 @@
         private System.Windows.Forms.Button buttonBrowseExecutableR;
         private System.Windows.Forms.TextBox textBoxPathR;
         private System.Windows.Forms.Label labelPathR;
+        private System.Windows.Forms.TextBox textBoxPathRHome;
+        private System.Windows.Forms.Label labelPathRHome;
     }
 }

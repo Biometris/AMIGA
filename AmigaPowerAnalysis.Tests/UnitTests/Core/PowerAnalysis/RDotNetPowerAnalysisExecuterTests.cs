@@ -41,7 +41,7 @@ namespace AmigaPowerAnalysis.Tests.Core {
             //CsvWriter.WriteToCsvFile(Path.Combine(testPath, "OutputScript.csv"), ",", outputScript.OutputRecords);
 
             var progressReport = new ProgressReport();
-            var rDotNetExecuter = new RDotNetPowerAnalysisExecuter(_testPath, _rLibraryPath);
+            var rDotNetExecuter = new RDotNetPowerAnalysisExecuter(_testPath);
             var output = rDotNetExecuter.Run(inputPowerAnalysis, progressReport.NewProgressState(100));
             CsvWriter.WriteToCsvFile(Path.Combine(testPath, "OutputRDotNet.csv"), ",", output.OutputRecords);
 

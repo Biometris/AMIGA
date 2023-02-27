@@ -1,14 +1,26 @@
-﻿using System;
+﻿using RDotNet;
+using RDotNet.Devices;
+using RDotNet.NativeLibrary;
+using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Text;
-using RDotNet;
-using System.IO;
-using Biometris.ApplicationUtilities;
 
 namespace Biometris.R.REngines {
     public class RDotNetEngine : IRCommandExecuter, IDisposable {
+
+        /// <summary>
+        /// Path to the R Home folder, e.g. C:\Program Files\R\R-3.6.0
+        /// </summary>
+        public static string R_HomePath { get; set; } = null;
+
+        /// <summary>
+        /// Path to the R packages library, e.g. C:\Program Files\R\R-3.6.0\library
+        /// If no value is given it defaults to the [R_HomePath]\library folder
+        /// </summary>
+        public static string R_LibsPath { get; set; } = null;
 
         /// <summary>
         /// Is the R script already running (doing some analysis).
@@ -22,17 +34,9 @@ namespace Biometris.R.REngines {
         private static REngine _rEngine = null;
 
         /// <summary>
-        /// Holds the path containing the additional R packages.
-        /// </summary>
-        private string _libraryPath;
-
-        /// <summary>
         /// Constructor.
         /// </summary>
-        public RDotNetEngine(string libraryPath = null) {
-            if (!string.IsNullOrEmpty(libraryPath)) {
-                _libraryPath = Path.GetFullPath(libraryPath).Replace(@"\", "/");
-            }
+        public RDotNetEngine() {
             start();
         }
 
@@ -83,14 +87,28 @@ namespace Biometris.R.REngines {
             }
             _isRunning = true;
             if (_rEngine == null) {
+                string rPath = "R path not found";
                 try {
-                    REngine.SetEnvironmentVariables();
-                    _rEngine = REngine.GetInstance();
+                    var nativeUtils = new NativeUtility();
+                    var rHome = !string.IsNullOrEmpty(R_HomePath) ? R_HomePath : nativeUtils.FindRHome();
+                    rPath = nativeUtils.FindRPath(rHome);
+                    if (!string.IsNullOrEmpty(R_LibsPath)) {
+                        Environment.SetEnvironmentVariable("R_LIBS_USER", R_LibsPath, EnvironmentVariableTarget.Process);
+                    }
+                    REngine.SetEnvironmentVariables(rPath, rHome);
+                    _rEngine = REngine.GetInstance(device: new NullCharacterDevice());
+                    if (_rEngine.DllVersion.StartsWith("4.2")) {
+                        var cmd = $"Sys.setenv(PATH = paste(\"{rPath.Replace(@"\", "/")}\", Sys.getenv(\"PATH\"), sep=\";\"))";
+                        _rEngine.Evaluate(cmd);
+                    }
                 } catch {
                     _isRunning = false;
-                    throw new RNotFoundException("Cannot find R on this computer");
+                    throw new Exception($"Cannot establish connection with R ({rPath}).");
                 }
-                _rEngine.Evaluate("options(width=10000)");
+                // Initialize R session
+                if (_rEngine != null) {
+                    _rEngine.Evaluate("options(width=10000)");
+                }
             }
             evaluateCommand("rm(list = ls())");
         }
@@ -399,11 +417,11 @@ namespace Biometris.R.REngines {
         /// <returns></returns>
         public string GetRInfo() {
             var sb = new StringBuilder();
-            var version = this.EvaluateString("R.version.string");
+            var version = EvaluateString("R.version.string");
             sb.AppendLine(version);
-            var rHome = this.EvaluateString("R.home(\"bin\")");
+            var rHome = EvaluateString("R.home(\"bin\")");
             sb.AppendLine(string.Format("R home: {0}", rHome));
-            var libPaths = this.EvaluateCharacterVector(".libPaths()");
+            var libPaths = EvaluateCharacterVector(".libPaths()");
             sb.AppendLine(string.Format("Library paths: {0}", string.Join(", ", libPaths)));
             return sb.ToString();
         }
@@ -415,42 +433,39 @@ namespace Biometris.R.REngines {
         /// <param name="packageName">The R package name.</param>
         /// <param name="minimalRequiredPackageVersion">The minimally required version.</param>
         public void LoadLibrary(string packageName, Version minimalRequiredPackageVersion = null) {
-            if (string.IsNullOrEmpty(_libraryPath)) {
-                _libraryPath = this.EvaluateCharacterVector(".libPaths()").First();
-            }
-            var libLoaded = EvaluateBoolean(string.Format("require('{0}', lib.loc='{1}')", packageName, _libraryPath));
+            var libLoaded = EvaluateBoolean($"require('{packageName}')");
             if (!libLoaded) {
                 try {
-                    Comment(string.Format("Package {0} not found in R. Now trying to download and install it from cran.rVersions-project.org", packageName));
-                    EvaluateNoReturn(string.Format("install.packages('{0}', repos='http://cran.r-project.org/', lib='{1}')", packageName, _libraryPath));
+                    Comment($"Package {packageName} not found in R. Now trying to download and install it from cran.rVersions-project.org");
+                    var result = EvaluateString($"install.packages('{packageName}', dependencies=TRUE, repos='http://cloud.r-project.org/')");
                 } catch (Exception ex) {
-                    var message = string.Format("R package {0} was not installed and could not be downloaded and installed from the cran website. Please install the package manually within R.", packageName);
+                    var message = $"R package {packageName} was not installed and could not be downloaded and installed from the cran website. Please install the package manually within R.";
                     Comment(message);
                     throw new RLoadLibraryException(message, ex);
                 }
-                libLoaded = EvaluateBoolean(string.Format("require('{0}', lib.loc='{1}')", packageName, _libraryPath));
+                libLoaded = EvaluateBoolean($"require('{packageName}')");
                 if (libLoaded) {
-                    Comment(string.Format("R package {0} is installed and loaded successfully.", packageName));
+                    Comment($"R package {packageName} is installed and loaded successfully.");
                 } else {
                     var error = GetErrorMessage();
-                    var message = string.Format("Tried to download and install R package {0} but it could NOT be loaded. Please install the R package manually from within R.", packageName);
+                    var message = $"Tried to download and install R package {packageName} but it could NOT be loaded. Please install the R package manually.";
                     Comment(message);
                     if (!string.IsNullOrEmpty(error)) {
-                        Comment(string.Format("Message: {0}", error));
+                        Comment($"Message: {error}");
                     }
                     throw new RLoadLibraryException(message);
                 }
             } else {
-                Comment(string.Format("R package {0} is loaded successfully.", packageName));
+                Comment($"R package {packageName} is loaded successfully.");
             }
-            var libraryVersion = this.EvaluateString(string.Format("as.character(packageVersion('{0}'))", packageName));
+            var libraryVersion = EvaluateString($"as.character(packageVersion('{packageName}'))");
             var installedPackageVersion = new Version(libraryVersion);
             if (minimalRequiredPackageVersion != null && installedPackageVersion < minimalRequiredPackageVersion) {
-                var msg = string.Format("Version of R package {0} (version {1}) is too old. Please install later version (>= {2}).", packageName, installedPackageVersion, minimalRequiredPackageVersion);
+                var msg = $"Version of R package {packageName} (version {installedPackageVersion}) is too old. Please install later version (>= {minimalRequiredPackageVersion}).";
                 Comment(msg);
                 throw new RLoadLibraryException(msg);
             }
-            Comment(string.Format("Package version of R package {0}: {1}.", packageName, installedPackageVersion));
+            Comment($"Package version of R package {packageName}: {installedPackageVersion}.");
         }
 
         #endregion

@@ -73,13 +73,37 @@ namespace AmigaPowerAnalysis.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Program Files\\R\\R-3.1.1\\bin\\RScript.exe")]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string RPath {
             get {
                 return ((string)(this["RPath"]));
             }
             set {
                 this["RPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string RHome {
+            get {
+                return ((string)(this["RHome"]));
+            }
+            set {
+                this["RHome"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string RLibs {
+            get {
+                return ((string)(this["RLibs"]));
+            }
+            set {
+                this["RLibs"] = value;
             }
         }
     }

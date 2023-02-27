@@ -15,7 +15,13 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="RPath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">C:\Program Files\R\R-3.1.1\bin\RScript.exe</Value>
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="RHome" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="RLibs" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
     </Setting>
   </Settings>
 </SettingsFile>

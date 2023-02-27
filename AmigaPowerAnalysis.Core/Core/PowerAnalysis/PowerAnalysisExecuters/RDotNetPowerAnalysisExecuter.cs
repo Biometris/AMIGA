@@ -23,15 +23,9 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
         }
 
         private string _tempPath;
-        private string _libraryPath;
 
-        public RDotNetPowerAnalysisExecuter(string tempPath, string libraryPath = null) {
+        public RDotNetPowerAnalysisExecuter(string tempPath) {
             _tempPath = Path.GetFullPath(tempPath.Substring(0, tempPath.Length));
-            if (string.IsNullOrEmpty(libraryPath)) {
-                _libraryPath = ApplicationUtils.GetApplicationDataPath();
-            } else {
-                _libraryPath = libraryPath;
-            }
         }
 
         public override OutputPowerAnalysis Run(InputPowerAnalysis inputPowerAnalysis, ProgressState progressState) {
@@ -61,7 +55,9 @@ namespace AmigaPowerAnalysis.Core.PowerAnalysis {
             var outputResults = new List<OutputPowerAnalysisRecord>();
             try {
                 var errorList = new List<string>();
-                using (var rEngine = new LoggingRDotNetEngine(logger, _libraryPath)) {
+                RDotNetEngine.R_HomePath = Properties.Settings.Default.RHome;
+                RDotNetEngine.R_LibsPath = Properties.Settings.Default.RLibs;
+                using (var rEngine = new LoggingRDotNetEngine(logger)) {
                     progressState.Update(string.Format("Analysis of endpoint: {0}, initializing R...", inputPowerAnalysis.Endpoint));
 
                     rEngine.LoadLibrary("MASS");

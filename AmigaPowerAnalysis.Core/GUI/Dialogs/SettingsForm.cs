@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
+﻿using RDotNet.NativeLibrary;
+using System;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace AmigaPowerAnalysis.GUI {
@@ -15,13 +9,26 @@ namespace AmigaPowerAnalysis.GUI {
 
         private string _genstatPath;
         private string _pathR;
+        private string _pathRHome;
 
         public SettingsForm() {
             InitializeComponent();
             _genstatPath = Properties.Settings.Default.GenstatPath;
             _pathR = Properties.Settings.Default.RPath;
+            _pathRHome = Properties.Settings.Default.RHome;
+            if (string.IsNullOrEmpty(_pathRHome)) {
+                var nativeUtils = new NativeUtility();
+                var rDll = nativeUtils.FindRPath();
+                if (!string.IsNullOrEmpty(rDll)) {
+                    _pathRHome = new DirectoryInfo(rDll)
+                        .Parent.Parent
+                        .FullName;
+                    _pathR = Path.Combine(_pathRHome, @"bin\RScript.exe");
+                }
+            }
             textBoxPathGenstat.Text = _genstatPath;
             textBoxPathR.Text = _pathR;
+            textBoxPathRHome.Text = _pathRHome;
         }
 
         private void buttonBrowseGenstatExecutable_Click(object sender, EventArgs e) {
@@ -66,7 +73,11 @@ namespace AmigaPowerAnalysis.GUI {
                     showError("Invalid path", "The provided path is not valid.");
                 } else {
                     _pathR = newPathR;
+                    _pathRHome = new DirectoryInfo(newPathR)
+                        .Parent.Parent
+                        .FullName;
                     textBoxPathR.Text = _pathR;
+                    textBoxPathRHome.Text = _pathRHome;
                 }
             }
         }
@@ -86,6 +97,9 @@ namespace AmigaPowerAnalysis.GUI {
             }
             if (File.Exists(_pathR)) {
                 Properties.Settings.Default.RPath = _pathR;
+            }
+            if (Directory.Exists(_pathRHome)) {
+                Properties.Settings.Default.RHome = _pathRHome;
             }
             Properties.Settings.Default.Save();
             Close();
