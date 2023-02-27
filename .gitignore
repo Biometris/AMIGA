@@ -208,6 +208,7 @@ FakesAssemblies/
 
 # Visual Studio 6 workspace options file
 *.opt
+gitversion.json
 
 # LightSwitch generated files
 GeneratedArtifacts/
