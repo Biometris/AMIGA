@@ -28,9 +28,13 @@
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.recentProjectsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.clearRecentProjectsListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolstripEndpointTypes = new System.Windows.Forms.ToolStripMenuItem();
@@ -39,10 +43,7 @@
             this.userManualToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolstripAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl = new System.Windows.Forms.TabControl();
-            this.recentProjectsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.clearRecentProjectsListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -91,6 +92,26 @@
             this.openToolStripMenuItem.Text = "&Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
+            // recentProjectsToolStripMenuItem
+            // 
+            this.recentProjectsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.clearRecentProjectsListToolStripMenuItem});
+            this.recentProjectsToolStripMenuItem.Name = "recentProjectsToolStripMenuItem";
+            this.recentProjectsToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.recentProjectsToolStripMenuItem.Text = "Recent Projects";
+            // 
+            // clearRecentProjectsListToolStripMenuItem
+            // 
+            this.clearRecentProjectsListToolStripMenuItem.Name = "clearRecentProjectsListToolStripMenuItem";
+            this.clearRecentProjectsListToolStripMenuItem.Size = new System.Drawing.Size(213, 22);
+            this.clearRecentProjectsListToolStripMenuItem.Text = "Empty Recent Projects List";
+            this.clearRecentProjectsListToolStripMenuItem.Click += new System.EventHandler(this.clearRecentProjectsListToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(190, 6);
+            // 
             // closeToolStripMenuItem
             // 
             this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
@@ -116,6 +137,11 @@
             this.saveAsToolStripMenuItem.Text = "Save as...";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
             // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(190, 6);
+            // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
@@ -128,7 +154,8 @@
             // 
             this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolstripEndpointTypes,
-            this.goToolStripMenuItem});
+            this.goToolStripMenuItem,
+            this.settingsToolStripMenuItem});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.optionsToolStripMenuItem.Text = "Options";
@@ -136,14 +163,14 @@
             // toolstripEndpointTypes
             // 
             this.toolstripEndpointTypes.Name = "toolstripEndpointTypes";
-            this.toolstripEndpointTypes.Size = new System.Drawing.Size(163, 22);
+            this.toolstripEndpointTypes.Size = new System.Drawing.Size(180, 22);
             this.toolstripEndpointTypes.Text = "Endpoint Groups";
             this.toolstripEndpointTypes.Click += new System.EventHandler(this.toolstripEndpointTypes_Click);
             // 
             // goToolStripMenuItem
             // 
             this.goToolStripMenuItem.Name = "goToolStripMenuItem";
-            this.goToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+            this.goToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.goToolStripMenuItem.Text = "Run simulation";
             this.goToolStripMenuItem.Click += new System.EventHandler(this.goToolStripMenuItem_Click);
             // 
@@ -184,30 +211,12 @@
             this.tabControl.TabIndex = 2;
             this.tabControl.SelectedIndexChanged += new System.EventHandler(this.tabControl_SelectedIndexChanged);
             // 
-            // recentProjectsToolStripMenuItem
+            // settingsToolStripMenuItem
             // 
-            this.recentProjectsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.clearRecentProjectsListToolStripMenuItem});
-            this.recentProjectsToolStripMenuItem.Name = "recentProjectsToolStripMenuItem";
-            this.recentProjectsToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
-            this.recentProjectsToolStripMenuItem.Text = "Recent Projects";
-            // 
-            // clearRecentProjectsListToolStripMenuItem
-            // 
-            this.clearRecentProjectsListToolStripMenuItem.Name = "clearRecentProjectsListToolStripMenuItem";
-            this.clearRecentProjectsListToolStripMenuItem.Size = new System.Drawing.Size(213, 22);
-            this.clearRecentProjectsListToolStripMenuItem.Text = "Empty Recent Projects List";
-            this.clearRecentProjectsListToolStripMenuItem.Click += new System.EventHandler(this.clearRecentProjectsListToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(190, 6);
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(190, 6);
+            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.settingsToolStripMenuItem.Text = "Settings";
+            this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
             // MainWindow
             // 
@@ -252,6 +261,7 @@
         private System.Windows.Forms.ToolStripMenuItem clearRecentProjectsListToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
     }
 }
 
