@@ -18,19 +18,15 @@
            Version="$(var.ProductVersion)" UpgradeCode="$(var.ProductUpgradeCode)">
     <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
-    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+    <MajorUpgrade
+      DowngradeErrorMessage="A newer version of [ProductVersionName] is already installed."
+      AllowSameVersionUpgrades="yes"
+      />
     <MediaTemplate EmbedCab="yes" />
 
     <Icon Id="ProductIcon" SourceFile="Resources\Logo.ico" />
     <Property Id="ARPPRODUCTICON" Value="ProductIcon"/>
-    <Property Id="ARPNOREPAIR" Value="1"/>
     <Property Id="MSIFASTINSTALL" Value="1"/>
-
-    <Upgrade Id="$(var.ProductUpgradeCode)">
-      <UpgradeVersion Minimum="$(var.ProductVersion)" OnlyDetect="yes" Property="NEWERVERSIONDETECTED"/>
-      <UpgradeVersion Minimum="0.0.0.0" Maximum="$(var.ProductVersion)" IncludeMinimum="yes" IncludeMaximum="no" Property="OLDERVERSIONBEINGUPGRADED"/>
-    </Upgrade>
-    <Condition Message="A newer version of this software is already installed.">NOT NEWERVERSIONDETECTED</Condition>
 
     <Feature Id="ProductFeature" Title="$(var.ProductName)" Level="1" Display="expand" ConfigurableDirectory='INSTALLFOLDER'>
       <ComponentGroupRef Id="ApplicationComponentGroup" />
@@ -135,6 +131,9 @@
       <Component Guid="{3F36344F-55A8-4BA4-B935-ADEC2F0877F8}">
         <File Source="..\AmigaPowerAnalysis.Core\bin\$(var.Platform)\Release\MathNet.Numerics.dll" KeyPath="yes" />
       </Component>
+      <Component Guid="{655DF6D8-7B79-4A52-AE77-CBA1B10954E6}">
+        <File Source="..\AmigaPowerAnalysis.Core\bin\$(var.Platform)\Release\Microsoft.Win32.Registry.dll" KeyPath="yes" />
+      </Component>
       <Component Guid="{D4CE65E3-D88A-4A7D-861A-14FA24723A04}">
         <File Source="..\AmigaPowerAnalysis.Core\bin\$(var.Platform)\Release\OpenHtmlToPdf.dll" KeyPath="yes" />
       </Component>
@@ -153,8 +152,11 @@
       <Component Guid="{6A98CBCD-0D8D-4C10-9C6F-5707F5DCCA5C}">
         <File Source="..\AmigaPowerAnalysis.Core\bin\$(var.Platform)\Release\RDotNet.dll" KeyPath="yes" />
       </Component>
-      <Component Guid="{6D7CDA95-941E-4000-89C0-7C5BBC6B3224}">
-        <File Source="..\AmigaPowerAnalysis.Core\bin\$(var.Platform)\Release\RDotNet.NativeLibrary.dll" KeyPath="yes" />
+      <Component Guid="{076459D4-CAA1-426A-8AF9-A98B62887783}">
+        <File Source="..\AmigaPowerAnalysis.Core\bin\$(var.Platform)\Release\System.Security.AccessControl.dll" KeyPath="yes" />
+      </Component>
+      <Component Guid="{11282B84-9A48-4690-ACEE-5B72A1ADE44B}">
+        <File Source="..\AmigaPowerAnalysis.Core\bin\$(var.Platform)\Release\System.Security.Principal.Windows.dll" KeyPath="yes" />
       </Component>
     </ComponentGroup>
   </Fragment>
